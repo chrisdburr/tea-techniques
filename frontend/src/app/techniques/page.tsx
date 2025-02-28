@@ -26,6 +26,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import Link from "next/link";
+import { Technique, Category, AssuranceGoal } from "@/lib/types";
 
 export default function TechniquesPage() {
 	const searchParams = useSearchParams();
@@ -33,8 +34,8 @@ export default function TechniquesPage() {
 
 	// Get filter values from URL parameters
 	const initialSearch = searchParams.get("search") || "";
-	const initialAssuranceGoal = searchParams.get("assurance_goal") || "";
-	const initialCategory = searchParams.get("category") || "";
+	const initialAssuranceGoal = searchParams.get("assurance_goal") || "all";
+	const initialCategory = searchParams.get("category") || "all";
 
 	// Local state for filters
 	const [search, setSearch] = useState(initialSearch);
@@ -55,8 +56,13 @@ export default function TechniquesPage() {
 	const applyFilters = () => {
 		const params = new URLSearchParams();
 		if (search) params.set("search", search);
-		if (assuranceGoal) params.set("assurance_goal", assuranceGoal);
-		if (category) params.set("category", category);
+
+		// Only add assurance_goal parameter if it's not "all"
+		if (assuranceGoal && assuranceGoal !== "all")
+			params.set("assurance_goal", assuranceGoal);
+
+		// Only add category parameter if it's not "all"
+		if (category && category !== "all") params.set("category", category);
 
 		router.push(`/techniques?${params.toString()}`);
 	};
@@ -105,11 +111,11 @@ export default function TechniquesPage() {
 									<SelectValue placeholder="Assurance Goal" />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value="">
+									<SelectItem value="all">
 										All Assurance Goals
 									</SelectItem>
 									{assuranceGoalsData?.results?.map(
-										(goal: any) => (
+										(goal: AssuranceGoal) => (
 											<SelectItem
 												key={goal.id}
 												value={goal.id.toString()}
@@ -130,11 +136,11 @@ export default function TechniquesPage() {
 									<SelectValue placeholder="Category" />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value="">
+									<SelectItem value="all">
 										All Categories
 									</SelectItem>
 									{categoriesData?.results?.map(
-										(cat: any) => (
+										(cat: Category) => (
 											<SelectItem
 												key={cat.id}
 												value={cat.id.toString()}
@@ -164,31 +170,35 @@ export default function TechniquesPage() {
 				) : (
 					<>
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-							{techniquesData?.results?.map((technique: any) => (
-								<Card key={technique.id}>
-									<CardHeader>
-										<CardTitle>{technique.name}</CardTitle>
-										<CardDescription>
-											{technique.category_name} |{" "}
-											{technique.model_dependency}
-										</CardDescription>
-									</CardHeader>
-									<CardContent>
-										<p className="line-clamp-3 text-sm text-muted-foreground">
-											{technique.description}
-										</p>
-									</CardContent>
-									<CardFooter>
-										<Button asChild variant="outline">
-											<Link
-												href={`/techniques/${technique.id}`}
-											>
-												View Details
-											</Link>
-										</Button>
-									</CardFooter>
-								</Card>
-							))}
+							{techniquesData?.results?.map(
+								(technique: Technique) => (
+									<Card key={technique.id}>
+										<CardHeader>
+											<CardTitle>
+												{technique.name}
+											</CardTitle>
+											<CardDescription>
+												{technique.category_name} |{" "}
+												{technique.model_dependency}
+											</CardDescription>
+										</CardHeader>
+										<CardContent>
+											<p className="line-clamp-3 text-sm text-muted-foreground">
+												{technique.description}
+											</p>
+										</CardContent>
+										<CardFooter>
+											<Button asChild variant="outline">
+												<Link
+													href={`/techniques/${technique.id}`}
+												>
+													View Details
+												</Link>
+											</Button>
+										</CardFooter>
+									</Card>
+								)
+							)}
 						</div>
 
 						{techniquesData?.results?.length === 0 && (

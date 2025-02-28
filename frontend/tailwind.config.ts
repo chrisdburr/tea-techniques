@@ -1,8 +1,11 @@
 import type { Config } from "tailwindcss";
-import { fontFamily } from "tailwindcss/defaultTheme";
+import defaultTheme from "tailwindcss/defaultTheme";
+import tailwindcssAnimate from "tailwindcss-animate";
+import tailwindcssTypography from "@tailwindcss/typography";
+import tailwindcssForms from "@tailwindcss/forms";
 
 const config: Config = {
-	darkMode: ["class"],
+	darkMode: "class",
 	content: [
 		"./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
 		"./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -58,16 +61,18 @@ const config: Config = {
 				sm: "calc(var(--radius) - 4px)",
 			},
 			fontFamily: {
-				sans: ["var(--font-geist-sans)", ...fontFamily.sans],
-				mono: ["var(--font-geist-mono)", ...fontFamily.mono],
+				sans: [
+					"var(--font-geist-sans)",
+					...defaultTheme.fontFamily.sans,
+				],
+				mono: [
+					"var(--font-geist-mono)",
+					...defaultTheme.fontFamily.mono,
+				],
 			},
 		},
 	},
-	plugins: [
-		require("tailwindcss-animate"),
-		require("@tailwindcss/typography"),
-		require("@tailwindcss/forms"),
-	],
+	plugins: [tailwindcssAnimate, tailwindcssTypography, tailwindcssForms],
 };
 
 export default config;

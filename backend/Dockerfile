@@ -1,4 +1,3 @@
-# backend/Dockerfile
 FROM python:3.12-slim
 
 WORKDIR /app
@@ -13,7 +12,7 @@ RUN apt-get update && apt-get install -y \
 COPY pyproject.toml poetry.lock ./
 RUN pip install poetry && \
     poetry config virtualenvs.create false && \
-    poetry install --no-dev --no-interaction --no-ansi
+    poetry install --only main --no-interaction --no-ansi
 
 # Copy project files
 COPY . .

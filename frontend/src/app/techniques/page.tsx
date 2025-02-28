@@ -1,3 +1,4 @@
+// src/app/techniques/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -88,7 +89,7 @@ export default function TechniquesPage() {
 				<div className="flex justify-between items-center">
 					<h1 className="text-3xl font-bold">Techniques</h1>
 					<Button asChild>
-						<Link href="/techniques/new">Add New Technique</Link>
+						<Link href="/techniques/add">Add New Technique</Link>
 					</Button>
 				</div>
 

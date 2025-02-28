@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "TEA XAI Techniques",
-	description: "Explore Trustworthy and Ethical AI Techniques",
+	title: "TEA Techniques",
+	description: "Explore Technique for Responsible AI Design, Development, and Deployment",
 };
 
 export default function RootLayout({

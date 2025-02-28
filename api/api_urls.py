@@ -2,6 +2,9 @@
 
 from django.urls import path, include, re_path
 from rest_framework.routers import DefaultRouter
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
@@ -16,6 +19,33 @@ from .views.api_views import (
     FairnessApproachesViewSet,
     ProjectLifecycleStagesViewSet,
 )
+
+
+@api_view(["GET"])
+def api_root(request, format=None):
+    """
+    API root providing links to all primary endpoints
+    """
+    return Response(
+        {
+            "assurance_goals": reverse(
+                "assurancegoal-list", request=request, format=format
+            ),
+            "categories": reverse("category-list", request=request, format=format),
+            "subcategories": reverse(
+                "subcategory-list", request=request, format=format
+            ),
+            "tags": reverse("tag-list", request=request, format=format),
+            "techniques": reverse("technique-list", request=request, format=format),
+            "fairness_approaches": reverse(
+                "fairnessapproach-list", request=request, format=format
+            ),
+            "project_lifecycle_stages": reverse(
+                "projectlifecyclestage-list", request=request, format=format
+            ),
+        }
+    )
+
 
 # Schema view for Swagger documentation
 schema_view = get_schema_view(
@@ -41,6 +71,7 @@ router.register(r"fairness-approaches", FairnessApproachesViewSet)
 router.register(r"project-lifecycle-stages", ProjectLifecycleStagesViewSet)
 
 urlpatterns = [
+    path("", api_root, name="api-root"),
     path("", include(router.urls)),
     path(
         "categories-by-goal/<int:assurance_goal_id>/",
@@ -52,7 +83,6 @@ urlpatterns = [
         get_subcategorylist,
         name="subcategories-by-category",
     ),
-    path("auth/", include("rest_framework.urls", namespace="rest_framework")),
     # Authentication
     path("auth/", include("rest_framework.urls", namespace="rest_framework")),
     # Swagger documentation

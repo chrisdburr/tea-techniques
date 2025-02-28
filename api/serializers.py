@@ -53,10 +53,17 @@ class ProjectLifecycleStageSerializer(serializers.ModelSerializer):
 
 
 class TechniqueSerializer(serializers.ModelSerializer):
+    # Add more nested serializations for related data that the frontend might need
     assurance_goal_name = serializers.ReadOnlyField(source="assurance_goal.name")
     category_name = serializers.ReadOnlyField(source="category.name")
     sub_category_name = serializers.ReadOnlyField(source="sub_category.name")
     tags = TagSerializer(many=True, read_only=True)
+    fairness_approaches = FairnessApproachSerializer(
+        many=True, read_only=True, source="fairness_approach"
+    )
+    project_lifecycle_stages = ProjectLifecycleStageSerializer(
+        many=True, read_only=True, source="project_lifecycle_stage"
+    )
 
     class Meta:
         model = Technique
@@ -77,6 +84,8 @@ class TechniqueSerializer(serializers.ModelSerializer):
             "reference",
             "software_package",
             "limitation",
+            "fairness_approaches",
+            "project_lifecycle_stages",
         ]
 
 

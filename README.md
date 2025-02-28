@@ -30,7 +30,7 @@ DB_PORT=5432 # change if necessary in case of port conflicts
 
 ```shell
 poetry install
-poetry shell
+eval $(poetry env activate)
 ```
 
 ### Setup postgres container
@@ -46,7 +46,7 @@ Once the virtual environment, packages, and container are created/running, you c
 ```shell
 python manage.py makemigrations
 python manage.py migrate
-python run load_and_import.py
+python load_and_import.py
 ```
 
 ### Run Django App

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import MainLayout from "@/components/layout/MainLayout";
 import Link from "next/link";
+import * as Constants from "@/lib/constants";
 
 export default function Home() {
 	return (
@@ -21,7 +22,7 @@ export default function Home() {
 							TEA Techniques Database
 						</h1>
 						<p className="text-muted-foreground max-w-xl mx-auto">
-							A database of techniques to help assure your responsible design, development, and deployment of AI technologies.
+							{ Constants.APP_DESCRIPTION }
 						</p>
 						<div className="flex justify-center gap-4 mt-6">
 							<Button asChild size="lg">

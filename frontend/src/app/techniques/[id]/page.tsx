@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
-	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
@@ -32,6 +31,11 @@ export default function TechniqueDetailPage() {
 
 	const { data: technique, isLoading, error } = useTechniqueDetail(id);
 	const deleteMutation = useDeleteTechnique();
+
+	interface TagType {
+		id: number;
+		name: string;
+	}
 
 	if (isLoading) {
 		return (
@@ -100,9 +104,7 @@ export default function TechniqueDetailPage() {
 								<DialogHeader>
 									<DialogTitle>Delete Technique</DialogTitle>
 									<DialogDescription>
-										Are you sure you want to delete "
-										{technique?.name}"? This action cannot
-										be undone.
+										{`Are you sure you want to delete "${technique?.name}"? This action cannot be undone.`}
 									</DialogDescription>
 								</DialogHeader>
 								<DialogFooter>
@@ -225,7 +227,7 @@ export default function TechniqueDetailPage() {
 								</CardHeader>
 								<CardContent>
 									<div className="flex flex-wrap gap-2">
-										{technique.tags.map((tag: any) => (
+										{technique.tags.map((tag: TagType) => (
 											<span
 												key={tag.id}
 												className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary"

@@ -1,15 +1,28 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "./client";
+import type { Technique, Category, AssuranceGoal, APIResponse } from "@/lib/types";
 
-// Techniques
 export const useTechniques = (params = {}) => {
+
+	const filteredParams: Record<string, any> = { ...params };
+	Object.keys(filteredParams).forEach((key) => {
+		if (filteredParams[key] === "all") {
+			delete filteredParams[key];
+		}
+	});
+
 	return useQuery({
 		queryKey: ["techniques", params],
 		queryFn: async () => {
-			const response = await apiClient.get("/api/techniques/", {
-				params,
-			});
-			return response.data;
+			try {
+				const response = await apiClient.get("/techniques/", {
+					params: filteredParams,
+				});
+				return response.data as APIResponse<Technique>;
+			} catch (error) {
+				console.error("Error fetching techniques:", error);
+				throw error;
+			}
 		},
 	});
 };
@@ -18,33 +31,31 @@ export const useTechniqueDetail = (id: number) => {
 	return useQuery({
 		queryKey: ["technique", id],
 		queryFn: async () => {
-			const response = await apiClient.get(`/api/techniques/${id}/`);
-			return response.data;
+			const response = await apiClient.get(`/techniques/${id}/`);
+			return response.data as Technique;
 		},
 		enabled: !!id,
 	});
 };
 
-// Categories
 export const useCategories = (params = {}) => {
 	return useQuery({
 		queryKey: ["categories", params],
 		queryFn: async () => {
-			const response = await apiClient.get("/api/categories/", {
+			const response = await apiClient.get("/categories/", {
 				params,
 			});
-			return response.data;
+			return response.data as APIResponse<Category>;
 		},
 	});
 };
 
-// Assurance Goals
 export const useAssuranceGoals = () => {
 	return useQuery({
 		queryKey: ["assuranceGoals"],
 		queryFn: async () => {
-			const response = await apiClient.get("/api/assurance-goals/");
-			return response.data;
+			const response = await apiClient.get("/assurance-goals/");
+			return response.data as APIResponse<AssuranceGoal>;
 		},
 	});
 };
@@ -54,8 +65,8 @@ export const useCreateTechnique = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: async (data: any) => {
-			const response = await apiClient.post("/api/techniques/", data);
+		mutationFn: async (data: Partial<Technique>) => {
+			const response = await apiClient.post("/techniques/", data);
 			return response.data;
 		},
 		onSuccess: () => {
@@ -68,9 +79,9 @@ export const useUpdateTechnique = (id: number) => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: async (data: any) => {
+		mutationFn: async (data: Partial<Technique>) => {
 			const response = await apiClient.put(
-				`/api/techniques/${id}/`,
+				`/techniques/${id}/`,
 				data
 			);
 			return response.data;
@@ -87,7 +98,7 @@ export const useDeleteTechnique = () => {
 
 	return useMutation({
 		mutationFn: async (id: number) => {
-			await apiClient.delete(`/api/techniques/${id}/`);
+			await apiClient.delete(`/techniques/${id}/`);
 			return id;
 		},
 		onSuccess: () => {

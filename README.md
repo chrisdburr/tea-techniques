@@ -68,21 +68,3 @@ You can then navigate to one of the following urls:
 
 > [!INFO]  
 > You can also run `python manage.py show_urls` in the terminal to see a list of all available urls.
-
-## To Do
-
-This project is a work-in-progress. Eventually, a proper project page with issues will be developed for the following tasks:
-
-- [ ] Move to Turing org (and convert following list to issues)
-- [ ] Review DB schema to ensure integrity and completeness
-- [ ] Add full CRUD operations
-- [ ] Add new columns (i.e. 'Related Techniques', 'Model Details' for "Model Specificity', and 'Complexity (???)' )
-- [ ] Allow submission of new techniques (for review by admin)
-- [ ] Add user authentication (i.e. hook into TEA platform)
-- [ ] Improve descriptions for techniques, i.e. split into short description (for `techniques_list` view) and longer explanation (for `technique_detail` view)
-- [ ] Add 'sort by' function for 'Technique Name' in `techniques_list` view.
-- [ ] Add unit tests
-- [ ] Update API endpoints to provide greater interactivity
-- [ ] Build views and HTML templates for better navigation
-- [ ] Integrate into TEA platform
-

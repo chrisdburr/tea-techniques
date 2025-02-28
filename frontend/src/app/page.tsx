@@ -18,12 +18,10 @@ export default function Home() {
 				<section className="py-12">
 					<div className="text-center space-y-4">
 						<h1 className="text-4xl font-bold">
-							Explainability Techniques Database
+							TEA Techniques Database
 						</h1>
 						<p className="text-muted-foreground max-w-xl mx-auto">
-							A comprehensive database of Explainability AI
-							techniques for Trustworthy and Ethical Assurance
-							(TEA).
+							A database of techniques to help assure your responsible design, development, and deployment of AI technologies.
 						</p>
 						<div className="flex justify-center gap-4 mt-6">
 							<Button asChild size="lg">

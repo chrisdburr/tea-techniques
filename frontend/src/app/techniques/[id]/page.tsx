@@ -1,15 +1,11 @@
+// src/app/techniques/[id]]/page.tsx
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
 import MainLayout from "@/components/layout/MainLayout";
 import { useTechniqueDetail, useDeleteTechnique } from "@/lib/api/hooks";
 import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import {
 	Dialog,
@@ -24,8 +20,10 @@ import { useState } from "react";
 
 export default function TechniqueDetailPage() {
 	const params = useParams();
+	console.log("Route param:", params.id);
 	const router = useRouter();
 	const id = Number(params.id);
+	console.log("Parsed id:", id);
 
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 

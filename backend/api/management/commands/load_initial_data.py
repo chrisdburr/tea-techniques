@@ -1,5 +1,3 @@
-# backend/api/management/commands/load_initial_data.py
-
 from django.core.management.base import BaseCommand
 from django.core.management import call_command
 from django.db import transaction
@@ -16,8 +14,8 @@ class Command(BaseCommand):
             "assurance_goals.json",
             "categories.json",
             "sub_categories.json",
-            "techniques.json",  # New fixture we'll create
-            "tags.json",  # New fixture we'll create
+            "techniques.json",
+            "tags.json",
         ]
 
         try:

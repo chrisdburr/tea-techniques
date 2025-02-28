@@ -2,13 +2,13 @@ services:
   db:
     image: postgres:15
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
+      - POSTGRES_USER=tea_user
+      - POSTGRES_PASSWORD=tea_password
+      - POSTGRES_DB=tea_techniques
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      test: ["CMD-SHELL", "pg_isready -U tea_user -d tea_techniques"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -19,26 +19,30 @@ services:
       dockerfile: Dockerfile
     environment:
       - DB_HOST=db
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
+      - DB_USER=tea_user
+      - DB_PASSWORD=tea_password
+      - DB_NAME=tea_techniques
       - DB_PORT=5432
-      - DEBUG=${DEBUG:-False}
-      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-*}
-      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:3000}
+      - DEBUG=True
+      - ALLOWED_HOSTS=*
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000
+      - SECRET_KEY=dev-secret-key
     depends_on:
       db:
         condition: service_healthy
     ports:
       - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./backend/scripts:/app/scripts
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     environment:
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000/api}
-      - NEXT_PUBLIC_SWAGGER_URL=${NEXT_PUBLIC_SWAGGER_URL:-http://localhost:8000/swagger/}
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api
+      - NEXT_PUBLIC_SWAGGER_URL=http://localhost:8000/swagger/
     ports:
       - "3000:3000"
     depends_on:

@@ -1,164 +1,203 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import MainLayout from "@/components/layout/MainLayout";
+import {
+	useTechniques,
+	useCategories,
+	useAssuranceGoals,
+} from "@/lib/api/hooks";
 import {
 	Card,
 	CardContent,
 	CardDescription,
+	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import MainLayout from "@/components/layout/MainLayout";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import Link from "next/link";
-import * as Constants from "@/lib/constants";
+import { Technique, Category, AssuranceGoal } from "@/lib/types";
 
-export default function Home() {
+// Loading component
+function LoadingState() {
 	return (
-		<MainLayout>
-			<div className="space-y-6">
-				<section className="py-12">
-					<div className="text-center space-y-4">
-						<h1 className="text-4xl font-bold">
-							TEA Techniques Database
-						</h1>
-						<p className="text-muted-foreground max-w-xl mx-auto">
-							{ Constants.APP_DESCRIPTION }
-						</p>
-						<div className="flex justify-center gap-4 mt-6">
-							<Button asChild size="lg">
-								<Link href="/techniques">
-									Browse Techniques
+		<div className="flex justify-center items-center min-h-[400px]">
+			<p className="text-lg text-muted-foreground">
+				Loading techniques...
+			</p>
+		</div>
+	);
+}
+
+// Types for the search form
+interface SearchFilters {
+	search: string;
+	assuranceGoal: string;
+	category: string;
+}
+
+interface SearchFormProps {
+	onSearch: (filters: SearchFilters) => void;
+	onReset: () => void;
+}
+
+// Search and filter form component
+function SearchForm({ onSearch, onReset }: SearchFormProps) {
+	const [search, setSearch] = useState("");
+	const { data: categoriesData } = useCategories();
+	const { data: assuranceGoalsData } = useAssuranceGoals();
+	const [assuranceGoal, setAssuranceGoal] = useState("all");
+	const [category, setCategory] = useState("all");
+
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		onSearch({ search, assuranceGoal, category });
+	};
+
+	return (
+		<form onSubmit={handleSubmit} className="bg-muted/30 p-4 rounded-lg">
+			<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+				<Input
+					placeholder="Search techniques..."
+					value={search}
+					onChange={(e) => setSearch(e.target.value)}
+				/>
+				<Select value={assuranceGoal} onValueChange={setAssuranceGoal}>
+					<SelectTrigger>
+						<SelectValue placeholder="Assurance Goal" />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectItem value="all">All Assurance Goals</SelectItem>
+						{assuranceGoalsData?.results?.map(
+							(goal: AssuranceGoal) => (
+								<SelectItem
+									key={goal.id}
+									value={goal.id.toString()}
+								>
+									{goal.name}
+								</SelectItem>
+							)
+						)}
+					</SelectContent>
+				</Select>
+				<Select value={category} onValueChange={setCategory}>
+					<SelectTrigger>
+						<SelectValue placeholder="Category" />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectItem value="all">All Categories</SelectItem>
+						{categoriesData?.results?.map((cat: Category) => (
+							<SelectItem key={cat.id} value={cat.id.toString()}>
+								{cat.name}
+							</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
+				<div className="flex gap-2">
+					<Button type="submit">Apply Filters</Button>
+					<Button type="button" variant="outline" onClick={onReset}>
+						Reset
+					</Button>
+				</div>
+			</div>
+		</form>
+	);
+}
+
+// Main content component that uses searchParams
+function TechniqueContent() {
+	const searchParams = useSearchParams();
+	const router = useRouter();
+
+	const search = searchParams.get("search") || "";
+	const assuranceGoal = searchParams.get("assurance_goal") || "all";
+	const category = searchParams.get("category") || "all";
+
+	const { data: techniquesData, isLoading } = useTechniques({
+		search,
+		assurance_goal: assuranceGoal,
+		category,
+	});
+
+	const handleSearch = (filters: SearchFilters) => {
+		const params = new URLSearchParams();
+		if (filters.search) params.set("search", filters.search);
+		if (filters.assuranceGoal !== "all")
+			params.set("assurance_goal", filters.assuranceGoal);
+		if (filters.category !== "all")
+			params.set("category", filters.category);
+		router.push(`/techniques?${params.toString()}`);
+	};
+
+	const handleReset = () => {
+		router.push("/techniques");
+	};
+
+	if (isLoading) return <LoadingState />;
+
+	return (
+		<div className="space-y-6">
+			<div className="flex justify-between items-center">
+				<h1 className="text-3xl font-bold">Techniques</h1>
+				<Button asChild>
+					<Link href="/techniques/add">Add New Technique</Link>
+				</Button>
+			</div>
+
+			<SearchForm onSearch={handleSearch} onReset={handleReset} />
+
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				{techniquesData?.results?.map((technique: Technique) => (
+					<Card key={technique.id}>
+						<CardHeader>
+							<CardTitle>{technique.name}</CardTitle>
+							<CardDescription>
+								{technique.category_name} |{" "}
+								{technique.model_dependency}
+							</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<p className="line-clamp-3 text-sm text-muted-foreground">
+								{technique.description}
+							</p>
+						</CardContent>
+						<CardFooter>
+							<Button asChild variant="outline">
+								<Link href={`/techniques/${technique.id}`}>
+									View Details
 								</Link>
 							</Button>
-							<Button asChild variant="outline" size="lg">
-								<Link href="/about">Learn More</Link>
-							</Button>
-						</div>
-					</div>
-				</section>
-
-				<section className="py-12 bg-muted/50 rounded-lg">
-					<div className="container mx-auto px-4">
-						<h2 className="text-2xl font-bold text-center mb-8">
-							Explore by Assurance Goal
-						</h2>
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-							<Card>
-								<CardHeader>
-									<CardTitle>Explainability</CardTitle>
-									<CardDescription>
-										Ensuring model decisions are transparent
-										and understandable.
-									</CardDescription>
-								</CardHeader>
-								<CardContent>
-									<p className="mb-4">
-										Explore techniques for making AI models
-										more interpretable and their decisions
-										explainable to humans.
-									</p>
-									<Button asChild variant="outline">
-										<Link href="/techniques?assurance_goal=1">
-											View Explainability Techniques
-										</Link>
-									</Button>
-								</CardContent>
-							</Card>
-							<Card>
-								<CardHeader>
-									<CardTitle>Fairness</CardTitle>
-									<CardDescription>
-										Promoting equitable outcomes across
-										different user groups.
-									</CardDescription>
-								</CardHeader>
-								<CardContent>
-									<p className="mb-4">
-										Discover methods to detect and mitigate
-										biases in AI systems for more equitable
-										decision-making.
-									</p>
-									<Button asChild variant="outline">
-										<Link href="/techniques?assurance_goal=2">
-											View Fairness Techniques
-										</Link>
-									</Button>
-								</CardContent>
-							</Card>
-						</div>
-					</div>
-				</section>
-
-				<section className="py-12">
-					<div className="container mx-auto px-4">
-						<h2 className="text-2xl font-bold text-center mb-8">
-							Browse by Category
-						</h2>
-						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-							{[
-								{
-									title: "Feature Analysis",
-									description:
-										"Techniques that analyze input features' contributions.",
-									link: "/techniques?category=1",
-								},
-								{
-									title: "Model Approximation",
-									description:
-										"Methods that create interpretable surrogates of complex models.",
-									link: "/techniques?category=2",
-								},
-								{
-									title: "Visualization Techniques",
-									description:
-										"Methods that create visual representations of model behavior.",
-									link: "/techniques?category=3",
-								},
-								{
-									title: "Example-Based Methods",
-									description:
-										"Techniques using specific instances to explain predictions.",
-									link: "/techniques?category=4",
-								},
-								{
-									title: "Rule Extraction",
-									description:
-										"Methods deriving human-readable rules from models.",
-									link: "/techniques?category=5",
-								},
-								{
-									title: "Uncertainty and Reliability",
-									description:
-										"Techniques assessing confidence and reliability of predictions.",
-									link: "/techniques?category=6",
-								},
-							].map((category, index) => (
-								<Card key={index}>
-									<CardHeader>
-										<CardTitle className="text-lg">
-											{category.title}
-										</CardTitle>
-									</CardHeader>
-									<CardContent>
-										<p className="text-sm text-muted-foreground mb-4">
-											{category.description}
-										</p>
-										<Button
-											asChild
-											variant="ghost"
-											size="sm"
-										>
-											<Link href={category.link}>
-												Browse
-											</Link>
-										</Button>
-									</CardContent>
-								</Card>
-							))}
-						</div>
-					</div>
-				</section>
+						</CardFooter>
+					</Card>
+				))}
 			</div>
+
+			{techniquesData?.results?.length === 0 && (
+				<div className="text-center py-8">
+					<p>No techniques found matching your criteria.</p>
+				</div>
+			)}
+		</div>
+	);
+}
+
+// Main page component with Suspense boundary
+export default function TechniquesPage() {
+	return (
+		<MainLayout>
+			<Suspense fallback={<LoadingState />}>
+				<TechniqueContent />
+			</Suspense>
 		</MainLayout>
 	);
 }

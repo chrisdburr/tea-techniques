@@ -1,15 +1,24 @@
+// src/lib/api/hooks.ts
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "./client";
-import type { Technique, Category, AssuranceGoal, APIResponse } from "@/lib/types";
+import type {
+	Technique,
+	Category,
+	AssuranceGoal,
+	APIResponse,
+} from "@/lib/types";
 
-export const useTechniques = (params = {}) => {
+interface QueryParams {
+	search?: string;
+	assurance_goal?: string;
+	category?: string;
+	[key: string]: string | undefined;
+}
 
-	const filteredParams: Record<string, any> = { ...params };
-	Object.keys(filteredParams).forEach((key) => {
-		if (filteredParams[key] === "all") {
-			delete filteredParams[key];
-		}
-	});
+export const useTechniques = (params: QueryParams = {}) => {
+	const filteredParams = Object.fromEntries(
+		Object.entries(params).filter(([, value]) => value !== "all")
+	);
 
 	return useQuery({
 		queryKey: ["techniques", params],
@@ -38,7 +47,7 @@ export const useTechniqueDetail = (id: number) => {
 	});
 };
 
-export const useCategories = (params = {}) => {
+export const useCategories = (params: QueryParams = {}) => {
 	return useQuery({
 		queryKey: ["categories", params],
 		queryFn: async () => {
@@ -67,7 +76,7 @@ export const useCreateTechnique = () => {
 	return useMutation({
 		mutationFn: async (data: Partial<Technique>) => {
 			const response = await apiClient.post("/techniques/", data);
-			return response.data;
+			return response.data as Technique;
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["techniques"] });
@@ -80,11 +89,8 @@ export const useUpdateTechnique = (id: number) => {
 
 	return useMutation({
 		mutationFn: async (data: Partial<Technique>) => {
-			const response = await apiClient.put(
-				`/techniques/${id}/`,
-				data
-			);
-			return response.data;
+			const response = await apiClient.put(`/techniques/${id}/`, data);
+			return response.data as Technique;
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["techniques"] });

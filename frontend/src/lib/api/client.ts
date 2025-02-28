@@ -4,6 +4,7 @@ import axios, {
 	AxiosResponse,
 	AxiosError,
 } from "axios";
+import { config } from "@/lib/config";
 
 // Define a more specific error interface
 interface APIErrorResponse {
@@ -26,7 +27,7 @@ export class APIError extends Error {
 
 // Create axios instance
 const createAPIClient = (
-	baseURL: string = process.env.NEXT_PUBLIC_API_BASE_URL || ""
+	baseURL: string = config.apiBaseUrl
 ): AxiosInstance => {
 	const instance = axios.create({
 		baseURL,
@@ -34,6 +35,8 @@ const createAPIClient = (
 		headers: {
 			"Content-Type": "application/json",
 		},
+		// Important for CORS
+		withCredentials: true,
 	});
 
 	// Request interceptor
@@ -57,20 +60,18 @@ const createAPIClient = (
 	instance.interceptors.response.use(
 		(response: AxiosResponse) => response,
 		(error: AxiosError<APIErrorResponse>) => {
-			// Transform axios errors into a more manageable format
 			if (error.response) {
-				// The request was made and the server responded with a status code
 				throw new APIError(
 					error.response.data?.detail || "An error occurred",
 					error.response.status,
 					error.response.data
 				);
 			} else if (error.request) {
-				// The request was made but no response was received
-				throw new APIError("No response received from server", 0);
+				throw new APIError("No response received from server");
 			} else {
-				// Something happened in setting up the request
-				throw new APIError("Error setting up the request", 0);
+				throw new APIError(
+					error.message || "Error setting up the request"
+				);
 			}
 		}
 	);

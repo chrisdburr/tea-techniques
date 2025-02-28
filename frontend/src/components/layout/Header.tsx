@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { DarkModeToggle } from "@/lib/context/dark-mode";
 import { Button } from "@/components/ui/button";
+import { config } from "@/lib/config";
 
 const Header = () => {
 	return (
@@ -48,7 +49,13 @@ const Header = () => {
 						size="sm"
 						className="hidden md:flex"
 					>
-						<Link href="/api">API Documentation</Link>
+						<a
+							href={config.swaggerUrl}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							API Documentation
+						</a>
 					</Button>
 				</div>
 			</div>

@@ -18,5 +18,11 @@ RUN pip install poetry && \
 # Copy project files
 COPY . .
 
-# Run migrations and load initial data
-CMD ["sh", "-c", "python manage.py migrate && python manage.py loaddata api/fixtures/*.json && python manage.py runserver 0.0.0.0:8000"]
+# Create start script
+RUN echo '#!/bin/sh\n\
+python manage.py migrate --noinput\n\
+python manage.py load_initial_data\n\
+python manage.py runserver 0.0.0.0:8000' > /app/start.sh && \
+    chmod +x /app/start.sh
+
+CMD ["/app/start.sh"]

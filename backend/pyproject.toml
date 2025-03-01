@@ -25,6 +25,19 @@ psycopg = "^3.2.5"
 django-cors-headers = "^4.7.0"
 drf-yasg = "^1.21.9"
 
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.2"
+pytest-django = "^4.8.0"
+pytest-cov = "^4.1.0"
+factory-boy = "^3.3.0"
+faker = "^23.1.0"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+python_files = ["test_*.py", "*_test.py"]
+testpaths = ["api/tests"]
+filterwarnings = ["ignore::DeprecationWarning"]
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

@@ -55,7 +55,12 @@ def get_subcategory_id(subcategory_name, category_id):
 def create_technique_object(row, pk, assurance_goal_id):
     category_id = get_category_id(row["Category"], assurance_goal_id)
     subcategory_id = get_subcategory_id(row.get("Sub-Category", ""), category_id)
-
+    
+    # If no valid category_id is found, default to the first category for the assurance goal
+    if category_id is None:
+        category_id = 1 if assurance_goal_id == 1 else 9  # Default to Feature Analysis or Pre-Processing
+    
+    # Create the technique object
     return {
         "model": "api.technique",
         "pk": pk,

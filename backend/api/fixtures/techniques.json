@@ -1,0 +1,1345 @@
+[
+  {
+    "model": "api.technique",
+    "pk": 1,
+    "fields": {
+      "name": "SHAP (SHapley Additive exPlanations)",
+      "description": "Assigns importance values to each feature by computing their contribution to individual predictions, based on Shapley values from cooperative game theory.",
+      "assurance_goal": 1,
+      "category": 1,
+      "sub_category": 1,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Explaining individual predictions in complex models like neural networks or ensemble models.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 2,
+    "fields": {
+      "name": "Permutation Importance",
+      "description": "Evaluates feature importance by measuring the decrease in model accuracy when a feature's values are randomly shuffled.",
+      "assurance_goal": 1,
+      "category": 1,
+      "sub_category": 1,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Assessing feature importance in models where coefficients are not available, such as tree-based models.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 3,
+    "fields": {
+      "name": "Mean Decrease Impurity (MDI)",
+      "description": "Calculates feature importance in tree-based models by measuring how much each feature decreases impurity across all trees.",
+      "assurance_goal": 1,
+      "category": 1,
+      "sub_category": 1,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Determining important features in Random Forest classification tasks.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 4,
+    "fields": {
+      "name": "Gini Importance",
+      "description": "Measures the total reduction of Gini impurity brought by a feature across all nodes and trees in decision trees and Random Forests.",
+      "assurance_goal": 1,
+      "category": 1,
+      "sub_category": 1,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Selecting important features when building tree-based classification models.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 5,
+    "fields": {
+      "name": "Coefficient Magnitudes (in Linear Models)",
+      "description": "Uses the absolute values of coefficients in linear models to represent feature importance, indicating the strength and direction of relationships.",
+      "assurance_goal": 1,
+      "category": 1,
+      "sub_category": 1,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Interpreting which features influence housing price predictions in linear regression.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 6,
+    "fields": {
+      "name": "Integrated Gradients",
+      "description": "Attributes feature importance by integrating gradients of the model's output with respect to inputs along a path from a baseline to the actual input.",
+      "assurance_goal": 1,
+      "category": 1,
+      "sub_category": 1,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Understanding pixel contributions in image classification with deep neural networks.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 7,
+    "fields": {
+      "name": "DeepLIFT",
+      "description": "Tracks changes in the output relative to a reference input, decomposing contributions from individual neurons to the final prediction in deep learning models.",
+      "assurance_goal": 1,
+      "category": 1,
+      "sub_category": 1,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Explaining why a neural network classifies an image as a specific object by tracing neuron activations.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 8,
+    "fields": {
+      "name": "Layer-wise Relevance Propagation (LRP)",
+      "description": "Explains predictions by backpropagating relevance scores from the output layer to input features, distributing the prediction score layer by layer.",
+      "assurance_goal": 1,
+      "category": 1,
+      "sub_category": 1,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Visualising important regions in medical images for disease diagnosis using deep learning models.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 9,
+    "fields": {
+      "name": "Variable Importance in Random Forests (MDA, MDG)",
+      "description": "Calculates feature importance by measuring the Mean Decrease Accuracy or Mean Decrease Gini when a feature is excluded from Random Forest models.",
+      "assurance_goal": 1,
+      "category": 1,
+      "sub_category": 1,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Identifying key predictors in a Random Forest model for credit scoring.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 10,
+    "fields": {
+      "name": "Contextual Decomposition",
+      "description": "Interprets neural networks by decomposing activations to explain predictions based on contributions of individual features or groups.",
+      "assurance_goal": 1,
+      "category": 1,
+      "sub_category": 1,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Explaining sentiment predictions in text by attributing scores to words or phrases.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 11,
+    "fields": {
+      "name": "Taylor Decomposition",
+      "description": "Decomposes predictions into contributions from individual features using a Taylor series expansion of the model's prediction function.",
+      "assurance_goal": 1,
+      "category": 1,
+      "sub_category": 1,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Attributing feature contributions in complex models for specific predictions.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 12,
+    "fields": {
+      "name": "Sobol Indices",
+      "description": "Quantifies the contribution of individual variables and their interactions to the output variance in sensitivity analysis.",
+      "assurance_goal": 1,
+      "category": 1,
+      "sub_category": 2,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Understanding parameter impacts in environmental modeling outputs.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 13,
+    "fields": {
+      "name": "Feature Interaction Detection (H-statistic)",
+      "description": "Measures feature interaction by comparing joint contributions to the model with the sum of individual contributions.",
+      "assurance_goal": 1,
+      "category": 1,
+      "sub_category": 2,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Identifying significant interactions in healthcare predictive models.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 14,
+    "fields": {
+      "name": "LIME (Local Interpretable Model-Agnostic Explanations)",
+      "description": "Generates local surrogate models that approximate complex model behaviour around a specific instance using interpretable models like linear models.",
+      "assurance_goal": 1,
+      "category": 2,
+      "sub_category": 3,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Explaining why a customer was denied a loan by approximating the model's decision locally.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 15,
+    "fields": {
+      "name": "Ridge Regression Surrogates",
+      "description": "Uses Ridge Regression as a surrogate to approximate global behaviour of complex models, balancing simplicity and interpretability with regularisation.",
+      "assurance_goal": 1,
+      "category": 2,
+      "sub_category": 4,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Summarising complex model behaviour for regulatory reporting in finance.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 16,
+    "fields": {
+      "name": "Partial Dependence Plots (PDP)",
+      "description": "Visualises the relationship between one or two features and the predicted outcome, averaging out effects of other features.",
+      "assurance_goal": 1,
+      "category": 3,
+      "sub_category": 5,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Understanding how changes in age affect predicted disease risk in medical models.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 17,
+    "fields": {
+      "name": "Accumulated Local Effects (ALE) Plots",
+      "description": "Similar to PDPs but account for feature interactions, providing accurate insights when features are correlated.",
+      "assurance_goal": 1,
+      "category": 3,
+      "sub_category": 5,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Exploring the effect of house size on price predictions in real estate models with correlated features.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 18,
+    "fields": {
+      "name": "Individual Conditional Expectation (ICE) Plots",
+      "description": "Shows how a feature affects predictions for individual instances, highlighting heterogeneous effects across data points.",
+      "assurance_goal": 1,
+      "category": 3,
+      "sub_category": 5,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Visualising how customers' predicted spending changes with income in consumer behaviour models.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 19,
+    "fields": {
+      "name": "Saliency Maps",
+      "description": "Highlights important pixels in input images that most influence the output prediction in computer vision models.",
+      "assurance_goal": 1,
+      "category": 3,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Identifying regions contributing to tumor diagnosis in medical images.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 20,
+    "fields": {
+      "name": "Grad-CAM (Gradient-weighted Class Activation Mapping)",
+      "description": "Uses gradients to produce heatmaps highlighting image regions that contribute most to the model's output.",
+      "assurance_goal": 1,
+      "category": 3,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Visualising parts of an image leading to a 'dog' classification in image recognition models.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 21,
+    "fields": {
+      "name": "Occlusion Sensitivity",
+      "description": "Measures prediction changes by systematically occluding parts of the input to identify important regions or features.",
+      "assurance_goal": 1,
+      "category": 3,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Understanding which words affect sentiment prediction by masking them in NLP models.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 22,
+    "fields": {
+      "name": "Attention Mechanisms in Neural Networks",
+      "description": "Visualises attention weights in models like transformers, highlighting important input parts for predictions.",
+      "assurance_goal": 1,
+      "category": 3,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Analysing which words a transformer model focuses on during machine translation tasks.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 23,
+    "fields": {
+      "name": "Factor Analysis",
+      "description": "Reduces dimensionality by identifying latent factors explaining observed variability, aiding in data interpretation.",
+      "assurance_goal": 1,
+      "category": 8,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Discovering underlying factors in psychological survey data for social science research.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 24,
+    "fields": {
+      "name": "Principal Component Analysis (PCA)",
+      "description": "Reduces dimensionality by projecting data onto directions of maximum variance, simplifying data while retaining important information.",
+      "assurance_goal": 1,
+      "category": 3,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Visualising high-dimensional gene expression data in bioinformatics.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 25,
+    "fields": {
+      "name": "t-SNE",
+      "description": "A non-linear technique that visualises high-dimensional data in 2D or 3D, preserving local relationships between points.",
+      "assurance_goal": 1,
+      "category": 3,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Visualising clusters in high-dimensional word embeddings.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 26,
+    "fields": {
+      "name": "UMAP",
+      "description": "A non-linear technique similar to t-SNE but better at preserving global data structure.",
+      "assurance_goal": 1,
+      "category": 3,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Visualising patterns in user behaviour data for marketing analysis.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 27,
+    "fields": {
+      "name": "Prototype and Criticism Models",
+      "description": "Identifies representative (prototypes) and non-representative (criticisms) examples to summarise and highlight model behaviour.",
+      "assurance_goal": 1,
+      "category": 4,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Selecting representative customer profiles for targeted marketing.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 28,
+    "fields": {
+      "name": "Influence Functions",
+      "description": "Measures the impact of training examples on model predictions to identify influential data points.",
+      "assurance_goal": 1,
+      "category": 4,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Debugging model predictions by identifying influential training data points.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 29,
+    "fields": {
+      "name": "Contrastive Explanation Method (CEM)",
+      "description": "Generates explanations by identifying minimal input changes that result in different outcomes, offering counterfactual reasoning.",
+      "assurance_goal": 1,
+      "category": 4,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Explaining loan rejections by showing what changes would lead to approval.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 30,
+    "fields": {
+      "name": "Bayesian Networks (e.g., bnlearn)",
+      "description": "Probabilistic graphical models representing variables and their conditional dependencies for causal reasoning.",
+      "assurance_goal": 1,
+      "category": 4,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Modeling causal relationships in gene regulatory networks.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 31,
+    "fields": {
+      "name": "ANCHOR",
+      "description": "Provides high-precision if-then rules for specific predictions, explaining which features are responsible for the decision.",
+      "assurance_goal": 1,
+      "category": 5,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Generating rules to explain individual predictions in text classification.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 32,
+    "fields": {
+      "name": "RuleFit",
+      "description": "Combines decision rules with linear models to provide interpretable models capturing non-linear patterns.",
+      "assurance_goal": 1,
+      "category": 5,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Building interpretable models for predicting customer churn with rule-based explanations.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 33,
+    "fields": {
+      "name": "Monte Carlo Dropout",
+      "description": "Uses dropout at inference time in deep learning models to estimate uncertainty by approximating Bayesian inference.",
+      "assurance_goal": 1,
+      "category": 6,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Estimating prediction uncertainty in medical diagnosis models.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 34,
+    "fields": {
+      "name": "ODIN (Out-of-DIstribution detector for Neural networks)",
+      "description": "Detects out-of-distribution samples in neural networks by applying temperature scaling and input perturbations.",
+      "assurance_goal": 1,
+      "category": 6,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Identifying when an image classifier encounters novel inputs.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 35,
+    "fields": {
+      "name": "Permutation Tests",
+      "description": "Estimates uncertainty by permuting data labels and calculating test statistics to create a null distribution in non-parametric methods.",
+      "assurance_goal": 1,
+      "category": 6,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Assessing the significance of model predictions in hypothesis testing.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 36,
+    "fields": {
+      "name": "Fairness Metrics (e.g., Equalized Odds, Demographic Parity)",
+      "description": "Evaluates models for fairness by measuring disparities in predictions across different demographic groups.",
+      "assurance_goal": 1,
+      "category": 7,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Ensuring a hiring model does not discriminate based on gender or ethnicity.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 37,
+    "fields": {
+      "name": "Model Pruning",
+      "description": "Simplifies neural networks by removing less important weights or neurons, reducing complexity while retaining performance.",
+      "assurance_goal": 1,
+      "category": 8,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Reducing model size for deployment on mobile devices without significant loss in accuracy.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 38,
+    "fields": {
+      "name": "Knowledge Distillation",
+      "description": "Trains a simpler 'student' model to replicate the behaviour of a complex 'teacher' model, resulting in a more interpretable model.",
+      "assurance_goal": 1,
+      "category": 8,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Simplifying a deep neural network for faster inference in real-time applications.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 39,
+    "fields": {
+      "name": "Attention Visualisation in Transformers",
+      "description": "Visualises attention weights in transformer-based models to show how the model focuses on different input parts during prediction.",
+      "assurance_goal": 1,
+      "category": 3,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Understanding which words a transformer model focuses on during machine translation tasks.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 40,
+    "fields": {
+      "name": "Neuron Activation Analysis",
+      "description": "Analyses activation patterns of neurons in large language models (LLMs) to interpret their roles and the concepts they represent.",
+      "assurance_goal": 1,
+      "category": 1,
+      "sub_category": 1,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Identifying neurons responsible for syntax or semantics in language models.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 41,
+    "fields": {
+      "name": "Prompt Sensitivity Analysis",
+      "description": "Studies how variations in input prompts affect LLM outputs to understand model behaviour and sensitivity.",
+      "assurance_goal": 1,
+      "category": 4,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Evaluating how different phrasings influence an LLM's answers in question-answering tasks.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 42,
+    "fields": {
+      "name": "Causal Mediation Analysis in Language Models",
+      "description": "Investigates causal relationships within LLMs by assessing how interventions on specific components affect outputs.",
+      "assurance_goal": 1,
+      "category": 4,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Understanding how adjusting embeddings changes model responses in language generation tasks.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 43,
+    "fields": {
+      "name": "Feature Attribution with Integrated Gradients in NLP",
+      "description": "Applies Integrated Gradients to attribute importance of input tokens in LLMs for specific predictions, often producing visualisations.",
+      "assurance_goal": 1,
+      "category": 1,
+      "sub_category": 1,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Identifying words influencing text sentiment classification or topic modeling.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 44,
+    "fields": {
+      "name": "Concept Activation Vectors (CAVs)",
+      "description": "Represents human-understandable concepts as vectors in the model's latent space to analyse their influence on predictions.",
+      "assurance_goal": 1,
+      "category": 1,
+      "sub_category": 1,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Assessing how concepts like \"negativity\" affect language model outputs.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 45,
+    "fields": {
+      "name": "In-Context Learning Analysis",
+      "description": "Examines how LLMs learn from examples provided in the input prompt, revealing capacity for few-shot learning.",
+      "assurance_goal": 1,
+      "category": 4,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Analysing the effect of examples on an LLM's ability to perform a new task like translation.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 46,
+    "fields": {
+      "name": "Reweighing",
+      "description": "Assigns weights to instances in the training data to ensure different groups are equally represented in all labels.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Balancing gender representation in credit approval datasets before training a classifier.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 47,
+    "fields": {
+      "name": "Disparate Impact Remover",
+      "description": "Edits feature values to reduce dependence between features and protected attributes, aiming to mitigate disparate impact.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Adjusting salary features to reduce gender bias in income prediction models.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 48,
+    "fields": {
+      "name": "Learning Fair Representations",
+      "description": "Learns latent representations that encode data well but obfuscate information about protected attributes.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Creating unbiased data representations for hiring algorithms.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 49,
+    "fields": {
+      "name": "Fairness GAN",
+      "description": "Employs Generative Adversarial Networks to generate fair representations of data that obfuscate protected attributes.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Creating unbiased datasets for training fair image recognition models.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 50,
+    "fields": {
+      "name": "Optimised Pre-Processing",
+      "description": "Modifies training data features and labels to induce fairness while preserving data utility.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Adjusting criminal justice data to reduce racial bias before training models.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 51,
+    "fields": {
+      "name": "Relabelling",
+      "description": "Changes labels of certain instances in training data to reduce bias, often based on fairness constraints.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Modifying labels in loan default datasets to mitigate historical biases.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 52,
+    "fields": {
+      "name": "Preferential Sampling",
+      "description": "Re-samples data with preference for certain groups to achieve fair representation in training datasets.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Oversampling minority groups in medical data to train unbiased models.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 53,
+    "fields": {
+      "name": "Fairness Through Unawareness",
+      "description": "Ensures the model does not use protected attributes in decisions; however, indirect bias may persist.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Removing gender as a feature in employee promotion predictions.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 54,
+    "fields": {
+      "name": "Adversarial Debiasing",
+      "description": "Trains a model to make accurate predictions while reducing the ability of an adversary to predict protected attributes from outputs.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Developing fair classification models for loan approvals by reducing gender predictability.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 55,
+    "fields": {
+      "name": "Adversarial Debiasing for Text",
+      "description": "Applies adversarial debiasing techniques specifically to textual data to mitigate biases in language models.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Reducing gender bias in sentiment analysis models by adversarial training on text data.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 56,
+    "fields": {
+      "name": "Fair Adversarial Networks",
+      "description": "Extends adversarial debiasing by incorporating fairness into deep learning via adversarial training.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Reducing bias in facial recognition systems with adversarial networks.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 57,
+    "fields": {
+      "name": "Prejudice Remover Regulariser",
+      "description": "Incorporates a fairness penalty into the learning objective to penalise models that encode biases with respect to protected attributes.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Training logistic regression models with fairness constraints for university admissions.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 58,
+    "fields": {
+      "name": "Meta Fair Classifier",
+      "description": "Modifies any classifier to optimise for fairness metrics using a meta-learning algorithm.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Applying fairness optimisation to models in employee evaluation systems.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 59,
+    "fields": {
+      "name": "Exponentiated Gradient Reduction",
+      "description": "Formulates fairness as a constrained optimisation problem, using exponentiated gradient methods to find optimal classifiers.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Training fair classifiers for employment screening processes.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 60,
+    "fields": {
+      "name": "Fair Transfer Learning",
+      "description": "Adapts models trained on one domain to another while preserving fairness constraints across domains.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Transferring fairness-aware models from one region's data to another in healthcare analytics.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 61,
+    "fields": {
+      "name": "Adaptive Sensitive Reweighting",
+      "description": "Dynamically adjusts weights during training based on model performance across different groups.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Balancing performance in speech recognition across accents and dialects.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 62,
+    "fields": {
+      "name": "Multi-Accuracy Boosting",
+      "description": "Improves accuracy uniformly across groups by correcting errors where the model performs poorly for certain groups.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Enhancing model performance for underrepresented groups in disease prediction.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 63,
+    "fields": {
+      "name": "Equalised Odds Post-Processing",
+      "description": "Adjusts output probabilities to equalise true positive and false positive rates across groups.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Ensuring fairness in recidivism risk assessments used in judicial decisions.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 64,
+    "fields": {
+      "name": "Threshold Optimiser",
+      "description": "Adjusts decision thresholds for different groups to satisfy fairness constraints post-training.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Ensuring equal acceptance rates in college admissions across demographics.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 65,
+    "fields": {
+      "name": "Reject Option Classification",
+      "description": "Changes decisions where the model is least certain, favouring the disadvantaged group within this uncertain region.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Mitigating bias in hiring decisions by adjusting uncertain predictions.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 66,
+    "fields": {
+      "name": "Calibration with Equality of Opportunity",
+      "description": "Adjusts probabilities to achieve equal true positive rates across groups while maintaining calibration within each group.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Balancing opportunity in credit scoring across different ethnic groups.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 67,
+    "fields": {
+      "name": "Statistical Parity Difference",
+      "description": "Measures the difference in positive outcome rates between protected and unprotected groups.",
+      "assurance_goal": 2,
+      "category": 12,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Evaluating fairness in hiring models by comparing selection rates across genders.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 68,
+    "fields": {
+      "name": "Disparate Impact",
+      "description": "Assesses whether decisions disproportionately affect members of a protected group, typically requiring a ratio between rates.",
+      "assurance_goal": 2,
+      "category": 12,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Checking for bias in loan approvals where minority groups are less likely to be approved.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 69,
+    "fields": {
+      "name": "Demographic Parity",
+      "description": "Evaluates if the outcome is independent of the protected attributes, aiming for equal outcome rates across groups.",
+      "assurance_goal": 2,
+      "category": 12,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Ensuring job advertisements are shown equally across genders.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 70,
+    "fields": {
+      "name": "Equal Opportunity Difference",
+      "description": "Computes the difference in true positive rates between groups, assessing fairness in terms of equal opportunity.",
+      "assurance_goal": 2,
+      "category": 12,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Assessing fairness in medical diagnosis models across age groups.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 71,
+    "fields": {
+      "name": "Average Odds Difference",
+      "description": "Calculates the average difference in false positive and true positive rates between groups.",
+      "assurance_goal": 2,
+      "category": 12,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Measuring bias in criminal risk assessment tools.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 72,
+    "fields": {
+      "name": "Individual Fairness Metric (Consistency)",
+      "description": "Evaluates whether similar individuals receive similar predictions, assessing fairness at an individual level.",
+      "assurance_goal": 2,
+      "category": 12,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Ensuring similar credit applicants receive similar loan decisions.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 73,
+    "fields": {
+      "name": "Algorithmic Fairness using K-NN",
+      "description": "Uses K-nearest neighbours to assess individual fairness by comparing predictions among similar instances.",
+      "assurance_goal": 2,
+      "category": 12,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Evaluating fairness in personalised recommendation systems.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 74,
+    "fields": {
+      "name": "Counterfactual Fairness (Causal Modelling)",
+      "description": "Ensures predictions remain the same in a counterfactual world where protected attributes are altered.",
+      "assurance_goal": 2,
+      "category": 13,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Assessing fairness in loan approvals by simulating changes in applicant's race.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 75,
+    "fields": {
+      "name": "Path-Specific Counterfactual Fairness",
+      "description": "Considers specific causal pathways, allowing fairness interventions on certain paths.",
+      "assurance_goal": 2,
+      "category": 13,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Modelling fair decisions in advertising without altering legitimate causal effects.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 76,
+    "fields": {
+      "name": "Causal Fairness Assessment with Do-Calculus",
+      "description": "Utilises causal inference techniques to assess and mitigate bias by computing interventional distributions.",
+      "assurance_goal": 2,
+      "category": 13,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Understanding bias in hiring decisions through causal relationships.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 77,
+    "fields": {
+      "name": "Diversity Constraints in Recommendations",
+      "description": "Incorporates diversity and fairness constraints in recommendation systems for varied and fair content exposure.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Ensuring fair representation of genres in music recommendation platforms.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 78,
+    "fields": {
+      "name": "Bayesian Fairness Regularisation",
+      "description": "Applies Bayesian methods to include fairness as a prior, allowing probabilistic interpretation of fairness constraints.",
+      "assurance_goal": 2,
+      "category": 9,
+      "sub_category": null,
+      "model_dependency": "Model-Specific",
+      "example_use_case": "Applying fairness regularisation in Bayesian models for credit risk assessment.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  },
+  {
+    "model": "api.technique",
+    "pk": 79,
+    "fields": {
+      "name": "SHAP Values for Fairness",
+      "description": "Uses SHAP (SHapley Additive exPlanations) to attribute model predictions to input features, helping to identify bias contributions.",
+      "assurance_goal": 2,
+      "category": 14,
+      "sub_category": null,
+      "model_dependency": "Model-Agnostic",
+      "example_use_case": "Explaining biased predictions in loan approvals by examining feature contributions.",
+      "scope": null,
+      "reference": "",
+      "software_package": "",
+      "limitation": ""
+    }
+  }
+]

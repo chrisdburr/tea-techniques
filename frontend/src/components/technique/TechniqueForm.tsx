@@ -1,13 +1,17 @@
 // src/components/technique/TechniqueForm.tsx
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useCreateTechnique, useUpdateTechnique } from "@/lib/api/hooks";
+import {
+	useCreateTechnique,
+	useUpdateTechnique,
+	useAssuranceGoals,
+	useCategories,
+} from "@/lib/api/hooks";
 import { Technique } from "@/lib/types";
 
 import {
 	Card,
 	CardContent,
-	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
@@ -39,13 +43,16 @@ const TechniqueForm: React.FC<TechniqueFormProps> = ({
 		description: "",
 		model_dependency: "Model-Agnostic", // Default value
 		example_use_case: "",
-		limitation: "",
-		reference: "",
-		software_package: "",
+		assurance_goal: "1", // Default to first assurance goal (string for Select component)
+		category: "1", // Default to first category (string for Select component)
 	});
 
 	const [errors, setErrors] = useState<{ [key: string]: string }>({});
 	const [isSubmitting, setIsSubmitting] = useState(false);
+
+	// Fetch dropdown data
+	const { data: assuranceGoalsData } = useAssuranceGoals();
+	const { data: categoriesData } = useCategories();
 
 	// Set up mutations
 	const createMutation = useCreateTechnique();
@@ -62,9 +69,8 @@ const TechniqueForm: React.FC<TechniqueFormProps> = ({
 				model_dependency:
 					technique.model_dependency || "Model-Agnostic",
 				example_use_case: technique.example_use_case || "",
-				limitation: technique.limitation || "",
-				reference: technique.reference || "",
-				software_package: technique.software_package || "",
+				assurance_goal: technique.assurance_goal?.toString() || "1",
+				category: technique.category?.toString() || "1",
 			});
 		}
 	}, [isEditMode, technique]);
@@ -123,17 +129,40 @@ const TechniqueForm: React.FC<TechniqueFormProps> = ({
 
 		setIsSubmitting(true);
 
+		// For debugging - log what we're sending to the API
+		console.log("Submitting form data:", formData);
+
 		try {
 			if (isEditMode && technique) {
 				// Update existing technique
-				await updateMutation.mutateAsync({
+				const updateData = {
 					id: technique.id,
-					...formData,
-				});
-				router.push(`/techniques/${technique.id}`);
+					name: formData.name,
+					description: formData.description,
+					model_dependency: formData.model_dependency,
+					example_use_case: formData.example_use_case,
+					// Convert string IDs to numbers
+					assurance_goal: parseInt(formData.assurance_goal, 10),
+					category: parseInt(formData.category, 10),
+				};
+
+				console.log("Updating technique with data:", updateData);
+				const result = await updateMutation.mutateAsync(updateData);
+				router.push(`/techniques/${result.id}`);
 			} else {
 				// Create new technique
-				const result = await createMutation.mutateAsync(formData);
+				const createData = {
+					name: formData.name,
+					description: formData.description,
+					model_dependency: formData.model_dependency,
+					example_use_case: formData.example_use_case,
+					// Convert string IDs to numbers
+					assurance_goal: parseInt(formData.assurance_goal, 10),
+					category: parseInt(formData.category, 10),
+				};
+
+				console.log("Creating technique with data:", createData);
+				const result = await createMutation.mutateAsync(createData);
 				router.push(`/techniques/${result.id}`);
 			}
 		} catch (error) {
@@ -149,6 +178,13 @@ const TechniqueForm: React.FC<TechniqueFormProps> = ({
 		}
 	};
 
+	// Filter categories by selected assurance goal
+	const filteredCategories =
+		categoriesData?.results?.filter(
+			(category) =>
+				category.assurance_goal.toString() === formData.assurance_goal
+		) || [];
+
 	return (
 		<Card className="w-full max-w-2xl mx-auto">
 			<form onSubmit={handleSubmit}>
@@ -156,11 +192,6 @@ const TechniqueForm: React.FC<TechniqueFormProps> = ({
 					<CardTitle>
 						{isEditMode ? "Edit Technique" : "Add New Technique"}
 					</CardTitle>
-					<CardDescription>
-						{isEditMode
-							? "Update the details of this technique"
-							: "Create a new technique to add to the database"}
-					</CardDescription>
 				</CardHeader>
 
 				<CardContent className="space-y-6">
@@ -210,6 +241,64 @@ const TechniqueForm: React.FC<TechniqueFormProps> = ({
 
 						<div className="space-y-2">
 							<Label
+								htmlFor="assurance_goal"
+								className="text-base"
+							>
+								Assurance Goal{" "}
+								<span className="text-red-500">*</span>
+							</Label>
+							<Select
+								value={formData.assurance_goal}
+								onValueChange={(value) =>
+									handleSelectChange("assurance_goal", value)
+								}
+							>
+								<SelectTrigger id="assurance_goal">
+									<SelectValue placeholder="Select an assurance goal" />
+								</SelectTrigger>
+								<SelectContent>
+									{assuranceGoalsData?.results?.map(
+										(goal) => (
+											<SelectItem
+												key={goal.id}
+												value={goal.id.toString()}
+											>
+												{goal.name}
+											</SelectItem>
+										)
+									)}
+								</SelectContent>
+							</Select>
+						</div>
+
+						<div className="space-y-2">
+							<Label htmlFor="category" className="text-base">
+								Category <span className="text-red-500">*</span>
+							</Label>
+							<Select
+								value={formData.category}
+								onValueChange={(value) =>
+									handleSelectChange("category", value)
+								}
+							>
+								<SelectTrigger id="category">
+									<SelectValue placeholder="Select a category" />
+								</SelectTrigger>
+								<SelectContent>
+									{filteredCategories.map((category) => (
+										<SelectItem
+											key={category.id}
+											value={category.id.toString()}
+										>
+											{category.name}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+						</div>
+
+						<div className="space-y-2">
+							<Label
 								htmlFor="model_dependency"
 								className="text-base"
 							>
@@ -225,14 +314,7 @@ const TechniqueForm: React.FC<TechniqueFormProps> = ({
 									)
 								}
 							>
-								<SelectTrigger
-									id="model_dependency"
-									className={
-										errors.model_dependency
-											? "border-red-500"
-											: ""
-									}
-								>
+								<SelectTrigger id="model_dependency">
 									<SelectValue placeholder="Select dependency type" />
 								</SelectTrigger>
 								<SelectContent>
@@ -244,11 +326,6 @@ const TechniqueForm: React.FC<TechniqueFormProps> = ({
 									</SelectItem>
 								</SelectContent>
 							</Select>
-							{errors.model_dependency && (
-								<p className="text-sm text-red-500">
-									{errors.model_dependency}
-								</p>
-							)}
 						</div>
 
 						<div className="space-y-2">
@@ -265,51 +342,6 @@ const TechniqueForm: React.FC<TechniqueFormProps> = ({
 								onChange={handleChange}
 								placeholder="Describe an example use case"
 								rows={3}
-							/>
-						</div>
-
-						<div className="space-y-2">
-							<Label htmlFor="limitation" className="text-base">
-								Limitations
-							</Label>
-							<Textarea
-								id="limitation"
-								name="limitation"
-								value={formData.limitation}
-								onChange={handleChange}
-								placeholder="Describe any limitations"
-								rows={3}
-							/>
-						</div>
-
-						<div className="space-y-2">
-							<Label htmlFor="reference" className="text-base">
-								Reference URL
-							</Label>
-							<Input
-								id="reference"
-								name="reference"
-								type="url"
-								value={formData.reference}
-								onChange={handleChange}
-								placeholder="https://example.com/reference"
-							/>
-						</div>
-
-						<div className="space-y-2">
-							<Label
-								htmlFor="software_package"
-								className="text-base"
-							>
-								Software Package URL
-							</Label>
-							<Input
-								id="software_package"
-								name="software_package"
-								type="url"
-								value={formData.software_package}
-								onChange={handleChange}
-								placeholder="https://example.com/package"
 							/>
 						</div>
 					</div>
@@ -334,7 +366,7 @@ const TechniqueForm: React.FC<TechniqueFormProps> = ({
 						{isLoading ? (
 							<span className="flex items-center gap-2">
 								<span className="animate-spin">↻</span>
-								{isEditMode ? "Updating..." : "Submitting..."}
+								{isEditMode ? "Updating..." : "Creating..."}
 							</span>
 						) : (
 							<>

@@ -56,11 +56,22 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 20,  # Adjust as needed
+    "PAGE_SIZE": 20,
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend",
         "rest_framework.filters.SearchFilter",
         "rest_framework.filters.OrderingFilter",
+    ],
+    # Temporarily allow any access for development
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
+    # Exception handler to make error responses consistent
+    "EXCEPTION_HANDLER": "api.utils.custom_exception_handler",
+    # Make JSON the default format
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
     ],
 }
 
@@ -126,14 +137,22 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+# In development, allow all origins
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+    CORS_ALLOW_CREDENTIALS = True
+    # Also add appropriate middleware
+    MIDDLEWARE = [
+        "corsheaders.middleware.CorsMiddleware",  # This should be as high as possible
+        # ... your other middleware
+    ] + [m for m in MIDDLEWARE if m != "corsheaders.middleware.CorsMiddleware"]
+
 # CORS settings
-CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:3000").split(",")
-
-# Allow credentials (cookies, authorization headers)
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:3000").split(
+    ","
+)
 CORS_ALLOW_CREDENTIALS = True
-
-# For development, you can use this setting if needed
-CORS_ALLOW_ALL_ORIGINS = DEBUG
 
 CORS_ALLOW_METHODS = [
     "DELETE",
@@ -153,6 +172,13 @@ CORS_ALLOW_HEADERS = [
     "user-agent",
     "x-csrftoken",
     "x-requested-with",
+]
+
+# Set CSRF settings to work with CORS
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    # Add your production domains later
 ]
 
 INTERNAL_IPS = [

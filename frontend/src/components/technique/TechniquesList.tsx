@@ -43,14 +43,21 @@ export default function TechniquesList() {
 	const [category, setCategory] = useState(initialCategory);
 
 	// Queries
-	const { data: techniquesData, isLoading } = useTechniques({
-		search: initialSearch,
-		assurance_goal: initialAssuranceGoal,
-		category: initialCategory,
+	const { data: techniquesData, isLoading, error } = useTechniques({
+		search: initialSearch === "all" ? "" : initialSearch,
+		assurance_goal: initialAssuranceGoal === "all" ? "" : initialAssuranceGoal,
+		category: initialCategory === "all" ? "" : initialCategory,
 	});
 
 	const { data: categoriesData } = useCategories();
 	const { data: assuranceGoalsData } = useAssuranceGoals();
+
+	// Log for debugging - only in development
+	if (process.env.NODE_ENV === 'development') {
+		console.log("Techniques Data:", techniquesData);
+		console.log("Loading:", isLoading);
+		console.log("Error:", error);
+	}
 
 	// Apply filters
 	const applyFilters = () => {
@@ -69,6 +76,9 @@ export default function TechniquesList() {
 		setCategory("all");
 		router.push("/techniques");
 	};
+
+	// Access techniques data safely
+	const techniques = techniquesData?.results || [];
 
 	return (
 		<div className="space-y-6">
@@ -137,16 +147,21 @@ export default function TechniquesList() {
 
 			{isLoading ? (
 				<div className="text-center py-8">Loading techniques...</div>
+			) : error ? (
+				<div className="text-center py-8 text-red-500">
+					<p>Error loading techniques: {(error as Error).message}</p>
+					<p className="mt-2">Please check that the backend is running and properly configured.</p>
+				</div>
 			) : (
 				<>
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-						{techniquesData?.results?.map(
-							(technique: Technique) => (
+					{techniques.length > 0 ? (
+						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+							{techniques.map((technique: Technique) => (
 								<Card key={technique.id}>
 									<CardHeader>
 										<CardTitle>{technique.name}</CardTitle>
 										<CardDescription>
-											{technique.category_name} |{" "}
+											{technique.category_name || 'Uncategorized'} |{" "}
 											{technique.model_dependency}
 										</CardDescription>
 									</CardHeader>
@@ -157,21 +172,24 @@ export default function TechniquesList() {
 									</CardContent>
 									<CardFooter>
 										<Button asChild variant="outline">
-											<Link
-												href={`/techniques/${technique.id}`}
-											>
+											<Link href={`/techniques/${technique.id}`}>
 												View Details
 											</Link>
 										</Button>
 									</CardFooter>
 								</Card>
-							)
-						)}
-					</div>
-
-					{techniquesData?.results?.length === 0 && (
+							))}
+						</div>
+					) : (
 						<div className="text-center py-8">
 							<p>No techniques found matching your criteria.</p>
+							<p className="mt-2 text-sm text-muted-foreground">
+								This could be because:
+							</p>
+							<ul className="list-disc list-inside mt-2 text-sm text-muted-foreground">
+								<li>No techniques exist in the database yet</li>
+								<li>The current filters exclude all techniques</li>
+							</ul>
 						</div>
 					)}
 				</>

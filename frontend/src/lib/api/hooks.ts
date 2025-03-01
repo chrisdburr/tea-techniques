@@ -15,27 +15,30 @@ interface QueryParams {
 	[key: string]: string | undefined;
 }
 
+/**
+ * FETCH HOOKS - Get data from the API
+ */
+
+// Get a list of techniques
 export const useTechniques = (params: QueryParams = {}) => {
 	const filteredParams = Object.fromEntries(
-		Object.entries(params).filter(([, value]) => value !== "all")
+		Object.entries(params).filter(
+			([, value]) => value !== "all" && value !== ""
+		)
 	);
 
 	return useQuery({
 		queryKey: ["techniques", params],
 		queryFn: async () => {
-			try {
-				const response = await apiClient.get("/techniques/", {
-					params: filteredParams,
-				});
-				return response.data as APIResponse<Technique>;
-			} catch (error) {
-				console.error("Error fetching techniques:", error);
-				throw error;
-			}
+			const response = await apiClient.get("/techniques/", {
+				params: filteredParams,
+			});
+			return response.data as APIResponse<Technique>;
 		},
 	});
 };
 
+// Get a single technique by ID
 export const useTechniqueDetail = (id: number) => {
 	return useQuery({
 		queryKey: ["technique", id],
@@ -43,10 +46,11 @@ export const useTechniqueDetail = (id: number) => {
 			const response = await apiClient.get(`/techniques/${id}/`);
 			return response.data as Technique;
 		},
-		enabled: !!id,
+		enabled: !!id, // Only run when id is truthy
 	});
 };
 
+// Get a list of categories
 export const useCategories = (params: QueryParams = {}) => {
 	return useQuery({
 		queryKey: ["categories", params],
@@ -59,9 +63,10 @@ export const useCategories = (params: QueryParams = {}) => {
 	});
 };
 
+// Get a list of assurance goals
 export const useAssuranceGoals = () => {
 	return useQuery({
-		queryKey: ["assuranceGoals"],
+		queryKey: ["assurance-goals"],
 		queryFn: async () => {
 			const response = await apiClient.get("/assurance-goals/");
 			return response.data as APIResponse<AssuranceGoal>;
@@ -69,7 +74,11 @@ export const useAssuranceGoals = () => {
 	});
 };
 
-// CRUD operations
+/**
+ * MUTATION HOOKS - Create, update, or delete data
+ */
+
+// Create a new technique
 export const useCreateTechnique = () => {
 	const queryClient = useQueryClient();
 
@@ -84,11 +93,12 @@ export const useCreateTechnique = () => {
 	});
 };
 
+// Update an existing technique
 export const useUpdateTechnique = (id: number) => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: async (data: Partial<Technique>) => {
+		mutationFn: async (data: Partial<Technique> & { id: number }) => {
 			const response = await apiClient.put(`/techniques/${id}/`, data);
 			return response.data as Technique;
 		},
@@ -99,6 +109,7 @@ export const useUpdateTechnique = (id: number) => {
 	});
 };
 
+// Delete a technique
 export const useDeleteTechnique = () => {
 	const queryClient = useQueryClient();
 

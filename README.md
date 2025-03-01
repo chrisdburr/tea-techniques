@@ -42,19 +42,24 @@ For local development, you can use SQLite which doesn't require Docker:
 
 If you want to use the full Docker setup with PostgreSQL:
 
-1. **Start the database**
-   ```bash
-   docker compose up -d db
-   ```
+1. **Setup environment variable**
 
-2. **Wait for the database to be ready, then run the backend and frontend**
+  ```bash
+  mv .env.example .env
+  ```
+
+  - Review and adjust the values (e.g. change user and password)
+
+2. **Start the database**
+
    ```bash
-   docker compose up backend frontend
+   docker compose up -d
    ```
 
 3. **Access the application**
-   - Frontend: http://localhost:3000
-   - API: http://localhost:8000/api/
+
+  - Frontend: http://localhost:3000
+  - API: http://localhost:8000/api/
 
 ## Project Structure
 

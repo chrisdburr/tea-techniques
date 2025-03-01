@@ -1,70 +1,116 @@
-# Explainability Techniques
+# TEA Techniques
 
-A simple (and work-in-progress) Django app for interacting with a database of XAI techniques. 
+A platform for exploring techniques for evidencing claims about responsible design, development, and deployment of data-driven technologies. To be used in conjunction with the Trustworthy and Ethical Assurance (TEA) platform.
 
-## Quickstart
+## Development Setup
 
-### Clone repository
+### Quick Start (Recommended)
 
-```shell
-git clone https://github.com/chrisdburr/tea-XAI-demo.git && cd tea-XAI-demo
+For local development, you can use SQLite which doesn't require Docker:
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-repo/tea-techniques.git
+   cd tea-techniques
+   ```
+
+2. **Set up the backend**
+   ```bash
+   cd backend
+   poetry install
+   poetry run python scripts/setup_dev.py
+   ```
+
+3. **Run the backend with SQLite**
+   ```bash
+   USE_SQLITE=True poetry run python manage.py runserver
+   ```
+
+4. **In a new terminal, set up and run the frontend**
+   ```bash
+   cd frontend
+   npm install
+   npm run dev --turbopack
+   ```
+
+5. **Access the application**
+   - Frontend: http://localhost:3000
+   - API: http://localhost:8000/api/
+   - Admin: http://localhost:8000/admin/ (username: admin, password: admin)
+
+### Using Docker (for production-like environment)
+
+If you want to use the full Docker setup with PostgreSQL:
+
+1. **Start the database**
+   ```bash
+   docker compose up -d db
+   ```
+
+2. **Wait for the database to be ready, then run the backend and frontend**
+   ```bash
+   docker compose up backend frontend
+   ```
+
+3. **Access the application**
+   - Frontend: http://localhost:3000
+   - API: http://localhost:8000/api/
+
+## Project Structure
+
+- **Backend**: Django with Django REST Framework
+  - `backend/api`: Main Django app
+  - `backend/config`: Django project settings
+  - `backend/scripts`: Utility scripts
+
+- **Frontend**: Next.js with TypeScript and Tailwind CSS
+  - `frontend/src/app`: Next.js pages and routes
+  - `frontend/src/components`: Reusable React components
+  - `frontend/src/lib`: Utilities, types, and API clients
+
+## Development Tips
+
+1. **Local Development Mode**
+   
+   The setup script creates a SQLite database with sample data, making it easy to start development without Docker.
+
+2. **Authentication**
+   
+   The development setup creates an admin user you can use to access the Django admin interface:
+   - Username: `admin`
+   - Password: `admin`
+
+3. **API Documentation**
+   
+   Access the API documentation at http://localhost:8000/swagger/ when the backend is running.
+
+4. **Database Migrations**
+   
+   When changing models, create and apply migrations:
+   ```bash
+   cd backend
+   USE_SQLITE=True poetry run python manage.py makemigrations
+   USE_SQLITE=True poetry run python manage.py migrate
+   ```
+
+5. **Development Commands**
+   
+   See CLAUDE.md for more detailed development commands and code style guidelines.
+
+## Testing
+
+Run frontend tests:
+```bash
+cd frontend
+npm test
 ```
 
-### Populate `.env` file
-
-- Create a `.env` file in the root directory and ensure the following environment variables are set
-
-```.env
-# PostgreSQL settings
-DB_USER=username
-DB_PASSWORD=password
-DB_HOST=localhost
-DB_NAME=xai-techniques
-DB_PORT=5432 # change if necessary in case of port conflicts
+Run backend tests:
+```bash
+cd backend
+USE_SQLITE=True poetry run pytest
 ```
 
-### Install Python dependancies and activate the virtual environment
+## License
 
-> [!WARNING]  
-> This repository contains a `pyproject.toml` file, created using [Poetry](https://python-poetry.org/docs/#installation) to manage virtual environments and packages. Instructions for poetry are below, but will need to be modified if using alternatives, such as conda or pyvenv.
-
-```shell
-poetry install
-eval $(poetry env activate)
-```
-
-### Setup postgres container
-
-1. Ensure environment variables are set (see above)
-2. Create docker container using `docker compose up -d`
-3. Test to ensure the container is running correctly using `docker ps`
-
-### Populate database
-
-Once the virtual environment, packages, and container are created/running, you can populate the database.
-
-```shell
-python manage.py makemigrations
-python manage.py migrate
-python load_and_import.py
-```
-
-### Run Django App
-
-Assuming no errors were reported in the previous steps, you can now create a superuser and run the webserver.
-
-```shell
-python manage.py createsuperuser
-# Fill in details as required
-python manage.py runserver
-```
-
-You can then navigate to one of the following urls:
-
-1. Admin Page: http://127.0.0.1:8000/admin/
-2. Home Page: http://127.0.0.1:8000/
-3. List of Techniques: http://127.0.0.1:8000/
-4. Main API Endpoint: http://127.0.0.1:8000/api/
-
-> [!INFO]  
-> You can also run `python manage.py show_urls` in the terminal to see a list of all available urls.
+[Add license information]

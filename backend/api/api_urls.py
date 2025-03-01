@@ -18,6 +18,7 @@ from .views.api_views import (
     get_subcategorylist,
     FairnessApproachesViewSet,
     ProjectLifecycleStagesViewSet,
+    debug_endpoint,
 )
 
 
@@ -71,6 +72,7 @@ router.register(r"fairness-approaches", FairnessApproachesViewSet)
 router.register(r"project-lifecycle-stages", ProjectLifecycleStagesViewSet)
 
 urlpatterns = [
+    path("debug/", debug_endpoint, name="debug-endpoint"),
     path("", api_root, name="api-root"),
     path("", include(router.urls)),
     path(

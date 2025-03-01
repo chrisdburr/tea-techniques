@@ -1,7 +1,21 @@
-// frontend/src/lib/api/useTechniques.ts
-// This file is being kept for backward compatibility
-// All hooks are now in hooks.ts
-import { useTechniques, useAddTechnique, useUpdateTechnique } from "./hooks";
+// src/lib/api/useTechniques.ts
+/**
+ * @deprecated This file is maintained for backward compatibility.
+ * Import from hooks.ts directly instead.
+ */
+
+import {
+	useTechniques,
+	useCreateTechnique,
+	useUpdateTechnique,
+	useDeleteTechnique,
+} from "./hooks";
+
+// Re-export with legacy name for backward compatibility
+export const useAddTechnique = useCreateTechnique;
+
+// Re-export other hooks with their standard names
+export { useTechniques, useUpdateTechnique, useDeleteTechnique };
 
 // Re-export types
 export interface Technique {
@@ -11,6 +25,3 @@ export interface Technique {
 	model_dependency: string;
 	example_use_case: string;
 }
-
-// Re-export hooks
-export { useTechniques, useAddTechnique, useUpdateTechnique };

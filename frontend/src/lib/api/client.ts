@@ -35,7 +35,6 @@ const createAPIClient = (
 		headers: {
 			"Content-Type": "application/json",
 		},
-		// Important for CORS
 		withCredentials: true,
 	});
 

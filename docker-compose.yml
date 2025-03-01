@@ -7,6 +7,8 @@ services:
       - POSTGRES_DB=tea_techniques
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432 # optional for local development and testing
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U tea_user -d tea_techniques"]
       interval: 5s

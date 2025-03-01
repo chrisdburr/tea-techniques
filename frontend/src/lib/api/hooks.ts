@@ -15,26 +15,73 @@ interface QueryParams {
 	[key: string]: string | undefined;
 }
 
-/**
- * FETCH HOOKS - Get data from the API
- */
+// API error response type for reference
+// Commented out to avoid unused variable warnings
+/*
+interface APIErrorResponse {
+	status?: number;
+	data?: {
+		detail?: string;
+		message?: string;
+	};
+}
+*/
 
-// Get a list of techniques
-export const useTechniques = (params: QueryParams = {}) => {
-	const filteredParams = Object.fromEntries(
-		Object.entries(params).filter(
-			([, value]) => value !== "all" && value !== ""
-		)
-	);
+export interface PaginatedResponse<T> {
+	count: number;
+	next: string | null;
+	previous: string | null;
+	results: T[];
+}
 
+// Simple conversion of page number to limit/offset - keeping for potential future use
+// const pageToOffset = (page: number, pageSize: number = 20) => {
+// 	return (page - 1) * pageSize;
+// };
+
+// Basic calculation of total pages based on item count
+const calculateTotalPages = (totalItems: number, pageSize: number = 20): number => {
+	return totalItems > 0 ? Math.ceil(totalItems / pageSize) : 1;
+};
+
+// Get a list of techniques with pagination
+export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
+	// Filter parameters - Keep the names exactly as backend expects
+	const apiParams: Record<string, string | number> = { };
+	
+	// Add search parameter if provided
+	if (params.search) {
+		apiParams.search = params.search;
+	}
+	
+	// Add assurance_goal filter if it's not "all"
+	if (params.assurance_goal && params.assurance_goal !== "all") {
+		apiParams.assurance_goal = params.assurance_goal;
+	}
+	
+	// Add category filter if it's not "all"
+	if (params.category && params.category !== "all") {
+		apiParams.category = params.category;
+	}
+	
+	// Add pagination parameters
+	apiParams.page = page;
+	
+	// Debug logging
+	if (process.env.NODE_ENV === "development") {
+		console.log("API Request Params:", apiParams);
+	}
+	
 	return useQuery({
-		queryKey: ["techniques", params],
+		queryKey: ["techniques", params, page],
 		queryFn: async () => {
 			const response = await apiClient.get("/techniques/", {
-				params: filteredParams,
+				params: apiParams,
 			});
-			return response.data as APIResponse<Technique>;
+			return response.data as PaginatedResponse<Technique>;
 		},
+		// Don't refetch on window focus for better UX
+		refetchOnWindowFocus: false,
 	});
 };
 
@@ -52,6 +99,7 @@ export const useTechniqueDetail = (id: number) => {
 
 // Get a list of categories
 export const useCategories = (params: QueryParams = {}) => {
+	// Simple API call without parameter transformation
 	return useQuery({
 		queryKey: ["categories", params],
 		queryFn: async () => {
@@ -60,6 +108,26 @@ export const useCategories = (params: QueryParams = {}) => {
 			});
 			return response.data as APIResponse<Category>;
 		},
+		// Don't refetch on window focus for better UX
+		refetchOnWindowFocus: false,
+	});
+};
+
+// Get categories filtered by assurance goal
+export const useCategoriesByAssuranceGoal = (assuranceGoalId: string | null) => {
+	// Don't filter if "all" is selected
+	const params = assuranceGoalId && assuranceGoalId !== "all" 
+		? { assurance_goal: assuranceGoalId } 
+		: {};
+	
+	return useQuery({
+		queryKey: ["categories-by-goal", assuranceGoalId],
+		queryFn: async () => {
+			const response = await apiClient.get("/categories/", { params });
+			return response.data as APIResponse<Category>;
+		},
+		// Don't refetch on window focus for better UX
+		refetchOnWindowFocus: false,
 	});
 };
 
@@ -71,6 +139,8 @@ export const useAssuranceGoals = () => {
 			const response = await apiClient.get("/assurance-goals/");
 			return response.data as APIResponse<AssuranceGoal>;
 		},
+		// Don't refetch on window focus for better UX
+		refetchOnWindowFocus: false,
 	});
 };
 
@@ -123,3 +193,6 @@ export const useDeleteTechnique = () => {
 		},
 	});
 };
+
+// Export the utility functions for use in components
+export { calculateTotalPages };

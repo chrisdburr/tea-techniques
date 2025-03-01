@@ -1,10 +1,10 @@
 import React from "react";
 import Link from "next/link";
 import * as Constants from "@/lib/constants";
-
+import { config } from "@/lib/config";
 
 const Footer = () => {
-  return (
+	return (
 		<footer className="border-t border-border bg-background">
 			<div className="container mx-auto py-8 px-4">
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -24,15 +24,7 @@ const Footer = () => {
 									href="/techniques"
 									className="text-muted-foreground hover:text-foreground"
 								>
-									Techniques
-								</Link>
-							</li>
-							<li>
-								<Link
-									href="/categories"
-									className="text-muted-foreground hover:text-foreground"
-								>
-									Categories
+									Browse Techniques
 								</Link>
 							</li>
 							<li>
@@ -52,7 +44,7 @@ const Footer = () => {
 						<ul className="space-y-2 text-sm">
 							<li>
 								<Link
-									href="/api"
+									href={config.swaggerUrl}
 									className="text-muted-foreground hover:text-foreground"
 								>
 									API Documentation
@@ -60,7 +52,7 @@ const Footer = () => {
 							</li>
 							<li>
 								<a
-									href="https://github.com/chrisdburr/tea-XAI-demo"
+									href="https://github.com/chrisdburr/tea-techniques"
 									target="_blank"
 									rel="noopener noreferrer"
 									className="text-muted-foreground hover:text-foreground"
@@ -79,7 +71,7 @@ const Footer = () => {
 				</div>
 			</div>
 		</footer>
-  );
+	);
 };
 
 export default Footer;

@@ -100,11 +100,24 @@ class TechniqueWriteSerializer(serializers.ModelSerializer):
             "assurance_goal",
             "model_dependency",
             "example_use_case",
-            "scope",
             "category",
-            "sub_category",
-            "tags",
-            "reference",
-            "software_package",
-            "limitation",
+            "sub_category",  # Optional
         ]
+
+    def create(self, validated_data):
+        """Custom create method with error handling."""
+        try:
+            return super().create(validated_data)
+        except Exception as e:
+            # Log the error for debugging
+            print(f"Error creating technique: {str(e)}")
+            raise serializers.ValidationError(f"Failed to create technique: {str(e)}")
+
+    def update(self, instance, validated_data):
+        """Custom update method with error handling."""
+        try:
+            return super().update(instance, validated_data)
+        except Exception as e:
+            # Log the error for debugging
+            print(f"Error updating technique: {str(e)}")
+            raise serializers.ValidationError(f"Failed to update technique: {str(e)}")

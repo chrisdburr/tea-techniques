@@ -19,15 +19,7 @@ const Header = () => {
 									href="/techniques"
 									className="text-muted-foreground hover:text-foreground"
 								>
-									Techniques
-								</Link>
-							</li>
-							<li>
-								<Link
-									href="/categories"
-									className="text-muted-foreground hover:text-foreground"
-								>
-									Categories
+									Browse Techniques
 								</Link>
 							</li>
 							<li>

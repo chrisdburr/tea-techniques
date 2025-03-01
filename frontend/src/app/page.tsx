@@ -1,203 +1,147 @@
 "use client";
 
-import { Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
 import MainLayout from "@/components/layout/MainLayout";
-import {
-	useTechniques,
-	useCategories,
-	useAssuranceGoals,
-} from "@/lib/api/hooks";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
 	CardDescription,
-	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
-import Link from "next/link";
-import { Technique, Category, AssuranceGoal } from "@/lib/types";
+import { Database, FileText, Globe } from "lucide-react";
 
-// Loading component
-function LoadingState() {
-	return (
-		<div className="flex justify-center items-center min-h-[400px]">
-			<p className="text-lg text-muted-foreground">
-				Loading techniques...
-			</p>
-		</div>
-	);
-}
+export default function HomePage() {
 
-// Types for the search form
-interface SearchFilters {
-	search: string;
-	assuranceGoal: string;
-	category: string;
-}
-
-interface SearchFormProps {
-	onSearch: (filters: SearchFilters) => void;
-	onReset: () => void;
-}
-
-// Search and filter form component
-function SearchForm({ onSearch, onReset }: SearchFormProps) {
-	const [search, setSearch] = useState("");
-	const { data: categoriesData } = useCategories();
-	const { data: assuranceGoalsData } = useAssuranceGoals();
-	const [assuranceGoal, setAssuranceGoal] = useState("all");
-	const [category, setCategory] = useState("all");
-
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-		onSearch({ search, assuranceGoal, category });
-	};
-
-	return (
-		<form onSubmit={handleSubmit} className="bg-muted/30 p-4 rounded-lg">
-			<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-				<Input
-					placeholder="Search techniques..."
-					value={search}
-					onChange={(e) => setSearch(e.target.value)}
-				/>
-				<Select value={assuranceGoal} onValueChange={setAssuranceGoal}>
-					<SelectTrigger>
-						<SelectValue placeholder="Assurance Goal" />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="all">All Assurance Goals</SelectItem>
-						{assuranceGoalsData?.results?.map(
-							(goal: AssuranceGoal) => (
-								<SelectItem
-									key={goal.id}
-									value={goal.id.toString()}
-								>
-									{goal.name}
-								</SelectItem>
-							)
-						)}
-					</SelectContent>
-				</Select>
-				<Select value={category} onValueChange={setCategory}>
-					<SelectTrigger>
-						<SelectValue placeholder="Category" />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="all">All Categories</SelectItem>
-						{categoriesData?.results?.map((cat: Category) => (
-							<SelectItem key={cat.id} value={cat.id.toString()}>
-								{cat.name}
-							</SelectItem>
-						))}
-					</SelectContent>
-				</Select>
-				<div className="flex gap-2">
-					<Button type="submit">Apply Filters</Button>
-					<Button type="button" variant="outline" onClick={onReset}>
-						Reset
-					</Button>
-				</div>
-			</div>
-		</form>
-	);
-}
-
-// Main content component that uses searchParams
-function TechniqueContent() {
-	const searchParams = useSearchParams();
-	const router = useRouter();
-
-	const search = searchParams.get("search") || "";
-	const assuranceGoal = searchParams.get("assurance_goal") || "all";
-	const category = searchParams.get("category") || "all";
-
-	const { data: techniquesData, isLoading } = useTechniques({
-		search,
-		assurance_goal: assuranceGoal,
-		category,
-	});
-
-	const handleSearch = (filters: SearchFilters) => {
-		const params = new URLSearchParams();
-		if (filters.search) params.set("search", filters.search);
-		if (filters.assuranceGoal !== "all")
-			params.set("assurance_goal", filters.assuranceGoal);
-		if (filters.category !== "all")
-			params.set("category", filters.category);
-		router.push(`/techniques?${params.toString()}`);
-	};
-
-	const handleReset = () => {
-		router.push("/techniques");
-	};
-
-	if (isLoading) return <LoadingState />;
-
-	return (
-		<div className="space-y-6">
-			<div className="flex justify-between items-center">
-				<h1 className="text-3xl font-bold">Techniques</h1>
-				<Button asChild>
-					<Link href="/techniques/add">Add New Technique</Link>
-				</Button>
-			</div>
-
-			<SearchForm onSearch={handleSearch} onReset={handleReset} />
-
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-				{techniquesData?.results?.map((technique: Technique) => (
-					<Card key={technique.id}>
-						<CardHeader>
-							<CardTitle>{technique.name}</CardTitle>
-							<CardDescription>
-								{technique.category_name} |{" "}
-								{technique.model_dependency}
-							</CardDescription>
-						</CardHeader>
-						<CardContent>
-							<p className="line-clamp-3 text-sm text-muted-foreground">
-								{technique.description}
-							</p>
-						</CardContent>
-						<CardFooter>
-							<Button asChild variant="outline">
-								<Link href={`/techniques/${technique.id}`}>
-									View Details
-								</Link>
-							</Button>
-						</CardFooter>
-					</Card>
-				))}
-			</div>
-
-			{techniquesData?.results?.length === 0 && (
-				<div className="text-center py-8">
-					<p>No techniques found matching your criteria.</p>
-				</div>
-			)}
-		</div>
-	);
-}
-
-// Main page component with Suspense boundary
-export default function TechniquesPage() {
 	return (
 		<MainLayout>
-			<Suspense fallback={<LoadingState />}>
-				<TechniqueContent />
-			</Suspense>
+			<div className="space-y-16 py-8">
+				{/* Hero Section with Responsive Image */}
+				<section className="container mx-auto">
+					<div className="flex flex-col md:flex-row gap-8 items-center">
+						<div className="w-full md:w-1/2 space-y-6 text-center md:text-left">
+							<h1 className="text-4xl md:text-5xl font-bold">
+								TEA Techniques Database
+							</h1>
+							<p className="text-xl text-muted-foreground">
+								A platform for exploring techniques for
+								evidencing claims about responsible design,
+								development, and deployment of data-driven
+								technologies.
+							</p>
+							<div className="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
+								<Button asChild size="lg">
+									<Link href="/techniques">
+										Explore Techniques
+									</Link>
+								</Button>
+								<Button asChild variant="outline" size="lg">
+									<Link href="https://assuranceplatform.azurewebsites.net/">
+										Go to TEA Platform
+									</Link>
+								</Button>
+							</div>
+						</div>
+						<div className="w-full md:w-1/2 mt-8 md:mt-0">
+							<div className="relative aspect-[4/3] w-full max-w-lg mx-auto shadow-lg rounded-lg overflow-hidden">
+								<Image
+									src="/hero.jpg"
+									alt="Assurance illustration showing various aspects of AI ethics and governance"
+									fill
+									style={{ objectFit: "cover" }}
+									className="rounded-lg"
+									priority
+								/>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				{/* Features Section */}
+				<section className="space-y-6">
+					<div className="text-center mb-8">
+						<h2 className="text-3xl font-bold">Key Features</h2>
+						<p className="text-muted-foreground max-w-2xl mx-auto mt-2">
+							Tools and resources to help with ethical and
+							responsible AI development
+						</p>
+					</div>
+
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+						<Card className="h-full">
+							<CardHeader>
+								<FileText className="h-12 w-12 text-primary mb-2" />
+								<CardTitle>Structured Documentation</CardTitle>
+								<CardDescription>
+									Detailed descriptions and references for
+									each technique
+								</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<p className="text-muted-foreground">
+									Each technique includes comprehensive
+									information about its purpose, limitations,
+									and practical use cases.
+								</p>
+							</CardContent>
+						</Card>
+
+						<Card className="h-full">
+							<CardHeader>
+								<Database className="h-12 w-12 text-primary mb-2" />
+								<CardTitle>Searchable Database</CardTitle>
+								<CardDescription>
+									Quickly find techniques that match your
+									needs
+								</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<p className="text-muted-foreground">
+									Filter by assurance goals, categories, and
+									specific criteria to discover appropriate
+									techniques for your project.
+								</p>
+							</CardContent>
+						</Card>
+
+						<Card className="h-full">
+							<CardHeader>
+								<Globe className="h-12 w-12 text-primary mb-2" />
+								<CardTitle>Open Platform</CardTitle>
+								<CardDescription>
+									Access API documentation and contribute to
+									the platform
+								</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<p className="text-muted-foreground">
+									TEA Techniques is designed to be an open,
+									collaborative resource for the AI ethics
+									community.
+								</p>
+							</CardContent>
+						</Card>
+					</div>
+				</section>
+
+				{/* Call to Action */}
+				<section className="bg-muted/50 py-12 px-6 rounded-lg text-center space-y-6">
+					<h2 className="text-3xl font-bold">
+						Ready to get started?
+					</h2>
+					<p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+						Explore our database of techniques to help ensure your
+						AI systems are trustworthy and ethically developed.
+					</p>
+					<div className="pt-4">
+						<Button asChild size="lg">
+							<Link href="/techniques">Explore Techniques</Link>
+						</Button>
+					</div>
+				</section>
+			</div>
 		</MainLayout>
 	);
 }

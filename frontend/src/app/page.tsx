@@ -50,6 +50,7 @@ export default function HomePage() {
 									src="/hero.jpg"
 									alt="Assurance illustration showing various aspects of AI ethics and governance"
 									fill
+									sizes="(max-width: 768px) 100vw, 50vw"
 									style={{ objectFit: "cover" }}
 									className="rounded-lg"
 									priority

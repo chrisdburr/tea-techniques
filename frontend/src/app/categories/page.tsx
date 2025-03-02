@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import MainLayout from "@/components/layout/MainLayout";
 import { useAssuranceGoals, useCategories } from "@/lib/api/hooks";
 import {
@@ -18,12 +17,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AssuranceGoal, Category } from "@/lib/types";
 
 export default function CategoriesPage() {
-	const router = useRouter();
+	// Removed unused router
 	const { data: assuranceGoalsData, isLoading: isLoadingGoals } =
 		useAssuranceGoals();
 	const { data: categoriesData, isLoading: isLoadingCategories } =
 		useCategories();
-	const [activeTab, setActiveTab] = useState<string>("all");
+	const [, setActiveTab] = useState<string>("all");
 
 	// Function to filter categories by assurance goal
 	const getCategoriesByGoal = (goalId: number) => {

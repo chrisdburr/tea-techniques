@@ -94,7 +94,7 @@ export function Pagination({
 			</Button>
 			
 			{/* Page number buttons */}
-			{pageNumbers.map((pageNumber, index) => {
+			{pageNumbers.map((pageNumber) => {
 				// Render ellipsis
 				if (pageNumber < 0) {
 					return (

@@ -1,10 +1,10 @@
-# Backend Migration Plan for TEA Techniques Project
+# Backend Revisions Plan for TEA Techniques Project
 
 This document outlines the plan to migrate the backend of the TEA Techniques project to support the new data model as defined in the requirements.
 
 ## 1. Overview of Changes
 
-The migration involves several key changes to the existing data model:
+The update involves several key changes to the existing data model:
 
 1. **TechniqueRelationship Model Enhancement**: Update to add relationship_type, make fields non-nullable, and use proper foreign key deletion handling.
 2. **Maintaining Hierarchical Relationship**: Keep the current hierarchical structure between Goals, Categories, and Sub-Categories.
@@ -156,7 +156,7 @@ class Technique(models.Model):
     tags = models.ManyToManyField(Tag, through='TechniqueTag', blank=True)
     
     # Fields being replaced by new models
-    # These will be removed after migration
+    # These will be removed after update
     # example_use_case = models.TextField()  # Replaced by TechniqueExampleUseCase
     # reference = models.URLField(blank=True)  # Replaced by TechniqueResource
     # software_package = models.URLField(blank=True)  # Replaced by TechniqueResource
@@ -205,27 +205,27 @@ class TechniqueRelationship(models.Model):
         return f"{self.technique_from.name} → {self.technique_to.name} ({self.relationship_type})"
 ```
 
-### 2.4 Create Database Migrations
+### 2.4 Create Database updates
 
-1. Generate the migrations using Django's migration system:
-
-```bash
-cd backend
-poetry run python manage.py makemigrations api
-```
-
-2. Create a data migration to transfer existing data to the new structure:
+1. Generate the updates using Django's update system:
 
 ```bash
 cd backend
-poetry run python manage.py makemigrations api --empty --name=data_migration_for_new_models
+poetry run python manage.py makeupdates api
 ```
 
-3. Edit the generated migration file to include custom data migration logic:
+2. Create a data update to transfer existing data to the new structure:
+
+```bash
+cd backend
+poetry run python manage.py makeupdates api --empty --name=data_update_for_new_models
+```
+
+3. Edit the generated update file to include custom data update logic:
 
 ```python
-# In the data migration file
-from django.db import migrations
+# In the data update file
+from django.db import updates
 
 def migrate_techniques_data(apps, schema_editor):
     # Get the models
@@ -595,18 +595,18 @@ def migrate_techniques_from_csv(apps, schema_editor):
                     description=res_desc
                 )
 
-class Migration(migrations.Migration):
+class update(updates.update):
 
     dependencies = [
-        ('api', 'XXXX_previous_migration'),  # Update this to the actual previous migration
+        ('api', 'XXXX_previous_update'),  # Update this to the actual previous update
     ]
 
     operations = [
-        migrations.RunPython(migrate_techniques_from_csv),
+        updates.RunPython(migrate_techniques_from_csv),
     ]
 ```
 
-4. Apply the migrations:
+4. Apply the updates:
 
 ```bash
 cd backend
@@ -702,7 +702,7 @@ class TechniqueSerializer(serializers.ModelSerializer):
             "resources",
             "example_use_cases",
             "limitations",
-            # Legacy fields to be removed after migration
+            # Legacy fields to be removed after update
             # "reference",
             # "software_package",
             # "scope",
@@ -1078,25 +1078,25 @@ urlpatterns = [
 
 1. **Unit Tests**: Create unit tests for new models and serializers.
 2. **API Tests**: Test all API endpoints with various input combinations.
-3. **Data Migration Test**: Verify that data is correctly migrated from old structure to new structure.
+3. **Data update Test**: Verify that data is correctly migrated from old structure to new structure.
 4. **Validation Tests**: Verify that validation rules work as expected (e.g., techniques can only be associated with categories that belong to their associated goals). This is critical to maintain the hierarchical relationship where categories are specific to a single assurance goal, even if they share the same name across different goals.
 
 ## 4. Rollout Strategy
 
 1. **Development Phase**:
    - Implement all model changes
-   - Create migrations
+   - Create updates
    - Update serializers and views
    - Develop comprehensive tests
 
 2. **Testing Phase**:
    - Run automated tests
    - Manually test API endpoints
-   - Verify data migration results
+   - Verify data update results
 
 3. **Deployment**:
    - Create a backup of the production database
-   - Apply migrations
+   - Apply updates
    - Deploy updated code
    - Run smoke tests to verify functionality
 
@@ -1106,7 +1106,7 @@ urlpatterns = [
 
 ## 5. Cleanup Phase
 
-After the migration is complete and the new system is stable:
+After the update is complete and the new system is stable:
 
 1. Remove commented-out code
 2. Drop unused models as identified in requirement 6

@@ -1,13 +1,13 @@
 // src/components/technique/TechniquesList.tsx
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import {
   useAssuranceGoals,
   calculateTotalPages,
   useTechniques,
-  useCategoriesByAssuranceGoal
+  useCategories
 } from "@/lib/api/hooks";
 import { useFilterParams } from "@/lib/hooks/useFilterParams";
 
@@ -29,6 +29,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Pagination } from "@/components/ui/pagination";
+import { Badge } from "@/components/ui/badge";
+import { Loader2 } from "lucide-react";
 import type { Technique, Category, AssuranceGoal } from "@/lib/types";
 
 // Number of items per page - must match backend setting (20)
@@ -46,12 +48,11 @@ export default function TechniquesList() {
   const { 
     filters, 
     setFilter, 
-    applyFilters, 
-    resetFilters, 
-    changePage,
     currentPage
   } = useFilterParams(initialFilters);
-
+  
+  // Fix hydration issues by tracking client-side rendering
+  
   // Fetch data from API
   const { data: techniquesData, isLoading, error } = useTechniques(
     {
@@ -63,11 +64,10 @@ export default function TechniquesList() {
   );
 
   // Fetch filtered categories based on selected assurance goal
-  const { data: categoriesData } = useCategoriesByAssuranceGoal(filters.assurance_goal);
+  const { data: categoriesData } = useCategories(
+    filters.assurance_goal !== "all" ? parseInt(filters.assurance_goal) : undefined
+  );
   const { data: assuranceGoalsData } = useAssuranceGoals();
-
-  // We'll handle the category reset directly in the onValueChange handler
-  // No need for useEffect here since it was causing infinite loop issues
 
   // Calculate pagination information
   const totalItems = techniquesData?.count || 0;
@@ -96,15 +96,41 @@ export default function TechniquesList() {
                 setFilter("search", newValue);
               }
             }}
-            onKeyDown={(e) => e.key === "Enter" && applyFilters()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                // Build URL with current filters
+                const params = new URLSearchParams();
+                
+                // Add search if provided
+                if (filters.search) {
+                  params.set("search", filters.search);
+                }
+                
+                // Add assurance goal if set
+                if (filters.assurance_goal && filters.assurance_goal !== "all") {
+                  params.set("assurance_goals", filters.assurance_goal);
+                }
+                
+                // Add category if set
+                if (filters.category && filters.category !== "all") {
+                  params.set("categories", filters.category);
+                }
+                
+                // Always set page
+                params.set("page", "1");
+                
+                // Navigate
+                window.location.href = `/techniques?${params.toString()}`;
+              }
+            }}
           />
           <Select
             value={filters.assurance_goal || "all"}
             onValueChange={(value) => {
-              if (value !== filters.assurance_goal) {
-                setFilter("assurance_goal", value);
-                // When assurance goal changes, also reset category directly here
-                setFilter("category", "all");
+              if (value === "all") {
+                window.location.href = "/techniques?page=1";
+              } else {
+                window.location.href = `/techniques?assurance_goals=${value}&page=1`;
               }
             }}
           >
@@ -130,16 +156,32 @@ export default function TechniquesList() {
           <Select 
             value={filters.category || "all"} 
             onValueChange={(value) => {
-              if (value !== filters.category) {
-                setFilter("category", value);
+              const params = new URLSearchParams();
+              
+              // Add category filter if not "all"
+              if (value !== "all") {
+                params.set("categories", value);
               }
+              
+              // Add assurance goal filter if it's set
+              if (filters.assurance_goal && filters.assurance_goal !== "all") {
+                params.set("assurance_goals", filters.assurance_goal);
+              }
+              
+              // Always set page
+              params.set("page", "1");
+              
+              // Navigate to filtered URL
+              window.location.href = `/techniques?${params.toString()}`;
             }}
           >
             <SelectTrigger>
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
+              <SelectItem value="all">
+                All Categories
+              </SelectItem>
               {categoriesData?.results?.map((cat: Category) => (
                 <SelectItem
                   key={cat.id}
@@ -151,16 +193,48 @@ export default function TechniquesList() {
             </SelectContent>
           </Select>
           <div className="flex gap-2">
-            <Button onClick={() => applyFilters()}>Apply Filters</Button>
-            <Button variant="outline" onClick={resetFilters}>
+            <Button onClick={() => {
+              // Build URL with all current filters
+              const params = new URLSearchParams();
+              
+              // Add search if provided
+              if (filters.search) {
+                params.set("search", filters.search);
+              }
+              
+              // Add assurance goal if set
+              if (filters.assurance_goal && filters.assurance_goal !== "all") {
+                params.set("assurance_goals", filters.assurance_goal);
+              }
+              
+              // Add category if set
+              if (filters.category && filters.category !== "all") {
+                params.set("categories", filters.category);
+              }
+              
+              params.set("page", "1");
+              
+              // Navigate to filtered URL
+              window.location.href = `/techniques?${params.toString()}`;
+            }}>
+              Apply Filters
+            </Button>
+            <Button variant="outline" onClick={() => {
+              // Direct navigation to reset
+              window.location.href = "/techniques?page=1";
+            }}>
               Reset
             </Button>
           </div>
         </div>
       </div>
 
+      
       {isLoading ? (
-        <div className="text-center py-8">Loading techniques...</div>
+        <div className="flex justify-center items-center py-8">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <span className="ml-2">Loading techniques...</span>
+        </div>
       ) : error ? (
         <div className="text-center py-8 text-red-500">
           <p>Error loading techniques: {(error as Error).message}</p>
@@ -187,7 +261,31 @@ export default function TechniquesList() {
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}
-                  onPageChange={changePage}
+                  onPageChange={(newPage) => {
+                    // Build URL with current filters and new page
+                    const params = new URLSearchParams();
+                    
+                    // Add search if provided
+                    if (filters.search) {
+                      params.set("search", filters.search);
+                    }
+                    
+                    // Add assurance goal if set
+                    if (filters.assurance_goal && filters.assurance_goal !== "all") {
+                      params.set("assurance_goals", filters.assurance_goal);
+                    }
+                    
+                    // Add category if set
+                    if (filters.category && filters.category !== "all") {
+                      params.set("categories", filters.category);
+                    }
+                    
+                    // Set the new page parameter
+                    params.set("page", newPage.toString());
+                    
+                    // Navigate to new page
+                    window.location.href = `/techniques?${params.toString()}`;
+                  }}
                   className="mt-8"
                 />
               )}
@@ -197,30 +295,49 @@ export default function TechniquesList() {
           )}
         </>
       )}
+      
     </div>
   );
 }
 
 // Extracted components
 function TechniqueCard({ technique }: { technique: Technique }) {
+  // Get first category and goal names for display in card
+  const primaryCategory = technique.categories.length > 0 
+    ? technique.categories[0].name 
+    : "Uncategorized";
+  
   return (
-    <Card>
+    <Card className="h-full flex flex-col">
       <CardHeader>
-        <CardTitle>
+        <CardTitle className="line-clamp-2">
           {technique.name}
         </CardTitle>
         <CardDescription>
-          {technique.category_name || "Uncategorized"}{" "}
-          | {technique.model_dependency}
+          {primaryCategory} | {technique.model_dependency}
+          {technique.assurance_goals.length > 1 && " | Multiple Goals"}
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <p className="line-clamp-3 text-sm text-muted-foreground">
+      
+      <CardContent className="flex-1">
+        <p className="line-clamp-3 text-sm text-muted-foreground mb-3">
           {technique.description}
         </p>
+        
+        <div className="flex flex-wrap gap-2">
+          {technique.assurance_goals.slice(0, 3).map((goal) => (
+            <Badge key={goal.id} variant="outline">
+              {goal.name}
+            </Badge>
+          ))}
+          {technique.assurance_goals.length > 3 && (
+            <Badge variant="outline">+{technique.assurance_goals.length - 3} more</Badge>
+          )}
+        </div>
       </CardContent>
-      <CardFooter>
-        <Button asChild variant="outline">
+      
+      <CardFooter className="mt-auto">
+        <Button asChild variant="default" className="w-full">
           <Link href={`/techniques/${technique.id}`}>
             View Details
           </Link>

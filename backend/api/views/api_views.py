@@ -13,20 +13,28 @@ from ..models import (
     AssuranceGoal,
     Category,
     SubCategory,
-    FairnessApproach,
-    ProjectLifecycleStage,
     Tag,
     Technique,
+    TechniqueRelationship,
+    AttributeType,
+    AttributeValue,
+    ResourceType
 )
 from ..serializers import (
     AssuranceGoalSerializer,
     CategorySerializer,
     SubCategorySerializer,
-    FairnessApproachSerializer,
-    ProjectLifecycleStageSerializer,
     TagSerializer,
     TechniqueSerializer,
-    TechniqueWriteSerializer,  # Add this - crucial for our updated ViewSet
+    TechniqueWriteSerializer,
+    TechniqueRelationshipSerializer,
+    AttributeTypeSerializer,
+    AttributeValueSerializer,
+    ResourceTypeSerializer,
+    TechniqueAttributeSerializer,
+    TechniqueResourceSerializer,
+    TechniqueExampleUseCaseSerializer,
+    TechniqueLimitationSerializer,
 )
 
 # Set up logger
@@ -85,30 +93,7 @@ class TagsViewSet(viewsets.ModelViewSet):
     ordering_fields = ["id", "name"]
 
 
-class FairnessApproachesViewSet(viewsets.ModelViewSet):
-    queryset = FairnessApproach.objects.all()
-    serializer_class = FairnessApproachSerializer
-    filter_backends = [
-        DjangoFilterBackend,
-        filters.SearchFilter,
-        filters.OrderingFilter,
-    ]
-    filterset_fields = ["name"]
-    search_fields = ["name", "description"]
-    ordering_fields = ["id", "name"]
-
-
-class ProjectLifecycleStagesViewSet(viewsets.ModelViewSet):
-    queryset = ProjectLifecycleStage.objects.all()
-    serializer_class = ProjectLifecycleStageSerializer
-    filter_backends = [
-        DjangoFilterBackend,
-        filters.SearchFilter,
-        filters.OrderingFilter,
-    ]
-    filterset_fields = ["name"]
-    search_fields = ["name", "description"]
-    ordering_fields = ["id", "name"]
+# FairnessApproaches and ProjectLifecycleStages ViewSets have been removed as part of the cleanup
 
 
 class TechniquesViewSet(viewsets.ModelViewSet):
@@ -126,14 +111,13 @@ class TechniquesViewSet(viewsets.ModelViewSet):
     ]
     filterset_fields = [
         "name",
-        "assurance_goal",
-        "category",
-        "sub_category",
         "model_dependency",
-        "scope",
+        "assurance_goals",
+        "categories",
+        "subcategories",
         "tags",
     ]
-    search_fields = ["name", "description", "example_use_case"]
+    search_fields = ["name", "description"]
     ordering_fields = ["id", "name"]
 
     def get_serializer_class(self):
@@ -176,6 +160,58 @@ class TechniquesViewSet(viewsets.ModelViewSet):
             raise
 
 
+class AttributeTypesViewSet(viewsets.ModelViewSet):
+    queryset = AttributeType.objects.all()
+    serializer_class = AttributeTypeSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+    filterset_fields = ["name", "applicable_goals", "required_for_goals"]
+    search_fields = ["name", "description"]
+    ordering_fields = ["id", "name"]
+
+
+class AttributeValuesViewSet(viewsets.ModelViewSet):
+    queryset = AttributeValue.objects.all()
+    serializer_class = AttributeValueSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+    filterset_fields = ["name", "attribute_type"]
+    search_fields = ["name", "description"]
+    ordering_fields = ["id", "name"]
+
+
+class ResourceTypesViewSet(viewsets.ModelViewSet):
+    queryset = ResourceType.objects.all()
+    serializer_class = ResourceTypeSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+    filterset_fields = ["name"]
+    search_fields = ["name"]
+    ordering_fields = ["id", "name"]
+
+
+class TechniqueRelationshipsViewSet(viewsets.ModelViewSet):
+    queryset = TechniqueRelationship.objects.all()
+    serializer_class = TechniqueRelationshipSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+    filterset_fields = ["technique_from", "technique_to", "relationship_type"]
+    search_fields = ["relationship_type"]
+    ordering_fields = ["id"]
+
+
 @api_view(["GET"])
 def get_categorylist(request, assurance_goal_id):
     categories = Category.objects.filter(assurance_goal_id=assurance_goal_id)
@@ -202,6 +238,8 @@ def debug_endpoint(request):
         assurance_goals = AssuranceGoal.objects.all()
         categories = Category.objects.all()
         subcategories = SubCategory.objects.all()
+        attribute_types = AttributeType.objects.all()
+        resource_types = ResourceType.objects.all()
 
         response_data = {
             "available_models": {
@@ -224,24 +262,59 @@ def debug_endpoint(request):
                     }
                     for subcat in subcategories
                 ],
+                "attribute_types": [
+                    {"id": at.id, "name": at.name} for at in attribute_types
+                ],
+                "resource_types": [
+                    {"id": rt.id, "name": rt.name} for rt in resource_types
+                ],
             },
             "technique_fields": {
                 "required": [
                     "name",
                     "description",
-                    "assurance_goal",
-                    "category",
                     "model_dependency",
                 ],
-                "optional": ["example_use_case", "sub_category", "scope", "tags"],
+                "optional": [
+                    "assurance_goal_ids",
+                    "category_ids",
+                    "subcategory_ids",
+                    "tag_ids",
+                    "attributes",
+                    "resources",
+                    "example_use_cases",
+                    "limitations",
+                ],
             },
             "technique_example": {
                 "name": "Example Technique",
                 "description": "Description of the technique",
-                "assurance_goal": 1,  # ID of an assurance goal (integer)
-                "category": 1,  # ID of a category (integer)
                 "model_dependency": "Model-Agnostic",
-                "example_use_case": "Example use case description",
+                "assurance_goal_ids": [1, 2],
+                "category_ids": [1, 2],
+                "subcategory_ids": [1],
+                "tag_ids": [1, 2],
+                "attributes": [
+                    {"attribute_value": 1}
+                ],
+                "resources": [
+                    {
+                        "resource_type": 1,
+                        "title": "Documentation",
+                        "url": "https://example.com",
+                        "description": "Official documentation"
+                    }
+                ],
+                "example_use_cases": [
+                    {
+                        "description": "Example use case description",
+                        "assurance_goal": 1
+                    }
+                ],
+                "limitations": [
+                    "Limitation 1",
+                    "Limitation 2"
+                ]
             },
         }
 

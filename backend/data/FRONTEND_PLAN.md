@@ -1,10 +1,10 @@
-# Frontend Migration Plan for TEA Techniques Project
+# Frontend Revisions Plan for TEA Techniques Project
 
 This document outlines the plan to update the frontend of the TEA Techniques project to work with the new backend data model as defined in the requirements.
 
 ## 1. Overview of Changes
 
-The frontend migration involves updating several key components to work with the new backend data structure:
+The frontend revisions involves updating several key components to work with the new backend data structure:
 
 1. **Update TypeScript Types**: Define new TypeScript interfaces to match the updated backend models.
 2. **API Hooks**: Update hooks to work with new endpoints and data structures.
@@ -1143,7 +1143,7 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
    - Perform manual testing
 
 3. **Deployment**:
-   - Deploy after backend migration is complete
+   - Deploy after backend updates are complete
    - Monitor for errors
    - Address any issues that arise
 
@@ -1154,4 +1154,4 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
 3. Deployment: 1 day
 4. Post-deployment fixes: 1 week
 
-Total estimated time: 3-4 weeks, aligned with backend migration timeline.
+Total estimated time: 3-4 weeks, aligned with backend update timeline.

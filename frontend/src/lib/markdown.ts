@@ -22,16 +22,18 @@ export async function getMarkdownContent(filePath: string) {
 	// Use gray-matter to parse the markdown frontmatter
 	const { content } = matter(fileContents);
 
-	// Use remark to convert markdown into HTML string
-	const processedContent = await unified()
-		.use(remarkParse)
-		.use(remarkHtml)
-		.process(content);
+	return { content };
+}
 
-	return {
-		contentHtml: processedContent.toString(),
-		content,
-	};
+/**
+ * Convert markdown to HTML
+ */
+export async function markdownToHtml(markdown: string) {
+	const result = await unified()
+		.use(remarkParse)
+		.use(remarkHtml, { sanitize: false }) // Ensure HTML isn't sanitized out
+		.process(markdown);
+	return result.toString();
 }
 
 /**
@@ -64,18 +66,25 @@ export function extractSections(markdownContent: string) {
 }
 
 /**
- * Map README sections to about page tabs
+ * Map README sections to about page tabs with HTML conversion
  */
-export function mapSectionsToTabs(sections: Record<string, string>) {
+export async function mapSectionsToTabs(sections: Record<string, string>) {
+	// Convert each section to HTML
+	const convertedSections: Record<string, string> = {};
+
+	for (const [key, content] of Object.entries(sections)) {
+		convertedSections[key] = await markdownToHtml(content);
+	}
+
 	return {
 		projectInfo: {
-			overview: sections["introduction"] || "",
-			features: sections["key-features"] || "",
+			overview: convertedSections["introduction"] || "",
+			features: convertedSections["key-features"] || "",
 		},
 		developerInstructions: {
-			development: sections["development-setup"] || "",
-			projectStructure: sections["project-structure"] || "",
-			testing: sections["testing"] || "",
+			development: convertedSections["development-setup"] || "",
+			projectStructure: convertedSections["project-structure"] || "",
+			testing: convertedSections["testing"] || "",
 		},
 	};
 }

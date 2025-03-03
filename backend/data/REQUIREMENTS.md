@@ -1,6 +1,6 @@
-# TEA Techniques Database Migration Requirements
+# TEA Techniques Database Revisions Requirements
 
-This document tracks all required changes for the database migration plan. Each change is documented with its rationale, implementation requirements, and dependencies.
+This document tracks all required changes for the database update plan. Each change is documented with its rationale, implementation requirements, and dependencies.
 
 ## 1. TechniqueRelationship Model Enhancements
 
@@ -46,7 +46,7 @@ Allows for future expansion to different relationship types
 
 **Implementation Steps:**
 
-Create a migration to modify field constraints (removing null=True)
+Create a plan to modify field constraints (removing null=True)
 Add the relationship_type field with default value "similar"
 Clean any existing null entries in the relationship table
 Add the unique_together constraint for the three fields
@@ -72,7 +72,7 @@ Goals do not share categories (even if they have the same name conceptually)
 Categories do not share sub-categories
 
 **Decision:**
-We will maintain the current hierarchical structure rather than implementing the many-to-many relationships proposed in the migration plan. This ensures that:
+We will maintain the current hierarchical structure rather than implementing the many-to-many relationships proposed in the plan. This ensures that:
 
 Categories remain specific to a single assurance goal
 Sub-categories remain specific to a single category
@@ -81,8 +81,8 @@ The data model accurately reflects the business domain requirements
 **Implementation Requirements:**
 
 Retain the current foreign key relationships in the model
-Do not implement the CategoryAssuranceGoal and SubCategoryCategory join tables proposed in the migration plan
-Ensure any data migration scripts maintain these hierarchical relationships
+Do not implement the CategoryAssuranceGoal and SubCategoryCategory join tables proposed in the plan
+Ensure any data import scripts maintain these hierarchical relationships
 
 **Rationale:**
 While many-to-many relationships might offer more flexibility, they don't align with the business requirement that goals should have distinct categories and categories should have distinct sub-categories, even if they share the same name conceptually. The current model better enforces data integrity and domain rules.
@@ -106,7 +106,7 @@ Maintain the optional relationship between `Technique` and `SubCategory` in the 
 **Implementation Requirements:**
 - Ensure that any changes to the model or database schema preserve the optional nature of this relationship
 - Any form validation or API endpoint validation should continue to allow techniques without a sub-category
-- Data migration scripts should handle cases where sub-category is null
+- Data import scripts should handle cases where sub-category is null
 
 **Rationale:**
 Categories may have different levels of granularity. Some may benefit from subdivision into sub-categories, while others may be sufficiently specific without further subdivision. Maintaining the optional relationship provides appropriate flexibility in the data model.
@@ -185,9 +185,9 @@ class TechniqueSubCategory(models.Model):
 This change enables the platform to represent techniques that span multiple assurance goals, which more accurately reflects real-world scenarios where techniques can serve multiple purposes across different assurance domains.
 
 **Complexity Impact:**
-This is a significant change that affects the core data model and will require careful migration. It may require specialized forms and validation logic to maintain referential integrity across the hierarchical relationships.
+This is a significant change that affects the core data model and will require careful consideration. It may require specialized forms and validation logic to maintain referential integrity across the hierarchical relationships.
 
-# MIGRATION_REQUIREMENTS.md
+# REQUIREMENTS.md
 
 ## 5. Enhanced Technique Attributes and Resources Management
 
@@ -246,7 +246,7 @@ class Technique(models.Model):
 ```
 
 **Proposed Changes:**
-Implement the AttributeType/AttributeValue system from the migration plan:
+Implement the AttributeType/AttributeValue system from the plan:
 
 ```python
 class AttributeType(models.Model):
@@ -377,7 +377,7 @@ Maintain the current implementation. The existing many-to-many relationship thro
 
 ## Implementation Considerations:
 
-1. The migration should include data transfer from existing fields to the new relational structures
+1. The update should include data transfer from existing fields to the new relational structures
 2. Frontend forms will need updating to support these more complex data structures
 3. API endpoints must be enhanced to expose the richer relationships
 4. Validation logic should enforce goal-specific attribute requirements
@@ -406,7 +406,7 @@ class TechniqueProjectLifecycleStage(models.Model):
 These models appear to be fairness-specific attributes that are not currently being utilized effectively. Rather than maintaining separate specialized models, any future lifecycle stage information can be handled through the more flexible AttributeType/AttributeValue system proposed in section 5.3.
 
 **Implementation Steps:**
-1. Create migration to delete these tables
+1. Create code to delete these tables
 2. Remove references from the Technique model
 3. Remove related serializers and views
 4. Update any form fields or UI elements that reference these models

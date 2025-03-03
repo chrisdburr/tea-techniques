@@ -16,8 +16,10 @@ from .views.api_views import (
     TechniquesViewSet,
     get_categorylist,
     get_subcategorylist,
-    FairnessApproachesViewSet,
-    ProjectLifecycleStagesViewSet,
+    AttributeTypesViewSet,
+    AttributeValuesViewSet,
+    ResourceTypesViewSet,
+    TechniqueRelationshipsViewSet,
     debug_endpoint,
 )
 
@@ -38,11 +40,17 @@ def api_root(request, format=None):
             ),
             "tags": reverse("tag-list", request=request, format=format),
             "techniques": reverse("technique-list", request=request, format=format),
-            "fairness_approaches": reverse(
-                "fairnessapproach-list", request=request, format=format
+            "attribute_types": reverse(
+                "attributetype-list", request=request, format=format
             ),
-            "project_lifecycle_stages": reverse(
-                "projectlifecyclestage-list", request=request, format=format
+            "attribute_values": reverse(
+                "attributevalue-list", request=request, format=format
+            ),
+            "resource_types": reverse(
+                "resourcetype-list", request=request, format=format
+            ),
+            "technique_relationships": reverse(
+                "techniquerelationship-list", request=request, format=format
             ),
         }
     )
@@ -68,8 +76,10 @@ router.register(r"categories", CategoryViewSet)
 router.register(r"subcategories", SubCategoryViewSet)
 router.register(r"tags", TagsViewSet)
 router.register(r"techniques", TechniquesViewSet)
-router.register(r"fairness-approaches", FairnessApproachesViewSet)
-router.register(r"project-lifecycle-stages", ProjectLifecycleStagesViewSet)
+router.register(r"attribute-types", AttributeTypesViewSet)
+router.register(r"attribute-values", AttributeValuesViewSet)
+router.register(r"resource-types", ResourceTypesViewSet)
+router.register(r"technique-relationships", TechniqueRelationshipsViewSet)
 
 urlpatterns = [
     path("debug/", debug_endpoint, name="debug-endpoint"),

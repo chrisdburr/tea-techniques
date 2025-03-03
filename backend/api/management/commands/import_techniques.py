@@ -1,267 +1,238 @@
 import csv
-import logging
+import json
 import os
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.db import transaction
 from api.models import (
-    Technique,
+    AssuranceGoal,
     Category,
     SubCategory,
     Tag,
-    AssuranceGoal,
-    FairnessApproach,
-    ProjectLifecycleStage,
-    TechniqueFairnessApproach,
-    TechniqueProjectLifecycleStage,
+    AttributeType,
+    AttributeValue,
+    ResourceType,
+    Technique,
+    TechniqueAttribute,
+    TechniqueExampleUseCase,
+    TechniqueLimitation,
+    TechniqueResource,
 )
-
-# Configure logging
-logger = logging.getLogger(__name__)
-handler = logging.FileHandler("import_techniques.log")
-formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-logger.setLevel(logging.INFO)
-
-
-def get_or_create_case_insensitive(model, name_field, name, defaults=None):
-    """
-    Performs a case-insensitive get or create for a given model and field.
-    """
-    if defaults is None:
-        defaults = {}
-    lookup = {f"{name_field}__iexact": name.strip()}
-    obj = model.objects.filter(**lookup).first()
-    if obj:
-        return obj, False
-    else:
-        # Combine the name field and any extra fields required for creation
-        create_kwargs = {name_field: name.strip(), **defaults}
-        obj = model.objects.create(**create_kwargs)
-        return obj, True
 
 
 class Command(BaseCommand):
-    help = "Import techniques from a CSV file. Usage: import_techniques <csv_file> <assurance_goal>"
+    help = 'Import techniques from CSV file'
 
     def add_arguments(self, parser):
-        parser.add_argument("csv_file", type=str, help="Path to the CSV file to import")
-        parser.add_argument(
-            "assurance_goal", type=str, help="Name of the Assurance Goal"
-        )
+        parser.add_argument('--file', type=str, help='Path to the CSV file')
 
     def handle(self, *args, **options):
-        csv_file = options["csv_file"]
-        assurance_goal_name = options["assurance_goal"]
-
-        success_count = 0
-        error_count = 0
-
-        self.stdout.write(
-            self.style.NOTICE(
-                f"Starting import from '{csv_file}' for Assurance Goal '{assurance_goal_name}'"
-            )
-        )
-        logger.info(
-            f"Starting import from '{csv_file}' for Assurance Goal '{assurance_goal_name}'"
-        )
-
-        if not os.path.isfile(csv_file):
-            error_msg = f"CSV file not found at '{csv_file}'"
-            self.stdout.write(self.style.ERROR(error_msg))
-            logger.error(error_msg)
-            raise CommandError(error_msg)
-
-        # Get the AssuranceGoal
-        try:
-            assurance_goal = AssuranceGoal.objects.get(name__iexact=assurance_goal_name)
-        except AssuranceGoal.DoesNotExist:
-            error_msg = f"Assurance Goal '{assurance_goal_name}' does not exist."
-            self.stdout.write(self.style.ERROR(error_msg))
-            logger.error(error_msg)
-            raise CommandError(error_msg)
-
-        try:
-            with open(csv_file, newline="", encoding="utf-8-sig") as file:
-                reader = csv.DictReader(file)
-                row_number = 1  # To track row numbers for logging
-
+        file_path = options.get('file')
+        if not file_path:
+            file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 
+                                    'data', 'techniques.csv')
+        
+        if not os.path.exists(file_path):
+            self.stdout.write(self.style.ERROR(f'File not found: {file_path}'))
+            return
+        
+        self.stdout.write(self.style.SUCCESS(f'Importing techniques from {file_path}'))
+        
+        # Create initial records needed for import
+        self._create_base_records()
+        
+        # Process the CSV file
+        with open(file_path, 'r', encoding='utf-8') as csvfile:
+            reader = csv.DictReader(csvfile)
+            
+            # Use a transaction to ensure data consistency
+            with transaction.atomic():
                 for row in reader:
-                    row_number += 1
-                    try:
-                        with transaction.atomic():
-                            # Retrieve and validate Technique Name
-                            technique_name = row.get("Technique Name", "").strip()
-                            if not technique_name or technique_name.lower() == "???":
-                                warning_msg = f"Skipping invalid row {row_number}: Technique Name is missing or invalid."
-                                self.stdout.write(self.style.WARNING(warning_msg))
-                                logger.warning(warning_msg)
-                                error_count += 1
-                                continue
-
-                            # Process Category
-                            category_name = row.get("Category", "").strip()
-                            if not category_name:
-                                error_msg = f"Category is missing in row {row_number}."
-                                self.stdout.write(self.style.ERROR(error_msg))
-                                logger.error(error_msg)
-                                error_count += 1
-                                continue
-
-                            category = Category.objects.filter(
-                                name__iexact=category_name,
-                                assurance_goal=assurance_goal,
-                            ).first()
-                            if not category:
-                                error_msg = f"Category '{category_name}' not found for Assurance Goal '{assurance_goal_name}' in row {row_number}."
-                                self.stdout.write(self.style.ERROR(error_msg))
-                                logger.error(error_msg)
-                                error_count += 1
-                                continue
-
-                            # Process SubCategory
-                            sub_category_name = row.get("Sub-Category", "").strip()
-                            if sub_category_name:
-                                sub_category = SubCategory.objects.filter(
-                                    name__iexact=sub_category_name, category=category
-                                ).first()
-                                if not sub_category:
-                                    error_msg = f"SubCategory '{sub_category_name}' not found under Category '{category_name}' in row {row_number}."
-                                    self.stdout.write(self.style.ERROR(error_msg))
-                                    logger.error(error_msg)
-                                    error_count += 1
-                                    continue
-                            else:
-                                sub_category = None
-
-                            # Prepare defaults for Technique creation/update
-                            technique_defaults = {
-                                "description": row.get("Description", "").strip(),
-                                "assurance_goal": assurance_goal,
-                                "model_dependency": row.get(
-                                    "Model Dependency", ""
-                                ).strip(),
-                                "example_use_case": row.get(
-                                    "Example Use Case", ""
-                                ).strip(),
+                    self._process_technique(row)
+                    
+        self.stdout.write(self.style.SUCCESS('Successfully imported techniques'))
+    
+    def _create_base_records(self):
+        """Create necessary base records (goals, attributes, etc.)"""
+        # Create assurance goals if they don't exist
+        for goal_name in ['Explainability', 'Fairness']:
+            AssuranceGoal.objects.get_or_create(
+                name=goal_name,
+                defaults={'description': f'{goal_name} techniques for trustworthy AI'}
+            )
+            
+        # Create attribute types
+        for attr_type in ['Scope', 'Data Type', 'Model Type', 'Programming Language']:
+            AttributeType.objects.get_or_create(
+                name=attr_type,
+                defaults={'description': f'The {attr_type.lower()} of the technique'}
+            )
+            
+        # Create resource types
+        for resource_type in ['Paper', 'GitHub', 'Documentation', 'Website', 'Tutorial', 'API']:
+            ResourceType.objects.get_or_create(
+                name=resource_type,
+                defaults={'icon': resource_type.lower()}
+            )
+    
+    def _process_technique(self, row):
+        """Process a single technique row from the CSV"""
+        try:
+            # Extract data from the row
+            name = row['name']
+            description = row['description']
+            model_dependency = row['model_dependency']
+            assurance_goal_name = row['assurance_goals']
+            
+            # Parse JSON arrays
+            categories_data = json.loads(row['categories']) if row['categories'] else []
+            subcategories_data = json.loads(row['subcategories']) if row['subcategories'] else []
+            attributes_data = json.loads(row['attributes']) if row['attributes'] else []
+            example_use_cases_data = json.loads(row['example_use_cases']) if row['example_use_cases'] else []
+            resources_data = json.loads(row['resources']) if row['resources'] else []
+            limitations_data = row['limitations'].split('|') if row['limitations'] else []
+            
+            # If a technique already exists with this name, we'll update it
+            # Otherwise, we'll create a new one
+            technique, created = Technique.objects.update_or_create(
+                name=name,
+                defaults={
+                    'description': description,
+                    'model_dependency': model_dependency,
+                }
+            )
+            
+            # Clear existing relationships if updating
+            if not created:
+                technique.assurance_goals.clear()
+                technique.categories.clear()
+                technique.subcategories.clear()
+                
+                # Delete related objects
+                technique.attributes.all().delete()
+                technique.resources.all().delete()
+                technique.example_use_cases.all().delete()
+                technique.limitations.all().delete()
+            
+            # Process assurance goals
+            assurance_goal = AssuranceGoal.objects.get(name=assurance_goal_name)
+            technique.assurance_goals.add(assurance_goal)
+            
+            # Process categories and subcategories
+            for cat_data in categories_data:
+                goal_name = cat_data.get('goal', assurance_goal_name)
+                cat_name = cat_data.get('category')
+                
+                goal = AssuranceGoal.objects.get(name=goal_name)
+                
+                # Get or create the category
+                category, _ = Category.objects.get_or_create(
+                    name=cat_name,
+                    assurance_goal=goal,
+                    defaults={'description': f'Category for {cat_name}'}
+                )
+                
+                # Add category to technique
+                technique.categories.add(category)
+                
+            # Process subcategories
+            for subcat_data in subcategories_data:
+                cat_name = subcat_data.get('category')
+                subcat_name = subcat_data.get('subcategory')
+                
+                # Find the category
+                try:
+                    category = Category.objects.get(name=cat_name)
+                    
+                    # Get or create subcategory
+                    subcategory, _ = SubCategory.objects.get_or_create(
+                        name=subcat_name,
+                        category=category,
+                        defaults={'description': f'Subcategory for {subcat_name}'}
+                    )
+                    
+                    # Add subcategory to technique
+                    technique.subcategories.add(subcategory)
+                except Category.DoesNotExist:
+                    self.stdout.write(self.style.WARNING(f'Category {cat_name} not found for {name}'))
+            
+            # Process attributes
+            for attr_data in attributes_data:
+                attr_type_name = attr_data.get('type')
+                attr_value_name = attr_data.get('value')
+                
+                # Get or create attribute type
+                attr_type, _ = AttributeType.objects.get_or_create(
+                    name=attr_type_name,
+                    defaults={'description': f'The {attr_type_name.lower()} of the technique'}
+                )
+                
+                # Get or create attribute value
+                attr_value, _ = AttributeValue.objects.get_or_create(
+                    attribute_type=attr_type,
+                    name=attr_value_name,
+                    defaults={'description': f'{attr_value_name} {attr_type_name.lower()}'}
+                )
+                
+                # Add attribute to technique
+                TechniqueAttribute.objects.get_or_create(
+                    technique=technique,
+                    attribute_value=attr_value
+                )
+            
+            # Process example use cases
+            for use_case_data in example_use_cases_data:
+                use_case_desc = use_case_data.get('description')
+                use_case_goal_name = use_case_data.get('goal', assurance_goal_name)
+                
+                # Find the goal
+                try:
+                    use_case_goal = AssuranceGoal.objects.get(name=use_case_goal_name)
+                    
+                    # Create example use case
+                    TechniqueExampleUseCase.objects.get_or_create(
+                        technique=technique,
+                        description=use_case_desc,
+                        assurance_goal=use_case_goal
+                    )
+                except AssuranceGoal.DoesNotExist:
+                    self.stdout.write(self.style.WARNING(f'Goal {use_case_goal_name} not found for {name}'))
+            
+            # Process limitations
+            for limitation in limitations_data:
+                if limitation.strip():
+                    TechniqueLimitation.objects.get_or_create(
+                        technique=technique,
+                        description=limitation.strip()
+                    )
+            
+            # Process resources
+            for resource_data in resources_data:
+                if isinstance(resource_data, dict):
+                    resource_type_name = resource_data.get('type', 'Website')
+                    resource_title = resource_data.get('title', 'Resource')
+                    resource_url = resource_data.get('url', '')
+                    resource_desc = resource_data.get('description', '')
+                    
+                    if resource_url:
+                        # Get or create resource type
+                        resource_type, _ = ResourceType.objects.get_or_create(
+                            name=resource_type_name,
+                            defaults={'icon': resource_type_name.lower()}
+                        )
+                        
+                        # Create resource
+                        TechniqueResource.objects.get_or_create(
+                            technique=technique,
+                            resource_type=resource_type,
+                            url=resource_url,
+                            defaults={
+                                'title': resource_title,
+                                'description': resource_desc
                             }
-
-                            # Handle Scope Columns
-                            scope_global = (
-                                row.get("Scope Global", "").strip().lower() == "yes"
-                            )
-                            scope_local = (
-                                row.get("Scope Local", "").strip().lower() == "yes"
-                            )
-
-                            if scope_global and scope_local:
-                                scope = "Both"
-                            elif scope_global:
-                                scope = "Global"
-                            elif scope_local:
-                                scope = "Local"
-                            else:
-                                scope = None
-
-                            technique_defaults["scope"] = scope
-
-                            # Create or update Technique with correct lookup
-                            try:
-                                technique = Technique.objects.get(
-                                    name__iexact=technique_name
-                                )
-                                # Update the Technique's fields
-                                for field, value in technique_defaults.items():
-                                    setattr(technique, field, value)
-                                # Assign ForeignKey fields directly
-                                technique.category = category
-                                technique.sub_category = sub_category
-                                technique.save()
-                                created = False
-                                success_count += 1
-                                success_msg = f"Updated Technique: {technique.name}"
-                                self.stdout.write(self.style.SUCCESS(success_msg))
-                                logger.info(success_msg)
-                            except Technique.DoesNotExist:
-                                # Create a new Technique
-                                technique = Technique.objects.create(
-                                    name=technique_name,
-                                    category=category,  # Assign ForeignKey directly
-                                    sub_category=sub_category,  # Assign ForeignKey directly or leave blank
-                                    **technique_defaults,
-                                )
-                                created = True
-                                success_count += 1
-                                success_msg = f"Imported Technique: {technique.name}"
-                                self.stdout.write(self.style.SUCCESS(success_msg))
-                                logger.info(success_msg)
-
-                            # Process Tags (assuming there's a 'Tags' column in the CSV)
-                            tags = self.parse_semicolon_separated(row.get("Tags", ""))
-                            for tag_name in tags:
-                                if tag_name:
-                                    tag, _ = get_or_create_case_insensitive(
-                                        Tag, "name", tag_name
-                                    )
-                                    technique.tags.add(tag)
-
-                            # Process Fairness Approach (if column exists)
-                            if "Fairness Approach" in row:
-                                fa_names = self.parse_semicolon_separated(
-                                    row.get("Fairness Approach", "")
-                                )
-                                for fa_name in fa_names:
-                                    if fa_name:
-                                        fairness_approach, _ = (
-                                            get_or_create_case_insensitive(
-                                                FairnessApproach, "name", fa_name
-                                            )
-                                        )
-                                        TechniqueFairnessApproach.objects.get_or_create(
-                                            technique=technique,
-                                            fairness_approach=fairness_approach,
-                                        )
-
-                            # Process Project Lifecycle Stage (if column exists)
-                            if "Project Lifecycle Stage" in row:
-                                pls_names = self.parse_semicolon_separated(
-                                    row.get("Project Lifecycle Stage", "")
-                                )
-                                for pls_name in pls_names:
-                                    if pls_name:
-                                        pls, _ = get_or_create_case_insensitive(
-                                            ProjectLifecycleStage, "name", pls_name
-                                        )
-                                        TechniqueProjectLifecycleStage.objects.get_or_create(
-                                            technique=technique,
-                                            project_lifecycle_stage=pls,
-                                        )
-
-                    except Exception as e:
-                        error_msg = (
-                            f"Error importing row {row_number} in '{csv_file}': {e}"
                         )
-                        self.stdout.write(self.style.ERROR(error_msg))
-                        logger.exception(
-                            "Exception occurred while importing row %d", row_number
-                        )
-                        error_count += 1
-                        continue  # Continue with the next row
-
+            
+            status = 'Created' if created else 'Updated'
+            self.stdout.write(self.style.SUCCESS(f'{status} technique: {name}'))
+            
         except Exception as e:
-            error_msg = f"Failed to process file '{csv_file}': {e}"
-            self.stdout.write(self.style.ERROR(error_msg))
-            logger.error(error_msg)
-            raise CommandError(error_msg)
-
-        summary_msg = (
-            f"Import completed: {success_count} succeeded, {error_count} failed."
-        )
-        self.stdout.write(self.style.SUCCESS(summary_msg))
-        logger.info(summary_msg)
-
-    def parse_semicolon_separated(self, value):
-        """
-        Helper method to parse semicolon-separated strings into a list.
-        """
-        return [item.strip() for item in value.split(";") if item.strip()]
+            self.stdout.write(self.style.ERROR(f'Error processing technique {row.get("name", "Unknown")}: {str(e)}'))

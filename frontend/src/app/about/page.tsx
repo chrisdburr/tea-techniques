@@ -27,16 +27,20 @@ export default function AboutPage() {
 					</p>
 				</div>
 
-				<Tabs defaultValue="about" className="w-full">
+				<Tabs defaultValue="project-info" className="w-full">
 					<TabsList>
-						<TabsTrigger value="about">About</TabsTrigger>
-						<TabsTrigger value="development">
-							Development
+						<TabsTrigger value="project-info">
+							Project Information
 						</TabsTrigger>
-						<TabsTrigger value="testing">Testing</TabsTrigger>
+						<TabsTrigger value="developer-instructions">
+							Developer Instructions
+						</TabsTrigger>
 					</TabsList>
 
-					<TabsContent value="about" className="space-y-6 py-4">
+					<TabsContent
+						value="project-info"
+						className="space-y-6 py-4"
+					>
 						<section>
 							<h2 className="text-2xl font-semibold mb-3">
 								Project Overview
@@ -142,7 +146,10 @@ export default function AboutPage() {
 						</section>
 					</TabsContent>
 
-					<TabsContent value="development" className="space-y-6 py-4">
+					<TabsContent
+						value="developer-instructions"
+						className="space-y-6 py-4"
+					>
 						<h2 className="text-2xl font-semibold mb-3">
 							Development Setup
 						</h2>
@@ -206,6 +213,58 @@ export default function AboutPage() {
 										</pre>
 									</li>
 								</ol>
+								<p>Access the application at:</p>
+								<ul className="list-disc pl-6 space-y-1">
+									<li>
+										Frontend:{" "}
+										<code>http://localhost:3000</code>
+									</li>
+									<li>
+										API:{" "}
+										<code>http://localhost:8000/api/</code>
+									</li>
+									<li>
+										Admin:{" "}
+										<code>
+											http://localhost:8000/admin/
+										</code>{" "}
+										(username: admin, password: admin)
+									</li>
+								</ul>
+							</CardContent>
+						</Card>
+
+						<Card>
+							<CardHeader>
+								<CardTitle>
+									Using Docker (for production-like
+									environment)
+								</CardTitle>
+								<CardDescription>
+									Full setup with PostgreSQL database
+								</CardDescription>
+							</CardHeader>
+							<CardContent className="space-y-4">
+								<ol className="list-decimal pl-6 space-y-2">
+									<li>
+										<strong>
+											Setup environment variables
+										</strong>
+										<pre className="bg-muted p-2 rounded-md mt-1 overflow-x-auto">
+											<code>mv .env.example .env</code>
+										</pre>
+										<p className="text-sm text-muted-foreground mt-1">
+											Review and adjust the values (e.g.,
+											change user and password)
+										</p>
+									</li>
+									<li>
+										<strong>Start the database</strong>
+										<pre className="bg-muted p-2 rounded-md mt-1 overflow-x-auto">
+											<code>docker compose up -d</code>
+										</pre>
+									</li>
+								</ol>
 							</CardContent>
 						</Card>
 
@@ -257,109 +316,110 @@ export default function AboutPage() {
 								</div>
 							</CardContent>
 						</Card>
-					</TabsContent>
-
-					<TabsContent value="testing" className="space-y-6 py-4">
-						<h2 className="text-2xl font-semibold mb-3">
-							Testing Guide
-						</h2>
 
 						<Card>
 							<CardHeader>
-								<CardTitle>Frontend Testing</CardTitle>
-								<CardDescription>
-									Using Jest and React Testing Library
-								</CardDescription>
+								<CardTitle>Testing</CardTitle>
 							</CardHeader>
-							<CardContent className="space-y-2">
-								<p>
-									The frontend uses Jest and React Testing
-									Library for component and API testing.
-								</p>
-								<h3 className="font-medium mb-1">
-									Running Tests
-								</h3>
-								<pre className="bg-muted p-2 rounded-md mt-1 overflow-x-auto">
-									<code>
-										cd frontend
-										<br />
-										npm run test
-									</code>
-								</pre>
-								<p className="mt-2">
-									For watch mode during development:
-								</p>
-								<pre className="bg-muted p-2 rounded-md mt-1 overflow-x-auto">
-									<code>
-										cd frontend
-										<br />
-										npm run test:watch
-									</code>
-								</pre>
+							<CardContent className="space-y-4">
+								<div>
+									<h3 className="font-medium mb-2">
+										Frontend Testing
+									</h3>
+									<p>
+										The frontend uses Jest and React Testing
+										Library for component and API testing.
+									</p>
+									<pre className="bg-muted p-2 rounded-md mt-1 overflow-x-auto">
+										<code>
+											cd frontend
+											<br />
+											npm run test
+										</code>
+									</pre>
+									<p className="mt-2">
+										For watch mode during development:
+									</p>
+									<pre className="bg-muted p-2 rounded-md mt-1 overflow-x-auto">
+										<code>
+											cd frontend
+											<br />
+											npm run test:watch
+										</code>
+									</pre>
+								</div>
+
+								<div>
+									<h3 className="font-medium mb-2">
+										Backend Testing
+									</h3>
+									<p>
+										The backend uses pytest and Django&apos;s
+										testing tools for model and API testing.
+									</p>
+									<pre className="bg-muted p-2 rounded-md mt-1 overflow-x-auto">
+										<code>
+											cd backend
+											<br />
+											USE_SQLITE=True poetry run pytest
+										</code>
+									</pre>
+									<p className="mt-2">
+										For test coverage reports:
+									</p>
+									<pre className="bg-muted p-2 rounded-md mt-1 overflow-x-auto">
+										<code>
+											cd backend
+											<br />
+											poetry run pytest --cov=api
+										</code>
+									</pre>
+								</div>
+
+								<div>
+									<h3 className="font-medium mb-2">
+										Integration Testing
+									</h3>
+									<p>
+										A custom integration testing script is
+										provided to test the interaction between
+										frontend and backend by making direct
+										API calls.
+									</p>
+									<pre className="bg-muted p-2 rounded-md mt-1 overflow-x-auto">
+										<code>
+											# Install dependencies if needed
+											<br />
+											pip install requests rich
+											<br />
+											<br />
+											# Run integration tests
+											<br />
+											python scripts/test_integration.py
+										</code>
+									</pre>
+								</div>
 							</CardContent>
 						</Card>
 
 						<Card>
 							<CardHeader>
-								<CardTitle>Backend Testing</CardTitle>
-								<CardDescription>
-                                    <p>
-										Using pytest and Django&apos;s testing tools
-                                    </p>
-								</CardDescription>
-							</CardHeader>
-							<CardContent className="space-y-2">
-								<p>
-									The backend uses pytest and Django&apos;s testing
-									tools for model and API testing.
-								</p>
-								<h3 className="font-medium mb-1">
-									Running Tests
-								</h3>
-								<pre className="bg-muted p-2 rounded-md mt-1 overflow-x-auto">
-									<code>
-										cd backend
-										<br />
-										poetry run pytest
-									</code>
-								</pre>
-								<p className="mt-2">
-									For test coverage reports:
-								</p>
-								<pre className="bg-muted p-2 rounded-md mt-1 overflow-x-auto">
-									<code>
-										cd backend
-										<br />
-										poetry run pytest --cov=api
-									</code>
-								</pre>
-							</CardContent>
-						</Card>
-
-						<Card>
-							<CardHeader>
-								<CardTitle>Integration Testing</CardTitle>
+								<CardTitle>Database Migrations</CardTitle>
 							</CardHeader>
 							<CardContent>
 								<p>
-									A custom integration testing script is
-									provided to test the interaction between
-									frontend and backend by making direct API
-									calls.
+									When changing models, create and apply
+									migrations:
 								</p>
-								<h3 className="font-medium mb-1">
-									Running Integration Tests
-								</h3>
 								<pre className="bg-muted p-2 rounded-md mt-1 overflow-x-auto">
 									<code>
-										# Install dependencies if needed
+										cd backend
 										<br />
-										pip install requests rich
+										USE_SQLITE=True poetry run python
+										manage.py makemigrations
 										<br />
-										<br />
-										# Run integration tests
-										<br />
-										python scripts/test_integration.py
+										USE_SQLITE=True poetry run python
+										manage.py migrate
 									</code>
 								</pre>
 							</CardContent>

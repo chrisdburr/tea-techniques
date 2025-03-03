@@ -134,7 +134,7 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
       
       {values.length > 0 && (
         <div className="flex flex-wrap gap-1 mt-2">
-          {React.useMemo(() => selectedLabels.map((label, i) => (
+          {selectedLabels.map((label, i) => (
             <Badge 
               key={i} 
               variant="secondary" 
@@ -150,7 +150,7 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
                 <X className="h-3 w-3" />
               </button>
             </Badge>
-          )), [selectedLabels, values, handleRemove, disabled])}
+          ))}
         </div>
       )}
       

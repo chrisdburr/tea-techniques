@@ -1,6 +1,6 @@
 // src/lib/hooks/useFilterParams.ts
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 interface FilterState {
   [key: string]: string;
@@ -17,7 +17,6 @@ export function useFilterParams(
   defaultPage = 1
 ) {
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   // Initialize state from URL parameters
   const [filters, setFilters] = useState<FilterState>(() => {

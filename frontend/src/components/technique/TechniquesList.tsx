@@ -48,17 +48,10 @@ export default function TechniquesList() {
   const { 
     filters, 
     setFilter, 
-    applyFilters, 
-    resetFilters, 
-    changePage,
     currentPage
   } = useFilterParams(initialFilters);
   
   // Fix hydration issues by tracking client-side rendering
-  const [isClient, setIsClient] = React.useState(false);
-  React.useEffect(() => {
-    setIsClient(true);
-  }, []);
   
   // Fetch data from API
   const { data: techniquesData, isLoading, error } = useTechniques(

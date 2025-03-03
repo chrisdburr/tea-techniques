@@ -1,36 +1,28 @@
 // src/app/techniques/[id]/page.tsx
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import MainLayout from "@/components/layout/MainLayout";
-import { useTechniqueDetail, useDeleteTechnique } from "@/lib/api/hooks";
+import { useTechniqueDetail } from "@/lib/api/hooks";
 import { Button } from "@/components/ui/button";
 import { 
   Card, 
   CardContent, 
   CardHeader, 
   CardTitle,
-  CardDescription,
+  CardFooter,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
 import Link from "next/link";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { 
   ArrowLeft, 
   Edit, 
   ExternalLink, 
-  Loader2, 
+  Loader2,
+  Info,
+  Lock,
 } from "lucide-react";
-import { useState } from "react";
 import { 
   TechniqueAttribute, 
   TechniqueResource, 
@@ -53,8 +45,8 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-// Component to display technique attributes
-function TechniqueAttributes({ attributes }: { attributes: TechniqueAttribute[] }) {
+// Component to display technique attributes in the sidebar
+function TechniqueAttributesSidebar({ attributes }: { attributes: TechniqueAttribute[] }) {
   if (!attributes || attributes.length === 0) {
     return <p className="text-muted-foreground">No attributes specified.</p>;
   }
@@ -71,8 +63,8 @@ function TechniqueAttributes({ attributes }: { attributes: TechniqueAttribute[] 
   return (
     <div className="space-y-4">
       {Object.entries(attributesByType).map(([type, attrs]) => (
-        <div key={type} className="border rounded-md p-4">
-          <h3 className="text-sm font-medium mb-2">{type}</h3>
+        <div key={type} className="space-y-2">
+          <h3 className="text-sm font-medium">{type}</h3>
           <div className="flex flex-wrap gap-2">
             {attrs.map((attr) => (
               <Badge key={attr.id} variant="secondary">
@@ -170,15 +162,26 @@ function TechniqueLimitations({ limitations }: { limitations: TechniqueLimitatio
   );
 }
 
+// Reusable tooltip component with info icon
+function InfoLabel({ label, tooltip }: { label: string; tooltip: string }) {
+  return (
+    <Tooltip content={tooltip}>
+      <div className="inline-flex items-center cursor-help">
+        {label}
+        <Info className="ml-1 h-4 w-4 text-muted-foreground" />
+      </div>
+    </Tooltip>
+  );
+}
+
 export default function TechniqueDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const id = Number(params.id);
 
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  // This would be replaced with actual auth state - for now always false
+  const isAuthenticated = false;
 
   const { data: technique, isLoading, error } = useTechniqueDetail(id);
-  const deleteMutation = useDeleteTechnique();
 
   if (isLoading) {
     return (
@@ -210,200 +213,246 @@ export default function TechniqueDetailPage() {
     );
   }
 
-  const handleDelete = async () => {
-    try {
-      await deleteMutation.mutateAsync(id);
-      setDeleteDialogOpen(false);
-      router.push("/techniques");
-    } catch (error) {
-      console.error("Error deleting technique:", error);
-    }
-  };
-
   return (
-    <MainLayout>
-      {/* Header section */}
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <Button asChild variant="outline" size="sm" className="mb-4">
-            <Link href="/techniques">
-              <ArrowLeft className="h-4 w-4 mr-2" /> Back to Techniques
-            </Link>
-          </Button>
+    <TooltipProvider>
+      <MainLayout>
+        {/* Header section */}
+        <div className="mb-6">
           <h1 className="text-3xl font-bold">{technique.name}</h1>
         </div>
-        <div className="flex gap-2">
-          <Button asChild variant="outline">
-            <Link href={`/techniques/${id}/edit`}>
-              <Edit className="h-4 w-4 mr-2" /> Edit
+
+        {/* Responsive layout with main content and sidebar */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+          {/* Main content */}
+          <div className="lg:col-span-2 space-y-8">
+            <Section title="Description">
+              <p className="whitespace-pre-line">
+                {technique.description}
+              </p>
+            </Section>
+
+            <Section title="Example Use Cases">
+              <TechniqueExampleUseCases
+                useCases={technique.example_use_cases}
+              />
+            </Section>
+
+            <Section title="Limitations">
+              <TechniqueLimitations
+                limitations={technique.limitations}
+              />
+            </Section>
+
+            <Section title="Resources">
+              <TechniqueResources
+                resources={technique.resources}
+              />
+            </Section>
+          </div>
+
+          {/* Sidebar with technique attributes */}
+          <div>
+            <Card className="sticky top-4">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">
+                  <InfoLabel
+                    label="Technique Attributes"
+                    tooltip="Classification metadata for this technique"
+                  />
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-2">
+                  <h3 className="text-sm font-medium">
+                    <InfoLabel
+                      label="Model Dependency"
+                      tooltip="Indicates whether this technique requires access to model internals"
+                    />
+                  </h3>
+                  <div>
+                    <Badge
+                      variant="outline"
+                      className="text-sm"
+                    >
+                      {technique.model_dependency}
+                    </Badge>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-sm font-medium">
+                    <InfoLabel
+                      label="Assurance Goals"
+                      tooltip="The primary goals that this technique helps achieve"
+                    />
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {technique.assurance_goals.map(
+                      (goal) => (
+                        <Badge
+                          key={goal.id}
+                          className="text-sm"
+                        >
+                          {goal.name}
+                        </Badge>
+                      )
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-sm font-medium">
+                    <InfoLabel
+                      label="Categories"
+                      tooltip="Main classification groups for this technique"
+                    />
+                  </h3>
+                  <div className="space-y-2">
+                    {technique.categories.length > 0 ? (
+                      technique.categories.map(
+                        (category) => (
+                          <div
+                            key={category.id}
+                            className="flex justify-between items-center text-sm py-1 border-b last:border-0 border-muted"
+                          >
+                            <span>
+                              {category.name}
+                            </span>
+                            <Badge
+                              variant="outline"
+                              className="text-xs"
+                            >
+                              {
+                                category.assurance_goal_name
+                              }
+                            </Badge>
+                          </div>
+                        )
+                      )
+                    ) : (
+                      <p className="text-muted-foreground text-sm">
+                        None specified
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-sm font-medium">
+                    <InfoLabel
+                      label="Subcategories"
+                      tooltip="More specific classification within categories"
+                    />
+                  </h3>
+                  <div className="space-y-2">
+                    {technique.subcategories.length > 0 ? (
+                      technique.subcategories.map(
+                        (subcategory) => (
+                          <div
+                            key={subcategory.id}
+                            className="flex justify-between items-center text-sm py-1 border-b last:border-0 border-muted"
+                          >
+                            <span>
+                              {subcategory.name}
+                            </span>
+                            <Badge
+                              variant="outline"
+                              className="text-xs"
+                            >
+                              {
+                                subcategory.category_name
+                              }
+                            </Badge>
+                          </div>
+                        )
+                      )
+                    ) : (
+                      <p className="text-muted-foreground text-sm">
+                        None specified
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {technique.attributes.length > 0 && (
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-medium">
+                      <InfoLabel
+                        label="Technical Attributes"
+                        tooltip="Detailed classification attributes for this technique"
+                      />
+                    </h3>
+                    <TechniqueAttributesSidebar
+                      attributes={technique.attributes}
+                    />
+                  </div>
+                )}
+
+                {technique.tags.length > 0 && (
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-medium">
+                      <InfoLabel
+                        label="Tags"
+                        tooltip="Keywords associated with this technique"
+                      />
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {technique.tags.map((tag) => (
+                        <Badge
+                          key={tag.id}
+                          variant="secondary"
+                        >
+                          {tag.name}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+              
+              {/* Edit section - delete will be accessible from edit form later */}
+              <CardFooter className="flex flex-col items-stretch pt-4 pb-4 border-t">
+                <div
+                  className={`bg-muted/50 rounded p-3 mb-4 flex items-center ${
+                    isAuthenticated ? "hidden" : ""
+                  }`}
+                >
+                  <Lock className="h-4 w-4 mr-2 text-muted-foreground" />
+                  <p className="text-sm text-muted-foreground">
+                    Authentication is required to edit a
+                    technique. Not implemented yet.
+                  </p>
+                </div>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="w-full"
+                  disabled={!isAuthenticated}
+                >
+                  {/* <Link href={`/techniques/${id}/edit`}>
+                    <Edit className="h-4 w-4 mr-2" /> Edit
+                    Technique
+                  </Link> */}
+                  <Link href="#">
+                    <Edit className="h-4 w-4 mr-2" /> Edit
+                    Technique
+                  </Link>
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+        </div>
+
+        {/* Back button at the bottom */}
+        <div className="mt-8">
+          <Button asChild variant="outline" size="sm">
+            <Link href="/techniques">
+              <ArrowLeft className="h-4 w-4 mr-2" /> Back to
+              Techniques
             </Link>
           </Button>
-          <Dialog
-            open={deleteDialogOpen}
-            onOpenChange={setDeleteDialogOpen}
-          >
-            <DialogTrigger asChild>
-              <Button variant="destructive">Delete</Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Delete Technique</DialogTitle>
-                <DialogDescription>
-                  {`Are you sure you want to delete "${technique.name}"? This action cannot be undone.`}
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <Button
-                  variant="outline"
-                  onClick={() => setDeleteDialogOpen(false)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="destructive"
-                  onClick={handleDelete}
-                  disabled={deleteMutation.isPending}
-                >
-                  {deleteMutation.isPending ? "Deleting..." : "Delete"}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
         </div>
-      </div>
-
-      {/* Tabs for organization */}
-      <Tabs defaultValue="overview" className="mt-8">
-        <TabsList className="grid grid-cols-4 mb-8">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="examples">Examples & Limitations</TabsTrigger>
-          <TabsTrigger value="resources">Resources</TabsTrigger>
-          <TabsTrigger value="classification">Classification</TabsTrigger>
-        </TabsList>
-
-        {/* Overview Tab */}
-        <TabsContent value="overview" className="space-y-8">
-          <Section title="Description">
-            <p className="whitespace-pre-line">{technique.description}</p>
-          </Section>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="md:col-span-2">
-              <CardHeader>
-                <CardTitle>Assurance Goals</CardTitle>
-                <CardDescription>
-                  This technique supports the following assurance goals:
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2">
-                  {technique.assurance_goals.map((goal) => (
-                    <Badge key={goal.id} className="px-3 py-1 text-sm">
-                      {goal.name}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Model Dependency</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Badge variant="outline" className="text-base">
-                  {technique.model_dependency}
-                </Badge>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        {/* Examples & Limitations Tab */}
-        <TabsContent value="examples" className="space-y-8">
-          <Section title="Example Use Cases">
-            <TechniqueExampleUseCases useCases={technique.example_use_cases} />
-          </Section>
-
-          <Section title="Limitations">
-            <TechniqueLimitations limitations={technique.limitations} />
-          </Section>
-        </TabsContent>
-
-        {/* Resources Tab */}
-        <TabsContent value="resources" className="space-y-8">
-          <Section title="Resources">
-            <TechniqueResources resources={technique.resources} />
-          </Section>
-        </TabsContent>
-
-        {/* Classification Tab */}
-        <TabsContent value="classification" className="space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Categories</CardTitle>
-                <CardDescription>Categories that this technique belongs to</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {technique.categories.length > 0 ? (
-                  technique.categories.map((category) => (
-                    <div key={category.id} className="border-b pb-2 last:border-0">
-                      <div className="flex justify-between items-center">
-                        <h3 className="font-medium">{category.name}</h3>
-                        <Badge variant="outline">{category.assurance_goal_name}</Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground mt-1">{category.description}</p>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-muted-foreground">No categories specified.</p>
-                )}
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Subcategories</CardTitle>
-                <CardDescription>Subcategories that this technique belongs to</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {technique.subcategories.length > 0 ? (
-                  <div className="space-y-4">
-                    {technique.subcategories.map((subcategory) => (
-                      <div key={subcategory.id} className="border-b pb-2 last:border-0">
-                        <div className="flex justify-between items-center">
-                          <h3 className="font-medium">{subcategory.name}</h3>
-                          <Badge variant="outline">{subcategory.category_name}</Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground mt-1">{subcategory.description}</p>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-muted-foreground">No subcategories specified.</p>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-
-          <Section title="Attributes">
-            <TechniqueAttributes attributes={technique.attributes} />
-          </Section>
-
-          {technique.tags.length > 0 && (
-            <Section title="Tags">
-              <div className="flex flex-wrap gap-2">
-                {technique.tags.map((tag) => (
-                  <Badge key={tag.id} variant="secondary">
-                    {tag.name}
-                  </Badge>
-                ))}
-              </div>
-            </Section>
-          )}
-        </TabsContent>
-      </Tabs>
-    </MainLayout>
+      </MainLayout>
+    </TooltipProvider>
   );
 }

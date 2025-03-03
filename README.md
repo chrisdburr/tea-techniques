@@ -98,10 +98,6 @@ If you want to use the full Docker setup with PostgreSQL:
    USE_SQLITE=True poetry run python manage.py migrate
    ```
 
-5. **Development Commands**
-   
-   See CLAUDE.md for more detailed development commands and code style guidelines.
-
 ## Testing
 
 Run frontend tests:
@@ -115,6 +111,22 @@ Run backend tests:
 cd backend
 USE_SQLITE=True poetry run pytest
 ```
+
+Run integration tests:
+```bash
+# Install dependencies if needed
+pip install requests rich
+
+# Run integration tests
+python scripts/test_integration.py
+```
+
+## Key Features
+
+- **Structured Documentation**: Each technique includes comprehensive information about its purpose, implementation details, and practical use cases.
+- **Categorized Organization**: Techniques are organized by assurance goals, categories, and subcategories to help you find exactly what you need.
+- **API Access**: Access all data through a comprehensive REST API with documentation via Swagger.
+- **Model Agnostic & Specific**: Browse techniques that work across different model types or that are designed for specific model architectures.
 
 ## License
 

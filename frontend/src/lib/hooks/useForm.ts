@@ -4,7 +4,7 @@ import { useState, ChangeEvent } from 'react';
 type FormErrors<T> = Partial<Record<keyof T | 'submit', string>>;
 
 // Create a type for validators that preserves the field types
-type FormValidators<T> = {
+export type FormValidators<T> = {
   [K in keyof T]?: (value: T[K]) => string | null;
 };
 

@@ -27,6 +27,17 @@ def custom_exception_handler(exc, context):
     if isinstance(response.data, dict):
         # If it's a dictionary with a 'detail' key, keep that structure
         if "detail" in response.data:
+            raw_detail = response.data["detail"]
+            if isinstance(raw_detail, dict):
+                detail_str_parts = []
+                for field, errors in raw_detail.items():
+                    if isinstance(errors, list):
+                        errors_joined = "; ".join(errors)
+                        detail_str_parts.append(f"{field}: {errors_joined}")
+                    else:
+                        detail_str_parts.append(f"{field}: {errors}")
+                detail_str = " | ".join(detail_str_parts)
+                response.data["detail"] = detail_str
             response.data = {
                 "detail": response.data["detail"],
                 "status_code": response.status_code,

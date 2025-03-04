@@ -132,19 +132,19 @@ DataListValue.displayName = "DataList.Value"
 
 // Section component
 interface DataListSectionProps extends React.HTMLAttributes<HTMLDivElement> {
-  title?: string | React.ReactNode
+  heading?: string | React.ReactNode
 }
 
 const DataListSection = React.forwardRef<HTMLDivElement, DataListSectionProps>(
-  ({ className, title, children, ...props }, ref) => {
+  ({ className, heading, children, ...props }, ref) => {
     return (
       <div
         ref={ref}
         className={cn("space-y-2", className)}
         {...props}
       >
-        {title && (
-          <h3 className="font-semibold text-sm">{title}</h3>
+        {heading && (
+          <h3 className="font-semibold text-sm">{heading}</h3>
         )}
         <div className="space-y-2">
           {children}

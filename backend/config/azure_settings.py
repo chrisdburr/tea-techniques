@@ -1,4 +1,4 @@
-from .production_settings import *
+from .settings import *
 import os
 
 # Use Azure environment variables

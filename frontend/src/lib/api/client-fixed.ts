@@ -44,44 +44,22 @@ export class APIError extends Error {
 
 // Create axios instance
 const createAPIClient = (
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	_baseURL: string = config.apiBaseUrl
+	baseURL: string = config.apiBaseUrl
 ): AxiosInstance => {
-	// Get the environment for debugging
-	const isDocker = process.env.DOCKER_ENV === 'true';
-	const isServer = typeof window === 'undefined';
+	// We'll use the relative URL path for client-side requests to leverage Next.js API route proxying
+	// This fixes the redirect loop by going through Next.js rewrites instead of direct API calls
+	const adjustedBaseURL = typeof window !== 'undefined' ? '/api' : baseURL;
 	
-	// IMPORTANT: Access the environment variable directly for logging
-	console.log(`API Configuration:
-		- NEXT_PUBLIC_API_URL: ${process.env.NEXT_PUBLIC_API_URL}
-		- Docker Environment: ${isDocker ? 'Yes' : 'No'}
-		- Running on: ${isServer ? 'Server' : 'Client'}
-		- Config apiBaseUrl: ${config.apiBaseUrl}
-	`);
-	
-	// Try using the absolute URL for the API endpoint when in development
-	const fullBaseURL = isServer ? 
-		(isDocker ? 'http://backend:8000/api' : 'http://localhost:8000/api') : 
-		'/api';
-		
-	console.log(`Using baseURL: ${fullBaseURL} (server: ${isServer}, docker: ${isDocker})`);
+	console.log(`Creating API client with baseURL: ${adjustedBaseURL}`);
 	
 	const instance = axios.create({
-		baseURL: fullBaseURL,
-		timeout: 30000, // 30 seconds - increased for troubleshooting
+		baseURL: adjustedBaseURL,
+		timeout: 15000, // 15 seconds - increased for development
 		headers: {
 			"Content-Type": "application/json",
-			"Accept": "application/json"
 		},
-		// Turn off withCredentials to avoid CORS issues
+		// Turn off withCredentials for now as it can cause CORS preflight failures
 		withCredentials: false,
-		// Allow a reasonable number of redirects (but log them)
-		maxRedirects: 5,
-		// Explicitly check status
-		validateStatus: (status) => {
-			console.log(`Received status code: ${status}`);
-			return status >= 200 && status < 300;
-		}
 	});
 
 	// Request interceptor
@@ -126,21 +104,24 @@ const createAPIClient = (
 	// Response interceptor
 	instance.interceptors.response.use(
 		(response: AxiosResponse) => {
-			// Log the successful response
-			console.log(
-				`API Response: ${response.status} ${response.config.url}`,
-				response.data
-			);
+			// For development, log the response (remove in production)
+			if (process.env.NODE_ENV === "development") {
+				console.log(
+					`API Response: ${response.status} ${response.config.url}`,
+					response.data
+				);
+			}
 			return response;
 		},
 		(error: AxiosError<APIErrorResponse>) => {
-			// Log all errors for debugging
-			console.error(
-				"API Error:",
-				error.message,
-				error.response?.status,
-				error.response?.data
-			);
+			// For development, log the error (remove in production)
+			if (process.env.NODE_ENV === "development") {
+				console.error(
+					"API Error:",
+					error.response?.status,
+					error.response?.data
+				);
+			}
 
 			if (error.response) {
 				// Server responded with error status

@@ -27,28 +27,34 @@ services:
       - DB_PORT=5432
       - DEBUG=True
       - ALLOWED_HOSTS=*
-      - CORS_ALLOWED_ORIGINS=http://localhost:3000
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://frontend:3000
       - SECRET_KEY=dev-secret-key
+      - DOCKER_ENVIRONMENT=True
     depends_on:
       db:
         condition: service_healthy
     ports:
       - "8000:8000"
-    volumes:
-      - ./backend:/app
-      - ./backend/scripts:/app/scripts
+    # For development, uncomment these volume mounts:
+    # volumes:
+    #   - ./backend:/app
+    #   - ./backend/scripts:/app/scripts
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000/api
-      - NEXT_PUBLIC_SWAGGER_URL=http://localhost:8000/swagger/
+      - NEXT_PUBLIC_API_URL=/api
+      - NEXT_PUBLIC_SWAGGER_URL=/swagger/
+      - NODE_ENV=production
+      - DOCKER_ENV=true
     ports:
       - "3000:3000"
     depends_on:
       - backend
+    networks:
+      - default
 
 volumes:
   postgres_data:

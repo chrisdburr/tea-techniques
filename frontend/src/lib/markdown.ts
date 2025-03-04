@@ -6,18 +6,28 @@ import remarkParse from "remark-parse";
 import remarkHtml from "remark-html";
 import matter from "gray-matter";
 
-// Root directory of the project
-const projectRoot = path.join(process.cwd(), "..");
-
 /**
  * Read and parse a markdown file from the project
  */
 export async function getMarkdownContent(filePath: string) {
-	// Get the absolute path
-	const fullPath = path.join(projectRoot, filePath);
-
-	// Read the file
-	const fileContents = fs.readFileSync(fullPath, "utf8");
+	// First try to read from project root
+	let fileContents: string;
+	
+	try {
+		// Try project root (works in development)
+		const projectRoot = path.join(process.cwd(), "..");
+		const fullPath = path.join(projectRoot, filePath);
+		fileContents = fs.readFileSync(fullPath, "utf8");
+	} catch {
+		try {
+			// Try public directory (for Docker build)
+			const publicPath = path.join(process.cwd(), 'public', filePath);
+			fileContents = fs.readFileSync(publicPath, "utf8");
+		} catch {
+			// Use fallback content if README can't be found
+			fileContents = `# TEA Techniques\n\nA platform for exploring techniques for evidencing claims about responsible design, development, and deployment of data-driven technologies.\n\n## Key Features\n\n- Structured Documentation\n- Categorized Organization\n- API Access\n- Model Agnostic & Specific`;
+		}
+	}
 
 	// Use gray-matter to parse the markdown frontmatter
 	const { content } = matter(fileContents);

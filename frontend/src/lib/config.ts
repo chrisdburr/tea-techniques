@@ -1,28 +1,31 @@
 // frontend/src/lib/config.ts
 
 interface Config {
-	apiBaseUrl: string;
-	swaggerUrl: string;
+  apiBaseUrl: string;
+  swaggerUrl: string;
+}
+
+// Always prefer environment variables if available
+const getApiBaseUrl = (): string => {
+  // Server-side or client-side rendering, try environment variables first
+  if (typeof window === 'undefined') {
+    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
   }
   
-  const development: Config = {
-	apiBaseUrl: "http://localhost:8000/api",
-	swaggerUrl: "http://localhost:8000/swagger/",
-  };
+  // Client-side - use window.ENV if it exists (runtime variables), 
+  // otherwise fall back to build-time env
+  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+};
+
+const getSwaggerUrl = (): string => {
+  if (typeof window === 'undefined') {
+    return process.env.NEXT_PUBLIC_SWAGGER_URL || 'http://localhost:8000/swagger/';
+  }
   
-  const production: Config = {
-	apiBaseUrl: process.env.NEXT_PUBLIC_API_URL || "https://api.yourdomain.com/api",
-	swaggerUrl: process.env.NEXT_PUBLIC_SWAGGER_URL || "https://api.yourdomain.com/swagger/",
-  };
-  
-  const azure: Config = {
-	apiBaseUrl: process.env.NEXT_PUBLIC_API_URL || "/api",
-	swaggerUrl: process.env.NEXT_PUBLIC_SWAGGER_URL || "/swagger/",
-  };
-  
-  export const config: Config =
-	process.env.NODE_ENV === "production"
-	  ? process.env.NEXT_PUBLIC_DEPLOYMENT_ENV === "azure"
-		? azure
-		: production
-	  : development;
+  return process.env.NEXT_PUBLIC_SWAGGER_URL || 'http://localhost:8000/swagger/';
+};
+
+export const config: Config = {
+  apiBaseUrl: getApiBaseUrl(),
+  swaggerUrl: getSwaggerUrl()
+};

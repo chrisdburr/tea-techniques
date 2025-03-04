@@ -25,15 +25,15 @@ FROM node:20-slim AS runner
 
 WORKDIR /app
 
-# Copy necessary files from builder
-COPY --from=builder /app/next.config.ts ./
+# Copy necessary files for standalone mode
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 
 # Set environment variables
 ENV NODE_ENV production
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
 ENV NEXT_TELEMETRY_DISABLED 1
 
 # Don't run as root
@@ -45,5 +45,5 @@ USER nextjs
 # Expose the port the app runs on
 EXPOSE 3000
 
-# Start the application
-CMD ["npm", "start"]
+# Start the application in standalone mode
+CMD ["node", "server.js"]

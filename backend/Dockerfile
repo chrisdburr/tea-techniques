@@ -14,13 +14,14 @@ COPY pyproject.toml poetry.lock ./
 RUN pip install poetry && \
     poetry config virtualenvs.create false && \
     poetry install --only main --no-interaction --no-ansi && \
-    pip install gunicorn
+    pip install gunicorn && \
+    pip install whitenoise
 
 # Copy project files
 COPY . .
 
-# Create a directory for scripts
-RUN mkdir -p /app/scripts
+# Create directories for scripts and static files
+RUN mkdir -p /app/scripts /app/static /app/staticfiles
 
 # Create the start script
 RUN echo '#!/bin/bash\n\
@@ -44,7 +45,7 @@ RUN echo '#!/bin/bash\n\
     python manage.py loaddata api/fixtures/assurance_goals.json || echo "Warning: Could not load assurance_goals fixture"\n\
     python manage.py loaddata api/fixtures/categories.json || echo "Warning: Could not load categories fixture"\n\
     python manage.py loaddata api/fixtures/sub_categories.json || echo "Warning: Could not load sub_categories fixture"\n\
-    python manage.py loaddata api/fixtures/techniques.json || echo "Warning: Could not load techniques fixture"\n\
+    python manage.py loaddata api/fixtures/updated_techniques.json || echo "Warning: Could not load techniques fixture"\n\
     \n\
     # Start server with Gunicorn\n\
     gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2' > /app/entrypoint.sh

@@ -23,6 +23,7 @@ interface SelectFieldProps {
   error?: string | null;
   placeholder?: string;
   required?: boolean;
+  disabled?: boolean; // Add this property
 }
 
 export const SelectField: React.FC<SelectFieldProps> = ({
@@ -34,6 +35,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({
   error,
   placeholder = "Select an option",
   required = false,
+  disabled = false, // Add default value
 }) => {
   // Memoize the handler to avoid frequent recreation
   const handleValueChange = React.useCallback((newValue: string) => {
@@ -50,6 +52,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({
     <Select
       value={memoizedValue}
       onValueChange={handleValueChange}
+      disabled={disabled} // Pass the disabled prop to the Select component
     >
       <SelectTrigger id={id} className={error ? "border-red-500" : ""}>
         <SelectValue placeholder={placeholder} />
@@ -65,7 +68,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({
         ))}
       </SelectContent>
     </Select>
-  ), [memoizedValue, handleValueChange, id, error, placeholder, options]);
+  ), [memoizedValue, handleValueChange, id, error, placeholder, options, disabled]); // Add disabled to the dependency array
 
   return (
     <div className="space-y-2">

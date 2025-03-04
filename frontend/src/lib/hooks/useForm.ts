@@ -3,26 +3,37 @@ import { useState, ChangeEvent } from 'react';
 
 type FormErrors<T> = Partial<Record<keyof T | 'submit', string>>;
 
+// Create a type for validators that preserves the field types
+type FormValidators<T> = {
+  [K in keyof T]?: (value: T[K]) => string | null;
+};
+
 interface UseFormReturn<T> {
   values: T;
   errors: FormErrors<T>;
   isSubmitting: boolean;
   handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleBlur: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   handleSelectChange: (name: keyof T, value: string) => void;
   setFieldValue: <K extends keyof T>(name: K, value: T[K]) => void;
   setFieldError: (name: keyof T | 'submit', error: string) => void;
   clearFieldError: (name: keyof T) => void;
   setSubmitting: (isSubmitting: boolean) => void;
-  validateForm: (validators: Record<keyof T, (value: unknown) => string | null>) => boolean;
+  validateForm: () => boolean;  // Changed to not take parameters
   resetForm: (newValues?: Partial<T>) => void;
 }
 
 /**
  * Custom hook for form handling
  * @param initialValues Initial form values
+ * @param validators Field validation functions
  * @returns Form state and handlers
  */
-export function useForm<T extends Record<string, unknown>>(initialValues: T): UseFormReturn<T> {
+
+export function useForm<T extends object>(
+  initialValues: T, 
+  validators: FormValidators<T> = {} as FormValidators<T>
+): UseFormReturn<T> {
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<FormErrors<T>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -85,22 +96,6 @@ export function useForm<T extends Record<string, unknown>>(initialValues: T): Us
     });
   };
 
-  const validateForm = (validators: Record<keyof T, (value: unknown) => string | null>) => {
-    const newErrors: FormErrors<T> = {};
-    
-    Object.keys(validators).forEach(key => {
-      const fieldKey = key as keyof T;
-      const validator = validators[fieldKey];
-      const errorMessage = validator(values[fieldKey]);
-      
-      if (errorMessage) {
-        newErrors[fieldKey] = errorMessage;
-      }
-    });
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   const resetForm = (newValues?: Partial<T>) => {
     // When called with newValues (especially in edit mode), we need to ensure values are set
@@ -121,11 +116,57 @@ export function useForm<T extends Record<string, unknown>>(initialValues: T): Us
     }
   };
 
+  // Updated validateForm to use the stored validators
+  const validateForm = () => {
+    const newErrors: FormErrors<T> = {};
+    
+    Object.keys(validators).forEach(key => {
+      const fieldKey = key as keyof T;
+      const validator = validators[fieldKey];
+      
+      if (validator) {
+        // TypeScript now knows that validator expects T[fieldKey] type
+        const errorMessage = validator(values[fieldKey]);
+        
+        if (errorMessage) {
+          newErrors[fieldKey] = errorMessage;
+        }
+      }
+    });
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Updated handleBlur to use the stored validators
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name } = e.target;
+    const fieldKey = name as keyof T;
+    
+    // If there's a validator for this field
+    if (fieldKey in validators && validators[fieldKey]) {
+      const validator = validators[fieldKey];
+      if (validator) {
+        const errorMessage = validator(values[fieldKey]);
+        
+        if (errorMessage) {
+          setErrors(prev => ({
+            ...prev,
+            [fieldKey]: errorMessage
+          }));
+        } else {
+          clearFieldError(fieldKey);
+        }
+      }
+    }
+  };
+
   return {
     values,
     errors,
     isSubmitting,
     handleChange,
+    handleBlur,
     handleSelectChange,
     setFieldValue,
     setFieldError,

@@ -13,7 +13,8 @@ RUN apt-get update && apt-get install -y \
 COPY pyproject.toml poetry.lock ./
 RUN pip install poetry && \
     poetry config virtualenvs.create false && \
-    poetry install --only main --no-interaction --no-ansi
+    poetry install --only main --no-interaction --no-ansi && \
+    pip install gunicorn
 
 # Copy project files
 COPY . .
@@ -36,16 +37,20 @@ RUN echo '#!/bin/bash\n\
     # Run migrations\n\
     python manage.py migrate --noinput\n\
     \n\
-    # Generate and load fixtures\n\
-    python manage.py loaddata api/fixtures/assurance_goals.json\n\
-    python manage.py loaddata api/fixtures/categories.json\n\
-    python manage.py loaddata api/fixtures/sub_categories.json\n\
-    cd scripts && python generate_techniques.py && cd ..\n\
+    # Collect static files\n\
+    python manage.py collectstatic --noinput\n\
+    \n\
+    # Load fixtures if needed\n\
+    python manage.py loaddata api/fixtures/assurance_goals.json || echo "Warning: Could not load assurance_goals fixture"\n\
+    python manage.py loaddata api/fixtures/categories.json || echo "Warning: Could not load categories fixture"\n\
+    python manage.py loaddata api/fixtures/sub_categories.json || echo "Warning: Could not load sub_categories fixture"\n\
     python manage.py loaddata api/fixtures/techniques.json || echo "Warning: Could not load techniques fixture"\n\
     \n\
-    # Start server\n\
-    python manage.py runserver 0.0.0.0:8000' > /app/entrypoint.sh
+    # Start server with Gunicorn\n\
+    gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2' > /app/entrypoint.sh
 
 RUN chmod +x /app/entrypoint.sh
+
+EXPOSE 8000
 
 CMD ["/app/entrypoint.sh"]

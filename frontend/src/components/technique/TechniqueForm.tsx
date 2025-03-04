@@ -54,8 +54,7 @@ const validators = {
   model_dependency: (value: string) => (!value ? "Model dependency is required" : null),
   assurance_goal_ids: (value: number[]) => (value.length === 0 ? "At least one assurance goal is required" : null),
   category_ids: (value: number[]) => (value.length === 0 ? "At least one category is required" : null),
-  // Other fields are optional
-};
+} as const;
 
 interface TechniqueFormProps {
   id?: number;
@@ -76,7 +75,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
     setFieldError,
     validateForm,
     resetForm,
-  } = useForm<TechniqueFormData>(initialFormData, validators);
+  } = useForm<TechniqueFormData>(initialFormData, validators as any);
 
   const { error: apiError, handleError } = useApiError();
 

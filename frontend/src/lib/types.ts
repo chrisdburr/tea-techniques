@@ -104,31 +104,28 @@ export interface Technique {
 // For Technique form handling
 
 export interface TechniqueFormData {
-  name: string;
-  description: string;
-  model_dependency: string;
-  assurance_goal_ids: number[];
-  category_ids: number[];
-  subcategory_ids: number[];
-  tag_ids: number[];
-  attributes: {
-    attribute_type: number;
-    attribute_value: number;
-  }[];
-  resources: {
-    resource_type: number;
-    title: string;
-    url: string;
-    description: string;
-  }[];
-  example_use_cases: {
-    description: string;
-    assurance_goal?: number;
-  }[];
-  limitations: string[];
-  
-  // Add this type index signature to make it compatible with Record<string, unknown>
-  [key: string]: string | number[] | Array<any> | object;
+	name: string;
+	description: string;
+	model_dependency: string;
+	assurance_goal_ids: number[];
+	category_ids: number[];
+	subcategory_ids: number[];
+	tag_ids: number[];
+	attributes: {
+		attribute_type: number;
+		attribute_value: number;
+	}[];
+	resources: {
+		resource_type: number;
+		title: string;
+		url: string;
+		description: string;
+	}[];
+	example_use_cases: {
+		description: string;
+		assurance_goal?: number;
+	}[];
+	limitations: string[];
 }
 
 // API Response wrapper type

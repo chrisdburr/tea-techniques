@@ -8,16 +8,23 @@ const mockTechniques: Technique[] = [
     name: 'Test Technique 1',
     description: 'Description for test technique 1',
     model_dependency: 'Agnostic',
-    example_use_case: 'Example use case for technique 1'
-  },
-  {
-    id: 2,
-    name: 'Test Technique 2',
-    description: 'Description for test technique 2',
-    model_dependency: 'Specific',
-    example_use_case: 'Example use case for technique 2'
+    example_use_cases: [
+      {
+        id: 101,
+        description: 'Example use case',
+        assurance_goal: 1,
+        assurance_goal_name: 'Explainability'
+      }
+    ],
+    assurance_goals: [],
+    categories: [],
+    subcategories: [],
+    attributes: [],
+    resources: [],
+    limitations: [],
+    tags: []
   }
-];
+]
 
 export const handlers = [
   // GET /api/techniques/
@@ -39,7 +46,7 @@ export const handlers = [
 
   // POST /api/techniques/
   http.post('/api/techniques/', async ({ request }) => {
-    const newTechnique = await request.json();
+    const newTechnique = await request.json() as Partial<Technique>;
     const technique = {
       id: mockTechniques.length + 1,
       ...newTechnique
@@ -51,7 +58,7 @@ export const handlers = [
   // PUT /api/techniques/:id
   http.put('/api/techniques/:id', async ({ params, request }) => {
     const { id } = params;
-    const updatedData = await request.json();
+    const updatedData = await request.json() as Partial<Technique>;
     const technique = mockTechniques.find(t => t.id === Number(id));
     
     if (!technique) {

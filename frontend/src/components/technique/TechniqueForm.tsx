@@ -11,10 +11,10 @@ import {
   useResourceTypes,
   useTechniqueDetail,
 } from "@/lib/api/hooks";
+import { useForm, type FormValidators } from "@/lib/hooks/useForm";
 import { 
   TechniqueFormData
 } from "@/lib/types";
-import { useForm } from "@/lib/hooks/useForm";
 import { useApiError } from "@/lib/hooks/useApiError";
 import { SelectField } from "@/components/common/SelectField";
 
@@ -47,14 +47,16 @@ const initialFormData: TechniqueFormData = {
   limitations: [],
 };
 
-// Form validators
-const validators = {
-  name: (value: string) => (!value.trim() ? "Name is required" : null),
-  description: (value: string) => (!value.trim() ? "Description is required" : null),
-  model_dependency: (value: string) => (!value ? "Model dependency is required" : null),
-  assurance_goal_ids: (value: number[]) => (value.length === 0 ? "At least one assurance goal is required" : null),
-  category_ids: (value: number[]) => (value.length === 0 ? "At least one category is required" : null),
-} as const;
+const validators: FormValidators<TechniqueFormData> = {
+	name: (value: string) => (!value.trim() ? "Name is required" : null),
+	description: (value: string) => (!value.trim() ? "Description is required" : null),
+	model_dependency: (value: string) =>
+		!value ? "Model dependency is required" : null,
+	assurance_goal_ids: (value: number[]) =>
+		value.length === 0 ? "At least one assurance goal is required" : null,
+	category_ids: (value: number[]) =>
+		value.length === 0 ? "At least one category is required" : null,
+};
 
 interface TechniqueFormProps {
   id?: number;
@@ -66,16 +68,16 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
   
   // Form state management
   const {
-    values: formData,
-    errors,
-    isSubmitting,
-    handleChange,
-    handleBlur,
-    setFieldValue,
-    setFieldError,
-    validateForm,
-    resetForm,
-  } = useForm<TechniqueFormData>(initialFormData, validators as any);
+		values: formData,
+		errors,
+		isSubmitting,
+		handleChange,
+		handleBlur,
+		setFieldValue,
+		setFieldError,
+		validateForm,
+		resetForm,
+  } = useForm<TechniqueFormData>(initialFormData, validators);
 
   const { error: apiError, handleError } = useApiError();
 

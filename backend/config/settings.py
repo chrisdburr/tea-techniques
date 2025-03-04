@@ -142,16 +142,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# CorsMiddleware is already at the top of the middleware list, no need to reorder
-
 # In development or Docker, allow all origins
-if DEBUG or os.environ.get('DOCKER_ENVIRONMENT', False):
+if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
     CORS_ALLOW_CREDENTIALS = True
+    CORS_EXPOSE_HEADERS = ["Content-Type", "X-CSRFToken"]
 else:
     # For production, use specified origins
-    CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+    CORS_ALLOWED_ORIGINS = os.getenv(
+        "CORS_ALLOWED_ORIGINS", "http://localhost:3000"
+    ).split(",")
     CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_METHODS = [

@@ -144,19 +144,45 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
     params.category || "all",
     page
   ];
+
+  console.log(`[useTechniques] Query with params:`, apiParams);
   
   return useQuery({
     queryKey: queryKey,
     queryFn: async () => {
-      const response = await apiClient.get("/techniques/", {
-        params: apiParams,
-      });
-      return response.data as APIResponse<Technique>;
+      console.log(`[useTechniques] Fetching data with params:`, apiParams);
+      try {
+        // Make a direct fetch request first to test if the API is reachable
+        const directUrl = `/api/techniques/?page=${page}`;
+        console.log(`[useTechniques] Testing direct fetch to: ${directUrl}`);
+        
+        const fetchResponse = await fetch(directUrl, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
+        });
+        console.log(`[useTechniques] Direct fetch response status:`, fetchResponse.status);
+        
+        // Now make the actual API call via axios
+        const response = await apiClient.get("/techniques/", {
+          params: apiParams,
+        });
+        console.log(`[useTechniques] Success! Received ${response.data?.results?.length || 0} techniques`);
+        return response.data as APIResponse<Technique>;
+      } catch (error) {
+        console.error(`[useTechniques] Error fetching techniques:`, error);
+        // Rethrow the error so React Query can handle it
+        throw error;
+      }
     },
     // Don't refetch on window focus for better UX
     refetchOnWindowFocus: false,
     // Prevent redundant requests with the same parameters
     staleTime: 30000, // Consider data fresh for 30 seconds
+    // Add retry logic for network issues
+    retry: 3,
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 10000),
   });
 };
 

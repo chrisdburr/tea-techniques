@@ -39,8 +39,7 @@ For local development, we use SQLite as the database backend. This setup is quic
   cp .env.example .env
   ```
 
-> [!WARNING]
-> You may want to review and adjust the values in the `.env` file (e.g. change user and password)
+  - You may want to review and adjust the values in the `.env` file (e.g. change user and password)
 
 3. **Set up the backend**
    ```bash
@@ -79,8 +78,7 @@ If you want to use the full Docker setup with PostgreSQL:
   cp .env.example .env
   ```
 
-> [!WARNING]
-> You may want to review and adjust the values in the `.env` file (e.g. change user and password)
+  - You may want to review and adjust the values in the `.env` file (e.g. change user and password)
 
 2. **Start the application**
 

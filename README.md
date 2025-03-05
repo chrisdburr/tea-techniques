@@ -93,7 +93,7 @@ If you want to use the full Docker setup with PostgreSQL:
 
 </details>
 
-## Project Structure
+## 📦 Project Structure
 
 - **Backend**: Django with Django REST Framework
   - `backend/api`: Main Django app
@@ -106,7 +106,7 @@ If you want to use the full Docker setup with PostgreSQL:
   - `frontend/src/components`: Reusable React components
   - `frontend/src/lib`: Utilities, types, and API clients
 
-## Development Tips
+## 💡 Development Tips
 
 1. **API Documentation**
    

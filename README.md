@@ -1,12 +1,24 @@
 # TEA Techniques
 
+![An illustration showing different techniques for assurance](https://alan-turing-institute.github.io/turing-commons/assets/images/illustrations/trust-yellow.png)
+
 A platform for exploring techniques for evidencing claims about responsible design, development, and deployment of data-driven technologies. To be used in conjunction with the Trustworthy and Ethical Assurance (TEA) platform.
+
+## Key Features
+
+- **Structured Documentation**: Each technique includes comprehensive information about its purpose, implementation details, and practical use cases.
+- **Categorized Organization**: Techniques are organized by assurance goals, categories, and subcategories to help you find exactly what you need.
+- **API Access**: Access all data through a comprehensive REST API with documentation via Swagger.
+- **Model Agnostic & Specific**: Browse techniques that work across different model types or that are designed for specific model architectures.
 
 ## Development Setup
 
+> [!WARNING]
+> These instructions have only been tested on MacOS and Linux. If you are using Windows, you may need to adjust some commands.
+
 ### Quick Start (Recommended)
 
-For local development, you can use SQLite which doesn't require Docker:
+For local development, we use SQLite as the database backend. This setup is quick and easy to get started but is not suitable for production use:
 
 1. **Clone the repository**
    ```bash
@@ -20,7 +32,8 @@ For local development, you can use SQLite which doesn't require Docker:
   cp .env.example .env
   ```
 
-  - Review and adjust the values (e.g. change user and password)
+> [!WARNING]
+> You may want to review and adjust the values in the `.env` file (e.g. change user and password)
 
 3. **Set up the backend**
    ```bash
@@ -44,9 +57,9 @@ For local development, you can use SQLite which doesn't require Docker:
 6. **Access the application**
    - Frontend: http://localhost:3000
    - API: http://localhost:8000/api/
-   - Admin: http://localhost:8000/admin/ (username: admin, password: admin)
+   - Django Admin: http://localhost:8000/admin/
 
-### Using Docker (for production-like environment)
+### Using Docker
 
 If you want to use the full Docker setup with PostgreSQL:
 
@@ -56,9 +69,10 @@ If you want to use the full Docker setup with PostgreSQL:
   cp .env.example .env
   ```
 
-  - Review and adjust the values (e.g. change user and password)
+> [!WARNING]
+> You may want to review and adjust the values in the `.env` file (e.g. change user and password)
 
-2. **Start the database**
+2. **Start the application**
 
    ```bash
    docker compose up -d
@@ -74,77 +88,23 @@ If you want to use the full Docker setup with PostgreSQL:
 - **Backend**: Django with Django REST Framework
   - `backend/api`: Main Django app
   - `backend/config`: Django project settings
-  - `backend/scripts`: Utility scripts
+  - `backend/scripts`: Utility scripts (e.g. reset DB, import CSV)
+  - `backend/data`: CSV file with technique data
 
 - **Frontend**: Next.js with TypeScript and Tailwind CSS
   - `frontend/src/app`: Next.js pages and routes
   - `frontend/src/components`: Reusable React components
   - `frontend/src/lib`: Utilities, types, and API clients
 
-## Data Management
-
-This project uses a CSV-based approach for managing technique data:
-
-- The primary source of truth is the `techniques.csv` file in the `backend/data` directory
-- All assurance goals, categories, and subcategories are derived from this CSV
-- When running locally with SQLite, use `reset_and_import.py` to reload the database
-- When deploying with Docker, the CSV is automatically imported on container startup
-
 ## Development Tips
 
-1. **Local Development Mode**
+1. **API Documentation**
    
-   The setup script creates a SQLite database with sample data, making it easy to start development without Docker.
+   You can access the API documentation at http://localhost:8000/swagger/ when the backend is running.
 
-2. **Authentication**
-   
-   The development setup creates an admin user you can use to access the Django admin interface:
-   - Username: `admin`
-   - Password: `admin`
+2. **Additional Documentation**
 
-3. **API Documentation**
-   
-   Access the API documentation at http://localhost:8000/swagger/ when the backend is running.
+   You can find additional documentation about the project's data management and testing in the following files:
 
-4. **Database Migrations**
-   
-   When changing models, create and apply migrations:
-   ```bash
-   cd backend
-   USE_SQLITE=True poetry run python manage.py makemigrations
-   USE_SQLITE=True poetry run python manage.py migrate
-   ```
-
-## Testing
-
-Run frontend tests:
-```bash
-cd frontend
-npm test
-```
-
-Run backend tests:
-```bash
-cd backend
-USE_SQLITE=True poetry run pytest
-```
-
-Run integration tests:
-```bash
-# Install dependencies if needed
-pip install requests rich
-
-# Run integration tests
-python scripts/test_integration.py
-```
-
-## Key Features
-
-- **Structured Documentation**: Each technique includes comprehensive information about its purpose, implementation details, and practical use cases.
-- **Categorized Organization**: Techniques are organized by assurance goals, categories, and subcategories to help you find exactly what you need.
-- **API Access**: Access all data through a comprehensive REST API with documentation via Swagger.
-- **Model Agnostic & Specific**: Browse techniques that work across different model types or that are designed for specific model architectures.
-
-## License
-
-[Add license information]
+   - [Data Management Guide](docs/DATA-MANAGEMENT.md)
+   - [Testing Guide](docs/TESTING.md)

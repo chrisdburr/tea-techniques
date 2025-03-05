@@ -14,26 +14,34 @@ For local development, you can use SQLite which doesn't require Docker:
    cd tea-techniques
    ```
 
-2. **Set up the backend**
+2. **Setup environment variable**
+
+  ```bash
+  mv .env.example .env
+  ```
+
+  - Review and adjust the values (e.g. change user and password)
+
+3. **Set up the backend**
    ```bash
    cd backend
    poetry install
    poetry run python scripts/setup_dev.py
    ```
 
-3. **Run the backend with SQLite**
+4. **Run the backend with SQLite**
    ```bash
    USE_SQLITE=True poetry run python manage.py runserver
    ```
 
-4. **In a new terminal, set up and run the frontend**
+5. **In a new terminal, set up and run the frontend**
    ```bash
    cd frontend
    npm install
    npm run dev --turbopack
    ```
 
-5. **Access the application**
+6. **Access the application**
    - Frontend: http://localhost:3000
    - API: http://localhost:8000/api/
    - Admin: http://localhost:8000/admin/ (username: admin, password: admin)

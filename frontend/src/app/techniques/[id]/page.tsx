@@ -46,6 +46,60 @@ function Section({
 	);
 }
 
+// // Component to display technique resources
+// function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
+// 	if (!resources || resources.length === 0) {
+// 		return <p className="text-muted-foreground">No resources available.</p>;
+// 	}
+
+// 	// Group resources by type
+// 	const resourcesByType = resources.reduce((acc, resource) => {
+// 		const typeName = resource.resource_type_name;
+// 		if (!acc[typeName]) {
+// 			acc[typeName] = [];
+// 		}
+// 		acc[typeName].push(resource);
+// 		return acc;
+// 	}, {} as Record<string, TechniqueResource[]>);
+
+// 	return (
+// 		<div className="space-y-4">
+// 			{Object.entries(resourcesByType).map(([typeName, resources]) => (
+// 				<div key={typeName} className="space-y-2">
+// 					<h3 className="text-sm font-medium">{typeName}</h3>
+// 					{resources.map((resource) => (
+// 						<div
+// 							key={resource.id}
+// 							className="border rounded-md p-4"
+// 						>
+// 							<div className="flex items-center justify-between">
+// 								<h4 className="font-medium">
+// 									{resource.title}
+// 								</h4>
+// 								<Button asChild variant="outline" size="sm">
+// 									<a
+// 										href={resource.url}
+// 										target="_blank"
+// 										rel="noopener noreferrer"
+// 									>
+// 										<ExternalLink className="h-4 w-4 mr-2" />{" "}
+// 										View
+// 									</a>
+// 								</Button>
+// 							</div>
+// 							{resource.description && (
+// 								<p className="text-sm mt-2 text-muted-foreground">
+// 									{resource.description}
+// 								</p>
+// 							)}
+// 						</div>
+// 					))}
+// 				</div>
+// 			))}
+// 		</div>
+// 	);
+// }
+
 // Component to display technique resources
 function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 	if (!resources || resources.length === 0) {
@@ -76,15 +130,15 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 								<h4 className="font-medium">
 									{resource.title}
 								</h4>
-								<Button asChild variant="outline" size="sm">
-									<a
-										href={resource.url}
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										<ExternalLink className="h-4 w-4 mr-2" />{" "}
-										View
-									</a>
+								{/* Disabled button instead of link */}
+								<Button
+									variant="outline"
+									size="sm"
+									disabled={true}
+									title="Links temporarily disabled pending review"
+								>
+									<ExternalLink className="h-4 w-4 mr-2" />{" "}
+									View
 								</Button>
 							</div>
 							{resource.description && (
@@ -100,7 +154,6 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 	);
 }
 
-// Component to display technique example use cases
 function TechniqueExampleUseCases({
 	useCases,
 }: {
@@ -115,18 +168,15 @@ function TechniqueExampleUseCases({
 	}
 
 	return (
-		<div className="space-y-4">
+		<div className="space-y-6">
 			{useCases.map((useCase) => (
-				<div key={useCase.id} className="border rounded-md p-4">
-					<div className="flex items-center gap-2 mb-2">
-						<h3 className="font-medium">Example Use Case</h3>
-						{useCase.assurance_goal_name && (
-							<Badge variant="outline">
-								{useCase.assurance_goal_name}
-							</Badge>
-						)}
-					</div>
-					<p className="text-sm">{useCase.description}</p>
+				<div key={useCase.id} className="space-y-2">
+					{useCase.assurance_goal_name && (
+						<Badge variant="outline">
+							{useCase.assurance_goal_name}
+						</Badge>
+					)}
+					<p className="whitespace-pre-line">{useCase.description}</p>
 				</div>
 			))}
 		</div>
@@ -147,11 +197,30 @@ function TechniqueLimitations({
 
 	return (
 		<div className="space-y-4">
-			{limitations.map((limitation) => (
-				<div key={limitation.id} className="border rounded-md p-4">
-					<p className="text-sm">{limitation.description}</p>
-				</div>
-			))}
+			{limitations.map((limitation) => {
+				// Parse the nested JSON in the description field
+				let parsedDescription = limitation.description;
+				try {
+					// Try to parse the string as JSON
+					const parsedData = JSON.parse(limitation.description);
+					// If it's an array with objects containing description fields, extract them
+					if (
+						Array.isArray(parsedData) &&
+						parsedData.length > 0 &&
+						parsedData[0].description
+					) {
+						parsedDescription = parsedData[0].description;
+					}
+				} catch (e) {
+					// If parsing fails, use the original description
+					console.error(
+						"Failed to parse limitation description JSON:",
+						e
+					);
+				}
+
+				return <div key={limitation.id}>{parsedDescription}</div>;
+			})}
 		</div>
 	);
 }
@@ -206,14 +275,14 @@ export default function TechniqueDetailPage() {
 		<TooltipProvider>
 			<MainLayout>
 				{/* Header section */}
-				<div className="mb-6">
-					<h1 className="text-3xl font-bold">{technique.name}</h1>
-				</div>
-
-				{/* Responsive layout with main content and sidebar */}
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+				<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 					{/* Main content */}
 					<div className="lg:col-span-2 space-y-8">
+						<div className="mb-6">
+							<h1 className="text-3xl font-bold">
+								{technique.name}
+							</h1>
+						</div>
 						<Section title="Description">
 							<p className="whitespace-pre-line">
 								{technique.description}

@@ -41,11 +41,8 @@ RUN echo '#!/bin/bash\n\
     # Collect static files\n\
     python manage.py collectstatic --noinput\n\
     \n\
-    # Load fixtures if needed\n\
-    python manage.py loaddata api/fixtures/assurance_goals.json || echo "Warning: Could not load assurance_goals fixture"\n\
-    python manage.py loaddata api/fixtures/categories.json || echo "Warning: Could not load categories fixture"\n\
-    python manage.py loaddata api/fixtures/sub_categories.json || echo "Warning: Could not load sub_categories fixture"\n\
-    python manage.py loaddata api/fixtures/updated_techniques.json || echo "Warning: Could not load techniques fixture"\n\
+    # Import techniques from CSV\n\
+    python manage.py import_techniques --file=data/techniques.csv || echo "Warning: Could not import techniques from CSV"\n\
     \n\
     # Start server with Gunicorn\n\
     gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2' > /app/entrypoint.sh

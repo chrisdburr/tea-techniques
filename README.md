@@ -23,6 +23,19 @@ An interactive database for exploring techniques for evidencing claims about res
 > These instructions have only been tested on MacOS and Linux. If you are using Windows, you may need to adjust some commands.
 
 <details>
+<summary>🪧 Prerequisites </summary>
+
+This project uses Poetry for Python dependency management. If you don't have Poetry installed:
+
+```bash
+# On Linux, macOS, Windows (WSL)
+curl -sSL https://install.python-poetry.org | python3 -
+
+# On Windows (PowerShell)
+(Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -
+</details>
+
+<details>
 <summary>📦 SQLite Setup (Quick Start for Development)</summary>
 
 For local development, we use SQLite as the database backend. This setup is quick and easy to get started but is not suitable for production use:

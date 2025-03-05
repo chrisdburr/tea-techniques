@@ -1,6 +1,6 @@
-from django.urls import reverse
+from django.test import TestCase
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
 from api.models import (
     Technique,
     AssuranceGoal,
@@ -25,7 +25,7 @@ import json
 
 
 class ApiEndpointTestCase(APITestCase):
-    """Test that all API endpoints return 200 OK"""
+    """Test that all API endpoints return 200 OK using direct URLs"""
 
     def setUp(self):
         # Create base objects for relationships
@@ -43,63 +43,57 @@ class ApiEndpointTestCase(APITestCase):
             tags=[self.tag],
         )
 
+        # Create a client
+        self.client = APIClient()
+
     def test_api_root(self):
         """Test that API root works"""
-        url = reverse("api-root")
-        response = self.client.get(url)
+        response = self.client.get("/api/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_assurance_goals_list(self):
         """Test the assurance goals endpoint"""
-        url = reverse("assurance-goals-list")
-        response = self.client.get(url)
+        response = self.client.get("/api/assurance-goals/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_categories_list(self):
         """Test the categories endpoint"""
-        url = reverse("categories-list")
-        response = self.client.get(url)
+        response = self.client.get("/api/categories/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_subcategories_list(self):
         """Test the subcategories endpoint"""
-        url = reverse("subcategories-list")
-        response = self.client.get(url)
+        response = self.client.get("/api/subcategories/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_tags_list(self):
         """Test the tags endpoint"""
-        url = reverse("tags-list")
-        response = self.client.get(url)
+        response = self.client.get("/api/tags/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_techniques_list(self):
         """Test the techniques endpoint"""
-        url = reverse("techniques-list")
-        response = self.client.get(url)
+        response = self.client.get("/api/techniques/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_attribute_types_list(self):
         """Test the attribute types endpoint"""
-        url = reverse("attribute-types-list")
-        response = self.client.get(url)
+        response = self.client.get("/api/attribute-types/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_attribute_values_list(self):
         """Test the attribute values endpoint"""
-        url = reverse("attribute-values-list")
-        response = self.client.get(url)
+        response = self.client.get("/api/attribute-values/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_resource_types_list(self):
         """Test the resource types endpoint"""
-        url = reverse("resource-types-list")
-        response = self.client.get(url)
+        response = self.client.get("/api/resource-types/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 class TechniqueAPITestCase(APITestCase):
-    """Test Techniques API CRUD operations"""
+    """Test Techniques API CRUD operations using direct URLs"""
 
     def setUp(self):
         self.assurance_goal = AssuranceGoalFactory(name="Explainability")
@@ -147,11 +141,14 @@ class TechniqueAPITestCase(APITestCase):
         )
 
         # URL for technique operations
-        self.technique_list_url = reverse("techniques-list")
+        self.techniques_url = "/api/techniques/"
+
+        # Create a client
+        self.client = APIClient()
 
     def test_get_technique_list(self):
         """Test retrieving a list of techniques"""
-        response = self.client.get(self.technique_list_url)
+        response = self.client.get(self.techniques_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()
 
@@ -169,7 +166,7 @@ class TechniqueAPITestCase(APITestCase):
 
     def test_get_technique_detail(self):
         """Test retrieving a specific technique"""
-        url = reverse("techniques-detail", args=[self.technique1.id])
+        url = f"{self.techniques_url}{self.technique1.id}/"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -232,9 +229,7 @@ class TechniqueAPITestCase(APITestCase):
         }
 
         response = self.client.post(
-            self.technique_list_url,
-            data=json.dumps(data),
-            content_type="application/json",
+            self.techniques_url, data=json.dumps(data), content_type="application/json"
         )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -259,7 +254,7 @@ class TechniqueAPITestCase(APITestCase):
 
     def test_update_technique(self):
         """Test updating a technique"""
-        url = reverse("techniques-detail", args=[self.technique1.id])
+        url = f"{self.techniques_url}{self.technique1.id}/"
 
         # Update the technique
         data = {
@@ -286,7 +281,7 @@ class TechniqueAPITestCase(APITestCase):
 
     def test_partial_update_technique(self):
         """Test partially updating a technique"""
-        url = reverse("techniques-detail", args=[self.technique1.id])
+        url = f"{self.techniques_url}{self.technique1.id}/"
 
         # Partially update the technique (only name)
         data = {"name": "Partially Updated SHAP"}
@@ -305,7 +300,7 @@ class TechniqueAPITestCase(APITestCase):
 
     def test_delete_technique(self):
         """Test deleting a technique"""
-        url = reverse("techniques-detail", args=[self.technique1.id])
+        url = f"{self.techniques_url}{self.technique1.id}/"
         response = self.client.delete(url)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -321,7 +316,7 @@ class TechniqueAPITestCase(APITestCase):
         )
 
         # Filter by original assurance goal
-        url = f"{self.technique_list_url}?assurance_goals={self.assurance_goal.id}"
+        url = f"{self.techniques_url}?assurance_goals={self.assurance_goal.id}"
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -347,7 +342,7 @@ class TechniqueAPITestCase(APITestCase):
         )
 
         # Filter by original category
-        url = f"{self.technique_list_url}?categories={self.category.id}"
+        url = f"{self.techniques_url}?categories={self.category.id}"
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -362,7 +357,7 @@ class TechniqueAPITestCase(APITestCase):
     def test_filter_techniques_by_search(self):
         """Test searching techniques by name or description"""
         # Search by partial name
-        url = f"{self.technique_list_url}?search=SHAP"
+        url = f"{self.techniques_url}?search=SHAP"
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -373,7 +368,7 @@ class TechniqueAPITestCase(APITestCase):
         self.assertIn(self.technique1.name, technique_names)
 
         # Search by partial description
-        url = f"{self.technique_list_url}?search=Class+Activation"
+        url = f"{self.techniques_url}?search=Class+Activation"
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -385,7 +380,7 @@ class TechniqueAPITestCase(APITestCase):
 
     def test_filter_techniques_by_model_dependency(self):
         """Test filtering techniques by model dependency"""
-        url = f"{self.technique_list_url}?model_dependency=Model-Agnostic"
+        url = f"{self.techniques_url}?model_dependency=Model-Agnostic"
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -405,7 +400,7 @@ class TechniqueAPITestCase(APITestCase):
         )
 
         # Filter by tag1
-        url = f"{self.technique_list_url}?tags={self.tag1.id}"
+        url = f"{self.techniques_url}?tags={self.tag1.id}"
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -424,7 +419,7 @@ class TechniqueAPITestCase(APITestCase):
             TechniqueFactory(name=f"Pagination Test Technique {i}")
 
         # Get first page (default page size is defined in settings)
-        response = self.client.get(self.technique_list_url)
+        response = self.client.get(self.techniques_url)
         data = response.json()
 
         self.assertIn("count", data)
@@ -445,7 +440,7 @@ class TechniqueAPITestCase(APITestCase):
     def test_relation_specific_endpoints(self):
         """Test the endpoints for filtering categories and subcategories by parent"""
         # Test categories by assurance goal
-        url = reverse("categories-by-goal", args=[self.assurance_goal.id])
+        url = f"/api/categories-by-goal/{self.assurance_goal.id}/"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()
@@ -455,7 +450,7 @@ class TechniqueAPITestCase(APITestCase):
         self.assertIn(self.category.id, category_ids)
 
         # Test subcategories by category
-        url = reverse("subcategories-by-category", args=[self.category.id])
+        url = f"/api/subcategories-by-category/{self.category.id}/"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()
@@ -466,7 +461,7 @@ class TechniqueAPITestCase(APITestCase):
 
     def test_debug_endpoint(self):
         """Test that the debug endpoint works"""
-        url = reverse("debug-endpoint")
+        url = "/api/debug/"
 
         # Test GET
         response = self.client.get(url)

@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -7,6 +8,15 @@ load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Use SQLite for testing
+if "test" in sys.argv or "pytest" in sys.argv[0]:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": ":memory:",  # Use in-memory database for faster tests
+        }
+    }
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = "/static/"

@@ -8,7 +8,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15.2-black)](https://nextjs.org/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-A comprehensive platform for exploring and documenting techniques for evidencing claims about responsible AI design, development, and deployment. This repository works in conjunction with the [Trustworthy and Ethical Assurance (TEA) platform](https://assuranceplatform.azurewebsites.net/) to enable practitioners to identify and implement appropriate assurance methods.
+An interactive database for exploring techniques for evidencing claims about responsible AI design, development, and deployment. This repository has been designed to work in conjunction with the [Trustworthy and Ethical Assurance (TEA) platform](https://assuranceplatform.azurewebsites.net/) to enable practitioners to identify and implement appropriate assurance methods.
 
 ## 🚀 Key Features
 

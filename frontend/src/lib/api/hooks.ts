@@ -385,12 +385,42 @@ export const useTechniqueDetail = (id: number) => {
 				});
 
 				if (!response.ok) {
+					const errorText = await response.text();
+					console.error(
+						`[useTechniqueDetail] Response error: ${response.status}`,
+						errorText
+					);
 					throw new Error(
 						`API returned ${response.status}: ${response.statusText}`
 					);
 				}
 
-				const data = await response.json();
+				// Try to parse as JSON
+				let data;
+				try {
+					const text = await response.text();
+					console.log(
+						`[useTechniqueDetail] Raw response:`,
+						text.substring(0, 500) + "..."
+					);
+					data = JSON.parse(text);
+				} catch (parseError) {
+					console.error(
+						`[useTechniqueDetail] JSON parse error:`,
+						parseError
+					);
+					throw new Error(`Failed to parse API response as JSON`);
+				}
+
+				// Validate and log the response
+				console.log(`[useTechniqueDetail] Parsed response:`, data);
+
+				// Check if the data has the expected structure
+				if (!data.id || !data.name) {
+					console.error(`[useTechniqueDetail] Malformed data:`, data);
+					throw new Error(`API returned malformed data`);
+				}
+
 				return data as Technique;
 			} catch (error) {
 				console.error(`[useTechniqueDetail] Error:`, error);

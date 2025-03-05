@@ -7,11 +7,13 @@ While this project is in development it currently uses a CSV file, `techniques.c
 ## Adding or Modifying Techniques
 
 1. Edit the `techniques.csv` file directly
-2. For local development, run `python backend/scripts/reset_and_import.py` to reload the database
+2. For local development:
+   - To reset the database and import techniques: `python manage.py reset_and_import_techniques --use-sqlite`
+   - To only import techniques without resetting: `python manage.py import_techniques --use-sqlite`
 3. For Docker deployments, rebuild and restart the containers: `docker-compose down && docker-compose up -d --build`
 
 > [!WARNING] 
-> The `reset_and_import.py` script will also allow you to reset the database and import your updated CSV file. 
+> The `reset_database` command will completely reset the database. Use with caution.
 
 ## Schema Information
 

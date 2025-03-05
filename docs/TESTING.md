@@ -46,12 +46,12 @@ To run the backend tests:
 
 ```bash
 cd backend
-USE_SQLITE=True poetry run pytest
+poetry run pytest
 ```
 
 For test coverage report:
 
 ```bash
 cd backend
-USE_SQLITE=True poetry run pytest --cov=api
+poetry run pytest --cov=api
 ```

@@ -1,11 +1,10 @@
 # api/tests/conftest.py
-import os
 import pytest
+from django.conf import settings
 
 
-@pytest.fixture(scope="session", autouse=True)
-def set_test_database():
-    """Force SQLite database for all tests."""
-    os.environ["USE_SQLITE"] = "True"
-    # Also set Django to use in-memory SQLite
-    os.environ["DB_ENGINE"] = "sqlite"
+def pytest_configure(config):
+    """Print information about the test environment."""
+    print(f"\nUsing Django settings module: {settings.SETTINGS_MODULE}")
+    db_engine = settings.DATABASES["default"]["ENGINE"]
+    print(f"Using database engine: {db_engine}")

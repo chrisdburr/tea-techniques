@@ -1,31 +1,41 @@
 // frontend/src/lib/config.ts
 
 interface Config {
-  apiBaseUrl: string;
-  swaggerUrl: string;
+	apiBaseUrl: string;
+	swaggerUrl: string;
+	isProduction: boolean;
 }
 
 // Always prefer environment variables if available
 const getApiBaseUrl = (): string => {
-  // Server-side or client-side rendering, try environment variables first
-  if (typeof window === 'undefined') {
-    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
-  }
-  
-  // Client-side - use window.ENV if it exists (runtime variables), 
-  // otherwise fall back to build-time env
-  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+	// Check for environment variables
+	if (process.env.NEXT_PUBLIC_API_URL) {
+		return process.env.NEXT_PUBLIC_API_URL;
+	}
+
+	// For local development without env vars
+	if (process.env.NODE_ENV === "development") {
+		return "http://localhost:8000/api";
+	}
+
+	// Production fallback (should be overridden by env var)
+	return "/api";
 };
 
 const getSwaggerUrl = (): string => {
-  if (typeof window === 'undefined') {
-    return process.env.NEXT_PUBLIC_SWAGGER_URL || 'http://localhost:8000/swagger/';
-  }
-  
-  return process.env.NEXT_PUBLIC_SWAGGER_URL || 'http://localhost:8000/swagger/';
+	if (process.env.NEXT_PUBLIC_SWAGGER_URL) {
+		return process.env.NEXT_PUBLIC_SWAGGER_URL;
+	}
+
+	if (process.env.NODE_ENV === "development") {
+		return "http://localhost:8000/swagger/";
+	}
+
+	return "/swagger/";
 };
 
 export const config: Config = {
-  apiBaseUrl: getApiBaseUrl(),
-  swaggerUrl: getSwaggerUrl()
+	apiBaseUrl: getApiBaseUrl(),
+	swaggerUrl: getSwaggerUrl(),
+	isProduction: process.env.NODE_ENV === "production",
 };

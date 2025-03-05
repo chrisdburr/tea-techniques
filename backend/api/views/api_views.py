@@ -7,7 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.http import JsonResponse
 from django.core import serializers
 import json
-import logging  # Add this for logging
+import logging
 
 from ..models import (
     AssuranceGoal,
@@ -18,7 +18,7 @@ from ..models import (
     TechniqueRelationship,
     AttributeType,
     AttributeValue,
-    ResourceType
+    ResourceType,
 )
 from ..serializers import (
     AssuranceGoalSerializer,
@@ -91,9 +91,6 @@ class TagsViewSet(viewsets.ModelViewSet):
     filterset_fields = ["name"]
     search_fields = ["name"]
     ordering_fields = ["id", "name"]
-
-
-# FairnessApproaches and ProjectLifecycleStages ViewSets have been removed as part of the cleanup
 
 
 class TechniquesViewSet(viewsets.ModelViewSet):
@@ -294,27 +291,19 @@ def debug_endpoint(request):
                 "category_ids": [1, 2],
                 "subcategory_ids": [1],
                 "tag_ids": [1, 2],
-                "attributes": [
-                    {"attribute_value": 1}
-                ],
+                "attributes": [{"attribute_value": 1}],
                 "resources": [
                     {
                         "resource_type": 1,
                         "title": "Documentation",
                         "url": "https://example.com",
-                        "description": "Official documentation"
+                        "description": "Official documentation",
                     }
                 ],
                 "example_use_cases": [
-                    {
-                        "description": "Example use case description",
-                        "assurance_goal": 1
-                    }
+                    {"description": "Example use case description", "assurance_goal": 1}
                 ],
-                "limitations": [
-                    "Limitation 1",
-                    "Limitation 2"
-                ]
+                "limitations": ["Limitation 1", "Limitation 2"],
             },
         }
 

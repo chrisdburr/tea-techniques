@@ -1,4 +1,4 @@
-// This file should replace the content in src/app/techniques/[id]/page.tsx
+// src/app/techniques/[id]/page.tsx
 "use client";
 
 import { useParams } from "next/navigation";
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
+import { StarRating } from "@/components/ui/star-rating";
 import Link from "next/link";
 import {
 	ArrowLeft,
@@ -30,6 +31,7 @@ import {
 	TechniqueExampleUseCase,
 	TechniqueLimitation,
 } from "@/lib/types";
+import { getTechniqueRatings } from "@/lib/utils";
 
 // Helper component for section headers
 function SectionTitle({ title }: { title: string }) {
@@ -431,6 +433,51 @@ export default function TechniqueDetailPage() {
 										<TechniqueAttributesSidebar
 											attributes={technique.attributes}
 										/>
+									</div>
+								)}
+
+								{/* Extract and display ratings */}
+								{technique.attributes.length > 0 && (
+									<div className="space-y-4">
+										{/* Complexity Rating */}
+										<div className="space-y-1">
+											<h3 className="text-sm font-medium">
+												<InfoLabel
+													label="Complexity"
+													tooltip="How complex is this technique to implement (1-5)"
+												/>
+											</h3>
+											<div className="flex items-center gap-2">
+												<StarRating
+													rating={
+														getTechniqueRatings(
+															technique.attributes
+														).complexity
+													}
+													className="text-primary"
+												/>
+											</div>
+										</div>
+
+										{/* Computational Cost Rating */}
+										<div className="space-y-1">
+											<h3 className="text-sm font-medium">
+												<InfoLabel
+													label="Computational Cost"
+													tooltip="How computationally expensive is this technique (1-5)"
+												/>
+											</h3>
+											<div className="flex items-center gap-2">
+												<StarRating
+													rating={
+														getTechniqueRatings(
+															technique.attributes
+														).computationalCost
+													}
+													className="text-primary"
+												/>
+											</div>
+										</div>
 									</div>
 								)}
 

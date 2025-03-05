@@ -24,13 +24,11 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("api.api_urls")),
     path("__reload__/", include("django_browser_reload.urls")),
-    # API documentation
     path(
         "swagger/",
         schema_view.with_ui("swagger", cache_timeout=0),
         name="schema-swagger-ui",
     ),
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
-    # Optional: Add a basic root response
     path("", include("api.root_urls")),
 ]

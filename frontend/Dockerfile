@@ -13,9 +13,13 @@ RUN npm ci
 # Copy project files
 COPY . .
 
-# Set environment variables
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV NODE_ENV production
+# Set build-time environment variables (can be overridden at build time)
+ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_SWAGGER_URL
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+ENV NEXT_PUBLIC_SWAGGER_URL=${NEXT_PUBLIC_SWAGGER_URL}
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
 
 # Build application
 RUN npm run build
@@ -30,11 +34,11 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
-# Set environment variables
-ENV NODE_ENV production
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
-ENV NEXT_TELEMETRY_DISABLED 1
+# Set runtime environment variables
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Don't run as root
 RUN addgroup --system --gid 1001 nodejs

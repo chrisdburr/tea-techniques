@@ -10,14 +10,14 @@ For local development, you can use SQLite which doesn't require Docker:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-repo/tea-techniques.git
+   git clone https://github.com/chrisdburr/tea-techniques.git
    cd tea-techniques
    ```
 
 2. **Setup environment variable**
 
   ```bash
-  mv .env.example .env
+  cp .env.example .env
   ```
 
   - Review and adjust the values (e.g. change user and password)
@@ -53,7 +53,7 @@ If you want to use the full Docker setup with PostgreSQL:
 1. **Setup environment variable**
 
   ```bash
-  mv .env.example .env
+  cp .env.example .env
   ```
 
   - Review and adjust the values (e.g. change user and password)

@@ -1,8 +1,12 @@
+# backend/api/management/commands/import_techniques.py
 import csv
 import json
 import os
+from pathlib import Path
 from django.core.management.base import BaseCommand
 from django.db import transaction
+from django.conf import settings
+
 from api.models import (
     AssuranceGoal,
     Category,
@@ -28,14 +32,36 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument("--file", type=str, help="Path to the CSV file")
+        parser.add_argument(
+            "--use-sqlite",
+            action="store_true",
+            default=False,
+            help="Use SQLite database instead of PostgreSQL",
+        )
 
     def handle(self, *args, **options):
         file_path = options.get("file")
+        use_sqlite = options.get("use_sqlite", False)
+
+        # Configure SQLite if specified
+        if use_sqlite:
+            os.environ["USE_SQLITE"] = "True"
+            # Force Django to use SQLite
+            BASE_DIR = Path(settings.BASE_DIR)
+            settings.DATABASES["default"] = {
+                "ENGINE": "django.db.backends.sqlite3",
+                "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+            }
+            from django.db import connections
+
+            connections.close_all()
+            self.stdout.write(self.style.SUCCESS("Using SQLite database"))
+
+        # Get the file path
         if not file_path:
+            BASE_DIR = Path(settings.BASE_DIR)
             file_path = os.path.join(
-                os.path.dirname(
-                    os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-                ),
+                BASE_DIR,
                 "data",
                 "techniques.csv",
             )
@@ -55,10 +81,14 @@ class Command(BaseCommand):
 
             # Use a transaction to ensure data consistency
             with transaction.atomic():
+                count = 0
                 for row in reader:
                     self._process_technique(row)
+                    count += 1
 
-        self.stdout.write(self.style.SUCCESS("Successfully imported techniques"))
+        self.stdout.write(
+            self.style.SUCCESS(f"Successfully imported {count} techniques")
+        )
 
     def _create_base_records(self):
         """Create necessary base records (goals, attributes, etc.)"""

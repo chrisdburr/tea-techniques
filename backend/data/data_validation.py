@@ -1,3 +1,5 @@
+# Temp file for validating URLs returned by Claude as placeholders for resource links
+
 import csv
 import json
 import requests

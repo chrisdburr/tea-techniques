@@ -1,4 +1,4 @@
-// src/lib/types.ts - Update or replace with these type definitions
+// src/lib/types.ts
 
 // Base type interfaces
 export interface AssuranceGoal {

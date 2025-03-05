@@ -26,7 +26,7 @@ For local development, you can use SQLite which doesn't require Docker:
    ```bash
    cd backend
    poetry install
-   poetry run python scripts/setup_dev.py
+   poetry run python scripts/reset_and_import.py
    ```
 
 4. **Run the backend with SQLite**

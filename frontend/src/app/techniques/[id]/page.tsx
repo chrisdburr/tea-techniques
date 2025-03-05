@@ -14,24 +14,16 @@ import {
 	CardFooter,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
-import { StarRating } from "@/components/ui/star-rating";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { AttributeVisualizer } from "@/components/technique/AttributeVisualizer";
+import { InfoLabel } from "@/components/ui/info-label";
 import Link from "next/link";
+import { ArrowLeft, Edit, ExternalLink, Loader2, Lock } from "lucide-react";
 import {
-	ArrowLeft,
-	Edit,
-	ExternalLink,
-	Loader2,
-	Info,
-	Lock,
-} from "lucide-react";
-import {
-	TechniqueAttribute,
 	TechniqueResource,
 	TechniqueExampleUseCase,
 	TechniqueLimitation,
 } from "@/lib/types";
-import { getTechniqueRatings } from "@/lib/utils";
 
 // Helper component for section headers
 function SectionTitle({ title }: { title: string }) {
@@ -50,45 +42,6 @@ function Section({
 		<div className="mb-8">
 			<SectionTitle title={title} />
 			<div className="bg-card rounded-lg border p-4">{children}</div>
-		</div>
-	);
-}
-
-// Component to display technique attributes in the sidebar
-function TechniqueAttributesSidebar({
-	attributes,
-}: {
-	attributes: TechniqueAttribute[];
-}) {
-	if (!attributes || attributes.length === 0) {
-		return (
-			<p className="text-muted-foreground">No attributes specified.</p>
-		);
-	}
-
-	// Group attributes by type
-	const attributesByType = attributes.reduce((acc, attr) => {
-		if (!acc[attr.attribute_type]) {
-			acc[attr.attribute_type] = [];
-		}
-		acc[attr.attribute_type].push(attr);
-		return acc;
-	}, {} as Record<string, TechniqueAttribute[]>);
-
-	return (
-		<div className="space-y-4">
-			{Object.entries(attributesByType).map(([type, attrs]) => (
-				<div key={type} className="space-y-2">
-					<h3 className="text-sm font-medium">{type}</h3>
-					<div className="flex flex-wrap gap-2">
-						{attrs.map((attr) => (
-							<Badge key={attr.id} variant="secondary">
-								{attr.attribute_value_name}
-							</Badge>
-						))}
-					</div>
-				</div>
-			))}
 		</div>
 	);
 }
@@ -200,18 +153,6 @@ function TechniqueLimitations({
 				</div>
 			))}
 		</div>
-	);
-}
-
-// Reusable tooltip component with info icon
-function InfoLabel({ label, tooltip }: { label: string; tooltip: string }) {
-	return (
-		<Tooltip content={tooltip}>
-			<div className="inline-flex items-center cursor-help">
-				{label}
-				<Info className="ml-1 h-4 w-4 text-muted-foreground" />
-			</div>
-		</Tooltip>
 	);
 }
 
@@ -423,61 +364,16 @@ export default function TechniqueDetailPage() {
 								</div>
 
 								{technique.attributes.length > 0 && (
-									<div className="space-y-2">
+									<div className="space-y-6">
 										<h3 className="text-sm font-medium">
 											<InfoLabel
 												label="Technical Attributes"
-												tooltip="Detailed classification attributes for this technique"
+												tooltip="Classification metadata for this technique"
 											/>
 										</h3>
-										<TechniqueAttributesSidebar
+										<AttributeVisualizer
 											attributes={technique.attributes}
 										/>
-									</div>
-								)}
-
-								{/* Extract and display ratings */}
-								{technique.attributes.length > 0 && (
-									<div className="space-y-4">
-										{/* Complexity Rating */}
-										<div className="space-y-1">
-											<h3 className="text-sm font-medium">
-												<InfoLabel
-													label="Complexity"
-													tooltip="How complex is this technique to implement (1-5)"
-												/>
-											</h3>
-											<div className="flex items-center gap-2">
-												<StarRating
-													rating={
-														getTechniqueRatings(
-															technique.attributes
-														).complexity
-													}
-													className="text-primary"
-												/>
-											</div>
-										</div>
-
-										{/* Computational Cost Rating */}
-										<div className="space-y-1">
-											<h3 className="text-sm font-medium">
-												<InfoLabel
-													label="Computational Cost"
-													tooltip="How computationally expensive is this technique (1-5)"
-												/>
-											</h3>
-											<div className="flex items-center gap-2">
-												<StarRating
-													rating={
-														getTechniqueRatings(
-															technique.attributes
-														).computationalCost
-													}
-													className="text-primary"
-												/>
-											</div>
-										</div>
 									</div>
 								)}
 

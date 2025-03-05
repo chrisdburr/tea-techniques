@@ -73,6 +73,15 @@ If you want to use the full Docker setup with PostgreSQL:
   - `frontend/src/components`: Reusable React components
   - `frontend/src/lib`: Utilities, types, and API clients
 
+## Data Management
+
+This project uses a CSV-based approach for managing technique data:
+
+- The primary source of truth is the `techniques.csv` file in the `backend/data` directory
+- All assurance goals, categories, and subcategories are derived from this CSV
+- When running locally with SQLite, use `reset_and_import.py` to reload the database
+- When deploying with Docker, the CSV is automatically imported on container startup
+
 ## Development Tips
 
 1. **Local Development Mode**

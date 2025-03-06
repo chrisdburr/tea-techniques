@@ -1,7 +1,0 @@
-Data Modality: Add a field indicating the data type or domain each technique applies to (e.g., Image, Text, Tabular, All). This helps users quickly identify if a technique is relevant for their data. For example, Grad-CAM would be marked for image data, whereas Permutation Importance might be applicable to all tabular data.
-
-ML Lifecycle Stage: Include a column specifying at what stage of the ML pipeline the technique is applied (such as Pre-Processing, In-Processing (during training/modeling), Post-Processing, or Post-Deployment monitoring). This provides context on when to implement the technique. For instance, Reweighing is a pre-processing step, while Equalized Odds is a post-processing adjustment.
-
-Original Source or Year: Provide metadata on the origin of each technique (for example, the year it was introduced or a key reference). This can help users assess the maturity of a technique. For example, noting that SHAP was introduced in 2017 or citing the original paper gives context and allows users to find more detailed information if needed.
-
-Domain-Specific Tags: Optionally, include tags or columns for any domain or industry where the technique is especially common or effective (e.g., Computer Vision, NLP, Healthcare). This can guide users to techniques proven in similar problem areas.

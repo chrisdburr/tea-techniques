@@ -478,3 +478,34 @@ class TechniqueAPITestCase(APITestCase):
         data = response.json()
         self.assertIn("received_data", data)
         self.assertEqual(data["received_data"], test_data)
+
+    def test_category_tags_compatibility(self):
+        """Test that techniques created with category_tags format work with the API"""
+        # Create a technique with specific categories that mimics one created from the new CSV format
+        goal_name = "Explainability"
+        cat_name = "feature-analysis"
+        subcat_name = "importance-and-attribution"
+
+        goal, _ = AssuranceGoal.objects.get_or_create(name=goal_name)
+        category, _ = Category.objects.get_or_create(name=cat_name, assurance_goal=goal)
+        subcategory, _ = SubCategory.objects.get_or_create(
+            name=subcat_name, category=category
+        )
+
+        # Create technique and link relationships to mimic import from category_tags
+        technique = TechniqueFactory(
+            name="Category Tags Test Technique",
+            assurance_goals=[goal],
+        )
+        technique.categories.add(category)
+        technique.subcategories.add(subcategory)
+
+        # Test retrieving and filtering
+        response = self.client.get(f"{self.techniques_url}{technique.id}/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json()["name"], technique.name)
+
+        # Test filtering by category
+        response = self.client.get(f"{self.techniques_url}?categories={category.id}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn(technique.name, [t["name"] for t in response.json()["results"]])

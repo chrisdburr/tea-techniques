@@ -33,11 +33,11 @@ python manage.py migrate --noinput
 # Import techniques from CSV if file exists
 if [ -f "data/techniques.csv" ]; then
     echo "Importing techniques from CSV..."
-    python manage.py import_techniques --file=data/techniques.csv || {
+    python manage.py import_techniques --file=data/techniques_v2.csv || {
         echo "⚠️  Warning: Could not import techniques from CSV"
     }
 else
-    echo "⚠️  No techniques.csv found, skipping import"
+    echo "⚠️  No techniques_v2.csv found, skipping import"
 fi
 
 # Set worker count based on environment variables or available cores

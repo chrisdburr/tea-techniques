@@ -15,14 +15,29 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { AttributeVisualizer } from "@/components/technique/AttributeVisualizer";
 import { InfoLabel } from "@/components/ui/info-label";
+import { StarRating } from "@/components/ui/star-rating";
 import Link from "next/link";
-import { ArrowLeft, Edit, ExternalLink, Loader2, Lock } from "lucide-react";
+import {
+	ArrowLeft,
+	ArrowRight,
+	Brain,
+	CheckCircle,
+	Edit,
+	Eye,
+	ExternalLink,
+	Info,
+	Loader2,
+	Lock,
+	Scale,
+	Shield,
+	ShieldCheck,
+} from "lucide-react";
 import {
 	TechniqueResource,
 	TechniqueExampleUseCase,
 	TechniqueLimitation,
+	AttributeValue,
 } from "@/lib/types";
 
 // Helper component for section headers
@@ -113,16 +128,47 @@ function TechniqueExampleUseCases({
 		);
 	}
 
+	// Group use cases by assurance goal
+	const groupedUseCases = useCases.reduce((acc, useCase) => {
+		const goalName = useCase.assurance_goal_name || "Other";
+		if (!acc[goalName]) {
+			acc[goalName] = [];
+		}
+		acc[goalName].push(useCase);
+		return acc;
+	}, {} as Record<string, TechniqueExampleUseCase[]>);
+
+	// Map assurance goals to their respective icons
+	const goalIcons = {
+		Explainability: <Brain className="h-5 w-5" />,
+		Fairness: <Scale className="h-5 w-5" />,
+		Security: <Shield className="h-5 w-5" />,
+		Safety: <ShieldCheck className="h-5 w-5" />,
+		Reliability: <CheckCircle className="h-5 w-5" />,
+		Transparency: <Eye className="h-5 w-5" />,
+		Privacy: <Lock className="h-5 w-5" />,
+		Other: <Info className="h-5 w-5" />,
+	};
+
 	return (
-		<div className="space-y-6">
-			{useCases.map((useCase) => (
-				<div key={useCase.id} className="space-y-2">
-					{useCase.assurance_goal_name && (
-						<Badge variant="outline">
-							{useCase.assurance_goal_name}
-						</Badge>
-					)}
-					<p className="whitespace-pre-line">{useCase.description}</p>
+		<div className="space-y-8">
+			{Object.entries(groupedUseCases).map(([goalName, cases]) => (
+				<div key={goalName} className="space-y-4">
+					<div className="flex items-center gap-2 text-primary">
+						{goalIcons[goalName as keyof typeof goalIcons] || (
+							<Info className="h-5 w-5" />
+						)}
+						<h3 className="font-medium">{goalName}</h3>
+					</div>
+					<div className="space-y-4 pl-7">
+						{cases.map((useCase) => (
+							<div key={useCase.id} className="space-y-1">
+								<p className="whitespace-pre-line">
+									{useCase.description}
+								</p>
+							</div>
+						))}
+					</div>
 				</div>
 			))}
 		</div>
@@ -155,8 +201,12 @@ function TechniqueLimitations({
 						return (
 							<div key={limitation.id} className="space-y-2">
 								{parsedData.map((item, index) => (
-									<div key={index} className="ml-4 list-item">
-										{item.description || item}
+									<div
+										key={index}
+										className="flex items-start gap-2 py-1"
+									>
+										<ArrowRight className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
+										<span>{item.description || item}</span>
 									</div>
 								))}
 							</div>
@@ -167,7 +217,15 @@ function TechniqueLimitations({
 					console.log("Using original limitation text");
 				}
 
-				return <div key={limitation.id}>{parsedDescription}</div>;
+				return (
+					<div
+						key={limitation.id}
+						className="flex items-start gap-2 py-1"
+					>
+						<ArrowRight className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
+						<span>{parsedDescription}</span>
+					</div>
+				);
 			})}
 		</div>
 	);
@@ -228,14 +286,36 @@ export default function TechniqueDetailPage() {
 			.filter((tag) => tag.trim().length > 0)
 			.map((tag) => {
 				const parts = tag.trim().split("/");
+				// Format category name (remove hyphens, title case)
+				const formatName = (name: string) => {
+					return name
+						.split("-")
+						.map(
+							(word) =>
+								word.charAt(0).toUpperCase() + word.slice(1)
+						)
+						.join(" ");
+				};
+
 				return {
-					category: parts[0],
-					subcategory: parts.length > 1 ? parts[1] : null,
+					category: formatName(parts[0]),
+					subcategory: parts.length > 1 ? formatName(parts[1]) : null,
 				};
 			});
 	};
 
 	const categoryTags = parseCategoryTags(technique.category_tags);
+
+	// Map assurance goals to their respective icons
+	const goalIcons = {
+		Explainability: <Brain className="h-5 w-5" />,
+		Fairness: <Scale className="h-5 w-5" />,
+		Security: <Shield className="h-5 w-5" />,
+		Safety: <ShieldCheck className="h-5 w-5" />,
+		Reliability: <CheckCircle className="h-5 w-5" />,
+		Transparency: <Eye className="h-5 w-5" />,
+		Privacy: <Lock className="h-5 w-5" />,
+	};
 
 	return (
 		<TooltipProvider>
@@ -248,26 +328,6 @@ export default function TechniqueDetailPage() {
 							<h1 className="text-3xl font-bold">
 								{technique.name}
 							</h1>
-							{technique.complexity_rating ||
-							technique.computational_cost_rating ? (
-								<div className="flex gap-4 mt-2">
-									{technique.complexity_rating ? (
-										<div className="text-sm text-muted-foreground">
-											Complexity:{" "}
-											{technique.complexity_rating}/5
-										</div>
-									) : null}
-									{technique.computational_cost_rating ? (
-										<div className="text-sm text-muted-foreground">
-											Computational Cost:{" "}
-											{
-												technique.computational_cost_rating
-											}
-											/5
-										</div>
-									) : null}
-								</div>
-							) : null}
 						</div>
 						<Section title="Description">
 							<p className="whitespace-pre-line">
@@ -306,23 +366,7 @@ export default function TechniqueDetailPage() {
 								</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-6">
-								<div className="space-y-2">
-									<h3 className="text-sm font-medium">
-										<InfoLabel
-											label="Model Dependency"
-											tooltip="Indicates whether this technique requires access to model internals"
-										/>
-									</h3>
-									<div>
-										<Badge
-											variant="outline"
-											className="text-sm"
-										>
-											{technique.model_dependency}
-										</Badge>
-									</div>
-								</div>
-
+								{/* Assurance Goals with Icons */}
 								<div className="space-y-2">
 									<h3 className="text-sm font-medium">
 										<InfoLabel
@@ -330,102 +374,36 @@ export default function TechniqueDetailPage() {
 											tooltip="The primary goals that this technique helps achieve"
 										/>
 									</h3>
-									<div className="flex flex-wrap gap-2">
+									<div className="flex flex-wrap gap-3">
 										{technique.assurance_goals.map(
 											(goal) => (
-												<Badge
+												<div
 													key={goal.id}
-													className="text-sm"
+													className="flex items-center gap-2 p-2 bg-secondary rounded-md"
+													title={goal.name}
 												>
-													{goal.name}
-												</Badge>
+													{goalIcons[
+														goal.name as keyof typeof goalIcons
+													] || (
+														<Info className="h-5 w-5" />
+													)}
+													<span className="font-medium text-sm">
+														{goal.name}
+													</span>
+												</div>
 											)
 										)}
 									</div>
 								</div>
 
-								<div className="space-y-2">
-									<h3 className="text-sm font-medium">
-										<InfoLabel
-											label="Categories"
-											tooltip="Main classification groups for this technique"
-										/>
-									</h3>
-									<div className="space-y-2">
-										{technique.categories.length > 0 ? (
-											technique.categories.map(
-												(category) => (
-													<div
-														key={category.id}
-														className="flex justify-between items-center text-sm py-1 border-b last:border-0 border-muted"
-													>
-														<span>
-															{category.name}
-														</span>
-														<Badge
-															variant="outline"
-															className="text-xs"
-														>
-															{
-																category.assurance_goal_name
-															}
-														</Badge>
-													</div>
-												)
-											)
-										) : (
-											<p className="text-muted-foreground text-sm">
-												None specified
-											</p>
-										)}
-									</div>
-								</div>
-
-								<div className="space-y-2">
-									<h3 className="text-sm font-medium">
-										<InfoLabel
-											label="Subcategories"
-											tooltip="More specific classification within categories"
-										/>
-									</h3>
-									<div className="space-y-2">
-										{technique.subcategories.length > 0 ? (
-											technique.subcategories.map(
-												(subcategory) => (
-													<div
-														key={subcategory.id}
-														className="flex justify-between items-center text-sm py-1 border-b last:border-0 border-muted"
-													>
-														<span>
-															{subcategory.name}
-														</span>
-														<Badge
-															variant="outline"
-															className="text-xs"
-														>
-															{
-																subcategory.category_name
-															}
-														</Badge>
-													</div>
-												)
-											)
-										) : (
-											<p className="text-muted-foreground text-sm">
-												None specified
-											</p>
-										)}
-									</div>
-								</div>
-
-								{/* Show raw category tags if available */}
+								{/* Categories (from category tags) */}
 								{technique.category_tags &&
 									categoryTags.length > 0 && (
 										<div className="space-y-2">
 											<h3 className="text-sm font-medium">
 												<InfoLabel
-													label="Category Tags"
-													tooltip="Raw category tags from the API"
+													label="Categories"
+													tooltip="Classification categories for this technique"
 												/>
 											</h3>
 											<div className="space-y-2">
@@ -455,23 +433,107 @@ export default function TechniqueDetailPage() {
 										</div>
 									)}
 
-								{technique.attribute_values &&
-									technique.attribute_values.length > 0 && (
-										<div className="space-y-6">
-											<h3 className="text-sm font-medium">
-												<InfoLabel
-													label="Technical Attributes"
-													tooltip="Classification metadata for this technique"
-												/>
-											</h3>
-											<AttributeVisualizer
-												attributeValues={
-													technique.attribute_values
+								{/* Model Dependency - Moved here after categories */}
+								<div className="space-y-2">
+									<h3 className="text-sm font-medium">
+										<InfoLabel
+											label="Model Dependency"
+											tooltip="Indicates whether this technique requires access to model internals"
+										/>
+									</h3>
+									<div>
+										<Badge
+											variant="outline"
+											className="text-sm"
+										>
+											{technique.model_dependency}
+										</Badge>
+									</div>
+								</div>
+
+								{/* Goal-Specific Attributes section */}
+								<div className="space-y-3 border-t pt-3">
+									<h3 className="text-sm font-medium">
+										<InfoLabel
+											label="Goal-Specific Attributes"
+											tooltip="Attributes specific to the technique's assurance goals"
+										/>
+									</h3>
+
+									{/* Ratings */}
+									{technique.complexity_rating ? (
+										<div className="space-y-1">
+											<h4 className="text-xs text-muted-foreground">
+												Complexity
+											</h4>
+											<StarRating
+												rating={
+													technique.complexity_rating
 												}
+												maxRating={5}
+												className="text-primary"
 											/>
 										</div>
-									)}
+									) : null}
 
+									{technique.computational_cost_rating ? (
+										<div className="space-y-1">
+											<h4 className="text-xs text-muted-foreground">
+												Computational Cost
+											</h4>
+											<StarRating
+												rating={
+													technique.computational_cost_rating
+												}
+												maxRating={5}
+												className="text-primary"
+											/>
+										</div>
+									) : null}
+
+									{/* Add Explanatory Scope and other attributes */}
+									{technique.attribute_values &&
+										technique.attribute_values.length > 0 &&
+										Object.entries(
+											technique.attribute_values.reduce(
+												(acc, attr) => {
+													const type =
+														attr.attribute_type_name;
+													if (!acc[type]) {
+														acc[type] = [];
+													}
+													acc[type].push(attr);
+													return acc;
+												},
+												{} as Record<
+													string,
+													AttributeValue[]
+												>
+											)
+										).map(([type, values]) => (
+											<div
+												className="space-y-1"
+												key={type}
+											>
+												<h4 className="text-xs text-muted-foreground">
+													{type}
+												</h4>
+												<div className="flex flex-wrap gap-2">
+													{values.map((value) => (
+														<Badge
+															key={value.id}
+															variant="outline"
+															className="text-sm"
+														>
+															{value.name}
+														</Badge>
+													))}
+												</div>
+											</div>
+										))}
+								</div>
+
+								{/* Tags */}
 								{technique.tags &&
 									technique.tags.length > 0 && (
 										<div className="space-y-2">

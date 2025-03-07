@@ -201,6 +201,7 @@ export default function TechniquesList() {
 	const apiFilters = useMemo(() => {
 		return {
 			search: filters.search,
+			search_fields: "name",
 			assurance_goal:
 				filters.assurance_goals.length === 1
 					? filters.assurance_goals[0]
@@ -208,9 +209,13 @@ export default function TechniquesList() {
 			category:
 				filters.categories.length === 1 ? filters.categories[0] : "all",
 			model_dependency:
-				filters.model_dependency.length === 1
+				filters.model_dependency.length > 0
 					? filters.model_dependency[0]
 					: "all",
+			complexity_min: filters.complexity_min?.toString(),
+			complexity_max: filters.complexity_max?.toString(),
+			computational_cost_min: filters.computational_cost_min?.toString(),
+			computational_cost_max: filters.computational_cost_max?.toString(),
 		};
 	}, [filters]);
 
@@ -236,7 +241,20 @@ export default function TechniquesList() {
 	const totalPages = calculateTotalPages(totalItems, PAGE_SIZE);
 
 	// Access techniques data safely
-	const techniques = techniquesData?.results || [];
+	// Access techniques data safely and apply client-side filtering if needed
+	const techniques = useMemo(() => {
+		const results = techniquesData?.results || [];
+
+		// If searching, double-check that results actually contain the search term in their name
+		if (filters.search && filters.search.trim() !== "") {
+			const searchTerm = filters.search.toLowerCase().trim();
+			return results.filter((technique: Technique) =>
+				technique.name.toLowerCase().includes(searchTerm)
+			);
+		}
+
+		return results;
+	}, [techniquesData?.results, filters.search]);
 
 	// Apply filters function
 	const applyFilters = () => {
@@ -246,6 +264,7 @@ export default function TechniquesList() {
 		// Add search if provided
 		if (filters.search) {
 			params.set("search", filters.search);
+			params.set("search_fields", "name");
 		}
 
 		// Add assurance goals if set (currently API only supports one)
@@ -263,7 +282,31 @@ export default function TechniquesList() {
 			params.set("model_dependency", filters.model_dependency[0]);
 		}
 
-		// TODO: Add rating filters once API supports them
+		// Add rating filters
+		if (filters.complexity_min && filters.complexity_min > 1) {
+			params.set("complexity_min", filters.complexity_min.toString());
+		}
+		if (filters.complexity_max && filters.complexity_max < 5) {
+			params.set("complexity_max", filters.complexity_max.toString());
+		}
+		if (
+			filters.computational_cost_min &&
+			filters.computational_cost_min > 1
+		) {
+			params.set(
+				"computational_cost_min",
+				filters.computational_cost_min.toString()
+			);
+		}
+		if (
+			filters.computational_cost_max &&
+			filters.computational_cost_max < 5
+		) {
+			params.set(
+				"computational_cost_max",
+				filters.computational_cost_max.toString()
+			);
+		}
 
 		// Always set page to 1 when applying filters
 		params.set("page", "1");
@@ -353,6 +396,10 @@ export default function TechniquesList() {
 														"search",
 														filters.search
 													);
+													params.set(
+														"search_fields",
+														"name"
+													);
 												}
 
 												// Add assurance goal if set (API limitation for now)
@@ -387,6 +434,46 @@ export default function TechniquesList() {
 														"model_dependency",
 														filters
 															.model_dependency[0]
+													);
+												}
+
+												// Add rating filters
+												if (
+													filters.complexity_min &&
+													filters.complexity_min > 1
+												) {
+													params.set(
+														"complexity_min",
+														filters.complexity_min.toString()
+													);
+												}
+												if (
+													filters.complexity_max &&
+													filters.complexity_max < 5
+												) {
+													params.set(
+														"complexity_max",
+														filters.complexity_max.toString()
+													);
+												}
+												if (
+													filters.computational_cost_min &&
+													filters.computational_cost_min >
+														1
+												) {
+													params.set(
+														"computational_cost_min",
+														filters.computational_cost_min.toString()
+													);
+												}
+												if (
+													filters.computational_cost_max &&
+													filters.computational_cost_max <
+														5
+												) {
+													params.set(
+														"computational_cost_max",
+														filters.computational_cost_max.toString()
 													);
 												}
 

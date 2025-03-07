@@ -314,37 +314,43 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 								</div>
 
 								{/* Computational Cost Rating */}
-								<h4 className="text-sm font-medium">
-									Computational Cost
-								</h4>
-								<div className="pt-2 pb-1">
-									<Slider
-										value={[
-											filters.computational_cost_min || 1,
-											filters.computational_cost_max || 5,
-										]}
-										min={1}
-										max={5}
-										step={1}
-										onValueChange={(value) => {
-											updateFilter(
-												"computational_cost_min",
-												value[0]
-											);
-											updateFilter(
-												"computational_cost_max",
-												value[1]
-											);
-										}}
-									/>
-								</div>
-								<div className="flex justify-between text-xs text-muted-foreground">
-									<span>
-										{filters.computational_cost_min || 1}
-									</span>
-									<span>
-										{filters.computational_cost_max || 5}
-									</span>
+								<div className="space-y-3">
+									<h4 className="text-sm font-medium">
+										Computational Cost
+									</h4>
+									<div className="pt-2 pb-1">
+										<Slider
+											value={[
+												filters.computational_cost_min ||
+													1,
+												filters.computational_cost_max ||
+													5,
+											]}
+											min={1}
+											max={5}
+											step={1}
+											onValueChange={(value) => {
+												updateFilter(
+													"computational_cost_min",
+													value[0]
+												);
+												updateFilter(
+													"computational_cost_max",
+													value[1]
+												);
+											}}
+										/>
+									</div>
+									<div className="flex justify-between text-xs text-muted-foreground">
+										<span>
+											{filters.computational_cost_min ||
+												1}
+										</span>
+										<span>
+											{filters.computational_cost_max ||
+												5}
+										</span>
+									</div>
 								</div>
 							</div>
 						</AccordionContent>

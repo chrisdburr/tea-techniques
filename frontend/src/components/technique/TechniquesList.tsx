@@ -1,7 +1,6 @@
-// src/components/technique/TechniquesList.tsx
 "use client";
 
-import React from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import {
 	useAssuranceGoals,
@@ -10,6 +9,9 @@ import {
 	useCategories,
 } from "@/lib/api/hooks";
 import { useFilterParams } from "@/lib/hooks/useFilterParams";
+import TechniquesSidebar, {
+	FilterState,
+} from "@/components/technique/TechniquesSidebar";
 
 import {
 	Card,
@@ -20,52 +22,33 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 import { Pagination } from "@/components/ui/pagination";
-import {
-	Brain,
-	Scale,
-	Shield,
-	ShieldCheck,
-	CheckCircle,
-	Eye,
-	Info,
-	Loader2,
-	Lock,
-} from "lucide-react";
-import type { Technique, Category, AssuranceGoal } from "@/lib/types";
+import { Loader2 } from "lucide-react";
+import type { Technique } from "@/lib/types";
+import { formatCategoryName } from "./CategoryTag";
+import GoalIcon from "./GoalIcon";
 
 // Number of items per page - must match backend setting (20)
 const PAGE_SIZE = 20;
 
-// Initial filter values
-const initialFilters = {
+// Initial filter values - converted to the new format
+const initialFilters: FilterState = {
 	search: "",
-	assurance_goal: "all",
-	category: "all",
+	assurance_goals: [],
+	categories: [],
+	model_dependency: [],
+	complexity_min: 1,
+	complexity_max: 5,
+	computational_cost_min: 1,
+	computational_cost_max: 5,
 };
 
-// Extracted components
+// Extracted TechniqueCard component
 const TechniqueCard = ({
 	technique,
 }: {
 	technique: Technique;
 }): JSX.Element => {
-	// Format function to improve display of category names
-	const formatCategoryName = (name: string) => {
-		return name
-			.split("-")
-			.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-			.join(" ");
-	};
-
 	// Get first category and subcategory if available
 	const primaryCategory =
 		technique.categories.length > 0
@@ -110,17 +93,6 @@ const TechniqueCard = ({
 		return description.substring(0, cutoff) + "...";
 	};
 
-	// Map assurance goals to their respective icons
-	const goalIcons = {
-		Explainability: <Brain className="h-4 w-4" />,
-		Fairness: <Scale className="h-4 w-4" />,
-		Security: <Shield className="h-4 w-4" />,
-		Safety: <ShieldCheck className="h-4 w-4" />,
-		Reliability: <CheckCircle className="h-4 w-4" />,
-		Transparency: <Eye className="h-4 w-4" />,
-		Privacy: <Lock className="h-4 w-4" />,
-	};
-
 	// Build full category text for hover tooltip
 	const fullCategoryText = subcategory
 		? `${primaryCategory} | ${subcategory}`
@@ -158,9 +130,7 @@ const TechniqueCard = ({
 							className="p-1.5 rounded-full flex items-center bg-secondary"
 							title={goal.name}
 						>
-							{goalIcons[goal.name as keyof typeof goalIcons] || (
-								<Info className="h-4 w-4" />
-							)}
+							<GoalIcon goalName={goal.name} size={16} />
 						</div>
 					))}
 				</div>
@@ -194,30 +164,72 @@ const EmptyStateComponent = (): JSX.Element => {
 };
 
 export default function TechniquesList() {
+	// State for mobile sidebar
+	const [isSidebarOpen, setSidebarOpen] = useState(false);
+
 	// Use custom filter hook to manage URL parameters
-	const { filters, setFilter, currentPage } = useFilterParams(initialFilters);
+	const { filters: urlFilters, currentPage } = useFilterParams({
+		search: "",
+		assurance_goal: "all",
+		category: "all",
+		model_dependency: "all",
+	});
+
+	// State for the new filter format
+	const [filters, setFilters] = useState<FilterState>(() => {
+		// Convert from URL format to our new format
+		return {
+			search: urlFilters.search || "",
+			assurance_goals:
+				urlFilters.assurance_goal !== "all"
+					? [urlFilters.assurance_goal]
+					: [],
+			categories:
+				urlFilters.category !== "all" ? [urlFilters.category] : [],
+			model_dependency:
+				urlFilters.model_dependency !== "all"
+					? [urlFilters.model_dependency]
+					: [],
+			complexity_min: 1,
+			complexity_max: 5,
+			computational_cost_min: 1,
+			computational_cost_max: 5,
+		};
+	});
+
+	// Convert back to URL format for API calls
+	const apiFilters = useMemo(() => {
+		return {
+			search: filters.search,
+			assurance_goal:
+				filters.assurance_goals.length === 1
+					? filters.assurance_goals[0]
+					: "all",
+			category:
+				filters.categories.length === 1 ? filters.categories[0] : "all",
+			model_dependency:
+				filters.model_dependency.length === 1
+					? filters.model_dependency[0]
+					: "all",
+		};
+	}, [filters]);
 
 	// Fetch data from API
 	const {
 		data: techniquesData,
 		isLoading,
 		error,
-	} = useTechniques(
-		{
-			search: filters.search,
-			assurance_goal: filters.assurance_goal,
-			category: filters.category,
-		},
-		currentPage
-	);
+	} = useTechniques(apiFilters, currentPage);
 
 	// Fetch filtered categories based on selected assurance goal
-	const { data: categoriesData } = useCategories(
-		filters.assurance_goal !== "all"
-			? parseInt(filters.assurance_goal)
-			: undefined
-	);
-	const { data: assuranceGoalsData } = useAssuranceGoals();
+	const { data: categoriesData, isLoading: isLoadingCategories } =
+		useCategories(
+			filters.assurance_goals.length === 1
+				? parseInt(filters.assurance_goals[0])
+				: undefined
+		);
+	const { data: assuranceGoalsData, isLoading: isLoadingGoals } =
+		useAssuranceGoals();
 
 	// Calculate pagination information
 	const totalItems = techniquesData?.count || 0;
@@ -225,6 +237,46 @@ export default function TechniquesList() {
 
 	// Access techniques data safely
 	const techniques = techniquesData?.results || [];
+
+	// Apply filters function
+	const applyFilters = () => {
+		// Build URL with current filters
+		const params = new URLSearchParams();
+
+		// Add search if provided
+		if (filters.search) {
+			params.set("search", filters.search);
+		}
+
+		// Add assurance goals if set (currently API only supports one)
+		if (filters.assurance_goals.length > 0) {
+			params.set("assurance_goals", filters.assurance_goals[0]);
+		}
+
+		// Add categories if set (currently API only supports one)
+		if (filters.categories.length > 0) {
+			params.set("categories", filters.categories[0]);
+		}
+
+		// Add model dependency if set (currently API only supports one)
+		if (filters.model_dependency.length > 0) {
+			params.set("model_dependency", filters.model_dependency[0]);
+		}
+
+		// TODO: Add rating filters once API supports them
+
+		// Always set page to 1 when applying filters
+		params.set("page", "1");
+
+		// Navigate
+		window.location.href = `/techniques?${params.toString()}`;
+	};
+
+	// Reset filters function
+	const resetFilters = () => {
+		setFilters(initialFilters);
+		window.location.href = "/techniques?page=1";
+	};
 
 	return (
 		<div className="space-y-6">
@@ -235,257 +287,129 @@ export default function TechniquesList() {
 				</Button>
 			</div>
 
-			<div className="bg-muted/30 p-4 rounded-lg">
-				<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-					<Input
-						placeholder="Search techniques..."
-						value={filters.search || ""}
-						onChange={(e) => {
-							const newValue = e.target.value;
-							if (newValue !== filters.search) {
-								setFilter("search", newValue);
-							}
-						}}
-						onKeyDown={(e) => {
-							if (e.key === "Enter") {
-								// Build URL with current filters
-								const params = new URLSearchParams();
-
-								// Add search if provided
-								if (filters.search) {
-									params.set("search", filters.search);
-								}
-
-								// Add assurance goal if set
-								if (
-									filters.assurance_goal &&
-									filters.assurance_goal !== "all"
-								) {
-									params.set(
-										"assurance_goals",
-										filters.assurance_goal
-									);
-								}
-
-								// Add category if set
-								if (
-									filters.category &&
-									filters.category !== "all"
-								) {
-									params.set("categories", filters.category);
-								}
-
-								// Always set page
-								params.set("page", "1");
-
-								// Navigate
-								window.location.href = `/techniques?${params.toString()}`;
-							}
-						}}
+			{/* Main content with sidebar */}
+			<div className="flex flex-col md:flex-row gap-6">
+				{/* Sidebar */}
+				<div className="md:w-80 shrink-0">
+					<TechniquesSidebar
+						filters={filters}
+						setFilters={setFilters}
+						applyFilters={applyFilters}
+						resetFilters={resetFilters}
+						assuranceGoals={assuranceGoalsData?.results}
+						categories={categoriesData?.results}
+						isDataLoading={isLoadingGoals || isLoadingCategories}
+						isMobileOpen={isSidebarOpen}
+						setIsMobileOpen={setSidebarOpen}
 					/>
-					<Select
-						value={filters.assurance_goal || "all"}
-						onValueChange={(value) => {
-							if (value === "all") {
-								window.location.href = "/techniques?page=1";
-							} else {
-								window.location.href = `/techniques?assurance_goals=${value}&page=1`;
-							}
-						}}
-					>
-						<SelectTrigger>
-							<SelectValue placeholder="Assurance Goal" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="all">
-								All Assurance Goals
-							</SelectItem>
-							{assuranceGoalsData?.results?.map(
-								(goal: AssuranceGoal) => (
-									<SelectItem
-										key={goal.id}
-										value={goal.id.toString()}
-									>
-										{goal.name}
-									</SelectItem>
-								)
-							)}
-						</SelectContent>
-					</Select>
-					<Select
-						value={filters.category || "all"}
-						onValueChange={(value) => {
-							const params = new URLSearchParams();
-
-							// Add category filter if not "all"
-							if (value !== "all") {
-								params.set("categories", value);
-							}
-
-							// Add assurance goal filter if it's set
-							if (
-								filters.assurance_goal &&
-								filters.assurance_goal !== "all"
-							) {
-								params.set(
-									"assurance_goals",
-									filters.assurance_goal
-								);
-							}
-
-							// Always set page
-							params.set("page", "1");
-
-							// Navigate to filtered URL
-							window.location.href = `/techniques?${params.toString()}`;
-						}}
-					>
-						<SelectTrigger>
-							<SelectValue placeholder="Category" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="all">All Categories</SelectItem>
-							{categoriesData?.results?.map((cat: Category) => (
-								<SelectItem
-									key={cat.id}
-									value={cat.id.toString()}
-								>
-									{cat.name}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
-					<div className="flex gap-2">
-						<Button
-							onClick={() => {
-								// Build URL with all current filters
-								const params = new URLSearchParams();
-
-								// Add search if provided
-								if (filters.search) {
-									params.set("search", filters.search);
-								}
-
-								// Add assurance goal if set
-								if (
-									filters.assurance_goal &&
-									filters.assurance_goal !== "all"
-								) {
-									params.set(
-										"assurance_goals",
-										filters.assurance_goal
-									);
-								}
-
-								// Add category if set
-								if (
-									filters.category &&
-									filters.category !== "all"
-								) {
-									params.set("categories", filters.category);
-								}
-
-								params.set("page", "1");
-
-								// Navigate to filtered URL
-								window.location.href = `/techniques?${params.toString()}`;
-							}}
-						>
-							Apply Filters
-						</Button>
-						<Button
-							variant="outline"
-							onClick={() => {
-								// Direct navigation to reset
-								window.location.href = "/techniques?page=1";
-							}}
-						>
-							Reset
-						</Button>
-					</div>
 				</div>
-			</div>
 
-			{isLoading ? (
-				<div className="flex justify-center items-center py-8">
-					<Loader2 className="h-8 w-8 animate-spin text-primary" />
-					<span className="ml-2">Loading techniques...</span>
-				</div>
-			) : error ? (
-				<div className="text-center py-8 text-red-500">
-					<p>Error loading techniques: {(error as Error).message}</p>
-					<p className="mt-2">
-						Please check that the backend is running and properly
-						configured.
-					</p>
-				</div>
-			) : (
-				<>
-					{techniques.length > 0 ? (
+				{/* Techniques list */}
+				<div className="flex-1">
+					{isLoading ? (
+						<div className="flex justify-center items-center py-8">
+							<Loader2 className="h-8 w-8 animate-spin text-primary" />
+							<span className="ml-2">Loading techniques...</span>
+						</div>
+					) : error ? (
+						<div className="text-center py-8 text-red-500">
+							<p>
+								Error loading techniques:{" "}
+								{(error as Error).message}
+							</p>
+							<p className="mt-2">
+								Please check that the backend is running and
+								properly configured.
+							</p>
+						</div>
+					) : (
 						<>
-							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-								{techniques.map((technique: Technique) => (
-									<TechniqueCard
-										key={technique.id}
-										technique={technique}
-									/>
-								))}
-							</div>
+							{techniques.length > 0 ? (
+								<>
+									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+										{techniques.map(
+											(technique: Technique) => (
+												<TechniqueCard
+													key={technique.id}
+													technique={technique}
+												/>
+											)
+										)}
+									</div>
 
-							{/* Only show pagination if we have more than one page */}
-							{totalPages > 1 && (
-								<Pagination
-									currentPage={currentPage}
-									totalPages={totalPages}
-									onPageChange={(newPage) => {
-										// Build URL with current filters and new page
-										const params = new URLSearchParams();
+									{/* Only show pagination if we have more than one page */}
+									{totalPages > 1 && (
+										<Pagination
+											currentPage={currentPage}
+											totalPages={totalPages}
+											onPageChange={(newPage) => {
+												// Build URL with current filters and new page
+												const params =
+													new URLSearchParams();
 
-										// Add search if provided
-										if (filters.search) {
-											params.set(
-												"search",
-												filters.search
-											);
-										}
+												// Add search if provided
+												if (filters.search) {
+													params.set(
+														"search",
+														filters.search
+													);
+												}
 
-										// Add assurance goal if set
-										if (
-											filters.assurance_goal &&
-											filters.assurance_goal !== "all"
-										) {
-											params.set(
-												"assurance_goals",
-												filters.assurance_goal
-											);
-										}
+												// Add assurance goal if set (API limitation for now)
+												if (
+													filters.assurance_goals
+														.length > 0
+												) {
+													params.set(
+														"assurance_goals",
+														filters
+															.assurance_goals[0]
+													);
+												}
 
-										// Add category if set
-										if (
-											filters.category &&
-											filters.category !== "all"
-										) {
-											params.set(
-												"categories",
-												filters.category
-											);
-										}
+												// Add category if set (API limitation for now)
+												if (
+													filters.categories.length >
+													0
+												) {
+													params.set(
+														"categories",
+														filters.categories[0]
+													);
+												}
 
-										// Set the new page parameter
-										params.set("page", newPage.toString());
+												// Add model_dependency if set (API limitation for now)
+												if (
+													filters.model_dependency
+														.length > 0
+												) {
+													params.set(
+														"model_dependency",
+														filters
+															.model_dependency[0]
+													);
+												}
 
-										// Navigate to new page
-										window.location.href = `/techniques?${params.toString()}`;
-									}}
-									className="mt-8"
-								/>
+												// Set the new page parameter
+												params.set(
+													"page",
+													newPage.toString()
+												);
+
+												// Navigate to new page
+												window.location.href = `/techniques?${params.toString()}`;
+											}}
+											className="mt-8"
+										/>
+									)}
+								</>
+							) : (
+								<EmptyStateComponent />
 							)}
 						</>
-					) : (
-						<EmptyStateComponent />
 					)}
-				</>
-			)}
+				</div>
+			</div>
 		</div>
 	);
 }

@@ -15,20 +15,29 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { AttributeVisualizer } from "@/components/technique/AttributeVisualizer";
-import { InfoLabel } from "@/components/ui/info-label";
+import { StarRating } from "@/components/ui/star-rating";
 import Link from "next/link";
-import { ArrowLeft, Edit, ExternalLink, Loader2, Lock } from "lucide-react";
+import {
+	ArrowLeft,
+	ArrowRight,
+	Brain,
+	CheckCircle,
+	Edit,
+	Eye,
+	ExternalLink,
+	Info,
+	Loader2,
+	Lock,
+	Scale,
+	Shield,
+	ShieldCheck,
+} from "lucide-react";
 import {
 	TechniqueResource,
 	TechniqueExampleUseCase,
 	TechniqueLimitation,
+	AttributeValue,
 } from "@/lib/types";
-
-// Helper component for section headers
-function SectionTitle({ title }: { title: string }) {
-	return <h2 className="text-xl font-semibold mb-4">{title}</h2>;
-}
 
 // Helper component for section containers
 function Section({
@@ -40,65 +49,18 @@ function Section({
 }) {
 	return (
 		<div className="mb-8">
-			<SectionTitle title={title} />
-			<div className="bg-card rounded-lg border p-4">{children}</div>
+			<h2
+				className="text-xl font-semibold mb-4"
+				id={title.toLowerCase().replace(/\s+/g, "-")}
+			>
+				{title}
+			</h2>
+			<div className="bg-card rounded-lg border p-4 shadow-sm">
+				{children}
+			</div>
 		</div>
 	);
 }
-
-// // Component to display technique resources
-// function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
-// 	if (!resources || resources.length === 0) {
-// 		return <p className="text-muted-foreground">No resources available.</p>;
-// 	}
-
-// 	// Group resources by type
-// 	const resourcesByType = resources.reduce((acc, resource) => {
-// 		const typeName = resource.resource_type_name;
-// 		if (!acc[typeName]) {
-// 			acc[typeName] = [];
-// 		}
-// 		acc[typeName].push(resource);
-// 		return acc;
-// 	}, {} as Record<string, TechniqueResource[]>);
-
-// 	return (
-// 		<div className="space-y-4">
-// 			{Object.entries(resourcesByType).map(([typeName, resources]) => (
-// 				<div key={typeName} className="space-y-2">
-// 					<h3 className="text-sm font-medium">{typeName}</h3>
-// 					{resources.map((resource) => (
-// 						<div
-// 							key={resource.id}
-// 							className="border rounded-md p-4"
-// 						>
-// 							<div className="flex items-center justify-between">
-// 								<h4 className="font-medium">
-// 									{resource.title}
-// 								</h4>
-// 								<Button asChild variant="outline" size="sm">
-// 									<a
-// 										href={resource.url}
-// 										target="_blank"
-// 										rel="noopener noreferrer"
-// 									>
-// 										<ExternalLink className="h-4 w-4 mr-2" />{" "}
-// 										View
-// 									</a>
-// 								</Button>
-// 							</div>
-// 							{resource.description && (
-// 								<p className="text-sm mt-2 text-muted-foreground">
-// 									{resource.description}
-// 								</p>
-// 							)}
-// 						</div>
-// 					))}
-// 				</div>
-// 			))}
-// 		</div>
-// 	);
-// }
 
 // Component to display technique resources
 function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
@@ -124,7 +86,7 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 					{resources.map((resource) => (
 						<div
 							key={resource.id}
-							className="border rounded-md p-4"
+							className="border rounded-md p-4 hover:border-primary transition-colors"
 						>
 							<div className="flex items-center justify-between">
 								<h4 className="font-medium">
@@ -136,9 +98,13 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 									size="sm"
 									disabled={true}
 									title="Links temporarily disabled pending review"
+									className="flex items-center gap-1"
 								>
-									<ExternalLink className="h-4 w-4 mr-2" />{" "}
-									View
+									<ExternalLink
+										className="h-4 w-4"
+										aria-hidden="true"
+									/>
+									<span>View</span>
 								</Button>
 							</div>
 							{resource.description && (
@@ -167,16 +133,47 @@ function TechniqueExampleUseCases({
 		);
 	}
 
+	// Group use cases by assurance goal
+	const groupedUseCases = useCases.reduce((acc, useCase) => {
+		const goalName = useCase.assurance_goal_name || "Other";
+		if (!acc[goalName]) {
+			acc[goalName] = [];
+		}
+		acc[goalName].push(useCase);
+		return acc;
+	}, {} as Record<string, TechniqueExampleUseCase[]>);
+
+	// Map assurance goals to their respective icons
+	const goalIcons = {
+		Explainability: <Brain className="h-5 w-5" aria-hidden="true" />,
+		Fairness: <Scale className="h-5 w-5" aria-hidden="true" />,
+		Security: <Shield className="h-5 w-5" aria-hidden="true" />,
+		Safety: <ShieldCheck className="h-5 w-5" aria-hidden="true" />,
+		Reliability: <CheckCircle className="h-5 w-5" aria-hidden="true" />,
+		Transparency: <Eye className="h-5 w-5" aria-hidden="true" />,
+		Privacy: <Lock className="h-5 w-5" aria-hidden="true" />,
+		Other: <Info className="h-5 w-5" aria-hidden="true" />,
+	};
+
 	return (
-		<div className="space-y-6">
-			{useCases.map((useCase) => (
-				<div key={useCase.id} className="space-y-2">
-					{useCase.assurance_goal_name && (
-						<Badge variant="outline">
-							{useCase.assurance_goal_name}
-						</Badge>
-					)}
-					<p className="whitespace-pre-line">{useCase.description}</p>
+		<div className="space-y-8">
+			{Object.entries(groupedUseCases).map(([goalName, cases]) => (
+				<div key={goalName} className="space-y-4">
+					<div className="flex items-center gap-2 text-primary font-medium">
+						{goalIcons[goalName as keyof typeof goalIcons] || (
+							<Info className="h-5 w-5" aria-hidden="true" />
+						)}
+						<h3 className="font-medium">{goalName}</h3>
+					</div>
+					<div className="space-y-4 pl-7">
+						{cases.map((useCase) => (
+							<div key={useCase.id} className="space-y-1">
+								<p className="whitespace-pre-line">
+									{useCase.description}
+								</p>
+							</div>
+						))}
+					</div>
 				</div>
 			))}
 		</div>
@@ -198,28 +195,47 @@ function TechniqueLimitations({
 	return (
 		<div className="space-y-4">
 			{limitations.map((limitation) => {
-				// Parse the nested JSON in the description field
-				let parsedDescription = limitation.description;
+				// Try to parse the nested JSON in the description field
+				const parsedDescription = limitation.description;
 				try {
 					// Try to parse the string as JSON
 					const parsedData = JSON.parse(limitation.description);
+
 					// If it's an array with objects containing description fields, extract them
-					if (
-						Array.isArray(parsedData) &&
-						parsedData.length > 0 &&
-						parsedData[0].description
-					) {
-						parsedDescription = parsedData[0].description;
+					if (Array.isArray(parsedData) && parsedData.length > 0) {
+						return (
+							<div key={limitation.id} className="space-y-2">
+								{parsedData.map((item, index) => (
+									<div
+										key={index}
+										className="flex items-start gap-2 py-1"
+									>
+										<ArrowRight
+											className="h-4 w-4 text-primary mt-1 flex-shrink-0"
+											aria-hidden="true"
+										/>
+										<span>{item.description || item}</span>
+									</div>
+								))}
+							</div>
+						);
 					}
-				} catch (e) {
+				} catch {
 					// If parsing fails, use the original description
-					console.error(
-						"Failed to parse limitation description JSON:",
-						e
-					);
 				}
 
-				return <div key={limitation.id}>{parsedDescription}</div>;
+				return (
+					<div
+						key={limitation.id}
+						className="flex items-start gap-2 py-1"
+					>
+						<ArrowRight
+							className="h-4 w-4 text-primary mt-1 flex-shrink-0"
+							aria-hidden="true"
+						/>
+						<span>{parsedDescription}</span>
+					</div>
+				);
 			})}
 		</div>
 	);
@@ -245,7 +261,10 @@ export default function TechniqueDetailPage() {
 		return (
 			<MainLayout>
 				<div className="flex justify-center items-center py-12">
-					<Loader2 className="h-8 w-8 animate-spin text-primary" />
+					<Loader2
+						className="h-8 w-8 animate-spin text-primary"
+						aria-hidden="true"
+					/>
 					<span className="ml-2">Loading technique details...</span>
 				</div>
 			</MainLayout>
@@ -271,6 +290,46 @@ export default function TechniqueDetailPage() {
 		);
 	}
 
+	// Helper function to parse category tags
+	const parseCategoryTags = (categoryTagsStr: string) => {
+		if (!categoryTagsStr) return [];
+
+		return categoryTagsStr
+			.split("#")
+			.filter((tag) => tag.trim().length > 0)
+			.map((tag) => {
+				const parts = tag.trim().split("/");
+				// Format category name (remove hyphens, title case)
+				const formatName = (name: string) => {
+					return name
+						.split("-")
+						.map(
+							(word) =>
+								word.charAt(0).toUpperCase() + word.slice(1)
+						)
+						.join(" ");
+				};
+
+				return {
+					category: formatName(parts[0]),
+					subcategory: parts.length > 1 ? formatName(parts[1]) : null,
+				};
+			});
+	};
+
+	const categoryTags = parseCategoryTags(technique.category_tags);
+
+	// Map assurance goals to their respective icons
+	const goalIcons = {
+		Explainability: <Brain className="h-5 w-5" />,
+		Fairness: <Scale className="h-5 w-5" />,
+		Security: <Shield className="h-5 w-5" />,
+		Safety: <ShieldCheck className="h-5 w-5" />,
+		Reliability: <CheckCircle className="h-5 w-5" />,
+		Transparency: <Eye className="h-5 w-5" />,
+		Privacy: <Lock className="h-5 w-5" />,
+	};
+
 	return (
 		<TooltipProvider>
 			<MainLayout>
@@ -284,9 +343,11 @@ export default function TechniqueDetailPage() {
 							</h1>
 						</div>
 						<Section title="Description">
-							<p className="whitespace-pre-line">
-								{technique.description}
-							</p>
+							<div className="prose max-w-none">
+								<p className="whitespace-pre-line">
+									{technique.description}
+								</p>
+							</div>
 						</Section>
 
 						<Section title="Example Use Cases">
@@ -310,22 +371,133 @@ export default function TechniqueDetailPage() {
 
 					{/* Sidebar with technique attributes */}
 					<div>
-						<Card className="sticky top-4">
-							<CardHeader className="pb-3">
-								<CardTitle className="text-lg">
-									<InfoLabel
-										label="Technique Attributes"
-										tooltip="Classification metadata for this technique"
-									/>
+						<Card className="sticky top-4 shadow-sm">
+							<CardHeader className="pb-3 border-b">
+								<CardTitle className="text-lg font-semibold">
+									Technique Attributes
+									<span
+										className="ml-1 inline-flex"
+										title="Classification metadata for this technique"
+									>
+										<Info className="h-4 w-4 text-muted-foreground" />
+									</span>
 								</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-6">
+								{/* Assurance Goals with Icons */}
 								<div className="space-y-2">
-									<h3 className="text-sm font-medium">
-										<InfoLabel
-											label="Model Dependency"
-											tooltip="Indicates whether this technique requires access to model internals"
+									<h3 className="text-sm font-medium flex items-center">
+										Assurance Goals
+										<span
+											className="ml-1 inline-flex"
+											title="The primary goals that this technique helps achieve"
+										>
+											<Info className="h-4 w-4 text-muted-foreground" />
+										</span>
+									</h3>
+									<div className="flex flex-wrap gap-3">
+										{technique.assurance_goals.map(
+											(goal) => (
+												<div
+													key={goal.id}
+													className="flex items-center gap-2 p-2 bg-secondary rounded-md"
+													title={goal.name}
+												>
+													{goalIcons[
+														goal.name as keyof typeof goalIcons
+													] || (
+														<Info className="h-5 w-5" />
+													)}
+													<span className="font-medium text-sm">
+														{goal.name}
+													</span>
+												</div>
+											)
+										)}
+									</div>
+								</div>
+
+								{/* Categories (from category tags) */}
+								{technique.category_tags &&
+									categoryTags.length > 0 && (
+										<div className="space-y-2">
+											<h3 className="text-sm font-medium flex items-center">
+												Categories
+												<span
+													className="ml-1 inline-flex"
+													title="Classification categories for this technique"
+												>
+													<Info className="h-4 w-4 text-muted-foreground" />
+												</span>
+											</h3>
+											<div className="space-y-2">
+												{categoryTags.map(
+													(tag, index) => (
+														<div
+															key={index}
+															className="flex justify-between items-center text-sm py-1 border-b last:border-0 border-muted"
+														>
+															<span>
+																{tag.category}
+															</span>
+															{tag.subcategory && (
+																<Badge
+																	variant="outline"
+																	className="text-xs"
+																>
+																	{
+																		tag.subcategory
+																	}
+																</Badge>
+															)}
+														</div>
+													)
+												)}
+											</div>
+										</div>
+									)}
+
+								{/* Ratings */}
+								{technique.complexity_rating ? (
+									<div className="space-y-2">
+										<h3 className="text-sm font-medium flex items-center">
+											Complexity
+										</h3>
+										<StarRating
+											rating={technique.complexity_rating}
+											maxRating={5}
+											className="text-amber-400"
+											aria-label={`Complexity rating: ${technique.complexity_rating} out of 5`}
 										/>
+									</div>
+								) : null}
+
+								{technique.computational_cost_rating ? (
+									<div className="space-y-2">
+										<h3 className="text-sm font-medium flex items-center">
+											Computational Cost
+										</h3>
+										<StarRating
+											rating={
+												technique.computational_cost_rating
+											}
+											maxRating={5}
+											className="text-amber-400"
+											aria-label={`Computational cost rating: ${technique.computational_cost_rating} out of 5`}
+										/>
+									</div>
+								) : null}
+
+								{/* Model Dependency */}
+								<div className="space-y-2">
+									<h3 className="text-sm font-medium flex items-center">
+										Model Dependency
+										<span
+											className="ml-1 inline-flex"
+											title="Indicates whether this technique requires access to model internals"
+										>
+											<Info className="h-4 w-4 text-muted-foreground" />
+										</span>
 									</h3>
 									<div>
 										<Badge
@@ -337,135 +509,85 @@ export default function TechniqueDetailPage() {
 									</div>
 								</div>
 
-								<div className="space-y-2">
-									<h3 className="text-sm font-medium">
-										<InfoLabel
-											label="Assurance Goals"
-											tooltip="The primary goals that this technique helps achieve"
-										/>
+								{/* Goal-Specific Attributes section */}
+								<div className="space-y-3 border-t pt-3">
+									<h3 className="text-sm font-medium flex items-center">
+										Goal-Specific Attributes
+										<span
+											className="ml-1 inline-flex"
+											title="Attributes specific to the technique's assurance goals"
+										>
+											<Info className="h-4 w-4 text-muted-foreground" />
+										</span>
 									</h3>
-									<div className="flex flex-wrap gap-2">
-										{technique.assurance_goals.map(
-											(goal) => (
-												<Badge
-													key={goal.id}
-													className="text-sm"
+
+									{/* Add Explanatory Scope and other attributes */}
+									{technique.attribute_values &&
+										technique.attribute_values.length > 0 &&
+										Object.entries(
+											technique.attribute_values.reduce(
+												(acc, attr) => {
+													const type =
+														attr.attribute_type_name;
+													if (!acc[type]) {
+														acc[type] = [];
+													}
+													acc[type].push(attr);
+													return acc;
+												},
+												{} as Record<
+													string,
+													AttributeValue[]
 												>
-													{goal.name}
-												</Badge>
 											)
-										)}
-									</div>
-								</div>
-
-								<div className="space-y-2">
-									<h3 className="text-sm font-medium">
-										<InfoLabel
-											label="Categories"
-											tooltip="Main classification groups for this technique"
-										/>
-									</h3>
-									<div className="space-y-2">
-										{technique.categories.length > 0 ? (
-											technique.categories.map(
-												(category) => (
-													<div
-														key={category.id}
-														className="flex justify-between items-center text-sm py-1 border-b last:border-0 border-muted"
-													>
-														<span>
-															{category.name}
-														</span>
+										).map(([type, values]) => (
+											<div
+												className="space-y-1"
+												key={type}
+											>
+												<h4 className="text-xs text-muted-foreground">
+													{type}
+												</h4>
+												<div className="flex flex-wrap gap-2">
+													{values.map((value) => (
 														<Badge
+															key={value.id}
 															variant="outline"
-															className="text-xs"
+															className="text-sm"
 														>
-															{
-																category.assurance_goal_name
-															}
+															{value.name}
 														</Badge>
-													</div>
-												)
-											)
-										) : (
-											<p className="text-muted-foreground text-sm">
-												None specified
-											</p>
-										)}
-									</div>
+													))}
+												</div>
+											</div>
+										))}
 								</div>
 
-								<div className="space-y-2">
-									<h3 className="text-sm font-medium">
-										<InfoLabel
-											label="Subcategories"
-											tooltip="More specific classification within categories"
-										/>
-									</h3>
-									<div className="space-y-2">
-										{technique.subcategories.length > 0 ? (
-											technique.subcategories.map(
-												(subcategory) => (
-													<div
-														key={subcategory.id}
-														className="flex justify-between items-center text-sm py-1 border-b last:border-0 border-muted"
-													>
-														<span>
-															{subcategory.name}
-														</span>
-														<Badge
-															variant="outline"
-															className="text-xs"
-														>
-															{
-																subcategory.category_name
-															}
-														</Badge>
-													</div>
-												)
-											)
-										) : (
-											<p className="text-muted-foreground text-sm">
-												None specified
-											</p>
-										)}
-									</div>
-								</div>
-
-								{technique.attributes.length > 0 && (
-									<div className="space-y-6">
-										<h3 className="text-sm font-medium">
-											<InfoLabel
-												label="Technical Attributes"
-												tooltip="Classification metadata for this technique"
-											/>
-										</h3>
-										<AttributeVisualizer
-											attributes={technique.attributes}
-										/>
-									</div>
-								)}
-
-								{technique.tags.length > 0 && (
-									<div className="space-y-2">
-										<h3 className="text-sm font-medium">
-											<InfoLabel
-												label="Tags"
-												tooltip="Keywords associated with this technique"
-											/>
-										</h3>
-										<div className="flex flex-wrap gap-2">
-											{technique.tags.map((tag) => (
-												<Badge
-													key={tag.id}
-													variant="secondary"
+								{/* Tags */}
+								{technique.tags &&
+									technique.tags.length > 0 && (
+										<div className="space-y-2">
+											<h3 className="text-sm font-medium flex items-center">
+												Tags
+												<span
+													className="ml-1 inline-flex"
+													title="Keywords associated with this technique"
 												>
-													{tag.name}
-												</Badge>
-											))}
+													<Info className="h-4 w-4 text-muted-foreground" />
+												</span>
+											</h3>
+											<div className="flex flex-wrap gap-2">
+												{technique.tags.map((tag) => (
+													<Badge
+														key={tag.id}
+														variant="secondary"
+													>
+														{tag.name}
+													</Badge>
+												))}
+											</div>
 										</div>
-									</div>
-								)}
+									)}
 							</CardContent>
 
 							{/* Edit section - delete will be accessible from edit form later */}
@@ -475,7 +597,10 @@ export default function TechniqueDetailPage() {
 										isAuthenticated ? "hidden" : ""
 									}`}
 								>
-									<Lock className="h-4 w-4 mr-2 text-muted-foreground" />
+									<Lock
+										className="h-4 w-4 mr-2 text-muted-foreground"
+										aria-hidden="true"
+									/>
 									<p className="text-sm text-muted-foreground">
 										Authentication is required to edit a
 										technique. Not implemented yet.
@@ -487,14 +612,15 @@ export default function TechniqueDetailPage() {
 									className="w-full"
 									disabled={!isAuthenticated}
 								>
-									{/* This is commented out because the edit form is not fully implemented yet */}
-									{/* <Link href={`/techniques/${id}/edit`}>
-                    <Edit className="h-4 w-4 mr-2" /> Edit
-                    Technique
-                  </Link> */}
-									<Link href="#">
-										<Edit className="h-4 w-4 mr-2" /> Edit
-										Technique
+									<Link
+										href="#"
+										aria-label="Edit technique (disabled)"
+									>
+										<Edit
+											className="h-4 w-4 mr-2"
+											aria-hidden="true"
+										/>{" "}
+										Edit Technique
 									</Link>
 								</Button>
 							</CardFooter>
@@ -505,9 +631,12 @@ export default function TechniqueDetailPage() {
 				{/* Back button at the bottom */}
 				<div className="mt-8">
 					<Button asChild variant="outline" size="sm">
-						<Link href="/techniques">
-							<ArrowLeft className="h-4 w-4 mr-2" /> Back to
-							Techniques
+						<Link
+							href="/techniques"
+							className="flex items-center gap-2"
+						>
+							<ArrowLeft className="h-4 w-4" aria-hidden="true" />
+							<span>Back to Techniques</span>
 						</Link>
 					</Button>
 				</div>

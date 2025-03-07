@@ -11,14 +11,14 @@ from api.models import (
     AssuranceGoal,
     Category,
     SubCategory,
+    Tag,
     AttributeType,
     AttributeValue,
     ResourceType,
     Technique,
-    TechniqueAttribute,
+    TechniqueResource,
     TechniqueExampleUseCase,
     TechniqueLimitation,
-    TechniqueResource,
 )
 
 
@@ -159,312 +159,239 @@ class Command(BaseCommand):
 
         return results
 
-
-def _process_technique(self, row):
-    """Process a single technique row from the CSV"""
-    try:
-        # Extract basic data from the row
-        name = row.get("name", "")
-        description = row.get("description", "")
-        model_dependency = row.get("model_dependency", "Model-Agnostic")
-        assurance_goals_name = row.get("assurance_goals", "")
-
-        # Skip if essential data is missing
-        if not name or not description:
-            self.stdout.write(
-                self.style.WARNING(f"Skipping row with missing name or description")
-            )
-            return
-
-        # Parse JSON fields
+    def _process_technique(self, row):
+        """Process a single technique row from the CSV"""
         try:
-            categories_data = (
-                json.loads(row.get("categories", "[]")) if row.get("categories") else []
-            )
-            subcategories_data = (
-                json.loads(row.get("subcategories", "[]"))
-                if row.get("subcategories")
-                else []
-            )
-            attributes_data = (
-                json.loads(row.get("attributes", "[]")) if row.get("attributes") else []
-            )
-            example_use_cases_data = (
-                json.loads(row.get("example_use_cases", "[]"))
-                if row.get("example_use_cases")
-                else []
-            )
-            resources_data = (
-                json.loads(row.get("resources", "[]")) if row.get("resources") else []
-            )
-            limitations_data = (
-                row.get("limitations", "").split("|") if row.get("limitations") else []
-            )
-        except json.JSONDecodeError as e:
-            self.stdout.write(self.style.ERROR(f"JSON parsing error for {name}: {e}"))
-            return
+            # Extract basic data from the row
+            name = row.get("name", "")
+            description = row.get("description", "")
+            model_dependency = row.get("model_dependency", "Model-Agnostic")
+            assurance_goals_name = row.get("assurance_goals", "")
+            category_tags = row.get("category_tags", "")
+            complexity_rating = row.get("complexity_rating")
+            computational_cost_rating = row.get("computational_cost_rating")
 
-        # If a technique already exists with this name, we'll update it
-        # Otherwise, we'll create a new one
-        technique, created = Technique.objects.update_or_create(
-            name=name,
-            defaults={
-                "description": description,
-                "model_dependency": model_dependency,
-            },
-        )
-
-        # Clear existing relationships if updating
-        if not created:
-            technique.assurance_goals.clear()
-            technique.categories.clear()
-            technique.subcategories.clear()
-            technique.tags.clear()
-
-            # Delete related objects
-            TechniqueAttribute.objects.filter(technique=technique).delete()
-            TechniqueResource.objects.filter(technique=technique).delete()
-            TechniqueExampleUseCase.objects.filter(technique=technique).delete()
-            TechniqueLimitation.objects.filter(technique=technique).delete()
-
-        # Process assurance goals (could be a single name or multiple)
-        goal_names = []
-        if assurance_goals_name:
-            if "," in assurance_goals_name:
-                goal_names = [name.strip() for name in assurance_goals_name.split(",")]
-            else:
-                goal_names = [assurance_goals_name.strip()]
-
-            for goal_name in goal_names:
-                goal, _ = AssuranceGoal.objects.get_or_create(
-                    name=goal_name,
-                    defaults={
-                        "description": f"{goal_name} techniques for trustworthy AI"
-                    },
-                )
-                technique.assurance_goals.add(goal)
-
-        # Process categories
-        for cat_data in categories_data:
-            goal_name = cat_data.get("goal", assurance_goals_name)
-            cat_name = cat_data.get("category")
-
-            if not cat_name:
-                continue
-
-            # Get or create the goal
-            goal, _ = AssuranceGoal.objects.get_or_create(
-                name=goal_name,
-                defaults={"description": f"{goal_name} techniques for trustworthy AI"},
-            )
-
-            # Get or create the category
-            category, _ = Category.objects.get_or_create(
-                name=cat_name,
-                assurance_goal=goal,
-                defaults={"description": f"Category for {cat_name}"},
-            )
-
-            # Add category to technique
-            technique.categories.add(category)
-
-        # Process subcategories
-        for subcat_data in subcategories_data:
-            cat_name = subcat_data.get("category")
-            subcat_name = subcat_data.get("subcategory")
-
-            if not cat_name or not subcat_name:
-                continue
-
-            # Find the category - we need to search across all assurance goals
-            try:
-                categories = Category.objects.filter(name=cat_name)
-                if categories.exists():
-                    category = categories.first()
-
-                    # Get or create subcategory
-                    subcategory, _ = SubCategory.objects.get_or_create(
-                        name=subcat_name,
-                        category=category,
-                        defaults={"description": f"Subcategory for {subcat_name}"},
-                    )
-
-                    # Add subcategory to technique
-                    technique.subcategories.add(subcategory)
-            except Category.DoesNotExist:
+            # Skip if essential data is missing
+            if not name or not description:
                 self.stdout.write(
-                    self.style.WARNING(f"Category {cat_name} not found for {name}")
+                    self.style.WARNING(f"Skipping row with missing name or description")
                 )
+                return
 
-        # Process category_tags (new format)
-        category_tags = row.get("category_tags", "")
-        if category_tags:
-            parsed_categories = self._parse_category_tags(category_tags)
-
-            for cat_data in parsed_categories:
-                cat_name = cat_data.get("category")
-                subcat_name = cat_data.get("subcategory")
-
-                # Use first available assurance goal, or default to Explainability
-                goal_name = goal_names[0] if goal_names else "Explainability"
-
-                goal, _ = AssuranceGoal.objects.get_or_create(
-                    name=goal_name,
-                    defaults={
-                        "description": f"{goal_name} techniques for trustworthy AI"
-                    },
+            # Parse JSON fields
+            try:
+                attributes_data = (
+                    json.loads(row.get("attributes", "[]"))
+                    if row.get("attributes")
+                    else []
                 )
-
-                # Get or create category
-                category, _ = Category.objects.get_or_create(
-                    name=cat_name,
-                    assurance_goal=goal,
-                    defaults={"description": f"Category for {cat_name}"},
+                example_use_cases_data = (
+                    json.loads(row.get("example_use_cases", "[]"))
+                    if row.get("example_use_cases")
+                    else []
                 )
+                resources_data = (
+                    json.loads(row.get("resources", "[]"))
+                    if row.get("resources")
+                    else []
+                )
+                limitations_data = (
+                    row.get("limitations", "").split("|")
+                    if row.get("limitations")
+                    else []
+                )
+            except json.JSONDecodeError as e:
+                self.stdout.write(
+                    self.style.ERROR(f"JSON parsing error for {name}: {e}")
+                )
+                return
 
-                # Add category to technique
-                technique.categories.add(category)
-
-                # Process subcategory if present
-                if subcat_name:
-                    subcategory, _ = SubCategory.objects.get_or_create(
-                        name=subcat_name,
-                        category=category,
-                        defaults={"description": f"Subcategory for {subcat_name}"},
-                    )
-
-                    # Add subcategory to technique
-                    technique.subcategories.add(subcategory)
-
-        # Process attributes
-        for attr_data in attributes_data:
-            attr_type_name = attr_data.get("type")
-            attr_value_name = attr_data.get("value")
-
-            if not attr_type_name or not attr_value_name:
-                continue
-
-            # Get or create attribute type
-            attr_type, _ = AttributeType.objects.get_or_create(
-                name=attr_type_name,
+            # Create or update the technique
+            technique, created = Technique.objects.update_or_create(
+                name=name,
                 defaults={
-                    "description": f"The {attr_type_name.lower()} of the technique"
+                    "description": description,
+                    "model_dependency": model_dependency,
+                    "category_tags": category_tags,
+                    "complexity_rating": (
+                        int(complexity_rating)
+                        if complexity_rating and complexity_rating.isdigit()
+                        else None
+                    ),
+                    "computational_cost_rating": (
+                        int(computational_cost_rating)
+                        if computational_cost_rating
+                        and computational_cost_rating.isdigit()
+                        else None
+                    ),
                 },
             )
 
-            # Get or create attribute value
-            attr_value, _ = AttributeValue.objects.get_or_create(
-                attribute_type=attr_type,
-                name=attr_value_name,
-                defaults={"description": f"{attr_value_name} {attr_type_name.lower()}"},
-            )
+            # Clear existing relationships if updating
+            if not created:
+                # Clear M2M relationships
+                technique.assurance_goals.clear()
+                technique.categories.clear()
+                technique.subcategories.clear()
+                technique.tags.clear()
 
-            # Add attribute to technique
-            TechniqueAttribute.objects.get_or_create(
-                technique=technique, attribute_value=attr_value
-            )
+                # Delete related objects
+                AttributeValue.objects.filter(technique=technique).delete()
+                TechniqueResource.objects.filter(technique=technique).delete()
+                TechniqueExampleUseCase.objects.filter(technique=technique).delete()
+                TechniqueLimitation.objects.filter(technique=technique).delete()
 
-        # Process example use cases
-        for use_case_data in example_use_cases_data:
-            use_case_desc = use_case_data.get("description")
-            use_case_goal_name = use_case_data.get("goal", assurance_goals_name)
+            # Process assurance goals
+            goal_names = []
+            if assurance_goals_name:
+                if "," in assurance_goals_name:
+                    goal_names = [
+                        name.strip() for name in assurance_goals_name.split(",")
+                    ]
+                else:
+                    goal_names = [assurance_goals_name.strip()]
 
-            if not use_case_desc:
-                continue
+                for goal_name in goal_names:
+                    goal, _ = AssuranceGoal.objects.get_or_create(
+                        name=goal_name,
+                        defaults={
+                            "description": f"{goal_name} techniques for trustworthy AI"
+                        },
+                    )
+                    technique.assurance_goals.add(goal)
 
-            # Find the goal
-            try:
-                use_case_goal, _ = AssuranceGoal.objects.get_or_create(
-                    name=use_case_goal_name,
+            # Process category_tags
+            if category_tags:
+                parsed_categories = self._parse_category_tags(category_tags)
+
+                for cat_data in parsed_categories:
+                    cat_name = cat_data.get("category")
+                    subcat_name = cat_data.get("subcategory")
+
+                    # Use first available assurance goal, or default to Explainability
+                    goal_name = goal_names[0] if goal_names else "Explainability"
+
+                    goal, _ = AssuranceGoal.objects.get_or_create(
+                        name=goal_name,
+                        defaults={
+                            "description": f"{goal_name} techniques for trustworthy AI"
+                        },
+                    )
+
+                    # Get or create category
+                    category, _ = Category.objects.get_or_create(
+                        name=cat_name,
+                        assurance_goal=goal,
+                        defaults={"description": f"Category for {cat_name}"},
+                    )
+
+                    # Add category to technique
+                    technique.categories.add(category)
+
+                    # Process subcategory if present
+                    if subcat_name:
+                        subcategory, _ = SubCategory.objects.get_or_create(
+                            name=subcat_name,
+                            category=category,
+                            defaults={"description": f"Subcategory for {subcat_name}"},
+                        )
+
+                        # Add subcategory to technique
+                        technique.subcategories.add(subcategory)
+
+            # Process attributes
+            for attr_data in attributes_data:
+                attr_type_name = attr_data.get("type")
+                attr_value_name = attr_data.get("value")
+
+                if not attr_type_name or not attr_value_name:
+                    continue
+
+                # Get or create attribute type
+                attr_type, _ = AttributeType.objects.get_or_create(
+                    name=attr_type_name,
                     defaults={
-                        "description": f"{use_case_goal_name} techniques for trustworthy AI"
+                        "description": f"The {attr_type_name.lower()} of the technique"
                     },
                 )
 
-                # Create example use case
-                TechniqueExampleUseCase.objects.get_or_create(
+                # Create attribute value directly related to technique
+                AttributeValue.objects.create(
+                    attribute_type=attr_type,
+                    name=attr_value_name,
+                    description=f"{attr_value_name} {attr_type_name.lower()}",
                     technique=technique,
-                    description=use_case_desc,
-                    assurance_goal=use_case_goal,
-                )
-            except Exception as e:
-                self.stdout.write(
-                    self.style.WARNING(f"Error creating use case for {name}: {e}")
                 )
 
-        # Process limitations
-        for limitation in limitations_data:
-            if limitation.strip():
-                TechniqueLimitation.objects.get_or_create(
-                    technique=technique, description=limitation.strip()
+            # Process example use cases
+            for use_case_data in example_use_cases_data:
+                use_case_desc = use_case_data.get("description")
+                use_case_goal_name = use_case_data.get("goal", assurance_goals_name)
+
+                if not use_case_desc:
+                    continue
+
+                # Find the goal
+                try:
+                    use_case_goal, _ = AssuranceGoal.objects.get_or_create(
+                        name=use_case_goal_name,
+                        defaults={
+                            "description": f"{use_case_goal_name} techniques for trustworthy AI"
+                        },
+                    )
+
+                    # Create example use case
+                    TechniqueExampleUseCase.objects.create(
+                        technique=technique,
+                        description=use_case_desc,
+                        assurance_goal=use_case_goal,
+                    )
+                except Exception as e:
+                    self.stdout.write(
+                        self.style.WARNING(f"Error creating use case for {name}: {e}")
+                    )
+
+            # Process limitations
+            for limitation in limitations_data:
+                if limitation.strip():
+                    TechniqueLimitation.objects.create(
+                        technique=technique, description=limitation.strip()
+                    )
+
+            # Process resources
+            for resource_data in resources_data:
+                if not isinstance(resource_data, dict):
+                    continue
+
+                resource_type_name = resource_data.get("type", "Website")
+                resource_title = resource_data.get("title", "Resource")
+                resource_url = resource_data.get("url", "")
+                resource_desc = resource_data.get("description", "")
+
+                if not resource_url:
+                    continue
+
+                # Get or create resource type
+                resource_type, _ = ResourceType.objects.get_or_create(
+                    name=resource_type_name,
+                    defaults={"icon": resource_type_name.lower()},
                 )
 
-        # Process resources
-        for resource_data in resources_data:
-            if not isinstance(resource_data, dict):
-                continue
+                # Create resource
+                TechniqueResource.objects.create(
+                    technique=technique,
+                    resource_type=resource_type,
+                    url=resource_url,
+                    title=resource_title,
+                    description=resource_desc,
+                )
 
-            resource_type_name = resource_data.get("type", "Website")
-            resource_title = resource_data.get("title", "Resource")
-            resource_url = resource_data.get("url", "")
-            resource_desc = resource_data.get("description", "")
+            status = "Created" if created else "Updated"
+            self.stdout.write(self.style.SUCCESS(f"{status} technique: {name}"))
 
-            if not resource_url:
-                continue
-
-            # Get or create resource type
-            resource_type, _ = ResourceType.objects.get_or_create(
-                name=resource_type_name,
-                defaults={"icon": resource_type_name.lower()},
+        except Exception as e:
+            self.stdout.write(
+                self.style.ERROR(
+                    f'Error processing technique {row.get("name", "Unknown")}: {str(e)}'
+                )
             )
-
-            # Create resource
-            TechniqueResource.objects.get_or_create(
-                technique=technique,
-                resource_type=resource_type,
-                url=resource_url,
-                defaults={"title": resource_title, "description": resource_desc},
-            )
-
-        # Process complexity and computational cost if available
-        complexity = row.get("complexity_rating")
-        if complexity and complexity.isdigit():
-            complexity_type, _ = AttributeType.objects.get_or_create(
-                name="Complexity",
-                defaults={"description": "The complexity rating of the technique"},
-            )
-            complexity_value, _ = AttributeValue.objects.get_or_create(
-                attribute_type=complexity_type,
-                name=complexity,
-                defaults={"description": f"Complexity level {complexity}"},
-            )
-            TechniqueAttribute.objects.get_or_create(
-                technique=technique, attribute_value=complexity_value
-            )
-
-        cost = row.get("computational_cost_rating")
-        if cost and cost.isdigit():
-            cost_type, _ = AttributeType.objects.get_or_create(
-                name="Computational Cost",
-                defaults={
-                    "description": "The computational cost rating of the technique"
-                },
-            )
-            cost_value, _ = AttributeValue.objects.get_or_create(
-                attribute_type=cost_type,
-                name=cost,
-                defaults={"description": f"Computational cost level {cost}"},
-            )
-            TechniqueAttribute.objects.get_or_create(
-                technique=technique, attribute_value=cost_value
-            )
-
-        status = "Created" if created else "Updated"
-        self.stdout.write(self.style.SUCCESS(f"{status} technique: {name}"))
-
-    except Exception as e:
-        self.stdout.write(
-            self.style.ERROR(
-                f'Error processing technique {row.get("name", "Unknown")}: {str(e)}'
-            )
-        )

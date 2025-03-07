@@ -3,48 +3,53 @@ import React from "react";
 import { StarRating } from "@/components/ui/star-rating";
 import { Badge } from "@/components/ui/badge";
 import { InfoLabel } from "@/components/ui/info-label";
-import { TechniqueAttribute } from "@/lib/types";
+import { AttributeValue } from "@/lib/types";
 
-// Define visualization types - extendable for future visualizations
+// Define visualization types
 type VisualizationType = "stars" | "badge" | "percentage" | "default";
 
 // Define mapping of attribute types to visualization methods
 interface AttributeConfig {
 	visualizationType: VisualizationType;
 	tooltip: string;
-	valueMapper?: (value: string | number) => string | number; // More specific type
+	valueMapper?: (value: string | number) => string | number;
 }
 
-// This can be expanded as new attribute types are added
+// Attribute type to visualization mapping
 const ATTRIBUTE_CONFIGS: Record<string, AttributeConfig> = {
 	Complexity: {
 		visualizationType: "stars",
 		tooltip: "How complex is this technique to implement (1-5)",
-		valueMapper: (value) => Number(value) || 0, // Ensure value is a number
+		valueMapper: (value) => Number(value) || 0,
 	},
 	"Computational Cost": {
 		visualizationType: "stars",
 		tooltip: "How computationally expensive is this technique (1-5)",
-		valueMapper: (value) => Number(value) || 0, // Ensure value is a number
+		valueMapper: (value) => Number(value) || 0,
 	},
-	// Add new attributes here in the future
+	// Add configurations for new attribute types from the API
+	"Explanatory Scope": {
+		visualizationType: "default",
+		tooltip: "Whether the technique provides local or global explanations",
+	},
 };
 
 interface AttributeVisualizerProps {
-	attributes: TechniqueAttribute[];
+	attributeValues: AttributeValue[];
 }
 
 export const AttributeVisualizer: React.FC<AttributeVisualizerProps> = ({
-	attributes,
+	attributeValues,
 }) => {
 	// Group attributes by type
-	const attributesByType = attributes.reduce((acc, attr) => {
-		if (!acc[attr.attribute_type]) {
-			acc[attr.attribute_type] = [];
+	const attributesByType = attributeValues.reduce((acc, attr) => {
+		const type = attr.attribute_type_name;
+		if (!acc[type]) {
+			acc[type] = [];
 		}
-		acc[attr.attribute_type].push(attr);
+		acc[type].push(attr);
 		return acc;
-	}, {} as Record<string, TechniqueAttribute[]>);
+	}, {} as Record<string, AttributeValue[]>);
 
 	return (
 		<div className="space-y-4">
@@ -54,9 +59,9 @@ export const AttributeVisualizer: React.FC<AttributeVisualizerProps> = ({
 					tooltip: `${type} attribute`,
 				};
 
-				// Get first attribute value for this type (assuming most types have one value)
+				// Get first attribute value for this type (for single-value attributes like ratings)
 				const attr = attrs[0];
-				const rawValue = attr.attribute_value_name;
+				const rawValue = attr.name;
 				const value = config.valueMapper
 					? config.valueMapper(rawValue)
 					: rawValue;
@@ -87,7 +92,7 @@ export const AttributeVisualizer: React.FC<AttributeVisualizerProps> = ({
 							<div className="flex flex-wrap gap-2">
 								{attrs.map((attr) => (
 									<Badge key={attr.id} variant="secondary">
-										{attr.attribute_value_name}
+										{attr.name}
 									</Badge>
 								))}
 							</div>

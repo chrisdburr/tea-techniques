@@ -46,60 +46,6 @@ function Section({
 	);
 }
 
-// // Component to display technique resources
-// function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
-// 	if (!resources || resources.length === 0) {
-// 		return <p className="text-muted-foreground">No resources available.</p>;
-// 	}
-
-// 	// Group resources by type
-// 	const resourcesByType = resources.reduce((acc, resource) => {
-// 		const typeName = resource.resource_type_name;
-// 		if (!acc[typeName]) {
-// 			acc[typeName] = [];
-// 		}
-// 		acc[typeName].push(resource);
-// 		return acc;
-// 	}, {} as Record<string, TechniqueResource[]>);
-
-// 	return (
-// 		<div className="space-y-4">
-// 			{Object.entries(resourcesByType).map(([typeName, resources]) => (
-// 				<div key={typeName} className="space-y-2">
-// 					<h3 className="text-sm font-medium">{typeName}</h3>
-// 					{resources.map((resource) => (
-// 						<div
-// 							key={resource.id}
-// 							className="border rounded-md p-4"
-// 						>
-// 							<div className="flex items-center justify-between">
-// 								<h4 className="font-medium">
-// 									{resource.title}
-// 								</h4>
-// 								<Button asChild variant="outline" size="sm">
-// 									<a
-// 										href={resource.url}
-// 										target="_blank"
-// 										rel="noopener noreferrer"
-// 									>
-// 										<ExternalLink className="h-4 w-4 mr-2" />{" "}
-// 										View
-// 									</a>
-// 								</Button>
-// 							</div>
-// 							{resource.description && (
-// 								<p className="text-sm mt-2 text-muted-foreground">
-// 									{resource.description}
-// 								</p>
-// 							)}
-// 						</div>
-// 					))}
-// 				</div>
-// 			))}
-// 		</div>
-// 	);
-// }
-
 // Component to display technique resources
 function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 	if (!resources || resources.length === 0) {
@@ -198,25 +144,27 @@ function TechniqueLimitations({
 	return (
 		<div className="space-y-4">
 			{limitations.map((limitation) => {
-				// Parse the nested JSON in the description field
-				let parsedDescription = limitation.description;
+				// Try to parse the nested JSON in the description field
+				const parsedDescription = limitation.description;
 				try {
 					// Try to parse the string as JSON
 					const parsedData = JSON.parse(limitation.description);
+
 					// If it's an array with objects containing description fields, extract them
-					if (
-						Array.isArray(parsedData) &&
-						parsedData.length > 0 &&
-						parsedData[0].description
-					) {
-						parsedDescription = parsedData[0].description;
+					if (Array.isArray(parsedData) && parsedData.length > 0) {
+						return (
+							<div key={limitation.id} className="space-y-2">
+								{parsedData.map((item, index) => (
+									<div key={index} className="ml-4 list-item">
+										{item.description || item}
+									</div>
+								))}
+							</div>
+						);
 					}
-				} catch (e) {
+				} catch {
 					// If parsing fails, use the original description
-					console.error(
-						"Failed to parse limitation description JSON:",
-						e
-					);
+					console.log("Using original limitation text");
 				}
 
 				return <div key={limitation.id}>{parsedDescription}</div>;
@@ -271,6 +219,24 @@ export default function TechniqueDetailPage() {
 		);
 	}
 
+	// Helper function to parse category tags
+	const parseCategoryTags = (categoryTagsStr: string) => {
+		if (!categoryTagsStr) return [];
+
+		return categoryTagsStr
+			.split("#")
+			.filter((tag) => tag.trim().length > 0)
+			.map((tag) => {
+				const parts = tag.trim().split("/");
+				return {
+					category: parts[0],
+					subcategory: parts.length > 1 ? parts[1] : null,
+				};
+			});
+	};
+
+	const categoryTags = parseCategoryTags(technique.category_tags);
+
 	return (
 		<TooltipProvider>
 			<MainLayout>
@@ -282,6 +248,26 @@ export default function TechniqueDetailPage() {
 							<h1 className="text-3xl font-bold">
 								{technique.name}
 							</h1>
+							{technique.complexity_rating ||
+							technique.computational_cost_rating ? (
+								<div className="flex gap-4 mt-2">
+									{technique.complexity_rating ? (
+										<div className="text-sm text-muted-foreground">
+											Complexity:{" "}
+											{technique.complexity_rating}/5
+										</div>
+									) : null}
+									{technique.computational_cost_rating ? (
+										<div className="text-sm text-muted-foreground">
+											Computational Cost:{" "}
+											{
+												technique.computational_cost_rating
+											}
+											/5
+										</div>
+									) : null}
+								</div>
+							) : null}
 						</div>
 						<Section title="Description">
 							<p className="whitespace-pre-line">
@@ -432,40 +418,81 @@ export default function TechniqueDetailPage() {
 									</div>
 								</div>
 
-								{technique.attributes.length > 0 && (
-									<div className="space-y-6">
-										<h3 className="text-sm font-medium">
-											<InfoLabel
-												label="Technical Attributes"
-												tooltip="Classification metadata for this technique"
-											/>
-										</h3>
-										<AttributeVisualizer
-											attributes={technique.attributes}
-										/>
-									</div>
-								)}
-
-								{technique.tags.length > 0 && (
-									<div className="space-y-2">
-										<h3 className="text-sm font-medium">
-											<InfoLabel
-												label="Tags"
-												tooltip="Keywords associated with this technique"
-											/>
-										</h3>
-										<div className="flex flex-wrap gap-2">
-											{technique.tags.map((tag) => (
-												<Badge
-													key={tag.id}
-													variant="secondary"
-												>
-													{tag.name}
-												</Badge>
-											))}
+								{/* Show raw category tags if available */}
+								{technique.category_tags &&
+									categoryTags.length > 0 && (
+										<div className="space-y-2">
+											<h3 className="text-sm font-medium">
+												<InfoLabel
+													label="Category Tags"
+													tooltip="Raw category tags from the API"
+												/>
+											</h3>
+											<div className="space-y-2">
+												{categoryTags.map(
+													(tag, index) => (
+														<div
+															key={index}
+															className="flex justify-between items-center text-sm py-1 border-b last:border-0 border-muted"
+														>
+															<span>
+																{tag.category}
+															</span>
+															{tag.subcategory && (
+																<Badge
+																	variant="outline"
+																	className="text-xs"
+																>
+																	{
+																		tag.subcategory
+																	}
+																</Badge>
+															)}
+														</div>
+													)
+												)}
+											</div>
 										</div>
-									</div>
-								)}
+									)}
+
+								{technique.attribute_values &&
+									technique.attribute_values.length > 0 && (
+										<div className="space-y-6">
+											<h3 className="text-sm font-medium">
+												<InfoLabel
+													label="Technical Attributes"
+													tooltip="Classification metadata for this technique"
+												/>
+											</h3>
+											<AttributeVisualizer
+												attributeValues={
+													technique.attribute_values
+												}
+											/>
+										</div>
+									)}
+
+								{technique.tags &&
+									technique.tags.length > 0 && (
+										<div className="space-y-2">
+											<h3 className="text-sm font-medium">
+												<InfoLabel
+													label="Tags"
+													tooltip="Keywords associated with this technique"
+												/>
+											</h3>
+											<div className="flex flex-wrap gap-2">
+												{technique.tags.map((tag) => (
+													<Badge
+														key={tag.id}
+														variant="secondary"
+													>
+														{tag.name}
+													</Badge>
+												))}
+											</div>
+										</div>
+									)}
 							</CardContent>
 
 							{/* Edit section - delete will be accessible from edit form later */}
@@ -487,11 +514,6 @@ export default function TechniqueDetailPage() {
 									className="w-full"
 									disabled={!isAuthenticated}
 								>
-									{/* This is commented out because the edit form is not fully implemented yet */}
-									{/* <Link href={`/techniques/${id}/edit`}>
-                    <Edit className="h-4 w-4 mr-2" /> Edit
-                    Technique
-                  </Link> */}
 									<Link href="#">
 										<Edit className="h-4 w-4 mr-2" /> Edit
 										Technique

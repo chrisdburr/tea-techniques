@@ -14,11 +14,13 @@ from ..models import (
     Category,
     SubCategory,
     Tag,
+    ResourceType,
     Technique,
-    TechniqueRelationship,
     AttributeType,
     AttributeValue,
-    ResourceType,
+    TechniqueResource,
+    TechniqueExampleUseCase,
+    TechniqueLimitation,
 )
 from ..serializers import (
     AssuranceGoalSerializer,
@@ -26,12 +28,9 @@ from ..serializers import (
     SubCategorySerializer,
     TagSerializer,
     TechniqueSerializer,
-    TechniqueWriteSerializer,
-    TechniqueRelationshipSerializer,
     AttributeTypeSerializer,
     AttributeValueSerializer,
     ResourceTypeSerializer,
-    TechniqueAttributeSerializer,
     TechniqueResourceSerializer,
     TechniqueExampleUseCaseSerializer,
     TechniqueLimitationSerializer,
@@ -119,8 +118,8 @@ class TechniquesViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         """Return appropriate serializer class based on action."""
-        if self.action in ["create", "update", "partial_update"]:
-            return TechniqueWriteSerializer
+        # if self.action in ["create", "update", "partial_update"]:
+        #     return TechniqueWriteSerializer
         return TechniqueSerializer
 
     def create(self, request, *args, **kwargs):
@@ -194,19 +193,6 @@ class ResourceTypesViewSet(viewsets.ModelViewSet):
     filterset_fields = ["name"]
     search_fields = ["name"]
     ordering_fields = ["id", "name"]
-
-
-class TechniqueRelationshipsViewSet(viewsets.ModelViewSet):
-    queryset = TechniqueRelationship.objects.all()
-    serializer_class = TechniqueRelationshipSerializer
-    filter_backends = [
-        DjangoFilterBackend,
-        filters.SearchFilter,
-        filters.OrderingFilter,
-    ]
-    filterset_fields = ["technique_from", "technique_to", "relationship_type"]
-    search_fields = ["relationship_type"]
-    ordering_fields = ["id"]
 
 
 @api_view(["GET"])

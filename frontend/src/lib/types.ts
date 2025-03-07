@@ -97,6 +97,9 @@ export interface Technique {
 	name: string;
 	description: string;
 	model_dependency: string;
+	category_tags: string;
+	complexity_rating?: number;
+	computational_cost_rating?: number;
 
 	// Many-to-many relationships
 	assurance_goals: AssuranceGoal[];
@@ -104,8 +107,8 @@ export interface Technique {
 	subcategories: SubCategory[];
 	tags: Tag[];
 
-	// New relationship data
-	attributes: TechniqueAttribute[];
+	// Renamed from attributes to attribute_values to match API
+	attribute_values: AttributeValue[];
 	resources: TechniqueResource[];
 	example_use_cases: TechniqueExampleUseCase[];
 	limitations: TechniqueLimitation[];
@@ -151,5 +154,11 @@ export interface APIErrorResponse {
 	errors?: Record<string, string[]>;
 	status_code?: number;
 	error_type?: string;
-	[key: string]: string | number | boolean | null | undefined | Record<string, string[]>;
+	[key: string]:
+		| string
+		| number
+		| boolean
+		| null
+		| undefined
+		| Record<string, string[]>;
 }

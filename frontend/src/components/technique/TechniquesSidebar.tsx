@@ -17,14 +17,13 @@ import {
 import GoalIcon from "./GoalIcon";
 import CategoryTag from "./CategoryTag";
 
+// Export this interface so it can be imported by TechniquesList.tsx
 export interface FilterState {
 	search: string;
 	assurance_goals: string[];
 	categories: string[];
 	model_dependency: string[];
-	complexity_min?: number;
 	complexity_max?: number;
-	computational_cost_min?: number;
 	computational_cost_max?: number;
 }
 
@@ -277,15 +276,14 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 						</AccordionTrigger>
 						<AccordionContent className="px-4">
 							<div className="space-y-6">
-								{/* Complexity Rating */}
+								{/* Complexity Rating - Single threshold */}
 								<div className="space-y-3">
 									<h4 className="text-sm font-medium">
-										Complexity
+										Maximum Complexity
 									</h4>
 									<div className="pt-2 pb-1">
 										<Slider
 											value={[
-												filters.complexity_min || 1,
 												filters.complexity_max || 5,
 											]}
 											min={1}
@@ -293,36 +291,30 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 											step={1}
 											onValueChange={(value) => {
 												updateFilter(
-													"complexity_min",
-													value[0]
-												);
-												updateFilter(
 													"complexity_max",
-													value[1]
+													value[0]
 												);
 											}}
 										/>
 									</div>
 									<div className="flex justify-between text-xs text-muted-foreground">
+										<span>Simple (1)</span>
 										<span>
-											{filters.complexity_min || 1}
-										</span>
-										<span>
+											Current:{" "}
 											{filters.complexity_max || 5}
 										</span>
+										<span>Complex (5)</span>
 									</div>
 								</div>
 
-								{/* Computational Cost Rating */}
+								{/* Computational Cost Rating - Single threshold */}
 								<div className="space-y-3">
 									<h4 className="text-sm font-medium">
-										Computational Cost
+										Maximum Computational Cost
 									</h4>
 									<div className="pt-2 pb-1">
 										<Slider
 											value={[
-												filters.computational_cost_min ||
-													1,
 												filters.computational_cost_max ||
 													5,
 											]}
@@ -331,25 +323,20 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 											step={1}
 											onValueChange={(value) => {
 												updateFilter(
-													"computational_cost_min",
-													value[0]
-												);
-												updateFilter(
 													"computational_cost_max",
-													value[1]
+													value[0]
 												);
 											}}
 										/>
 									</div>
 									<div className="flex justify-between text-xs text-muted-foreground">
+										<span>Low (1)</span>
 										<span>
-											{filters.computational_cost_min ||
-												1}
-										</span>
-										<span>
+											Current:{" "}
 											{filters.computational_cost_max ||
 												5}
 										</span>
+										<span>High (5)</span>
 									</div>
 								</div>
 							</div>

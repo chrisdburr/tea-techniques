@@ -19,7 +19,6 @@ from .views.api_views import (
     AttributeTypesViewSet,
     AttributeValuesViewSet,
     ResourceTypesViewSet,
-    TechniqueRelationshipsViewSet,
     debug_endpoint,
 )
 
@@ -49,9 +48,6 @@ def api_root(request, format=None):
             "resource_types": reverse(
                 "resourcetype-list", request=request, format=format
             ),
-            "technique_relationships": reverse(
-                "techniquerelationship-list", request=request, format=format
-            ),
         }
     )
 
@@ -79,7 +75,6 @@ router.register(r"techniques", TechniquesViewSet)
 router.register(r"attribute-types", AttributeTypesViewSet)
 router.register(r"attribute-values", AttributeValuesViewSet)
 router.register(r"resource-types", ResourceTypesViewSet)
-router.register(r"technique-relationships", TechniqueRelationshipsViewSet)
 
 urlpatterns = [
     path("debug/", debug_endpoint, name="debug-endpoint"),

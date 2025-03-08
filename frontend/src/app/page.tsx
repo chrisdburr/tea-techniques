@@ -14,15 +14,15 @@ import {
 import { Database, FileText, Globe } from "lucide-react";
 
 export default function HomePage() {
-
 	return (
 		<MainLayout>
-			<div className="space-y-16 py-8">
-				{/* Hero Section with Responsive Image */}
-				<section className="container mx-auto">
-					<div className="flex flex-col md:flex-row gap-8 items-center">
-						<div className="w-full md:w-1/2 space-y-6 text-center md:text-left">
-							<h1 className="text-4xl md:text-5xl font-bold">
+			<div className="space-y-24 pb-16">
+				{/* Hero Section with Split Layout */}
+				<section className="container mx-auto py-12 px-4">
+					<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+						{/* Left side: Content */}
+						<div className="space-y-6 max-w-2xl">
+							<h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
 								TEA Techniques Database
 							</h1>
 							<p className="text-xl text-muted-foreground">
@@ -31,8 +31,8 @@ export default function HomePage() {
 								development, and deployment of data-driven
 								technologies.
 							</p>
-							<div className="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
-								<Button asChild size="lg">
+							<div className="flex flex-wrap gap-4 pt-4">
+								<Button asChild size="lg" className="font-medium">
 									<Link href="/techniques">
 										Explore Techniques
 									</Link>
@@ -44,24 +44,22 @@ export default function HomePage() {
 								</Button>
 							</div>
 						</div>
-						<div className="w-full md:w-1/2 mt-8 md:mt-0">
-							<div className="relative aspect-[4/3] w-full max-w-lg mx-auto shadow-lg rounded-lg overflow-hidden">
-								<Image
-									src="/hero.jpg"
-									alt="Assurance illustration showing various aspects of AI ethics and governance"
-									fill
-									sizes="(max-width: 768px) 100vw, 50vw"
-									style={{ objectFit: "cover" }}
-									className="rounded-lg"
-									priority
-								/>
-							</div>
+
+						{/* Right side: Image showcase with shadow and border */}
+						<div className="relative rounded-lg overflow-hidden shadow-xl border border-muted">
+							<Image
+								src="/hero_alt.png"
+								alt="TEA Techniques platform interface"
+								width={800}
+								height={500}
+								className="w-full object-cover"
+							/>
 						</div>
 					</div>
 				</section>
 
-				{/* Features Section */}
-				<section className="space-y-6">
+				{/* Features Section - Now with more spacing from the hero */}
+				<section className="container mx-auto px-4 space-y-10">
 					<div className="text-center mb-8">
 						<h2 className="text-3xl font-bold">Key Features</h2>
 						<p className="text-muted-foreground max-w-2xl mx-auto mt-2">
@@ -70,7 +68,7 @@ export default function HomePage() {
 						</p>
 					</div>
 
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10">
 						<Card className="h-full">
 							<CardHeader>
 								<FileText className="h-12 w-12 text-primary mb-2" />
@@ -128,18 +126,20 @@ export default function HomePage() {
 				</section>
 
 				{/* Call to Action */}
-				<section className="bg-muted/50 py-12 px-6 rounded-lg text-center space-y-6">
-					<h2 className="text-3xl font-bold">
-						Ready to get started?
-					</h2>
-					<p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-						Explore our database of techniques to help ensure your
-						AI systems are trustworthy and ethically developed.
-					</p>
-					<div className="pt-4">
-						<Button asChild size="lg">
-							<Link href="/techniques">Explore Techniques</Link>
-						</Button>
+				<section className="container mx-auto px-4">
+					<div className="bg-muted/50 py-12 px-6 rounded-lg text-center space-y-6">
+						<h2 className="text-3xl font-bold">
+							Ready to get started?
+						</h2>
+						<p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+							Explore our database of techniques to help ensure your
+							AI systems are trustworthy and ethically developed.
+						</p>
+						<div className="pt-4">
+							<Button asChild size="lg">
+								<Link href="/techniques">Explore Techniques</Link>
+							</Button>
+						</div>
 					</div>
 				</section>
 			</div>

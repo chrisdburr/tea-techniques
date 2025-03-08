@@ -1,0 +1,5 @@
+- [ ] Responsive sidebar
+- [ ] Responsive pagination
+- [ ] Improved homepage
+- [ ] Improved about page
+- [ ] New categories page

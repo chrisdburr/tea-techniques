@@ -1,4 +1,4 @@
-- [ ] Responsive sidebar
+- [x] Responsive sidebar
 - [ ] Responsive pagination
 - [ ] Improved homepage
 - [ ] Improved about page

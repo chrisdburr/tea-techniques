@@ -59,7 +59,7 @@ For local development, we use SQLite as the database backend. This setup is quic
    ```bash
    cd backend
    poetry install
-   poetry run python manage.py reset_and_import_techniques --use-sqlite
+   USE_SQLITE=True python manage.py reset_and_import_techniques
    ```
 
 4. **Run the backend with SQLite**

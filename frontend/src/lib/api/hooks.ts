@@ -304,6 +304,8 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 
 	if (params.search) {
 		apiParams.search = params.search;
+		// Django REST Framework format for specifying search fields
+		apiParams.search_fields = "name"; // Only search in name field
 	}
 
 	if (params.assurance_goal && params.assurance_goal !== "all") {
@@ -312,6 +314,24 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 
 	if (params.category && params.category !== "all") {
 		apiParams.categories = params.category;
+	}
+
+	if (params.model_dependency && params.model_dependency !== "all") {
+		apiParams.model_dependency = params.model_dependency;
+	}
+
+	// Add rating parameters
+	if (params.complexity_min) {
+		apiParams.complexity_min = params.complexity_min;
+	}
+	if (params.complexity_max) {
+		apiParams.complexity_max = params.complexity_max;
+	}
+	if (params.computational_cost_min) {
+		apiParams.computational_cost_min = params.computational_cost_min;
+	}
+	if (params.computational_cost_max) {
+		apiParams.computational_cost_max = params.computational_cost_max;
 	}
 
 	// Create query string
@@ -323,8 +343,10 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 	const queryKey = [
 		"techniques",
 		params.search || "",
+		params.search_fields || "",
 		params.assurance_goal || "all",
 		params.category || "all",
+		params.model_dependency || "all",
 		page,
 	];
 

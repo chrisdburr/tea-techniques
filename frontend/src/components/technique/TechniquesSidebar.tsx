@@ -4,7 +4,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
-import { ArrowLeftFromLine, Filter, Search } from "lucide-react";
+import { ArrowRightFromLine, ChevronLeft, Search } from "lucide-react";
 import { AssuranceGoal, Category } from "@/lib/types";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -42,6 +42,9 @@ interface TechniquesSidebarProps {
 	// Mobile state
 	isMobileOpen: boolean;
 	setIsMobileOpen: (isOpen: boolean) => void;
+	
+	// New prop to control showing toggle in header
+	allowToggle?: boolean;
 }
 
 export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
@@ -54,6 +57,7 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 	isDataLoading,
 	isMobileOpen,
 	setIsMobileOpen,
+	allowToggle = false,
 }) => {
 	// Toggle sidebar on mobile
 	const toggleSidebar = () => {
@@ -79,41 +83,53 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 	};
 
 	return (
-		<div
-			className={`
-      fixed inset-y-0 left-0 z-20 w-80 bg-background border-r border-border transform transition-transform duration-200 ease-in-out
-      ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
-      md:relative md:translate-x-0 md:w-full md:border-0
-    `}
-		>
-			{/* Mobile toggle button */}
-			<div className="absolute right-0 top-4 translate-x-full md:hidden">
-				<Button
-					variant="outline"
-					size="sm"
-					className="rounded-l-none border-l-0"
+		<div className="bg-background border rounded-lg shadow-sm overflow-hidden">
+			{/* Overlay to capture clicks outside the sidebar on mobile */}
+			{isMobileOpen && (
+				<div 
+					className="fixed inset-0 bg-black/30 z-[-1] md:hidden" 
 					onClick={toggleSidebar}
-					aria-label={isMobileOpen ? "Close filters" : "Open filters"}
-				>
-					{isMobileOpen ? (
-						<ArrowLeftFromLine className="h-4 w-4" />
-					) : (
-						<Filter className="h-4 w-4" />
-					)}
-				</Button>
-			</div>
-
+					aria-hidden="true"
+				/>
+			)}
+			
 			{/* Sidebar header */}
-			<div className="p-4 border-b flex items-center justify-between">
+			<div className="p-4 border-b flex items-center justify-between sticky top-0 bg-background z-10">
 				<h2 className="font-semibold text-lg">Filters</h2>
-				<Button variant="outline" size="sm" onClick={resetFilters}>
-					Reset
-				</Button>
+				<div className="flex gap-2">
+					<Button variant="outline" size="sm" onClick={resetFilters}>
+						Reset
+					</Button>
+					
+					{/* Toggle button for desktop */}
+					{allowToggle && (
+						<Button 
+							variant="outline" 
+							size="sm" 
+							onClick={toggleSidebar}
+							className="hidden md:flex items-center"
+							aria-label="Hide filters"
+						>
+							<ChevronLeft className="h-4 w-4 mr-2" />
+							Hide
+						</Button>
+					)}
+					
+					{/* Close button for mobile only */}
+					<Button 
+						variant="outline" 
+						size="sm" 
+						onClick={toggleSidebar} 
+						className="md:hidden"
+						aria-label="Close filters"
+					>
+						<ArrowRightFromLine className="h-4 w-4" />
+					</Button>
+				</div>
 			</div>
 
 			{/* Filters */}
-			<div className="overflow-y-auto h-[calc(100%-60px)] py-2">
-				{/* Search */}
+			<div className="overflow-y-auto max-h-[calc(100vh-120px)] py-2 bg-background">
 				<div className="p-4">
 					<div className="relative">
 						<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -130,6 +146,16 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 								}
 							}}
 						/>
+					</div>
+					<div className="mt-2 md:hidden">
+						<Button 
+							onClick={applyFilters} 
+							size="sm" 
+							className="w-full"
+							disabled={isDataLoading}
+						>
+							{isDataLoading ? 'Loading...' : 'Search'}
+						</Button>
 					</div>
 				</div>
 
@@ -299,10 +325,6 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 									</div>
 									<div className="flex justify-between text-xs text-muted-foreground">
 										<span>Simple (1)</span>
-										<span>
-											Current:{" "}
-											{filters.complexity_max || 5}
-										</span>
 										<span>Complex (5)</span>
 									</div>
 								</div>
@@ -346,10 +368,15 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 			</div>
 
 			{/* Apply filters button (mobile only) */}
-			<div className="absolute bottom-0 left-0 right-0 p-4 bg-background border-t md:hidden">
-				<Button onClick={applyFilters} className="w-full">
-					Apply Filters
-				</Button>
+			<div className="sticky bottom-0 left-0 right-0 p-4 bg-background border-t md:hidden">
+				<div className="flex gap-2">
+					<Button onClick={resetFilters} variant="outline" className="w-1/3">
+						Reset
+					</Button>
+					<Button onClick={applyFilters} className="w-2/3">
+						Apply Filters
+					</Button>
+				</div>
 			</div>
 		</div>
 	);

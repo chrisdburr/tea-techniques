@@ -42,7 +42,7 @@ interface TechniquesSidebarProps {
 	// Mobile state
 	isMobileOpen: boolean;
 	setIsMobileOpen: (isOpen: boolean) => void;
-	
+
 	// New prop to control showing toggle in header
 	allowToggle?: boolean;
 }
@@ -86,13 +86,13 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 		<div className="bg-background border rounded-lg shadow-sm overflow-hidden">
 			{/* Overlay to capture clicks outside the sidebar on mobile */}
 			{isMobileOpen && (
-				<div 
-					className="fixed inset-0 bg-black/30 z-[-1] md:hidden" 
+				<div
+					className="fixed inset-0 bg-black/30 z-[-1] md:hidden"
 					onClick={toggleSidebar}
 					aria-hidden="true"
 				/>
 			)}
-			
+
 			{/* Sidebar header */}
 			<div className="p-4 border-b flex items-center justify-between sticky top-0 bg-background z-10">
 				<h2 className="font-semibold text-lg">Filters</h2>
@@ -100,12 +100,12 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 					<Button variant="outline" size="sm" onClick={resetFilters}>
 						Reset
 					</Button>
-					
+
 					{/* Toggle button for desktop */}
 					{allowToggle && (
-						<Button 
-							variant="outline" 
-							size="sm" 
+						<Button
+							variant="outline"
+							size="sm"
 							onClick={toggleSidebar}
 							className="hidden md:flex items-center"
 							aria-label="Hide filters"
@@ -114,12 +114,12 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 							Hide
 						</Button>
 					)}
-					
+
 					{/* Close button for mobile only */}
-					<Button 
-						variant="outline" 
-						size="sm" 
-						onClick={toggleSidebar} 
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={toggleSidebar}
 						className="md:hidden"
 						aria-label="Close filters"
 					>
@@ -148,9 +148,9 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 						/>
 					</div>
 					<div className="mt-2 md:hidden">
-						<Button 
-							onClick={applyFilters} 
-							size="sm" 
+						<Button
+							onClick={applyFilters}
+							size="sm"
 							className="w-full"
 							disabled={isDataLoading}
 						>
@@ -302,63 +302,61 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 						</AccordionTrigger>
 						<AccordionContent className="px-4">
 							<div className="space-y-6">
-								{/* Complexity Rating - Single threshold */}
+								{/* Complexity Rating - With visible steps */}
 								<div className="space-y-3">
 									<h4 className="text-sm font-medium">
 										Maximum Complexity
 									</h4>
 									<div className="pt-2 pb-1">
 										<Slider
-											value={[
-												filters.complexity_max || 5,
-											]}
+											value={[filters.complexity_max || 5]}
 											min={1}
 											max={5}
 											step={1}
 											onValueChange={(value) => {
-												updateFilter(
-													"complexity_max",
-													value[0]
-												);
+												updateFilter("complexity_max", value[0]);
 											}}
 										/>
 									</div>
 									<div className="flex justify-between text-xs text-muted-foreground">
-										<span>Simple (1)</span>
-										<span>Complex (5)</span>
+										<span>1</span>
+										<span>2</span>
+										<span>3</span>
+										<span>4</span>
+										<span>5</span>
+									</div>
+									<div className="flex justify-between text-xs text-muted-foreground">
+										<span>Simple</span>
+										<span className="ml-auto">Complex</span>
 									</div>
 								</div>
 
-								{/* Computational Cost Rating - Single threshold */}
+								{/* Computational Cost Rating - With visible steps */}
 								<div className="space-y-3">
 									<h4 className="text-sm font-medium">
 										Maximum Computational Cost
 									</h4>
 									<div className="pt-2 pb-1">
 										<Slider
-											value={[
-												filters.computational_cost_max ||
-													5,
-											]}
+											value={[filters.computational_cost_max || 5]}
 											min={1}
 											max={5}
 											step={1}
 											onValueChange={(value) => {
-												updateFilter(
-													"computational_cost_max",
-													value[0]
-												);
+												updateFilter("computational_cost_max", value[0]);
 											}}
 										/>
 									</div>
 									<div className="flex justify-between text-xs text-muted-foreground">
-										<span>Low (1)</span>
-										<span>
-											Current:{" "}
-											{filters.computational_cost_max ||
-												5}
-										</span>
-										<span>High (5)</span>
+										<span>1</span>
+										<span>2</span>
+										<span>3</span>
+										<span>4</span>
+										<span>5</span>
+									</div>
+									<div className="flex justify-between text-xs text-muted-foreground">
+										<span>Low</span>
+										<span className="ml-auto">High</span>
 									</div>
 								</div>
 							</div>

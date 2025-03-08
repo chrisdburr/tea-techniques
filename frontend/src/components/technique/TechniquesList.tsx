@@ -1,4 +1,4 @@
-// TechniquesList.tsx
+// TechniquesList.tsx with pagination fix
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
@@ -136,9 +136,9 @@ const TechniqueCard = ({
 			</CardContent>
 
 			<CardFooter className="pt-3 pb-4 px-4 sm:px-6 sm:pt-4">
-				<Button 
-					asChild 
-					variant="default" 
+				<Button
+					asChild
+					variant="default"
 					size="sm"
 					className="w-full text-xs sm:text-sm"
 				>
@@ -170,7 +170,7 @@ const EmptyStateComponent = (): JSX.Element => {
 export default function TechniquesList() {
 	// State for sidebar visibility (used for both mobile and desktop)
 	const [isSidebarOpen, setSidebarOpen] = useState(true);
-	
+
 	// Detect screen size to automatically hide sidebar on mobile
 	useEffect(() => {
 		const handleResize = () => {
@@ -180,10 +180,10 @@ export default function TechniquesList() {
 				setSidebarOpen(true);
 			}
 		};
-		
+
 		// Initial check
 		handleResize();
-		
+
 		// Listen for window resize events
 		window.addEventListener('resize', handleResize);
 		return () => window.removeEventListener('resize', handleResize);
@@ -258,10 +258,6 @@ export default function TechniquesList() {
 	const { data: assuranceGoalsData, isLoading: isLoadingGoals } =
 		useAssuranceGoals();
 
-	// Calculate pagination information
-	const totalItems = techniquesData?.count || 0;
-	const totalPages = calculateTotalPages(totalItems, PAGE_SIZE);
-
 	// Update the techniques memo to include client-side filtering for complexity and computational cost
 	const techniques = useMemo(() => {
 		const results = techniquesData?.results || [];
@@ -290,7 +286,7 @@ export default function TechniquesList() {
 				filters.computational_cost_max !== undefined &&
 				technique.computational_cost_rating !== undefined &&
 				technique.computational_cost_rating >
-					filters.computational_cost_max
+				filters.computational_cost_max
 			) {
 				return false;
 			}
@@ -304,6 +300,11 @@ export default function TechniquesList() {
 		filters.complexity_max,
 		filters.computational_cost_max,
 	]);
+
+	// Calculate pagination information based on filtered count instead of API count
+	// This is the key fix: use the length of client-side filtered results
+	const filteredCount = techniques.length;
+	const totalPages = calculateTotalPages(filteredCount, PAGE_SIZE);
 
 	// Apply filters function
 	const applyFilters = () => {
@@ -439,7 +440,7 @@ export default function TechniquesList() {
 						/>
 					</div>
 				)}
-				
+
 				{/* Filter buttons when sidebar is closed */}
 				{!isSidebarOpen && (
 					<>
@@ -454,7 +455,7 @@ export default function TechniquesList() {
 								<Filter className="h-4 w-4 mr-1" />
 							</Button>
 						</div>
-						
+
 						{/* Mobile floating button */}
 						<div className="fixed bottom-6 right-6 z-40 md:hidden">
 							<Button

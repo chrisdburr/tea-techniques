@@ -1,6 +1,7 @@
+// TechniquesList.tsx
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import {
 	useAssuranceGoals,
@@ -23,7 +24,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/ui/pagination";
-import { Loader2 } from "lucide-react";
+import { Loader2, Filter } from "lucide-react";
 import type { Technique } from "@/lib/types";
 import { formatCategoryName } from "./CategoryTag";
 import GoalIcon from "./GoalIcon";
@@ -41,7 +42,7 @@ const initialFilters: FilterState = {
 	computational_cost_max: 5,
 };
 
-// Extracted TechniqueCard component
+// Extracted TechniqueCard component with improved responsive design
 const TechniqueCard = ({
 	technique,
 }: {
@@ -98,44 +99,49 @@ const TechniqueCard = ({
 
 	return (
 		<Card className="h-full flex flex-col">
-			<CardHeader className="pb-2">
+			<CardHeader className="pb-2 px-4 pt-4 sm:px-6 sm:pt-6">
 				<CardTitle
-					className="line-clamp-1 text-lg"
+					className="line-clamp-1 text-base sm:text-lg"
 					title={technique.name}
 				>
 					{formatTitle(technique.name)}
 				</CardTitle>
 				<CardDescription
-					className="text-sm text-muted-foreground line-clamp-1"
+					className="text-xs sm:text-sm text-muted-foreground line-clamp-1"
 					title={fullCategoryText}
 				>
 					{categoryText}
 				</CardDescription>
 			</CardHeader>
 
-			<CardContent className="pt-0 pb-0 flex-grow flex flex-col">
+			<CardContent className="pt-0 pb-0 px-4 sm:px-6 flex-grow flex flex-col">
 				<p
-					className="text-sm text-foreground mb-4 h-10 overflow-hidden"
+					className="text-xs sm:text-sm text-foreground mb-3 h-8 sm:h-10 overflow-hidden"
 					title={technique.description}
 				>
-					{truncateDescription(technique.description)}
+					{truncateDescription(technique.description, 90)}
 				</p>
 
-				<div className="flex items-center gap-2 mt-auto">
+				<div className="flex flex-wrap items-center gap-1 sm:gap-2 mt-auto">
 					{technique.assurance_goals.map((goal) => (
 						<div
 							key={goal.id}
-							className="p-1.5 rounded-full flex items-center bg-secondary"
+							className="p-1 sm:p-1.5 rounded-full flex items-center bg-secondary"
 							title={goal.name}
 						>
-							<GoalIcon goalName={goal.name} size={16} />
+							<GoalIcon goalName={goal.name} size={14} />
 						</div>
 					))}
 				</div>
 			</CardContent>
 
-			<CardFooter className="pt-4">
-				<Button asChild variant="default" className="w-full">
+			<CardFooter className="pt-3 pb-4 px-4 sm:px-6 sm:pt-4">
+				<Button 
+					asChild 
+					variant="default" 
+					size="sm"
+					className="w-full text-xs sm:text-sm"
+				>
 					<Link href={`/techniques/${technique.id}`}>
 						View Details
 					</Link>
@@ -162,8 +168,26 @@ const EmptyStateComponent = (): JSX.Element => {
 };
 
 export default function TechniquesList() {
-	// State for mobile sidebar
-	const [isSidebarOpen, setSidebarOpen] = useState(false);
+	// State for sidebar visibility (used for both mobile and desktop)
+	const [isSidebarOpen, setSidebarOpen] = useState(true);
+	
+	// Detect screen size to automatically hide sidebar on mobile
+	useEffect(() => {
+		const handleResize = () => {
+			if (window.innerWidth < 768) {
+				setSidebarOpen(false);
+			} else {
+				setSidebarOpen(true);
+			}
+		};
+		
+		// Initial check
+		handleResize();
+		
+		// Listen for window resize events
+		window.addEventListener('resize', handleResize);
+		return () => window.removeEventListener('resize', handleResize);
+	}, []);
 
 	// Use custom filter hook to manage URL parameters
 	const { filters: urlFilters, currentPage } = useFilterParams({
@@ -387,29 +411,63 @@ export default function TechniquesList() {
 
 	return (
 		<div className="space-y-6">
-			<div className="flex justify-between items-center">
-				<h1 className="text-3xl font-bold">Techniques</h1>
-				<Button asChild>
+			<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+				<div className="flex flex-row items-center gap-2">
+					<h1 className="text-2xl sm:text-3xl font-bold">Techniques</h1>
+				</div>
+				<Button asChild size="sm" className="w-full sm:w-auto">
 					<Link href="/techniques/add">Add New Technique</Link>
 				</Button>
 			</div>
 
 			{/* Main content with sidebar */}
-			<div className="flex flex-col md:flex-row gap-6">
-				{/* Sidebar */}
-				<div className="md:w-80 shrink-0">
-					<TechniquesSidebar
-						filters={filters}
-						setFilters={setFilters}
-						applyFilters={applyFilters}
-						resetFilters={resetFilters}
-						assuranceGoals={assuranceGoalsData?.results}
-						categories={categoriesData?.results}
-						isDataLoading={isLoadingGoals || isLoadingCategories}
-						isMobileOpen={isSidebarOpen}
-						setIsMobileOpen={setSidebarOpen}
-					/>
-				</div>
+			<div className="flex flex-col md:flex-row gap-6 relative">
+				{/* Sidebar with sticky behavior on desktop */}
+				{isSidebarOpen && (
+					<div className="md:w-80 md:sticky md:top-4 md:self-start">
+						<TechniquesSidebar
+							filters={filters}
+							setFilters={setFilters}
+							applyFilters={applyFilters}
+							resetFilters={resetFilters}
+							assuranceGoals={assuranceGoalsData?.results}
+							categories={categoriesData?.results}
+							isDataLoading={isLoadingGoals || isLoadingCategories}
+							isMobileOpen={isSidebarOpen}
+							setIsMobileOpen={setSidebarOpen}
+							allowToggle={true} /* Pass flag to show toggle button in header */
+						/>
+					</div>
+				)}
+				
+				{/* Filter buttons when sidebar is closed */}
+				{!isSidebarOpen && (
+					<>
+						{/* Desktop sticky filter button (positioned on the left) */}
+						<div className="hidden md:block sticky top-4 z-30 h-0">
+							<Button
+								variant="outline"
+								onClick={() => setSidebarOpen(true)}
+								className="flex items-center gap-2 shadow-md"
+								size="sm"
+							>
+								<Filter className="h-4 w-4 mr-1" />
+							</Button>
+						</div>
+						
+						{/* Mobile floating button */}
+						<div className="fixed bottom-6 right-6 z-40 md:hidden">
+							<Button
+								variant="secondary"
+								onClick={() => setSidebarOpen(true)}
+								className="rounded-full shadow-md w-12 h-12 p-0"
+								aria-label="Show filters"
+							>
+								<Filter className="h-5 w-5" />
+							</Button>
+						</div>
+					</>
+				)}
 
 				{/* Techniques list */}
 				<div className="flex-1">
@@ -433,7 +491,8 @@ export default function TechniquesList() {
 						<>
 							{techniques.length > 0 ? (
 								<>
-									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+									{/* Improved responsive grid with smaller cards on xs screens */}
+									<div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
 										{techniques.map(
 											(technique: Technique) => (
 												<TechniqueCard

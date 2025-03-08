@@ -3,624 +3,400 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import MainLayout from "@/components/layout/MainLayout";
-import { useAssuranceGoals, useCategories, useTechniques } from "@/lib/api/hooks";
-import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-} from "@/components/ui/tabs";
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/ui/accordion";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-    CardFooter
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { StarRating } from "@/components/ui/star-rating";
-import {
-    Brain,
-    Scale,
-    Lock,
-    CheckCircle,
-    ShieldCheck,
-    Eye,
-    Circle,
-    ExternalLink,
-    ArrowRight,
-    ChevronsRight,
-    AlertCircle,
-    Loader2
-} from "lucide-react";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowRight } from "lucide-react";
+import { useAssuranceGoals, useCategories, useTechniques } from "@/lib/api/hooks";
 import GoalIcon from "@/components/technique/GoalIcon";
-import { formatCategoryName } from "@/components/technique/CategoryTag";
-import { AssuranceGoal, Category, Technique } from "@/lib/types";
-
-// Type for the goal descriptions
-interface GoalDescription {
-    description: string;
-    icon: JSX.Element;
-    examples: string[];
-}
-
-// Type for model dependency info
-interface ModelDependencyInfo {
-    description: string;
-    advantages: string[];
-    examples: string[];
-}
-
-// Define goal descriptions with accessibility-friendly colors
-const goalDescriptions: Record<string, GoalDescription> = {
-    Explainability: {
-        description: "Techniques that help explain how AI models make decisions, allowing stakeholders to understand the reasoning behind machine outputs.",
-        icon: <Brain className="h-10 w-10" aria-hidden="true" />,
-        examples: ["SHAP", "LIME", "Partial Dependence Plots"]
-    },
-    Fairness: {
-        description: "Methods to identify, measure, and mitigate bias and discrimination in AI systems, ensuring equitable treatment across different groups.",
-        icon: <Scale className="h-10 w-10" aria-hidden="true" />,
-        examples: ["Demographic Parity", "Fairness Constraints", "Counterfactual Fairness"]
-    },
-    Privacy: {
-        description: "Approaches to protect sensitive information when developing and deploying AI systems while preserving utility of the data and models.",
-        icon: <Lock className="h-10 w-10" aria-hidden="true" />,
-        examples: ["Differential Privacy", "Federated Learning", "Homomorphic Encryption"]
-    },
-    Reliability: {
-        description: "Techniques to ensure AI systems operate consistently and predictably under varying conditions, with appropriate uncertainty quantification.",
-        icon: <CheckCircle className="h-10 w-10" aria-hidden="true" />,
-        examples: ["Conformal Prediction", "Empirical Calibration", "Uncertainty Quantification"]
-    },
-    Safety: {
-        description: "Methods to make AI systems robust against misuse, adversarial attacks, and unexpected failures to prevent harm to users and society.",
-        icon: <ShieldCheck className="h-10 w-10" aria-hidden="true" />,
-        examples: ["Red Teaming", "Anomaly Detection", "Runtime Monitoring"]
-    },
-    Transparency: {
-        description: "Practices for documenting and communicating AI development processes, capabilities, and limitations to appropriate stakeholders.",
-        icon: <Eye className="h-10 w-10" aria-hidden="true" />,
-        examples: ["Model Cards", "Datasheets", "Audit Trails"]
-    },
-};
-
-// Define model dependency information
-const modelDependencyInfo: Record<string, ModelDependencyInfo> = {
-    "Model-Agnostic": {
-        description: "Techniques that can be applied to any machine learning model regardless of its architecture or type. These methods treat the model as a 'black box' and only require access to its inputs and outputs.",
-        advantages: [
-            "Greater flexibility and portability across different model types",
-            "Can be applied to proprietary models without access to internals",
-            "Generally simpler to implement and use",
-            "More future-proof as they work with new model architectures"
-        ],
-        examples: ["LIME", "SHAP", "Permutation Importance", "Partial Dependence Plots"]
-    },
-    "Model-Specific": {
-        description: "Techniques that are designed for or require access to specific model architectures, internal components, or training processes. These methods typically leverage model internals for deeper insights.",
-        advantages: [
-            "Can provide more detailed and accurate explanations",
-            "May be more computationally efficient",
-            "Can tap into model-specific structures for better insights",
-            "Often yield more granular and precise results"
-        ],
-        examples: ["Attention Visualization", "Integrated Gradients", "Grad-CAM", "Layer-wise Relevance Propagation"]
-    }
-};
-
-// Type for category tree items
-type CategoryTreeItem = {
-    name: string;
-    subcategories: string[];
-    techniques: number;
-}
+import type { AssuranceGoal, Category, Technique } from "@/lib/types";
 
 export default function CategoriesPage() {
-    // Local state
-    const [selectedGoal, setSelectedGoal] = useState<string | null>(null);
-    const [featuredExamplesByGoal, setFeaturedExamplesByGoal] = useState<Record<string, Technique[]>>({});
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    // State for the selected tab and goal
+    const [selectedGoal, setSelectedGoal] = useState<string>("Explainability");
+    const [selectedCategoryGroup, setSelectedCategoryGroup] = useState<string>("");
 
-    // Fetch data from API
-    const {
-        // data: assuranceGoalsData,
-        isLoading: isLoadingGoals,
-        error: goalsError
-    } = useAssuranceGoals();
+    // Fetch assurance goals
+    const { data: assuranceGoalsData, isLoading: isLoadingGoals } = useAssuranceGoals();
 
-    const {
-        data: categoriesData,
-        isLoading: isLoadingCategories,
-        error: categoriesError
-    } = useCategories();
+    // Fetch categories
+    const { data: categoriesData, isLoading: isLoadingCategories } = useCategories();
 
-    const {
-        data: techniquesData,
-        isLoading: isLoadingTechniques,
-        error: techniquesError
-    } = useTechniques();
-
-    // Check for any errors
-    useEffect(() => {
-        if (goalsError) {
-            setErrorMessage("Error loading assurance goals. Please try again later.");
-        } else if (categoriesError) {
-            setErrorMessage("Error loading categories. Please try again later.");
-        } else if (techniquesError) {
-            setErrorMessage("Error loading techniques. Please try again later.");
-        } else {
-            setErrorMessage(null);
-        }
-    }, [goalsError, categoriesError, techniquesError]);
-
-    // Organize techniques and categories when data is available
-    useEffect(() => {
-        if (categoriesData?.results && techniquesData?.results) {
-            const techniquesByCategory: Record<string, Technique[]> = {};
-            const examplesByGoal: Record<string, Technique[]> = {};
-
-            // Process all techniques
-            techniquesData.results.forEach((technique: Technique) => {
-                if (technique.category_tags) {
-                    const tags = technique.category_tags.split('#').filter(Boolean);
-
-                    // Group techniques by category
-                    tags.forEach((tag: string) => {
-                        const mainCategory = tag.split('/')[0];
-                        if (!techniquesByCategory[mainCategory]) {
-                            techniquesByCategory[mainCategory] = [];
-                        }
-                        techniquesByCategory[mainCategory].push(technique);
-                    });
-
-                    // Group techniques by assurance goal (for featured examples)
-                    technique.assurance_goals.forEach((goal: AssuranceGoal) => {
-                        if (!examplesByGoal[goal.name]) {
-                            examplesByGoal[goal.name] = [];
-                        }
-
-                        // Only add if we don't already have 3 examples and this one isn't already included
-                        if (examplesByGoal[goal.name].length < 3 &&
-                            !examplesByGoal[goal.name].some(t => t.id === technique.id)) {
-                            examplesByGoal[goal.name].push(technique);
-                        }
-                    });
-                }
-            });
-
-            // Update featured examples state
-            setFeaturedExamplesByGoal(examplesByGoal);
-        }
-    }, [categoriesData, techniquesData]);
-
-    // Prepare the categories by goal mapping
-    const categoriesByGoal: Record<string, CategoryTreeItem[]> = {};
-
-    if (categoriesData?.results && techniquesData?.results) {
-        // First, group techniques by category tag for counting
-        const techniquesByCategory: Record<string, Technique[]> = {};
-
-        techniquesData.results.forEach((technique: Technique) => {
-            if (technique.category_tags) {
-                const tags = technique.category_tags.split('#').filter(Boolean);
-
-                tags.forEach((tag: string) => {
-                    const mainCategory = tag.split('/')[0];
-                    if (!techniquesByCategory[mainCategory]) {
-                        techniquesByCategory[mainCategory] = [];
-                    }
-                    techniquesByCategory[mainCategory].push(technique);
-                });
-            }
-        });
-
-        // Then create the category tree
-        categoriesData.results.forEach((category: Category) => {
-            const goalName = category.assurance_goal_name;
-
-            if (!categoriesByGoal[goalName]) {
-                categoriesByGoal[goalName] = [];
-            }
-
-            // Find all subcategories for this category
-            const subcategories = categoriesData.results
-                .filter(c => c.name.startsWith(`${category.name}/`))
-                .map(c => c.name.split('/')[1]);
-
-            // Count techniques in this category
-            const techCount = techniquesByCategory[category.name]?.length || 0;
-
-            categoriesByGoal[goalName].push({
-                name: category.name,
-                subcategories: subcategories,
-                techniques: techCount
-            });
-        });
-    }
-
-    // Generic loading skeleton for cards
-    const LoadingSkeleton = () => (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-                <Card key={i} className="h-64">
-                    <CardHeader>
-                        <div className="h-8 w-3/4 bg-muted animate-pulse rounded-md" />
-                        <div className="h-4 w-1/2 mt-2 bg-muted animate-pulse rounded-md" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="h-4 w-full mt-2 bg-muted animate-pulse rounded-md" />
-                        <div className="h-4 w-full mt-2 bg-muted animate-pulse rounded-md" />
-                        <div className="h-4 w-3/4 mt-2 bg-muted animate-pulse rounded-md" />
-                    </CardContent>
-                    <CardFooter>
-                        <div className="h-9 w-full bg-muted animate-pulse rounded-md" />
-                    </CardFooter>
-                </Card>
-            ))}
-        </div>
+    // Fetch techniques for the selected goal
+    const { data: goalTechniques, isLoading: isLoadingTechniques } = useTechniques(
+        { assurance_goals: selectedGoal },
+        1 // First page only
     );
 
-    // Determine loading state
-    const isLoading = isLoadingGoals || isLoadingCategories || isLoadingTechniques;
+    // Fetch model-agnostic and model-specific example techniques
+    const { data: agnosticTechniques } = useTechniques(
+        { model_dependency: "Model-Agnostic" },
+        1
+    );
+
+    const { data: specificTechniques } = useTechniques(
+        { model_dependency: "Model-Specific" },
+        1
+    );
+
+    // Detailed descriptions for each assurance goal
+    const goalDescriptions: Record<string, string> = {
+        Explainability: "Techniques that aim to make AI models more interpretable and their decisions more understandable to humans. These techniques help identify how models transform inputs into outputs, which features are most important for predictions, and why specific decisions are made.",
+        Fairness: "Techniques that assess and mitigate bias in AI systems to ensure equitable outcomes across diverse demographic groups. These approaches help identify, measure, and reduce discrimination and unfairness in algorithmic decision-making.",
+        Security: "Techniques that protect AI systems from adversarial attacks, vulnerabilities, and other security threats. These methods enhance the robustness of AI systems against manipulation and unauthorized exploitation.",
+        Privacy: "Techniques that help preserve data privacy and confidentiality when developing or deploying AI systems. These approaches enable machine learning while protecting sensitive information from exposure or inference.",
+        Reliability: "Techniques that ensure AI systems perform consistently and as expected across various conditions and environments. These methods improve robustness, error detection, and failure prevention in AI applications."
+    };
+
+    // Group categories by assurance goal for easier display
+    const categoriesByGoal = React.useMemo(() => {
+        if (!categoriesData?.results) return {};
+
+        return categoriesData.results.reduce((acc: Record<string, Category[]>, category: Category) => {
+            const goalName = category.assurance_goal_name;
+            if (!acc[goalName]) {
+                acc[goalName] = [];
+            }
+            acc[goalName].push(category);
+            return acc;
+        }, {});
+    }, [categoriesData]);
+
+    // Group categories by first letter for the category section
+    const categoriesByFirstLetter = React.useMemo(() => {
+        if (!categoriesData?.results) return {};
+
+        return categoriesData.results.reduce((acc: Record<string, Category[]>, category: Category) => {
+            const firstLetter = category.name.charAt(0).toUpperCase();
+            if (!acc[firstLetter]) {
+                acc[firstLetter] = [];
+            }
+            acc[firstLetter].push(category);
+            return acc;
+        }, {});
+    }, [categoriesData]);
+
+    // All unique first letters for category group tabs
+    const categoryGroups = React.useMemo(() => {
+        return Object.keys(categoriesByFirstLetter).sort();
+    }, [categoriesByFirstLetter]);
+
+    // Helper function to create URL with correct filter parameters
+    const createFilterUrl = (filterType: string, filterValue: string) => {
+        // The backend expects plural parameter names for these filters
+        if (filterType === "assurance_goal") {
+            return `/techniques?assurance_goals=${encodeURIComponent(filterValue)}`;
+        }
+        if (filterType === "category") {
+            return `/techniques?categories=${encodeURIComponent(filterValue)}`;
+        }
+        // For model dependency, use the exact parameter name
+        return `/techniques?${filterType}=${encodeURIComponent(filterValue)}`;
+    };
+
+    // Update the selected goal when tab changes
+    useEffect(() => {
+        if (selectedGoal && selectedGoal !== "all") {
+            // You could make other adjustments here if needed
+        }
+    }, [selectedGoal]);
 
     return (
         <MainLayout>
-            <div className="space-y-8">
-                {/* Page Header */}
-                <section>
-                    <div className="mb-6">
-                        <h1 className="text-3xl font-bold">Understanding the TEA Techniques</h1>
-                        <p className="text-lg text-muted-foreground mt-2">
-                            A guide to help you navigate and understand the organization of techniques in our database
-                        </p>
-                    </div>
-
-                    <div className="prose max-w-none my-8">
-                        <p>
-                            The TEA Techniques database organizes responsible AI methods along several dimensions to help you find the right approaches for your needs. Each technique is categorized by its <strong>assurance goal</strong>, <strong>model dependency</strong>, and technical <strong>category</strong>. Techniques are also rated for <strong>complexity</strong> and <strong>computational cost</strong> to help you assess implementation requirements.
-                        </p>
-                    </div>
+            <div className="space-y-12">
+                <section className="space-y-6">
+                    <h1 className="text-3xl font-bold text-center">TEA Techniques Categories</h1>
+                    <p className="text-lg text-muted-foreground text-center max-w-3xl mx-auto">
+                        Explore techniques by assurance goals, categories, or model dependencies to find the right approach for your AI assurance needs.
+                    </p>
                 </section>
 
-                {/* Error message (if any) */}
-                {errorMessage && (
-                    <div role="alert" className="relative w-full rounded-lg border p-4 border-destructive/50 text-destructive dark:border-destructive my-4">
-                        <AlertCircle className="h-4 w-4 absolute left-4 top-4 text-destructive" />
-                        <h5 className="mb-1 font-medium leading-none tracking-tight pl-7">Error</h5>
-                        <div className="text-sm [&_p]:leading-relaxed pl-7">{errorMessage}</div>
-                    </div>
-                )}
+                {/* Assurance Goals Section */}
+                <section className="space-y-8">
+                    <h2 className="text-2xl font-bold">Assurance Goals</h2>
 
-                {/* Loading indicator for the whole page (only shown initially) */}
-                {isLoading && Object.keys(categoriesByGoal).length === 0 && (
-                    <div className="flex flex-col items-center justify-center py-12">
-                        <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
-                        <p className="text-muted-foreground">Loading content...</p>
-                    </div>
-                )}
+                    <Tabs defaultValue="Explainability" className="space-y-8" onValueChange={setSelectedGoal}>
+                        <TabsList className="flex flex-wrap gap-2">
+                            {!isLoadingGoals && assuranceGoalsData?.results && assuranceGoalsData.results.map((goal: AssuranceGoal) => (
+                                <TabsTrigger
+                                    key={goal.id}
+                                    value={goal.name}
+                                    className="flex items-center gap-2"
+                                >
+                                    <GoalIcon goalName={goal.name} size={16} />
+                                    <span>{goal.name}</span>
+                                </TabsTrigger>
+                            ))}
+                        </TabsList>
 
-                {/* Main Content - Only shown when not in initial loading state */}
-                {(!isLoading || Object.keys(categoriesByGoal).length > 0) && (
-                    <>
-                        {/* Assurance Goals Section */}
-                        <section className="space-y-6" aria-labelledby="assurance-goals-heading">
-                            <h2 id="assurance-goals-heading" className="text-2xl font-bold">Assurance Goals</h2>
-                            <p className="text-muted-foreground">
-                                Assurance goals represent the primary objectives that techniques help achieve in responsible AI development. Each technique is associated with at least one of these goals.
-                            </p>
-
-                            <Tabs defaultValue="Explainability" className="w-full">
-                                <div className="overflow-x-auto pb-1">
-                                    <TabsList className="w-full flex justify-start space-x-2">
-                                        {Object.keys(goalDescriptions).map((goalName) => (
-                                            <TabsTrigger key={goalName} value={goalName} className="flex items-center gap-2 whitespace-nowrap">
-                                                <GoalIcon goalName={goalName} size={14} />
-                                                <span>{goalName}</span>
-                                            </TabsTrigger>
-                                        ))}
-                                    </TabsList>
+                        {!isLoadingGoals && assuranceGoalsData?.results && assuranceGoalsData.results.map((goal: AssuranceGoal) => (
+                            <TabsContent key={goal.id} value={goal.name} className="space-y-6">
+                                {/* Goal description */}
+                                <div className="bg-muted/30 p-6 rounded-lg">
+                                    <p className="text-lg">{goalDescriptions[goal.name] || goal.description}</p>
                                 </div>
 
-                                {Object.keys(goalDescriptions).map((goalName) => (
-                                    <TabsContent key={goalName} value={goalName} className="mt-4">
-                                        {isLoadingTechniques ? (
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                                {[1, 2, 3].map((i) => (
-                                                    <Card key={i} className="h-64">
-                                                        <CardHeader className="pb-2">
-                                                            <div className="h-6 w-3/4 bg-muted animate-pulse rounded-md" />
-                                                            <div className="h-4 w-1/2 mt-2 bg-muted animate-pulse rounded-md" />
-                                                        </CardHeader>
-                                                        <CardContent className="flex-grow">
-                                                            <div className="h-4 w-full mt-2 bg-muted animate-pulse rounded-md" />
-                                                            <div className="h-4 w-full mt-2 bg-muted animate-pulse rounded-md" />
-                                                            <div className="h-4 w-3/4 mt-2 bg-muted animate-pulse rounded-md" />
-                                                        </CardContent>
-                                                        <CardFooter className="pt-0">
-                                                            <div className="h-9 w-full bg-muted animate-pulse rounded-md" />
-                                                        </CardFooter>
-                                                    </Card>
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                                {featuredExamplesByGoal[goalName]?.length > 0 ? (
-                                                    featuredExamplesByGoal[goalName].map((technique) => (
-                                                        <Card key={technique.id} className="h-full flex flex-col">
-                                                            <CardHeader className="pb-2">
-                                                                <CardTitle className="text-lg truncate" title={technique.name}>
-                                                                    {technique.name}
-                                                                </CardTitle>
-                                                                <CardDescription className="truncate">
-                                                                    {technique.model_dependency}
-                                                                </CardDescription>
-                                                            </CardHeader>
-                                                            <CardContent className="flex-grow">
-                                                                <p className="text-sm line-clamp-3">{technique.description}</p>
-                                                            </CardContent>
-                                                            <CardFooter className="pt-0">
-                                                                <Button asChild variant="outline" className="w-full">
-                                                                    <Link href={`/techniques/${technique.id}`} aria-label={`View details for ${technique.name}`}>
-                                                                        View Details <ExternalLink className="ml-2 h-4 w-4" aria-hidden="true" />
-                                                                    </Link>
-                                                                </Button>
-                                                            </CardFooter>
-                                                        </Card>
-                                                    ))
-                                                ) : (
-                                                    <div className="col-span-full text-center py-8 text-muted-foreground italic">
-                                                        No example techniques available
-                                                    </div>
-                                                )}
-                                            </div>
-                                        )}
+                                {/* Example techniques for this goal */}
+                                <div className="space-y-4">
+                                    <h3 className="text-xl font-semibold">Example {goal.name} Techniques</h3>
 
-                                        <div className="flex justify-center mt-6">
-                                            <Button asChild>
-                                                <Link
-                                                    href={`/techniques?assurance_goal=${goalName}`}
-                                                    aria-label={`Browse all ${goalName} techniques`}
-                                                >
-                                                    Browse All {goalName} Techniques <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
-                                                </Link>
-                                            </Button>
+                                    {isLoadingTechniques ? (
+                                        <p>Loading examples...</p>
+                                    ) : goalTechniques?.results && goalTechniques.results.length > 0 ? (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                            {goalTechniques.results.slice(0, 3).map((technique: Technique) => (
+                                                <Card key={technique.id} className="h-full flex flex-col">
+                                                    <CardHeader>
+                                                        <CardTitle className="line-clamp-2">{technique.name}</CardTitle>
+                                                        <CardDescription>
+                                                            {technique.model_dependency}
+                                                        </CardDescription>
+                                                    </CardHeader>
+                                                    <CardContent className="flex-grow">
+                                                        <p className="line-clamp-4 text-sm">{technique.description}</p>
+                                                    </CardContent>
+                                                    <CardFooter>
+                                                        <Button asChild variant="outline" size="sm" className="w-full">
+                                                            <Link href={`/techniques/${technique.id}`}>
+                                                                View Details
+                                                            </Link>
+                                                        </Button>
+                                                    </CardFooter>
+                                                </Card>
+                                            ))}
                                         </div>
-                                    </TabsContent>
-                                ))}
-                            </Tabs>
-                        </section>
+                                    ) : (
+                                        <p>No example techniques found for {goal.name}.</p>
+                                    )}
 
-                        {/* Model Dependency Section */}
-                        <section className="space-y-6 mt-12" aria-labelledby="model-dependency-heading">
-                            <h2 id="model-dependency-heading" className="text-2xl font-bold">Model Dependency</h2>
-                            <p className="text-muted-foreground">
-                                Model dependency indicates whether a technique requires access to the internal components of a model or can treat it as a &ldquo;black box&rdquo;. This is an important consideration for choosing appropriate techniques.
-                            </p>
-
-                            {isLoading ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                                    {[1, 2].map((i) => (
-                                        <Card key={i} className="h-96">
-                                            <CardHeader>
-                                                <div className="h-6 w-1/2 bg-muted animate-pulse rounded-md" />
-                                            </CardHeader>
-                                            <CardContent>
-                                                <div className="h-4 w-full mt-2 bg-muted animate-pulse rounded-md" />
-                                                <div className="h-4 w-full mt-2 bg-muted animate-pulse rounded-md" />
-                                                <div className="h-4 w-3/4 mt-2 bg-muted animate-pulse rounded-md" />
-                                                <div className="mt-4">
-                                                    <div className="h-4 w-1/4 mt-4 bg-muted animate-pulse rounded-md" />
-                                                    <div className="h-4 w-full mt-2 bg-muted animate-pulse rounded-md" />
-                                                    <div className="h-4 w-full mt-2 bg-muted animate-pulse rounded-md" />
-                                                </div>
-                                            </CardContent>
-                                            <CardFooter>
-                                                <div className="h-9 w-full bg-muted animate-pulse rounded-md" />
-                                            </CardFooter>
-                                        </Card>
-                                    ))}
+                                    {/* Link to all techniques for this goal */}
+                                    <div className="flex justify-center mt-6">
+                                        <Button asChild size="lg">
+                                            <Link href={createFilterUrl("assurance_goal", goal.name)}>
+                                                Browse All {goal.name} Techniques
+                                                <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
+                                            </Link>
+                                        </Button>
+                                    </div>
                                 </div>
-                            ) : (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                                    {Object.entries(modelDependencyInfo).map(([dependency, info]) => (
-                                        <Card key={dependency} className="h-full flex flex-col">
+
+                                {/* Categories related to this goal */}
+                                {categoriesByGoal[goal.name] && categoriesByGoal[goal.name].length > 0 && (
+                                    <div className="space-y-4">
+                                        <h3 className="text-xl font-semibold">{goal.name} Categories</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                            {categoriesByGoal[goal.name].map((category: Category) => (
+                                                <Card key={category.id} className="hover:bg-muted/20 transition-colors">
+                                                    <CardHeader>
+                                                        <CardTitle>{category.name}</CardTitle>
+                                                    </CardHeader>
+                                                    <CardContent>
+                                                        <p className="line-clamp-3 text-sm">{category.description || `${category.name} techniques for ${goal.name}`}</p>
+                                                    </CardContent>
+                                                    <CardFooter>
+                                                        <Button asChild variant="outline" size="sm" className="w-full">
+                                                            <Link href={createFilterUrl("category", category.id.toString())}>
+                                                                Browse {category.name} Techniques
+                                                            </Link>
+                                                        </Button>
+                                                    </CardFooter>
+                                                </Card>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </TabsContent>
+                        ))}
+                    </Tabs>
+                </section>
+
+                {/* Categories Section */}
+                <section className="space-y-8">
+                    <h2 className="text-2xl font-bold">Categories by Name</h2>
+
+                    <div className="bg-muted/30 p-6 rounded-lg">
+                        <p className="text-lg">
+                            Categories provide a more granular classification of techniques within each assurance goal.
+                            Use these to find specific approaches targeting particular aspects of AI systems.
+                        </p>
+                    </div>
+
+                    <Tabs
+                        defaultValue={categoryGroups[0] || "A"}
+                        className="space-y-8"
+                        onValueChange={setSelectedCategoryGroup}
+                    >
+                        <TabsList className="flex flex-wrap gap-1">
+                            {categoryGroups.map((letter) => (
+                                <TabsTrigger key={letter} value={letter}>
+                                    {letter}
+                                </TabsTrigger>
+                            ))}
+                        </TabsList>
+
+                        {categoryGroups.map((letter) => (
+                            <TabsContent key={letter} value={letter} className="space-y-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {categoriesByFirstLetter[letter] && categoriesByFirstLetter[letter].map((category: Category) => (
+                                        <Card key={category.id} className="h-full flex flex-col">
                                             <CardHeader>
                                                 <CardTitle className="flex items-center gap-2">
-                                                    <Badge variant={dependency === "Model-Agnostic" ? "outline" : "default"}>
-                                                        {dependency}
-                                                    </Badge>
+                                                    <GoalIcon goalName={category.assurance_goal_name} size={16} />
+                                                    <span>{category.name}</span>
                                                 </CardTitle>
+                                                <CardDescription>{category.assurance_goal_name}</CardDescription>
                                             </CardHeader>
                                             <CardContent className="flex-grow">
-                                                <p className="mb-4">{info.description}</p>
-                                                <div className="space-y-4">
-                                                    <div>
-                                                        <h4 className="font-semibold text-sm">Advantages:</h4>
-                                                        <ul className="list-disc pl-6 mt-2 space-y-1 text-sm">
-                                                            {info.advantages.map((advantage, i) => (
-                                                                <li key={i}>{advantage}</li>
-                                                            ))}
-                                                        </ul>
-                                                    </div>
-                                                    <div>
-                                                        <h4 className="font-semibold text-sm">Example Techniques:</h4>
-                                                        <div className="flex flex-wrap gap-2 mt-2">
-                                                            {info.examples.map((example, i) => (
-                                                                <Badge key={i} variant="secondary">{example}</Badge>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <p className="text-sm line-clamp-3">{category.description || `${category.name} techniques for ${category.assurance_goal_name}`}</p>
                                             </CardContent>
                                             <CardFooter>
-                                                <Button
-                                                    asChild
-                                                    variant="outline"
-                                                    className="w-full"
-                                                    aria-label={`Browse ${dependency} techniques`}
-                                                >
-                                                    <Link href={`/techniques?model_dependency=${dependency}`}>
-                                                        Browse {dependency} Techniques
+                                                <Button asChild variant="outline" size="sm" className="w-full">
+                                                    <Link href={createFilterUrl("category", category.id.toString())}>
+                                                        Browse {category.name} Techniques
                                                     </Link>
                                                 </Button>
                                             </CardFooter>
                                         </Card>
                                     ))}
                                 </div>
-                            )}
-                        </section>
+                            </TabsContent>
+                        ))}
+                    </Tabs>
 
-                        {/* Complexity and Computational Cost Section */}
-                        <section className="space-y-6 mt-12" aria-labelledby="implementation-heading">
-                            <h2 id="implementation-heading" className="text-2xl font-bold">Implementation Considerations</h2>
-                            <p className="text-muted-foreground">
-                                Each technique is rated for complexity and computational cost to help you understand the resources required for implementation.
-                            </p>
+                    <div className="flex justify-center mt-6">
+                        <Button asChild size="lg" variant="outline">
+                            <Link href="/techniques">
+                                Browse All Techniques
+                                <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
+                            </Link>
+                        </Button>
+                    </div>
+                </section>
 
-                            {isLoading ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
-                                    {[1, 2].map((i) => (
-                                        <Card key={i}>
-                                            <CardHeader>
-                                                <div className="h-6 w-3/4 bg-muted animate-pulse rounded-md" />
-                                                <div className="h-4 w-1/2 mt-2 bg-muted animate-pulse rounded-md" />
-                                            </CardHeader>
-                                            <CardContent>
-                                                <div className="space-y-4">
-                                                    {[1, 2, 3].map((j) => (
-                                                        <div key={j} className="flex items-center justify-between">
-                                                            <div className="h-4 w-1/3 bg-muted animate-pulse rounded-md" />
-                                                            <div className="h-4 w-1/3 bg-muted animate-pulse rounded-md" />
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </CardContent>
-                                        </Card>
+                {/* Model Dependency Section */}
+                <section className="space-y-8">
+                    <h2 className="text-2xl font-bold">Model Dependency</h2>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {/* Model-Agnostic */}
+                        <Card className="h-full flex flex-col">
+                            <CardHeader>
+                                <CardTitle>Model-Agnostic Techniques</CardTitle>
+                                <CardDescription>
+                                    Techniques that can be applied to any machine learning model, regardless of its internal structure.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="flex-grow">
+                                <ul className="space-y-2">
+                                    {agnosticTechniques?.results && agnosticTechniques.results.slice(0, 3).map((technique: Technique) => (
+                                        <li key={technique.id}>
+                                            <Link href={`/techniques/${technique.id}`} className="text-primary hover:underline">
+                                                {technique.name}
+                                            </Link>
+                                        </li>
                                     ))}
-                                </div>
-                            ) : (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
-                                    <Card>
-                                        <CardHeader>
-                                            <CardTitle>Complexity Rating</CardTitle>
-                                            <CardDescription>
-                                                Indicates how difficult a technique is to understand and implement
-                                            </CardDescription>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <div className="space-y-4">
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex items-center">
-                                                        <StarRating rating={1} className="text-yellow-500" />
-                                                        <span className="ml-2">Simple</span>
-                                                    </div>
-                                                    <p className="text-sm text-muted-foreground">Basic techniques with straightforward implementation</p>
-                                                </div>
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex items-center">
-                                                        <StarRating rating={3} className="text-yellow-500" />
-                                                        <span className="ml-2">Moderate</span>
-                                                    </div>
-                                                    <p className="text-sm text-muted-foreground">Requires some expertise and careful implementation</p>
-                                                </div>
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex items-center">
-                                                        <StarRating rating={5} className="text-yellow-500" />
-                                                        <span className="ml-2">Complex</span>
-                                                    </div>
-                                                    <p className="text-sm text-muted-foreground">Advanced techniques requiring specialist knowledge</p>
-                                                </div>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-
-                                    <Card>
-                                        <CardHeader>
-                                            <CardTitle>Computational Cost</CardTitle>
-                                            <CardDescription>
-                                                Indicates the computational resources needed to run the technique
-                                            </CardDescription>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <div className="space-y-4">
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex items-center">
-                                                        <StarRating rating={1} className="text-yellow-500" />
-                                                        <span className="ml-2">Low</span>
-                                                    </div>
-                                                    <p className="text-sm text-muted-foreground">Runs efficiently on standard hardware</p>
-                                                </div>
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex items-center">
-                                                        <StarRating rating={3} className="text-yellow-500" />
-                                                        <span className="ml-2">Medium</span>
-                                                    </div>
-                                                    <p className="text-sm text-muted-foreground">May require significant processing power or memory</p>
-                                                </div>
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex items-center">
-                                                        <StarRating rating={5} className="text-yellow-500" />
-                                                        <span className="ml-2">High</span>
-                                                    </div>
-                                                    <p className="text-sm text-muted-foreground">Computationally intensive, may need specialized hardware</p>
-                                                </div>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                </div>
-                            )}
-                        </section>
-
-                        {/* How to Use This Information */}
-                        <section className="mt-12 border-t pt-8" aria-labelledby="how-to-use-heading">
-                            <h2 id="how-to-use-heading" className="text-2xl font-bold mb-4">How to Use This Information</h2>
-
-                            <div className="prose max-w-none">
-                                <p>
-                                    When selecting techniques for your responsible AI project, consider these factors:
-                                </p>
-
-                                <ol>
-                                    <li>
-                                        <strong>Start with your assurance goals</strong> - Identify which objectives are most important for your specific use case (e.g., explaining model decisions, ensuring fairness).
-                                    </li>
-                                    <li>
-                                        <strong>Consider your model constraints</strong> - If you&apos;re working with a black-box model or third-party API, focus on model-agnostic techniques. If you have full access to model internals, you can leverage model-specific approaches.
-                                    </li>
-                                    <li>
-                                        <strong>Assess your resources</strong> - Match the complexity and computational cost ratings with your team&apos;s expertise and available computing resources.
-                                    </li>
-                                    <li>
-                                        <strong>Explore multiple techniques</strong> - Often, a combination of techniques is necessary for comprehensive responsible AI assurance.
-                                    </li>
-                                </ol>
-
-                                <p>
-                                    The TEA Techniques database is designed to help you navigate these considerations and find the right approaches for your needs.
-                                </p>
-                            </div>
-
-                            <div className="mt-8 flex justify-center">
-                                <Button asChild size="lg">
-                                    <Link href="/techniques">
-                                        Browse All Techniques
+                                </ul>
+                            </CardContent>
+                            <CardFooter>
+                                <Button asChild variant="default" className="w-full">
+                                    <Link href={createFilterUrl("model_dependency", "Model-Agnostic")}>
+                                        Browse Model-Agnostic Techniques
+                                        <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
                                     </Link>
                                 </Button>
+                            </CardFooter>
+                        </Card>
+
+                        {/* Model-Specific */}
+                        <Card className="h-full flex flex-col">
+                            <CardHeader>
+                                <CardTitle>Model-Specific Techniques</CardTitle>
+                                <CardDescription>
+                                    Techniques that require access to a model&apos;s internal components, gradients, or specific architectures.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="flex-grow">
+                                <ul className="space-y-2">
+                                    {specificTechniques?.results && specificTechniques.results.slice(0, 3).map((technique: Technique) => (
+                                        <li key={technique.id}>
+                                            <Link href={`/techniques/${technique.id}`} className="text-primary hover:underline">
+                                                {technique.name}
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </CardContent>
+                            <CardFooter>
+                                <Button asChild variant="default" className="w-full">
+                                    <Link href={createFilterUrl("model_dependency", "Model-Specific")}>
+                                        Browse Model-Specific Techniques
+                                        <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
+                                    </Link>
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    </div>
+                </section>
+
+                {/* How to Use This Information Section */}
+                <section className="space-y-6">
+                    <h2 className="text-2xl font-bold">How to Use This Information</h2>
+
+                    <div className="bg-card rounded-lg p-8 shadow-sm space-y-6">
+                        <div className="max-w-3xl mx-auto space-y-6">
+                            <div className="space-y-2">
+                                <h3 className="text-xl font-semibold flex items-center">
+                                    <ArrowRight className="mr-2 h-5 w-5 text-primary" />
+                                    Identify Your Assurance Goals
+                                </h3>
+                                <p className="text-lg ml-7">
+                                    Start by determining which aspects of AI trustworthiness are most important for your system—explainability, fairness, security, etc.
+                                </p>
                             </div>
-                        </section>
-                    </>
-                )}
+
+                            <div className="space-y-2">
+                                <h3 className="text-xl font-semibold flex items-center">
+                                    <ArrowRight className="mr-2 h-5 w-5 text-primary" />
+                                    Consider Your Model Type
+                                </h3>
+                                <p className="text-lg ml-7">
+                                    Some techniques require access to model internals, while others work with any model as a black box. Choose based on your access level.
+                                </p>
+                            </div>
+
+                            <div className="space-y-2">
+                                <h3 className="text-xl font-semibold flex items-center">
+                                    <ArrowRight className="mr-2 h-5 w-5 text-primary" />
+                                    Explore Categories in Depth
+                                </h3>
+                                <p className="text-lg ml-7">
+                                    Within each assurance goal, different categories address specific aspects of the problem. Browse these to narrow your search.
+                                </p>
+                            </div>
+
+                            <div className="space-y-2">
+                                <h3 className="text-xl font-semibold flex items-center">
+                                    <ArrowRight className="mr-2 h-5 w-5 text-primary" />
+                                    Evaluate Implementation Requirements
+                                </h3>
+                                <p className="text-lg ml-7">
+                                    Each technique has different complexity and computational requirements. Consider your resources and constraints.
+                                </p>
+                            </div>
+
+                            <div className="space-y-2">
+                                <h3 className="text-xl font-semibold flex items-center">
+                                    <ArrowRight className="mr-2 h-5 w-5 text-primary" />
+                                    Combine Multiple Techniques
+                                </h3>
+                                <p className="text-lg ml-7">
+                                    Often, the best approach is to use multiple techniques together to address different aspects of AI assurance.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </MainLayout>
     );
 }
-

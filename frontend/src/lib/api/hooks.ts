@@ -34,7 +34,7 @@ export const useAssuranceGoals = () => {
 		queryKey: ["assurance-goals"],
 		queryFn: async () => {
 			try {
-				const url = `http://127.0.0.1:8000/api/assurance-goals/`;
+				const url = `http://localhost:8000/api/assurance-goals/`;
 				console.log(`[useAssuranceGoals] Direct fetching from: ${url}`);
 
 				const response = await fetch(url, {
@@ -75,7 +75,7 @@ export const useCategories = (assuranceGoalId?: number) => {
 		queryKey: ["categories", assuranceGoalId],
 		queryFn: async () => {
 			try {
-				const url = `http://127.0.0.1:8000/api/categories/?${queryString.toString()}`;
+				const url = `http://localhost:8000/api/categories/?${queryString.toString()}`;
 				console.log(`[useCategories] Direct fetching from: ${url}`);
 
 				const response = await fetch(url, {
@@ -116,7 +116,7 @@ export const useSubCategories = (categoryId?: number) => {
 		queryKey: ["subcategories", categoryId],
 		queryFn: async () => {
 			try {
-				const url = `http://127.0.0.1:8000/api/subcategories/?${queryString.toString()}`;
+				const url = `http://localhost:8000/api/subcategories/?${queryString.toString()}`;
 				console.log(`[useSubCategories] Direct fetching from: ${url}`);
 
 				const response = await fetch(url, {
@@ -152,7 +152,7 @@ export const useTags = () => {
 		queryKey: ["tags"],
 		queryFn: async () => {
 			try {
-				const url = `http://127.0.0.1:8000/api/tags/`;
+				const url = `http://localhost:8000/api/tags/`;
 				console.log(`[useTags] Direct fetching from: ${url}`);
 
 				const response = await fetch(url, {
@@ -188,7 +188,7 @@ export const useAttributeTypes = () => {
 		queryKey: ["attribute-types"],
 		queryFn: async () => {
 			try {
-				const url = `http://127.0.0.1:8000/api/attribute-types/`;
+				const url = `http://localhost:8000/api/attribute-types/`;
 				console.log(`[useAttributeTypes] Direct fetching from: ${url}`);
 
 				const response = await fetch(url, {
@@ -229,7 +229,7 @@ export const useAttributeValues = (attributeTypeId?: number) => {
 		queryKey: ["attribute-values", attributeTypeId],
 		queryFn: async () => {
 			try {
-				const url = `http://127.0.0.1:8000/api/attribute-values/?${queryString.toString()}`;
+				const url = `http://localhost:8000/api/attribute-values/?${queryString.toString()}`;
 				console.log(
 					`[useAttributeValues] Direct fetching from: ${url}`
 				);
@@ -268,7 +268,7 @@ export const useResourceTypes = () => {
 		queryKey: ["resource-types"],
 		queryFn: async () => {
 			try {
-				const url = `http://127.0.0.1:8000/api/resource-types/`;
+				const url = `http://localhost:8000/api/resource-types/`;
 				console.log(`[useResourceTypes] Direct fetching from: ${url}`);
 
 				const response = await fetch(url, {
@@ -355,7 +355,7 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 		queryFn: async () => {
 			try {
 				// Use the direct fetch approach with absolute URL
-				const url = `http://127.0.0.1:8000/api/techniques/?${queryString.toString()}`;
+				const url = `http://localhost:8000/api/techniques/?${queryString.toString()}`;
 				console.log(`[useTechniques] Direct fetching from: ${url}`);
 
 				const response = await fetch(url, {
@@ -392,7 +392,7 @@ export const useTechniqueDetail = (id: number) => {
 		queryKey: ["technique", id],
 		queryFn: async () => {
 			try {
-				const url = `http://127.0.0.1:8000/api/techniques/${id}/`;
+				const url = `http://localhost:8000/api/techniques/${id}/`;
 				console.log(
 					`[useTechniqueDetail] Direct fetching from: ${url}`
 				);
@@ -461,7 +461,7 @@ export const useCreateTechnique = () => {
 	return useMutation({
 		mutationFn: async (data: TechniqueFormData) => {
 			try {
-				const url = `http://127.0.0.1:8000/api/techniques/`;
+				const url = `http://localhost:8000/api/techniques/`;
 				console.log(`[useCreateTechnique] Direct posting to: ${url}`);
 
 				const response = await fetch(url, {
@@ -499,7 +499,7 @@ export const useUpdateTechnique = (id: number) => {
 	return useMutation({
 		mutationFn: async (data: TechniqueFormData) => {
 			try {
-				const url = `http://127.0.0.1:8000/api/techniques/${id}/`;
+				const url = `http://localhost:8000/api/techniques/${id}/`;
 				console.log(`[useUpdateTechnique] Direct putting to: ${url}`);
 
 				const response = await fetch(url, {
@@ -538,7 +538,7 @@ export const useDeleteTechnique = () => {
 	return useMutation({
 		mutationFn: async (id: number) => {
 			try {
-				const url = `http://127.0.0.1:8000/api/techniques/${id}/`;
+				const url = `http://localhost:8000/api/techniques/${id}/`;
 				console.log(
 					`[useDeleteTechnique] Direct deleting from: ${url}`
 				);
@@ -582,7 +582,7 @@ export const useTechniqueRelationships = (techniqueId: number) => {
 		queryKey: ["technique-relationships", techniqueId],
 		queryFn: async () => {
 			try {
-				const url = `http://127.0.0.1:8000/api/technique-relationships/?${queryString.toString()}`;
+				const url = `http://localhost:8000/api/technique-relationships/?${queryString.toString()}`;
 				console.log(
 					`[useTechniqueRelationships] Direct fetching from: ${url}`
 				);

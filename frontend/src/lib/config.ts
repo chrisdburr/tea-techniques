@@ -13,12 +13,7 @@ const getApiBaseUrl = (): string => {
 		return process.env.NEXT_PUBLIC_API_URL;
 	}
 
-	// For local development without env vars
-	if (process.env.NODE_ENV === "development") {
-		return "http://localhost:8000/api";
-	}
-
-	// Production fallback (should be overridden by env var)
+	// Use relative URL for both dev and prod to work with any domain
 	return "/api";
 };
 
@@ -27,10 +22,7 @@ const getSwaggerUrl = (): string => {
 		return process.env.NEXT_PUBLIC_SWAGGER_URL;
 	}
 
-	if (process.env.NODE_ENV === "development") {
-		return "http://localhost:8000/swagger/";
-	}
-
+	// Use relative URL
 	return "/swagger/";
 };
 

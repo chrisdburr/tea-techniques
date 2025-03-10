@@ -149,15 +149,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# In development or Docker, allow all origins
+# Enable CORS for all origins in development
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
     CORS_ALLOW_CREDENTIALS = True
     CORS_EXPOSE_HEADERS = ["Content-Type", "X-CSRFToken"]
 else:
-    # For production, use specified origins
+    # For production, use specified origins including your Tailscale domain
     CORS_ALLOWED_ORIGINS = os.getenv(
-        "CORS_ALLOWED_ORIGINS", "http://localhost:3000"
+        "CORS_ALLOWED_ORIGINS", 
+        "http://localhost:3000,http://localhost:3001,https://arch-webserver.tailb4d95.ts.net"
     ).split(",")
     CORS_ALLOW_CREDENTIALS = True
 
@@ -169,10 +170,11 @@ CORS_ALLOW_METHODS = [
     "POST",
     "PUT",
 ]
+# Allow common headers
 CORS_ALLOW_HEADERS = [
     "accept",
     "accept-encoding",
-    "authorization",
+    "authorization", 
     "content-type",
     "dnt",
     "origin",
@@ -185,7 +187,9 @@ CORS_ALLOW_HEADERS = [
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    # Add production domains later
+    "http://localhost:3001",
+    "https://arch-webserver.tailb4d95.ts.net",
+]
 ]
 
 INTERNAL_IPS = [

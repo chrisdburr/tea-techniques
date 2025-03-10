@@ -15,6 +15,9 @@ const apiClient = axios.create({
 	maxRedirects: 0,
 });
 
+// Log base URL during initialization
+console.log(`Axios client initialized with baseURL: ${config.apiBaseUrl}`);
+
 // Add request logging in development
 if (process.env.NODE_ENV === "development") {
 	apiClient.interceptors.request.use(

@@ -43,18 +43,20 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - DOCKER_ENV=true
+        - BACKEND_URL=http://backend:8000
     environment:
       - NEXT_PUBLIC_API_URL=/api
       - NEXT_PUBLIC_SWAGGER_URL=/swagger/
       - NODE_ENV=production
       - DOCKER_ENV=true
       - BACKEND_URL=http://backend:8000
+      - NODE_OPTIONS=--max-old-space-size=4096
     ports:
       - "3000:3000"
     depends_on:
       - backend
-    networks:
-      - default
 
 volumes:
   postgres_data:

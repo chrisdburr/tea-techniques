@@ -6,6 +6,9 @@ from rest_framework.decorators import api_view
 from django_filters.rest_framework import DjangoFilterBackend
 from django.http import JsonResponse
 from django.core import serializers
+from django.views.decorators.csrf import csrf_exempt
+from django.middleware.common import CommonMiddleware
+from django.db import connection
 import json
 import logging
 
@@ -210,6 +213,7 @@ def get_subcategorylist(request, category_id):
 
 
 @api_view(["GET", "POST"])
+@csrf_exempt
 def debug_endpoint(request):
     """
     Debugging endpoint to check what the API is receiving and can return.
@@ -231,6 +235,13 @@ def debug_endpoint(request):
             "MIDDLEWARE": settings.MIDDLEWARE,
         }
         
+        # Get current database connection info
+        db_info = {
+            "vendor": connection.vendor,
+            "queries_executed": len(connection.queries) if settings.DEBUG else "Query logging disabled",
+            "is_usable": connection.is_usable(),
+        }
+        
         # Return model information for debugging
         assurance_goals_count = AssuranceGoal.objects.count()
         categories_count = Category.objects.count()
@@ -246,6 +257,7 @@ def debug_endpoint(request):
                 "content_type": request.content_type or "Not set",
                 "headers": {k: v for k, v in request.headers.items() if k.lower() not in ('cookie', 'authorization')},
             },
+            "database_info": db_info,
             "database_counts": {
                 "assurance_goals": assurance_goals_count,
                 "categories": categories_count,

@@ -30,17 +30,30 @@ const calculateTotalPages = (
 	return totalItems > 0 ? Math.ceil(totalItems / pageSize) : 1;
 };
 
+// Helper function to try API calls with and without trailing slash
+const fetchAPI = async <T>(url: string, params?: Record<string, string | number>): Promise<T> => {
+  try {
+    // First, try without trailing slash
+    const urlWithoutSlash = url.endsWith('/') ? url.slice(0, -1) : url;
+    const response = await apiClient.get(urlWithoutSlash, { params });
+    return response.data as T;
+  } catch (error) {
+    console.log(`[fetchAPI] Failed without slash, trying with slash`);
+    // If that fails, try with trailing slash
+    const urlWithSlash = url.endsWith('/') ? url : `${url}/`;
+    const response = await apiClient.get(urlWithSlash, { params });
+    return response.data as T;
+  }
+};
+
 // Base data fetching hooks
 export const useAssuranceGoals = () => {
 	return useQuery({
 		queryKey: ["assurance-goals"],
 		queryFn: async () => {
 			try {
-				// Use apiClient instead of fetch directly
 				console.log(`[useAssuranceGoals] Fetching using apiClient`);
-				
-				const response = await apiClient.get(`/api/assurance-goals/`);
-				return response.data as APIResponse<AssuranceGoal>;
+				return await fetchAPI<APIResponse<AssuranceGoal>>('/api/assurance-goals/');
 			} catch (error: unknown) {
 				logApiError('useAssuranceGoals', error);
 				throw error;
@@ -63,9 +76,7 @@ export const useCategories = (assuranceGoalId?: number) => {
 		queryFn: async () => {
 			try {
 				console.log(`[useCategories] Fetching using apiClient with params: ${JSON.stringify(params)}`);
-				
-				const response = await apiClient.get(`/api/categories/`, { params });
-				return response.data as APIResponse<Category>;
+				return await fetchAPI<APIResponse<Category>>('/api/categories/', params);
 			} catch (error: unknown) {
 				logApiError('useCategories', error);
 				throw error;
@@ -88,9 +99,7 @@ export const useSubCategories = (categoryId?: number) => {
 		queryFn: async () => {
 			try {
 				console.log(`[useSubCategories] Fetching using apiClient with params: ${JSON.stringify(params)}`);
-				
-				const response = await apiClient.get(`/api/subcategories/`, { params });
-				return response.data as APIResponse<SubCategory>;
+				return await fetchAPI<APIResponse<SubCategory>>('/api/subcategories/', params);
 			} catch (error: unknown) {
 				logApiError('useSubCategories', error);
 				throw error;
@@ -108,9 +117,7 @@ export const useTags = () => {
 		queryFn: async () => {
 			try {
 				console.log(`[useTags] Fetching using apiClient`);
-				
-				const response = await apiClient.get(`/api/tags/`);
-				return response.data as APIResponse<Tag>;
+				return await fetchAPI<APIResponse<Tag>>('/api/tags/');
 			} catch (error: unknown) {
 				logApiError('useTags', error);
 				throw error;
@@ -128,9 +135,7 @@ export const useAttributeTypes = () => {
 		queryFn: async () => {
 			try {
 				console.log(`[useAttributeTypes] Fetching using apiClient`);
-				
-				const response = await apiClient.get(`/api/attribute-types/`);
-				return response.data as APIResponse<AttributeType>;
+				return await fetchAPI<APIResponse<AttributeType>>('/api/attribute-types/');
 			} catch (error: unknown) {
 				logApiError('useAttributeTypes', error);
 				throw error;
@@ -153,9 +158,7 @@ export const useAttributeValues = (attributeTypeId?: number) => {
 		queryFn: async () => {
 			try {
 				console.log(`[useAttributeValues] Fetching using apiClient with params: ${JSON.stringify(params)}`);
-				
-				const response = await apiClient.get(`/api/attribute-values/`, { params });
-				return response.data as APIResponse<AttributeValue>;
+				return await fetchAPI<APIResponse<AttributeValue>>('/api/attribute-values/', params);
 			} catch (error: unknown) {
 				logApiError('useAttributeValues', error);
 				throw error;
@@ -174,9 +177,7 @@ export const useResourceTypes = () => {
 		queryFn: async () => {
 			try {
 				console.log(`[useResourceTypes] Fetching using apiClient`);
-				
-				const response = await apiClient.get(`/api/resource-types/`);
-				return response.data as APIResponse<ResourceType>;
+				return await fetchAPI<APIResponse<ResourceType>>('/api/resource-types/');
 			} catch (error: unknown) {
 				logApiError('useResourceTypes', error);
 				throw error;
@@ -245,12 +246,7 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 			try {
 				// Use the apiClient configured with proper baseUrl
 				console.log(`[useTechniques] Fetching using apiClient with params: ${queryParams.toString()}`);
-				
-				const response = await apiClient.get(`/api/techniques/`, {
-					params: apiParams  // Use the params object directly with axios
-				});
-				
-				return response.data;
+				return await fetchAPI('/api/techniques/', apiParams);
 			} catch (error: unknown) {
 				logApiError('useTechniques', error);
 				throw error;
@@ -269,19 +265,37 @@ export const useTechniqueDetail = (id: number) => {
 			try {
 				console.log(`[useTechniqueDetail] Fetching using apiClient for technique ${id}`);
 				
-				const response = await apiClient.get(`/api/techniques/${id}/`);
-				const data = response.data;
-				
-				// Validate and log the response
-				console.log(`[useTechniqueDetail] Response:`, data);
+				try {
+					// Try without trailing slash first
+					const response = await apiClient.get(`/api/techniques/${id}`);
+					const data = response.data;
+					
+					// Validate and log the response
+					console.log(`[useTechniqueDetail] Response:`, data);
 
-				// Check if the data has the expected structure
-				if (!data.id || !data.name) {
-					console.error(`[useTechniqueDetail] Malformed data:`, data);
-					throw new Error(`API returned malformed data`);
+					// Check if the data has the expected structure
+					if (!data.id || !data.name) {
+						console.error(`[useTechniqueDetail] Malformed data:`, data);
+						throw new Error(`API returned malformed data`);
+					}
+
+					return data as Technique;
+				} catch (innerError) {
+					// Try with trailing slash as fallback
+					const response = await apiClient.get(`/api/techniques/${id}/`);
+					const data = response.data;
+					
+					// Validate and log the response
+					console.log(`[useTechniqueDetail] Response:`, data);
+
+					// Check if the data has the expected structure
+					if (!data.id || !data.name) {
+						console.error(`[useTechniqueDetail] Malformed data:`, data);
+						throw new Error(`API returned malformed data`);
+					}
+
+					return data as Technique;
 				}
-
-				return data as Technique;
 			} catch (error: unknown) {
 				logApiError('useTechniqueDetail', error);
 				throw error;
@@ -301,8 +315,15 @@ export const useCreateTechnique = () => {
 			try {
 				console.log(`[useCreateTechnique] Posting using apiClient`);
 				
-				const response = await apiClient.post(`/api/techniques/`, data);
-				return response.data as Technique;
+				try {
+					// Try without trailing slash first
+					const response = await apiClient.post(`/api/techniques`, data);
+					return response.data as Technique;
+				} catch (innerError) {
+					// Try with trailing slash as fallback
+					const response = await apiClient.post(`/api/techniques/`, data);
+					return response.data as Technique;
+				}
 			} catch (error: unknown) {
 				logApiError('useCreateTechnique', error);
 				throw error;
@@ -322,8 +343,15 @@ export const useUpdateTechnique = (id: number) => {
 			try {
 				console.log(`[useUpdateTechnique] Putting using apiClient for technique ${id}`);
 				
-				const response = await apiClient.put(`/api/techniques/${id}/`, data);
-				return response.data as Technique;
+				try {
+					// Try without trailing slash first
+					const response = await apiClient.put(`/api/techniques/${id}`, data);
+					return response.data as Technique;
+				} catch (innerError) {
+					// Try with trailing slash as fallback
+					const response = await apiClient.put(`/api/techniques/${id}/`, data);
+					return response.data as Technique;
+				}
 			} catch (error: unknown) {
 				logApiError('useUpdateTechnique', error);
 				throw error;
@@ -344,8 +372,15 @@ export const useDeleteTechnique = () => {
 			try {
 				console.log(`[useDeleteTechnique] Deleting using apiClient for technique ${id}`);
 				
-				await apiClient.delete(`/api/techniques/${id}/`);
-				return id;
+				try {
+					// Try without trailing slash first
+					await apiClient.delete(`/api/techniques/${id}`);
+					return id;
+				} catch (innerError) {
+					// Try with trailing slash as fallback
+					await apiClient.delete(`/api/techniques/${id}/`);
+					return id;
+				}
 			} catch (error: unknown) {
 				logApiError('useDeleteTechnique', error);
 				throw error;
@@ -370,9 +405,7 @@ export const useTechniqueRelationships = (techniqueId: number) => {
 		queryFn: async () => {
 			try {
 				console.log(`[useTechniqueRelationships] Fetching using apiClient with params: ${JSON.stringify(params)}`);
-				
-				const response = await apiClient.get(`/api/technique-relationships/`, { params });
-				return response.data;
+				return await fetchAPI('/api/technique-relationships/', params);
 			} catch (error: unknown) {
 				logApiError('useTechniqueRelationships', error);
 				throw error;

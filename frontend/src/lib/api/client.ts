@@ -33,8 +33,8 @@ const apiClient = axios.create({
     "Content-Type": "application/json",
     Accept: "application/json",
   },
-  // Prevent redirect following to avoid loops
-  maxRedirects: 0,
+  // Allow redirects to follow Django's trailing slash redirects
+  maxRedirects: 5,
 });
 
 // Log base URL during initialization

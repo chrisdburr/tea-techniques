@@ -88,6 +88,8 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.JSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
     ],
+    # Allow requests without trailing slashes
+    "TRAILING_SLASH": False,
 }
 
 ROOT_URLCONF = "config.urls"
@@ -166,6 +168,9 @@ CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://frontend:3000").split(",")
 CORS_ALLOW_CREDENTIALS = True
 CORS_EXPOSE_HEADERS = ["Content-Type", "X-CSRFToken"]
+
+# Disable redirects to URLs with trailing slashes (Django default is True)
+APPEND_SLASH = False
 
 CORS_ALLOW_METHODS = [
     "DELETE",

@@ -27,7 +27,7 @@ services:
       - DB_PORT=5432
       - DEBUG=True
       - ALLOWED_HOSTS=*
-      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://frontend:3000
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001,http://frontend:3000
       - SECRET_KEY=dev-secret-key
       - DOCKER_ENVIRONMENT=True
     depends_on:
@@ -35,7 +35,6 @@ services:
         condition: service_healthy
     ports:
       - "8000:8000"
-    # For development, uncomment these volume mounts:
     volumes:
       - ./backend:/app
       - ./backend/data:/app/data
@@ -49,6 +48,7 @@ services:
       - NEXT_PUBLIC_SWAGGER_URL=/swagger/
       - NODE_ENV=production
       - DOCKER_ENV=true
+      - BACKEND_URL=http://backend:8000
     ports:
       - "3000:3000"
     depends_on:

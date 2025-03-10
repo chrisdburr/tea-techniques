@@ -8,6 +8,7 @@ const mockTechniques: Technique[] = [
     name: 'Test Technique 1',
     description: 'Description for test technique 1',
     model_dependency: 'Agnostic',
+    category_tags: '', // Add this required field
     example_use_cases: [
       {
         id: 101,
@@ -19,7 +20,7 @@ const mockTechniques: Technique[] = [
     assurance_goals: [],
     categories: [],
     subcategories: [],
-    attributes: [],
+    attribute_values: [], // Updated from attributes to attribute_values
     resources: [],
     limitations: [],
     tags: []

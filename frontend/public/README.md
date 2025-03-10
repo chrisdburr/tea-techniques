@@ -1,6 +1,6 @@
 # TEA Techniques
 
-A platform for exploring techniques for evidencing claims about responsible design, development, and deployment of data-driven technologies. To be used in conjunction with the Trustworthy and Ethical Assurance (TEA) platform.
+An interactive database for exploring techniques for evidencing claims about responsible AI design, development, and deployment. This repository has been designed to work in conjunction with the [Trustworthy and Ethical Assurance (TEA) platform](https://assuranceplatform.azurewebsites.net/) as a core plugin to enable practitioners to identify and implement appropriate assurance methods.
 
 ## Development Setup
 
@@ -10,63 +10,63 @@ For local development, you can use SQLite which doesn't require Docker:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-repo/tea-techniques.git
+   git clone https://github.com/chrisdburr/tea-techniques.git
    cd tea-techniques
    ```
 
-2. **Set up the backend**
+2. **Setup environment variable**
+   ```bash
+   cp .env.example .env
+   ```
+
+3. **Set up the backend**
    ```bash
    cd backend
    poetry install
-   poetry run python scripts/setup_dev.py
+   USE_SQLITE=True python manage.py reset_and_import_techniques
    ```
 
-3. **Run the backend with SQLite**
+4. **Run the backend with SQLite**
    ```bash
    USE_SQLITE=True poetry run python manage.py runserver
    ```
 
-4. **In a new terminal, set up and run the frontend**
+5. **In a new terminal, set up and run the frontend**
    ```bash
    cd frontend
    npm install
    npm run dev --turbopack
    ```
 
-5. **Access the application**
+6. **Access the application**
    - Frontend: http://localhost:3000
    - API: http://localhost:8000/api/
-   - Admin: http://localhost:8000/admin/ (username: admin, password: admin)
+   - Django Admin: http://localhost:8000/admin/
 
 ### Using Docker (for production-like environment)
 
 If you want to use the full Docker setup with PostgreSQL:
 
 1. **Setup environment variable**
+   ```bash
+   cp .env.example .env
+   ```
 
-  ```bash
-  mv .env.example .env
-  ```
-
-  - Review and adjust the values (e.g. change user and password)
-
-2. **Start the database**
-
+2. **Start the application**
    ```bash
    docker compose up -d
    ```
 
 3. **Access the application**
-
-  - Frontend: http://localhost:3000
-  - API: http://localhost:8000/api/
+   - Frontend: http://localhost:3000
+   - API: http://localhost:8000/api/
 
 ## Project Structure
 
 - **Backend**: Django with Django REST Framework
   - `backend/api`: Main Django app
   - `backend/config`: Django project settings
-  - `backend/scripts`: Utility scripts
+  - `backend/data`: CSV file with technique data
 
 - **Frontend**: Next.js with TypeScript and Tailwind CSS
   - `frontend/src/app`: Next.js pages and routes
@@ -75,22 +75,10 @@ If you want to use the full Docker setup with PostgreSQL:
 
 ## Development Tips
 
-1. **Local Development Mode**
-   
-   The setup script creates a SQLite database with sample data, making it easy to start development without Docker.
-
-2. **Authentication**
-   
-   The development setup creates an admin user you can use to access the Django admin interface:
-   - Username: `admin`
-   - Password: `admin`
-
-3. **API Documentation**
-   
+1. **API Documentation**
    Access the API documentation at http://localhost:8000/swagger/ when the backend is running.
 
-4. **Database Migrations**
-   
+2. **Database Migrations**
    When changing models, create and apply migrations:
    ```bash
    cd backend
@@ -109,16 +97,7 @@ npm test
 Run backend tests:
 ```bash
 cd backend
-USE_SQLITE=True poetry run pytest
-```
-
-Run integration tests:
-```bash
-# Install dependencies if needed
-pip install requests rich
-
-# Run integration tests
-python scripts/test_integration.py
+poetry run pytest
 ```
 
 ## Key Features
@@ -130,4 +109,4 @@ python scripts/test_integration.py
 
 ## License
 
-[Add license information]
+This project is licensed under the MIT License - see the LICENSE file for details.

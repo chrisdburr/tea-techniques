@@ -14,14 +14,20 @@ RUN npm ci
 COPY . .
 
 # Set build-time environment variables (can be overridden at build time)
-ARG NEXT_PUBLIC_API_URL
-ARG NEXT_PUBLIC_SWAGGER_URL
+ARG NEXT_PUBLIC_API_URL=/api
+ARG NEXT_PUBLIC_SWAGGER_URL=/swagger/
+ARG DOCKER_ENV=true
+ARG BACKEND_URL=http://backend:8000
+
+# Set environment variables for build
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 ENV NEXT_PUBLIC_SWAGGER_URL=${NEXT_PUBLIC_SWAGGER_URL}
+ENV DOCKER_ENV=${DOCKER_ENV}
+ENV BACKEND_URL=${BACKEND_URL}
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
-# Build application
+# Set up development build (for source map support)
 RUN npm run build
 
 # Production image
@@ -39,6 +45,13 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV DOCKER_ENV=true
+ENV BACKEND_URL=http://backend:8000
+ENV NEXT_PUBLIC_API_URL=/api
+ENV NEXT_PUBLIC_SWAGGER_URL=/swagger/
+
+# Install curl for health checks
+RUN apt-get update && apt-get install -y curl wget && rm -rf /var/lib/apt/lists/*
 
 # Don't run as root
 RUN addgroup --system --gid 1001 nodejs

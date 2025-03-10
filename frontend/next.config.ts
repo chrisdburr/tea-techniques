@@ -20,14 +20,8 @@ const nextConfig: NextConfig = {
 
 	// Add this output configuration for standalone mode
 	output: "standalone",
-};
 
-module.exports = {
-	output: 'standalone',
-	experimental: {
-	  // This is important for proper proxying
-	  skipTrailingSlashRedirect: true,
-	}
-  }
+	skipTrailingSlashRedirect: true
+};
 
 export default nextConfig;

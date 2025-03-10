@@ -23,12 +23,20 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("api.api_urls")),
+    # Also support paths without trailing slash
+    path("api", include("api.api_urls")),
     path("__reload__/", include("django_browser_reload.urls")),
     path(
         "swagger/",
         schema_view.with_ui("swagger", cache_timeout=0),
         name="schema-swagger-ui",
     ),
+    path(
+        "swagger",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui-no-slash",
+    ),
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
+    path("redoc", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc-no-slash"),
     path("", include("api.root_urls")),
 ]

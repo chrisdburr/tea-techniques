@@ -39,12 +39,20 @@ const nextConfig: NextConfig = {
 		console.log(`Setting up rewrite rules to proxy to: ${BACKEND_URL}`);
 		return [
 			{
+				source: '/api',
+				destination: `${BACKEND_URL}/api/` // Proxy to Django backend root with trailing slash
+			},
+			{
 				source: '/api/:path*',
-				destination: `${BACKEND_URL}/api/:path*` // Proxy to Django backend
+				destination: `${BACKEND_URL}/api/:path*` // Proxy to Django backend paths
+			},
+			{
+				source: '/swagger',
+				destination: `${BACKEND_URL}/swagger/` // Proxy Swagger docs with trailing slash
 			},
 			{
 				source: '/swagger/:path*',
-				destination: `${BACKEND_URL}/swagger/:path*` // Proxy Swagger docs
+				destination: `${BACKEND_URL}/swagger/:path*` // Proxy Swagger docs paths
 			}
 		];
 	},
@@ -52,8 +60,8 @@ const nextConfig: NextConfig = {
 	// Add this output configuration for standalone mode
 	output: "standalone",
 	
-	// Skip trailing slash redirects
-	skipTrailingSlashRedirect: true
+	// Force trailing slashes to match Django's URL pattern
+	trailingSlash: true
 };
 
 export default nextConfig;

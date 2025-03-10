@@ -66,7 +66,7 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
-router = DefaultRouter()
+router = DefaultRouter(trailing_slash=False)
 router.register(r"assurance-goals", AssuranceGoalsViewSet)
 router.register(r"categories", CategoryViewSet)
 router.register(r"subcategories", SubCategoryViewSet)
@@ -77,21 +77,23 @@ router.register(r"attribute-values", AttributeValuesViewSet)
 router.register(r"resource-types", ResourceTypesViewSet)
 
 urlpatterns = [
-    path("debug/", debug_endpoint, name="debug-endpoint"),
+    path("debug", debug_endpoint, name="debug-endpoint"),
+    # Also add path with trailing slash for compatibility
+    path("debug/", debug_endpoint, name="debug-endpoint-slash"),
     path("", api_root, name="api-root"),
     path("", include(router.urls)),
     path(
-        "categories-by-goal/<int:assurance_goal_id>/",
+        "categories-by-goal/<int:assurance_goal_id>",
         get_categorylist,
         name="categories-by-goal",
     ),
     path(
-        "subcategories-by-category/<int:category_id>/",
+        "subcategories-by-category/<int:category_id>",
         get_subcategorylist,
         name="subcategories-by-category",
     ),
     # Authentication
-    path("auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path("auth", include("rest_framework.urls", namespace="rest_framework")),
     # Swagger documentation
     re_path(
         r"^swagger(?P<format>\.json|\.yaml)$",
@@ -99,11 +101,20 @@ urlpatterns = [
         name="schema-json",
     ),
     re_path(
-        r"^swagger/$",
+        r"^swagger$",
         schema_view.with_ui("swagger", cache_timeout=0),
         name="schema-swagger-ui",
     ),
+    # Also keep trailing slash versions for backward compatibility
     re_path(
-        r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
+        r"^swagger/$",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui-slash",
+    ),
+    re_path(
+        r"^redoc$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
+    ),
+    re_path(
+        r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc-slash"
     ),
 ]

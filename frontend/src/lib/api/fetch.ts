@@ -1,8 +1,7 @@
 // src/lib/api/fetch.ts
 export async function fetchApi(endpoint: string, options: RequestInit = {}) {
-	// Always use the absolute path to the backend in development
-	const baseUrl = "http://localhost:8000/api";
-	const url = `${baseUrl}/${endpoint.replace(/^\//, "")}`;
+	// Always use a relative URL path for API calls
+	const url = `/api/${endpoint.replace(/^\//, "")}`;
 
 	console.log(`[fetchApi] Requesting: ${url}`);
 

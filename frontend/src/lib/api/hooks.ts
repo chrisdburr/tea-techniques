@@ -37,7 +37,7 @@ const fetchAPI = async <T>(url: string, params?: Record<string, string | number>
     const urlWithoutSlash = url.endsWith('/') ? url.slice(0, -1) : url;
     const response = await apiClient.get(urlWithoutSlash, { params });
     return response.data as T;
-  } catch (error) {
+  } catch {
     console.log(`[fetchAPI] Failed without slash, trying with slash`);
     // If that fails, try with trailing slash
     const urlWithSlash = url.endsWith('/') ? url : `${url}/`;
@@ -280,7 +280,7 @@ export const useTechniqueDetail = (id: number) => {
 					}
 
 					return data as Technique;
-				} catch (innerError) {
+				} catch {
 					// Try with trailing slash as fallback
 					const response = await apiClient.get(`/api/techniques/${id}/`);
 					const data = response.data;
@@ -319,7 +319,7 @@ export const useCreateTechnique = () => {
 					// Try without trailing slash first
 					const response = await apiClient.post(`/api/techniques`, data);
 					return response.data as Technique;
-				} catch (innerError) {
+				} catch {
 					// Try with trailing slash as fallback
 					const response = await apiClient.post(`/api/techniques/`, data);
 					return response.data as Technique;
@@ -347,7 +347,7 @@ export const useUpdateTechnique = (id: number) => {
 					// Try without trailing slash first
 					const response = await apiClient.put(`/api/techniques/${id}`, data);
 					return response.data as Technique;
-				} catch (innerError) {
+				} catch {
 					// Try with trailing slash as fallback
 					const response = await apiClient.put(`/api/techniques/${id}/`, data);
 					return response.data as Technique;
@@ -376,7 +376,7 @@ export const useDeleteTechnique = () => {
 					// Try without trailing slash first
 					await apiClient.delete(`/api/techniques/${id}`);
 					return id;
-				} catch (innerError) {
+				} catch {
 					// Try with trailing slash as fallback
 					await apiClient.delete(`/api/techniques/${id}/`);
 					return id;

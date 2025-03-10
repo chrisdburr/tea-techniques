@@ -260,7 +260,9 @@ export default function TechniquesList() {
 
 	// Update the techniques memo to include client-side filtering for complexity and computational cost
 	const techniques = useMemo(() => {
-		const results = techniquesData?.results || [];
+		// Type assertion to ensure TypeScript knows the structure
+		const data = techniquesData as { results?: Technique[] } | undefined;
+		const results = data?.results || [];
 
 		// Apply client-side filtering for results
 		return results.filter((technique: Technique) => {
@@ -295,7 +297,7 @@ export default function TechniquesList() {
 			return true;
 		});
 	}, [
-		techniquesData?.results,
+		techniquesData,
 		filters.search,
 		filters.complexity_max,
 		filters.computational_cost_max,

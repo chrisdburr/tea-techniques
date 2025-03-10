@@ -10,10 +10,12 @@ interface Config {
 const getApiBaseUrl = (): string => {
 	// Check for environment variables
 	if (process.env.NEXT_PUBLIC_API_URL) {
+		console.log('Using NEXT_PUBLIC_API_URL from env:', process.env.NEXT_PUBLIC_API_URL);
 		return process.env.NEXT_PUBLIC_API_URL;
 	}
 
 	// Use relative URL for both dev and prod to work with any domain
+	console.log('No NEXT_PUBLIC_API_URL found, using default /api');
 	return "/api";
 };
 

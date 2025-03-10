@@ -1,26 +1,35 @@
 #!/bin/bash
 set -e
 
-# Wait for database
-echo "Checking database connection..."
-max_retries=30
-retry_count=0
+# Check which database we're using
+if [ "$USE_SQLITE" = "True" ]; then
+    echo "Using SQLite database"
+    
+    # Ensure the db_data directory exists
+    mkdir -p /app/db_data
+    
+else
+    # Wait for PostgreSQL database
+    echo "Checking PostgreSQL database connection..."
+    max_retries=30
+    retry_count=0
 
-while [ $retry_count -lt $max_retries ]; do
-    if PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c "\q" 2>/dev/null; then
-        echo "✅ PostgreSQL is up - executing command"
-        break
-    fi
-    
-    retry_count=$((retry_count+1))
-    echo "⏳ Waiting for PostgreSQL... (attempt $retry_count of $max_retries)"
-    sleep 2
-    
-    if [ $retry_count -eq $max_retries ]; then
-        echo "❌ Failed to connect to PostgreSQL after $max_retries attempts!"
-        echo "⚠️  Continuing startup anyway, but application may fail!"
-    fi
-done
+    while [ $retry_count -lt $max_retries ]; do
+        if PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c "\q" 2>/dev/null; then
+            echo "✅ PostgreSQL is up - executing command"
+            break
+        fi
+        
+        retry_count=$((retry_count+1))
+        echo "⏳ Waiting for PostgreSQL... (attempt $retry_count of $max_retries)"
+        sleep 2
+        
+        if [ $retry_count -eq $max_retries ]; then
+            echo "❌ Failed to connect to PostgreSQL after $max_retries attempts!"
+            echo "⚠️  Continuing startup anyway, but application may fail!"
+        fi
+    done
+fi
 
 # Collect static files (no input in case it asks)
 echo "Collecting static files..."
@@ -31,11 +40,26 @@ echo "Running migrations..."
 python manage.py migrate --noinput
 
 # Import techniques from CSV if file exists
-if [ -f "data/techniques.csv" ]; then
+if [ -f "data/techniques_v2.csv" ]; then
     echo "Importing techniques from CSV..."
-    python manage.py import_techniques --file=data/techniques_v2.csv || {
-        echo "⚠️  Warning: Could not import techniques from CSV"
-    }
+    
+    # Check if we already have techniques imported
+    TECHNIQUE_COUNT=$(python -c "from api.models import Technique; print(Technique.objects.count())" 2>/dev/null || echo "0")
+    
+    if [ "$TECHNIQUE_COUNT" = "0" ]; then
+        echo "No techniques found in database, importing..."
+        # For SQLite, use the reset_and_import_techniques command with force flag
+        python manage.py reset_and_import_techniques --force || {
+            echo "⚠️  Warning: Could not reset database and import techniques"
+            # Fallback to just importing techniques if reset fails
+            echo "Attempting to import techniques without resetting..."
+            python manage.py import_techniques --file=data/techniques_v2.csv || {
+                echo "⚠️  Warning: Could not import techniques from CSV"
+            }
+        }
+    else
+        echo "✅ Database already contains $TECHNIQUE_COUNT techniques, skipping import"
+    fi
 else
     echo "⚠️  No techniques_v2.csv found, skipping import"
 fi

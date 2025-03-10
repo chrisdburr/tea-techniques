@@ -244,7 +244,14 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
       } else {
         // Create new technique
         const result = await createMutation.mutateAsync(finalFormData);
-        router.push(`/techniques/${result.id}`);
+        // Add a null check to handle the case when result might be null
+        if (result && result.id) {
+          router.push(`/techniques/${result.id}`);
+        } else {
+          // Fallback if result or result.id is null
+          router.push(`/techniques`);
+          console.warn("Received null or invalid result from API");
+        }
       }
     } catch (error) {
       console.error("Error submitting technique:", error);

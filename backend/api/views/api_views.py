@@ -217,80 +217,48 @@ def debug_endpoint(request):
     POST: Echoes back the received data, useful for checking what's being sent
     """
     if request.method == "GET":
+        # Return connection information for debugging
+        from django.conf import settings
+        
+        # Safe version of settings that doesn't expose sensitive information
+        safe_settings = {
+            "DEBUG": settings.DEBUG,
+            "ALLOWED_HOSTS": settings.ALLOWED_HOSTS,
+            "CORS_ALLOWED_ORIGINS": getattr(settings, "CORS_ALLOWED_ORIGINS", "Not set"),
+            "CORS_ALLOW_ALL_ORIGINS": getattr(settings, "CORS_ALLOW_ALL_ORIGINS", "Not set"),
+            "DATABASE_ENGINE": settings.DATABASES["default"]["ENGINE"],
+            "INSTALLED_APPS": settings.INSTALLED_APPS,
+            "MIDDLEWARE": settings.MIDDLEWARE,
+        }
+        
         # Return model information for debugging
-        assurance_goals = AssuranceGoal.objects.all()
-        categories = Category.objects.all()
-        subcategories = SubCategory.objects.all()
-        attribute_types = AttributeType.objects.all()
-        resource_types = ResourceType.objects.all()
+        assurance_goals_count = AssuranceGoal.objects.count()
+        categories_count = Category.objects.count()
+        subcategories_count = SubCategory.objects.count()
+        techniques_count = Technique.objects.count()
 
         response_data = {
-            "available_models": {
-                "assurance_goals": [
-                    {"id": goal.id, "name": goal.name} for goal in assurance_goals
-                ],
-                "categories": [
-                    {
-                        "id": cat.id,
-                        "name": cat.name,
-                        "assurance_goal_id": cat.assurance_goal_id,
-                    }
-                    for cat in categories
-                ],
-                "subcategories": [
-                    {
-                        "id": subcat.id,
-                        "name": subcat.name,
-                        "category_id": subcat.category_id,
-                    }
-                    for subcat in subcategories
-                ],
-                "attribute_types": [
-                    {"id": at.id, "name": at.name} for at in attribute_types
-                ],
-                "resource_types": [
-                    {"id": rt.id, "name": rt.name} for rt in resource_types
-                ],
+            "api_status": "API is running correctly",
+            "request_info": {
+                "path": request.path,
+                "host": request.get_host(),
+                "method": request.method,
+                "content_type": request.content_type or "Not set",
+                "headers": {k: v for k, v in request.headers.items() if k.lower() not in ('cookie', 'authorization')},
             },
-            "technique_fields": {
-                "required": [
-                    "name",
-                    "description",
-                    "model_dependency",
-                ],
-                "optional": [
-                    "assurance_goal_ids",
-                    "category_ids",
-                    "subcategory_ids",
-                    "tag_ids",
-                    "attributes",
-                    "resources",
-                    "example_use_cases",
-                    "limitations",
-                ],
+            "database_counts": {
+                "assurance_goals": assurance_goals_count,
+                "categories": categories_count,
+                "subcategories": subcategories_count,
+                "techniques": techniques_count,
             },
-            "technique_example": {
-                "name": "Example Technique",
-                "description": "Description of the technique",
-                "model_dependency": "Model-Agnostic",
-                "assurance_goal_ids": [1, 2],
-                "category_ids": [1, 2],
-                "subcategory_ids": [1],
-                "tag_ids": [1, 2],
-                "attributes": [{"attribute_value": 1}],
-                "resources": [
-                    {
-                        "resource_type": 1,
-                        "title": "Documentation",
-                        "url": "https://example.com",
-                        "description": "Official documentation",
-                    }
-                ],
-                "example_use_cases": [
-                    {"description": "Example use case description", "assurance_goal": 1}
-                ],
-                "limitations": ["Limitation 1", "Limitation 2"],
+            "api_endpoints": {
+                "assurance_goals": "/api/assurance-goals/",
+                "categories": "/api/categories/",
+                "techniques": "/api/techniques/",
+                "debug": "/api/debug/",
             },
+            "settings": safe_settings,
         }
 
         return Response(response_data)
@@ -299,9 +267,10 @@ def debug_endpoint(request):
         # Echo back received data for debugging
         return Response(
             {
+                "api_status": "API is running correctly",
                 "received_data": request.data,
                 "content_type": request.content_type,
                 "method": request.method,
-                "user": str(request.user),
+                "headers": {k: v for k, v in request.headers.items() if k.lower() not in ('cookie', 'authorization')},
             }
         )

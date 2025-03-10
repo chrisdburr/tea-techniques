@@ -1,4 +1,4 @@
-// src/lib/api/hooks.ts - Updated to use relative URLs
+// src/lib/api/hooks.ts
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type {
 	Technique,
@@ -21,35 +21,11 @@ interface QueryParams {
 }
 
 // Basic calculation of total pages based on item count
-export const calculateTotalPages = (
+const calculateTotalPages = (
 	totalItems: number,
 	pageSize: number = 20
 ): number => {
 	return totalItems > 0 ? Math.ceil(totalItems / pageSize) : 1;
-};
-
-// Helper function to make fetch requests with consistent error handling
-const fetchFromApi = async <T>(url: string): Promise<T> => {
-	try {
-		console.log(`[API Request] ${url}`);
-		
-		const response = await fetch(url, {
-			method: "GET",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-			},
-		});
-
-		if (!response.ok) {
-			throw new Error(`API returned ${response.status}: ${response.statusText}`);
-		}
-
-		return await response.json() as T;
-	} catch (error) {
-		console.error(`[API Error] ${url}:`, error);
-		throw error;
-	}
 };
 
 // Base data fetching hooks
@@ -57,7 +33,31 @@ export const useAssuranceGoals = () => {
 	return useQuery({
 		queryKey: ["assurance-goals"],
 		queryFn: async () => {
-			return fetchFromApi<APIResponse<AssuranceGoal>>(`/api/assurance-goals/`);
+			try {
+				const url = `http://127.0.0.1:8000/api/assurance-goals/`;
+				console.log(`[useAssuranceGoals] Direct fetching from: ${url}`);
+
+				const response = await fetch(url, {
+					method: "GET",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+					},
+					redirect: "error",
+				});
+
+				if (!response.ok) {
+					throw new Error(
+						`API returned ${response.status}: ${response.statusText}`
+					);
+				}
+
+				const data = await response.json();
+				return data as APIResponse<AssuranceGoal>;
+			} catch (error) {
+				console.error(`[useAssuranceGoals] Error:`, error);
+				throw error;
+			}
 		},
 		refetchOnWindowFocus: false,
 		retry: 1,
@@ -74,7 +74,31 @@ export const useCategories = (assuranceGoalId?: number) => {
 	return useQuery({
 		queryKey: ["categories", assuranceGoalId],
 		queryFn: async () => {
-			return fetchFromApi<APIResponse<Category>>(`/api/categories/?${queryString.toString()}`);
+			try {
+				const url = `http://127.0.0.1:8000/api/categories/?${queryString.toString()}`;
+				console.log(`[useCategories] Direct fetching from: ${url}`);
+
+				const response = await fetch(url, {
+					method: "GET",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+					},
+					redirect: "error",
+				});
+
+				if (!response.ok) {
+					throw new Error(
+						`API returned ${response.status}: ${response.statusText}`
+					);
+				}
+
+				const data = await response.json();
+				return data as APIResponse<Category>;
+			} catch (error) {
+				console.error(`[useCategories] Error:`, error);
+				throw error;
+			}
 		},
 		refetchOnWindowFocus: false,
 		retry: 1,
@@ -91,7 +115,31 @@ export const useSubCategories = (categoryId?: number) => {
 	return useQuery({
 		queryKey: ["subcategories", categoryId],
 		queryFn: async () => {
-			return fetchFromApi<APIResponse<SubCategory>>(`/api/subcategories/?${queryString.toString()}`);
+			try {
+				const url = `http://127.0.0.1:8000/api/subcategories/?${queryString.toString()}`;
+				console.log(`[useSubCategories] Direct fetching from: ${url}`);
+
+				const response = await fetch(url, {
+					method: "GET",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+					},
+					redirect: "error",
+				});
+
+				if (!response.ok) {
+					throw new Error(
+						`API returned ${response.status}: ${response.statusText}`
+					);
+				}
+
+				const data = await response.json();
+				return data as APIResponse<SubCategory>;
+			} catch (error) {
+				console.error(`[useSubCategories] Error:`, error);
+				throw error;
+			}
 		},
 		refetchOnWindowFocus: false,
 		retry: 1,
@@ -103,7 +151,31 @@ export const useTags = () => {
 	return useQuery({
 		queryKey: ["tags"],
 		queryFn: async () => {
-			return fetchFromApi<APIResponse<Tag>>(`/api/tags/`);
+			try {
+				const url = `http://127.0.0.1:8000/api/tags/`;
+				console.log(`[useTags] Direct fetching from: ${url}`);
+
+				const response = await fetch(url, {
+					method: "GET",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+					},
+					redirect: "error",
+				});
+
+				if (!response.ok) {
+					throw new Error(
+						`API returned ${response.status}: ${response.statusText}`
+					);
+				}
+
+				const data = await response.json();
+				return data as APIResponse<Tag>;
+			} catch (error) {
+				console.error(`[useTags] Error:`, error);
+				throw error;
+			}
 		},
 		refetchOnWindowFocus: false,
 		retry: 1,
@@ -115,7 +187,31 @@ export const useAttributeTypes = () => {
 	return useQuery({
 		queryKey: ["attribute-types"],
 		queryFn: async () => {
-			return fetchFromApi<APIResponse<AttributeType>>(`/api/attribute-types/`);
+			try {
+				const url = `http://127.0.0.1:8000/api/attribute-types/`;
+				console.log(`[useAttributeTypes] Direct fetching from: ${url}`);
+
+				const response = await fetch(url, {
+					method: "GET",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+					},
+					redirect: "error",
+				});
+
+				if (!response.ok) {
+					throw new Error(
+						`API returned ${response.status}: ${response.statusText}`
+					);
+				}
+
+				const data = await response.json();
+				return data as APIResponse<AttributeType>;
+			} catch (error) {
+				console.error(`[useAttributeTypes] Error:`, error);
+				throw error;
+			}
 		},
 		refetchOnWindowFocus: false,
 		retry: 1,
@@ -132,7 +228,33 @@ export const useAttributeValues = (attributeTypeId?: number) => {
 	return useQuery({
 		queryKey: ["attribute-values", attributeTypeId],
 		queryFn: async () => {
-			return fetchFromApi<APIResponse<AttributeValue>>(`/api/attribute-values/?${queryString.toString()}`);
+			try {
+				const url = `http://127.0.0.1:8000/api/attribute-values/?${queryString.toString()}`;
+				console.log(
+					`[useAttributeValues] Direct fetching from: ${url}`
+				);
+
+				const response = await fetch(url, {
+					method: "GET",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+					},
+					redirect: "error",
+				});
+
+				if (!response.ok) {
+					throw new Error(
+						`API returned ${response.status}: ${response.statusText}`
+					);
+				}
+
+				const data = await response.json();
+				return data as APIResponse<AttributeValue>;
+			} catch (error) {
+				console.error(`[useAttributeValues] Error:`, error);
+				throw error;
+			}
 		},
 		refetchOnWindowFocus: false,
 		retry: 1,
@@ -145,7 +267,31 @@ export const useResourceTypes = () => {
 	return useQuery({
 		queryKey: ["resource-types"],
 		queryFn: async () => {
-			return fetchFromApi<APIResponse<ResourceType>>(`/api/resource-types/`);
+			try {
+				const url = `http://127.0.0.1:8000/api/resource-types/`;
+				console.log(`[useResourceTypes] Direct fetching from: ${url}`);
+
+				const response = await fetch(url, {
+					method: "GET",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+					},
+					redirect: "error",
+				});
+
+				if (!response.ok) {
+					throw new Error(
+						`API returned ${response.status}: ${response.statusText}`
+					);
+				}
+
+				const data = await response.json();
+				return data as APIResponse<ResourceType>;
+			} catch (error) {
+				console.error(`[useResourceTypes] Error:`, error);
+				throw error;
+			}
 		},
 		refetchOnWindowFocus: false,
 		retry: 1,
@@ -207,7 +353,33 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 	return useQuery({
 		queryKey: queryKey,
 		queryFn: async () => {
-			return fetchFromApi<APIResponse<Technique>>(`/api/techniques/?${queryString.toString()}`);
+			try {
+				// Use the direct fetch approach with absolute URL
+				const url = `http://127.0.0.1:8000/api/techniques/?${queryString.toString()}`;
+				console.log(`[useTechniques] Direct fetching from: ${url}`);
+
+				const response = await fetch(url, {
+					method: "GET",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+					},
+					// Important: Prevent redirect following
+					redirect: "error",
+				});
+
+				if (!response.ok) {
+					throw new Error(
+						`API returned ${response.status}: ${response.statusText}`
+					);
+				}
+
+				const data = await response.json();
+				return data;
+			} catch (error) {
+				console.error(`[useTechniques] Error:`, error);
+				throw error;
+			}
 		},
 		refetchOnWindowFocus: false,
 		staleTime: 30000,
@@ -219,7 +391,63 @@ export const useTechniqueDetail = (id: number) => {
 	return useQuery({
 		queryKey: ["technique", id],
 		queryFn: async () => {
-			return fetchFromApi<Technique>(`/api/techniques/${id}/`);
+			try {
+				const url = `http://127.0.0.1:8000/api/techniques/${id}/`;
+				console.log(
+					`[useTechniqueDetail] Direct fetching from: ${url}`
+				);
+
+				const response = await fetch(url, {
+					method: "GET",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+					},
+					redirect: "error",
+				});
+
+				if (!response.ok) {
+					const errorText = await response.text();
+					console.error(
+						`[useTechniqueDetail] Response error: ${response.status}`,
+						errorText
+					);
+					throw new Error(
+						`API returned ${response.status}: ${response.statusText}`
+					);
+				}
+
+				// Try to parse as JSON
+				let data;
+				try {
+					const text = await response.text();
+					console.log(
+						`[useTechniqueDetail] Raw response:`,
+						text.substring(0, 500) + "..."
+					);
+					data = JSON.parse(text);
+				} catch (parseError) {
+					console.error(
+						`[useTechniqueDetail] JSON parse error:`,
+						parseError
+					);
+					throw new Error(`Failed to parse API response as JSON`);
+				}
+
+				// Validate and log the response
+				console.log(`[useTechniqueDetail] Parsed response:`, data);
+
+				// Check if the data has the expected structure
+				if (!data.id || !data.name) {
+					console.error(`[useTechniqueDetail] Malformed data:`, data);
+					throw new Error(`API returned malformed data`);
+				}
+
+				return data as Technique;
+			} catch (error) {
+				console.error(`[useTechniqueDetail] Error:`, error);
+				throw error;
+			}
 		},
 		enabled: !!id, // Only run if id is provided
 		refetchOnWindowFocus: false,
@@ -227,45 +455,37 @@ export const useTechniqueDetail = (id: number) => {
 	});
 };
 
-// Helper function for mutation requests
-const mutateApi = async <T>(
-	url: string,
-	method: "POST" | "PUT" | "DELETE",
-	data?: unknown
-): Promise<T | null> => {
-	try {
-		console.log(`[API ${method}] ${url}`);
-		
-		const response = await fetch(url, {
-			method,
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-			},
-			body: data ? JSON.stringify(data) : undefined,
-		});
-
-		if (!response.ok) {
-			throw new Error(`API returned ${response.status}: ${response.statusText}`);
-		}
-
-		if (method === "DELETE") {
-			return null;
-		}
-
-		return await response.json() as T;
-	} catch (error) {
-		console.error(`[API Error] ${method} ${url}:`, error);
-		throw error;
-	}
-};
-
 export const useCreateTechnique = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
 		mutationFn: async (data: TechniqueFormData) => {
-			return mutateApi<Technique>(`/api/techniques/`, "POST", data);
+			try {
+				const url = `http://127.0.0.1:8000/api/techniques/`;
+				console.log(`[useCreateTechnique] Direct posting to: ${url}`);
+
+				const response = await fetch(url, {
+					method: "POST",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(data),
+					redirect: "error",
+				});
+
+				if (!response.ok) {
+					throw new Error(
+						`API returned ${response.status}: ${response.statusText}`
+					);
+				}
+
+				const responseData = await response.json();
+				return responseData as Technique;
+			} catch (error) {
+				console.error(`[useCreateTechnique] Error:`, error);
+				throw error;
+			}
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["techniques"] });
@@ -278,7 +498,32 @@ export const useUpdateTechnique = (id: number) => {
 
 	return useMutation({
 		mutationFn: async (data: TechniqueFormData) => {
-			return mutateApi<Technique>(`/api/techniques/${id}/`, "PUT", data);
+			try {
+				const url = `http://127.0.0.1:8000/api/techniques/${id}/`;
+				console.log(`[useUpdateTechnique] Direct putting to: ${url}`);
+
+				const response = await fetch(url, {
+					method: "PUT",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(data),
+					redirect: "error",
+				});
+
+				if (!response.ok) {
+					throw new Error(
+						`API returned ${response.status}: ${response.statusText}`
+					);
+				}
+
+				const responseData = await response.json();
+				return responseData as Technique;
+			} catch (error) {
+				console.error(`[useUpdateTechnique] Error:`, error);
+				throw error;
+			}
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["techniques"] });
@@ -292,8 +537,32 @@ export const useDeleteTechnique = () => {
 
 	return useMutation({
 		mutationFn: async (id: number) => {
-			await mutateApi<null>(`/api/techniques/${id}/`, "DELETE");
-			return id;
+			try {
+				const url = `http://127.0.0.1:8000/api/techniques/${id}/`;
+				console.log(
+					`[useDeleteTechnique] Direct deleting from: ${url}`
+				);
+
+				const response = await fetch(url, {
+					method: "DELETE",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+					},
+					redirect: "error",
+				});
+
+				if (!response.ok) {
+					throw new Error(
+						`API returned ${response.status}: ${response.statusText}`
+					);
+				}
+
+				return id;
+			} catch (error) {
+				console.error(`[useDeleteTechnique] Error:`, error);
+				throw error;
+			}
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["techniques"] });
@@ -312,7 +581,33 @@ export const useTechniqueRelationships = (techniqueId: number) => {
 	return useQuery({
 		queryKey: ["technique-relationships", techniqueId],
 		queryFn: async () => {
-			return fetchFromApi<APIResponse<TechniqueRelationship>>(`/api/technique-relationships/?${queryString.toString()}`);
+			try {
+				const url = `http://127.0.0.1:8000/api/technique-relationships/?${queryString.toString()}`;
+				console.log(
+					`[useTechniqueRelationships] Direct fetching from: ${url}`
+				);
+
+				const response = await fetch(url, {
+					method: "GET",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+					},
+					redirect: "error",
+				});
+
+				if (!response.ok) {
+					throw new Error(
+						`API returned ${response.status}: ${response.statusText}`
+					);
+				}
+
+				const data = await response.json();
+				return data;
+			} catch (error) {
+				console.error(`[useTechniqueRelationships] Error:`, error);
+				throw error;
+			}
 		},
 		refetchOnWindowFocus: false,
 		retry: 1,
@@ -320,10 +615,5 @@ export const useTechniqueRelationships = (techniqueId: number) => {
 	});
 };
 
-// Need to add TechniqueRelationship type here to prevent linting errors
-interface TechniqueRelationship {
-	id: number;
-	technique_from: number;
-	technique_to: number;
-	relationship_type: string;
-}
+// Export the utility functions for use in components
+export { calculateTotalPages };

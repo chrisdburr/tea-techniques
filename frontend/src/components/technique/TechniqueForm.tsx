@@ -12,7 +12,7 @@ import {
   useTechniqueDetail,
 } from "@/lib/api/hooks";
 import { useForm, type FormValidators } from "@/lib/hooks/useForm";
-import { 
+import {
   TechniqueFormData
 } from "@/lib/types";
 import { useApiError } from "@/lib/hooks/useApiError";
@@ -48,14 +48,14 @@ const initialFormData: TechniqueFormData = {
 };
 
 const validators: FormValidators<TechniqueFormData> = {
-	name: (value: string) => (!value.trim() ? "Name is required" : null),
-	description: (value: string) => (!value.trim() ? "Description is required" : null),
-	model_dependency: (value: string) =>
-		!value ? "Model dependency is required" : null,
-	assurance_goal_ids: (value: number[]) =>
-		value.length === 0 ? "At least one assurance goal is required" : null,
-	category_ids: (value: number[]) =>
-		value.length === 0 ? "At least one category is required" : null,
+  name: (value: string) => (!value.trim() ? "Name is required" : null),
+  description: (value: string) => (!value.trim() ? "Description is required" : null),
+  model_dependency: (value: string) =>
+    !value ? "Model dependency is required" : null,
+  assurance_goal_ids: (value: number[]) =>
+    value.length === 0 ? "At least one assurance goal is required" : null,
+  category_ids: (value: number[]) =>
+    value.length === 0 ? "At least one category is required" : null,
 };
 
 interface TechniqueFormProps {
@@ -65,18 +65,18 @@ interface TechniqueFormProps {
 
 export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormProps) {
   const router = useRouter();
-  
+
   // Form state management
   const {
-		values: formData,
-		errors,
-		isSubmitting,
-		handleChange,
-		handleBlur,
-		setFieldValue,
-		setFieldError,
-		validateForm,
-		resetForm,
+    values: formData,
+    errors,
+    isSubmitting,
+    handleChange,
+    handleBlur,
+    setFieldValue,
+    setFieldError,
+    validateForm,
+    resetForm,
   } = useForm<TechniqueFormData>(initialFormData, validators);
 
   const { error: apiError, handleError } = useApiError();
@@ -95,38 +95,38 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
   const { data: assuranceGoalsData, isLoading: isLoadingGoals } = useAssuranceGoals();
   const { data: tagsData, isLoading: isLoadingTags } = useTags();
   const { data: resourceTypesData, isLoading: isLoadingResourceTypes } = useResourceTypes();
-  
+
   // Fetch categories filtered by selected assurance goals
   const [selectedGoals, setSelectedGoals] = useState<number[]>([]);
   const { data: categoriesData, isLoading: isLoadingCategories } = useCategories();
-  
+
   // Filter categories to only show those belonging to selected goals
   const filteredCategories = categoriesData?.results
-    ? categoriesData.results.filter(cat => 
-        selectedGoals.length === 0 || selectedGoals.includes(cat.assurance_goal)
-      )
+    ? categoriesData.results.filter(cat =>
+      selectedGoals.length === 0 || selectedGoals.includes(cat.assurance_goal)
+    )
     : [];
-  
+
   // Fetch subcategories filtered by selected categories
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const { data: subcategoriesData } = useSubCategories();
-  
+
   // Filter subcategories to only show those belonging to selected categories
   const filteredSubcategories = subcategoriesData?.results
-    ? subcategoriesData.results.filter(subcat => 
-        selectedCategories.length === 0 || selectedCategories.includes(subcat.category)
-      )
+    ? subcategoriesData.results.filter(subcat =>
+      selectedCategories.length === 0 || selectedCategories.includes(subcat.category)
+    )
     : [];
 
   // Mutations for create/update
   const createMutation = useCreateTechnique();
   const updateMutation = useUpdateTechnique(id || 0);
-  
+
   // Track overall loading state
-  const isLoading = 
-    isLoadingGoals || 
-    isLoadingCategories || 
-    isLoadingTags || 
+  const isLoading =
+    isLoadingGoals ||
+    isLoadingCategories ||
+    isLoadingTags ||
     isLoadingResourceTypes ||
     (isEditMode && isLoadingTechnique) ||
     isSubmitting ||
@@ -141,39 +141,39 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
       const category_ids = techniqueData.categories.map(cat => cat.id);
       const subcategory_ids = techniqueData.subcategories.map(subcat => subcat.id);
       const tag_ids = techniqueData.tags.map(tag => tag.id);
-      
+
       // Format attributes
-      const attributes = techniqueData.attributes.map(attr => ({
-        attribute_type: typeof attr.attribute_type === 'string' 
-          ? parseInt(attr.attribute_type) 
+      const attributes = techniqueData.attribute_values.map(attr => ({
+        attribute_type: typeof attr.attribute_type === 'string'
+          ? parseInt(attr.attribute_type)
           : attr.attribute_type,
-        attribute_value: attr.attribute_value
+        attribute_value: parseInt(attr.name) || 0 // Parse to number, default to 0 if NaN
       }));
-      
+
       // Set state for dynamic arrays
-      setUseCases(techniqueData.example_use_cases.length > 0 
+      setUseCases(techniqueData.example_use_cases.length > 0
         ? techniqueData.example_use_cases.map(uc => ({
-            description: uc.description,
-            assurance_goal: uc.assurance_goal
-          }))
+          description: uc.description,
+          assurance_goal: uc.assurance_goal
+        }))
         : [{ description: "" }]
       );
-      
+
       setLimitations(techniqueData.limitations.length > 0
         ? techniqueData.limitations.map(lim => lim.description)
         : [""]
       );
-      
+
       setResources(techniqueData.resources.length > 0
         ? techniqueData.resources.map(res => ({
-            resource_type: res.resource_type,
-            title: res.title,
-            url: res.url,
-            description: res.description
-          }))
+          resource_type: res.resource_type,
+          title: res.title,
+          url: res.url,
+          description: res.description
+        }))
         : [{ resource_type: 0, title: "", url: "", description: "" }]
       );
-      
+
       // Update form values using resetForm
       resetForm({
         name: techniqueData.name,
@@ -188,7 +188,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
         example_use_cases: [], // Will be handled by useCases state
         limitations: [], // Will be handled by limitations state
       });
-      
+
       // Update selected goals/categories for filtering, directly instead of through effects
       setSelectedGoals([...assurance_goal_ids]); // Use a new array to prevent reference sharing
       setSelectedCategories([...category_ids]);
@@ -199,13 +199,13 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
   // without creating effects that might cause infinite loops
   const memoizedSelectedGoals = React.useMemo(() => formData.assurance_goal_ids, [formData.assurance_goal_ids]);
   const memoizedSelectedCategories = React.useMemo(() => formData.category_ids, [formData.category_ids]);
-  
+
   // Update selected goals/categories with memoized values - only runs once after memo values are computed
   React.useEffect(() => {
     // Use functional updates to avoid potential loops
     setSelectedGoals(() => memoizedSelectedGoals);
   }, [memoizedSelectedGoals]);
-  
+
   React.useEffect(() => {
     // Use functional updates to avoid potential loops
     setSelectedCategories(() => memoizedSelectedCategories);
@@ -214,12 +214,12 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Filter out empty entries from dynamic arrays
     const filteredUseCases = useCases.filter(uc => uc.description.trim() !== "");
     const filteredLimitations = limitations.filter(lim => lim.trim() !== "");
     const filteredResources = resources.filter(res => res.title.trim() !== "" && res.url.trim() !== "");
-    
+
     // Create final form data
     const finalFormData: TechniqueFormData = {
       ...formData,
@@ -227,7 +227,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
       limitations: filteredLimitations,
       resources: filteredResources,
     };
-    
+
     // Validate the form
     const isValid = validateForm();
     if (!isValid) {
@@ -235,7 +235,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
       console.error("Form validation failed", errors);
       return;
     }
-    
+
     try {
       if (isEditMode && id) {
         // Update existing technique
@@ -259,7 +259,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
       // Just update the form field directly, don't do cascading updates here
       const goalIds = values.map(v => parseInt(v));
       setFieldValue("assurance_goal_ids", goalIds);
-      
+
       // Instead of setting other fields here, let the initial form load handle it
       // this helps break the circular deps
     } catch (error) {
@@ -273,7 +273,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
       // Just update the field directly, no cascading
       const categoryIds = values.map(v => parseInt(v));
       setFieldValue("category_ids", categoryIds);
-      
+
       // Don't update subcategories here to avoid circular deps
     } catch (error) {
       console.error("Error in handleCategoryChange:", error);
@@ -534,8 +534,8 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                       ))}
                     </select>
                     <p className="text-xs text-muted-foreground">
-                      {formData.assurance_goal_ids.length === 0 
-                        ? "Select assurance goals first to see available categories" 
+                      {formData.assurance_goal_ids.length === 0
+                        ? "Select assurance goals first to see available categories"
                         : "Hold Ctrl (or Cmd) to select multiple options"}
                     </p>
                     {errors?.category_ids && (
@@ -567,8 +567,8 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                       ))}
                     </select>
                     <p className="text-xs text-muted-foreground">
-                      {formData.category_ids.length === 0 
-                        ? "Select categories first to see available subcategories" 
+                      {formData.category_ids.length === 0
+                        ? "Select categories first to see available subcategories"
                         : "Hold Ctrl (or Cmd) to select multiple options"}
                     </p>
                   </div>
@@ -630,7 +630,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
-                      
+
                       <div className="space-y-2">
                         <Label htmlFor={`useCase-description-${index}`}>Description</Label>
                         <Textarea
@@ -642,7 +642,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                           disabled={isLoading}
                         />
                       </div>
-                      
+
                       <div className="space-y-2">
                         <Label htmlFor={`useCase-goal-${index}`}>Related Assurance Goal (Optional)</Label>
                         <SelectField
@@ -657,7 +657,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                       </div>
                     </div>
                   ))}
-                  
+
                   <Button
                     type="button"
                     variant="outline"
@@ -694,7 +694,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
-                      
+
                       <div className="space-y-2">
                         <Label htmlFor={`limitation-${index}`}>Description</Label>
                         <Textarea
@@ -708,7 +708,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                       </div>
                     </div>
                   ))}
-                  
+
                   <Button
                     type="button"
                     variant="outline"
@@ -748,7 +748,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
-                      
+
                       <div className="space-y-2">
                         <Label htmlFor={`resource-type-${index}`}>Resource Type</Label>
                         <SelectField
@@ -761,7 +761,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                           disabled={isLoading}
                         />
                       </div>
-                      
+
                       <div className="space-y-2">
                         <Label htmlFor={`resource-title-${index}`}>Title</Label>
                         <Input
@@ -772,7 +772,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                           disabled={isLoading}
                         />
                       </div>
-                      
+
                       <div className="space-y-2">
                         <Label htmlFor={`resource-url-${index}`}>URL</Label>
                         <Input
@@ -784,7 +784,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                           disabled={isLoading}
                         />
                       </div>
-                      
+
                       <div className="space-y-2">
                         <Label htmlFor={`resource-description-${index}`}>Description (Optional)</Label>
                         <Textarea
@@ -798,7 +798,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                       </div>
                     </div>
                   ))}
-                  
+
                   <Button
                     type="button"
                     variant="outline"

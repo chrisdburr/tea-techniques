@@ -190,7 +190,6 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3001",
     "https://arch-webserver.tailb4d95.ts.net",
 ]
-]
 
 INTERNAL_IPS = [
     "127.0.0.1",

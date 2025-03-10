@@ -41,20 +41,27 @@ export default function CategoriesPage() {
 
     // Client-side filter for the selected goal
     const goalTechniques = React.useMemo(() => {
-        if (!allTechniques?.results) return { results: [] };
+        // Ensure we have a properly typed return value for empty case
+        if (!allTechniques) return { results: [] as Technique[] };
+        
+        // Check if results exist in a type-safe way
+        const techniquesData = allTechniques as unknown as { results: Technique[] };
+        if (!techniquesData.results || !Array.isArray(techniquesData.results)) {
+            return { results: [] as Technique[] };
+        }
 
         console.log(`Filtering techniques for goal: ${selectedGoal}`);
 
         // Log the first technique's full structure to examine how assurance_goals are represented
-        if (allTechniques.results.length > 0) {
-            console.log("First technique structure:", JSON.stringify(allTechniques.results[0], null, 2));
-            console.log("First technique goals:", allTechniques.results[0].assurance_goals);
+        if (techniquesData.results.length > 0) {
+            console.log("First technique structure:", JSON.stringify(techniquesData.results[0], null, 2));
+            console.log("First technique goals:", techniquesData.results[0].assurance_goals);
         }
 
         // Filter techniques to only include those with the selected goal
-        const filteredResults = allTechniques.results.filter((technique: Technique) => {
+        const filteredResults = techniquesData.results.filter((technique: Technique) => {
             // Log each technique's goals for the first few techniques
-            if (allTechniques.results.indexOf(technique) < 3) {
+            if (techniquesData.results.indexOf(technique) < 3) {
                 console.log(`Technique ${technique.id} (${technique.name}) goals:`,
                     technique.assurance_goals.map(g => g.name));
             }
@@ -72,7 +79,7 @@ export default function CategoriesPage() {
 
         console.log(`Found ${filteredResults.length} techniques for ${selectedGoal}`);
         return {
-            ...allTechniques,
+            ...techniquesData,
             results: filteredResults
         };
     }, [allTechniques, selectedGoal]);

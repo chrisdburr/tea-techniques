@@ -115,12 +115,23 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Use SQLite for development and PostgreSQL for production
 if os.getenv("USE_SQLITE", "False") == "True" or os.getenv("DB_ENGINE") == "sqlite":
     # SQLite configuration for development
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+    # For Docker, store DB in a persisted volume
+    if os.getenv("DOCKER_ENVIRONMENT", "False") == "True":
+        db_dir = os.path.join(BASE_DIR, "db_data")
+        os.makedirs(db_dir, exist_ok=True)
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.sqlite3",
+                "NAME": os.path.join(db_dir, "db.sqlite3"),
+            }
         }
-    }
+    else:
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.sqlite3",
+                "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+            }
+        }
 else:
     # PostgreSQL configuration for production
     DATABASES = {
@@ -149,18 +160,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Enable CORS for all origins in development
-if DEBUG:
-    CORS_ALLOW_ALL_ORIGINS = True
-    CORS_ALLOW_CREDENTIALS = True
-    CORS_EXPOSE_HEADERS = ["Content-Type", "X-CSRFToken"]
-else:
-    # For production, use specified origins including your Tailscale domain
-    CORS_ALLOWED_ORIGINS = os.getenv(
-        "CORS_ALLOWED_ORIGINS", 
-        "http://localhost:3000,http://localhost:3001,https://arch-webserver.tailb4d95.ts.net"
-    ).split(",")
-    CORS_ALLOW_CREDENTIALS = True
+# CORS settings
+# Instead of enabling all origins, use explicit list for better security
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://frontend:3000").split(",")
+CORS_ALLOW_CREDENTIALS = True
+CORS_EXPOSE_HEADERS = ["Content-Type", "X-CSRFToken"]
 
 CORS_ALLOW_METHODS = [
     "DELETE",
@@ -189,6 +194,8 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:3001",
     "https://arch-webserver.tailb4d95.ts.net",
+    "http://arch-webserver.tailb4d95.ts.net",
+    "https://*.ts.net",
 ]
 
 INTERNAL_IPS = [

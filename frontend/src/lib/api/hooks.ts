@@ -1,5 +1,7 @@
 // src/lib/api/hooks.ts
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiClient } from "@/lib/api/client";
+import { logApiError } from "@/lib/api/errorUtils";
 import type {
 	Technique,
 	TechniqueFormData,
@@ -34,28 +36,13 @@ export const useAssuranceGoals = () => {
 		queryKey: ["assurance-goals"],
 		queryFn: async () => {
 			try {
-				const url = `http://localhost:8000/api/assurance-goals/`;
-				console.log(`[useAssuranceGoals] Direct fetching from: ${url}`);
-
-				const response = await fetch(url, {
-					method: "GET",
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
-					},
-					redirect: "error",
-				});
-
-				if (!response.ok) {
-					throw new Error(
-						`API returned ${response.status}: ${response.statusText}`
-					);
-				}
-
-				const data = await response.json();
-				return data as APIResponse<AssuranceGoal>;
-			} catch (error) {
-				console.error(`[useAssuranceGoals] Error:`, error);
+				// Use apiClient instead of fetch directly
+				console.log(`[useAssuranceGoals] Fetching using apiClient`);
+				
+				const response = await apiClient.get(`/api/assurance-goals/`);
+				return response.data as APIResponse<AssuranceGoal>;
+			} catch (error: unknown) {
+				logApiError('useAssuranceGoals', error);
 				throw error;
 			}
 		},
@@ -65,38 +52,22 @@ export const useAssuranceGoals = () => {
 };
 
 export const useCategories = (assuranceGoalId?: number) => {
-	// Create query string
-	const queryString = new URLSearchParams();
+	// Create params object for axios
+	const params: Record<string, string | number> = {};
 	if (assuranceGoalId) {
-		queryString.append("assurance_goal", String(assuranceGoalId));
+		params.assurance_goal = assuranceGoalId;
 	}
 
 	return useQuery({
 		queryKey: ["categories", assuranceGoalId],
 		queryFn: async () => {
 			try {
-				const url = `http://localhost:8000/api/categories/?${queryString.toString()}`;
-				console.log(`[useCategories] Direct fetching from: ${url}`);
-
-				const response = await fetch(url, {
-					method: "GET",
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
-					},
-					redirect: "error",
-				});
-
-				if (!response.ok) {
-					throw new Error(
-						`API returned ${response.status}: ${response.statusText}`
-					);
-				}
-
-				const data = await response.json();
-				return data as APIResponse<Category>;
-			} catch (error) {
-				console.error(`[useCategories] Error:`, error);
+				console.log(`[useCategories] Fetching using apiClient with params: ${JSON.stringify(params)}`);
+				
+				const response = await apiClient.get(`/api/categories/`, { params });
+				return response.data as APIResponse<Category>;
+			} catch (error: unknown) {
+				logApiError('useCategories', error);
 				throw error;
 			}
 		},
@@ -106,38 +77,22 @@ export const useCategories = (assuranceGoalId?: number) => {
 };
 
 export const useSubCategories = (categoryId?: number) => {
-	// Create query string
-	const queryString = new URLSearchParams();
+	// Create params object for axios
+	const params: Record<string, string | number> = {};
 	if (categoryId) {
-		queryString.append("category", String(categoryId));
+		params.category = categoryId;
 	}
 
 	return useQuery({
 		queryKey: ["subcategories", categoryId],
 		queryFn: async () => {
 			try {
-				const url = `http://localhost:8000/api/subcategories/?${queryString.toString()}`;
-				console.log(`[useSubCategories] Direct fetching from: ${url}`);
-
-				const response = await fetch(url, {
-					method: "GET",
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
-					},
-					redirect: "error",
-				});
-
-				if (!response.ok) {
-					throw new Error(
-						`API returned ${response.status}: ${response.statusText}`
-					);
-				}
-
-				const data = await response.json();
-				return data as APIResponse<SubCategory>;
-			} catch (error) {
-				console.error(`[useSubCategories] Error:`, error);
+				console.log(`[useSubCategories] Fetching using apiClient with params: ${JSON.stringify(params)}`);
+				
+				const response = await apiClient.get(`/api/subcategories/`, { params });
+				return response.data as APIResponse<SubCategory>;
+			} catch (error: unknown) {
+				logApiError('useSubCategories', error);
 				throw error;
 			}
 		},
@@ -152,28 +107,12 @@ export const useTags = () => {
 		queryKey: ["tags"],
 		queryFn: async () => {
 			try {
-				const url = `http://localhost:8000/api/tags/`;
-				console.log(`[useTags] Direct fetching from: ${url}`);
-
-				const response = await fetch(url, {
-					method: "GET",
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
-					},
-					redirect: "error",
-				});
-
-				if (!response.ok) {
-					throw new Error(
-						`API returned ${response.status}: ${response.statusText}`
-					);
-				}
-
-				const data = await response.json();
-				return data as APIResponse<Tag>;
-			} catch (error) {
-				console.error(`[useTags] Error:`, error);
+				console.log(`[useTags] Fetching using apiClient`);
+				
+				const response = await apiClient.get(`/api/tags/`);
+				return response.data as APIResponse<Tag>;
+			} catch (error: unknown) {
+				logApiError('useTags', error);
 				throw error;
 			}
 		},
@@ -188,28 +127,12 @@ export const useAttributeTypes = () => {
 		queryKey: ["attribute-types"],
 		queryFn: async () => {
 			try {
-				const url = `http://localhost:8000/api/attribute-types/`;
-				console.log(`[useAttributeTypes] Direct fetching from: ${url}`);
-
-				const response = await fetch(url, {
-					method: "GET",
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
-					},
-					redirect: "error",
-				});
-
-				if (!response.ok) {
-					throw new Error(
-						`API returned ${response.status}: ${response.statusText}`
-					);
-				}
-
-				const data = await response.json();
-				return data as APIResponse<AttributeType>;
-			} catch (error) {
-				console.error(`[useAttributeTypes] Error:`, error);
+				console.log(`[useAttributeTypes] Fetching using apiClient`);
+				
+				const response = await apiClient.get(`/api/attribute-types/`);
+				return response.data as APIResponse<AttributeType>;
+			} catch (error: unknown) {
+				logApiError('useAttributeTypes', error);
 				throw error;
 			}
 		},
@@ -219,40 +142,22 @@ export const useAttributeTypes = () => {
 };
 
 export const useAttributeValues = (attributeTypeId?: number) => {
-	// Create query string
-	const queryString = new URLSearchParams();
+	// Create params object for axios
+	const params: Record<string, string | number> = {};
 	if (attributeTypeId) {
-		queryString.append("attribute_type", String(attributeTypeId));
+		params.attribute_type = attributeTypeId;
 	}
 
 	return useQuery({
 		queryKey: ["attribute-values", attributeTypeId],
 		queryFn: async () => {
 			try {
-				const url = `http://localhost:8000/api/attribute-values/?${queryString.toString()}`;
-				console.log(
-					`[useAttributeValues] Direct fetching from: ${url}`
-				);
-
-				const response = await fetch(url, {
-					method: "GET",
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
-					},
-					redirect: "error",
-				});
-
-				if (!response.ok) {
-					throw new Error(
-						`API returned ${response.status}: ${response.statusText}`
-					);
-				}
-
-				const data = await response.json();
-				return data as APIResponse<AttributeValue>;
-			} catch (error) {
-				console.error(`[useAttributeValues] Error:`, error);
+				console.log(`[useAttributeValues] Fetching using apiClient with params: ${JSON.stringify(params)}`);
+				
+				const response = await apiClient.get(`/api/attribute-values/`, { params });
+				return response.data as APIResponse<AttributeValue>;
+			} catch (error: unknown) {
+				logApiError('useAttributeValues', error);
 				throw error;
 			}
 		},
@@ -268,28 +173,12 @@ export const useResourceTypes = () => {
 		queryKey: ["resource-types"],
 		queryFn: async () => {
 			try {
-				const url = `http://localhost:8000/api/resource-types/`;
-				console.log(`[useResourceTypes] Direct fetching from: ${url}`);
-
-				const response = await fetch(url, {
-					method: "GET",
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
-					},
-					redirect: "error",
-				});
-
-				if (!response.ok) {
-					throw new Error(
-						`API returned ${response.status}: ${response.statusText}`
-					);
-				}
-
-				const data = await response.json();
-				return data as APIResponse<ResourceType>;
-			} catch (error) {
-				console.error(`[useResourceTypes] Error:`, error);
+				console.log(`[useResourceTypes] Fetching using apiClient`);
+				
+				const response = await apiClient.get(`/api/resource-types/`);
+				return response.data as APIResponse<ResourceType>;
+			} catch (error: unknown) {
+				logApiError('useResourceTypes', error);
 				throw error;
 			}
 		},
@@ -335,9 +224,9 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 	}
 
 	// Create query string
-	const queryString = new URLSearchParams();
+	const queryParams = new URLSearchParams();
 	Object.entries(apiParams).forEach(([key, value]) => {
-		queryString.append(key, String(value));
+		queryParams.append(key, String(value));
 	});
 
 	const queryKey = [
@@ -354,30 +243,16 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 		queryKey: queryKey,
 		queryFn: async () => {
 			try {
-				// Use the direct fetch approach with absolute URL
-				const url = `http://localhost:8000/api/techniques/?${queryString.toString()}`;
-				console.log(`[useTechniques] Direct fetching from: ${url}`);
-
-				const response = await fetch(url, {
-					method: "GET",
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
-					},
-					// Important: Prevent redirect following
-					redirect: "error",
+				// Use the apiClient configured with proper baseUrl
+				console.log(`[useTechniques] Fetching using apiClient with params: ${queryParams.toString()}`);
+				
+				const response = await apiClient.get(`/api/techniques/`, {
+					params: apiParams  // Use the params object directly with axios
 				});
-
-				if (!response.ok) {
-					throw new Error(
-						`API returned ${response.status}: ${response.statusText}`
-					);
-				}
-
-				const data = await response.json();
-				return data;
-			} catch (error) {
-				console.error(`[useTechniques] Error:`, error);
+				
+				return response.data;
+			} catch (error: unknown) {
+				logApiError('useTechniques', error);
 				throw error;
 			}
 		},
@@ -392,50 +267,13 @@ export const useTechniqueDetail = (id: number) => {
 		queryKey: ["technique", id],
 		queryFn: async () => {
 			try {
-				const url = `http://localhost:8000/api/techniques/${id}/`;
-				console.log(
-					`[useTechniqueDetail] Direct fetching from: ${url}`
-				);
-
-				const response = await fetch(url, {
-					method: "GET",
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
-					},
-					redirect: "error",
-				});
-
-				if (!response.ok) {
-					const errorText = await response.text();
-					console.error(
-						`[useTechniqueDetail] Response error: ${response.status}`,
-						errorText
-					);
-					throw new Error(
-						`API returned ${response.status}: ${response.statusText}`
-					);
-				}
-
-				// Try to parse as JSON
-				let data;
-				try {
-					const text = await response.text();
-					console.log(
-						`[useTechniqueDetail] Raw response:`,
-						text.substring(0, 500) + "..."
-					);
-					data = JSON.parse(text);
-				} catch (parseError) {
-					console.error(
-						`[useTechniqueDetail] JSON parse error:`,
-						parseError
-					);
-					throw new Error(`Failed to parse API response as JSON`);
-				}
-
+				console.log(`[useTechniqueDetail] Fetching using apiClient for technique ${id}`);
+				
+				const response = await apiClient.get(`/api/techniques/${id}/`);
+				const data = response.data;
+				
 				// Validate and log the response
-				console.log(`[useTechniqueDetail] Parsed response:`, data);
+				console.log(`[useTechniqueDetail] Response:`, data);
 
 				// Check if the data has the expected structure
 				if (!data.id || !data.name) {
@@ -444,8 +282,8 @@ export const useTechniqueDetail = (id: number) => {
 				}
 
 				return data as Technique;
-			} catch (error) {
-				console.error(`[useTechniqueDetail] Error:`, error);
+			} catch (error: unknown) {
+				logApiError('useTechniqueDetail', error);
 				throw error;
 			}
 		},
@@ -461,29 +299,12 @@ export const useCreateTechnique = () => {
 	return useMutation({
 		mutationFn: async (data: TechniqueFormData) => {
 			try {
-				const url = `http://localhost:8000/api/techniques/`;
-				console.log(`[useCreateTechnique] Direct posting to: ${url}`);
-
-				const response = await fetch(url, {
-					method: "POST",
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(data),
-					redirect: "error",
-				});
-
-				if (!response.ok) {
-					throw new Error(
-						`API returned ${response.status}: ${response.statusText}`
-					);
-				}
-
-				const responseData = await response.json();
-				return responseData as Technique;
-			} catch (error) {
-				console.error(`[useCreateTechnique] Error:`, error);
+				console.log(`[useCreateTechnique] Posting using apiClient`);
+				
+				const response = await apiClient.post(`/api/techniques/`, data);
+				return response.data as Technique;
+			} catch (error: unknown) {
+				logApiError('useCreateTechnique', error);
 				throw error;
 			}
 		},
@@ -499,29 +320,12 @@ export const useUpdateTechnique = (id: number) => {
 	return useMutation({
 		mutationFn: async (data: TechniqueFormData) => {
 			try {
-				const url = `http://localhost:8000/api/techniques/${id}/`;
-				console.log(`[useUpdateTechnique] Direct putting to: ${url}`);
-
-				const response = await fetch(url, {
-					method: "PUT",
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(data),
-					redirect: "error",
-				});
-
-				if (!response.ok) {
-					throw new Error(
-						`API returned ${response.status}: ${response.statusText}`
-					);
-				}
-
-				const responseData = await response.json();
-				return responseData as Technique;
-			} catch (error) {
-				console.error(`[useUpdateTechnique] Error:`, error);
+				console.log(`[useUpdateTechnique] Putting using apiClient for technique ${id}`);
+				
+				const response = await apiClient.put(`/api/techniques/${id}/`, data);
+				return response.data as Technique;
+			} catch (error: unknown) {
+				logApiError('useUpdateTechnique', error);
 				throw error;
 			}
 		},
@@ -538,29 +342,12 @@ export const useDeleteTechnique = () => {
 	return useMutation({
 		mutationFn: async (id: number) => {
 			try {
-				const url = `http://localhost:8000/api/techniques/${id}/`;
-				console.log(
-					`[useDeleteTechnique] Direct deleting from: ${url}`
-				);
-
-				const response = await fetch(url, {
-					method: "DELETE",
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
-					},
-					redirect: "error",
-				});
-
-				if (!response.ok) {
-					throw new Error(
-						`API returned ${response.status}: ${response.statusText}`
-					);
-				}
-
+				console.log(`[useDeleteTechnique] Deleting using apiClient for technique ${id}`);
+				
+				await apiClient.delete(`/api/techniques/${id}/`);
 				return id;
-			} catch (error) {
-				console.error(`[useDeleteTechnique] Error:`, error);
+			} catch (error: unknown) {
+				logApiError('useDeleteTechnique', error);
 				throw error;
 			}
 		},
@@ -572,40 +359,22 @@ export const useDeleteTechnique = () => {
 
 // Relationship hooks
 export const useTechniqueRelationships = (techniqueId: number) => {
-	// Create query string
-	const queryString = new URLSearchParams();
+	// Create params object for axios
+	const params: Record<string, string | number> = {};
 	if (techniqueId) {
-		queryString.append("technique_from", String(techniqueId));
+		params.technique_from = techniqueId;
 	}
 
 	return useQuery({
 		queryKey: ["technique-relationships", techniqueId],
 		queryFn: async () => {
 			try {
-				const url = `http://localhost:8000/api/technique-relationships/?${queryString.toString()}`;
-				console.log(
-					`[useTechniqueRelationships] Direct fetching from: ${url}`
-				);
-
-				const response = await fetch(url, {
-					method: "GET",
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
-					},
-					redirect: "error",
-				});
-
-				if (!response.ok) {
-					throw new Error(
-						`API returned ${response.status}: ${response.statusText}`
-					);
-				}
-
-				const data = await response.json();
-				return data;
-			} catch (error) {
-				console.error(`[useTechniqueRelationships] Error:`, error);
+				console.log(`[useTechniqueRelationships] Fetching using apiClient with params: ${JSON.stringify(params)}`);
+				
+				const response = await apiClient.get(`/api/technique-relationships/`, { params });
+				return response.data;
+			} catch (error: unknown) {
+				logApiError('useTechniqueRelationships', error);
 				throw error;
 			}
 		},

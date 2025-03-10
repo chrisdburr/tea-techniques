@@ -9,4 +9,12 @@ const nextConfig: NextConfig = {
 	output: "standalone",
 };
 
+module.exports = {
+	output: 'standalone',
+	experimental: {
+	  // This is important for proper proxying
+	  skipTrailingSlashRedirect: true,
+	}
+  }
+
 export default nextConfig;

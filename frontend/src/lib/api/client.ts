@@ -1,25 +1,28 @@
 // src/lib/api/client.ts
 import axios from "axios";
+// config is imported but not directly used after the refactoring
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { config } from "@/lib/config";
 
 // Select the appropriate base URL based on environment
 const getBaseUrl = () => {
   // For server-side rendering in Docker environment
-  if (typeof window === 'undefined' && process.env.DOCKER_ENV === 'true') {
-    console.log('Server-side rendering in Docker environment detected');
-    return process.env.BACKEND_URL || 'http://backend:8000';
+  if (typeof window === 'undefined') {
+    // When running on the server
+    console.log('Server-side rendering detected');
+    if (process.env.DOCKER_ENV === 'true') {
+      console.log('Using Docker backend URL:', process.env.BACKEND_URL || 'http://backend:8000');
+      return process.env.BACKEND_URL || 'http://backend:8000';
+    } else {
+      console.log('Using local backend URL for server-side rendering:', process.env.BACKEND_URL || 'http://localhost:8000');
+      return process.env.BACKEND_URL || 'http://localhost:8000';
+    }
   }
   
-  // For browser in development environment
-  if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
-    console.log('Browser in development environment detected');
-    // We need to use the full backend URL for local development
-    return 'http://localhost:8000';
-  }
-
-  // Default for browser in production or Docker (using Next.js rewrites)
-  console.log('Using default base URL from config');
-  return config.apiBaseUrl;
+  // For browser (client-side) requests, always use relative URLs
+  // that will be handled by Next.js rewrites
+  console.log('Client-side rendering detected, using relative URL');
+  return '';
 };
 
 // Create a client that uses the appropriate API base URL
@@ -52,12 +55,6 @@ if (process.env.NODE_ENV === "development") {
     },
     (error) => Promise.reject(error)
   );
-  
-  // Test the backend connection and log the result
-  console.log('Testing direct connection to backend...');
-  apiClient.get('/api/techniques/')
-    .then(response => console.log('Backend is accessible:', response.status, response.data.count))
-    .catch(error => console.error('Backend connection test failed:', error));
 }
 
 export { apiClient };

@@ -17,10 +17,18 @@ function getBaseUrl(): string {
   const environment = getEnvironment();
   
   if (environment === 'server') {
-    // Use direct backend URL when running on the server
-    const backendUrl = process.env.BACKEND_URL || 'http://backend:8000';
-    console.log(`[fetchApi] Server-side request using backend URL: ${backendUrl}`);
-    return backendUrl;
+    // When running on the server
+    if (process.env.DOCKER_ENV === 'true') {
+      // Use direct backend URL when running on the server in Docker
+      const backendUrl = process.env.BACKEND_URL || 'http://backend:8000';
+      console.log(`[fetchApi] Server-side request in Docker using: ${backendUrl}`);
+      return backendUrl;
+    } else {
+      // Use localhost when running locally
+      const backendUrl = process.env.BACKEND_URL || 'http://localhost:8000';
+      console.log(`[fetchApi] Server-side request locally using: ${backendUrl}`);
+      return backendUrl;
+    }
   }
   
   // In the browser, use relative URLs that will be handled by Next.js rewrites

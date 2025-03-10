@@ -2,15 +2,15 @@
 
 ## Overview
 
-While this project is in development it currently uses a CSV file, `techniques.csv`, located in `backend/data/`.
+While this project is in development it currently uses a CSV file, `techniques_v2.csv`, located in `backend/data/`.
 
 ## Adding or Modifying Techniques
 
-1. Edit the `techniques.csv` file directly
+1. Edit the `techniques_v2.csv` file directly in `backend/data/`
 2. For local development:
-   - To reset the database and import techniques: `python manage.py reset_and_import_techniques --use-sqlite`
-   - To only import techniques without resetting: `python manage.py import_techniques --use-sqlite`
-3. For Docker deployments, rebuild and restart the containers: `docker-compose down && docker-compose up -d --build`
+   - To reset the database and import techniques: `USE_SQLITE=True python manage.py reset_and_import_techniques`
+   - To only import techniques without resetting: `USE_SQLITE=True python manage.py import_techniques`
+3. For Docker deployments, rebuild and restart the containers: `docker compose down && docker compose up -d --build`
 
 > [!WARNING] 
 > The `reset_database` command will completely reset the database. Use with caution.

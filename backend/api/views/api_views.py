@@ -121,8 +121,6 @@ class TechniquesViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         """Return appropriate serializer class based on action."""
-        # if self.action in ["create", "update", "partial_update"]:
-        #     return TechniqueWriteSerializer
         return TechniqueSerializer
 
     def create(self, request, *args, **kwargs):

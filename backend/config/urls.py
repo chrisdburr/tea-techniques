@@ -10,10 +10,10 @@ from rest_framework import permissions
 # Create schema view for Swagger documentation
 schema_view = get_schema_view(
     openapi.Info(
-        title="TEA XAI Techniques API",
+        title="TEA Techniques API",
         default_version="v1",
         description="API for Trustworthy and Ethical Assurance Techniques",
-        contact=openapi.Contact(email="contact@example.com"),
+        contact=openapi.Contact(email="cburr@turing.ac.uk"),
         license=openapi.License(name="MIT License"),
     ),
     public=True,
@@ -37,6 +37,10 @@ urlpatterns = [
         name="schema-swagger-ui-no-slash",
     ),
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
-    path("redoc", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc-no-slash"),
+    path(
+        "redoc",
+        schema_view.with_ui("redoc", cache_timeout=0),
+        name="schema-redoc-no-slash",
+    ),
     path("", include("api.root_urls")),
 ]

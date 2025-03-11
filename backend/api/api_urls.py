@@ -93,7 +93,7 @@ urlpatterns = [
         name="subcategories-by-category",
     ),
     # Authentication
-    path("auth", include("rest_framework.urls", namespace="rest_framework")),
+    path("auth", include("rest_framework.urls")),
     # Swagger documentation
     re_path(
         r"^swagger(?P<format>\.json|\.yaml)$",
@@ -115,6 +115,8 @@ urlpatterns = [
         r"^redoc$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
     ),
     re_path(
-        r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc-slash"
+        r"^redoc/$",
+        schema_view.with_ui("redoc", cache_timeout=0),
+        name="schema-redoc-slash",
     ),
 ]

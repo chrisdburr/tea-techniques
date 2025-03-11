@@ -22,9 +22,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include("api.api_urls")),
-    # Also support paths without trailing slash
-    path("api", include("api.api_urls")),
+    path("api/", include("api.urls")),
     path("__reload__/", include("django_browser_reload.urls")),
     path(
         "swagger/",

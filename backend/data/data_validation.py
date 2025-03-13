@@ -932,7 +932,7 @@ def main(csv_path, output_dir="validation_results", verbose=True):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="URL Validation Script")
     parser.add_argument(
-        "--csv", default="revised-techniques.csv", help="Path to CSV file"
+        "--csv", default="techniques_v2.csv", help="Path to CSV file"
     )
     parser.add_argument(
         "--output", default="validation_results", help="Output directory for results"

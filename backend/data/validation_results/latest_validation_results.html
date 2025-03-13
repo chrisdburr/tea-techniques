@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Validation Results</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1, h2 { color: #333; }
+        .summary { margin-bottom: 30px; background-color: #f5f5f5; padding: 15px; border-radius: 5px; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; cursor: pointer; position: relative; }
+        th:hover { background-color: #ddd; }
+        th::after { content: ""; position: absolute; right: 5px; }
+        th.sorted-asc::after { content: "▲"; }
+        th.sorted-desc::after { content: "▼"; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #f1f1f1; }
+        .pass { background-color: #dff0d8; }
+        .fail { background-color: #f2dede; }
+        .filters { margin-bottom: 15px; }
+        .filters input, .filters select { margin-right: 10px; padding: 5px; }
+        .priority-high { background-color: #ffcccc; }
+        .priority-medium { background-color: #ffffcc; }
+        .priority-low { background-color: #ccffcc; }
+        .error-type { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>URL Validation Results</h1>
+
+    <div class="summary">
+        <h2>Summary</h2>
+        <p>Generated on: 2025-03-13 07:02:47</p>
+        <p>Total rows: 122</p>
+        <p>Total resources: 61</p>
+        <p>Successful checks: 61 (100.0%)</p>
+        <p>Failed checks: 0 (0.0%)</p>
+        
+        <h3>Failure Types:</h3>
+        <ul>
+
+        </ul>
+    </div>
+
+    <div class="filters">
+        <input type="text" id="searchInput" placeholder="Search...">
+        <select id="statusFilter">
+            <option value="all">All Status</option>
+            <option value="PASS">Pass</option>
+            <option value="FAIL">Fail</option>
+        </select>
+        <select id="priorityFilter">
+            <option value="all">All Priorities</option>
+            <option value="high">High Priority</option>
+            <option value="medium">Medium Priority</option>
+            <option value="low">Low Priority</option>
+        </select>
+        <button onclick="resetFilters()">Reset Filters</button>
+    </div>
+
+    <table id="resultsTable">
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)">Row ID</th>
+                <th onclick="sortTable(1)">Resource Title</th>
+                <th onclick="sortTable(2)">URL</th>
+                <th onclick="sortTable(3)">Status</th>
+                <th onclick="sortTable(4)">Actual Title</th>
+                <th onclick="sortTable(5)">Similarity</th>
+                <th onclick="sortTable(6)">Keyword Match</th>
+                <th onclick="sortTable(7)" class="sorted-desc">Priority</th>
+                <th onclick="sortTable(8)">Suggestion</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr class="pass priority-medium" data-priority="30" data-status="PASS">
+                <td>12</td>
+                <td>SALib (Python Sensitivity Analysis Library)</td>
+                <td><a href="https://github.com/SALib/SALib" target="_blank">https://github.com/SALib/SALib</a></td>
+                <td>PASS</td>
+                <td>GitHub - SALib/SALib: Sensitivity Analysis Library in Python. Contains Sobol, Morris, FAST, and other methods.</td>
+                <td>0.45</td>
+                <td>0.80</td>
+                <td>30</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-medium" data-priority="30" data-status="PASS">
+                <td>47</td>
+                <td>Differential Privacy OpenDP Library</td>
+                <td><a href="https://github.com/opendp/opendp" target="_blank">https://github.com/opendp/opendp</a></td>
+                <td>PASS</td>
+                <td>GitHub - opendp/opendp: The core library of differential privacy algorithms powering the OpenDP Project.</td>
+                <td>0.51</td>
+                <td>1.00</td>
+                <td>30</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-medium" data-priority="30" data-status="PASS">
+                <td>63</td>
+                <td>PyOD: Python Outlier Detection</td>
+                <td><a href="https://github.com/yzhao062/pyod" target="_blank">https://github.com/yzhao062/pyod</a></td>
+                <td>PASS</td>
+                <td>GitHub - yzhao062/pyod: A Python Library for Outlier and Anomaly Detection, Integrating Classical and Deep Learning Techniques</td>
+                <td>0.38</td>
+                <td>0.75</td>
+                <td>30</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-medium" data-priority="30" data-status="PASS">
+                <td>67</td>
+                <td>Model Card Toolkit</td>
+                <td><a href="https://github.com/tensorflow/model-card-toolkit" target="_blank">https://github.com/tensorflow/model-card-toolkit</a></td>
+                <td>PASS</td>
+                <td>GitHub - tensorflow/model-card-toolkit: A toolkit that streamlines and automates the generation of model cards</td>
+                <td>0.23</td>
+                <td>1.00</td>
+                <td>30</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-medium" data-priority="30" data-status="PASS">
+                <td>90</td>
+                <td>TCAV: Concept Activation Vectors (Kim et al., 2018)</td>
+                <td><a href="https://arxiv.org/abs/1711.11279" target="_blank">https://arxiv.org/abs/1711.11279</a></td>
+                <td>PASS</td>
+                <td>[1711.11279] Interpretability Beyond Feature Attribution: Quantitative Testing with Concept Activation Vectors (TCAV)</td>
+                <td>0.45</td>
+                <td>0.80</td>
+                <td>30</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>3</td>
+                <td>Feature Importance Measures in Random Forests (Scikit-learn)</td>
+                <td><a href="https://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html" target="_blank">https://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html</a></td>
+                <td>PASS</td>
+                <td>Feature importances with a forest of trees — scikit-learn 1.6.1 documentation</td>
+                <td>0.62</td>
+                <td>0.29</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>4</td>
+                <td>Feature Importance Measures in Random Forests (Scikit-learn)</td>
+                <td><a href="https://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html" target="_blank">https://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html</a></td>
+                <td>PASS</td>
+                <td>Feature importances with a forest of trees — scikit-learn 1.6.1 documentation</td>
+                <td>0.62</td>
+                <td>0.29</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>6</td>
+                <td>Axiomatic Attribution for Deep Networks (Integrated Gradients, 2017)</td>
+                <td><a href="https://arxiv.org/abs/1703.01365" target="_blank">https://arxiv.org/abs/1703.01365</a></td>
+                <td>PASS</td>
+                <td>[1703.01365] Axiomatic Attribution for Deep Networks</td>
+                <td>0.75</td>
+                <td>0.57</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>7</td>
+                <td>Learning Important Features Through Propagating Activation Differences (DeepLIFT, 2017)</td>
+                <td><a href="https://arxiv.org/abs/1704.02685" target="_blank">https://arxiv.org/abs/1704.02685</a></td>
+                <td>PASS</td>
+                <td>[1704.02685] Learning Important Features Through Propagating Activation Differences</td>
+                <td>0.91</td>
+                <td>0.78</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>8</td>
+                <td>On Pixel-Wise Explanations by Layer-Wise Relevance Propagation (Bach et al., 2015)</td>
+                <td><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0130140" target="_blank">https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0130140</a></td>
+                <td>PASS</td>
+                <td>On Pixel-Wise Explanations for Non-Linear Classifier Decisions by Layer-Wise Relevance Propagation | PLOS One</td>
+                <td>0.70</td>
+                <td>0.78</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>9</td>
+                <td>Feature Importance Measures in Random Forests (Scikit-learn)</td>
+                <td><a href="https://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html" target="_blank">https://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html</a></td>
+                <td>PASS</td>
+                <td>Feature importances with a forest of trees — scikit-learn 1.6.1 documentation</td>
+                <td>0.62</td>
+                <td>0.29</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>10</td>
+                <td>Beyond Word Importance: Contextual Decomposition (Murdoch et al., 2018)</td>
+                <td><a href="https://openreview.net/forum?id=rkRwGg-0Z" target="_blank">https://openreview.net/forum?id=rkRwGg-0Z</a></td>
+                <td>PASS</td>
+                <td>Beyond Word Importance:  Contextual Decomposition to Extract Interactions from LSTMs | OpenReview</td>
+                <td>0.74</td>
+                <td>0.71</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>11</td>
+                <td>Explaining Nonlinear Classification Decisions with Deep Taylor Decomposition (Montavon et al., 2017)</td>
+                <td><a href="https://arxiv.org/abs/1512.02479" target="_blank">https://arxiv.org/abs/1512.02479</a></td>
+                <td>PASS</td>
+                <td>[1512.02479] Explaining NonLinear Classification Decisions with Deep Taylor Decomposition</td>
+                <td>0.88</td>
+                <td>0.78</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>22</td>
+                <td>Attention is not Explanation (Serrano & Smith, 2019)</td>
+                <td><a href="https://arxiv.org/abs/1902.10186" target="_blank">https://arxiv.org/abs/1902.10186</a></td>
+                <td>PASS</td>
+                <td>[1902.10186] Attention is not Explanation</td>
+                <td>0.75</td>
+                <td>0.40</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>25</td>
+                <td>How to Use t-SNE Effectively (Distill.pub)</td>
+                <td><a href="https://distill.pub/2016/misread-tsne" target="_blank">https://distill.pub/2016/misread-tsne</a></td>
+                <td>PASS</td>
+                <td>How to Use t-SNE Effectively</td>
+                <td>0.82</td>
+                <td>0.50</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>28</td>
+                <td>Understanding Black-box Predictions via Influence Functions (Koh & Liang, 2017)</td>
+                <td><a href="https://arxiv.org/abs/1703.04730" target="_blank">https://arxiv.org/abs/1703.04730</a></td>
+                <td>PASS</td>
+                <td>[1703.04730] Understanding Black-box Predictions via Influence Functions</td>
+                <td>0.89</td>
+                <td>0.71</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>33</td>
+                <td>Dropout as a Bayesian Approximation (Gal & Ghahramani, 2016)</td>
+                <td><a href="https://arxiv.org/abs/1506.02142" target="_blank">https://arxiv.org/abs/1506.02142</a></td>
+                <td>PASS</td>
+                <td>[1506.02142] Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning</td>
+                <td>0.62</td>
+                <td>0.60</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>34</td>
+                <td>Enhancing The Reliability of Out-of-distribution Image Detection (ODIN, 2018)</td>
+                <td><a href="https://arxiv.org/abs/1706.02690" target="_blank">https://arxiv.org/abs/1706.02690</a></td>
+                <td>PASS</td>
+                <td>[1706.02690] Enhancing The Reliability of Out-of-distribution Image Detection in Neural Networks</td>
+                <td>0.87</td>
+                <td>0.71</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>52</td>
+                <td>Probability Calibration (Scikit-learn)</td>
+                <td><a href="https://scikit-learn.org/stable/modules/calibration.html" target="_blank">https://scikit-learn.org/stable/modules/calibration.html</a></td>
+                <td>PASS</td>
+                <td>1.16. Probability calibration — scikit-learn 1.6.1 documentation</td>
+                <td>0.72</td>
+                <td>0.50</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>53</td>
+                <td>On Calibration of Modern Neural Networks (2017)</td>
+                <td><a href="https://arxiv.org/abs/1706.04599" target="_blank">https://arxiv.org/abs/1706.04599</a></td>
+                <td>PASS</td>
+                <td>[1706.04599] On Calibration of Modern Neural Networks</td>
+                <td>0.94</td>
+                <td>0.80</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>59</td>
+                <td>The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Classification Algorithms on Imbalanced Datasets</td>
+                <td><a href="https://doi.org/10.1371/journal.pone.0118432" target="_blank">https://doi.org/10.1371/journal.pone.0118432</a></td>
+                <td>PASS</td>
+                <td>The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets | PLOS One</td>
+                <td>0.91</td>
+                <td>0.85</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>70</td>
+                <td>ML Metadata (MLMD)</td>
+                <td><a href="https://www.tensorflow.org/tfx/guide/mlmd" target="_blank">https://www.tensorflow.org/tfx/guide/mlmd</a></td>
+                <td>PASS</td>
+                <td>ML Metadata  |  TFX  |  TensorFlow</td>
+                <td>0.62</td>
+                <td>0.50</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>77</td>
+                <td>Introduction to Linear Models</td>
+                <td><a href="https://scikit-learn.org/stable/modules/linear_model.html" target="_blank">https://scikit-learn.org/stable/modules/linear_model.html</a></td>
+                <td>PASS</td>
+                <td>1.1. Linear Models — scikit-learn 1.6.1 documentation</td>
+                <td>0.65</td>
+                <td>0.67</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>80</td>
+                <td>Feature Importance Measures in Random Forests (Scikit-learn)</td>
+                <td><a href="https://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html" target="_blank">https://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html</a></td>
+                <td>PASS</td>
+                <td>Feature importances with a forest of trees — scikit-learn 1.6.1 documentation</td>
+                <td>0.62</td>
+                <td>0.29</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>84</td>
+                <td>Distilling the Knowledge in a Neural Network (Hinton et al., 2015)</td>
+                <td><a href="https://arxiv.org/abs/1503.02531" target="_blank">https://arxiv.org/abs/1503.02531</a></td>
+                <td>PASS</td>
+                <td>[1503.02531] Distilling the Knowledge in a Neural Network</td>
+                <td>0.83</td>
+                <td>0.67</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>93</td>
+                <td>Certifying and Removing Disparate Impact (Feldman et al., 2015)</td>
+                <td><a href="https://arxiv.org/abs/1412.3756" target="_blank">https://arxiv.org/abs/1412.3756</a></td>
+                <td>PASS</td>
+                <td>[1412.3756] Certifying and removing disparate impact</td>
+                <td>0.73</td>
+                <td>0.67</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>94</td>
+                <td>Learning Fair Representations (Zemel et al., 2013)</td>
+                <td><a href="https://proceedings.mlr.press/v28/zemel13.html" target="_blank">https://proceedings.mlr.press/v28/zemel13.html</a></td>
+                <td>PASS</td>
+                <td>Learning Fair Representations</td>
+                <td>0.77</td>
+                <td>0.60</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>95</td>
+                <td>FairGAN: Fairness-aware Generative Adversarial Networks (Xu et al., 2018)</td>
+                <td><a href="https://arxiv.org/abs/1805.11202" target="_blank">https://arxiv.org/abs/1805.11202</a></td>
+                <td>PASS</td>
+                <td>[1805.11202] FairGAN: Fairness-aware Generative Adversarial Networks</td>
+                <td>0.89</td>
+                <td>0.86</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>96</td>
+                <td>Optimized Preprocessing for Discrimination Prevention (Calmon et al., 2017)</td>
+                <td><a href="https://arxiv.org/abs/1704.03354" target="_blank">https://arxiv.org/abs/1704.03354</a></td>
+                <td>PASS</td>
+                <td>[1704.03354] Optimized Data Pre-Processing for Discrimination Prevention</td>
+                <td>0.82</td>
+                <td>0.50</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>104</td>
+                <td>A Reductions Approach to Fair Classification (Agarwal et al., 2018)</td>
+                <td><a href="https://arxiv.org/abs/1803.02453" target="_blank">https://arxiv.org/abs/1803.02453</a></td>
+                <td>PASS</td>
+                <td>[1803.02453] A Reductions Approach to Fair Classification</td>
+                <td>0.82</td>
+                <td>0.67</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>108</td>
+                <td>Equality of Opportunity in Supervised Learning (Hardt et al., 2016)</td>
+                <td><a href="https://arxiv.org/abs/1610.02413" target="_blank">https://arxiv.org/abs/1610.02413</a></td>
+                <td>PASS</td>
+                <td>[1610.02413] Equality of Opportunity in Supervised Learning</td>
+                <td>0.84</td>
+                <td>0.67</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>113</td>
+                <td>Uniform Guidelines on Employee Selection (80% rule)</td>
+                <td><a href="https://www.gpo.gov/fdsys/pkg/CFR-2016-title29-vol4/xml/CFR-2016-title29-vol4-part1607.xml" target="_blank">https://www.gpo.gov/fdsys/pkg/CFR-2016-title29-vol4/xml/CFR-2016-title29-vol4-part1607.xml</a></td>
+                <td>PASS</td>
+                <td>UNIFORM GUIDELINES ON EMPLOYEE SELECTION PROCEDURES (1978)</td>
+                <td>0.81</td>
+                <td>0.80</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>115</td>
+                <td>Equality of Opportunity (Hardt et al., 2016)</td>
+                <td><a href="https://arxiv.org/abs/1610.02413" target="_blank">https://arxiv.org/abs/1610.02413</a></td>
+                <td>PASS</td>
+                <td>[1610.02413] Equality of Opportunity in Supervised Learning</td>
+                <td>0.60</td>
+                <td>0.50</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>119</td>
+                <td>Counterfactual Fairness (Kusner et al., 2017)</td>
+                <td><a href="https://arxiv.org/abs/1703.06856" target="_blank">https://arxiv.org/abs/1703.06856</a></td>
+                <td>PASS</td>
+                <td>[1703.06856] Counterfactual Fairness</td>
+                <td>0.72</td>
+                <td>0.50</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="20" data-status="PASS">
+                <td>120</td>
+                <td>Path-Specific Counterfactual Fairness (Chiappa & Gillam, 2018)</td>
+                <td><a href="https://arxiv.org/abs/1802.08139" target="_blank">https://arxiv.org/abs/1802.08139</a></td>
+                <td>PASS</td>
+                <td>[1802.08139] Path-Specific Counterfactual Fairness</td>
+                <td>0.79</td>
+                <td>0.57</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>5</td>
+                <td>Interpreting Regression Coefficients</td>
+                <td><a href="https://www.theanalysisfactor.com/interpreting-regression-coefficients/" target="_blank">https://www.theanalysisfactor.com/interpreting-regression-coefficients/</a></td>
+                <td>PASS</td>
+                <td>Interpreting Regression Coefficients - The Analysis Factor</td>
+                <td>0.78</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>38</td>
+                <td>Data Preprocessing Techniques for Classification Without Discrimination</td>
+                <td><a href="https://link.springer.com/article/10.1007/s10115-011-0463-8" target="_blank">https://link.springer.com/article/10.1007/s10115-011-0463-8</a></td>
+                <td>PASS</td>
+                <td>Data preprocessing techniques for classification without discrimination | Knowledge and Information Systems</td>
+                <td>0.81</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>39</td>
+                <td>Mitigating Unwanted Biases with Adversarial Learning</td>
+                <td><a href="https://arxiv.org/abs/1801.07593" target="_blank">https://arxiv.org/abs/1801.07593</a></td>
+                <td>PASS</td>
+                <td>[1801.07593] Mitigating Unwanted Biases with Adversarial Learning</td>
+                <td>1.00</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>40</td>
+                <td>Counterfactual Fairness</td>
+                <td><a href="https://arxiv.org/abs/1703.06856" target="_blank">https://arxiv.org/abs/1703.06856</a></td>
+                <td>PASS</td>
+                <td>[1703.06856] Counterfactual Fairness</td>
+                <td>1.00</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>41</td>
+                <td>A Reductions Approach to Fair Classification</td>
+                <td><a href="https://arxiv.org/abs/1803.02453" target="_blank">https://arxiv.org/abs/1803.02453</a></td>
+                <td>PASS</td>
+                <td>[1803.02453] A Reductions Approach to Fair Classification</td>
+                <td>1.00</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>44</td>
+                <td>The Measure and Mismeasure of Fairness</td>
+                <td><a href="https://arxiv.org/abs/1808.00023" target="_blank">https://arxiv.org/abs/1808.00023</a></td>
+                <td>PASS</td>
+                <td>[1808.00023] The Measure and Mismeasure of Fairness</td>
+                <td>1.00</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>46</td>
+                <td>Communication-Efficient Learning of Deep Networks from Decentralized Data</td>
+                <td><a href="https://arxiv.org/abs/1602.05629" target="_blank">https://arxiv.org/abs/1602.05629</a></td>
+                <td>PASS</td>
+                <td>[1602.05629] Communication-Efficient Learning of Deep Networks from Decentralized Data</td>
+                <td>1.00</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>48</td>
+                <td>Microsoft SEAL</td>
+                <td><a href="https://github.com/Microsoft/SEAL" target="_blank">https://github.com/Microsoft/SEAL</a></td>
+                <td>PASS</td>
+                <td>GitHub - microsoft/SEAL: Microsoft SEAL is an easy-to-use and powerful homomorphic encryption library.</td>
+                <td>0.31</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>50</td>
+                <td>Quantile Regression Forests</td>
+                <td><a href="https://www.jmlr.org/papers/v7/meinshausen06a.html" target="_blank">https://www.jmlr.org/papers/v7/meinshausen06a.html</a></td>
+                <td>PASS</td>
+                <td>Quantile Regression Forests</td>
+                <td>1.00</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>51</td>
+                <td>A Tutorial on Conformal Prediction</td>
+                <td><a href="https://arxiv.org/abs/0706.3188" target="_blank">https://arxiv.org/abs/0706.3188</a></td>
+                <td>PASS</td>
+                <td>[0706.3188] A tutorial on conformal prediction</td>
+                <td>0.87</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>54</td>
+                <td>Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles</td>
+                <td><a href="https://arxiv.org/abs/1612.01474" target="_blank">https://arxiv.org/abs/1612.01474</a></td>
+                <td>PASS</td>
+                <td>[1612.01474] Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles</td>
+                <td>1.00</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>55</td>
+                <td>An Introduction to the Bootstrap</td>
+                <td><a href="https://doi.org/10.1201/9780429246593" target="_blank">https://doi.org/10.1201/9780429246593</a></td>
+                <td>PASS</td>
+                <td>An Introduction to the Bootstrap | Bradley Efron, R.J. Tibshirani | Ta</td>
+                <td>0.67</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>56</td>
+                <td>The Jackknife Estimate of Variance</td>
+                <td><a href="https://projecteuclid.org/journals/annals-of-statistics/volume-9/issue-3/The-Jackknife-Estimate-of-Variance/10.1214/aos/1176345462.full" target="_blank">https://projecteuclid.org/journals/annals-of-statistics/volume-9/issue-3/The-Jackknife-Estimate-of-Variance/10.1214/aos/1176345462.full</a></td>
+                <td>PASS</td>
+                <td>The Jackknife Estimate of Variance</td>
+                <td>1.00</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>57</td>
+                <td>Cross-validation: evaluating estimator performance</td>
+                <td><a href="https://scikit-learn.org/stable/modules/cross_validation.html" target="_blank">https://scikit-learn.org/stable/modules/cross_validation.html</a></td>
+                <td>PASS</td>
+                <td>3.1. Cross-validation: evaluating estimator performance — scikit-learn 1.6.1 documentation</td>
+                <td>0.96</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>58</td>
+                <td>Testing Statistical Hypotheses</td>
+                <td><a href="https://www.springer.com/gp/book/9780387988641" target="_blank">https://www.springer.com/gp/book/9780387988641</a></td>
+                <td>PASS</td>
+                <td>Testing Statistical Hypotheses | SpringerLink</td>
+                <td>1.00</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>60</td>
+                <td>Metrics for Deep Generative Models</td>
+                <td><a href="https://arxiv.org/abs/1711.01204" target="_blank">https://arxiv.org/abs/1711.01204</a></td>
+                <td>PASS</td>
+                <td>[1711.01204] Metrics for Deep Generative Models</td>
+                <td>1.00</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>62</td>
+                <td>Red Teaming Language Models with Language Models</td>
+                <td><a href="https://arxiv.org/abs/2202.03286" target="_blank">https://arxiv.org/abs/2202.03286</a></td>
+                <td>PASS</td>
+                <td>[2202.03286] Red Teaming Language Models with Language Models</td>
+                <td>1.00</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>64</td>
+                <td>Human-in-the-Loop Machine Learning</td>
+                <td><a href="https://www.manning.com/books/human-in-the-loop-machine-learning" target="_blank">https://www.manning.com/books/human-in-the-loop-machine-learning</a></td>
+                <td>PASS</td>
+                <td>Human-in-the-Loop Machine Learning</td>
+                <td>1.00</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>66</td>
+                <td>Monitoring Machine Learning Models in Production</td>
+                <td><a href="https://christophergs.com/machine%20learning/2020/03/14/how-to-monitor-machine-learning-models/" target="_blank">https://christophergs.com/machine%20learning/2020/03/14/how-to-monitor-machine-learning-models/</a></td>
+                <td>PASS</td>
+                <td>Monitoring Machine Learning Models in Production</td>
+                <td>1.00</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>67</td>
+                <td>Model Cards for Model Reporting</td>
+                <td><a href="https://arxiv.org/abs/1810.03993" target="_blank">https://arxiv.org/abs/1810.03993</a></td>
+                <td>PASS</td>
+                <td>[1810.03993] Model Cards for Model Reporting</td>
+                <td>1.00</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>68</td>
+                <td>Datasheets for Datasets</td>
+                <td><a href="https://arxiv.org/abs/1803.09010" target="_blank">https://arxiv.org/abs/1803.09010</a></td>
+                <td>PASS</td>
+                <td>[1803.09010] Datasheets for Datasets</td>
+                <td>1.00</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>71</td>
+                <td>Tensorflow Data Validation</td>
+                <td><a href="https://www.tensorflow.org/tfx/guide/tfdv" target="_blank">https://www.tensorflow.org/tfx/guide/tfdv</a></td>
+                <td>PASS</td>
+                <td>TensorFlow Data Validation: Checking and analyzing your data  |  TFX</td>
+                <td>0.58</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>72</td>
+                <td>Distilling the Knowledge in a Neural Network</td>
+                <td><a href="https://arxiv.org/abs/1503.02531" target="_blank">https://arxiv.org/abs/1503.02531</a></td>
+                <td>PASS</td>
+                <td>[1503.02531] Distilling the Knowledge in a Neural Network</td>
+                <td>1.00</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>75</td>
+                <td>Monotonic Constraints</td>
+                <td><a href="https://xgboost.readthedocs.io/en/latest/tutorials/monotonic.html" target="_blank">https://xgboost.readthedocs.io/en/latest/tutorials/monotonic.html</a></td>
+                <td>PASS</td>
+                <td>Monotonic Constraints — xgboost 3.1.0-dev documentation</td>
+                <td>1.00</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>76</td>
+                <td>Decision Trees</td>
+                <td><a href="https://scikit-learn.org/stable/modules/tree.html" target="_blank">https://scikit-learn.org/stable/modules/tree.html</a></td>
+                <td>PASS</td>
+                <td>1.10. Decision Trees — scikit-learn 1.6.1 documentation</td>
+                <td>0.85</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="10" data-status="PASS">
+                <td>79</td>
+                <td>Naive Bayes</td>
+                <td><a href="https://scikit-learn.org/stable/modules/naive_bayes.html" target="_blank">https://scikit-learn.org/stable/modules/naive_bayes.html</a></td>
+                <td>PASS</td>
+                <td>1.9. Naive Bayes — scikit-learn 1.6.1 documentation</td>
+                <td>0.85</td>
+                <td>1.00</td>
+                <td>10</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>1</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>2</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>13</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>14</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>15</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>16</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>17</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>18</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>19</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>20</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>21</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>23</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>24</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>26</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>27</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>29</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>31</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>32</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>35</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>37</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>42</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>43</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>45</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>49</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>61</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>65</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>69</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>73</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>74</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>78</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>81</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>82</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>83</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>85</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>86</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>87</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>88</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>89</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>91</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>92</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>97</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>98</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>99</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>100</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>101</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>102</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>103</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>105</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>106</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>107</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>109</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>110</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>111</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>112</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>114</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>116</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>117</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>118</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>121</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>122</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>123</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+            <tr class="pass priority-low" data-priority="0" data-status="PASS">
+                <td>124</td>
+                <td></td>
+                <td><a href="" target="_blank"></a></td>
+                <td>PASS</td>
+                <td></td>
+                <td>0.00</td>
+                <td>0.00</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <script>
+        // Initial sort by priority (column 7) in descending order
+        window.onload = function() {
+            sortTable(7, true); // Sort by priority column in descending order
+        };
+        
+        function sortTable(columnIndex, initialSort = false) {
+            const table = document.getElementById('resultsTable');
+            const header = table.getElementsByTagName('th')[columnIndex];
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = Array.from(tbody.getElementsByTagName('tr'));
+            
+            // Check current sort direction
+            let sortDirection = 'asc';
+            if (!initialSort) {
+                if (header.classList.contains('sorted-asc')) {
+                    sortDirection = 'desc';
+                }
+            } else {
+                sortDirection = 'desc'; // For initial load
+            }
+            
+            // Remove sorting classes from all headers
+            const headers = table.getElementsByTagName('th');
+            for (let i = 0; i < headers.length; i++) {
+                headers[i].classList.remove('sorted-asc', 'sorted-desc');
+            }
+            
+            // Add appropriate class to the current header
+            header.classList.add(sortDirection === 'asc' ? 'sorted-asc' : 'sorted-desc');
+            
+            // Sort the rows
+            rows.sort((a, b) => {
+                let aValue = a.getElementsByTagName('td')[columnIndex].textContent;
+                let bValue = b.getElementsByTagName('td')[columnIndex].textContent;
+                
+                // Handle numeric values
+                if (!isNaN(aValue) && !isNaN(bValue)) {
+                    aValue = parseFloat(aValue) || 0;
+                    bValue = parseFloat(bValue) || 0;
+                }
+                
+                // Compare values
+                if (aValue < bValue) {
+                    return sortDirection === 'asc' ? -1 : 1;
+                } else if (aValue > bValue) {
+                    return sortDirection === 'asc' ? 1 : -1;
+                }
+                return 0;
+            });
+            
+            // Update the table
+            rows.forEach(row => tbody.appendChild(row));
+            
+            // Apply filters after sorting
+            applyFilters();
+        }
+        
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const priorityFilter = document.getElementById('priorityFilter').value;
+            
+            const rows = document.querySelectorAll('#resultsTable tbody tr');
+            
+            rows.forEach(row => {
+                let showRow = true;
+                
+                // Check search term
+                if (searchTerm) {
+                    const text = row.textContent.toLowerCase();
+                    if (!text.includes(searchTerm)) {
+                        showRow = false;
+                    }
+                }
+                
+                // Check status filter
+                if (statusFilter !== 'all') {
+                    const rowStatus = row.getAttribute('data-status');
+                    if (rowStatus !== statusFilter) {
+                        showRow = false;
+                    }
+                }
+                
+                // Check priority filter
+                if (priorityFilter !== 'all') {
+                    const priority = parseInt(row.getAttribute('data-priority'));
+                    if (priorityFilter === 'high' && priority < 50) showRow = false;
+                    if (priorityFilter === 'medium' && (priority < 30 || priority >= 50)) showRow = false;
+                    if (priorityFilter === 'low' && priority >= 30) showRow = false;
+                }
+                
+                // Show or hide the row
+                row.style.display = showRow ? '' : 'none';
+            });
+        }
+        
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('statusFilter').value = 'all';
+            document.getElementById('priorityFilter').value = 'all';
+            applyFilters();
+        }
+        
+        // Attach event listeners
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.getElementById('statusFilter').addEventListener('change', applyFilters);
+        document.getElementById('priorityFilter').addEventListener('change', applyFilters);
+    </script>
+
+</body>
+</html>

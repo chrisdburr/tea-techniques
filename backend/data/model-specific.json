@@ -1,0 +1,378 @@
+{
+	"model_specific_techniques": {
+		"Tree-based Models": {
+			"description": "Decision trees, random forests, gradient boosting models, and other tree-based algorithms",
+			"techniques": [
+				{
+					"id": 3,
+					"name": "Mean Decrease Impurity",
+					"applicable_models": [
+						"Decision Trees",
+						"Random Forests",
+						"Gradient Boosting Models"
+					],
+					"description": "Evaluates feature importance by calculating the reduction in impurity across all splits in tree-based models."
+				},
+				{
+					"id": 4,
+					"name": "Gini Importance",
+					"applicable_models": ["Decision Trees", "Random Forests"],
+					"description": "Sums the total reduction in Gini impurity across all splits, similar to Mean Decrease Impurity."
+				},
+				{
+					"id": 9,
+					"name": "Variable Importance in Random Forests (MDA MDG)",
+					"applicable_models": ["Random Forests"],
+					"description": "Uses Mean Decrease Accuracy and Mean Decrease Gini to evaluate feature importance in Random Forests."
+				},
+				{
+					"id": 76,
+					"name": "Decision Trees and Rule Lists",
+					"applicable_models": [
+						"Decision Trees",
+						"Rule-based Models"
+					],
+					"description": "Creates interpretable models through a series of if-then rules in a flowchart-like structure."
+				},
+				{
+					"id": 80,
+					"name": "Variable Importance in Random Forests (MDA, MDG)",
+					"applicable_models": ["Random Forests"],
+					"description": "Calculates feature importance by measuring impact when features are excluded from Random Forest models."
+				}
+			]
+		},
+		"Linear Models": {
+			"description": "Linear and logistic regression models using linear combinations of features",
+			"techniques": [
+				{
+					"id": 5,
+					"name": "Coefficient Magnitudes (in Linear Models)",
+					"applicable_models": [
+						"Linear Regression",
+						"Logistic Regression",
+						"Ridge Regression",
+						"Lasso Regression"
+					],
+					"description": "Examines the absolute values of coefficients to determine feature influence."
+				},
+				{
+					"id": 77,
+					"name": "Linear/Logistic Models with Few Features",
+					"applicable_models": [
+						"Linear Regression",
+						"Logistic Regression"
+					],
+					"description": "Builds transparent models using a small number of carefully selected features."
+				},
+				{
+					"id": 102,
+					"name": "Prejudice Remover Regulariser",
+					"applicable_models": [
+						"Logistic Regression",
+						"Other Regularizable Models"
+					],
+					"description": "Incorporates a fairness penalty into the learning objective to reduce bias."
+				}
+			]
+		},
+		"Neural Networks": {
+			"description": "Deep learning models including general neural networks, CNNs, RNNs, and transformer architectures",
+			"techniques": [
+				{
+					"id": 6,
+					"name": "Integrated Gradients",
+					"applicable_models": [
+						"General Neural Networks",
+						"CNNs",
+						"RNNs",
+						"Transformers"
+					],
+					"description": "Attributes feature contributions by accumulating gradients between baseline and actual input."
+				},
+				{
+					"id": 7,
+					"name": "DeepLIFT",
+					"applicable_models": [
+						"General Neural Networks",
+						"CNNs",
+						"RNNs"
+					],
+					"description": "Assigns credit to input features by comparing activations to a reference baseline."
+				},
+				{
+					"id": 8,
+					"name": "Layer-wise Relevance Propagation (LRP)",
+					"applicable_models": [
+						"General Neural Networks",
+						"CNNs",
+						"RNNs"
+					],
+					"description": "Propagates prediction relevance backward through the network to input features."
+				},
+				{
+					"id": 10,
+					"name": "Contextual Decomposition",
+					"applicable_models": ["LSTMs", "RNNs"],
+					"description": "Interprets predictions by breaking down outputs into parts attributed to specific input features."
+				},
+				{
+					"id": 11,
+					"name": "Taylor Decomposition",
+					"applicable_models": ["General Neural Networks"],
+					"description": "Uses Taylor series expansion to break down predictions into feature contributions."
+				},
+				{
+					"id": 19,
+					"name": "Saliency Maps",
+					"applicable_models": ["CNNs", "Vision Models"],
+					"description": "Highlights input parts (e.g., pixels) that strongly influence the model's prediction."
+				},
+				{
+					"id": 20,
+					"name": "Gradient-weighted Class Activation Mapping (Grad-CAM)",
+					"applicable_models": ["CNNs", "Vision Models"],
+					"description": "Produces coarse localization maps highlighting important image regions for classification."
+				},
+				{
+					"id": 21,
+					"name": "Occlusion Sensitivity",
+					"applicable_models": [
+						"CNNs",
+						"Vision Models",
+						"Text Models"
+					],
+					"description": "Tests feature importance by masking inputs and observing prediction changes."
+				},
+				{
+					"id": 22,
+					"name": "Attention Mechanisms in Neural Networks",
+					"applicable_models": [
+						"Transformers",
+						"Attention-based Models",
+						"LLMs"
+					],
+					"description": "Visualizes attention weights to show which input parts were most relevant for predictions."
+				},
+				{
+					"id": 33,
+					"name": "Monte Carlo Dropout",
+					"applicable_models": ["Neural Networks with Dropout"],
+					"description": "Estimates uncertainty by running multiple forward passes with dropout activated."
+				},
+				{
+					"id": 34,
+					"name": "ODIN",
+					"applicable_models": ["Neural Networks"],
+					"description": "Detects out-of-distribution inputs using temperature scaling and input perturbation."
+				},
+				{
+					"id": 39,
+					"name": "Adversarial Debiasing",
+					"applicable_models": ["Neural Networks"],
+					"description": "Uses adversarial techniques to prevent models from learning protected attributes."
+				},
+				{
+					"id": 53,
+					"name": "Temperature Scaling",
+					"applicable_models": [
+						"Neural Networks",
+						"Classification Models"
+					],
+					"description": "Calibrates confidence scores by scaling logits with a temperature parameter."
+				},
+				{
+					"id": 54,
+					"name": "Deep Ensembles",
+					"applicable_models": ["Neural Networks"],
+					"description": "Combines multiple independently trained neural networks for better predictions and uncertainty estimation."
+				},
+				{
+					"id": 72,
+					"name": "Model Distillation",
+					"applicable_models": ["Neural Networks"],
+					"description": "Compresses a large model into a smaller one that approximates the original behavior."
+				},
+				{
+					"id": 83,
+					"name": "Model Pruning",
+					"applicable_models": ["Neural Networks"],
+					"description": "Removes less important weights or neurons to reduce model complexity."
+				},
+				{
+					"id": 101,
+					"name": "Fair Adversarial Networks",
+					"applicable_models": ["Neural Networks"],
+					"description": "Extends adversarial debiasing by incorporating fairness into deep learning."
+				}
+			]
+		},
+		"Language Models": {
+			"description": "Large language models and specialized NLP architectures",
+			"techniques": [
+				{
+					"id": 85,
+					"name": "Attention Visualisation in Transformers",
+					"applicable_models": ["Transformers", "LLMs"],
+					"description": "Visualizes attention weights to show how the model focuses on different input parts."
+				},
+				{
+					"id": 86,
+					"name": "Neuron Activation Analysis",
+					"applicable_models": ["LLMs", "Neural Networks"],
+					"description": "Analyzes activation patterns of neurons to interpret their roles and represented concepts."
+				},
+				{
+					"id": 87,
+					"name": "Prompt Sensitivity Analysis",
+					"applicable_models": ["LLMs"],
+					"description": "Studies how variations in input prompts affect model outputs to understand behavior."
+				},
+				{
+					"id": 88,
+					"name": "Causal Mediation Analysis in Language Models",
+					"applicable_models": ["LLMs"],
+					"description": "Investigates causal relationships by assessing how interventions affect outputs."
+				},
+				{
+					"id": 89,
+					"name": "Feature Attribution with Integrated Gradients in NLP",
+					"applicable_models": ["LLMs", "NLP Models"],
+					"description": "Attributes importance of input tokens for specific predictions."
+				},
+				{
+					"id": 91,
+					"name": "In-Context Learning Analysis",
+					"applicable_models": ["LLMs"],
+					"description": "Examines how models learn from examples in the input prompt."
+				},
+				{
+					"id": 100,
+					"name": "Adversarial Debiasing for Text",
+					"applicable_models": ["NLP Models", "LLMs"],
+					"description": "Applies adversarial techniques to mitigate biases in language models."
+				}
+			]
+		},
+		"Probabilistic Models": {
+			"description": "Models that explicitly represent probability distributions",
+			"techniques": [
+				{
+					"id": 79,
+					"name": "Naive Bayes and Probabilistic Models",
+					"applicable_models": [
+						"Naive Bayes",
+						"Probabilistic Classifiers"
+					],
+					"description": "Uses Bayes' theorem and conditional probabilities for transparent prediction."
+				},
+				{
+					"id": 81,
+					"name": "Bayesian Networks",
+					"applicable_models": [
+						"Bayesian Networks",
+						"Probabilistic Graphical Models"
+					],
+					"description": "Represents variables and their conditional dependencies for causal reasoning."
+				},
+				{
+					"id": 123,
+					"name": "Bayesian Fairness Regularization",
+					"applicable_models": ["Bayesian Models"],
+					"description": "Incorporates fairness as a prior for probabilistic interpretation of fairness constraints."
+				}
+			]
+		},
+		"Additive Models": {
+			"description": "Models that learn a separate function for each feature and combine them additively",
+			"techniques": [
+				{
+					"id": 78,
+					"name": "Generalized Additive Models (GAMs)",
+					"applicable_models": ["GAMs"],
+					"description": "Extends linear models with flexible, nonlinear relationships for individual features."
+				}
+			]
+		},
+		"Generative Models": {
+			"description": "Models that can generate new data similar to training data",
+			"techniques": [
+				{
+					"id": 95,
+					"name": "Fairness GAN",
+					"applicable_models": ["GANs"],
+					"description": "Uses Generative Adversarial Networks to create fair data representations."
+				}
+			]
+		},
+		"Causal Models": {
+			"description": "Models that explicitly represent cause-effect relationships",
+			"techniques": [
+				{
+					"id": 119,
+					"name": "Counterfactual Fairness (Causal Modeling)",
+					"applicable_models": [
+						"Structural Causal Models",
+						"Causal Inference Models"
+					],
+					"description": "Ensures predictions remain consistent in counterfactual scenarios."
+				},
+				{
+					"id": 120,
+					"name": "Path-Specific Counterfactual Fairness",
+					"applicable_models": ["Structural Causal Models"],
+					"description": "Considers specific causal pathways for targeted fairness interventions."
+				},
+				{
+					"id": 121,
+					"name": "Causal Fairness Assessment with Do-Calculus",
+					"applicable_models": ["Causal Inference Models"],
+					"description": "Uses causal inference to assess and mitigate bias through interventional analysis."
+				}
+			]
+		},
+		"Recommendation Systems": {
+			"description": "Models designed to provide personalized recommendations",
+			"techniques": [
+				{
+					"id": 122,
+					"name": "Diversity Constraints in Recommendations",
+					"applicable_models": [
+						"Recommendation Systems",
+						"Collaborative Filtering",
+						"Content-Based Recommenders"
+					],
+					"description": "Incorporates diversity and fairness constraints for varied content exposure."
+				}
+			]
+		},
+		"Regression Models": {
+			"description": "Models that predict continuous values",
+			"techniques": [
+				{
+					"id": 50,
+					"name": "Quantile Regression",
+					"applicable_models": [
+						"Regression Models",
+						"Quantile Regression Forests"
+					],
+					"description": "Estimates different percentiles of the prediction's conditional distribution."
+				}
+			]
+		},
+		"Transfer Learning": {
+			"description": "Models that leverage knowledge from one domain to another",
+			"techniques": [
+				{
+					"id": 105,
+					"name": "Fair Transfer Learning",
+					"applicable_models": [
+						"Transfer Learning Models",
+						"Fine-tuned Models"
+					],
+					"description": "Adapts models across domains while preserving fairness constraints."
+				}
+			]
+		}
+	}
+}

@@ -22,9 +22,16 @@ import {
 	ArrowRight,
 	Brain,
 	CheckCircle,
+	Cpu,
 	Edit,
 	Eye,
 	ExternalLink,
+	FileText,
+	Book,
+	FileCode,
+	Package,
+	GraduationCap,
+	BookOpen,
 	Info,
 	Loader2,
 	Lock,
@@ -38,6 +45,94 @@ import {
 	TechniqueLimitation,
 	AttributeValue,
 } from "@/lib/types";
+
+// Utility function to find applicable models for model-specific techniques
+// This simulates what we would expect from the backend API when updated
+function findApplicableModels(techniqueId: number): string[] {
+	// Sample data based on model-specific.json structure
+	const modelSpecificData = {
+		"Tree-based Models": {
+			techniques: [
+				{
+					id: 3,
+					name: "Mean Decrease Impurity",
+					applicable_models: [
+						"Decision Trees",
+						"Random Forests",
+						"Gradient Boosting Models",
+					],
+				},
+				{
+					id: 4,
+					name: "Gini Importance",
+					applicable_models: ["Decision Trees", "Random Forests"],
+				},
+				{
+					id: 9,
+					name: "Variable Importance in Random Forests (MDA MDG)",
+					applicable_models: ["Random Forests"],
+				},
+			],
+		},
+		"Linear Models": {
+			techniques: [
+				{
+					id: 5,
+					name: "Coefficient Magnitudes (in Linear Models)",
+					applicable_models: [
+						"Linear Regression",
+						"Logistic Regression",
+						"Ridge Regression",
+						"Lasso Regression",
+					],
+				},
+			],
+		},
+		"Neural Networks": {
+			techniques: [
+				{
+					id: 6,
+					name: "Integrated Gradients",
+					applicable_models: [
+						"General Neural Networks",
+						"CNNs",
+						"RNNs",
+						"Transformers",
+					],
+				},
+				{
+					id: 7,
+					name: "DeepLIFT",
+					applicable_models: [
+						"General Neural Networks",
+						"CNNs",
+						"RNNs",
+					],
+				},
+				{
+					id: 8,
+					name: "Layer-wise Relevance Propagation (LRP)",
+					applicable_models: [
+						"General Neural Networks",
+						"CNNs",
+						"RNNs",
+					],
+				},
+			],
+		},
+	};
+
+	// Search through all categories and techniques to find the matching ID
+	for (const category of Object.values(modelSpecificData)) {
+		for (const technique of category.techniques) {
+			if (technique.id === techniqueId) {
+				return technique.applicable_models || [];
+			}
+		}
+	}
+
+	return [];
+}
 
 // Helper component for section containers
 function Section({
@@ -68,6 +163,24 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 		return <p className="text-muted-foreground">No resources available.</p>;
 	}
 
+	// Function to get the appropriate icon for resource type
+	const getResourceTypeIcon = (typeName: string) => {
+		switch (typeName.toLowerCase()) {
+			case "documentation":
+				return <FileText className="h-5 w-5" aria-hidden="true" />;
+			case "technical paper":
+				return <FileCode className="h-5 w-5" aria-hidden="true" />;
+			case "software package":
+				return <Package className="h-5 w-5" aria-hidden="true" />;
+			case "tutorial":
+				return <GraduationCap className="h-5 w-5" aria-hidden="true" />;
+			case "introductory paper":
+				return <BookOpen className="h-5 w-5" aria-hidden="true" />;
+			default:
+				return <Book className="h-5 w-5" aria-hidden="true" />;
+		}
+	};
+
 	// Group resources by type
 	const resourcesByType = resources.reduce((acc, resource) => {
 		const typeName = resource.resource_type_name;
@@ -79,43 +192,50 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 	}, {} as Record<string, TechniqueResource[]>);
 
 	return (
-		<div className="space-y-4">
-			{Object.entries(resourcesByType).map(([typeName, resources]) => (
-				<div key={typeName} className="space-y-2">
-					<h3 className="text-sm font-medium">{typeName}</h3>
-					{resources.map((resource) => (
-						<div
-							key={resource.id}
-							className="border rounded-md p-4 hover:border-primary transition-colors"
-						>
-							<div className="flex items-center justify-between">
-								<h4 className="font-medium">
-									{resource.title}
-								</h4>
-								{/* Disabled button instead of link */}
-								<Button
-									variant="outline"
-									size="sm"
-									disabled={true}
-									title="Links temporarily disabled pending review"
-									className="flex items-center gap-1"
-								>
-									<ExternalLink
-										className="h-4 w-4"
-										aria-hidden="true"
-									/>
-									<span>View</span>
-								</Button>
-							</div>
-							{resource.description && (
-								<p className="text-sm mt-2 text-muted-foreground">
-									{resource.description}
-								</p>
-							)}
+		<div className="space-y-8">
+			{Object.entries(resourcesByType).map(
+				([typeName, typeResources]) => (
+					<div key={typeName} className="space-y-4">
+						<div className="flex items-center gap-2 text-primary font-medium">
+							{getResourceTypeIcon(typeName)}
+							<h3 className="font-medium">{typeName}</h3>
 						</div>
-					))}
-				</div>
-			))}
+						<div className="space-y-4 pl-7">
+							{typeResources.map((resource) => (
+								<div
+									key={resource.id}
+									className="border rounded-md p-4 hover:border-primary transition-colors"
+								>
+									<div className="flex items-center justify-between">
+										<h4 className="font-medium">
+											{resource.title}
+										</h4>
+										{/* Disabled button instead of link */}
+										<Button
+											variant="outline"
+											size="sm"
+											disabled={true}
+											title="Links temporarily disabled pending review"
+											className="flex items-center gap-1"
+										>
+											<ExternalLink
+												className="h-4 w-4"
+												aria-hidden="true"
+											/>
+											<span>View</span>
+										</Button>
+									</div>
+									{resource.description && (
+										<p className="text-sm mt-2 text-muted-foreground">
+											{resource.description}
+										</p>
+									)}
+								</div>
+							))}
+						</div>
+					</div>
+				)
+			)}
 		</div>
 	);
 }
@@ -289,6 +409,12 @@ export default function TechniqueDetailPage() {
 			</MainLayout>
 		);
 	}
+
+	// Get applicable models for this technique (if model-specific)
+	const applicableModels =
+		technique.model_dependency === "Model-Specific"
+			? findApplicableModels(technique.id)
+			: [];
 
 	// Helper function to parse category tags
 	const parseCategoryTags = (categoryTagsStr: string) => {
@@ -508,6 +634,37 @@ export default function TechniqueDetailPage() {
 										</Badge>
 									</div>
 								</div>
+
+								{/* Applicable Models Section (for model-specific techniques) */}
+								{technique.model_dependency ===
+									"Model-Specific" &&
+									applicableModels.length > 0 && (
+										<div className="space-y-2">
+											<h3 className="text-sm font-medium flex items-center">
+												Applicable Models
+												<span
+													className="ml-1 inline-flex"
+													title="Specific model architectures this technique can be applied to"
+												>
+													<Info className="h-4 w-4 text-muted-foreground" />
+												</span>
+											</h3>
+											<div className="flex flex-wrap gap-2">
+												{applicableModels.map(
+													(model) => (
+														<Badge
+															key={model}
+															variant="outline"
+															className="flex items-center gap-1.5 text-xs py-1"
+														>
+															<Cpu className="h-3 w-3" />
+															<span>{model}</span>
+														</Badge>
+													)
+												)}
+											</div>
+										</div>
+									)}
 
 								{/* Goal-Specific Attributes section */}
 								<div className="space-y-3 border-t pt-3">

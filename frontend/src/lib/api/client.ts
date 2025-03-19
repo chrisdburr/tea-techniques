@@ -20,14 +20,17 @@ const getBaseUrl = () => {
 
 // Create a client that uses the appropriate API base URL
 const apiClient = axios.create({
-  baseURL: getBaseUrl(),
-  timeout: 15000,
-  headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  },
-  // Allow redirects to follow Django's trailing slash redirects
-  maxRedirects: 5,
+	baseURL: getBaseUrl(),
+	timeout: 15000,
+	headers: {
+		"Content-Type": "application/json",
+		Accept: "application/json",
+	},
+	// Allow redirects to follow Django's trailing slash redirects
+	maxRedirects: 5,
+	paramsSerializer: {
+		indexes: null,
+	},
 });
 
 export { apiClient };

@@ -31,7 +31,7 @@ interface TechniquesSidebarProps {
 	// Filter state
 	filters: FilterState;
 	setFilters: (filters: FilterState) => void;
-	applyFilters: () => void;
+	applyFilters: (filters?: FilterState) => void; // Updated to accept optional filters
 	resetFilters: () => void;
 
 	// Data for populating filters
@@ -73,13 +73,26 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 	};
 
 	// Helper to toggle an item in an array filter
+	// Helper to toggle an item in an array filter
 	const toggleArrayFilter = (key: keyof FilterState, itemId: string) => {
 		const currentValues = filters[key] as string[];
+
 		const newValues = currentValues.includes(itemId)
 			? currentValues.filter((id) => id !== itemId)
 			: [...currentValues, itemId];
 
+		// Create updated filters object
+		const updatedFilters = { ...filters, [key]: newValues };
+
+		// Update filter state
 		updateFilter(key, newValues as FilterState[typeof key]);
+
+		// Apply filters with the exact updated values, not relying on state update
+		setTimeout(() => {
+			console.log("Auto-applying filters after toggle:", updatedFilters);
+			// Pass the updated filters directly
+			applyFilters(updatedFilters);
+		}, 0);
 	};
 
 	return (
@@ -92,7 +105,6 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 					aria-hidden="true"
 				/>
 			)}
-
 			{/* Sidebar header */}
 			<div className="p-4 border-b flex items-center justify-between sticky top-0 bg-background z-10">
 				<h2 className="font-semibold text-lg">Filters</h2>
@@ -127,7 +139,6 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 					</Button>
 				</div>
 			</div>
-
 			{/* Filters */}
 			<div className="overflow-y-auto max-h-[calc(100vh-120px)] py-2 bg-background">
 				<div className="p-4">
@@ -136,27 +147,41 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 						<Input
 							placeholder="Search techniques..."
 							value={filters.search}
-							onChange={(e) =>
-								updateFilter("search", e.target.value)
-							}
+							onChange={(e) => {
+								const updatedFilters = {
+									...filters,
+									search: e.target.value,
+								};
+								updateFilter("search", e.target.value);
+								// Only auto-apply when input is empty or has at least 3 characters
+								if (
+									e.target.value.length === 0 ||
+									e.target.value.length > 2
+								) {
+									setTimeout(
+										() => applyFilters(updatedFilters),
+										300
+									);
+								}
+							}}
 							className="w-full pl-8"
 							onKeyDown={(e) => {
 								if (e.key === "Enter") {
-									applyFilters();
+									applyFilters(filters);
 								}
 							}}
 						/>
 					</div>
-					<div className="mt-2 md:hidden">
+					{/* <div className="mt-2 md:hidden">
 						<Button
 							onClick={applyFilters}
 							size="sm"
 							className="w-full"
 							disabled={isDataLoading}
 						>
-							{isDataLoading ? 'Loading...' : 'Search'}
+							{isDataLoading ? "Loading..." : "Search"}
 						</Button>
-					</div>
+					</div> */}
 				</div>
 
 				<Accordion
@@ -309,12 +334,29 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 									</h4>
 									<div className="pt-2 pb-1">
 										<Slider
-											value={[filters.complexity_max || 5]}
+											value={[
+												filters.complexity_max || 5,
+											]}
 											min={1}
 											max={5}
 											step={1}
 											onValueChange={(value) => {
-												updateFilter("complexity_max", value[0]);
+												const updatedFilters = {
+													...filters,
+													complexity_max: value[0],
+												};
+												updateFilter(
+													"complexity_max",
+													value[0]
+												);
+												// Pass updated filters directly
+												setTimeout(
+													() =>
+														applyFilters(
+															updatedFilters
+														),
+													0
+												);
 											}}
 										/>
 									</div>
@@ -338,12 +380,31 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 									</h4>
 									<div className="pt-2 pb-1">
 										<Slider
-											value={[filters.computational_cost_max || 5]}
+											value={[
+												filters.computational_cost_max ||
+													5,
+											]}
 											min={1}
 											max={5}
 											step={1}
 											onValueChange={(value) => {
-												updateFilter("computational_cost_max", value[0]);
+												const updatedFilters = {
+													...filters,
+													computational_cost_max:
+														value[0],
+												};
+												updateFilter(
+													"computational_cost_max",
+													value[0]
+												);
+												// Pass updated filters directly
+												setTimeout(
+													() =>
+														applyFilters(
+															updatedFilters
+														),
+													0
+												);
 											}}
 										/>
 									</div>
@@ -365,16 +426,14 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 				</Accordion>
 			</div>
 
-			{/* Apply filters button (mobile only) */}
 			<div className="sticky bottom-0 left-0 right-0 p-4 bg-background border-t md:hidden">
-				<div className="flex gap-2">
-					<Button onClick={resetFilters} variant="outline" className="w-1/3">
-						Reset
-					</Button>
-					<Button onClick={applyFilters} className="w-2/3">
-						Apply Filters
-					</Button>
-				</div>
+				<Button
+					onClick={resetFilters}
+					variant="outline"
+					className="w-full"
+				>
+					Reset All Filters
+				</Button>
 			</div>
 		</div>
 	);

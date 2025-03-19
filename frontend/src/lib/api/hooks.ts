@@ -18,8 +18,9 @@ import type {
 interface QueryParams {
 	search?: string;
 	assurance_goal?: string;
+	assurance_goals?: string | string[];
 	category?: string;
-	[key: string]: string | undefined;
+	[key: string]: string | string[] | undefined;
 }
 
 // Basic calculation of total pages based on item count
@@ -31,18 +32,30 @@ const calculateTotalPages = (
 };
 
 // Helper function to try API calls with and without trailing slash
-const fetchAPI = async <T>(url: string, params?: Record<string, string | number>): Promise<T> => {
-  try {
-    // First, try without trailing slash
-    const urlWithoutSlash = url.endsWith('/') ? url.slice(0, -1) : url;
-    const response = await apiClient.get(urlWithoutSlash, { params });
-    return response.data as T;
-  } catch {
-    // If that fails, try with trailing slash
-    const urlWithSlash = url.endsWith('/') ? url : `${url}/`;
-    const response = await apiClient.get(urlWithSlash, { params });
-    return response.data as T;
-  }
+const fetchAPI = async <T>(
+    url: string,
+    params?: Record<string, string | number | string[]>
+): Promise<T> => {
+    // Remove any trailing slash first 
+    const urlWithoutSlash = url.endsWith("/") ? url.slice(0, -1) : url;
+    const urlWithSlash = urlWithoutSlash + "/";
+    
+    // Try both URL variants in sequence
+    try {
+        // Try without trailing slash first
+        try {
+            const response = await apiClient.get(urlWithoutSlash, { params });
+            return response.data as T;
+        } catch {
+            // If first attempt fails, try with trailing slash
+            const response = await apiClient.get(urlWithSlash, { params });
+            return response.data as T;
+        }
+    } catch (error) {
+        // This catch will handle any errors from both attempts
+        console.error("API request failed with both URL variations:", error);
+        throw error;
+    }
 };
 
 // Base data fetching hooks
@@ -182,7 +195,7 @@ export const useResourceTypes = () => {
 
 export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 	// Filter parameters
-	const apiParams: Record<string, string | number> = { page };
+	const apiParams: Record<string, string | number | string[]> = { page };
 
 	if (params.search) {
 		apiParams.search = params.search;
@@ -190,7 +203,16 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 		apiParams.search_fields = "name"; // Only search in name field
 	}
 
-	if (params.assurance_goal && params.assurance_goal !== "all") {
+	// Handle assurance_goals as an array
+	if (
+		params.assurance_goals &&
+		Array.isArray(params.assurance_goals) &&
+		params.assurance_goals.length > 0
+	) {
+		// For axios, we need to format this correctly for the backend
+		apiParams.assurance_goals = params.assurance_goals;
+	} else if (params.assurance_goal && params.assurance_goal !== "all") {
+		// Backward compatibility for single goal
 		apiParams.assurance_goals = params.assurance_goal;
 	}
 
@@ -237,9 +259,9 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 		queryFn: async () => {
 			try {
 				// Use the apiClient configured with proper baseUrl
-				return await fetchAPI('/api/techniques/', apiParams);
+				return await fetchAPI("/api/techniques/", apiParams);
 			} catch (error: unknown) {
-				logApiError('useTechniques', error);
+				logApiError("useTechniques", error);
 				throw error;
 			}
 		},

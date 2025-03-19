@@ -28,6 +28,7 @@ import { Loader2, Filter } from "lucide-react";
 import type { Technique } from "@/lib/types";
 import { formatCategoryName } from "./CategoryTag";
 import GoalIcon from "./GoalIcon";
+import { useSearchParams } from "next/navigation";
 
 // Number of items per page - must match backend setting (20)
 const PAGE_SIZE = 20;
@@ -185,40 +186,70 @@ export default function TechniquesList() {
 		handleResize();
 
 		// Listen for window resize events
-		window.addEventListener('resize', handleResize);
-		return () => window.removeEventListener('resize', handleResize);
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
 	}, []);
 
-	// Use custom filter hook to manage URL parameters
-	const { filters: urlFilters, currentPage } = useFilterParams({
+	// Get current URL parameters directly
+	const searchParams = useSearchParams();
+	// Still use the hook for currentPage - it provides other useful functionality
+	const { currentPage } = useFilterParams({
 		search: "",
 		assurance_goal: "all",
 		category: "all",
 		model_dependency: "all",
 	});
 
-	// State for the new filter format
+	// State for the filters with direct URL parameter access
 	const [filters, setFilters] = useState<FilterState>(() => {
-		// Convert from URL format to our new format
-		return {
-			search: urlFilters.search || "",
-			assurance_goals:
-				urlFilters.assurance_goal !== "all"
-					? [urlFilters.assurance_goal]
-					: [],
-			categories:
-				urlFilters.category !== "all" ? [urlFilters.category] : [],
-			model_dependency:
-				urlFilters.model_dependency !== "all"
-					? [urlFilters.model_dependency]
-					: [],
-			complexity_max: urlFilters.complexity_max
-				? parseInt(urlFilters.complexity_max)
-				: 5,
-			computational_cost_max: urlFilters.computational_cost_max
-				? parseInt(urlFilters.computational_cost_max)
-				: 5,
+		const initialFilters: FilterState = {
+			search: "",
+			assurance_goals: [],
+			categories: [],
+			model_dependency: [],
+			complexity_max: 5,
+			computational_cost_max: 5,
 		};
+
+		// Get search from URL
+		const searchParam = searchParams.get("search");
+		if (searchParam) {
+			initialFilters.search = searchParam;
+		}
+
+		// Get multiple assurance_goals from URL
+		// This is the key fix - using getAll() instead of get() for array parameters
+		const assuranceGoalParams = searchParams.getAll("assurance_goals");
+		if (assuranceGoalParams.length > 0) {
+			console.log("Found assurance_goals in URL:", assuranceGoalParams);
+			initialFilters.assurance_goals = assuranceGoalParams;
+		}
+
+		// Similarly get categories
+		const categoryParams = searchParams.getAll("categories");
+		if (categoryParams.length > 0) {
+			initialFilters.categories = categoryParams;
+		}
+
+		// Get model dependency
+		const modelDependencyParam = searchParams.get("model_dependency");
+		if (modelDependencyParam) {
+			initialFilters.model_dependency = [modelDependencyParam];
+		}
+
+		// Get rating filters
+		const complexityParam = searchParams.get("complexity_max");
+		if (complexityParam) {
+			initialFilters.complexity_max = parseInt(complexityParam, 10);
+		}
+
+		const compCostParam = searchParams.get("computational_cost_max");
+		if (compCostParam) {
+			initialFilters.computational_cost_max = parseInt(compCostParam, 10);
+		}
+
+		console.log("Initialized filters from URL:", initialFilters);
+		return initialFilters;
 	});
 
 	// Convert back to URL format for API calls
@@ -226,10 +257,11 @@ export default function TechniquesList() {
 		return {
 			search: filters.search,
 			search_fields: "name",
-			assurance_goal:
-				filters.assurance_goals.length === 1
-					? filters.assurance_goals[0]
-					: "all",
+			// Pass all assurance goals, not just the first one
+			assurance_goals:
+				filters.assurance_goals.length > 0
+					? filters.assurance_goals
+					: undefined,
 			category:
 				filters.categories.length === 1 ? filters.categories[0] : "all",
 			model_dependency:
@@ -288,7 +320,7 @@ export default function TechniquesList() {
 				filters.computational_cost_max !== undefined &&
 				technique.computational_cost_rating !== undefined &&
 				technique.computational_cost_rating >
-				filters.computational_cost_max
+					filters.computational_cost_max
 			) {
 				return false;
 			}
@@ -309,52 +341,74 @@ export default function TechniquesList() {
 	const totalPages = calculateTotalPages(filteredCount, PAGE_SIZE);
 
 	// Apply filters function
-	const applyFilters = () => {
+	const applyFilters = (explicitFilters?: FilterState) => {
+		// Use explicitly passed filters or current state
+		const filtersToApply = explicitFilters || filters;
+		console.log("ApplyFilters called with:", filtersToApply);
+
 		// Build URL with current filters
 		const params = new URLSearchParams();
 
 		// Add search if provided
-		if (filters.search) {
-			params.set("search", filters.search);
+		if (filtersToApply.search) {
+			params.set("search", filtersToApply.search);
 			params.set("search_fields", "name");
 		}
 
-		// Add assurance goals if set (currently API only supports one)
-		if (filters.assurance_goals.length > 0) {
-			params.set("assurance_goals", filters.assurance_goals[0]);
+		// Add assurance goals - each as a separate parameter
+		if (filtersToApply.assurance_goals.length > 0) {
+			console.log(
+				"Adding assurance goals to URL:",
+				filtersToApply.assurance_goals
+			);
+			// Important: Use "append" for each goal ID
+			filtersToApply.assurance_goals.forEach((goalId) => {
+				params.append("assurance_goals", goalId);
+			});
 		}
 
-		// Add categories if set (currently API only supports one)
-		if (filters.categories.length > 0) {
-			params.set("categories", filters.categories[0]);
+		// Add categories
+		if (filtersToApply.categories.length > 0) {
+			filtersToApply.categories.forEach((catId) => {
+				params.append("categories", catId);
+			});
 		}
 
-		// Add model dependency if set (currently API only supports one)
-		if (filters.model_dependency.length > 0) {
-			params.set("model_dependency", filters.model_dependency[0]);
+		// Add model dependency
+		if (filtersToApply.model_dependency.length > 0) {
+			params.set("model_dependency", filtersToApply.model_dependency[0]);
 		}
 
-		// Add max complexity if not at the default maximum
-		if (filters.complexity_max && filters.complexity_max < 5) {
-			params.set("complexity_max", filters.complexity_max.toString());
-		}
-
-		// Add max computational cost if not at the default maximum
+		// Add complexity and computational cost
 		if (
-			filters.computational_cost_max &&
-			filters.computational_cost_max < 5
+			filtersToApply.complexity_max !== undefined &&
+			filtersToApply.complexity_max < 5
+		) {
+			params.set(
+				"complexity_max",
+				filtersToApply.complexity_max.toString()
+			);
+		}
+
+		if (
+			filtersToApply.computational_cost_max !== undefined &&
+			filtersToApply.computational_cost_max < 5
 		) {
 			params.set(
 				"computational_cost_max",
-				filters.computational_cost_max.toString()
+				filtersToApply.computational_cost_max.toString()
 			);
 		}
 
 		// Always set page to 1 when applying filters
 		params.set("page", "1");
 
-		// Navigate
-		window.location.href = `/techniques?${params.toString()}`;
+		// Debug the URL
+		const urlString = params.toString();
+		console.log("URL parameters:", urlString);
+
+		// Use a more explicit approach for navigation
+		window.location.href = `/techniques?${urlString}`;
 	};
 
 	// Reset filters function
@@ -374,17 +428,21 @@ export default function TechniquesList() {
 			params.set("search_fields", "name");
 		}
 
-		// Add assurance goals if set
+		// Add assurance goals - each as a separate parameter, just like in applyFilters
 		if (filters.assurance_goals.length > 0) {
-			params.set("assurance_goals", filters.assurance_goals[0]);
+			filters.assurance_goals.forEach((goalId) => {
+				params.append("assurance_goals", goalId);
+			});
 		}
 
-		// Add categories if set
+		// Add categories
 		if (filters.categories.length > 0) {
-			params.set("categories", filters.categories[0]);
+			filters.categories.forEach((catId) => {
+				params.append("categories", catId);
+			});
 		}
 
-		// Add model dependency if set
+		// Add model dependency
 		if (filters.model_dependency.length > 0) {
 			params.set("model_dependency", filters.model_dependency[0]);
 		}
@@ -408,7 +466,7 @@ export default function TechniquesList() {
 		// Set the new page parameter
 		params.set("page", newPage.toString());
 
-		// Navigate to new page
+		// Navigate to new page (without trailing slash)
 		window.location.href = `/techniques?${params.toString()}`;
 	};
 
@@ -416,7 +474,9 @@ export default function TechniquesList() {
 		<div className="space-y-6">
 			<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
 				<div className="flex flex-row items-center gap-2">
-					<h1 className="text-2xl sm:text-3xl font-bold">Techniques</h1>
+					<h1 className="text-2xl sm:text-3xl font-bold">
+						Techniques
+					</h1>
 				</div>
 				<Button asChild size="sm" className="w-full sm:w-auto">
 					<Link href="/techniques/add">Add New Technique</Link>
@@ -435,10 +495,14 @@ export default function TechniquesList() {
 							resetFilters={resetFilters}
 							assuranceGoals={assuranceGoalsData?.results}
 							categories={categoriesData?.results}
-							isDataLoading={isLoadingGoals || isLoadingCategories}
+							isDataLoading={
+								isLoadingGoals || isLoadingCategories
+							}
 							isMobileOpen={isSidebarOpen}
 							setIsMobileOpen={setSidebarOpen}
-							allowToggle={true} /* Pass flag to show toggle button in header */
+							allowToggle={
+								true
+							} /* Pass flag to show toggle button in header */
 						/>
 					</div>
 				)}

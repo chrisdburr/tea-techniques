@@ -1,11 +1,14 @@
 // frontend/next.config.ts
 import type { NextConfig } from "next";
-import bundleAnalyzer from '@next/bundle-analyzer';
 
-// Enable bundle analyzer if ANALYZE env var is set
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
-});
+// Import bundle analyzer conditionally
+let withBundleAnalyzer = (config: NextConfig) => config;
+if (process.env.ANALYZE === 'true') {
+  const bundleAnalyzer = require('@next/bundle-analyzer');
+  withBundleAnalyzer = bundleAnalyzer({
+    enabled: true,
+  });
+}
 
 // For debugging at runtime in Docker - will show up in logs
 console.log('Running next.config.ts - Environment variables:');

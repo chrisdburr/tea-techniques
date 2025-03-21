@@ -4,11 +4,14 @@ FROM node:20-slim AS builder
 # Set working directory
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Install pnpm
+RUN npm install -g pnpm@10.6.5
 
-# Install dependencies
-RUN npm ci
+# Copy package files
+COPY package.json pnpm-lock.yaml ./
+
+# Install dependencies with pnpm - frozen lockfile for reliability
+RUN pnpm install --frozen-lockfile
 
 # Copy project files
 COPY . .
@@ -28,10 +31,10 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
 # Set up development build (for source map support)
-RUN npm run build
+RUN pnpm build
 
-# Production image
-FROM node:20-slim AS runner
+# Production image - use alpine for smaller image size
+FROM node:20-alpine AS runner
 
 WORKDIR /app
 
@@ -51,7 +54,7 @@ ENV NEXT_PUBLIC_API_URL=/api
 ENV NEXT_PUBLIC_SWAGGER_URL=/swagger/
 
 # Install curl for health checks
-RUN apt-get update && apt-get install -y curl wget && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache curl
 
 # Don't run as root
 RUN addgroup --system --gid 1001 nodejs

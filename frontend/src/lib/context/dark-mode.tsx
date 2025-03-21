@@ -7,7 +7,7 @@ import React, {
 	useEffect,
 	ReactNode,
 } from "react";
-import { FaMoon, FaSun } from "react-icons/fa";
+import { Moon, Sun } from "lucide-react";
 
 type DarkModeContextType = {
 	isDarkMode: boolean;
@@ -76,9 +76,9 @@ export const DarkModeToggle: React.FC = () => {
 			}
 		>
 			{isDarkMode ? (
-				<FaSun className="text-yellow-500" />
+				<Sun className="h-5 w-5 text-yellow-500" />
 			) : (
-				<FaMoon className="text-gray-800" />
+				<Moon className="h-5 w-5 text-gray-800" />
 			)}
 		</button>
 	);

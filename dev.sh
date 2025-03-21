@@ -39,7 +39,7 @@ sleep 2
 # Start Next.js frontend in the background
 echo "Starting Next.js frontend..."
 cd frontend
-npm run dev --turbopack &
+pnpm run dev --turbopack &
 FRONTEND_PID=$!
 cd ..
 

@@ -2,11 +2,11 @@
 
 ## Overview
 
-While this project is in development it currently uses a CSV file, `techniques_v2.csv`, located in `backend/data/`.
+While this project is in development it currently uses a CSV file, `techniques.csv`, located in `backend/data/`.
 
 ## Adding or Modifying Techniques
 
-1. Edit the `techniques_v2.csv` file directly in `backend/data/`
+1. Edit the `techniques.csv` file directly in `backend/data/`
 2. For local development:
    - To reset the database and import techniques: `USE_SQLITE=True python manage.py reset_and_import_techniques`
    - To only import techniques without resetting: `USE_SQLITE=True python manage.py import_techniques`

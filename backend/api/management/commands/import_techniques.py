@@ -58,7 +58,7 @@ class Command(BaseCommand):
             file_path = os.path.join(
                 BASE_DIR,
                 "data",
-                "techniques_v3.csv",  # Updated to use v3 by default
+                "techniques.csv",  # Updated to use v3 by default
             )
 
         if not os.path.exists(file_path):
@@ -213,32 +213,51 @@ class Command(BaseCommand):
                 return
 
             # Parse JSON fields
-            try:
-                attributes_data = (
-                    json.loads(row.get("attributes", "[]"))
-                    if row.get("attributes")
-                    else []
-                )
-                example_use_cases_data = (
-                    json.loads(row.get("example_use_cases", "[]"))
-                    if row.get("example_use_cases")
-                    else []
-                )
-                resources_data = (
-                    json.loads(row.get("resources", "[]"))
-                    if row.get("resources")
-                    else []
-                )
-                limitations_data = (
-                    row.get("limitations", "").split("|")
-                    if row.get("limitations")
-                    else []
-                )
-            except json.JSONDecodeError as e:
-                self.stdout.write(
-                    self.style.ERROR(f"JSON parsing error for {name}: {e}")
-                )
-                return
+            # Handle empty or missing attributes field
+            attributes_str = row.get("attributes", "")
+            attributes_data = []
+            if attributes_str and attributes_str.strip():
+                try:
+                    attributes_data = json.loads(attributes_str)
+                except json.JSONDecodeError as e:
+                    # If it's not valid JSON but not empty, log a warning
+                    self.stdout.write(
+                        self.style.ERROR(f"JSON parsing error in attributes field for {name}: {e}")
+                    )
+                    # Continue processing other fields
+
+            # Handle empty or missing example_use_cases field
+            example_use_cases_str = row.get("example_use_cases", "")
+            example_use_cases_data = []
+            if example_use_cases_str and example_use_cases_str.strip():
+                try:
+                    example_use_cases_data = json.loads(example_use_cases_str)
+                except json.JSONDecodeError as e:
+                    # If it's not valid JSON but not empty, log a warning
+                    self.stdout.write(
+                        self.style.ERROR(f"JSON parsing error in example_use_cases field for {name}: {e}")
+                    )
+                    # Continue processing other fields
+
+            # Handle empty or missing resources field
+            resources_str = row.get("resources", "")
+            resources_data = []
+            if resources_str and resources_str.strip():
+                try:
+                    resources_data = json.loads(resources_str)
+                except json.JSONDecodeError as e:
+                    # If it's not valid JSON but not empty, log a warning
+                    self.stdout.write(
+                        self.style.ERROR(f"JSON parsing error in resources field for {name}: {e}")
+                    )
+                    # Continue processing other fields
+
+            # Handle limitations field (split by | character)
+            limitations_data = (
+                row.get("limitations", "").split("|")
+                if row.get("limitations")
+                else []
+            )
 
             # Create or update the technique
             technique, created = Technique.objects.update_or_create(
@@ -422,6 +441,9 @@ class Command(BaseCommand):
                 if isinstance(resource_authors, list):
                     resource_authors = ", ".join(resource_authors)
 
+                # Get source_type from the resource data
+                resource_source_type = resource_data.get("source_type", resource_type_name)
+                
                 # Create resource with enhanced information
                 TechniqueResource.objects.create(
                     technique=technique,
@@ -431,6 +453,7 @@ class Command(BaseCommand):
                     description=resource_desc,
                     authors=resource_authors,
                     publication_date=resource_publication_date,
+                    source_type=resource_source_type,  # Store the source_type from the CSV
                 )
 
             status = "Created" if created else "Updated"

@@ -63,6 +63,7 @@ export interface TechniqueResource {
 	id: number;
 	resource_type: number;
 	resource_type_name: string;
+	source_type?: string;  // Added based on data in techniques.csv
 	title: string;
 	url: string;
 	description: string;

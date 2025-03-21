@@ -40,7 +40,7 @@ echo "Running migrations..."
 python manage.py migrate --noinput
 
 # Import techniques from CSV if file exists
-if [ -f "data/techniques_v2.csv" ]; then
+if [ -f "data/techniques.csv" ]; then
     echo "Importing techniques from CSV..."
     
     # Check if we already have techniques imported
@@ -53,7 +53,7 @@ if [ -f "data/techniques_v2.csv" ]; then
             echo "⚠️  Warning: Could not reset database and import techniques"
             # Fallback to just importing techniques if reset fails
             echo "Attempting to import techniques without resetting..."
-            python manage.py import_techniques --file=data/techniques_v2.csv || {
+            python manage.py import_techniques --file=data/techniques.csv || {
                 echo "⚠️  Warning: Could not import techniques from CSV"
             }
         }
@@ -61,7 +61,7 @@ if [ -f "data/techniques_v2.csv" ]; then
         echo "✅ Database already contains $TECHNIQUE_COUNT techniques, skipping import"
     fi
 else
-    echo "⚠️  No techniques_v2.csv found, skipping import"
+    echo "⚠️  No techniques.csv found, skipping import"
 fi
 
 # Set worker count based on environment variables or available cores

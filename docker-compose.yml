@@ -17,11 +17,11 @@ services:
       - ./backend/data:/app/data
       - sqlite_data:/app/db_data
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/admin/"]
       interval: 30s
       timeout: 10s
-      retries: 3
-      start_period: 10s
+      retries: 5
+      start_period: 30s
 
   frontend:
     build:
@@ -45,11 +45,11 @@ services:
     volumes:
       - ./frontend/src:/app/src
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:3000"]
+      test: ["CMD", "wget", "--spider", "http://0.0.0.0:3000"]
       interval: 30s
       timeout: 10s
-      retries: 3
-      start_period: 10s
+      retries: 5
+      start_period: 30s
 
 volumes:
   sqlite_data:

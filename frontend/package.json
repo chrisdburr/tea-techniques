@@ -5,11 +5,17 @@
 	"scripts": {
 		"dev": "next dev --turbopack",
 		"build": "next build",
+		"analyze-deps": "pnpm list --depth=1",
+		"analyze-size": "du -sh node_modules",
 		"start": "next start",
 		"lint": "next lint",
 		"test": "jest",
 		"test:watch": "jest --watch"
 	},
+	"engines": {
+		"node": ">=18.0.0"
+	},
+	"packageManager": "pnpm@10.6.5",
 	"dependencies": {
 		"@radix-ui/react-accordion": "^1.2.3",
 		"@radix-ui/react-checkbox": "^1.1.4",
@@ -28,23 +34,18 @@
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"cmdk": "^1.0.4",
-		"gray-matter": "^4.0.3",
 		"lucide-react": "^0.476.0",
 		"next": "15.2.0",
 		"prismjs": "^1.29.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"react-icons": "^5.5.0",
 		"react-syntax-highlighter": "^15.6.1",
-		"remark": "^15.0.1",
-		"remark-html": "^16.0.1",
-		"remark-parse": "^11.0.0",
 		"tailwind-merge": "^3.0.2",
-		"tailwindcss-animate": "^1.0.7",
-		"unified": "^11.0.5"
+		"tailwindcss-animate": "^1.0.7"
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3",
+		"@next/bundle-analyzer": "^15.2.3",
 		"@tailwindcss/forms": "^0.5.10",
 		"@tailwindcss/postcss": "^4",
 		"@tailwindcss/typography": "^0.5.16",

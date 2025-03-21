@@ -70,8 +70,8 @@ For local development, we use SQLite as the database backend. This setup is quic
 5. **In a new terminal, set up and run the frontend**
    ```bash
    cd frontend
-   npm install
-   npm run dev --turbopack
+   pnpm install
+   pnpm run dev --turbopack
    ```
 
 6. **Access the application**

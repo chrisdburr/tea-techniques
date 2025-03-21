@@ -68,12 +68,6 @@ class Command(BaseCommand):
             self.create_admin_user()
 
         self.stdout.write(self.style.SUCCESS("✅ Database reset complete!"))
-        if use_sqlite:
-            self.stdout.write(
-                "➡️ Run 'USE_SQLITE=True python manage.py runserver' to start the server"
-            )
-        else:
-            self.stdout.write("➡️ Run 'python manage.py runserver' to start the server")
 
     def reset_database(self, BASE_DIR):
         """Reset the database and migrations"""

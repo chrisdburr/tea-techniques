@@ -37,3 +37,13 @@ class Command(BaseCommand):
         call_command("import_techniques", **import_options)
 
         self.stdout.write(self.style.SUCCESS("✅ Reset and import complete!"))
+        
+        # Add server startup instructions at the end
+        if use_sqlite:
+            self.stdout.write(
+                self.style.SUCCESS("➡️ Run 'USE_SQLITE=True python manage.py runserver' to start the server")
+            )
+        else:
+            self.stdout.write(
+                self.style.SUCCESS("➡️ Run 'python manage.py runserver' to start the server")
+            )

@@ -89,6 +89,7 @@ class TechniqueResourceSerializer(serializers.ModelSerializer):
             "description",
             "authors",
             "publication_date",
+            "source_type",
         ]
 
 

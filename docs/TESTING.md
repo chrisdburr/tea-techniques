@@ -19,14 +19,14 @@ To run the frontend tests:
 
 ```bash
 cd frontend
-npm run test
+pnpm run test
 ```
 
 To run tests in watch mode during development:
 
 ```bash
 cd frontend
-npm run test:watch
+pnpm run test:watch
 ```
 
 ## Backend Testing

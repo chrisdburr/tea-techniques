@@ -71,7 +71,7 @@ For local development, we use SQLite as the database backend. This setup is quic
    ```bash
    cd frontend
    pnpm install
-   pnpm run dev --turbopack
+   pnpm run dev:turbo
    ```
 
 6. **Access the application**

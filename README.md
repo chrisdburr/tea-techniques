@@ -97,13 +97,19 @@ If you want to use the full Docker setup with PostgreSQL:
 2. **Start the application**
 
    ```bash
-   docker compose up -d
+   COMPOSE_BAKE=true docker-compose build --no-cache && docker-compose up -d
    ```
 
 3. **Access the application**
 
   - Frontend: http://localhost:3000
   - API: http://localhost:8000/api/
+
+4. **Restart and Rebuild the Containers**
+
+   ```bash
+   docker-compose down && COMPOSE_BAKE=true docker-compose build --no-cache && docker-compose up -d
+   ```
 
 </details>
 

@@ -87,6 +87,8 @@ class TechniqueResourceSerializer(serializers.ModelSerializer):
             "title",
             "url",
             "description",
+            "authors",
+            "publication_date",
         ]
 
 
@@ -140,4 +142,5 @@ class TechniqueSerializer(serializers.ModelSerializer):
             "resources",
             "example_use_cases",
             "limitations",
+            "applicable_models",
         ]

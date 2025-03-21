@@ -31,7 +31,6 @@ import {
 	FileCode,
 	Package,
 	GraduationCap,
-	BookOpen,
 	Info,
 	Loader2,
 	Lock,
@@ -157,7 +156,6 @@ function Section({
 	);
 }
 
-// Component to display technique resources
 function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 	if (!resources || resources.length === 0) {
 		return <p className="text-muted-foreground">No resources available.</p>;
@@ -169,13 +167,13 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 			case "documentation":
 				return <FileText className="h-5 w-5" aria-hidden="true" />;
 			case "technical paper":
+			case "review paper":
+			case "introductory paper":
 				return <FileCode className="h-5 w-5" aria-hidden="true" />;
 			case "software package":
 				return <Package className="h-5 w-5" aria-hidden="true" />;
 			case "tutorial":
 				return <GraduationCap className="h-5 w-5" aria-hidden="true" />;
-			case "introductory paper":
-				return <BookOpen className="h-5 w-5" aria-hidden="true" />;
 			default:
 				return <Book className="h-5 w-5" aria-hidden="true" />;
 		}
@@ -210,7 +208,6 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 										<h4 className="font-medium">
 											{resource.title}
 										</h4>
-										{/* Disabled button instead of link */}
 										<Button
 											variant="outline"
 											size="sm"
@@ -225,6 +222,25 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 											<span>View</span>
 										</Button>
 									</div>
+
+									{/* New section to display authors and publication date */}
+									{(resource.authors ||
+										resource.publication_date) && (
+										<div className="mt-2 text-sm text-muted-foreground">
+											{resource.authors && (
+												<div className="font-medium">
+													Authors: {resource.authors}
+												</div>
+											)}
+											{resource.publication_date && (
+												<div className="text-xs mt-1">
+													Published:{" "}
+													{resource.publication_date}
+												</div>
+											)}
+										</div>
+									)}
+
 									{resource.description && (
 										<p className="text-sm mt-2 text-muted-foreground">
 											{resource.description}
@@ -410,10 +426,9 @@ export default function TechniqueDetailPage() {
 		);
 	}
 
-	// Get applicable models for this technique (if model-specific)
 	const applicableModels =
 		technique.model_dependency === "Model-Specific"
-			? findApplicableModels(technique.id)
+			? technique.applicable_models || findApplicableModels(technique.id)
 			: [];
 
 	// Helper function to parse category tags

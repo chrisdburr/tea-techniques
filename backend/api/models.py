@@ -73,8 +73,11 @@ class Technique(models.Model):
     )
     complexity_rating = models.PositiveSmallIntegerField(null=True, blank=True)
     computational_cost_rating = models.PositiveSmallIntegerField(null=True, blank=True)
-
-    # Relationships
+    applicable_models = models.JSONField(
+        null=True,
+        blank=True,
+        help_text="List of model types this technique is applicable to (for model-specific techniques)",
+    )
     assurance_goals = models.ManyToManyField(AssuranceGoal, related_name="techniques")
     categories = models.ManyToManyField(Category, related_name="techniques")
     subcategories = models.ManyToManyField(
@@ -127,6 +130,8 @@ class TechniqueResource(models.Model):
     title = models.CharField(max_length=255)
     url = models.URLField()
     description = models.TextField(blank=True)
+    authors = models.CharField(max_length=500, blank=True, null=True)
+    publication_date = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         db_table = "technique_resource"

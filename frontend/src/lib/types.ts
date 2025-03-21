@@ -66,6 +66,8 @@ export interface TechniqueResource {
 	title: string;
 	url: string;
 	description: string;
+	authors?: string;
+	publication_date?: string;
 }
 
 // Use Cases and Limitations
@@ -100,6 +102,7 @@ export interface Technique {
 	category_tags: string;
 	complexity_rating?: number;
 	computational_cost_rating?: number;
+	applicable_models?: string[];
 
 	// Many-to-many relationships
 	assurance_goals: AssuranceGoal[];

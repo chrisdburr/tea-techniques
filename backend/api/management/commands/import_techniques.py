@@ -58,7 +58,7 @@ class Command(BaseCommand):
             file_path = os.path.join(
                 BASE_DIR,
                 "data",
-                "techniques_v2.csv",
+                "techniques_v3.csv",  # Updated to use v3 by default
             )
 
         if not os.path.exists(file_path):
@@ -110,8 +110,11 @@ class Command(BaseCommand):
                 defaults={"description": f"The {attr_type.lower()} of the technique"},
             )
 
-        # Create resource types from the CSV
+        # Create resource types for the CSV
         resource_types = [
+            "Technical Paper",
+            "Review Paper",
+            "Introductory Paper",
             "Paper",
             "GitHub",
             "Documentation",
@@ -127,10 +130,12 @@ class Command(BaseCommand):
             "Law/Policy",
             "Principle",
             "Explanation",
+            "Software Package",
         ]
         for resource_type in resource_types:
             ResourceType.objects.get_or_create(
-                name=resource_type, defaults={"icon": resource_type.lower()}
+                name=resource_type,
+                defaults={"icon": resource_type.lower().replace(" ", "_")},
             )
 
     def _parse_category_tags(self, category_tags):
@@ -170,6 +175,35 @@ class Command(BaseCommand):
             category_tags = row.get("category_tags", "")
             complexity_rating = row.get("complexity_rating")
             computational_cost_rating = row.get("computational_cost_rating")
+
+            # Process the applicable_models field for model-specific techniques
+            applicable_models = row.get("applicable_models", None)
+            applicable_models_list = []
+
+            if applicable_models and model_dependency == "Model-Specific":
+                try:
+                    # Try to parse as JSON
+                    if isinstance(applicable_models, str):
+                        if applicable_models.startswith(
+                            "["
+                        ) and applicable_models.endswith("]"):
+                            # Process as a list string
+                            clean_str = applicable_models.strip("[]")
+                            applicable_models_list = [
+                                item.strip(" \"'")
+                                for item in clean_str.split(",")
+                                if item.strip()
+                            ]
+                        else:
+                            # If it's not in list format, try JSON parsing
+                            applicable_models_list = json.loads(applicable_models)
+                except (json.JSONDecodeError, Exception) as e:
+                    self.stdout.write(
+                        self.style.WARNING(
+                            f"Error parsing applicable_models for {name}: {e}"
+                        )
+                    )
+                    applicable_models_list = []
 
             # Skip if essential data is missing
             if not name or not description:
@@ -223,6 +257,9 @@ class Command(BaseCommand):
                         if computational_cost_rating
                         and computational_cost_rating.isdigit()
                         else None
+                    ),
+                    "applicable_models": (
+                        applicable_models_list if applicable_models_list else None
                     ),
                 },
             )
@@ -358,7 +395,7 @@ class Command(BaseCommand):
                         technique=technique, description=limitation.strip()
                     )
 
-            # Process resources
+            # Process resources with enhanced support for authors and publication dates
             for resource_data in resources_data:
                 if not isinstance(resource_data, dict):
                     continue
@@ -368,22 +405,32 @@ class Command(BaseCommand):
                 resource_url = resource_data.get("url", "")
                 resource_desc = resource_data.get("description", "")
 
+                # Get author information if available
+                resource_authors = resource_data.get("authors", [])
+                resource_publication_date = resource_data.get("publication_date", "")
+
                 if not resource_url:
                     continue
 
                 # Get or create resource type
                 resource_type, _ = ResourceType.objects.get_or_create(
                     name=resource_type_name,
-                    defaults={"icon": resource_type_name.lower()},
+                    defaults={"icon": resource_type_name.lower().replace(" ", "_")},
                 )
 
-                # Create resource
+                # Convert authors list to comma-separated string if it's a list
+                if isinstance(resource_authors, list):
+                    resource_authors = ", ".join(resource_authors)
+
+                # Create resource with enhanced information
                 TechniqueResource.objects.create(
                     technique=technique,
                     resource_type=resource_type,
                     url=resource_url,
                     title=resource_title,
                     description=resource_desc,
+                    authors=resource_authors,
+                    publication_date=resource_publication_date,
                 )
 
             status = "Created" if created else "Updated"

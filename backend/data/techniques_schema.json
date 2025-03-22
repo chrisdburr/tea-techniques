@@ -1,0 +1,151 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "TEA Techniques Schema",
+	"description": "Schema for the TEA Techniques dataset which catalogs ML/AI techniques with relevant attributes",
+	"type": "array",
+	"items": {
+		"type": "object",
+		"properties": {
+			"id": {
+				"type": "integer",
+				"description": "Unique identifier for the technique"
+			},
+			"name": {
+				"type": "string",
+				"description": "Name of the technique"
+			},
+			"description": {
+				"type": "string",
+				"description": "Description of what the technique does and how it works"
+			},
+			"model_dependency": {
+				"type": "string",
+				"enum": ["Model-Agnostic", "Model-Specific", "Organizational"],
+				"description": "Whether the technique works with any model or requires specific model types"
+			},
+			"applicable_models": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				},
+				"description": "Model types this technique is specifically applicable to"
+			},
+			"assurance_goals": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				},
+				"description": "Primary goals related to AI assurance (e.g., Explainability, Fairness, Privacy, etc.)"
+			},
+			"attributes": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
+							"description": "Type of attribute"
+						},
+						"value": {
+							"type": "string",
+							"description": "Value of the attribute"
+						}
+					},
+					"required": ["type", "value"]
+				},
+				"description": "Structured attributes of the technique, including explanatory scope (global/local)"
+			},
+			"example_use_cases": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"description": {
+							"type": "string",
+							"description": "Description of the use case"
+						},
+						"goal": {
+							"type": "string",
+							"description": "The assurance goal this use case addresses"
+						}
+					},
+					"required": ["description"]
+				},
+				"description": "Examples of how the technique can be used in practice"
+			},
+			"limitations": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				},
+				"description": "Limitations and drawbacks of the technique"
+			},
+			"resources": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
+							"description": "Type of resource"
+						},
+						"title": {
+							"type": "string",
+							"description": "Title of the resource"
+						},
+						"url": {
+							"type": "string",
+							"format": "uri",
+							"description": "URL of the resource"
+						},
+						"description": {
+							"type": "string",
+							"description": "Description of the resource"
+						},
+						"authors": {
+							"oneOf": [
+								{
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								{
+									"type": "string"
+								}
+							],
+							"description": "Authors of the resource"
+						},
+						"publication_date": {
+							"type": "string",
+							"description": "Publication date of the resource"
+						},
+						"source_type": {
+							"type": "string",
+							"description": "Type of source"
+						}
+					},
+					"required": ["title", "url"]
+				},
+				"description": "Resources related to the technique (papers, libraries, etc.)"
+			},
+			"complexity_rating": {
+				"type": ["integer", "null"],
+				"minimum": 1,
+				"maximum": 5,
+				"description": "Rating of implementation complexity on a scale from 1 to 5"
+			},
+			"computational_cost_rating": {
+				"type": ["integer", "null"],
+				"minimum": 1,
+				"maximum": 5,
+				"description": "Rating of computational cost on a scale from 1 to 5"
+			},
+			"category_tags": {
+				"type": "string",
+				"description": "Hashtag-formatted categorization of the technique"
+			}
+		},
+		"required": ["name", "description", "model_dependency"]
+	}
+}

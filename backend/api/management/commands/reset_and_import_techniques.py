@@ -7,7 +7,7 @@ class Command(BaseCommand):
     help = "Reset the database and import techniques in one step"
 
     def add_arguments(self, parser):
-        parser.add_argument("--file", type=str, help="Path to the CSV file")
+        parser.add_argument("--file", type=str, help="Path to the data file")
         parser.add_argument(
             "--force", action="store_true", help="Skip confirmation prompt"
         )
@@ -17,11 +17,19 @@ class Command(BaseCommand):
             default=True,
             help="Use SQLite database (default)",
         )
+        parser.add_argument(
+            "--format",
+            type=str,
+            choices=["json", "csv"],
+            default="json",
+            help="Format of the input file (default: json)",
+        )
 
     def handle(self, *args, **options):
         file_path = options.get("file")
         force = options.get("force", False)
         use_sqlite = options.get("use_sqlite", True)
+        file_format = options.get("format", "json")
 
         # First, reset the database
         reset_options = {"force": force, "use_sqlite": use_sqlite}
@@ -33,17 +41,29 @@ class Command(BaseCommand):
         if file_path:
             import_options["file"] = file_path
 
-        self.stdout.write(self.style.NOTICE("Step 2: Importing techniques"))
-        call_command("import_techniques", **import_options)
+        self.stdout.write(
+            self.style.NOTICE(f"Step 2: Importing techniques from {file_format} file")
+        )
+
+        if file_format == "csv":
+            # Use the original CSV import command
+            call_command("import_techniques_csv", **import_options)
+        else:
+            # Use the new JSON import command
+            call_command("import_techniques", **import_options)
 
         self.stdout.write(self.style.SUCCESS("✅ Reset and import complete!"))
-        
+
         # Add server startup instructions at the end
         if use_sqlite:
             self.stdout.write(
-                self.style.SUCCESS("➡️ Run 'USE_SQLITE=True python manage.py runserver' to start the server")
+                self.style.SUCCESS(
+                    "➡️ Run 'USE_SQLITE=True python manage.py runserver' to start the server"
+                )
             )
         else:
             self.stdout.write(
-                self.style.SUCCESS("➡️ Run 'python manage.py runserver' to start the server")
+                self.style.SUCCESS(
+                    "➡️ Run 'python manage.py runserver' to start the server"
+                )
             )

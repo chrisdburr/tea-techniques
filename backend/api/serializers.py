@@ -124,6 +124,19 @@ class TechniqueSerializer(serializers.ModelSerializer):
     resources = TechniqueResourceSerializer(many=True, read_only=True)
     example_use_cases = TechniqueExampleUseCaseSerializer(many=True, read_only=True)
     limitations = TechniqueLimitationSerializer(many=True, read_only=True)
+    
+    # Add a dummy field for applicable_models if it doesn't exist in the database
+    applicable_models = serializers.SerializerMethodField()
+    
+    def get_applicable_models(self, obj):
+        # Try to access the field, return empty list if it doesn't exist
+        try:
+            if hasattr(obj, 'applicable_models') and obj.applicable_models is not None:
+                return obj.applicable_models
+            return []
+        except Exception as e:
+            logger.warning(f"Error accessing applicable_models: {str(e)}")
+            return []
 
     class Meta:
         model = Technique

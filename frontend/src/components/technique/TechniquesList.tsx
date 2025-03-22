@@ -335,10 +335,10 @@ export default function TechniquesList() {
 		filters.computational_cost_max,
 	]);
 
-	// Calculate pagination information based on filtered count instead of API count
-	// This is the key fix: use the length of client-side filtered results
-	const filteredCount = techniques.length;
-	const totalPages = calculateTotalPages(filteredCount, PAGE_SIZE);
+	// Calculate pagination information using the total count from the API response
+	// Get the total count from the API response
+	const apiTotalCount = (techniquesData as { count?: number })?.count || 0;
+	const totalPages = calculateTotalPages(apiTotalCount, PAGE_SIZE);
 
 	// Apply filters function
 	const applyFilters = (explicitFilters?: FilterState) => {

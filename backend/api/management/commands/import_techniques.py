@@ -259,28 +259,41 @@ class Command(BaseCommand):
                 else []
             )
 
+            # Create default values
+            defaults = {
+                "description": description,
+                "model_dependency": model_dependency,
+                "category_tags": category_tags,
+                "complexity_rating": (
+                    int(complexity_rating)
+                    if complexity_rating and complexity_rating.isdigit()
+                    else None
+                ),
+                "computational_cost_rating": (
+                    int(computational_cost_rating)
+                    if computational_cost_rating
+                    and computational_cost_rating.isdigit()
+                    else None
+                ),
+            }
+            
+            # Check if applicable_models column exists in the database
+            try:
+                # We need to try accessing the column in a safe way
+                Technique._meta.get_field('applicable_models')
+                # If this succeeds, the field exists
+                defaults["applicable_models"] = (
+                    applicable_models_list if applicable_models_list else None
+                )
+            except Exception as e:
+                self.stdout.write(
+                    self.style.WARNING(f"Column 'applicable_models' does not exist in the database, skipping this field")
+                )
+                
             # Create or update the technique
             technique, created = Technique.objects.update_or_create(
                 name=name,
-                defaults={
-                    "description": description,
-                    "model_dependency": model_dependency,
-                    "category_tags": category_tags,
-                    "complexity_rating": (
-                        int(complexity_rating)
-                        if complexity_rating and complexity_rating.isdigit()
-                        else None
-                    ),
-                    "computational_cost_rating": (
-                        int(computational_cost_rating)
-                        if computational_cost_rating
-                        and computational_cost_rating.isdigit()
-                        else None
-                    ),
-                    "applicable_models": (
-                        applicable_models_list if applicable_models_list else None
-                    ),
-                },
+                defaults=defaults,
             )
 
             # Clear existing relationships if updating

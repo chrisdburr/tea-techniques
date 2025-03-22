@@ -26,15 +26,17 @@ import {
 	Edit,
 	Eye,
 	ExternalLink,
-	FileText,
+	FileCode2,
 	Book,
-	FileCode,
 	Package,
 	GraduationCap,
 	Info,
 	Loader2,
 	Lock,
+	NotebookText,
+	Rss,
 	Scale,
+	Scroll,
 	Shield,
 	ShieldCheck,
 } from "lucide-react";
@@ -176,26 +178,28 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 		
 		switch (sourceType) {
 			case "documentation":
-				return <FileText className="h-5 w-5" aria-hidden="true" />;
+				return <FileCode2 className="h-5 w-5" aria-hidden="true" />;
 			case "tutorial":
 				return <GraduationCap className="h-5 w-5" aria-hidden="true" />;
 			case "software_package":
 				return <Package className="h-5 w-5" aria-hidden="true" />;
 			case "technical_paper":
-				return <FileCode className="h-5 w-5" aria-hidden="true" />;
+				return <NotebookText className="h-5 w-5" aria-hidden="true" />;
 			case "review_paper":
-				return <FileCode className="h-5 w-5" aria-hidden="true" />;
+				return <Scroll className="h-5 w-5" aria-hidden="true" />;
 			case "introductory_paper":
+				return <Scroll className="h-5 w-5" aria-hidden="true" />;
 			case "paper":
-				return <FileCode className="h-5 w-5" aria-hidden="true" />;
+				return <Scroll className="h-5 w-5" aria-hidden="true" />;
 			case "blog":
-				return <FileText className="h-5 w-5" aria-hidden="true" />;
+				return <Rss className="h-5 w-5" aria-hidden="true" />;
 			case "implementation":
 				return <Package className="h-5 w-5" aria-hidden="true" />;
 			default:
 				return <Book className="h-5 w-5" aria-hidden="true" />;
 		}
 	};
+	
 
 	// Format source type for display
 	const formatSourceType = (sourceType: string): string => {

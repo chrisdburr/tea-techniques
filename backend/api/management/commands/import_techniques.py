@@ -1,8 +1,8 @@
 # backend/api/management/commands/import_techniques.py
-import csv
 import json
 import os
 from pathlib import Path
+import logging
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.conf import settings
@@ -21,12 +21,15 @@ from api.models import (
     TechniqueLimitation,
 )
 
+# Set up logger
+logger = logging.getLogger(__name__)
+
 
 class Command(BaseCommand):
-    help = "Import techniques from CSV file"
+    help = "Import techniques from JSON file"
 
     def add_arguments(self, parser):
-        parser.add_argument("--file", type=str, help="Path to the CSV file")
+        parser.add_argument("--file", type=str, help="Path to the JSON file")
         parser.add_argument(
             "--use-sqlite",
             action="store_true",
@@ -58,7 +61,7 @@ class Command(BaseCommand):
             file_path = os.path.join(
                 BASE_DIR,
                 "data",
-                "techniques.csv",  # Updated to use v3 by default
+                "techniques.json",
             )
 
         if not os.path.exists(file_path):
@@ -70,25 +73,35 @@ class Command(BaseCommand):
         # Create initial records needed for import
         self._create_base_records()
 
-        # Process the CSV file
-        with open(file_path, "r", encoding="utf-8") as csvfile:
-            reader = csv.DictReader(csvfile)
+        # Process the JSON file
+        try:
+            with open(file_path, "r", encoding="utf-8") as json_file:
+                techniques_data = json.load(json_file)
 
             # Use a transaction to ensure data consistency
             with transaction.atomic():
                 count = 0
-                for row in reader:
-                    self._process_technique(row)
+                for technique_data in techniques_data:
+                    self._process_technique(technique_data)
                     count += 1
 
-        self.stdout.write(
-            self.style.SUCCESS(f"Successfully imported {count} techniques")
-        )
+            self.stdout.write(
+                self.style.SUCCESS(f"Successfully imported {count} techniques")
+            )
+        except Exception as e:
+            self.stdout.write(self.style.ERROR(f"Error processing JSON file: {str(e)}"))
 
     def _create_base_records(self):
         """Create necessary base records (goals, attributes, etc.)"""
         # Create assurance goals if they don't exist
-        goal_names = ["Explainability", "Fairness"]
+        goal_names = [
+            "Explainability",
+            "Fairness",
+            "Privacy",
+            "Reliability",
+            "Safety",
+            "Transparency",
+        ]
         for goal_name in goal_names:
             AssuranceGoal.objects.get_or_create(
                 name=goal_name,
@@ -103,6 +116,7 @@ class Command(BaseCommand):
             "Programming Language",
             "Fairness Approach",
             "Project Lifecycle Stage",
+            "Explanatory Scope",
         ]
         for attr_type in attribute_types:
             AttributeType.objects.get_or_create(
@@ -164,132 +178,58 @@ class Command(BaseCommand):
 
         return results
 
-    def _process_technique(self, row):
-        """Process a single technique row from the CSV"""
+    def _process_technique(self, data):
+        """Process a single technique from JSON data"""
         try:
-            # Extract basic data from the row
-            name = row.get("name", "")
-            description = row.get("description", "")
-            model_dependency = row.get("model_dependency", "Model-Agnostic")
-            assurance_goals_name = row.get("assurance_goals", "")
-            category_tags = row.get("category_tags", "")
-            complexity_rating = row.get("complexity_rating")
-            computational_cost_rating = row.get("computational_cost_rating")
+            # Extract basic data
+            name = data.get("name", "")
+            description = data.get("description", "")
+            model_dependency = data.get("model_dependency", "Model-Agnostic")
+            assurance_goals_list = data.get("assurance_goals", [])
+            category_tags = data.get("category_tags", "")
+            complexity_rating = data.get("complexity_rating")
+            computational_cost_rating = data.get("computational_cost_rating")
+            applicable_models = data.get("applicable_models", [])
 
-            # Process the applicable_models field for model-specific techniques
-            applicable_models = row.get("applicable_models", None)
-            applicable_models_list = []
-
-            if applicable_models and model_dependency == "Model-Specific":
-                try:
-                    # Try to parse as JSON
-                    if isinstance(applicable_models, str):
-                        if applicable_models.startswith(
-                            "["
-                        ) and applicable_models.endswith("]"):
-                            # Process as a list string
-                            clean_str = applicable_models.strip("[]")
-                            applicable_models_list = [
-                                item.strip(" \"'")
-                                for item in clean_str.split(",")
-                                if item.strip()
-                            ]
-                        else:
-                            # If it's not in list format, try JSON parsing
-                            applicable_models_list = json.loads(applicable_models)
-                except (json.JSONDecodeError, Exception) as e:
-                    self.stdout.write(
-                        self.style.WARNING(
-                            f"Error parsing applicable_models for {name}: {e}"
-                        )
-                    )
-                    applicable_models_list = []
+            # Process nested data structures directly from JSON
+            attributes_data = data.get("attributes", [])
+            example_use_cases_data = data.get("example_use_cases", [])
+            resources_data = data.get("resources", [])
+            limitations_data = data.get("limitations", [])
 
             # Skip if essential data is missing
             if not name or not description:
                 self.stdout.write(
-                    self.style.WARNING(f"Skipping row with missing name or description")
+                    self.style.WARNING(
+                        f"Skipping technique with missing name or description"
+                    )
                 )
                 return
-
-            # Parse JSON fields
-            # Handle empty or missing attributes field
-            attributes_str = row.get("attributes", "")
-            attributes_data = []
-            if attributes_str and attributes_str.strip():
-                try:
-                    attributes_data = json.loads(attributes_str)
-                except json.JSONDecodeError as e:
-                    # If it's not valid JSON but not empty, log a warning
-                    self.stdout.write(
-                        self.style.ERROR(f"JSON parsing error in attributes field for {name}: {e}")
-                    )
-                    # Continue processing other fields
-
-            # Handle empty or missing example_use_cases field
-            example_use_cases_str = row.get("example_use_cases", "")
-            example_use_cases_data = []
-            if example_use_cases_str and example_use_cases_str.strip():
-                try:
-                    example_use_cases_data = json.loads(example_use_cases_str)
-                except json.JSONDecodeError as e:
-                    # If it's not valid JSON but not empty, log a warning
-                    self.stdout.write(
-                        self.style.ERROR(f"JSON parsing error in example_use_cases field for {name}: {e}")
-                    )
-                    # Continue processing other fields
-
-            # Handle empty or missing resources field
-            resources_str = row.get("resources", "")
-            resources_data = []
-            if resources_str and resources_str.strip():
-                try:
-                    resources_data = json.loads(resources_str)
-                except json.JSONDecodeError as e:
-                    # If it's not valid JSON but not empty, log a warning
-                    self.stdout.write(
-                        self.style.ERROR(f"JSON parsing error in resources field for {name}: {e}")
-                    )
-                    # Continue processing other fields
-
-            # Handle limitations field (split by | character)
-            limitations_data = (
-                row.get("limitations", "").split("|")
-                if row.get("limitations")
-                else []
-            )
 
             # Create default values
             defaults = {
                 "description": description,
                 "model_dependency": model_dependency,
                 "category_tags": category_tags,
-                "complexity_rating": (
-                    int(complexity_rating)
-                    if complexity_rating and complexity_rating.isdigit()
-                    else None
-                ),
-                "computational_cost_rating": (
-                    int(computational_cost_rating)
-                    if computational_cost_rating
-                    and computational_cost_rating.isdigit()
-                    else None
-                ),
+                "complexity_rating": complexity_rating,
+                "computational_cost_rating": computational_cost_rating,
             }
-            
+
             # Check if applicable_models column exists in the database
             try:
                 # We need to try accessing the column in a safe way
-                Technique._meta.get_field('applicable_models')
+                Technique._meta.get_field("applicable_models")
                 # If this succeeds, the field exists
                 defaults["applicable_models"] = (
-                    applicable_models_list if applicable_models_list else None
+                    applicable_models if applicable_models else None
                 )
             except Exception as e:
                 self.stdout.write(
-                    self.style.WARNING(f"Column 'applicable_models' does not exist in the database, skipping this field")
+                    self.style.WARNING(
+                        f"Column 'applicable_models' does not exist in the database, skipping this field"
+                    )
                 )
-                
+
             # Create or update the technique
             technique, created = Technique.objects.update_or_create(
                 name=name,
@@ -311,23 +251,14 @@ class Command(BaseCommand):
                 TechniqueLimitation.objects.filter(technique=technique).delete()
 
             # Process assurance goals
-            goal_names = []
-            if assurance_goals_name:
-                if "," in assurance_goals_name:
-                    goal_names = [
-                        name.strip() for name in assurance_goals_name.split(",")
-                    ]
-                else:
-                    goal_names = [assurance_goals_name.strip()]
-
-                for goal_name in goal_names:
-                    goal, _ = AssuranceGoal.objects.get_or_create(
-                        name=goal_name,
-                        defaults={
-                            "description": f"{goal_name} techniques for trustworthy AI"
-                        },
-                    )
-                    technique.assurance_goals.add(goal)
+            for goal_name in assurance_goals_list:
+                goal, _ = AssuranceGoal.objects.get_or_create(
+                    name=goal_name,
+                    defaults={
+                        "description": f"{goal_name} techniques for trustworthy AI"
+                    },
+                )
+                technique.assurance_goals.add(goal)
 
             # Process category_tags
             if category_tags:
@@ -338,7 +269,11 @@ class Command(BaseCommand):
                     subcat_name = cat_data.get("subcategory")
 
                     # Use first available assurance goal, or default to Explainability
-                    goal_name = goal_names[0] if goal_names else "Explainability"
+                    goal_name = (
+                        assurance_goals_list[0]
+                        if assurance_goals_list
+                        else "Explainability"
+                    )
 
                     goal, _ = AssuranceGoal.objects.get_or_create(
                         name=goal_name,
@@ -368,7 +303,7 @@ class Command(BaseCommand):
                         # Add subcategory to technique
                         technique.subcategories.add(subcategory)
 
-            # Process attributes
+            # Process attributes - now directly from JSON structure
             for attr_data in attributes_data:
                 attr_type_name = attr_data.get("type")
                 attr_value_name = attr_data.get("value")
@@ -395,7 +330,10 @@ class Command(BaseCommand):
             # Process example use cases
             for use_case_data in example_use_cases_data:
                 use_case_desc = use_case_data.get("description")
-                use_case_goal_name = use_case_data.get("goal", assurance_goals_name)
+                use_case_goal_name = use_case_data.get("goal")
+
+                if not use_case_goal_name and assurance_goals_list:
+                    use_case_goal_name = assurance_goals_list[0]
 
                 if not use_case_desc:
                     continue
@@ -427,19 +365,17 @@ class Command(BaseCommand):
                         technique=technique, description=limitation.strip()
                     )
 
-            # Process resources with enhanced support for authors and publication dates
+            # Process resources
             for resource_data in resources_data:
-                if not isinstance(resource_data, dict):
-                    continue
-
                 resource_type_name = resource_data.get("type", "Website")
                 resource_title = resource_data.get("title", "Resource")
                 resource_url = resource_data.get("url", "")
                 resource_desc = resource_data.get("description", "")
-
-                # Get author information if available
                 resource_authors = resource_data.get("authors", [])
                 resource_publication_date = resource_data.get("publication_date", "")
+                resource_source_type = resource_data.get(
+                    "source_type", resource_type_name
+                )
 
                 if not resource_url:
                     continue
@@ -454,10 +390,7 @@ class Command(BaseCommand):
                 if isinstance(resource_authors, list):
                     resource_authors = ", ".join(resource_authors)
 
-                # Get source_type from the resource data
-                resource_source_type = resource_data.get("source_type", resource_type_name)
-                
-                # Create resource with enhanced information
+                # Create resource
                 TechniqueResource.objects.create(
                     technique=technique,
                     resource_type=resource_type,
@@ -466,7 +399,7 @@ class Command(BaseCommand):
                     description=resource_desc,
                     authors=resource_authors,
                     publication_date=resource_publication_date,
-                    source_type=resource_source_type,  # Store the source_type from the CSV
+                    source_type=resource_source_type,
                 )
 
             status = "Created" if created else "Updated"
@@ -475,6 +408,6 @@ class Command(BaseCommand):
         except Exception as e:
             self.stdout.write(
                 self.style.ERROR(
-                    f'Error processing technique {row.get("name", "Unknown")}: {str(e)}'
+                    f'Error processing technique {data.get("name", "Unknown")}: {str(e)}'
                 )
             )

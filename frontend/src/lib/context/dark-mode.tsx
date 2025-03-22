@@ -76,7 +76,7 @@ export const DarkModeToggle: React.FC = () => {
 			}
 		>
 			{isDarkMode ? (
-				<Sun className="h-5 w-5 text-yellow-500" />
+				<Sun className="h-5 w-5 text-white" />
 			) : (
 				<Moon className="h-5 w-5 text-gray-800" />
 			)}

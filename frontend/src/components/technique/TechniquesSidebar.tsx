@@ -69,38 +69,35 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 		key: K,
 		value: FilterState[K]
 	) => {
+		console.log(`UpdateFilter called for ${key} with value:`, value);
+		// Only update state, don't apply filters
 		setFilters({ ...filters, [key]: value });
+		console.log("Filter state updated, waiting for Apply button");
 	};
 
-	// Helper to toggle an item in an array filter
-	// Helper to toggle an item in an array filter
+	// Helper to toggle an item in an array filter without immediately applying
 	const toggleArrayFilter = (key: keyof FilterState, itemId: string) => {
+		console.log(`Toggling ${key} filter with value: ${itemId}`);
 		const currentValues = filters[key] as string[];
 
 		const newValues = currentValues.includes(itemId)
 			? currentValues.filter((id) => id !== itemId)
 			: [...currentValues, itemId];
 
-		// Create updated filters object
-		const updatedFilters = { ...filters, [key]: newValues };
-
-		// Update filter state
+		// Update filter state without applying immediately
 		updateFilter(key, newValues as FilterState[typeof key]);
-
-		// Apply filters with the exact updated values, not relying on state update
-		setTimeout(() => {
-			console.log("Auto-applying filters after toggle:", updatedFilters);
-			// Pass the updated filters directly
-			applyFilters(updatedFilters);
-		}, 0);
+		console.log(`${key} filter updated, but not applied - waiting for Apply button`);
 	};
 
 	return (
-		<div className="bg-background border rounded-lg shadow-sm overflow-hidden">
+		<div className={`bg-background border overflow-hidden ${isMobileOpen ? 'md:relative md:rounded-lg md:shadow-sm fixed inset-0 z-50' : 'rounded-lg shadow-sm'}`}>
+			{/* Mobile filter panel content wrapper */}
+			<div className={`${isMobileOpen ? 'h-full flex flex-col md:block' : ''}`}>
 			{/* Overlay to capture clicks outside the sidebar on mobile */}
 			{isMobileOpen && (
 				<div
-					className="fixed inset-0 bg-black/30 z-[-1] md:hidden"
+					className="fixed inset-0 bg-black/30 md:hidden"
+					style={{ zIndex: -1 }}
 					onClick={toggleSidebar}
 					aria-hidden="true"
 				/>
@@ -109,10 +106,6 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 			<div className="p-4 border-b flex items-center justify-between sticky top-0 bg-background z-10">
 				<h2 className="font-semibold text-lg">Filters</h2>
 				<div className="flex gap-2">
-					<Button variant="outline" size="sm" onClick={resetFilters}>
-						Reset
-					</Button>
-
 					{/* Toggle button for desktop */}
 					{allowToggle && (
 						<Button
@@ -140,7 +133,7 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 				</div>
 			</div>
 			{/* Filters */}
-			<div className="overflow-y-auto max-h-[calc(100vh-120px)] py-2 bg-background">
+			<div className="overflow-y-auto py-2 bg-background flex-1 md:h-auto md:max-h-[calc(100vh-170px)]">
 				<div className="p-4">
 					<div className="relative">
 						<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -148,21 +141,7 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 							placeholder="Search techniques..."
 							value={filters.search}
 							onChange={(e) => {
-								const updatedFilters = {
-									...filters,
-									search: e.target.value,
-								};
 								updateFilter("search", e.target.value);
-								// Only auto-apply when input is empty or has at least 3 characters
-								if (
-									e.target.value.length === 0 ||
-									e.target.value.length > 2
-								) {
-									setTimeout(
-										() => applyFilters(updatedFilters),
-										300
-									);
-								}
 							}}
 							className="w-full pl-8"
 							onKeyDown={(e) => {
@@ -172,16 +151,26 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 							}}
 						/>
 					</div>
-					{/* <div className="mt-2 md:hidden">
+					
+					{/* Action buttons for both mobile and desktop - shown at top on desktop, hidden on mobile */}
+					<div className="hidden md:flex flex-row gap-2 mt-4">
 						<Button
-							onClick={applyFilters}
-							size="sm"
-							className="w-full"
-							disabled={isDataLoading}
+							onClick={() => applyFilters(filters)}
+							variant="default"
+							className="flex-1 font-medium"
+							size="default"
 						>
-							{isDataLoading ? "Loading..." : "Search"}
+							Apply Filters
 						</Button>
-					</div> */}
+						<Button
+							onClick={resetFilters}
+							variant="outline"
+							className="flex-1"
+							size="sm"
+						>
+							Reset
+						</Button>
+					</div>
 				</div>
 
 				<Accordion
@@ -341,22 +330,12 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 											max={5}
 											step={1}
 											onValueChange={(value) => {
-												const updatedFilters = {
-													...filters,
-													complexity_max: value[0],
-												};
+												console.log(`Changing complexity_max to: ${value[0]}`);
 												updateFilter(
 													"complexity_max",
 													value[0]
 												);
-												// Pass updated filters directly
-												setTimeout(
-													() =>
-														applyFilters(
-															updatedFilters
-														),
-													0
-												);
+												console.log("Complexity updated, but not applied - waiting for Apply button");
 											}}
 										/>
 									</div>
@@ -388,23 +367,12 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 											max={5}
 											step={1}
 											onValueChange={(value) => {
-												const updatedFilters = {
-													...filters,
-													computational_cost_max:
-														value[0],
-												};
+												console.log(`Changing computational_cost_max to: ${value[0]}`);
 												updateFilter(
 													"computational_cost_max",
 													value[0]
 												);
-												// Pass updated filters directly
-												setTimeout(
-													() =>
-														applyFilters(
-															updatedFilters
-														),
-													0
-												);
+												console.log("Computational cost updated, but not applied - waiting for Apply button");
 											}}
 										/>
 									</div>
@@ -426,14 +394,27 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 				</Accordion>
 			</div>
 
-			<div className="sticky bottom-0 left-0 right-0 p-4 bg-background border-t md:hidden">
-				<Button
-					onClick={resetFilters}
-					variant="outline"
-					className="w-full"
-				>
-					Reset All Filters
-				</Button>
+			{/* Mobile-only action buttons at the bottom */}
+			<div className="sticky bottom-0 p-4 bg-background border-t shadow-md z-10 md:hidden">
+				<div className="flex flex-col gap-2">
+					<Button
+						onClick={() => applyFilters(filters)}
+						variant="default"
+						className="w-full font-medium"
+						size="default"
+					>
+						Apply Filters
+					</Button>
+					<Button
+						onClick={resetFilters}
+						variant="outline"
+						className="w-full"
+						size="sm"
+					>
+						Reset Filters
+					</Button>
+				</div>
+			</div>
 			</div>
 		</div>
 	);

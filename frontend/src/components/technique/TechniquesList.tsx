@@ -1,7 +1,7 @@
 // TechniquesList.tsx with pagination fix
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useTransition } from "react";
 import Link from "next/link";
 import {
 	useAssuranceGoals,
@@ -28,13 +28,14 @@ import { Loader2, Filter } from "lucide-react";
 import type { Technique } from "@/lib/types";
 import { formatCategoryName } from "./CategoryTag";
 import GoalIcon from "./GoalIcon";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 // Number of items per page - must match backend setting (20)
 const PAGE_SIZE = 20;
 
-// Initial filter values
-const initialFilters: FilterState = {
+// Default filter values used as a reference
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const DEFAULT_FILTERS: FilterState = {
 	search: "",
 	assurance_goals: [],
 	categories: [],
@@ -192,6 +193,13 @@ export default function TechniquesList() {
 
 	// Get current URL parameters directly
 	const searchParams = useSearchParams();
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const router = useRouter();
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const pathname = usePathname();
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const [isPending, startTransition] = useTransition();
+	
 	// Still use the hook for currentPage - it provides other useful functionality
 	const { currentPage } = useFilterParams({
 		search: "",
@@ -200,8 +208,8 @@ export default function TechniquesList() {
 		model_dependency: "all",
 	});
 
-	// State for the filters with direct URL parameter access
-	const [filters, setFilters] = useState<FilterState>(() => {
+	// Parse filters from URL
+	const getInitialFilters = () => {
 		const initialFilters: FilterState = {
 			search: "",
 			assurance_goals: [],
@@ -250,28 +258,34 @@ export default function TechniquesList() {
 
 		console.log("Initialized filters from URL:", initialFilters);
 		return initialFilters;
-	});
+	};
+	
+	// State for the filters being edited by the user (not yet applied)
+	const [filters, setFilters] = useState<FilterState>(getInitialFilters);
+	
+	// State for the filters that have been applied (used for API calls)
+	const [appliedFilters, setAppliedFilters] = useState<FilterState>(getInitialFilters);
 
-	// Convert back to URL format for API calls
+	// Convert back to URL format for API calls - but using appliedFilters not filters
 	const apiFilters = useMemo(() => {
 		return {
-			search: filters.search,
+			search: appliedFilters.search,
 			search_fields: "name",
 			// Pass all assurance goals, not just the first one
 			assurance_goals:
-				filters.assurance_goals.length > 0
-					? filters.assurance_goals
+				appliedFilters.assurance_goals.length > 0
+					? appliedFilters.assurance_goals
 					: undefined,
 			category:
-				filters.categories.length === 1 ? filters.categories[0] : "all",
+				appliedFilters.categories.length === 1 ? appliedFilters.categories[0] : "all",
 			model_dependency:
-				filters.model_dependency.length > 0
-					? filters.model_dependency[0]
+				appliedFilters.model_dependency.length > 0
+					? appliedFilters.model_dependency[0]
 					: "all",
-			complexity_max: filters.complexity_max?.toString(),
-			computational_cost_max: filters.computational_cost_max?.toString(),
+			complexity_max: appliedFilters.complexity_max?.toString(),
+			computational_cost_max: appliedFilters.computational_cost_max?.toString(),
 		};
-	}, [filters]);
+	}, [appliedFilters]);
 
 	// Fetch data from API
 	const {
@@ -296,11 +310,11 @@ export default function TechniquesList() {
 		const data = techniquesData as { results?: Technique[] } | undefined;
 		const results = data?.results || [];
 
-		// Apply client-side filtering for results
+		// Apply client-side filtering for results using appliedFilters
 		return results.filter((technique: Technique) => {
 			// Filter by search term if needed
-			if (filters.search && filters.search.trim() !== "") {
-				const searchTerm = filters.search.toLowerCase().trim();
+			if (appliedFilters.search && appliedFilters.search.trim() !== "") {
+				const searchTerm = appliedFilters.search.toLowerCase().trim();
 				if (!technique.name.toLowerCase().includes(searchTerm)) {
 					return false;
 				}
@@ -308,19 +322,19 @@ export default function TechniquesList() {
 
 			// Apply complexity_max filter
 			if (
-				filters.complexity_max !== undefined &&
+				appliedFilters.complexity_max !== undefined &&
 				technique.complexity_rating !== undefined &&
-				technique.complexity_rating > filters.complexity_max
+				technique.complexity_rating > appliedFilters.complexity_max
 			) {
 				return false;
 			}
 
 			// Apply computational_cost_max filter
 			if (
-				filters.computational_cost_max !== undefined &&
+				appliedFilters.computational_cost_max !== undefined &&
 				technique.computational_cost_rating !== undefined &&
 				technique.computational_cost_rating >
-					filters.computational_cost_max
+					appliedFilters.computational_cost_max
 			) {
 				return false;
 			}
@@ -330,9 +344,9 @@ export default function TechniquesList() {
 		});
 	}, [
 		techniquesData,
-		filters.search,
-		filters.complexity_max,
-		filters.computational_cost_max,
+		appliedFilters.search,
+		appliedFilters.complexity_max,
+		appliedFilters.computational_cost_max,
 	]);
 
 	// Calculate pagination information using the total count from the API response
@@ -344,7 +358,10 @@ export default function TechniquesList() {
 	const applyFilters = (explicitFilters?: FilterState) => {
 		// Use explicitly passed filters or current state
 		const filtersToApply = explicitFilters || filters;
-		console.log("ApplyFilters called with:", filtersToApply);
+		console.log("🔍 ApplyFilters EXPLICITLY called with:", filtersToApply);
+		
+		// Update appliedFilters state first - this triggers API refresh
+		setAppliedFilters(filtersToApply);
 
 		// Build URL with current filters
 		const params = new URLSearchParams();
@@ -407,67 +424,78 @@ export default function TechniquesList() {
 		const urlString = params.toString();
 		console.log("URL parameters:", urlString);
 
-		// Use a more explicit approach for navigation
-		window.location.href = `/techniques?${urlString}`;
+		// Since router.push with transitions isn't working correctly,
+		// let's try using window.location.href again but with
+		// a slight delay to allow React to finish any updates
+		setTimeout(() => {
+			console.log("Using window.location to navigate to:", `/techniques?${urlString}`);
+			window.location.href = `/techniques?${urlString}`;
+		}, 100);
 	};
 
 	// Reset filters function
 	const resetFilters = () => {
-		setFilters(initialFilters);
-		window.location.href = "/techniques?page=1";
+		const defaultFilters = getInitialFilters();
+		setFilters(defaultFilters);
+		setAppliedFilters(defaultFilters);
+		console.log("Resetting filters with URL:", `/techniques?page=1`);
+		// Use window.location for reliable navigation
+		window.location.href = `/techniques?page=1`;
 	};
 
 	// Page change handler function
 	const handlePageChange = (newPage: number) => {
-		// Build URL with current filters and new page
+		// Build URL with applied filters and new page
 		const params = new URLSearchParams();
 
 		// Add search if provided
-		if (filters.search) {
-			params.set("search", filters.search);
+		if (appliedFilters.search) {
+			params.set("search", appliedFilters.search);
 			params.set("search_fields", "name");
 		}
 
 		// Add assurance goals - each as a separate parameter, just like in applyFilters
-		if (filters.assurance_goals.length > 0) {
-			filters.assurance_goals.forEach((goalId) => {
+		if (appliedFilters.assurance_goals.length > 0) {
+			appliedFilters.assurance_goals.forEach((goalId) => {
 				params.append("assurance_goals", goalId);
 			});
 		}
 
 		// Add categories
-		if (filters.categories.length > 0) {
-			filters.categories.forEach((catId) => {
+		if (appliedFilters.categories.length > 0) {
+			appliedFilters.categories.forEach((catId) => {
 				params.append("categories", catId);
 			});
 		}
 
 		// Add model dependency
-		if (filters.model_dependency.length > 0) {
-			params.set("model_dependency", filters.model_dependency[0]);
+		if (appliedFilters.model_dependency.length > 0) {
+			params.set("model_dependency", appliedFilters.model_dependency[0]);
 		}
 
 		// Add max complexity if not at default
-		if (filters.complexity_max && filters.complexity_max < 5) {
-			params.set("complexity_max", filters.complexity_max.toString());
+		if (appliedFilters.complexity_max && appliedFilters.complexity_max < 5) {
+			params.set("complexity_max", appliedFilters.complexity_max.toString());
 		}
 
 		// Add max computational cost if not at default
 		if (
-			filters.computational_cost_max &&
-			filters.computational_cost_max < 5
+			appliedFilters.computational_cost_max &&
+			appliedFilters.computational_cost_max < 5
 		) {
 			params.set(
 				"computational_cost_max",
-				filters.computational_cost_max.toString()
+				appliedFilters.computational_cost_max.toString()
 			);
 		}
 
 		// Set the new page parameter
 		params.set("page", newPage.toString());
 
-		// Navigate to new page (without trailing slash)
-		window.location.href = `/techniques?${params.toString()}`;
+		// Navigate to new page using direct window location
+		const queryString = params.toString();
+		console.log("Changing page with URL:", `/techniques?${queryString}`);
+		window.location.href = `/techniques?${queryString}`;
 	};
 
 	return (

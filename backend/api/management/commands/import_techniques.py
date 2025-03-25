@@ -108,7 +108,7 @@ class Command(BaseCommand):
                 defaults={"description": f"{goal_name} techniques for trustworthy AI"},
             )
 
-        # Create attribute types for common fields in the CSV
+        # Create attribute types for common fields in the JSON
         attribute_types = [
             "Scope",
             "Data Type",
@@ -124,7 +124,7 @@ class Command(BaseCommand):
                 defaults={"description": f"The {attr_type.lower()} of the technique"},
             )
 
-        # Create resource types for the CSV
+        # Create resource types for the JSON
         resource_types = [
             "Technical Paper",
             "Review Paper",
@@ -132,18 +132,12 @@ class Command(BaseCommand):
             "Paper",
             "GitHub",
             "Documentation",
-            "Website",
             "Tutorial",
-            "API",
-            "Library",
-            "Article",
             "Book",
             "Survey",
             "Blog",
             "Tool",
             "Law/Policy",
-            "Principle",
-            "Explanation",
             "Software Package",
         ]
         for resource_type in resource_types:
@@ -217,9 +211,7 @@ class Command(BaseCommand):
 
             # Check if applicable_models column exists in the database
             try:
-                # We need to try accessing the column in a safe way
                 Technique._meta.get_field("applicable_models")
-                # If this succeeds, the field exists
                 defaults["applicable_models"] = (
                     applicable_models if applicable_models else None
                 )
@@ -303,7 +295,7 @@ class Command(BaseCommand):
                         # Add subcategory to technique
                         technique.subcategories.add(subcategory)
 
-            # Process attributes - now directly from JSON structure
+            # Process attributes
             for attr_data in attributes_data:
                 attr_type_name = attr_data.get("type")
                 attr_value_name = attr_data.get("value")

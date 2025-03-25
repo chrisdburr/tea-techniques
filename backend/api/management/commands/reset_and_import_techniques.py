@@ -46,7 +46,7 @@ class Command(BaseCommand):
         )
 
         if file_format == "csv":
-            # Use the original CSV import command
+            # Use the original CSV import command—no longer used
             call_command("import_techniques_csv", **import_options)
         else:
             # Use the new JSON import command

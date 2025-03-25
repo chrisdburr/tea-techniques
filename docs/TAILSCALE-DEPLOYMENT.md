@@ -2,6 +2,8 @@
 
 This document outlines the Tailscale deployment process for the TEA Techniques application, along with known issues and recommendations for improvements.
 
+For standard deployment options, please refer to the [Deployment Guide](DEPLOYMENT.md).
+
 ## Current Deployment Architecture
 
 The current setup uses Tailscale Funnel to expose the application to the internet:
@@ -160,3 +162,10 @@ For a production-ready deployment, consider:
    - Set up alerts for critical issues
 
 By implementing these recommendations, the Tailscale deployment will become more robust, maintainable, and scalable for production use.
+
+## Related Documentation
+
+- [Deployment Guide](DEPLOYMENT.md) - Standard deployment options
+- [Development Workflow](DEVELOPMENT-WORKFLOW.md) - Local development setup
+- [Model Architecture](MODEL-ARCHITECTURE.md) - Database considerations
+- [Future Roadmap](FUTURE-ROADMAP.md) - Long-term architecture goals

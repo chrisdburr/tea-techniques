@@ -132,12 +132,27 @@ If you want to use the full Docker setup with PostgreSQL:
    
    You can access the API documentation at http://localhost:8000/swagger/ when the backend is running.
 
-2. **Additional Documentation**
+2. **Documentation**
 
-   You can find additional documentation about the project's data management and testing in the following files:
+   Comprehensive documentation is available to help you understand and contribute to the project:
 
-   - [Data Management Guide](docs/DATA-MANAGEMENT.md)
-   - [Testing Guide](docs/TESTING.md)
+   ### Core Guides
+   - [Data Management Guide](docs/DATA-MANAGEMENT.md) - How to manage and import technique data
+   - [Testing Guide](docs/TESTING.md) - Information on testing both frontend and backend
+   - [Deployment Guide](docs/DEPLOYMENT.md) - How to deploy the application
+   - [Tailscale Deployment Guide](docs/TAILSCALE-DEPLOYMENT.md) - Specialized deployment with Tailscale
+
+   ### User Documentation
+   - [User Guide](docs/USER-GUIDE.md) - End-user help for using the application
+   - [Glossary](docs/GLOSSARY.md) - Terminology used in the application
+
+   ### Developer Documentation
+   - [API Guide](docs/API-GUIDE.md) - API endpoints and usage
+   - [Model Architecture](docs/MODEL-ARCHITECTURE.md) - Data model details
+   - [Frontend Guide](docs/FRONTEND-GUIDE.md) - Frontend architecture and components
+   - [Development Workflow](docs/DEVELOPMENT-WORKFLOW.md) - Recommended development practices
+   - [Contributing Guide](docs/CONTRIBUTING.md) - How to contribute to the project
+   - [Future Roadmap](docs/FUTURE-ROADMAP.md) - Planned improvements
 
 ## 🤝 Contributing
 

@@ -239,12 +239,8 @@ npm run dev --turbopack`}
 												<span>Django project settings</span>
 											</li>
 											<li className="flex items-start gap-2">
-												<code className="bg-muted px-2 py-1 rounded text-primary font-mono min-w-32">backend/scripts</code>
-												<span>Utility scripts (e.g. reset DB, import CSV)</span>
-											</li>
-											<li className="flex items-start gap-2">
 												<code className="bg-muted px-2 py-1 rounded text-primary font-mono min-w-32">backend/data</code>
-												<span>CSV file with technique data</span>
+												<span>JSON file and schema for techniques</span>
 											</li>
 										</ul>
 									</div>
@@ -403,7 +399,7 @@ python manage.py test`}
 									<li className="flex items-start gap-2">
 										<ArrowRight className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
 										<div>
-											<strong>Via CSV Import</strong>: The backend includes scripts for importing techniques from a CSV file.
+											<strong>Via JSON modifications</strong>: The backend includes a directory where the dataset is stored as a single JSON file, which can be re-imported.
 										</div>
 									</li>
 									<li className="flex items-start gap-2">

@@ -71,6 +71,7 @@ export const useAssuranceGoals = () => {
 			}
 		},
 		refetchOnWindowFocus: false,
+		staleTime: 5 * 60 * 1000, // 5 minutes - this data rarely changes
 		retry: 1,
 	});
 };
@@ -244,13 +245,25 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 		queryParams.append(key, String(value));
 	});
 
+	// Create a more comprehensive query key that captures all filter parameters
 	const queryKey = [
 		"techniques",
 		params.search || "",
 		params.search_fields || "",
-		params.assurance_goal || "all",
-		params.category || "all",
+		// Include all assurance_goals values
+		Array.isArray(apiParams.assurance_goals) 
+			? apiParams.assurance_goals.join(',') 
+			: apiParams.assurance_goals || "all",
+		// Include all categories values
+		Array.isArray(apiParams.categories)
+			? apiParams.categories.join(',')
+			: apiParams.categories || "all",
 		params.model_dependency || "all",
+		// Include rating filters
+		params.complexity_min || "1",
+		params.complexity_max || "5",
+		params.computational_cost_min || "1",
+		params.computational_cost_max || "5",
 		page,
 	];
 
@@ -266,7 +279,7 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 			}
 		},
 		refetchOnWindowFocus: false,
-		staleTime: 30000,
+		staleTime: 60000, // 1 minute stale time
 		retry: 1, // Reduce retries to avoid spamming errors
 	});
 };

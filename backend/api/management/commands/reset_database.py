@@ -16,12 +16,6 @@ class Command(BaseCommand):
             "--force", action="store_true", help="Skip confirmation prompt"
         )
         parser.add_argument(
-            "--use-sqlite",
-            action="store_true",
-            default=False,
-            help="Use SQLite database (default: PostgreSQL)",
-        )
-        parser.add_argument(
             "--create-admin",
             action="store_true",
             default=True,
@@ -30,26 +24,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         force = options.get("force", False)
-        use_sqlite = options.get("use_sqlite", False)
         create_admin = options.get("create_admin", True)
 
         # Get the base directory
         BASE_DIR = Path(settings.BASE_DIR)
-
-        # Configure SQLite for the entire process
-        if use_sqlite:
-            os.environ["USE_SQLITE"] = "True"
-
-            # Force Django to use SQLite directly
-            settings.DATABASES["default"] = {
-                "ENGINE": "django.db.backends.sqlite3",
-                "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-            }
-
-            # Close existing connections
-            connections.close_all()
-
-            self.stdout.write(self.style.SUCCESS("Using SQLite database"))
 
         # Check if user wants to proceed with reset
         if not force:
@@ -73,16 +51,7 @@ class Command(BaseCommand):
         """Reset the database and migrations"""
         self.stdout.write(self.style.WARNING("\n===== DATABASE RESET PROCESS ====="))
 
-        # 1. Delete the SQLite database file if using SQLite
-        if os.environ.get("USE_SQLITE") == "True":
-            db_path = BASE_DIR / "db.sqlite3"
-            if db_path.exists():
-                db_path.unlink()
-                self.stdout.write("✓ Database file removed")
-            else:
-                self.stdout.write("✓ No existing database found, will create new")
-
-        # 2. Clear existing migrations to avoid conflicts
+        # Clear existing migrations to avoid conflicts
         migrations_dir = BASE_DIR / "api" / "migrations"
         migration_count = 0
         for file_path in migrations_dir.glob("*.py"):
@@ -91,11 +60,11 @@ class Command(BaseCommand):
                 migration_count += 1
         self.stdout.write(f"✓ Cleared {migration_count} migration files")
 
-        # 3. Create new migrations based on current models
+        # Create new migrations based on current models
         self.stdout.write("\n----- Creating fresh migrations -----")
         self.run_command("python manage.py makemigrations")
 
-        # 4. Apply migrations to set up database schema
+        # Apply migrations to set up database schema
         self.stdout.write("\n----- Creating database schema -----")
         self.run_command("python manage.py migrate")
 

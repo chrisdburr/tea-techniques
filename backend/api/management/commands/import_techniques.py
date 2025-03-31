@@ -31,29 +31,15 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("--file", type=str, help="Path to the JSON file")
         parser.add_argument(
-            "--use-sqlite",
-            action="store_true",
+            "--force", 
+            action="store_true", 
             default=False,
-            help="Use SQLite database instead of PostgreSQL",
+            help="Force import even if errors occur",
         )
 
     def handle(self, *args, **options):
         file_path = options.get("file")
-        use_sqlite = options.get("use_sqlite", False)
-
-        # Configure SQLite if specified
-        if use_sqlite:
-            os.environ["USE_SQLITE"] = "True"
-            # Force Django to use SQLite
-            BASE_DIR = Path(settings.BASE_DIR)
-            settings.DATABASES["default"] = {
-                "ENGINE": "django.db.backends.sqlite3",
-                "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-            }
-            from django.db import connections
-
-            connections.close_all()
-            self.stdout.write(self.style.SUCCESS("Using SQLite database"))
+        force = options.get("force", False)
 
         # Get the file path
         if not file_path:
@@ -209,18 +195,8 @@ class Command(BaseCommand):
                 "computational_cost_rating": computational_cost_rating,
             }
 
-            # Check if applicable_models column exists in the database
-            try:
-                Technique._meta.get_field("applicable_models")
-                defaults["applicable_models"] = (
-                    applicable_models if applicable_models else None
-                )
-            except Exception as e:
-                self.stdout.write(
-                    self.style.WARNING(
-                        f"Column 'applicable_models' does not exist in the database, skipping this field"
-                    )
-                )
+            # Add applicable_models to defaults
+            defaults["applicable_models"] = applicable_models if applicable_models else None
 
             # Create or update the technique
             technique, created = Technique.objects.update_or_create(

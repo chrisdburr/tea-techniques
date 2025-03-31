@@ -11,7 +11,7 @@ The current setup uses Tailscale Funnel to expose the application to the interne
 1. **Docker Compose Stack**:
    - Frontend container (Next.js)
    - Backend container (Django)
-   - PostgreSQL database container (in local mode, SQLite is used instead)
+   - PostgreSQL database container
 
 2. **Nginx Configuration**:
    - Serves as a reverse proxy
@@ -46,18 +46,16 @@ This script:
 
 ## Known Issues and Solutions
 
-### Database Schema Compatibility
+### Database Configuration
 
-The application uses SQLite in the Tailscale deployment but can experience issues with missing columns:
+The application now uses PostgreSQL consistently across all environments:
 
-**Problem**: The `applicable_models` column may be missing, causing API errors with 500 responses.
+**Solution**: The deployment has been standardized to use PostgreSQL:
+1. The database configuration is set in the Django settings
+2. The `tailscale_setup` command configures PostgreSQL properly
+3. Standard Django migrations are used to maintain schema consistency
 
-**Current solution**: We added a custom management command `add_missing_columns.py` that:
-1. Checks if the `applicable_models` column exists in the SQLite database
-2. Adds it using a direct SQLite ALTER TABLE statement if missing
-3. Verifies the column was added successfully
-
-This command is run during the `tailscale_setup` process to ensure the database has the correct schema.
+This ensures consistent behavior across all deployment environments.
 
 ### Host Header Handling
 
@@ -73,25 +71,25 @@ This ensures Django receives the expected host it's configured to use.
 
 ## Recommendations for Improvement
 
-### 1. Container-based Database
+### 1. Database Management
 
-**Current**: SQLite is used for Tailscale deployment, which requires special handling for schema changes.
+**Current**: PostgreSQL is used across all environments, providing consistency.
 
-**Recommended**: Use PostgreSQL consistently across all environments:
+**Recommended**: Further improvements for database management:
 
 ```yaml
-# docker-compose.yml modification
+# Current docker-compose.yml configuration
 services:
   db:
-    image: postgres:15
+    image: postgres:16
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_USER=user
       - POSTGRES_DB=techniques
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d techniques"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -99,13 +97,13 @@ services:
 
 ### 2. Migration Management
 
-**Current**: Special commands are needed to handle schema discrepancies.
+**Current**: Standard Django migrations are used consistently.
 
-**Recommended**: Implement a more robust migration strategy:
+**Recommended**: Further enhance the migration strategy:
 
-- Use Django's built-in `makemigrations` and `migrate` commands consistently
 - Add migration testing to CI/CD pipeline
-- Create a dedicated setup script that properly handles both SQLite and PostgreSQL
+- Implement database versioning and rollback capability
+- Create migration documentation for complex schema changes
 
 ### 3. Environment Configuration
 

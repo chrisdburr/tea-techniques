@@ -30,7 +30,6 @@ export ALLOWED_HOSTS="*,localhost,127.0.0.1,${TAILSCALE_DOMAIN},backend"
 export CORS_ALLOWED_ORIGINS="http://localhost:3000,http://frontend:3000,https://${TAILSCALE_DOMAIN},http://${TAILSCALE_DOMAIN}"
 export CSRF_TRUSTED_ORIGINS="https://${TAILSCALE_DOMAIN},http://${TAILSCALE_DOMAIN},http://localhost:8000"
 export DEBUG="True"  # Temporarily enable DEBUG for better error messages
-export USE_SQLITE="True"  # Use SQLite for deployment
 echo "Added CORS, CSRF, and hosts settings for ${TAILSCALE_DOMAIN}"
 
 # Rebuild the containers

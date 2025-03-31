@@ -11,12 +11,14 @@ import {
   useResourceTypes,
   useTechniqueDetail,
 } from "@/lib/api/hooks";
-import { useForm, type FormValidators } from "@/lib/hooks/useForm";
 import {
   TechniqueFormData
 } from "@/lib/types";
 import { useApiError } from "@/lib/hooks/useApiError";
 import { SelectField } from "@/components/common/SelectField";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 
 import {
   Card,
@@ -47,16 +49,37 @@ const initialFormData: TechniqueFormData = {
   limitations: [],
 };
 
-const validators: FormValidators<TechniqueFormData> = {
-  name: (value: string) => (!value.trim() ? "Name is required" : null),
-  description: (value: string) => (!value.trim() ? "Description is required" : null),
-  model_dependency: (value: string) =>
-    !value ? "Model dependency is required" : null,
-  assurance_goal_ids: (value: number[]) =>
-    value.length === 0 ? "At least one assurance goal is required" : null,
-  category_ids: (value: number[]) =>
-    value.length === 0 ? "At least one category is required" : null,
-};
+// Zod schema for form validation
+const techniqueSchema = z.object({
+  name: z.string().min(1, { message: "Name is required" }),
+  description: z.string().min(1, { message: "Description is required" }),
+  model_dependency: z.string().min(1, { message: "Model dependency is required" }),
+  assurance_goal_ids: z.array(z.number()).min(1, { message: "At least one assurance goal is required" }),
+  category_ids: z.array(z.number()).min(1, { message: "At least one category is required" }),
+  subcategory_ids: z.array(z.number()),
+  tag_ids: z.array(z.number()),
+  attributes: z.array(
+    z.object({
+      attribute_type: z.number(),
+      attribute_value: z.number(),
+    })
+  ),
+  resources: z.array(
+    z.object({
+      resource_type: z.number(),
+      title: z.string(),
+      url: z.string(),
+      description: z.string(),
+    })
+  ),
+  example_use_cases: z.array(
+    z.object({
+      description: z.string(),
+      assurance_goal: z.number().optional(),
+    })
+  ),
+  limitations: z.array(z.string()),
+});
 
 interface TechniqueFormProps {
   id?: number;
@@ -66,20 +89,25 @@ interface TechniqueFormProps {
 export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormProps) {
   const router = useRouter();
 
-  // Form state management
+  // Form state management with react-hook-form
   const {
-    values: formData,
-    errors,
-    isSubmitting,
-    handleChange,
-    handleBlur,
-    setFieldValue,
-    setFieldError,
-    validateForm,
-    resetForm,
-  } = useForm<TechniqueFormData>(initialFormData, validators);
+    control,
+    handleSubmit: hookFormSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+    reset,
+    watch
+  } = useForm<TechniqueFormData>({
+    resolver: zodResolver(techniqueSchema),
+    defaultValues: initialFormData,
+    mode: "onBlur"
+  });
 
-  const { error: apiError, handleError } = useApiError();
+  // Watch relevant fields for dependent selections
+  const watchedAssuranceGoalIds = watch("assurance_goal_ids");
+  const watchedCategoryIds = watch("category_ids");
+
+  const { handleError } = useApiError();
 
   // State for dynamic arrays
   const [useCases, setUseCases] = useState<Array<{ description: string; assurance_goal?: number }>>([{ description: "" }]);
@@ -174,8 +202,8 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
         : [{ resource_type: 0, title: "", url: "", description: "" }]
       );
 
-      // Update form values using resetForm
-      resetForm({
+      // Update form values using react-hook-form's reset
+      reset({
         name: techniqueData.name,
         description: techniqueData.description,
         model_dependency: techniqueData.model_dependency,
@@ -193,12 +221,12 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
       setSelectedGoals([...assurance_goal_ids]); // Use a new array to prevent reference sharing
       setSelectedCategories([...category_ids]);
     }
-  }, [isEditMode, techniqueData, resetForm]);
+  }, [isEditMode, techniqueData, reset]);
 
-  // Make sure selectedGoals and selectedCategories are memoized based on form data
+  // Make sure selectedGoals and selectedCategories are memoized based on watched fields
   // without creating effects that might cause infinite loops
-  const memoizedSelectedGoals = React.useMemo(() => formData.assurance_goal_ids, [formData.assurance_goal_ids]);
-  const memoizedSelectedCategories = React.useMemo(() => formData.category_ids, [formData.category_ids]);
+  const memoizedSelectedGoals = React.useMemo(() => watchedAssuranceGoalIds, [watchedAssuranceGoalIds]);
+  const memoizedSelectedCategories = React.useMemo(() => watchedCategoryIds, [watchedCategoryIds]);
 
   // Update selected goals/categories with memoized values - only runs once after memo values are computed
   React.useEffect(() => {
@@ -211,10 +239,8 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
     setSelectedCategories(() => memoizedSelectedCategories);
   }, [memoizedSelectedCategories]);
 
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  // Handle form submission using react-hook-form
+  const onSubmit: SubmitHandler<TechniqueFormData> = async (data) => {
     // Filter out empty entries from dynamic arrays
     const filteredUseCases = useCases.filter(uc => uc.description.trim() !== "");
     const filteredLimitations = limitations.filter(lim => lim.trim() !== "");
@@ -222,19 +248,11 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
 
     // Create final form data
     const finalFormData: TechniqueFormData = {
-      ...formData,
+      ...data,
       example_use_cases: filteredUseCases,
       limitations: filteredLimitations,
       resources: filteredResources,
     };
-
-    // Validate the form
-    const isValid = validateForm();
-    if (!isValid) {
-      // Show error message
-      console.error("Form validation failed", errors);
-      return;
-    }
 
     try {
       if (isEditMode && id) {
@@ -256,32 +274,26 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
     } catch (error) {
       console.error("Error submitting technique:", error);
       handleError(error);
-      setFieldError('submit', apiError?.message || 'An unexpected error occurred');
     }
   };
 
-  // Handle goal selection changes - simplified to avoid cascading effects
+  // Handle goal selection changes with react-hook-form
   const handleGoalChange = (values: string[]) => {
     try {
-      // Just update the form field directly, don't do cascading updates here
+      // Use setValue from react-hook-form
       const goalIds = values.map(v => parseInt(v));
-      setFieldValue("assurance_goal_ids", goalIds);
-
-      // Instead of setting other fields here, let the initial form load handle it
-      // this helps break the circular deps
+      setValue("assurance_goal_ids", goalIds, { shouldValidate: true });
     } catch (error) {
       console.error("Error in handleGoalChange:", error);
     }
   };
 
-  // Handle category selection changes - simplified to prevent effects loop
+  // Handle category selection changes with react-hook-form
   const handleCategoryChange = (values: string[]) => {
     try {
-      // Just update the field directly, no cascading
+      // Use setValue from react-hook-form
       const categoryIds = values.map(v => parseInt(v));
-      setFieldValue("category_ids", categoryIds);
-
-      // Don't update subcategories here to avoid circular deps
+      setValue("category_ids", categoryIds, { shouldValidate: true });
     } catch (error) {
       console.error("Error in handleCategoryChange:", error);
     }
@@ -395,7 +407,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
         </Button>
       </div>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={hookFormSubmit(onSubmit)}>
         <Tabs defaultValue="basic" className="w-full">
           <TabsList className="grid grid-cols-4 mb-8">
             <TabsTrigger value="basic">Basic Information</TabsTrigger>
@@ -418,17 +430,20 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                   <Label htmlFor="name">
                     Technique Name <span className="text-destructive">*</span>
                   </Label>
-                  <Input
-                    id="name"
+                  <Controller
                     name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    placeholder="Enter technique name"
-                    disabled={isLoading}
+                    control={control}
+                    render={({ field }) => (
+                      <Input
+                        id="name"
+                        placeholder="Enter technique name"
+                        disabled={isLoading}
+                        {...field}
+                      />
+                    )}
                   />
                   {errors?.name && (
-                    <p className="text-sm text-destructive">{errors.name}</p>
+                    <p className="text-sm text-destructive">{errors.name.message}</p>
                   )}
                 </div>
 
@@ -436,18 +451,21 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                   <Label htmlFor="description">
                     Description <span className="text-destructive">*</span>
                   </Label>
-                  <Textarea
-                    id="description"
+                  <Controller
                     name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    placeholder="Provide a detailed description of the technique"
-                    rows={6}
-                    disabled={isLoading}
+                    control={control}
+                    render={({ field }) => (
+                      <Textarea
+                        id="description"
+                        placeholder="Provide a detailed description of the technique"
+                        rows={6}
+                        disabled={isLoading}
+                        {...field}
+                      />
+                    )}
                   />
                   {errors?.description && (
-                    <p className="text-sm text-destructive">{errors.description}</p>
+                    <p className="text-sm text-destructive">{errors.description.message}</p>
                   )}
                 </div>
 
@@ -455,22 +473,25 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                   <Label htmlFor="model_dependency">
                     Model Dependency <span className="text-destructive">*</span>
                   </Label>
-                  {/* Temporary fix: Use native select instead of SelectField */}
-                  <select
-                    id="model_dependency"
+                  <Controller
                     name="model_dependency"
-                    value={formData.model_dependency}
-                    onChange={(e) => setFieldValue("model_dependency", e.target.value)}
-                    className="w-full px-3 py-2 border rounded-md"
-                    required
-                  >
-                    <option value="" disabled>Select Model Dependency</option>
-                    {modelDependencyOptions.map(option => (
-                      <option key={option.value} value={option.value}>{option.label}</option>
-                    ))}
-                  </select>
+                    control={control}
+                    render={({ field }) => (
+                      <select
+                        id="model_dependency"
+                        className="w-full px-3 py-2 border rounded-md"
+                        disabled={isLoading}
+                        {...field}
+                      >
+                        <option value="" disabled>Select Model Dependency</option>
+                        {modelDependencyOptions.map(option => (
+                          <option key={option.value} value={option.value}>{option.label}</option>
+                        ))}
+                      </select>
+                    )}
+                  />
                   {errors?.model_dependency && (
-                    <p className="text-sm text-destructive">{errors.model_dependency}</p>
+                    <p className="text-sm text-destructive">{errors.model_dependency.message}</p>
                   )}
                 </div>
               </CardContent>
@@ -492,29 +513,35 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                     <label htmlFor="assurance_goal_ids" className="block font-medium">
                       Assurance Goals <span className="text-destructive">*</span>
                     </label>
-                    <select
-                      id="assurance_goal_ids"
-                      multiple
-                      className="w-full px-3 py-2 border rounded-md"
-                      value={formData.assurance_goal_ids.map(id => id.toString())}
-                      onChange={(e) => {
-                        const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
-                        handleGoalChange(selectedOptions);
-                      }}
-                      disabled={isLoading}
-                      size={4}
-                    >
-                      {assuranceGoalOptions.map(option => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
+                    <Controller
+                      name="assurance_goal_ids"
+                      control={control}
+                      render={({ field }) => (
+                        <select
+                          id="assurance_goal_ids"
+                          multiple
+                          className="w-full px-3 py-2 border rounded-md"
+                          onChange={(e) => {
+                            const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
+                            handleGoalChange(selectedOptions);
+                          }}
+                          disabled={isLoading}
+                          size={4}
+                          value={field.value.map(id => id.toString())}
+                        >
+                          {assuranceGoalOptions.map(option => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                    />
                     <p className="text-xs text-muted-foreground">
                       Hold Ctrl (or Cmd) to select multiple options
                     </p>
                     {errors?.assurance_goal_ids && (
-                      <p className="text-sm text-destructive">{errors.assurance_goal_ids}</p>
+                      <p className="text-sm text-destructive">{errors.assurance_goal_ids.message}</p>
                     )}
                   </div>
 
@@ -522,31 +549,37 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                     <label htmlFor="category_ids" className="block font-medium">
                       Categories <span className="text-destructive">*</span>
                     </label>
-                    <select
-                      id="category_ids"
-                      multiple
-                      className="w-full px-3 py-2 border rounded-md"
-                      value={formData.category_ids.map(id => id.toString())}
-                      onChange={(e) => {
-                        const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
-                        handleCategoryChange(selectedOptions);
-                      }}
-                      disabled={isLoading || formData.assurance_goal_ids.length === 0}
-                      size={4}
-                    >
-                      {categoryOptions.map(option => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
+                    <Controller
+                      name="category_ids"
+                      control={control}
+                      render={({ field }) => (
+                        <select
+                          id="category_ids"
+                          multiple
+                          className="w-full px-3 py-2 border rounded-md"
+                          onChange={(e) => {
+                            const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
+                            handleCategoryChange(selectedOptions);
+                          }}
+                          disabled={isLoading || watchedAssuranceGoalIds.length === 0}
+                          size={4}
+                          value={field.value.map(id => id.toString())}
+                        >
+                          {categoryOptions.map(option => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                    />
                     <p className="text-xs text-muted-foreground">
-                      {formData.assurance_goal_ids.length === 0
+                      {watchedAssuranceGoalIds.length === 0
                         ? "Select assurance goals first to see available categories"
                         : "Hold Ctrl (or Cmd) to select multiple options"}
                     </p>
                     {errors?.category_ids && (
-                      <p className="text-sm text-destructive">{errors.category_ids}</p>
+                      <p className="text-sm text-destructive">{errors.category_ids.message}</p>
                     )}
                   </div>
 
@@ -554,27 +587,33 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                     <label htmlFor="subcategory_ids" className="block font-medium">
                       Subcategories
                     </label>
-                    <select
-                      id="subcategory_ids"
-                      multiple
-                      className="w-full px-3 py-2 border rounded-md"
-                      value={formData.subcategory_ids.map(id => id.toString())}
-                      onChange={(e) => {
-                        const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
-                        const subcategoryIds = selectedOptions.map(v => parseInt(v));
-                        setFieldValue("subcategory_ids", subcategoryIds);
-                      }}
-                      disabled={isLoading || formData.category_ids.length === 0}
-                      size={4}
-                    >
-                      {subcategoryOptions.map(option => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
+                    <Controller
+                      name="subcategory_ids"
+                      control={control}
+                      render={({ field }) => (
+                        <select
+                          id="subcategory_ids"
+                          multiple
+                          className="w-full px-3 py-2 border rounded-md"
+                          onChange={(e) => {
+                            const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
+                            const subcategoryIds = selectedOptions.map(v => parseInt(v));
+                            setValue("subcategory_ids", subcategoryIds);
+                          }}
+                          disabled={isLoading || watchedCategoryIds.length === 0}
+                          size={4}
+                          value={field.value.map(id => id.toString())}
+                        >
+                          {subcategoryOptions.map(option => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                    />
                     <p className="text-xs text-muted-foreground">
-                      {formData.category_ids.length === 0
+                      {watchedCategoryIds.length === 0
                         ? "Select categories first to see available subcategories"
                         : "Hold Ctrl (or Cmd) to select multiple options"}
                     </p>
@@ -584,25 +623,31 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                     <label htmlFor="tag_ids" className="block font-medium">
                       Tags
                     </label>
-                    <select
-                      id="tag_ids"
-                      multiple
-                      className="w-full px-3 py-2 border rounded-md"
-                      value={formData.tag_ids.map(id => id.toString())}
-                      onChange={(e) => {
-                        const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
-                        const tagIds = selectedOptions.map(v => parseInt(v));
-                        setFieldValue("tag_ids", tagIds);
-                      }}
-                      disabled={isLoading}
-                      size={4}
-                    >
-                      {tagOptions.map(option => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
+                    <Controller
+                      name="tag_ids"
+                      control={control}
+                      render={({ field }) => (
+                        <select
+                          id="tag_ids"
+                          multiple
+                          className="w-full px-3 py-2 border rounded-md"
+                          onChange={(e) => {
+                            const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
+                            const tagIds = selectedOptions.map(v => parseInt(v));
+                            setValue("tag_ids", tagIds);
+                          }}
+                          disabled={isLoading}
+                          size={4}
+                          value={field.value.map(id => id.toString())}
+                        >
+                          {tagOptions.map(option => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                    />
                     <p className="text-xs text-muted-foreground">
                       Hold Ctrl (or Cmd) to select multiple options
                     </p>

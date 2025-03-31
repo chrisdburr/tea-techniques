@@ -12,7 +12,7 @@ The plan is structured in six stages, starting with critical stabilization of th
   - [View detailed plan](tasks/task_1_1_stabilize_database.md)
   - Branch: `fix/stabilize-database`
 
-- [ ] **Task 1.2: Fix Core Add/Edit Technique Functionality** *(High Priority)*
+- [x] **Task 1.2: Fix Core Add/Edit Technique Functionality** *(High Priority)*
   - [View detailed plan](tasks/task_1_2_fix_core_functionality.md)
   - Branch: `feature/enable-technique-crud`
 

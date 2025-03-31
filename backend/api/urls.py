@@ -21,6 +21,13 @@ from .views.api_views import (
     ResourceTypesViewSet,
     debug_endpoint,
 )
+from .views.auth_views import (
+    get_csrf,
+    login_view,
+    logout_view,
+    user_view,
+    auth_status_view,
+)
 
 
 @api_view(["GET"])
@@ -91,8 +98,14 @@ urlpatterns = [
         get_subcategorylist,
         name="subcategories-by-category",
     ),
-    # Authentication
+    # Authentication - DRF's built-in auth views
     path("auth/", include("rest_framework.urls")),
+    # Custom auth endpoints
+    path("auth/csrf", get_csrf, name="get-csrf"),
+    path("auth/login", login_view, name="login"),
+    path("auth/logout", logout_view, name="logout"),
+    path("auth/user", user_view, name="user"),
+    path("auth/status", auth_status_view, name="auth-status"),
     # Swagger documentation
     re_path(
         r"^swagger(?P<format>\.json|\.yaml)$",

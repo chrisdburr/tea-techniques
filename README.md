@@ -37,9 +37,9 @@ curl -sSL https://install.python-poetry.org | python3 -
 </details>
 
 <details>
-<summary>📦 SQLite Setup (Quick Start for Development)</summary>
+<summary>📦 Local Development Setup</summary>
 
-For local development, we use SQLite as the database backend. This setup is quick and easy to get started but is not suitable for production use:
+For local development, we use PostgreSQL as the database backend:
 
 1. **Clone the repository**
    ```bash
@@ -53,28 +53,32 @@ For local development, we use SQLite as the database backend. This setup is quic
   cp .env.example .env
   ```
 
-  - You may want to review and adjust the values in the `.env` file (e.g. change user and password)
+  - You may want to review and adjust the values in the `.env` file (e.g. change database credentials)
 
-3. **Set up the backend**
+3. **Install and start PostgreSQL**
+   - Ensure PostgreSQL is installed and running on your system
+   - Create a database named 'techniques' (or use the name specified in your .env file)
+
+4. **Set up the backend**
    ```bash
    cd backend
    poetry install
-   USE_SQLITE=True python manage.py reset_and_import_techniques
+   python manage.py reset_and_import_techniques
    ```
 
-4. **Run the backend with SQLite**
+5. **Run the backend**
    ```bash
-   USE_SQLITE=True poetry run python manage.py runserver
+   poetry run python manage.py runserver
    ```
 
-5. **In a new terminal, set up and run the frontend**
+6. **In a new terminal, set up and run the frontend**
    ```bash
    cd frontend
    pnpm install
    pnpm run dev:turbo
    ```
 
-6. **Access the application**
+7. **Access the application**
    - Frontend: http://localhost:3000
    - API: http://localhost:8000/api/
    - Django Admin: http://localhost:8000/admin/

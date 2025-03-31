@@ -8,40 +8,21 @@ from django.db import connections
 
 
 class Command(BaseCommand):
-    help = "Special setup for Tailscale deployments with SQLite"
+    help = "Special setup for Tailscale deployments with PostgreSQL"
 
     def handle(self, *args, **options):
-        # Force SQLite for tailscale deployment
-        os.environ["USE_SQLITE"] = "True"
-        
         # Get the base directory
         BASE_DIR = Path(settings.BASE_DIR)
-        
-        # Force Django to use SQLite
-        settings.DATABASES["default"] = {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-        }
         
         # Close existing connections to ensure we use the new config
         connections.close_all()
         
-        self.stdout.write(self.style.SUCCESS("Using SQLite database for Tailscale deployment"))
-        
-        # Delete the SQLite database file if it exists
-        db_path = BASE_DIR / "db.sqlite3"
-        if db_path.exists():
-            db_path.unlink()
-            self.stdout.write("✓ Old database file removed")
+        self.stdout.write(self.style.SUCCESS("Using PostgreSQL database for Tailscale deployment"))
         
         # Run migrations
-        self.stdout.write("\n----- Applying migrations to new database -----")
+        self.stdout.write("\n----- Applying migrations to database -----")
         try:
             self.run_command("python manage.py migrate")
-            
-            # Add missing columns that might not be in the migrations
-            self.stdout.write("\n----- Adding any missing columns to database schema -----")
-            self.run_command("python manage.py add_missing_columns --force")
         except Exception as e:
             self.stdout.write(self.style.ERROR(f"Migration error: {str(e)}"))
             self.stdout.write(self.style.WARNING("Trying to continue anyway..."))
@@ -49,13 +30,13 @@ class Command(BaseCommand):
         # Import techniques with more robust error handling
         self.stdout.write("\n----- Importing techniques data -----")
         try:
-            self.run_command("python manage.py import_techniques --use-sqlite")
+            self.run_command("python manage.py import_techniques")
         except Exception as e:
             self.stdout.write(self.style.ERROR(f"Error during import: {str(e)}"))
-            # Try an alternative approach - direct import from CSV
+            # Try an alternative approach - direct import
             self.stdout.write(self.style.WARNING("Trying alternative import method..."))
             from django.core import management
-            management.call_command('import_techniques', use_sqlite=True, force=True)
+            management.call_command('import_techniques', force=True)
         
         # Verify data
         try:

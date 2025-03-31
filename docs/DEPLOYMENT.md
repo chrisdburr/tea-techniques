@@ -14,7 +14,7 @@
 > # Backend
 > cd backend
 > poetry install
-> USE_SQLITE=True python manage.py runserver
+> python manage.py runserver
 >
 > # Frontend
 > cd frontend

@@ -33,8 +33,7 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation";
 // Number of items per page - must match backend setting (20)
 const PAGE_SIZE = 20;
 
-// Default filter values used as a reference
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// Default filter values
 const DEFAULT_FILTERS: FilterState = {
 	search: "",
 	assurance_goals: [],
@@ -193,11 +192,8 @@ export default function TechniquesList() {
 
 	// Get current URL parameters directly
 	const searchParams = useSearchParams();
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const router = useRouter();
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const pathname = usePathname();
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [isPending, startTransition] = useTransition();
 	
 	// Still use the hook for currentPage - it provides other useful functionality
@@ -208,8 +204,8 @@ export default function TechniquesList() {
 		model_dependency: "all",
 	});
 
-	// Parse filters from URL
-	const getInitialFilters = () => {
+	// Parse filters from URL with useCallback to prevent recreating on each render
+	const getInitialFilters = useCallback(() => {
 		const initialFilters: FilterState = {
 			search: "",
 			assurance_goals: [],
@@ -258,13 +254,21 @@ export default function TechniquesList() {
 
 		console.log("Initialized filters from URL:", initialFilters);
 		return initialFilters;
-	};
+	}, [searchParams]);
 	
 	// State for the filters being edited by the user (not yet applied)
 	const [filters, setFilters] = useState<FilterState>(getInitialFilters);
 	
 	// State for the filters that have been applied (used for API calls)
 	const [appliedFilters, setAppliedFilters] = useState<FilterState>(getInitialFilters);
+	
+	// Update filters when URL parameters change
+	useEffect(() => {
+		// Get filters from URL parameters
+		const updatedFilters = getInitialFilters();
+		setFilters(updatedFilters);
+		setAppliedFilters(updatedFilters);
+	}, [searchParams, getInitialFilters]);
 
 	// Convert back to URL format for API calls - but using appliedFilters not filters
 	const apiFilters = useMemo(() => {
@@ -355,7 +359,7 @@ export default function TechniquesList() {
 	const totalPages = calculateTotalPages(apiTotalCount, PAGE_SIZE);
 
 	// Apply filters function
-	const applyFilters = (explicitFilters?: FilterState) => {
+	const applyFilters = useCallback((explicitFilters?: FilterState) => {
 		// Use explicitly passed filters or current state
 		const filtersToApply = explicitFilters || filters;
 		console.log("🔍 ApplyFilters EXPLICITLY called with:", filtersToApply);
@@ -424,27 +428,27 @@ export default function TechniquesList() {
 		const urlString = params.toString();
 		console.log("URL parameters:", urlString);
 
-		// Since router.push with transitions isn't working correctly,
-		// let's try using window.location.href again but with
-		// a slight delay to allow React to finish any updates
-		setTimeout(() => {
-			console.log("Using window.location to navigate to:", `/techniques?${urlString}`);
-			window.location.href = `/techniques?${urlString}`;
-		}, 100);
-	};
+		// Use Next.js router for client-side navigation
+		startTransition(() => {
+			router.push(`${pathname}?${urlString}`);
+		});
+	}, [filters, router, pathname, startTransition]);
 
 	// Reset filters function
-	const resetFilters = () => {
+	const resetFilters = useCallback(() => {
 		const defaultFilters = getInitialFilters();
 		setFilters(defaultFilters);
 		setAppliedFilters(defaultFilters);
 		console.log("Resetting filters with URL:", `/techniques?page=1`);
-		// Use window.location for reliable navigation
-		window.location.href = `/techniques?page=1`;
-	};
+		
+		// Use Next.js router for client-side navigation
+		startTransition(() => {
+			router.push(`${pathname}?page=1`);
+		});
+	}, [getInitialFilters, router, pathname, startTransition]);
 
 	// Page change handler function
-	const handlePageChange = (newPage: number) => {
+	const handlePageChange = useCallback((newPage: number) => {
 		// Build URL with applied filters and new page
 		const params = new URLSearchParams();
 
@@ -492,11 +496,14 @@ export default function TechniquesList() {
 		// Set the new page parameter
 		params.set("page", newPage.toString());
 
-		// Navigate to new page using direct window location
+		// Navigate to new page using Next.js router
 		const queryString = params.toString();
 		console.log("Changing page with URL:", `/techniques?${queryString}`);
-		window.location.href = `/techniques?${queryString}`;
-	};
+		
+		startTransition(() => {
+			router.push(`${pathname}?${queryString}`);
+		});
+	}, [appliedFilters, router, pathname, startTransition]);
 
 	return (
 		<div className="space-y-6">

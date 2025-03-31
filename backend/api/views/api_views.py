@@ -99,6 +99,8 @@ class TechniquesViewSet(viewsets.ModelViewSet):
     """
     ViewSet for Techniques that provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
+    
+    Authentication is required for create, update, and delete operations.
     """
 
     queryset = Technique.objects.all()
@@ -118,6 +120,19 @@ class TechniquesViewSet(viewsets.ModelViewSet):
     ]
     search_fields = ["name", "description"]
     ordering_fields = ["id", "name"]
+    
+    def get_permissions(self):
+        """
+        Customize permissions based on action:
+        - list and retrieve are allowed for any user (even unauthenticated)
+        - create, update, delete require authentication
+        """
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            from rest_framework.permissions import IsAuthenticated
+            return [IsAuthenticated()]
+        # Default permission for list and retrieve
+        from rest_framework.permissions import AllowAny
+        return [AllowAny()]
 
     def get_serializer_class(self):
         """Return appropriate serializer class based on action."""

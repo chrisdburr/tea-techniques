@@ -101,13 +101,13 @@ tea-techniques/
 3. Initialize the database:
 
    ```bash
-   USE_SQLITE=True python manage.py reset_and_import_techniques
+   python manage.py reset_and_import_techniques
    ```
 
 4. Run the development server:
 
    ```bash
-   USE_SQLITE=True poetry run python manage.py runserver
+   poetry run python manage.py runserver
    ```
 
 5. The API will be available at http://localhost:8000/api/

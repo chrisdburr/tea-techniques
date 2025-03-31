@@ -113,39 +113,17 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 
-# Database
-# Use SQLite for development and PostgreSQL for production
-if os.getenv("USE_SQLITE", "False") == "True" or os.getenv("DB_ENGINE") == "sqlite":
-    # SQLite configuration for development
-    # For Docker, store DB in a persisted volume
-    if os.getenv("DOCKER_ENVIRONMENT", "False") == "True":
-        db_dir = os.path.join(BASE_DIR, "db_data")
-        os.makedirs(db_dir, exist_ok=True)
-        DATABASES = {
-            "default": {
-                "ENGINE": "django.db.backends.sqlite3",
-                "NAME": os.path.join(db_dir, "db.sqlite3"),
-            }
-        }
-    else:
-        DATABASES = {
-            "default": {
-                "ENGINE": "django.db.backends.sqlite3",
-                "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-            }
-        }
-else:
-    # PostgreSQL configuration for production
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv("DB_NAME"),
-            "USER": os.getenv("DB_USER"),
-            "PASSWORD": os.getenv("DB_PASSWORD"),
-            "HOST": os.getenv("DB_HOST"),
-            "PORT": os.getenv("DB_PORT"),
-        }
+# Database configuration using PostgreSQL by default
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME", "techniques"),
+        "USER": os.getenv("DB_USER", "postgres"),
+        "PASSWORD": os.getenv("DB_PASSWORD", "postgres"),
+        "HOST": os.getenv("DB_HOST", "localhost"),
+        "PORT": os.getenv("DB_PORT", "5432"),
     }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {

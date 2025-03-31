@@ -12,12 +12,6 @@ class Command(BaseCommand):
             "--force", action="store_true", help="Skip confirmation prompt"
         )
         parser.add_argument(
-            "--use-sqlite",
-            action="store_true",
-            default=True,
-            help="Use SQLite database (default)",
-        )
-        parser.add_argument(
             "--format",
             type=str,
             choices=["json", "csv"],
@@ -28,16 +22,15 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         file_path = options.get("file")
         force = options.get("force", False)
-        use_sqlite = options.get("use_sqlite", True)
         file_format = options.get("format", "json")
 
         # First, reset the database
-        reset_options = {"force": force, "use_sqlite": use_sqlite}
+        reset_options = {"force": force}
         self.stdout.write(self.style.NOTICE("Step 1: Resetting database"))
         call_command("reset_database", **reset_options)
 
         # Then import techniques
-        import_options = {"use_sqlite": use_sqlite}
+        import_options = {}
         if file_path:
             import_options["file"] = file_path
 
@@ -55,15 +48,8 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("✅ Reset and import complete!"))
 
         # Add server startup instructions at the end
-        if use_sqlite:
-            self.stdout.write(
-                self.style.SUCCESS(
-                    "➡️ Run 'USE_SQLITE=True python manage.py runserver' to start the server"
-                )
+        self.stdout.write(
+            self.style.SUCCESS(
+                "➡️ Run 'python manage.py runserver' to start the server"
             )
-        else:
-            self.stdout.write(
-                self.style.SUCCESS(
-                    "➡️ Run 'python manage.py runserver' to start the server"
-                )
-            )
+        )

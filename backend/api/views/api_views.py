@@ -124,63 +124,12 @@ class TechniquesViewSet(viewsets.ModelViewSet):
         return TechniqueSerializer
         
     def list(self, request, *args, **kwargs):
-        """Override list method to handle database schema issues"""
-        try:
-            # Try the standard list implementation
-            return super().list(request, *args, **kwargs)
-        except Exception as e:
-            # Log the error
-            logger.error(f"Error in TechniquesViewSet list: {str(e)}")
-            
-            # Try a more basic query to avoid errors with missing columns
-            try:
-                # Use a simpler query that only selects basic fields
-                techniques = Technique.objects.only('id', 'name', 'description', 
-                                                  'model_dependency', 'category_tags',
-                                                  'complexity_rating', 'computational_cost_rating')
-                
-                # Handle pagination manually
-                page = self.paginate_queryset(techniques)
-                if page is not None:
-                    serializer = self.get_serializer(page, many=True)
-                    return self.get_paginated_response(serializer.data)
-                
-                serializer = self.get_serializer(techniques, many=True)
-                return Response(serializer.data)
-            except Exception as fallback_error:
-                # If even the fallback fails, return an error response
-                logger.error(f"Fallback query also failed: {str(fallback_error)}")
-                return Response(
-                    {"error": "Unable to retrieve techniques due to a database issue. Please contact support."},
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
-                )
+        """Standard list method for techniques"""
+        return super().list(request, *args, **kwargs)
                 
     def retrieve(self, request, *args, **kwargs):
-        """Override retrieve method to handle database schema issues"""
-        try:
-            # Try the standard retrieve implementation
-            return super().retrieve(request, *args, **kwargs)
-        except Exception as e:
-            # Log the error
-            logger.error(f"Error in TechniquesViewSet retrieve: {str(e)}")
-            
-            # Try a more basic query to avoid errors with missing columns
-            try:
-                # Get the instance with only basic fields
-                instance = Technique.objects.only(
-                    'id', 'name', 'description', 'model_dependency', 'category_tags',
-                    'complexity_rating', 'computational_cost_rating'
-                ).get(pk=kwargs['pk'])
-                
-                serializer = self.get_serializer(instance)
-                return Response(serializer.data)
-            except Exception as fallback_error:
-                # If even the fallback fails, return an error response
-                logger.error(f"Fallback query also failed: {str(fallback_error)}")
-                return Response(
-                    {"error": "Unable to retrieve the technique due to a database issue. Please contact support."},
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
-                )
+        """Standard retrieve method for techniques"""
+        return super().retrieve(request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
         """Create a new technique with improved error handling."""

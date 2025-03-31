@@ -31,6 +31,8 @@ const apiClient = axios.create({
 	paramsSerializer: {
 		indexes: null,
 	},
+	// Important for session-based authentication
+	withCredentials: true,
 });
 
 export { apiClient };

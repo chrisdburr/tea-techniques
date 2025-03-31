@@ -1,6 +1,6 @@
 // src/lib/hooks/useFilterParams.ts
-import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect, useCallback } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
 interface FilterState {
   [key: string]: string;
@@ -17,6 +17,8 @@ export function useFilterParams(
   defaultPage = 1
 ) {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   // Initialize state from URL parameters
   const [filters, setFilters] = useState<FilterState>(() => {
@@ -125,8 +127,8 @@ export function useFilterParams(
     });
   };
 
-  // Apply filters to URL and navigate
-  const applyFilters = (resetPage = true) => {
+  // Create URL search params from current filter state
+  const createSearchParams = useCallback((resetPageParam = true) => {
     const params = new URLSearchParams();
     
     // Convert from component parameter names to backend parameter names (singular to plural)
@@ -147,38 +149,41 @@ export function useFilterParams(
     }
     
     // Set page parameter (reset to 1 if specified)
-    params.set("page", resetPage ? "1" : filters.page);
+    params.set("page", resetPageParam ? "1" : filters.page);
     
-    // Use direct navigation for most reliable behavior
+    return params;
+  }, [filters]);
+
+  // Apply filters to URL and navigate
+  const applyFilters = useCallback((resetPage = true) => {
+    const params = createSearchParams(resetPage);
+    
     try {
-      // Build the URL with the correct query parameters
-      const newUrl = `${window.location.pathname}?${params.toString()}`;
-      
-      // Navigate using window.location for a reliable page update
-      window.location.href = newUrl;
+      // Use Next.js router.push for client-side navigation
+      router.push(`${pathname}?${params.toString()}`);
     } catch (error) {
       console.error("Navigation error:", error);
     }
-  };
+  }, [createSearchParams, router, pathname]);
 
   // Reset all filters to initial values
-  const resetFilters = () => {
+  const resetFilters = useCallback(() => {
     // Update local state
     setFilters({ 
       ...initialFilters,
       page: "1"
     });
     
-    // Use direct URL navigation for reliable reset
+    // Use Next.js router for navigation
     try {
-      window.location.href = `${window.location.pathname}?page=1`;
+      router.push(`${pathname}?page=1`);
     } catch (error) {
       console.error("Reset navigation error:", error);
     }
-  };
+  }, [initialFilters, router, pathname]);
 
   // Change page and update URL
-  const changePage = (newPage: number) => {
+  const changePage = useCallback((newPage: number) => {
     // Build URL with current filters plus new page
     const params = new URLSearchParams();
     
@@ -202,14 +207,13 @@ export function useFilterParams(
     // Set the new page parameter
     params.set("page", newPage.toString());
     
-    // Use direct navigation for reliable page change
+    // Use Next.js router for navigation
     try {
-      const newUrl = `${window.location.pathname}?${params.toString()}`;
-      window.location.href = newUrl;
+      router.push(`${pathname}?${params.toString()}`);
     } catch (error) {
       console.error("Page change navigation error:", error);
     }
-  };
+  }, [filters, router, pathname]);
 
   return {
     filters,

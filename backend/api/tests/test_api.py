@@ -247,7 +247,7 @@ class TechniqueAPITestCase(APITestCase):
         self.assertEqual(created_technique.categories.count(), 1)
         self.assertEqual(created_technique.subcategories.count(), 1)
         self.assertEqual(created_technique.tags.count(), 2)
-        self.assertEqual(created_technique.attributes.count(), 1)
+        self.assertEqual(created_technique.attribute_values.count(), 1)
         self.assertEqual(created_technique.resources.count(), 2)
         self.assertEqual(created_technique.example_use_cases.count(), 1)
         self.assertEqual(created_technique.limitations.count(), 2)

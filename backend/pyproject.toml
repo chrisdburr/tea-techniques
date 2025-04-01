@@ -35,9 +35,37 @@ pytest-django = "^4.8.0"
 pytest-cov = "^4.1.0"
 factory-boy = "^3.3.0"
 faker = "^23.1.0"
+mypy = "^1.9.0"
+django-stubs = "^4.2.7"
+djangorestframework-stubs = "^3.14.5"
+types-requests = "^2.32.0.20240420"
+types-markdown = "^3.5.0.20240412"
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+disallow_untyped_decorators = false
+no_implicit_optional = true
+strict_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+
+[[tool.mypy.overrides]]
+module = "*.migrations.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "*.tests.*"
+ignore_errors = true
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "config.test_settings"
+DJANGO_SETTINGS_MODULE = "config.settings_sqlite"
 python_files = ["test_*.py", "*_test.py"]
 testpaths = ["api/tests"]
 filterwarnings = ["ignore::DeprecationWarning"]

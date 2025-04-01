@@ -9,7 +9,6 @@ from api.models import (
     AttributeType,
     AttributeValue,
     ResourceType,
-    TechniqueAttribute,
     TechniqueResource,
     TechniqueExampleUseCase,
     TechniqueLimitation,
@@ -84,6 +83,7 @@ class AttributeValueFactory(factory.django.DjangoModelFactory):
     name = factory.LazyFunction(lambda: fake.word().capitalize())
     description = factory.LazyFunction(lambda: fake.sentence())
     attribute_type = factory.SubFactory(AttributeTypeFactory)
+    technique = factory.SubFactory('api.tests.factories.TechniqueFactory')
 
 
 class ResourceTypeFactory(factory.django.DjangoModelFactory):
@@ -145,12 +145,16 @@ class TechniqueFactory(factory.django.DjangoModelFactory):
                 self.tags.add(tag)
 
 
-class TechniqueAttributeFactory(factory.django.DjangoModelFactory):
+# TechniqueAttribute has been replaced with AttributeValue
+# that directly links to Technique
+class AttributeValueFactoryWithTechnique(factory.django.DjangoModelFactory):
     class Meta:
-        model = TechniqueAttribute
+        model = AttributeValue
 
     technique = factory.SubFactory(TechniqueFactory)
-    attribute_value = factory.SubFactory(AttributeValueFactory)
+    attribute_type = factory.SubFactory(AttributeTypeFactory)
+    name = factory.LazyFunction(lambda: fake.word().capitalize())
+    description = factory.LazyFunction(lambda: fake.sentence())
 
 
 class TechniqueResourceFactory(factory.django.DjangoModelFactory):

@@ -353,35 +353,7 @@ function TechniqueLimitations({
 	return (
 		<div className="space-y-4">
 			{limitations.map((limitation) => {
-				// Try to parse the nested JSON in the description field
-				const parsedDescription = limitation.description;
-				try {
-					// Try to parse the string as JSON
-					const parsedData = JSON.parse(limitation.description);
-
-					// If it's an array with objects containing description fields, extract them
-					if (Array.isArray(parsedData) && parsedData.length > 0) {
-						return (
-							<div key={limitation.id} className="space-y-2">
-								{parsedData.map((item, index) => (
-									<div
-										key={index}
-										className="flex items-start gap-2 py-1"
-									>
-										<ArrowRight
-											className="h-4 w-4 text-primary mt-1 flex-shrink-0"
-											aria-hidden="true"
-										/>
-										<span>{item.description || item}</span>
-									</div>
-								))}
-							</div>
-						);
-					}
-				} catch {
-					// If parsing fails, use the original description
-				}
-
+				// No need to parse JSON anymore as the backend now handles it properly
 				return (
 					<div
 						key={limitation.id}
@@ -391,7 +363,7 @@ function TechniqueLimitations({
 							className="h-4 w-4 text-primary mt-1 flex-shrink-0"
 							aria-hidden="true"
 						/>
-						<span>{parsedDescription}</span>
+						<span>{limitation.description}</span>
 					</div>
 				);
 			})}

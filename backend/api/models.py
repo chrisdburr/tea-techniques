@@ -69,7 +69,8 @@ class Technique(models.Model):
     description = models.TextField()
     model_dependency = models.CharField(max_length=100)
     category_tags = models.CharField(
-        max_length=500, blank=True, help_text="Format: #category/subcategory"
+        max_length=500, blank=True, 
+        help_text="Format: #category/subcategory (DEPRECATED: Use categories/subcategories relationships instead)"
     )
     complexity_rating = models.PositiveSmallIntegerField(null=True, blank=True)
     computational_cost_rating = models.PositiveSmallIntegerField(null=True, blank=True)

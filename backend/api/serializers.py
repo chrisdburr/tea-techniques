@@ -1,7 +1,11 @@
 # api/serializers.py
 
+from __future__ import annotations
+
 from rest_framework import serializers
 import logging
+from typing import Any, Dict, List, Optional, Union, cast
+
 from .models import (
     AssuranceGoal,
     Category,
@@ -100,7 +104,7 @@ class TechniqueExampleUseCaseSerializer(serializers.ModelSerializer):
         model = TechniqueExampleUseCase
         fields = ["id", "description", "assurance_goal", "assurance_goal_name"]
 
-    def get_assurance_goal_name(self, obj):
+    def get_assurance_goal_name(self, obj: TechniqueExampleUseCase) -> Optional[str]:
         if obj.assurance_goal:
             return obj.assurance_goal.name
         return None
@@ -128,11 +132,11 @@ class TechniqueSerializer(serializers.ModelSerializer):
     # Add a dummy field for applicable_models if it doesn't exist in the database
     applicable_models = serializers.SerializerMethodField()
     
-    def get_applicable_models(self, obj):
+    def get_applicable_models(self, obj: Technique) -> List[str]:
         # Try to access the field, return empty list if it doesn't exist
         try:
             if hasattr(obj, 'applicable_models') and obj.applicable_models is not None:
-                return obj.applicable_models
+                return cast(List[str], obj.applicable_models)
             return []
         except Exception as e:
             logger.warning(f"Error accessing applicable_models: {str(e)}")

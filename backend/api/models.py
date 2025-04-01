@@ -1,15 +1,19 @@
+from __future__ import annotations
+
 from django.db import models
+from django.db.models.query import QuerySet
+from typing import Dict, List, Optional, Any, Union, cast
 
 
 class AssuranceGoal(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    description = models.TextField()
+    name: models.CharField = models.CharField(max_length=255, unique=True)
+    description: models.TextField = models.TextField()
 
     class Meta:
         db_table = "assurance_goal"
         verbose_name_plural = "Assurance Goals"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -23,7 +27,7 @@ class Category(models.Model):
         verbose_name_plural = "Categories"
         unique_together = ("name", "assurance_goal")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name} ({self.assurance_goal.name})"
 
 
@@ -39,7 +43,7 @@ class SubCategory(models.Model):
         verbose_name_plural = "Subcategories"
         unique_together = ("name", "category")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name} ({self.category.name})"
 
 
@@ -49,7 +53,7 @@ class Tag(models.Model):
     class Meta:
         db_table = "tag"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -60,7 +64,7 @@ class ResourceType(models.Model):
     class Meta:
         db_table = "resource_type"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -89,7 +93,7 @@ class Technique(models.Model):
     class Meta:
         db_table = "technique"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -100,7 +104,7 @@ class AttributeType(models.Model):
     class Meta:
         db_table = "attribute_type"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -119,7 +123,7 @@ class AttributeValue(models.Model):
         db_table = "attribute_value"
         unique_together = ("attribute_type", "name", "technique")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.attribute_type.name}: {self.name}"
 
 
@@ -139,7 +143,7 @@ class TechniqueResource(models.Model):
         db_table = "technique_resource"
         unique_together = ("technique", "url")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.resource_type.name}: {self.title}"
 
 
@@ -155,7 +159,7 @@ class TechniqueExampleUseCase(models.Model):
     class Meta:
         db_table = "technique_example_use_case"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Use case for {self.technique.name}"
 
 
@@ -168,5 +172,5 @@ class TechniqueLimitation(models.Model):
     class Meta:
         db_table = "technique_limitation"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Limitation for {self.technique.name}"

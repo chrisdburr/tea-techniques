@@ -1,11 +1,15 @@
 # backend/api/management/commands/import_techniques.py
+from __future__ import annotations
+
 import json
 import os
 from pathlib import Path
 import logging
+from typing import Any, Dict, List, Optional, Union, Tuple, cast
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.conf import settings
+from argparse import ArgumentParser
 
 from api.models import (
     AssuranceGoal,
@@ -28,7 +32,7 @@ logger = logging.getLogger(__name__)
 class Command(BaseCommand):
     help = "Import techniques from JSON file"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: ArgumentParser) -> None:
         parser.add_argument("--file", type=str, help="Path to the JSON file")
         parser.add_argument(
             "--force", 
@@ -37,18 +41,20 @@ class Command(BaseCommand):
             help="Force import even if errors occur",
         )
 
-    def handle(self, *args, **options):
-        file_path = options.get("file")
+    def handle(self, *args: Any, **options: Dict[str, Any]) -> None:
+        file_path_option = options.get("file")
         force = options.get("force", False)
 
         # Get the file path
-        if not file_path:
+        if not file_path_option:
             BASE_DIR = Path(settings.BASE_DIR)
             file_path = os.path.join(
                 BASE_DIR,
                 "data",
                 "techniques.json",
             )
+        else:
+            file_path = str(file_path_option)
 
         if not os.path.exists(file_path):
             self.stdout.write(self.style.ERROR(f"File not found: {file_path}"))
@@ -77,7 +83,7 @@ class Command(BaseCommand):
         except Exception as e:
             self.stdout.write(self.style.ERROR(f"Error processing JSON file: {str(e)}"))
 
-    def _create_base_records(self):
+    def _create_base_records(self) -> None:
         """Create necessary base records (goals, attributes, etc.)"""
         # Create assurance goals if they don't exist
         goal_names = [
@@ -132,12 +138,12 @@ class Command(BaseCommand):
                 defaults={"icon": resource_type.lower().replace(" ", "_")},
             )
 
-    def _parse_category_tags(self, category_tags):
+    def _parse_category_tags(self, category_tags: str) -> List[Dict[str, Optional[str]]]:
         """Parse category tags from #category/subcategory format."""
         if not category_tags:
             return []
 
-        results = []
+        results: List[Dict[str, Optional[str]]] = []
         tags = category_tags.split("#")
 
         for tag in tags:
@@ -158,7 +164,7 @@ class Command(BaseCommand):
 
         return results
 
-    def _process_technique(self, data):
+    def _process_technique(self, data: Dict[str, Any]) -> None:
         """Process a single technique from JSON data"""
         try:
             # Extract basic data

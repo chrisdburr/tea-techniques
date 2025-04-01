@@ -8,7 +8,6 @@ from api.models import (
     AttributeType,
     AttributeValue,
     ResourceType,
-    TechniqueAttribute,
     TechniqueResource,
     TechniqueExampleUseCase,
     TechniqueLimitation,
@@ -21,8 +20,8 @@ from api.tests.factories import (
     TagFactory,
     AttributeTypeFactory,
     AttributeValueFactory,
+    AttributeValueFactoryWithTechnique,
     ResourceTypeFactory,
-    TechniqueAttributeFactory,
     TechniqueResourceFactory,
     TechniqueExampleUseCaseFactory,
     TechniqueLimitationFactory,
@@ -72,11 +71,16 @@ class ModelTestCase(TestCase):
     def test_attribute_value_creation(self):
         """Test that an AttributeValue can be created"""
         attr_type = AttributeTypeFactory(name="Test Type")
+        technique = TechniqueFactory()
         attr_value = AttributeValueFactory(
-            name="Test Value", description="Test description", attribute_type=attr_type
+            name="Test Value", 
+            description="Test description", 
+            attribute_type=attr_type,
+            technique=technique
         )
         self.assertEqual(attr_value.name, "Test Value")
         self.assertEqual(attr_value.attribute_type, attr_type)
+        self.assertEqual(attr_value.technique, technique)
         self.assertEqual(str(attr_value), "Test Type: Test Value")
 
     def test_resource_type_creation(self):
@@ -129,16 +133,18 @@ class ModelTestCase(TestCase):
         """Test that a Technique can have attributes"""
         technique = TechniqueFactory()
         attr_type = AttributeTypeFactory(name="Scope")
-        attr_value = AttributeValueFactory(name="Global", attribute_type=attr_type)
-
-        tech_attr = TechniqueAttributeFactory(
-            technique=technique, attribute_value=attr_value
+        
+        # Now AttributeValue links directly to Technique
+        attr_value = AttributeValueFactoryWithTechnique(
+            technique=technique, 
+            attribute_type=attr_type,
+            name="Global"
         )
 
-        self.assertEqual(tech_attr.technique, technique)
-        self.assertEqual(tech_attr.attribute_value, attr_value)
-        self.assertIn(technique.name, str(tech_attr))
-        self.assertIn(attr_value.name, str(tech_attr))
+        self.assertEqual(attr_value.technique, technique)
+        self.assertEqual(attr_value.attribute_type, attr_type)
+        self.assertEqual(attr_value.name, "Global")
+        self.assertEqual(str(attr_value), "Scope: Global")
 
     def test_technique_resource_relationship(self):
         """Test that a Technique can have resources"""

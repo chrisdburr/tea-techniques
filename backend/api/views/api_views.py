@@ -1,8 +1,12 @@
 # api/views/api_views.py
 
+from __future__ import annotations
+
 from rest_framework import viewsets, filters, status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.request import Request
+from rest_framework.permissions import BasePermission, IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from django.http import JsonResponse
 from django.core import serializers
@@ -11,6 +15,7 @@ from django.middleware.common import CommonMiddleware
 from django.db import connection
 import json
 import logging
+from typing import Any, Dict, List, Optional, Type, Union, cast
 
 from ..models import (
     AssuranceGoal,
@@ -121,32 +126,30 @@ class TechniquesViewSet(viewsets.ModelViewSet):
     search_fields = ["name", "description"]
     ordering_fields = ["id", "name"]
     
-    def get_permissions(self):
+    def get_permissions(self) -> List[BasePermission]:
         """
         Customize permissions based on action:
         - list and retrieve are allowed for any user (even unauthenticated)
         - create, update, delete require authentication
         """
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            from rest_framework.permissions import IsAuthenticated
             return [IsAuthenticated()]
         # Default permission for list and retrieve
-        from rest_framework.permissions import AllowAny
         return [AllowAny()]
 
-    def get_serializer_class(self):
+    def get_serializer_class(self) -> Type[TechniqueSerializer]:
         """Return appropriate serializer class based on action."""
         return TechniqueSerializer
         
-    def list(self, request, *args, **kwargs):
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """Standard list method for techniques"""
         return super().list(request, *args, **kwargs)
                 
-    def retrieve(self, request, *args, **kwargs):
+    def retrieve(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """Standard retrieve method for techniques"""
         return super().retrieve(request, *args, **kwargs)
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """Create a new technique with improved error handling."""
         try:
             serializer = self.get_serializer(data=request.data)
@@ -161,7 +164,7 @@ class TechniquesViewSet(viewsets.ModelViewSet):
             logger.error(f"Error creating technique: {str(e)}")
             raise
 
-    def update(self, request, *args, **kwargs):
+    def update(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """Update a technique with improved error handling."""
         try:
             instance = self.get_object()
@@ -220,14 +223,14 @@ class ResourceTypesViewSet(viewsets.ModelViewSet):
 
 
 @api_view(["GET"])
-def get_categorylist(request, assurance_goal_id):
+def get_categorylist(request: Request, assurance_goal_id: int) -> Response:
     categories = Category.objects.filter(assurance_goal_id=assurance_goal_id)
     serializer = CategorySerializer(categories, many=True)
     return Response(serializer.data)
 
 
 @api_view(["GET"])
-def get_subcategorylist(request, category_id):
+def get_subcategorylist(request: Request, category_id: int) -> Response:
     subcategories = SubCategory.objects.filter(category_id=category_id)
     serializer = SubCategorySerializer(subcategories, many=True)
     return Response(serializer.data)
@@ -235,7 +238,7 @@ def get_subcategorylist(request, category_id):
 
 @api_view(["GET", "POST"])
 @csrf_exempt
-def debug_endpoint(request):
+def debug_endpoint(request: Request) -> Response:
     """
     Debugging endpoint to check what the API is receiving and can return.
     GET: Returns the available models and their structure
@@ -307,3 +310,6 @@ def debug_endpoint(request):
                 "headers": {k: v for k, v in request.headers.items() if k.lower() not in ('cookie', 'authorization')},
             }
         )
+        
+    # Default fallback response - should never reach here due to DRF's api_view decorator
+    return Response({"error": "Unsupported HTTP method"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)

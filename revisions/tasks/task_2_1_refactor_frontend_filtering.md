@@ -19,3 +19,34 @@
     -   Next, run code quality tools.
     -   To finalise this task, add a summary of the change to this file. And, then update the status of the todo list in `plan.md`.
     -   Then, commit changes to the relevant feature branch.
+
+## Task Summary
+
+The frontend filtering and navigation refactoring has been completed successfully. Here's a summary of the changes:
+
+1. **Replaced `window.location.href` with Next.js Router**:
+   - Updated `useFilterParams.ts` to use `router.push()` instead of direct window navigation
+   - Implemented proper router usage in all navigation methods (applyFilters, resetFilters, changePage)
+   - Added useCallback for better performance in navigation functions
+
+2. **Improved `usePagination`**:
+   - Removed the errorPages workaround which was a temporary solution
+   - Implemented proper error handling and page validation
+   - Used router.push with pathname for consistent navigation
+
+3. **Enhanced React Query Integration**:
+   - Updated the queryKey in useTechniques to capture all filter parameters
+   - Included comprehensive parameter monitoring for all filter types
+   - Improved staleTime settings to better control refetching behavior
+
+4. **Optimized State Management**:
+   - Added useEffect to listen for URL parameter changes in TechniquesList
+   - Implemented useCallback for filter initialization to prevent unnecessary recreation
+   - Used React.useTransition for smoother UI during navigation operations
+
+5. **Code Cleanup**:
+   - Fixed ESLint warnings about unused variables
+   - Removed unnecessary comments and disabled ESLint directives
+   - Improved code organization and readability
+
+These changes significantly improve the user experience by eliminating full page reloads during filtering and pagination operations. The application now uses client-side navigation properly, making interactions much faster and smoother for users. React Query integration has been improved to ensure proper data fetching based on URL parameters.

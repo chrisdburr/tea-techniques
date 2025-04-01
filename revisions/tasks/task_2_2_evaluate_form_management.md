@@ -24,3 +24,35 @@
     -   Next, run code quality tools.
     -   To finalise this task, add a summary of the change to this file. And, then update the status of the todo list in `plan.md`.
     -   Then, commit changes to the relevant feature branch.
+
+## Task Summary
+
+The form management in the TEA Techniques application has been successfully refactored to replace the custom `useForm` hook with the industry-standard `react-hook-form` library. This refactoring included:
+
+1. **Library Adoption**:
+   - Added `react-hook-form` (v7.55.0) for form state management and validation
+   - Added `zod` (v3.24.2) for schema validation
+   - Added `@hookform/resolvers` (v4.1.3) to integrate Zod with react-hook-form
+
+2. **Form Validation Improvements**:
+   - Replaced custom validation functions with a comprehensive Zod schema
+   - Validation now runs on blur and on submit, providing better user feedback
+   - Error messages are properly typed and consistent throughout the form
+
+3. **Component Refactoring**:
+   - Replaced manual form state management with react-hook-form's `useForm` hook
+   - Used `Controller` components for controlled inputs
+   - Implemented field watching for dependent field relationships
+   - Simplified form submission logic
+
+4. **Testing**:
+   - Added unit tests for the TechniqueForm component to verify functionality
+
+5. **Benefits of the Refactoring**:
+   - Reduced code complexity and improved maintainability
+   - Better type safety throughout the form handling process
+   - Improved validation with clear error messages
+   - Follows industry best practices for React form management
+   - Easier to extend with additional validation rules
+
+The refactoring maintains all the existing functionality while providing a more robust foundation for future form enhancements.

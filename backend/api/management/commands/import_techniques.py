@@ -166,7 +166,9 @@ class Command(BaseCommand):
             description = data.get("description", "")
             model_dependency = data.get("model_dependency", "Model-Agnostic")
             assurance_goals_list = data.get("assurance_goals", [])
-            category_tags = data.get("category_tags", "")
+            category_tags = data.get("category_tags", "")  # Keep for backward compatibility
+            categories_data = data.get("categories", [])  # New direct categories list
+            subcategories_data = data.get("subcategories", [])  # New direct subcategories list
             complexity_rating = data.get("complexity_rating")
             computational_cost_rating = data.get("computational_cost_rating")
             applicable_models = data.get("applicable_models", [])
@@ -190,7 +192,7 @@ class Command(BaseCommand):
             defaults = {
                 "description": description,
                 "model_dependency": model_dependency,
-                "category_tags": category_tags,
+                "category_tags": category_tags,  # Keep for backward compatibility
                 "complexity_rating": complexity_rating,
                 "computational_cost_rating": computational_cost_rating,
             }
@@ -228,8 +230,84 @@ class Command(BaseCommand):
                 )
                 technique.assurance_goals.add(goal)
 
-            # Process category_tags
-            if category_tags:
+            # First try to process direct categories and subcategories data
+            has_direct_categories = False
+            
+            # Process direct categories data if available
+            if categories_data:
+                has_direct_categories = True
+                for cat_data in categories_data:
+                    if isinstance(cat_data, dict):
+                        cat_name = cat_data.get("name")
+                        cat_goal_name = cat_data.get("assurance_goal")
+                    else:
+                        cat_name = cat_data
+                        cat_goal_name = assurance_goals_list[0] if assurance_goals_list else "Explainability"
+                    
+                    if not cat_name:
+                        continue
+                        
+                    # Get or create the assurance goal
+                    goal, _ = AssuranceGoal.objects.get_or_create(
+                        name=cat_goal_name,
+                        defaults={
+                            "description": f"{cat_goal_name} techniques for trustworthy AI"
+                        },
+                    )
+                    
+                    # Get or create category
+                    category, _ = Category.objects.get_or_create(
+                        name=cat_name,
+                        assurance_goal=goal,
+                        defaults={"description": f"Category for {cat_name}"},
+                    )
+                    
+                    # Add category to technique
+                    technique.categories.add(category)
+            
+            # Process direct subcategories data if available
+            if subcategories_data:
+                has_direct_categories = True
+                for subcat_data in subcategories_data:
+                    if isinstance(subcat_data, dict):
+                        subcat_name = subcat_data.get("name")
+                        cat_name = subcat_data.get("category")
+                        cat_goal_name = subcat_data.get("assurance_goal", 
+                                                        assurance_goals_list[0] if assurance_goals_list else "Explainability")
+                    else:
+                        # If it's not a dict with detailed info, skip it
+                        continue
+                    
+                    if not subcat_name or not cat_name:
+                        continue
+                    
+                    # Get or create the assurance goal
+                    goal, _ = AssuranceGoal.objects.get_or_create(
+                        name=cat_goal_name,
+                        defaults={
+                            "description": f"{cat_goal_name} techniques for trustworthy AI"
+                        },
+                    )
+                    
+                    # Get or create category
+                    category, _ = Category.objects.get_or_create(
+                        name=cat_name,
+                        assurance_goal=goal,
+                        defaults={"description": f"Category for {cat_name}"},
+                    )
+                    
+                    # Get or create subcategory
+                    subcategory, _ = SubCategory.objects.get_or_create(
+                        name=subcat_name,
+                        category=category,
+                        defaults={"description": f"Subcategory for {subcat_name}"},
+                    )
+                    
+                    # Add subcategory to technique
+                    technique.subcategories.add(subcategory)
+            
+            # Fallback to category_tags only if direct categories are not available
+            if not has_direct_categories and category_tags:
                 parsed_categories = self._parse_category_tags(category_tags)
 
                 for cat_data in parsed_categories:
@@ -326,12 +404,53 @@ class Command(BaseCommand):
                         self.style.WARNING(f"Error creating use case for {name}: {e}")
                     )
 
-            # Process limitations
+            # Process limitations - handle both string and object formats
             for limitation in limitations_data:
-                if limitation.strip():
-                    TechniqueLimitation.objects.create(
-                        technique=technique, description=limitation.strip()
-                    )
+                # Check if the limitation is already a dict/object with description field
+                if isinstance(limitation, dict) and "description" in limitation:
+                    description = limitation["description"].strip()
+                    if description:
+                        TechniqueLimitation.objects.create(
+                            technique=technique, description=description
+                        )
+                # Check if it's a string that might be a JSON string
+                elif isinstance(limitation, str):
+                    # If it looks like a JSON array or object, try to parse it
+                    if limitation.strip().startswith(('[', '{')):
+                        try:
+                            parsed_limitation = json.loads(limitation)
+                            
+                            # Handle case where the parsed result is an array of limitation objects
+                            if isinstance(parsed_limitation, list):
+                                for item in parsed_limitation:
+                                    if isinstance(item, dict) and "description" in item:
+                                        desc = item["description"].strip()
+                                        if desc:
+                                            TechniqueLimitation.objects.create(
+                                                technique=technique, description=desc
+                                            )
+                                    elif isinstance(item, str) and item.strip():
+                                        TechniqueLimitation.objects.create(
+                                            technique=technique, description=item.strip()
+                                        )
+                            # Handle case where the parsed result is a single limitation object
+                            elif isinstance(parsed_limitation, dict) and "description" in parsed_limitation:
+                                desc = parsed_limitation["description"].strip()
+                                if desc:
+                                    TechniqueLimitation.objects.create(
+                                        technique=technique, description=desc
+                                    )
+                        except json.JSONDecodeError:
+                            # If parsing fails, treat it as a plain string
+                            if limitation.strip():
+                                TechniqueLimitation.objects.create(
+                                    technique=technique, description=limitation.strip()
+                                )
+                    # Handle plain strings
+                    elif limitation.strip():
+                        TechniqueLimitation.objects.create(
+                            technique=technique, description=limitation.strip()
+                        )
 
             # Process resources
             for resource_data in resources_data:

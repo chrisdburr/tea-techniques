@@ -18,11 +18,11 @@ The plan is structured in six stages, starting with critical stabilization of th
 
 ## Stage 2: Frontend Refactoring & UX Improvements
 
-- [ ] **Task 2.1: Refactor Frontend Filtering & Navigation** *(Medium Priority)*
+- [x] **Task 2.1: Refactor Frontend Filtering & Navigation** *(Medium Priority)*
   - [View detailed plan](tasks/task_2_1_refactor_frontend_filtering.md)
   - Branch: `refactor/frontend-filtering-navigation`
 
-- [ ] **Task 2.2: Evaluate and Refactor Form Management** *(Medium Priority)*
+- [x] **Task 2.2: Evaluate and Refactor Form Management** *(Medium Priority)*
   - [View detailed plan](tasks/task_2_2_evaluate_form_management.md)
   - Branch: `refactor/frontend-form-hook`
 

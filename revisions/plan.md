@@ -28,7 +28,7 @@ The plan is structured in six stages, starting with critical stabilization of th
 
 ## Stage 3: Backend Refactoring & Data Quality
 
-- [ ] **Task 3.1: Refactor Data Import and `category_tags`** *(Medium Priority)*
+- [x] **Task 3.1: Refactor Data Import and `category_tags`** *(Medium Priority)*
   - [View detailed plan](tasks/task_3_1_refactor_data_import.md)
   - Branch: `refactor/data-import-structure`
 

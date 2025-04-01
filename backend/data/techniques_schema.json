@@ -76,7 +76,23 @@
 			"limitations": {
 				"type": "array",
 				"items": {
-					"type": "string"
+					"oneOf": [
+						{
+							"type": "string",
+							"description": "Simple limitation description (legacy format)"
+						},
+						{
+							"type": "object",
+							"properties": {
+								"description": {
+									"type": "string",
+									"description": "Description of the limitation"
+								}
+							},
+							"required": ["description"],
+							"description": "Structured limitation object (preferred format)"
+						}
+					]
 				},
 				"description": "Limitations and drawbacks of the technique"
 			},
@@ -143,7 +159,47 @@
 			},
 			"category_tags": {
 				"type": "string",
-				"description": "Hashtag-formatted categorization of the technique"
+				"description": "DEPRECATED: Hashtag-formatted categorization. Use categories and subcategories fields instead."
+			},
+			"categories": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"name": {
+							"type": "string",
+							"description": "Name of the category"
+						},
+						"assurance_goal": {
+							"type": "string",
+							"description": "The assurance goal this category belongs to"
+						}
+					},
+					"required": ["name"]
+				},
+				"description": "List of categories this technique belongs to"
+			},
+			"subcategories": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"name": {
+							"type": "string",
+							"description": "Name of the subcategory"
+						},
+						"category": {
+							"type": "string", 
+							"description": "The parent category for this subcategory"
+						},
+						"assurance_goal": {
+							"type": "string",
+							"description": "The assurance goal this subcategory belongs to"
+						}
+					},
+					"required": ["name", "category"]
+				},
+				"description": "List of subcategories this technique belongs to"
 			}
 		},
 		"required": ["name", "description", "model_dependency"]

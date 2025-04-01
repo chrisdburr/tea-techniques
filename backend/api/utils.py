@@ -1,14 +1,18 @@
 # backend/api/utils.py
 
+from __future__ import annotations
+
 from rest_framework.views import exception_handler
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.exceptions import APIException
 import logging
+from typing import Any, Dict, List, Optional, Union, cast
 
 logger = logging.getLogger(__name__)
 
 
-def custom_exception_handler(exc, context):
+def custom_exception_handler(exc: Exception, context: Dict[str, Any]) -> Optional[Response]:
     """
     Custom exception handler for REST framework that improves error responses.
     """

@@ -32,7 +32,7 @@ The plan is structured in six stages, starting with critical stabilization of th
   - [View detailed plan](tasks/task_3_1_refactor_data_import.md)
   - Branch: `refactor/data-import-structure`
 
-- [ ] **Task 3.2: Add Backend Type Hinting** *(Medium Priority)*
+- [x] **Task 3.2: Add Backend Type Hinting** *(Medium Priority)*
   - [View detailed plan](tasks/task_3_2_add_backend_type_hints.md)
   - Branch: `refactor/backend-type-hints`
 

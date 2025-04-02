@@ -23,7 +23,13 @@ interface QueryParams {
 	[key: string]: string | string[] | undefined;
 }
 
-// Basic calculation of total pages based on item count
+/**
+ * Calculate the total number of pages based on item count and page size
+ * 
+ * @param totalItems - The total number of items across all pages
+ * @param pageSize - The number of items per page (defaults to 20)
+ * @returns The total number of pages (minimum 1)
+ */
 const calculateTotalPages = (
 	totalItems: number,
 	pageSize: number = 20
@@ -31,7 +37,17 @@ const calculateTotalPages = (
 	return totalItems > 0 ? Math.ceil(totalItems / pageSize) : 1;
 };
 
-// Helper function to try API calls with and without trailing slash
+/**
+ * Helper function to try API calls with and without trailing slash
+ * 
+ * This function attempts to fetch data from an API endpoint, trying both with
+ * and without a trailing slash to handle potential server configuration differences.
+ * 
+ * @param url - The base URL to fetch from
+ * @param params - Optional query parameters
+ * @returns Promise resolving to the requested data
+ * @throws Error if both attempts fail
+ */
 const fetchAPI = async <T>(
     url: string,
     params?: Record<string, string | number | string[]>
@@ -59,6 +75,12 @@ const fetchAPI = async <T>(
 };
 
 // Base data fetching hooks
+
+/**
+ * Hook for fetching assurance goals
+ * 
+ * @returns Query object with assurance goals data
+ */
 export const useAssuranceGoals = () => {
 	return useQuery({
 		queryKey: ["assurance-goals"],
@@ -76,6 +98,12 @@ export const useAssuranceGoals = () => {
 	});
 };
 
+/**
+ * Hook for fetching categories, optionally filtered by assurance goal
+ * 
+ * @param assuranceGoalId - Optional ID to filter categories by assurance goal
+ * @returns Query object with categories data
+ */
 export const useCategories = (assuranceGoalId?: number) => {
 	// Create params object for axios
 	const params: Record<string, string | number> = {};
@@ -98,6 +126,12 @@ export const useCategories = (assuranceGoalId?: number) => {
 	});
 };
 
+/**
+ * Hook for fetching subcategories for a specific category
+ * 
+ * @param categoryId - Optional ID to filter subcategories by category
+ * @returns Query object with subcategories data
+ */
 export const useSubCategories = (categoryId?: number) => {
 	// Create params object for axios
 	const params: Record<string, string | number> = {};
@@ -121,6 +155,11 @@ export const useSubCategories = (categoryId?: number) => {
 	});
 };
 
+/**
+ * Hook for fetching all tags
+ * 
+ * @returns Query object with tags data
+ */
 export const useTags = () => {
 	return useQuery({
 		queryKey: ["tags"],
@@ -194,6 +233,13 @@ export const useResourceTypes = () => {
 	});
 };
 
+/**
+ * Hook for fetching techniques with filtering, searching, and pagination
+ * 
+ * @param params - Query parameters for filtering and searching techniques
+ * @param page - Page number for pagination (defaults to 1)
+ * @returns Query object with techniques data
+ */
 export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 	// Filter parameters
 	const apiParams: Record<string, string | number | string[]> = { page };

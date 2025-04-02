@@ -1,7 +1,13 @@
 // TechniquesList.tsx with pagination fix
 "use client";
 
-import React, { useState, useEffect, useMemo, useTransition } from "react";
+import React, {
+	useState,
+	useEffect,
+	useMemo,
+	useTransition,
+	useCallback,
+} from "react";
 import Link from "next/link";
 import {
 	useAssuranceGoals,

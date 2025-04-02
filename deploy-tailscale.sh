@@ -3,6 +3,19 @@
 
 set -e  # Exit on any error
 
+# Check if .env.tailscale exists, if not, copy from example
+if [ ! -f .env.tailscale ]; then
+  if [ -f .env.tailscale.example ]; then
+    echo "No .env.tailscale found, creating from example..."
+    cp .env.tailscale.example .env.tailscale
+    echo "Please edit .env.tailscale with your tailscale domain and other settings."
+    exit 1
+  else
+    echo "Error: .env.tailscale not found and no example file available."
+    exit 1
+  fi
+fi
+
 # Load environment variables from .env.tailscale
 set -a
 source .env.tailscale
@@ -19,25 +32,12 @@ docker-compose down
 echo "Removing volumes for a clean start..."
 docker volume rm $(docker volume ls -q | grep tea-techniques) || true
 
-# Make sure frontend uses relative URLs
-echo "Setting up frontend with relative URLs..."
-export NEXT_PUBLIC_API_URL="/api"
-export NEXT_PUBLIC_SWAGGER_URL="/swagger/"
+# Create the nginx directory if it doesn't exist
+mkdir -p nginx
 
-# Pass CORS settings to backend
-echo "Setting up backend CORS and hosts..."
-export ALLOWED_HOSTS="*,localhost,127.0.0.1,${TAILSCALE_DOMAIN},backend"
-export CORS_ALLOWED_ORIGINS="http://localhost:3000,http://frontend:3000,https://${TAILSCALE_DOMAIN},http://${TAILSCALE_DOMAIN}"
-export CSRF_TRUSTED_ORIGINS="https://${TAILSCALE_DOMAIN},http://${TAILSCALE_DOMAIN},http://localhost:8000"
-export DEBUG="True"  # Temporarily enable DEBUG for better error messages
-echo "Added CORS, CSRF, and hosts settings for ${TAILSCALE_DOMAIN}"
-
-# Rebuild the containers
-echo "Building containers..."
-docker-compose build \
-  --build-arg NEXT_PUBLIC_API_URL="/api" \
-  --build-arg NEXT_PUBLIC_SWAGGER_URL="/swagger/" \
-  frontend
+# Generate the nginx configuration file from template
+echo "Generating Nginx configuration..."
+envsubst < nginx/tea-techniques.conf.template > nginx/tea-techniques.conf
 
 # Start the containers with environment variables passed through
 echo "Starting containers..."
@@ -45,7 +45,7 @@ docker-compose up -d
 
 # Wait for services to be ready
 echo "Waiting for services to start..."
-sleep 5
+sleep 10
 
 # Check if containers are running
 echo "Checking container status..."
@@ -60,22 +60,8 @@ docker-compose exec -T backend python manage.py tailscale_setup
 echo "Verifying database initialization..."
 docker-compose exec -T backend python manage.py shell -c "from api.models import Technique; print(f'Number of techniques: {Technique.objects.count()}')"
 
-# Update Nginx configuration
-if [ "$EUID" -eq 0 ]; then  # Only run if we're root
-  echo "Updating Nginx configuration..."
-  cp tea-techniques.conf /etc/nginx/conf.d/tea-techniques.conf
-  
-  # Test Nginx configuration before restarting
-  nginx -t
-  if [ $? -eq 0 ]; then
-    echo "Nginx configuration is valid, restarting Nginx..."
-    systemctl restart nginx
-  else
-    echo "ERROR: Nginx configuration is invalid. Please check the configuration."
-    exit 1
-  fi
-  
-  # Set up Tailscale funnel
+# Set up Tailscale funnel if running as root and funnel is available
+if [ "$EUID" -eq 0 ] && command -v tailscale &> /dev/null; then
   echo "Setting up Tailscale funnel in background mode..."
   tailscale funnel reset
   sleep 2
@@ -83,14 +69,23 @@ if [ "$EUID" -eq 0 ]; then  # Only run if we're root
   echo "Funnel status:"
   tailscale funnel status
 else
-  echo "WARNING: Not running as root. Skipping Nginx update and Tailscale funnel setup."
-  echo "Please run 'sudo ./update-nginx.sh' to update Nginx configuration."
+  echo "WARNING: Not running as root or Tailscale command not found. Skipping Tailscale funnel setup."
+  echo "To set up Tailscale funnel manually, run the following as root:"
+  echo "  tailscale funnel reset"
+  echo "  tailscale funnel --bg 80"
 fi
 
 echo ""
 echo "Deployment complete!"
 echo "========================================"
-echo "Your app should be accessible at: https://${TAILSCALE_DOMAIN}"
+
+if [ -n "$TAILSCALE_DOMAIN" ]; then
+  echo "Your app should be accessible at: https://${TAILSCALE_DOMAIN}"
+else
+  echo "Your app is running, but TAILSCALE_DOMAIN is not set in your .env.tailscale file."
+  echo "Please update your .env.tailscale file with your domain."
+fi
+
 echo ""
 echo "Frontend container logs (press Ctrl+C to exit):"
 docker-compose logs --tail=20 -f frontend

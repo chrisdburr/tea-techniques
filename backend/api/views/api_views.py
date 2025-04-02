@@ -150,37 +150,25 @@ class TechniquesViewSet(viewsets.ModelViewSet):
         return super().retrieve(request, *args, **kwargs)
 
     def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
-        """Create a new technique with improved error handling."""
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            instance = serializer.save()
+        """Create a new technique."""
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        instance = serializer.save()
 
-            # Return the created instance using the read serializer
-            read_serializer = TechniqueSerializer(instance)
-            return Response(read_serializer.data, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            # Log the error for debugging
-            logger.error(f"Error creating technique: {str(e)}")
-            raise
+        # Return the created instance
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def update(self, request: Request, *args: Any, **kwargs: Any) -> Response:
-        """Update a technique with improved error handling."""
-        try:
-            instance = self.get_object()
-            serializer = self.get_serializer(
-                instance, data=request.data, partial=kwargs.get("partial", False)
-            )
-            serializer.is_valid(raise_exception=True)
-            updated_instance = serializer.save()
+        """Update a technique."""
+        instance = self.get_object()
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=kwargs.get("partial", False)
+        )
+        serializer.is_valid(raise_exception=True)
+        updated_instance = serializer.save()
 
-            # Return the updated instance using the read serializer
-            read_serializer = TechniqueSerializer(updated_instance)
-            return Response(read_serializer.data)
-        except Exception as e:
-            # Log the error for debugging
-            logger.error(f"Error updating technique: {str(e)}")
-            raise
+        # Return the updated instance
+        return Response(serializer.data)
 
 
 class AttributeTypesViewSet(viewsets.ModelViewSet):

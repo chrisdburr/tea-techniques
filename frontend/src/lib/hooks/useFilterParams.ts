@@ -113,7 +113,16 @@ export function useFilterParams(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
-  // Set a single filter value, preventing unnecessary updates
+  /**
+   * Set a single filter value, preventing unnecessary updates
+   * 
+   * This function updates a single filter value in the state. It includes
+   * an optimization to prevent unnecessary re-renders by returning the same
+   * state reference if the value hasn't actually changed.
+   * 
+   * @param key - The filter key to update
+   * @param value - The new value for the filter
+   */
   const setFilter = (key: string, value: string) => {
     // Only update if the value actually changed to prevent unnecessary renders
     setFilters(prev => {
@@ -127,7 +136,16 @@ export function useFilterParams(
     });
   };
 
-  // Create URL search params from current filter state
+  /**
+   * Create URL search parameters from the current filter state
+   * 
+   * This converts the component's filter state into URL search parameters,
+   * handling the conversion from singular field names (used in the component)
+   * to plural field names (expected by the backend API).
+   * 
+   * @param resetPageParam - Whether to reset the page parameter to 1 (default: true)
+   * @returns URLSearchParams object with the filter parameters
+   */
   const createSearchParams = useCallback((resetPageParam = true) => {
     const params = new URLSearchParams();
     
@@ -154,7 +172,14 @@ export function useFilterParams(
     return params;
   }, [filters]);
 
-  // Apply filters to URL and navigate
+  /**
+   * Apply filters to the URL and navigate to the filtered view
+   * 
+   * This converts the current filter state to URL parameters and
+   * navigates to the updated URL, triggering a filtered view of the data.
+   * 
+   * @param resetPage - Whether to reset the page to 1 (default: true)
+   */
   const applyFilters = useCallback((resetPage = true) => {
     const params = createSearchParams(resetPage);
     
@@ -166,7 +191,12 @@ export function useFilterParams(
     }
   }, [createSearchParams, router, pathname]);
 
-  // Reset all filters to initial values
+  /**
+   * Reset all filters to their initial values
+   * 
+   * This resets the filter state to the initial values provided when the hook was
+   * initialized, and navigates to the URL with only the page parameter set to 1.
+   */
   const resetFilters = useCallback(() => {
     // Update local state
     setFilters({ 
@@ -182,7 +212,15 @@ export function useFilterParams(
     }
   }, [initialFilters, router, pathname]);
 
-  // Change page and update URL
+  /**
+   * Change the current page and update the URL
+   * 
+   * This navigates to a different page while preserving all other filter parameters.
+   * It handles the conversion from singular field names (component) to plural field
+   * names (backend) just like other filter methods.
+   * 
+   * @param newPage - The page number to navigate to
+   */
   const changePage = useCallback((newPage: number) => {
     // Build URL with current filters plus new page
     const params = new URLSearchParams();

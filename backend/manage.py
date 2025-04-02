@@ -6,7 +6,15 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+    # Default to the development settings, but allow override via environment variable
+    settings_module = os.environ.get("DJANGO_SETTINGS_MODULE", "config.settings.development")
+    
+    # Check for test command to use test settings
+    if len(sys.argv) > 1 and sys.argv[1] in ["test", "pytest"]:
+        settings_module = "config.settings.test"
+        
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", settings_module)
+    
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

@@ -28,9 +28,12 @@ RUN mkdir -p /app/scripts /app/static /app/staticfiles
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
+# Set default settings module for Docker
+ENV DJANGO_SETTINGS_MODULE=config.settings.docker
+
 # Add health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=30s --retries=5 \
-    CMD curl -f http://localhost:8000/admin/ || exit 1
+    CMD curl -f http://localhost:8000/api/health/ || exit 1
 
 EXPOSE 8000
 

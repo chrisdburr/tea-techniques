@@ -42,13 +42,13 @@ The plan is structured in six stages, starting with critical stabilization of th
   - [View detailed plan](tasks/task_4_1_enhance_frontend_test_coverage.md)
   - Branch: `test/frontend-coverage`
 
-- [ ] **Task 4.2: Refine Error Handling Logic** *(Medium Priority)*
+- [x] **Task 4.2: Refine Error Handling Logic** *(Medium Priority)*
   - [View detailed plan](tasks/task_4_2_refine_error_handling.md)
   - Branch: `refactor/error-handling`
 
 ## Stage 5: Documentation & Configuration
 
-- [ ] **Task 5.1: Enhance Code Documentation** *(Low Priority)*
+- [x] **Task 5.1: Enhance Code Documentation** *(Low Priority)*
   - [View detailed plan](tasks/task_5_1_enhance_code_documentation.md)
   - Branch: `docs/code-documentation`
 

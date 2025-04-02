@@ -1,5 +1,6 @@
 # config/urls.py
 
+from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.documentation import include_docs_urls
@@ -42,3 +43,14 @@ urlpatterns = [
     ),
     path("", include("api.root_urls")),
 ]
+
+if settings.DEBUG:
+    try:
+        import debug_toolbar
+
+        urlpatterns = [
+            path("__debug__/", include(debug_toolbar.urls)),
+        ] + urlpatterns
+    except ImportError:
+        # Handle case where debug_toolbar is not installed
+        pass

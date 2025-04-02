@@ -58,6 +58,6 @@ The plan is structured in six stages, starting with critical stabilization of th
 
 ## Stage 6: Deployment & CI/CD
 
-- [ ] **Task 6.1: Refine Deployment Scripts** *(Low/Medium Priority)*
+- [x] **Task 6.1: Refine Deployment Scripts** *(Low/Medium Priority)*
   - [View detailed plan](tasks/task_6_1_refine_deployment_scripts.md)
   - Branch: `refactor/deployment-scripts`

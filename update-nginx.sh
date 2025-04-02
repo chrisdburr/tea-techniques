@@ -1,80 +1,90 @@
 #!/bin/bash
-# update-nginx.sh - Update Nginx configuration and restart
+# update-nginx.sh - Update Nginx configuration without restarting the server
 
-echo "Updating Nginx configuration for handling API requests..."
-echo "======================================================"
+set -e  # Exit on any error
 
 # Make the script executable
 chmod +x $0
 
-# Make sure we're running as root
-if [ "$EUID" -ne 0 ]; then
-  echo "Please run as root (use sudo)"
+# Load environment variables
+if [ -f .env.tailscale ]; then
+  set -a
+  source .env.tailscale
+  set +a
+else
+  echo "WARNING: .env.tailscale file not found. Using default values."
+fi
+
+echo "Updating Nginx configuration for Tea Techniques..."
+echo "=================================================="
+
+# Check if nginx directory exists, if not create it
+if [ ! -d nginx ]; then
+  echo "Creating nginx directory..."
+  mkdir -p nginx
+fi
+
+# Check if template exists
+if [ ! -f nginx/tea-techniques.conf.template ]; then
+  echo "ERROR: Nginx configuration template not found at nginx/tea-techniques.conf.template"
   exit 1
 fi
 
-# Backup existing configuration
-echo "1. Backing up existing Nginx configuration..."
-if [ -f /etc/nginx/conf.d/tea-techniques.conf ]; then
-  cp /etc/nginx/conf.d/tea-techniques.conf /etc/nginx/conf.d/tea-techniques.conf.bak
-  echo "   Backup created: /etc/nginx/conf.d/tea-techniques.conf.bak"
+# Generate the new configuration file
+echo "1. Generating new Nginx configuration from template..."
+if [ -f nginx/tea-techniques.conf ]; then
+  # Backup existing configuration
+  cp nginx/tea-techniques.conf nginx/tea-techniques.conf.bak
+  echo "   Backed up existing configuration to nginx/tea-techniques.conf.bak"
 fi
 
-# Copy the updated configuration to the correct location
-echo "2. Copying new Nginx configuration..."
-cp tea-techniques.conf /etc/nginx/conf.d/tea-techniques.conf
-echo "   Configuration copied to /etc/nginx/conf.d/tea-techniques.conf"
+# Use envsubst to replace environment variables in the template
+envsubst < nginx/tea-techniques.conf.template > nginx/tea-techniques.conf
+echo "   Generated new configuration at nginx/tea-techniques.conf"
 
-# Test the Nginx configuration
-echo "3. Testing Nginx configuration..."
-nginx -t 2>&1 | tee /tmp/nginx-test-output.txt
-if [ $? -ne 0 ]; then
-  echo "❌ Nginx configuration test failed"
-  echo "   Error output:"
-  cat /tmp/nginx-test-output.txt
-  if [ -f /etc/nginx/conf.d/tea-techniques.conf.bak ]; then
-    echo "   Restoring backup configuration..."
-    cp /etc/nginx/conf.d/tea-techniques.conf.bak /etc/nginx/conf.d/tea-techniques.conf
-    echo "   Backup restored. Please fix the configuration errors."
-  fi
+# Reload Nginx configuration by restarting the container
+echo "2. Restarting Nginx container to apply changes..."
+if docker-compose ps | grep -q nginx; then
+  docker-compose restart nginx
+  echo "   ✅ Nginx container restarted successfully"
+else
+  echo "   ❌ Nginx container is not running"
+  echo "   Please start the container with: docker-compose up -d nginx"
   exit 1
 fi
-echo "   ✅ Nginx configuration test passed"
-
-# Restart Nginx to apply changes
-echo "4. Restarting Nginx service..."
-systemctl restart nginx
-if [ $? -ne 0 ]; then
-  echo "❌ Failed to restart Nginx"
-  echo "   Please check the Nginx error logs with: sudo journalctl -u nginx"
-  exit 1
-fi
-echo "   ✅ Nginx restarted successfully"
 
 # Verify Nginx is running
-echo "5. Verifying Nginx is running..."
-systemctl is-active --quiet nginx
-if [ $? -ne 0 ]; then
-  echo "❌ Nginx is not running"
-  echo "   Please check the Nginx error logs with: sudo journalctl -u nginx"
+echo "3. Verifying Nginx is running..."
+if docker-compose ps | grep -q "nginx.*Up"; then
+  echo "   ✅ Nginx container is running"
+else
+  echo "   ❌ Nginx container failed to start"
+  echo "   Please check container logs with: docker-compose logs nginx"
   exit 1
 fi
-echo "   ✅ Nginx is running properly"
 
-# Show Nginx status
-systemctl status nginx --no-pager | grep -E "Active:|Main|Tasks"
+# Show Nginx status and logs
+echo "4. Checking Nginx container logs (last 5 lines)..."
+docker-compose logs --tail=5 nginx
 
 echo ""
 echo "Configuration updated successfully!"
 echo "===================================="
 echo "Your application should now correctly handle API requests."
 echo ""
-echo "To test the API directly, try:"
-echo "curl -v https://arch-webserver.tailb4d95.ts.net/api/"
-echo ""
-echo "To test the frontend with API integration:"
-echo "Visit https://arch-webserver.tailb4d95.ts.net/techniques/"
+if [ -n "$TAILSCALE_DOMAIN" ]; then
+  echo "To test the API directly, try:"
+  echo "curl -v https://${TAILSCALE_DOMAIN}/api/"
+  echo ""
+  echo "To test the frontend with API integration:"
+  echo "Visit https://${TAILSCALE_DOMAIN}/techniques/"
+else
+  echo "To test the API locally, try:"
+  echo "curl -v http://localhost/api/"
+  echo ""
+  echo "To test the frontend with API integration:"
+  echo "Visit http://localhost/techniques/"
+fi
 echo ""
 echo "For debugging, check the Nginx logs:"
-echo "sudo tail -f /var/log/nginx/tea-techniques-error.log"
-echo "sudo tail -f /var/log/nginx/tea-techniques-access.log"
+echo "docker-compose logs nginx"

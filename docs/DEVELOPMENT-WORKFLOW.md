@@ -42,24 +42,49 @@ Workspace settings:
 
 ### Environment Variables
 
-Create a `.env` file in the project root (copy from `.env.example`):
+Create `.env` files in the project root and in the backend and frontend directories (copy from the respective `.env.example` files):
 
+**Project Root `.env`**:
 ```
-# Database
+# Backend settings
+SECRET_KEY=your-secret-key
+DJANGO_SETTINGS_MODULE=config.settings.development
+
+# Database settings (for PostgreSQL)
 DB_NAME=techniques
 DB_USER=postgres
 DB_PASSWORD=postgres
-DB_HOST=db
+DB_HOST=localhost
 DB_PORT=5432
 
-# API URL for frontend
-NEXT_PUBLIC_API_URL=http://localhost:8000/api
+# Frontend settings
+NEXT_PUBLIC_API_URL=/api
+NEXT_PUBLIC_SWAGGER_URL=/swagger/
+BACKEND_URL=http://localhost:8000
+```
 
-# Django
+**Backend `.env`**:
+```
+# Django configuration
 SECRET_KEY=your-secret-key
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
-CORS_ALLOWED_ORIGINS=http://localhost:3000
+DJANGO_SETTINGS_MODULE=config.settings.development
+
+# Database settings
+DB_NAME=techniques
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_HOST=localhost
+DB_PORT=5432
+```
+
+**Frontend `.env`**:
+```
+# Public variables
+NEXT_PUBLIC_API_URL=/api
+NEXT_PUBLIC_SWAGGER_URL=/swagger/
+
+# Server-side variables
+BACKEND_URL=http://localhost:8000
 ```
 
 ## Project Structure
@@ -246,7 +271,11 @@ For updating technique data:
 1. Edit JSON file in `backend/data/`
 2. Import data using management commands:
    ```bash
-   USE_SQLITE=True python manage.py import_techniques
+   # For development with standard PostgreSQL database
+   python manage.py import_techniques
+   
+   # For SQLite development (if needed)
+   DJANGO_SETTINGS_MODULE=config.settings.sqlite python manage.py import_techniques
    ```
 
 ## Common Development Tasks
@@ -320,7 +349,8 @@ See the [Deployment Guide](DEPLOYMENT.md) for detailed deployment instructions.
 
 - **Migration errors**: Try `python manage.py makemigrations` followed by `python manage.py migrate`
 - **Import errors**: Check that all required packages are installed in your Poetry environment
-- **Database errors**: Check connection settings in `.env` or `settings.py`
+- **Database errors**: Check connection settings in `.env` or settings files
+- **Settings module errors**: Ensure `DJANGO_SETTINGS_MODULE` is set correctly (e.g., `config.settings.development`)
 
 #### Frontend
 

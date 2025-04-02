@@ -27,21 +27,27 @@ The current setup uses Tailscale Funnel to expose the application to the interne
 To deploy the application with Tailscale:
 
 1. Ensure Tailscale is installed and logged in on your server
-2. Make sure Nginx is installed
-3. Clone the repository
+2. Clone the repository
+3. Configure environment variables:
+   ```bash
+   # Copy the example environment file
+   cp .env.tailscale.example .env.tailscale
+   
+   # Edit the file with your Tailscale domain and other settings
+   nano .env.tailscale
+   ```
 4. Run the deployment script:
-
-```bash
-./deploy-tailscale.sh
-```
+   ```bash
+   ./deploy-tailscale.sh
+   ```
 
 This script:
+- Checks for proper configuration
 - Stops any existing containers
 - Cleans up volumes for a fresh start
-- Sets environment variables for proper routing
-- Builds and starts the containers
+- Generates Nginx configuration from a template
+- Builds and starts the containers (including Nginx)
 - Initializes the database with sample data
-- Updates Nginx configuration
 - Sets up Tailscale funnel
 
 ## Known Issues and Solutions
@@ -61,13 +67,25 @@ This ensures consistent behavior across all deployment environments.
 
 **Problem**: Nginx proxy passes the original host header to Django, which can cause URL resolution issues.
 
-**Solution**: The Nginx configuration explicitly sets the Host header to `localhost:8000` for all backend requests:
+**Solution**: The Nginx configuration template explicitly sets the Host header to `localhost:8000` for all backend requests:
 
 ```nginx
 proxy_set_header Host localhost:8000;
 ```
 
 This ensures Django receives the expected host it's configured to use.
+
+### Nginx Configuration Updates
+
+**Problem**: Previously, updating Nginx configuration required direct file system access and service restarts.
+
+**Solution**: Now Nginx runs in a container, with configuration managed through:
+
+1. A template file (`nginx/tea-techniques.conf.template`) with environment variable placeholders
+2. Environment variables in `.env.tailscale` file 
+3. The `update-nginx.sh` script that regenerates the configuration and restarts only the Nginx container
+
+This approach eliminates the need for root access to the host system and reduces deployment complexity.
 
 ## Recommendations for Improvement
 
@@ -107,22 +125,31 @@ services:
 
 ### 3. Environment Configuration
 
-**Current**: Environment variables are set directly in the deploy script.
+**Current**: Environment variables are managed through `.env.tailscale` and template system:
 
-**Recommended**: Use a more structured approach:
+- Environment variables are loaded from `.env.tailscale`
+- Templates use environment variable substitution
+- Docker Compose uses these variables automatically
+- Default values are provided for optional variables
 
-- Create separate `.env.production`, `.env.development`, and `.env.tailscale` files
-- Use a tool like python-dotenv to manage these configurations
-- Document all required environment variables
+**Recommended further improvements**:
+
+- Add validation for required environment variables
+- Create separate `.env.production` and `.env.development` for other deployment scenarios
+- Document all environment variables in a central location
 
 ### 4. Automated Health Checks
 
-**Current**: Manual verification of deployment.
+**Current**: Basic health checks are implemented:
 
-**Recommended**: Add automated health checks:
+- All containers have health checks configured in docker-compose.yml
+- Nginx has a simple `/health` endpoint
+- Deployment script verifies service status
 
-- Implement a `/health` endpoint in the backend
-- Configure Docker health checks for all services
+**Recommended further improvements**:
+
+- Implement a more comprehensive `/health` endpoint in the backend with DB connectivity check
+- Add frontend health checks with API connectivity verification
 - Set up external monitoring using a service like UptimeRobot
 
 ### 5. TLS/SSL Implementation

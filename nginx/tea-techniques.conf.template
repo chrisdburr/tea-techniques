@@ -1,0 +1,53 @@
+server {
+    listen 80;
+    server_name ${NGINX_SERVER_NAME};
+
+    access_log /var/log/nginx/tea-techniques-access.log;
+    error_log /var/log/nginx/tea-techniques-error.log;
+
+    # Frontend routes
+    location / {
+        proxy_pass http://frontend:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # Backend API routes
+    location /api/ {
+        proxy_pass http://backend:8000;
+        proxy_set_header Host localhost:8000;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Django admin
+    location /admin/ {
+        proxy_pass http://backend:8000;
+        proxy_set_header Host localhost:8000;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Static files
+    location /static/ {
+        proxy_pass http://backend:8000;
+        proxy_set_header Host localhost:8000;
+    }
+
+    # Swagger docs
+    location /swagger/ {
+        proxy_pass http://backend:8000;
+        proxy_set_header Host localhost:8000;
+    }
+
+    # Health check endpoint
+    location /health {
+        return 200 'OK';
+        add_header Content-Type text/plain;
+    }
+}

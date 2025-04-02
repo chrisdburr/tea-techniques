@@ -14,7 +14,15 @@ logger = logging.getLogger(__name__)
 
 def custom_exception_handler(exc: Exception, context: Dict[str, Any]) -> Optional[Response]:
     """
-    Custom exception handler for REST framework that improves error responses.
+    Custom exception handler for REST framework that standardizes error responses.
+    
+    Returns a consistent error format for all exceptions:
+    {
+        "detail": "Human-readable error message",
+        "status_code": 400,
+        "error_type": "ValidationError",
+        "errors": {} | null (field-specific errors when applicable)
+    }
     """
     # Call REST framework's default exception handler first
     response = exception_handler(exc, context)
@@ -23,36 +31,49 @@ def custom_exception_handler(exc: Exception, context: Dict[str, Any]) -> Optiona
     if response is None:
         logger.error(f"Unhandled exception: {str(exc)}")
         return Response(
-            {"detail": "Internal server error", "message": str(exc)},
+            {
+                "detail": "Internal server error occurred",
+                "status_code": status.HTTP_500_INTERNAL_SERVER_ERROR,
+                "error_type": exc.__class__.__name__,
+                "errors": None
+            },
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
 
-    # Add more context to the response data
+    # Standardize the response format
+    field_errors = None
+    detail_message = "An error occurred"
+    
     if isinstance(response.data, dict):
-        # If it's a dictionary with a 'detail' key, keep that structure
-        if "detail" in response.data:
-            raw_detail = response.data["detail"]
-            if isinstance(raw_detail, dict):
-                detail_str_parts = []
-                for field, errors in raw_detail.items():
-                    if isinstance(errors, list):
-                        errors_joined = "; ".join(errors)
-                        detail_str_parts.append(f"{field}: {errors_joined}")
-                    else:
-                        detail_str_parts.append(f"{field}: {errors}")
-                detail_str = " | ".join(detail_str_parts)
-                response.data["detail"] = detail_str
-            response.data = {
-                "detail": response.data["detail"],
-                "status_code": response.status_code,
-                "error_type": exc.__class__.__name__,
-            }
-        # Otherwise, wrap the data in a standardized format
-        else:
-            response.data = {
-                "errors": response.data,
-                "status_code": response.status_code,
-                "error_type": exc.__class__.__name__,
-            }
-
+        # Case 1: Validation errors with field-specific messages
+        if "non_field_errors" in response.data or any(
+            isinstance(response.data.get(field), list) for field in response.data
+        ):
+            # This is likely a validation error with field-specific messages
+            field_errors = response.data
+            
+            # Create a user-friendly summary message
+            if "non_field_errors" in response.data:
+                detail_message = "; ".join(response.data["non_field_errors"])
+            else:
+                detail_message = "Validation error"
+                
+        # Case 2: Response with 'detail' field
+        elif "detail" in response.data:
+            detail_message = str(response.data["detail"])
+            # Check if there are nested errors to extract
+            if isinstance(response.data.get("errors"), dict):
+                field_errors = response.data["errors"]
+    
+    # Prepare the standardized response format
+    standardized_response = {
+        "detail": detail_message,
+        "status_code": response.status_code,
+        "error_type": exc.__class__.__name__,
+        "errors": field_errors
+    }
+    
+    # Replace the original response data with our standardized format
+    response.data = standardized_response
+    
     return response

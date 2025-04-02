@@ -1,25 +1,57 @@
 // src/lib/hooks/useForm.ts
 import { useState, ChangeEvent } from 'react';
 
+/**
+ * Type for form error messages, indexed by form field names
+ */
 type FormErrors<T> = Partial<Record<keyof T | 'submit', string>>;
 
-// Create a type for validators that preserves the field types
+/**
+ * Type for field validation functions
+ * Each function takes a field value and returns an error message or null
+ */
 export type FormValidators<T> = {
   [K in keyof T]?: (value: T[K]) => string | null;
 };
 
+/**
+ * Return type of the useForm hook
+ */
 interface UseFormReturn<T> {
+  /** Current form values */
   values: T;
+  
+  /** Current form errors */
   errors: FormErrors<T>;
+  
+  /** Whether the form is currently submitting */
   isSubmitting: boolean;
+  
+  /** Handler for input changes */
   handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  
+  /** Handler for input blur events (triggers validation) */
   handleBlur: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  
+  /** Handler for select input changes */
   handleSelectChange: (name: keyof T, value: string) => void;
+  
+  /** Manually set a field value */
   setFieldValue: <K extends keyof T>(name: K, value: T[K]) => void;
+  
+  /** Manually set an error for a field */
   setFieldError: (name: keyof T | 'submit', error: string) => void;
+  
+  /** Clear an error for a field */
   clearFieldError: (name: keyof T) => void;
+  
+  /** Set the form's submitting state */
   setSubmitting: (isSubmitting: boolean) => void;
-  validateForm: () => boolean;  // Changed to not take parameters
+  
+  /** Validate all form fields, returning whether the form is valid */
+  validateForm: () => boolean;
+  
+  /** Reset the form values and errors */
   resetForm: (newValues?: Partial<T>) => void;
 }
 
@@ -117,6 +149,14 @@ export function useForm<T extends object>(
   };
 
   // Updated validateForm to use the stored validators
+  /**
+   * Validate all form fields using the provided validators
+   * 
+   * Runs each field's validator function and collects any error messages.
+   * Updates the form's error state and returns whether the form is valid.
+   * 
+   * @returns Boolean indicating if the form is valid (true) or has errors (false)
+   */
   const validateForm = () => {
     const newErrors: FormErrors<T> = {};
     
@@ -138,7 +178,14 @@ export function useForm<T extends object>(
     return Object.keys(newErrors).length === 0;
   };
 
-  // Updated handleBlur to use the stored validators
+  /**
+   * Handle input blur events by validating the field
+   * 
+   * When a field loses focus, this runs the validator for that field
+   * and updates the error state accordingly.
+   * 
+   * @param e - The blur event from the input element
+   */
   const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name } = e.target;
     const fieldKey = name as keyof T;

@@ -1,4 +1,11 @@
 # api/serializers.py
+"""
+Serializers for the API application.
+
+This module contains serializers for all models in the API application.
+Serializers handle converting between Python objects and JSON representations,
+as well as validation of input data.
+"""
 
 from __future__ import annotations
 
@@ -25,12 +32,22 @@ logger = logging.getLogger(__name__)
 
 
 class AssuranceGoalSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the AssuranceGoal model.
+    
+    Serializes all fields of the AssuranceGoal model without any additional fields.
+    """
     class Meta:
         model = AssuranceGoal
         fields = "__all__"
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Category model.
+    
+    Includes the name of the associated AssuranceGoal as a read-only field.
+    """
     assurance_goal_name = serializers.ReadOnlyField(source="assurance_goal.name")
 
     class Meta:
@@ -39,6 +56,11 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class SubCategorySerializer(serializers.ModelSerializer):
+    """
+    Serializer for the SubCategory model.
+    
+    Includes the name of the associated Category as a read-only field.
+    """
     category_name = serializers.ReadOnlyField(source="category.name")
 
     class Meta:
@@ -47,18 +69,33 @@ class SubCategorySerializer(serializers.ModelSerializer):
 
 
 class TagSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Tag model.
+    
+    Serializes all fields of the Tag model without any additional fields.
+    """
     class Meta:
         model = Tag
         fields = "__all__"
 
 
 class AttributeTypeSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the AttributeType model.
+    
+    Serializes all fields of the AttributeType model without any additional fields.
+    """
     class Meta:
         model = AttributeType
         fields = "__all__"
 
 
 class AttributeValueSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the AttributeValue model.
+    
+    Includes the name of the associated AttributeType as a read-only field.
+    """
     attribute_type_name = serializers.ReadOnlyField(source="attribute_type.name")
 
     class Meta:
@@ -74,12 +111,22 @@ class AttributeValueSerializer(serializers.ModelSerializer):
 
 
 class ResourceTypeSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the ResourceType model.
+    
+    Serializes all fields of the ResourceType model without any additional fields.
+    """
     class Meta:
         model = ResourceType
         fields = "__all__"
 
 
 class TechniqueResourceSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the TechniqueResource model.
+    
+    Includes the name of the associated ResourceType as a read-only field.
+    """
     resource_type_name = serializers.ReadOnlyField(source="resource_type.name")
 
     class Meta:
@@ -98,6 +145,12 @@ class TechniqueResourceSerializer(serializers.ModelSerializer):
 
 
 class TechniqueExampleUseCaseSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the TechniqueExampleUseCase model.
+    
+    Includes the name of the associated AssuranceGoal as a computed field.
+    Handles the case where assurance_goal might be None.
+    """
     assurance_goal_name = serializers.SerializerMethodField()
 
     class Meta:
@@ -105,18 +158,31 @@ class TechniqueExampleUseCaseSerializer(serializers.ModelSerializer):
         fields = ["id", "description", "assurance_goal", "assurance_goal_name"]
 
     def get_assurance_goal_name(self, obj: TechniqueExampleUseCase) -> Optional[str]:
+        """Return the name of the associated assurance goal, or None if not set."""
         if obj.assurance_goal:
             return obj.assurance_goal.name
         return None
 
 
 class TechniqueLimitationSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the TechniqueLimitation model.
+    
+    Only includes the id and description fields.
+    """
     class Meta:
         model = TechniqueLimitation
         fields = ["id", "description"]
 
 
 class TechniqueSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Technique model.
+    
+    Includes nested serializers for all related models, providing a comprehensive
+    representation of a technique and all its associated data. All relationship
+    fields are read-only in this serializer.
+    """
     # Relationship fields
     assurance_goals = AssuranceGoalSerializer(many=True, read_only=True)
     categories = CategorySerializer(many=True, read_only=True)
@@ -133,7 +199,10 @@ class TechniqueSerializer(serializers.ModelSerializer):
     applicable_models = serializers.SerializerMethodField()
     
     def get_applicable_models(self, obj: Technique) -> List[str]:
-        # Try to access the field, return empty list if it doesn't exist
+        """
+        Get the applicable_models field from the Technique object.
+        Returns an empty list if the field doesn't exist or is None.
+        """
         try:
             if hasattr(obj, 'applicable_models') and obj.applicable_models is not None:
                 return cast(List[str], obj.applicable_models)

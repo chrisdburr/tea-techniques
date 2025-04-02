@@ -20,6 +20,7 @@ from .views.api_views import (
     AttributeValuesViewSet,
     ResourceTypesViewSet,
     debug_endpoint,
+    health_check,
 )
 from .views.auth_views import (
     get_csrf,
@@ -55,6 +56,8 @@ def api_root(request, format=None):
             "resource_types": reverse(
                 "resourcetype-list", request=request, format=format
             ),
+            "health": reverse("health-check", request=request, format=format),
+            "debug": reverse("debug-endpoint", request=request, format=format),
         }
     )
 
@@ -84,6 +87,7 @@ router.register(r"attribute-values", AttributeValuesViewSet)
 router.register(r"resource-types", ResourceTypesViewSet)
 
 urlpatterns = [
+    path("health/", health_check, name="health-check"),
     path("debug", debug_endpoint, name="debug-endpoint"),
     path("debug/", debug_endpoint, name="debug-endpoint-slash"),
     path("", api_root, name="api-root"),

@@ -224,6 +224,38 @@ def get_subcategorylist(request: Request, category_id: int) -> Response:
     return Response(serializer.data)
 
 
+@api_view(["GET"])
+def health_check(request: Request) -> Response:
+    """
+    Simple health check endpoint that verifies the API is running
+    and the database connection is working.
+    """
+    try:
+        # Check database connection by making a simple query
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            one = cursor.fetchone()[0]
+            assert one == 1
+        
+        return Response(
+            {
+                "status": "healthy",
+                "database": "connected",
+                "api": "running",
+            }
+        )
+    except Exception as e:
+        logger.error(f"Health check failed: {str(e)}")
+        return Response(
+            {
+                "status": "unhealthy",
+                "database": "disconnected",
+                "error": str(e),
+            },
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
+
+
 @api_view(["GET", "POST"])
 @csrf_exempt
 def debug_endpoint(request: Request) -> Response:

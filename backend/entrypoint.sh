@@ -1,13 +1,17 @@
 #!/bin/bash
 set -e
 
-# Check which database we're using
-if [ "$USE_SQLITE" = "True" ]; then
+# Determine which settings module we're using
+DEFAULT_SETTINGS="config.settings.docker"
+SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE:-$DEFAULT_SETTINGS}
+echo "Using settings module: $SETTINGS_MODULE"
+
+# Check if we're using PostgreSQL (default) or SQLite
+if [[ "$SETTINGS_MODULE" == *"sqlite"* ]]; then
     echo "Using SQLite database"
     
     # Ensure the db_data directory exists
     mkdir -p /app/db_data
-    
 else
     # Wait for PostgreSQL database
     echo "Checking PostgreSQL database connection..."

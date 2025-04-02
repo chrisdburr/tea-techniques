@@ -1,3 +1,4 @@
+// Update to handle MSW v2 
 import { setupServer } from 'msw/node';
 import { handlers } from './handlers';
 

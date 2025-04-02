@@ -38,7 +38,7 @@ The plan is structured in six stages, starting with critical stabilization of th
 
 ## Stage 4: Testing & Robustness Enhancement
 
-- [ ] **Task 4.1: Enhance Frontend Test Coverage** *(Medium Priority)*
+- [x] **Task 4.1: Enhance Frontend Test Coverage** *(Medium Priority)*
   - [View detailed plan](tasks/task_4_1_enhance_frontend_test_coverage.md)
   - Branch: `test/frontend-coverage`
 

@@ -19,31 +19,31 @@ server {
     # Backend API routes
     location /api/ {
         proxy_pass http://backend:8000;
-        proxy_set_header Host localhost:8000;
+        proxy_set_header Host $host;
         proxy_set_header X-Real-IP ${dollar}remote_addr;
         proxy_set_header X-Forwarded-For ${dollar}proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto ${dollar}scheme;
+        proxy_set_header X-Forwarded-Proto https;
     }
 
     # Django admin
     location /admin/ {
         proxy_pass http://backend:8000;
-        proxy_set_header Host localhost:8000;
+        proxy_set_header Host %host;
         proxy_set_header X-Real-IP ${dollar}remote_addr;
         proxy_set_header X-Forwarded-For ${dollar}proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto ${dollar}scheme;
+        proxy_set_header X-Forwarded-Proto https;
     }
 
     # Static files
     location /static/ {
         proxy_pass http://backend:8000;
-        proxy_set_header Host localhost:8000;
+        proxy_set_header Host $host;
     }
 
     # Swagger docs
     location /swagger/ {
         proxy_pass http://backend:8000;
-        proxy_set_header Host localhost:8000;
+        proxy_set_header Host $host;
     }
 
     # Health check endpoint

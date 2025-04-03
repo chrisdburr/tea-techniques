@@ -2,7 +2,6 @@
 
 import { Suspense, useState } from "react"; // Import Suspense
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { useAuth } from "@/lib/context/auth-context";
 import MainLayout from "@/components/layout/MainLayout";
 import {
@@ -70,11 +69,23 @@ function LoginPageContent() {
 		try {
 			await login(username, password);
 			router.push(redirectPath);
-		} catch (error: any) {
-			setErrorMsg(
-				error.response?.data?.detail ||
-					"Login failed. Please check your credentials."
-			);
+		} catch (error: unknown) {
+			const errorMessage = "Login failed. Please check your credentials.";
+			
+			// Type-safe error handling
+			if (error && typeof error === 'object' && 'response' in error) {
+				const responseObj = error.response;
+				if (responseObj && typeof responseObj === 'object' && 'data' in responseObj) {
+					const dataObj = responseObj.data;
+					if (dataObj && typeof dataObj === 'object' && 'detail' in dataObj) {
+						setErrorMsg(dataObj.detail as string);
+						setIsSubmitting(false);
+						return;
+					}
+				}
+			}
+			
+			setErrorMsg(errorMessage);
 		} finally {
 			setIsSubmitting(false);
 		}

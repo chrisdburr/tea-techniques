@@ -16,7 +16,6 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  error: string | null;
   login: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   checkAuthStatus: () => Promise<void>;
@@ -27,7 +26,6 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   isAuthenticated: false,
   isLoading: true,
-  error: null,
   login: async () => {},
   logout: async () => {},
   checkAuthStatus: async () => {},
@@ -37,7 +35,7 @@ const AuthContext = createContext<AuthContextType>({
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // State is managed internally, not exposed in context
 
   // Check auth status automatically on mount
   useEffect(() => {
@@ -47,14 +45,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Function to check if the user is already authenticated
   const checkAuthStatus = async () => {
     setIsLoading(true);
-    setError(null);
     
     try {
       // We'll check by trying to fetch the current user info
       const response = await apiClient.get('/api/auth/user');
       setUser(response.data);
       setIsLoading(false);
-    } catch (error) {
+    } catch {
+      // No need to use the error variable
       console.log('Not authenticated or could not verify authentication status');
       setUser(null);
       setIsLoading(false);
@@ -64,7 +62,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Function to log in
   const login = async (username: string, password: string) => {
     setIsLoading(true);
-    setError(null);
     
     try {
       // First, get CSRF token if needed
@@ -78,9 +75,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       setUser(response.data);
       setIsLoading(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Login error:', error);
-      setError(error.response?.data?.detail || 'Authentication failed');
       setIsLoading(false);
       throw error;
     }
@@ -100,14 +96,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // Create a redirectToAdmin helper
-  const redirectToAdmin = () => {
-    // This function will redirect users to the Django admin login page
-    // which is useful for simple authentication scenarios
-    if (typeof window !== 'undefined') {
-      window.location.href = '/admin/';
-    }
-  };
+  // Auth-related functionality
 
   return (
     <AuthContext.Provider
@@ -115,7 +104,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         user,
         isAuthenticated: !!user,
         isLoading,
-        error,
         login,
         logout,
         checkAuthStatus,

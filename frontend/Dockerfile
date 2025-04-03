@@ -25,6 +25,8 @@ ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 ENV NEXT_PUBLIC_SWAGGER_URL=${NEXT_PUBLIC_SWAGGER_URL}
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
+# Indicate Docker environment for next.config.js
+ENV DOCKER_ENV=true
 
 # Build the application
 RUN pnpm build

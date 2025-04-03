@@ -20,117 +20,55 @@ An interactive database for exploring techniques for evidencing claims about res
 ## 🛠️ Development Setup
 
 > [!WARNING]
-> These instructions have only been tested on MacOS and Linux. If you are using Windows, you may need to adjust some commands.
+> These instructions assume you are using Docker and Docker Compose. They have been tested on MacOS and Linux. If you are using Windows, you may need to adjust some commands.
 
 <details>
-<summary>🪧 Prerequisites </summary>
-  
-- **Python 3.12+ & Poetry:** Install Python and then Poetry ([Installation Guide](https://python-poetry.org/docs/#installation)).
-- **Node.js 20+ & pnpm:** Install Node.js ([Download](https://nodejs.org/)) and then pnpm (`npm install -g pnpm`).
-- **PostgreSQL:** You need a running PostgreSQL server. 
-   - **Installation:** If you don't have it, follow the official guide for your OS: [PostgreSQL Downloads](https://www.postgresql.org/download/).
-   - **Database Setup:** After installation, you need to create the database and user specified in your `.env` file. Connect to PostgreSQL (e.g., using `psql`) and run commands similar to these (adjust names/passwords if you changed them in `.env`):
-   
-   ```sql
-   CREATE DATABASE techniques;
-   CREATE USER postgres WITH PASSWORD 'postgres'; 
-   ALTER ROLE postgres SET client_encoding TO 'utf8';
-   ALTER ROLE postgres SET default_transaction_isolation TO 'read committed';
-   ALTER ROLE postgres SET timezone TO 'UTC';
-   GRANT ALL PRIVILEGES ON DATABASE techniques TO postgres;
-   \q 
-   ```
+<summary>🐳 Docker Development Setup</summary>
 
--   **Ensure it's running:** Make sure the PostgreSQL service is active before starting the backend.
+This is the standard way to set up the development environment using Docker Compose, which manages the necessary services (PostgreSQL, Backend, Frontend).
 
-</details>
-
-<summary>📦 Local Development Setup</summary>
-
-For local development, we use PostgreSQL as the database backend:
-
-1. **Clone the repository**
-
-```bash
+1.  **Prerequisites:** Ensure you have Docker and Docker Compose installed ([Docker Desktop](https://www.docker.com/products/docker-desktop/) is recommended).
+2.  **Clone the repository:**
+    ```bash
     git clone https://github.com/chrisdburr/tea-techniques.git
     cd tea-techniques
-```
-
-2. **Setup environment variable**
-
-```bash
-cp .env.example .env
-```
-
-Important: Ensure the DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT variables in this .env file match your local PostgreSQL setup (see Prerequisites).
-
-3. **Install and start PostgreSQL**
-
--   Ensure PostgreSQL is installed and running locally (see Prerequisites).
--   Ensure the database and user specified in your .env file exist and the user has the correct password and permissions.
-
-4. **Set up the backend**
-
-```bash
-cd backend
-poetry install
-# Ensure your .env file is configured correctly *before* running migrations/imports
-python manage.py migrate # Apply database migrations
-python manage.py reset_and_import_techniques # Reset and import data (use with caution if you have custom data)
-# OR just import if DB exists: python manage.py import_techniques
-```
-
-5. **Run the backend**
-
-```bash
-# Make sure you are in the backend directory
-poetry run python manage.py runserver
-```
-
-6. **In a new terminal, set up and run the frontend**
-
-```bash
-cd frontend
-pnpm install
-pnpm run dev:turbo
-```
-
-7. **Access the application**
-
--   Frontend: http://localhost:3000
--   API: http://localhost:8000/api/
--   Django Admin: http://localhost:8000/admin/
-
-</details>
-
-<details>
-<summary>🐳 Docker Setup (Production-like Environment)</summary>
-
-If you want to use the full Docker setup with PostgreSQL:
-
-1. **Setup environment variable**
-
-```bash
-cp .env.example .env
-```
-
--   You may want to review and adjust the values in the `.env` file (e.g. change user and password)
-
-2. **Start the application**
-
-    ```bash
-    COMPOSE_BAKE=true docker-compose build --no-cache && docker-compose up -d
     ```
-
-3. **Access the application**
-
--   Frontend: http://localhost:3000
--   API: http://localhost:8000/api/
-
-4. **Restart and Rebuild the Containers**
+3.  **Setup Environment Variables:**
+    ```bash
+    cp .env.example .env
+    ```
+    -   Review the `.env` file. For development, the default database credentials used by Docker Compose should work fine, but you can customize them if needed.
+4.  **Build and Start Services:**
+    ```bash
+    # Use the development compose file
+    docker-compose -f docker-compose.development.yml up -d --build
+    ```
+    -   This command builds the images (if they don't exist or need updating) and starts the `db`, `backend`, and `frontend` services in detached mode.
+5.  **Initialize the Database:**
+    ```bash
+    # Run migrations and import initial data inside the backend container
+    docker-compose -f docker-compose.development.yml exec backend python manage.py reset_and_import_techniques
+    ```
+    -   This step is crucial! It sets up the database schema and populates it with the necessary techniques data. You only need to run this once after the initial setup, or if you need to reset the development database.
+6.  **Access the Application:**
+    -   Frontend: http://localhost:3000
+    -   Backend API: http://localhost:8000/api/
+    -   Django Admin: http://localhost:8000/admin/ (Login with user: `admin`, password: `admin`)
+7.  **Stopping the Services:**
+    ```bash
+    docker-compose -f docker-compose.development.yml down
+    ```
+8.  **Viewing Logs:**
 
     ```bash
-    docker-compose down && COMPOSE_BAKE=true docker-compose build --no-cache && docker-compose up -d
+    # View logs for all services
+    docker-compose -f docker-compose.development.yml logs
+
+    # View logs for a specific service (e.g., backend)
+    docker-compose -f docker-compose.development.yml logs backend
+
+    # Follow logs in real-time
+    docker-compose -f docker-compose.development.yml logs -f backend
     ```
 
 </details>

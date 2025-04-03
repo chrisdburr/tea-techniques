@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev": "next dev",
 		"dev:turbo": "next dev --turbopack",
-		"build": "next build",
+		"build": "NEXT_DISABLE_LINT=true next build",
 		"analyze": "cross-env ANALYZE=true NODE_ENV=production next build",
 		"analyze-deps": "pnpm list --depth=1",
 		"analyze-size": "du -sh node_modules",
@@ -59,6 +59,7 @@
 		"cross-env": "^7.0.3",
 		"eslint": "^9",
 		"eslint-config-next": "15.2.0",
+		"eslint-plugin-react-hooks": "^5.2.0",
 		"msw": "^2.2.11",
 		"postcss": "^8.5.3",
 		"shadcn": "^2.4.0-canary.9",

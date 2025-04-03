@@ -4,6 +4,7 @@ Extends the base settings with development-specific settings.
 """
 
 from .base import *  # noqa
+import os  # Import os module
 
 # Set DEBUG to True for development
 DEBUG = True
@@ -28,4 +29,8 @@ INTERNAL_IPS = [
 CORS_ALLOWED_ORIGINS += [  # noqa
     "http://localhost:3001",
     "http://127.0.0.1:3001",
+    "http://frontend:3000",  # Allow frontend container access
 ]
+
+# Override DB host for Docker Compose service name
+DATABASES["default"]["HOST"] = os.getenv("DB_HOST", "db")  # noqa

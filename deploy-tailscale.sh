@@ -59,9 +59,22 @@ echo "🛑 Stopping existing containers (if any)..."
 $DOCKER_COMPOSE_CMD down --remove-orphans || echo "ℹ️ No running containers to stop or failed to stop."
 
 # 5. Clean up old volumes (optional, ensures completely fresh state)
-read -p "❓ Do you want to remove existing database and log volumes? (y/N): " -n 1 -r
-echo # Move to a new line
-if [[ $REPLY =~ ^[Yy]$ ]]; then
+if [[ -t 0 ]]; then
+    # Terminal input is available, ask the user
+    read -p "❓ Do you want to remove existing database and log volumes? (y/N): " -n 1 -r
+    echo # Move to a new line
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        remove_volumes=true
+    else
+        remove_volumes=false
+    fi
+else
+    # No terminal input, use default (no)
+    echo "⏭️ Running in non-interactive mode, skipping volume removal."
+    remove_volumes=false
+fi
+
+if [[ "$remove_volumes" == "true" ]]; then
     echo "🗑️ Removing volumes..."
     docker volume rm $(docker volume ls -q | grep tea-techniques_postgres_data) &>/dev/null || echo "ℹ️ No database volume to remove or removal failed."
     docker volume rm $(docker volume ls -q | grep tea-techniques_nginx_logs) &>/dev/null || echo "ℹ️ No nginx logs volume to remove or removal failed."
@@ -73,6 +86,8 @@ fi
 echo ""
 echo "⚙️ Generating Nginx configuration file..."
 mkdir -p "$(dirname "$NGINX_OUTPUT_FILE")" # Ensure directory exists
+# Define dollar variable for proper escaping of nginx variables
+export dollar='$'
 # Use envsubst to replace variables sourced from .env.tailscale
 if envsubst < "$NGINX_TEMPLATE_FILE" > "$NGINX_OUTPUT_FILE"; then
   echo "   ✅ Generated '$NGINX_OUTPUT_FILE'"

@@ -1,5 +1,5 @@
 #!/bin/bash
-# deploy-tailscale.sh - Deployment script for Tailscale server using Docker Compose profiles
+# deploy-tailscale.sh - Deployment script for Tailscale server 
 
 # Exit immediately if a command exits with a non-zero status.
 set -e
@@ -8,7 +8,7 @@ set -e
 TAILSCALE_ENV_FILE=".env.tailscale"
 NGINX_TEMPLATE_FILE="nginx/tea-techniques.conf.template"
 NGINX_OUTPUT_FILE="nginx/tea-techniques.conf"
-DOCKER_COMPOSE_CMD="docker compose --env-file ${TAILSCALE_ENV_FILE}" # Use the specific env file for all compose commands
+DOCKER_COMPOSE_CMD="docker compose -f docker-compose.tailscale.yml --env-file ${TAILSCALE_ENV_FILE}"
 
 # --- Pre-flight Checks ---
 echo "🚀 Starting Tailscale Deployment for Tea Techniques..."

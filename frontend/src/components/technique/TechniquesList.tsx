@@ -39,15 +39,8 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation";
 // Number of items per page - must match backend setting (20)
 const PAGE_SIZE = 20;
 
-// Default filter values
-const DEFAULT_FILTERS: FilterState = {
-	search: "",
-	assurance_goals: [],
-	categories: [],
-	model_dependency: [],
-	complexity_max: 5,
-	computational_cost_max: 5,
-};
+// Default filter values structure
+// Used for reference when resetting filters
 
 // Extracted TechniqueCard component with improved responsive design
 const TechniqueCard = ({
@@ -200,7 +193,7 @@ export default function TechniquesList() {
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const pathname = usePathname();
-	const [isPending, startTransition] = useTransition();
+	const [, startTransition] = useTransition();
 	
 	// Still use the hook for currentPage - it provides other useful functionality
 	const { currentPage } = useFilterParams({

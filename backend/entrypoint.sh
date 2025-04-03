@@ -43,29 +43,24 @@ python manage.py collectstatic --noinput
 echo "Running migrations..."
 python manage.py migrate --noinput
 
-# Import techniques from CSV if file exists
-if [ -f "data/techniques.csv" ]; then
-    echo "Importing techniques from CSV..."
-    
-    # Check if we already have techniques imported
+# Import techniques from JSON if file exists and database is empty
+JSON_FILE="data/techniques.json"
+if [ -f "$JSON_FILE" ]; then
+    echo "Checking for existing techniques..."
     TECHNIQUE_COUNT=$(python -c "from api.models import Technique; print(Technique.objects.count())" 2>/dev/null || echo "0")
     
     if [ "$TECHNIQUE_COUNT" = "0" ]; then
-        echo "No techniques found in database, importing..."
-        # For SQLite, use the reset_and_import_techniques command with force flag
-        python manage.py reset_and_import_techniques --force || {
-            echo "⚠️  Warning: Could not reset database and import techniques"
-            # Fallback to just importing techniques if reset fails
-            echo "Attempting to import techniques without resetting..."
-            python manage.py import_techniques --file=data/techniques.csv || {
-                echo "⚠️  Warning: Could not import techniques from CSV"
-            }
+        echo "No techniques found in database, importing from $JSON_FILE..."
+        # Use the standard JSON import command
+        python manage.py import_techniques --file="$JSON_FILE" || {
+            echo "⚠️  Warning: Could not import techniques from JSON."
+            echo "Please check the file format and the import script logs."
         }
     else
-        echo "✅ Database already contains $TECHNIQUE_COUNT techniques, skipping import"
+        echo "✅ Database already contains $TECHNIQUE_COUNT techniques, skipping import."
     fi
 else
-    echo "⚠️  No techniques.csv found, skipping import"
+    echo "⚠️  No $JSON_FILE found, skipping technique import."
 fi
 
 # Set worker count based on environment variables or available cores

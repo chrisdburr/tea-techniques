@@ -1,3 +1,4 @@
+export dollar="\$"
 #!/bin/bash
 # update-nginx.sh - Update Nginx configuration without restarting the server
 
@@ -38,6 +39,8 @@ if [ -f nginx/tea-techniques.conf ]; then
   echo "   Backed up existing configuration to nginx/tea-techniques.conf.bak"
 fi
 
+# Define dollar variable for proper escaping of nginx variables
+export dollar='$'
 # Use envsubst to replace environment variables in the template
 envsubst < nginx/tea-techniques.conf.template > nginx/tea-techniques.conf
 echo "   Generated new configuration at nginx/tea-techniques.conf"

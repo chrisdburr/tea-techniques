@@ -44,17 +44,13 @@ services:
             context: ./frontend
             dockerfile: Dockerfile
             args:
-                - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-/api}
+                - NEXT_PUBLIC_API_URL=http://backend:8000/api
                 - NEXT_PUBLIC_SWAGGER_URL=${NEXT_PUBLIC_SWAGGER_URL:-/swagger/}
         env_file:
             - .env
-        environment:
-            - WATCHPACK_POLLING=true
-        command: pnpm run dev
+        command: node server.js
         volumes:
-            - ./frontend:/app
             - /app/node_modules
-            - ./frontend/.next:/app/.next
         ports:
             - "3000:3000"
         depends_on:

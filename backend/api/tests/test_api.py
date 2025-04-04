@@ -1,4 +1,6 @@
 from django.test import TestCase
+from django.test.utils import CaptureQueriesContext
+from django.db import connection
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from api.models import (
@@ -478,6 +480,118 @@ class TechniqueAPITestCase(APITestCase):
         data = response.json()
         self.assertIn("received_data", data)
         self.assertEqual(data["received_data"], test_data)
+        
+    def test_techniques_list_query_optimization(self):
+        """Test that techniques list endpoint uses optimized queries"""
+        # Create a complex technique with all types of relationships to test prefetching
+        technique = TechniqueFactory(
+            name="Comprehensive Test Technique",
+            description="A test technique with all relationships",
+            model_dependency="Model-Agnostic",
+            assurance_goals=[self.assurance_goal],
+            categories=[self.category],
+            subcategories=[self.subcategory],
+            tags=[self.tag1, self.tag2],
+        )
+        
+        # Add attribute values, resources, use cases, and limitations
+        AttributeValueFactory(
+            name="Test Value",
+            attribute_type=self.scope_type,
+            technique=technique
+        )
+        
+        # Add a resource
+        technique.resources.create(
+            resource_type=self.paper_type,
+            title="Test Resource",
+            url="https://example.com/test",
+            description="A test resource"
+        )
+        
+        # Add an example use case
+        technique.example_use_cases.create(
+            description="Test use case",
+            assurance_goal=self.assurance_goal
+        )
+        
+        # Add a limitation
+        technique.limitations.create(
+            description="Test limitation"
+        )
+        
+        # Capture database queries during request
+        with CaptureQueriesContext(connection) as queries:
+            # Make sure to use the correct URL format ending with /
+            url = self.techniques_url if self.techniques_url.endswith('/') else f"{self.techniques_url}/"
+            response = self.client.get(url)
+            
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Analyze captured queries
+        # The key improvement is that without prefetch_related, we would see an N+1 problem
+        # with one query for each related object per technique
+        query_count = len(queries)
+        
+        # With properly optimized prefetch_related, we should have significantly fewer queries
+        # Exact number depends on implementation details, but we can set a reasonable upper bound
+        # Based on our prefetch_related setup, we expect around 9-15 queries total:
+        # 1 for techniques + 1 for each prefetched relation
+        self.assertLess(query_count, 20, 
+                      f"Query count too high ({query_count}). Check prefetch_related implementation.")
+    
+    def test_technique_detail_query_optimization(self):
+        """Test that technique detail endpoint uses optimized queries"""
+        # Create a complex technique with all types of relationships to test prefetching
+        technique = TechniqueFactory(
+            name="Detail Test Technique",
+            description="A test technique for detail view optimization",
+            model_dependency="Model-Agnostic",
+            assurance_goals=[self.assurance_goal],
+            categories=[self.category],
+            subcategories=[self.subcategory],
+            tags=[self.tag1, self.tag2],
+        )
+        
+        # Add attribute values, resources, use cases, and limitations
+        AttributeValueFactory(
+            name="Detail Test Value",
+            attribute_type=self.scope_type,
+            technique=technique
+        )
+        
+        technique.resources.create(
+            resource_type=self.paper_type,
+            title="Detail Test Resource",
+            url="https://example.com/detail-test",
+            description="A test resource for detail view"
+        )
+        
+        technique.example_use_cases.create(
+            description="Detail test use case",
+            assurance_goal=self.assurance_goal
+        )
+        
+        technique.limitations.create(
+            description="Detail test limitation"
+        )
+        
+        # Get the detail URL
+        base_url = self.techniques_url if self.techniques_url.endswith('/') else f"{self.techniques_url}/"
+        detail_url = f"{base_url}{technique.id}/"
+        
+        # Capture database queries during request
+        with CaptureQueriesContext(connection) as queries:
+            response = self.client.get(detail_url)
+            
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Analyze captured queries
+        query_count = len(queries)
+        
+        # With properly optimized prefetch_related, we should have significantly fewer queries
+        self.assertLess(query_count, 20, 
+                      f"Query count too high ({query_count}). Check prefetch_related for detail view.")
 
     def test_category_tags_compatibility(self):
         """Test that techniques created with category_tags format work with the API"""

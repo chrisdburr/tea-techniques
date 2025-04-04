@@ -41,7 +41,7 @@ const calculateTotalPages = (
  * Helper function to fetch data from API endpoints with consistent URL handling
  * 
  * This function provides a standardized way to access API endpoints,
- * following Next.js config trailing slash setting.
+ * ensuring URLs align with backend configuration (no trailing slashes).
  * 
  * @param path - The API path to fetch from (starting with /api)
  * @param params - Optional query parameters
@@ -53,8 +53,8 @@ const fetchAPI = async <T>(
     params?: Record<string, string | number | string[]>
 ): Promise<T> => {
     try {
-        // Ensure the path has a trailing slash to match Next.js trailingSlash config
-        const normalizedPath = path.endsWith("/") ? path : `${path}/`;
+        // Remove trailing slash to match Django's APPEND_SLASH=False and DRF's TRAILING_SLASH=False
+        const normalizedPath = path.endsWith("/") ? path.slice(0, -1) : path;
         
         // Make the request with normalized path
         const response = await apiClient.get(normalizedPath, { params });
@@ -77,7 +77,7 @@ export const useAssuranceGoals = () => {
 		queryKey: ["assurance-goals"],
 		queryFn: async () => {
 			try {
-				return await fetchAPI<APIResponse<AssuranceGoal>>('/api/assurance-goals/');
+				return await fetchAPI<APIResponse<AssuranceGoal>>('/api/assurance-goals');
 			} catch (error: unknown) {
 				logApiError('useAssuranceGoals', error);
 				throw error;
@@ -103,7 +103,7 @@ export const useCategories = (assuranceGoalId?: number) => {
 		queryKey: ["categories", assuranceGoalId],
 		queryFn: async () => {
 			try {
-				return await fetchAPI<APIResponse<Category>>('/api/categories/', params);
+				return await fetchAPI<APIResponse<Category>>('/api/categories', params);
 			} catch (error: unknown) {
 				logApiError('useCategories', error);
 				throw error;
@@ -129,7 +129,7 @@ export const useSubCategories = (categoryId?: number) => {
 		queryKey: ["subcategories", categoryId],
 		queryFn: async () => {
 			try {
-				return await fetchAPI<APIResponse<SubCategory>>('/api/subcategories/', params);
+				return await fetchAPI<APIResponse<SubCategory>>('/api/subcategories', params);
 			} catch (error: unknown) {
 				logApiError('useSubCategories', error);
 				throw error;
@@ -149,7 +149,7 @@ export const useTags = () => {
 		queryKey: ["tags"],
 		queryFn: async () => {
 			try {
-				return await fetchAPI<APIResponse<Tag>>('/api/tags/');
+				return await fetchAPI<APIResponse<Tag>>('/api/tags');
 			} catch (error: unknown) {
 				logApiError('useTags', error);
 				throw error;
@@ -164,7 +164,7 @@ export const useAttributeTypes = () => {
 		queryKey: ["attribute-types"],
 		queryFn: async () => {
 			try {
-				return await fetchAPI<APIResponse<AttributeType>>('/api/attribute-types/');
+				return await fetchAPI<APIResponse<AttributeType>>('/api/attribute-types');
 			} catch (error: unknown) {
 				logApiError('useAttributeTypes', error);
 				throw error;
@@ -184,7 +184,7 @@ export const useAttributeValues = (attributeTypeId?: number) => {
 		queryKey: ["attribute-values", attributeTypeId],
 		queryFn: async () => {
 			try {
-				return await fetchAPI<APIResponse<AttributeValue>>('/api/attribute-values/', params);
+				return await fetchAPI<APIResponse<AttributeValue>>('/api/attribute-values', params);
 			} catch (error: unknown) {
 				logApiError('useAttributeValues', error);
 				throw error;
@@ -200,7 +200,7 @@ export const useResourceTypes = () => {
 		queryKey: ["resource-types"],
 		queryFn: async () => {
 			try {
-				return await fetchAPI<APIResponse<ResourceType>>('/api/resource-types/');
+				return await fetchAPI<APIResponse<ResourceType>>('/api/resource-types');
 			} catch (error: unknown) {
 				logApiError('useResourceTypes', error);
 				throw error;
@@ -294,7 +294,7 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 		queryFn: async () => {
 			try {
 				// Use the apiClient configured with proper baseUrl
-				return await fetchAPI("/api/techniques/", apiParams);
+				return await fetchAPI("/api/techniques", apiParams);
 			} catch (error: unknown) {
 				logApiError("useTechniques", error);
 				throw error;
@@ -308,19 +308,15 @@ export const useTechniqueDetail = (id: number) => {
 		queryKey: ["technique", id],
 		queryFn: async () => {
 			try {
-				// Ensure the path has a trailing slash to match Next.js trailingSlash config
-				const normalizedPath = `/api/techniques/${id}/`;
-				
-				// Make the request with normalized path
-				const response = await apiClient.get(normalizedPath);
-				const data = response.data;
+				// Use fetchAPI to handle URL normalization consistently
+				const data = await fetchAPI<Technique>(`/api/techniques/${id}`);
 				
 				// Validate the response
 				if (!data.id || !data.name) {
 					throw new Error(`API returned malformed data`);
 				}
 
-				return data as Technique;
+				return data;
 			} catch (error: unknown) {
 				logApiError('useTechniqueDetail', error);
 				throw error;
@@ -336,11 +332,11 @@ export const useCreateTechnique = () => {
 	return useMutation({
 		mutationFn: async (data: TechniqueFormData) => {
 			try {
-				// Ensure the path has a trailing slash to match Next.js trailingSlash config
-				const normalizedPath = `/api/techniques/`;
+				// Remove trailing slash to match backend configuration
+				const path = `/api/techniques`;
 				
-				// Make the request with normalized path
-				const response = await apiClient.post(normalizedPath, data);
+				// Make the request with proper path
+				const response = await apiClient.post(path, data);
 				return response.data as Technique;
 			} catch (error: unknown) {
 				logApiError('useCreateTechnique', error);
@@ -359,11 +355,11 @@ export const useUpdateTechnique = (id: number) => {
 	return useMutation({
 		mutationFn: async (data: TechniqueFormData) => {
 			try {
-				// Ensure the path has a trailing slash to match Next.js trailingSlash config
-				const normalizedPath = `/api/techniques/${id}/`;
+				// Remove trailing slash to match backend configuration
+				const path = `/api/techniques/${id}`;
 				
-				// Make the request with normalized path
-				const response = await apiClient.put(normalizedPath, data);
+				// Make the request with proper path
+				const response = await apiClient.put(path, data);
 				return response.data as Technique;
 			} catch (error: unknown) {
 				logApiError('useUpdateTechnique', error);
@@ -383,11 +379,11 @@ export const useDeleteTechnique = () => {
 	return useMutation({
 		mutationFn: async (id: number) => {
 			try {
-				// Ensure the path has a trailing slash to match Next.js trailingSlash config
-				const normalizedPath = `/api/techniques/${id}/`;
+				// Remove trailing slash to match backend configuration
+				const path = `/api/techniques/${id}`;
 				
-				// Make the request with normalized path
-				await apiClient.delete(normalizedPath);
+				// Make the request with proper path
+				await apiClient.delete(path);
 				return id;
 			} catch (error: unknown) {
 				logApiError('useDeleteTechnique', error);
@@ -412,7 +408,7 @@ export const useTechniqueRelationships = (techniqueId: number) => {
 		queryKey: ["technique-relationships", techniqueId],
 		queryFn: async () => {
 			try {
-				return await fetchAPI('/api/technique-relationships/', params);
+				return await fetchAPI('/api/technique-relationships', params);
 			} catch (error: unknown) {
 				logApiError('useTechniqueRelationships', error);
 				throw error;

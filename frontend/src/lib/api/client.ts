@@ -22,7 +22,7 @@ const apiClient = axios.create({
 		"Content-Type": "application/json",
 		Accept: "application/json",
 	},
-	// Allow redirects to follow Django's trailing slash redirects
+	// Allow redirects for any server-side redirects
 	maxRedirects: 5,
 	paramsSerializer: {
 		indexes: null,

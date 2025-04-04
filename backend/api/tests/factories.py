@@ -103,6 +103,8 @@ class TechniqueFactory(factory.django.DjangoModelFactory):
     model_dependency = factory.LazyFunction(
         lambda: fake.random_element(elements=("Model-Agnostic", "Model-Specific"))
     )
+    complexity_rating = factory.LazyFunction(lambda: fake.random_int(min=1, max=5))
+    computational_cost_rating = factory.LazyFunction(lambda: fake.random_int(min=1, max=5))
 
     @factory.post_generation
     def assurance_goals(self, create, extracted, **kwargs):

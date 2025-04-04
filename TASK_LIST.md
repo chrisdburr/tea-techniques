@@ -164,19 +164,18 @@ IMPORTANT: make sure to create a **new Git feature branch before starting work**
        - Updated TAILSCALE-DEPLOYMENT.md to reflect the validation implementation
 -   **Branch:** `fix-env-var-handling`
 
-### 10. Add Validators for Rating Fields
+### 10. ✅ Add Validators for Rating Fields
 
 **Task:** Implement validators for rating fields to enforce ranges
 
-IMPORTANT: make sure to create a **new Git feature branch before starting work**.
-
--   **Steps:**
-
-    1. Update the model fields in `backend/api/models.py`:
-
+-   **Status:** Completed
+-   **Changes:**
+    1. Added import for Django validators:
         ```python
         from django.core.validators import MinValueValidator, MaxValueValidator
-
+        ```
+    2. Updated model fields in `backend/api/models.py` with validators:
+        ```python
         complexity_rating = models.PositiveSmallIntegerField(
             null=True,
             blank=True,
@@ -188,6 +187,9 @@ IMPORTANT: make sure to create a **new Git feature branch before starting work**
             validators=[MinValueValidator(1), MaxValueValidator(5)]
         )
         ```
+    3. Created a migration for the model changes
+    4. Added tests to verify the validators work correctly to enforce the 1-5 range for ratings
+-   **Branch:** `add-rating-validators`
 
 ### 11. Re-enable MSW API Mocking in Frontend Tests
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from django.db import models
 from django.db.models.query import QuerySet
+from django.core.validators import MinValueValidator, MaxValueValidator
 from typing import Dict, List, Optional, Any, Union, cast
 
 
@@ -118,8 +119,16 @@ class Technique(models.Model):
         max_length=500, blank=True, 
         help_text="Format: #category/subcategory (DEPRECATED: Use categories/subcategories relationships instead)"
     )
-    complexity_rating = models.PositiveSmallIntegerField(null=True, blank=True)
-    computational_cost_rating = models.PositiveSmallIntegerField(null=True, blank=True)
+    complexity_rating = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    computational_cost_rating = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
     applicable_models = models.JSONField(
         null=True,
         blank=True,

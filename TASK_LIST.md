@@ -82,15 +82,20 @@ Once finished, add a summary of the changes made in a commit message. Also updat
     3. Set up appropriate log formatters and handlers for Django and API modules
 -   **Branch:** `add-production-logging`
 
-### 6. Implement Authentication Tests
+### 6. ✅ Implement Authentication Tests
 
 **Task:** Add comprehensive authentication tests for API
 
--   **Steps:**
-    1. Update `backend/api/tests/test_api.py` to include tests for:
+-   **Status:** Completed
+-   **Changes:**
+    1. Added a new test class `AuthenticationTestCase` in `backend/api/tests/test_api.py` with tests for:
         - Anonymous user access (list/retrieve endpoints)
-        - Unauthenticated write operations (create/update/delete) - should return 401
-        - Authenticated write operations - should succeed
+        - Unauthenticated write operations (create/update/delete) - verified they fail with 401/403
+        - Authenticated write operations - verified they succeed
+        - Real-world authentication flow with login/logout
+        - Authentication status endpoint
+    2. Fixed URL patterns to match the API router configuration with `trailing_slash=False`
+-   **Branch:** `main`
 
 ### 7. Fix Field Type for TechniqueResource.publication_date
 

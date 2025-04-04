@@ -205,18 +205,20 @@ IMPORTANT: make sure to create a **new Git feature branch before starting work**
     6. Ensured tests run successfully in the current configuration
 -   **Branch:** `enable-msw-api-mocking`
 
-### 12. Consolidate API Base URL Configuration
+### 12. ✅ Consolidate API Base URL Configuration
 
 **Task:** Simplify and standardize API URL configuration across frontend
 
-IMPORTANT: make sure to create a **new Git feature branch before starting work**.
-
--   **Steps:**
-    1. Consolidate logic in `frontend/src/lib/config.ts`
-    2. Use consistent environment variables:
-        - NEXT_PUBLIC_API_URL for browser access
-        - INTERNAL_API_URL for server-side container access
-    3. Remove complex conditional logic based on `window` or `DOCKER_ENV`
+-   **Status:** Completed
+-   **Changes:**
+    1. Consolidated all API URL configuration in `frontend/src/lib/config.ts`:
+        - Created separate functions for browser-side and server-side URLs
+        - Used consistent environment variables as specified
+        - Removed conditional logic based on `window` or `DOCKER_ENV`
+    2. Updated `client.ts` to use the centralized configuration
+    3. Simplified URL handling in `hooks.ts` with consistent trailing slash approach
+    4. Updated `next.config.ts` to respect environment variables in a consistent manner
+-   **Branch:** `task-12-api-url-config`
 
 ## Lower Priority Tasks
 

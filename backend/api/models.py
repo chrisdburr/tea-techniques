@@ -200,7 +200,7 @@ class TechniqueResource(models.Model):
     url = models.URLField()
     description = models.TextField(blank=True)
     authors = models.CharField(max_length=500, blank=True, null=True)
-    publication_date = models.CharField(max_length=50, blank=True, null=True)
+    publication_date = models.DateField(blank=True, null=True)
     source_type = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:

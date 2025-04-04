@@ -288,17 +288,20 @@ IMPORTANT: make sure to create a **new Git feature branch before starting work**
     6. Left deprecated `category_tags` field for future removal as it's still referenced in code
 -   **Branch:** `task-16-clean-up-code-issues`
 
-### 17. Update Frontend Global Layout
+### 17. ✅ Update Frontend Global Layout
 
 **Task:** Improve global layout structure
 
 IMPORTANT: make sure to create a **new Git feature branch before starting work**.
 
--   **Steps:**
-    1. Add common structural elements to `frontend/src/app/layout.tsx`:
-        - Header component
-        - Main content area
-        - Footer component
+-   **Status:** Completed
+-   **Changes:**
+    1. Added common structural elements to `frontend/src/app/layout.tsx`:
+        - Imported and added Header component
+        - Created main content area with proper styling
+        - Imported and added Footer component
+        - Added flex container layout with min-height for full-page layout
+-   **Branch:** `task-17-update-layout`
 
 ### 18. Update GitIgnore with Standard Ignores
 

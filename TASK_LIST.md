@@ -12,6 +12,8 @@ Once finished, add a summary of the changes made in a commit message. Also updat
 
 **Task:** Override insecure default API permissions in production settings
 
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
+
 -   **Description:** The API is currently public by default with `AllowAny` permission
 -   **Status:** Completed
 -   **Changes:**
@@ -24,6 +26,8 @@ Once finished, add a summary of the changes made in a commit message. Also updat
 
 **Task:** Fix critical database migration tracking issue
 
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
+
 -   **Description:** Initial migration is incorrectly ignored in Git, breaking database functionality
 -   **Status:** Completed
 -   **Changes:**
@@ -35,6 +39,8 @@ Once finished, add a summary of the changes made in a commit message. Also updat
 ### 3. ✅ Fix N+1 Query Performance Issues in API
 
 **Task:** Resolve critical N+1 query bottleneck in Techniques API
+
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
 
 -   **Description:** The primary technique listing endpoint suffers from excessive database queries
 -   **Status:** Completed
@@ -61,6 +67,8 @@ Once finished, add a summary of the changes made in a commit message. Also updat
 
 **Task:** Restrict access to the debug endpoint
 
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
+
 -   **Description:** The debug endpoint exposes internal configuration information
 -   **Status:** Completed
 -   **Changes:**
@@ -75,6 +83,8 @@ Once finished, add a summary of the changes made in a commit message. Also updat
 
 **Task:** Implement robust logging for production environment
 
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
+
 -   **Status:** Completed
 -   **Changes:**
     1. Added `LOGGING` configuration to `backend/config/settings/production.py` with console and file handlers
@@ -85,6 +95,8 @@ Once finished, add a summary of the changes made in a commit message. Also updat
 ### 6. ✅ Implement Authentication Tests
 
 **Task:** Add comprehensive authentication tests for API
+
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
 
 -   **Status:** Completed
 -   **Changes:**
@@ -101,6 +113,8 @@ Once finished, add a summary of the changes made in a commit message. Also updat
 
 **Task:** Change `publication_date` field type from CharField to DateField
 
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
+
 -   **Status:** Completed
 -   **Changes:**
     1. Updated the model in `backend/api/models.py`:
@@ -112,23 +126,29 @@ Once finished, add a summary of the changes made in a commit message. Also updat
     4. Updated resource creation to properly handle date parsing
 -   **Branch:** `fix-publication-date-field`
 
-### 8. Refactor Complex Import Script Logic
+### 8. ✅ Refactor Complex Import Script Logic
 
 **Task:** Simplify data import logic
 
--   **Steps:**
-    1. Standardize the JSON data format for consistency
-    2. Refactor `_process_technique` method to:
-        - Compare existing relationships before clearing
-        - Simplify category/subcategory handling
-        - Implement logic for the unused `--force` argument
-        - Use the logger instead of stdout for internal logging
+-   **Status:** Completed
+-   **Changes:**
+    1. Created helper methods to modularize the code:
+        - `_process_categories()` - Extracts category/subcategory handling logic
+        - `_process_limitation()` - Extracts limitation processing logic 
+        - `_compare_relationships()` - Compares existing relationships before clearing
+    2. Implemented the `--force` flag to continue processing even when errors occur
+    3. Added proper logger usage instead of using stdout for internal logging
+    4. Selectively clears relationships only when they need updating
+    5. Improved error handling with better error propagation
+-   **Branch:** `refactor-import-script`
 
 ## Medium Priority Tasks
 
 ### 9. Fix Environment Variable Handling for Production Security
 
 **Task:** Improve handling of critical environment variables
+
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
 
 -   **Steps:**
     1. Add validation for required environment variables in `production.py`:
@@ -145,6 +165,8 @@ Once finished, add a summary of the changes made in a commit message. Also updat
 ### 10. Add Validators for Rating Fields
 
 **Task:** Implement validators for rating fields to enforce ranges
+
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
 
 -   **Steps:**
 
@@ -169,6 +191,8 @@ Once finished, add a summary of the changes made in a commit message. Also updat
 
 **Task:** Fix and re-enable Mock Service Worker for frontend tests
 
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
+
 -   **Steps:**
     1. Update `frontend/jest.setup.ts` to properly use MSW for API mocking
     2. Set up the handlers in `frontend/src/mocks/handlers.ts`
@@ -177,6 +201,8 @@ Once finished, add a summary of the changes made in a commit message. Also updat
 ### 12. Consolidate API Base URL Configuration
 
 **Task:** Simplify and standardize API URL configuration across frontend
+
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
 
 -   **Steps:**
     1. Consolidate logic in `frontend/src/lib/config.ts`
@@ -191,6 +217,8 @@ Once finished, add a summary of the changes made in a commit message. Also updat
 
 **Task:** Improve the development workflow for frontend
 
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
+
 -   **Steps:**
     1. Update `docker-compose.development.yml` and `frontend/Dockerfile` to use development mode
     2. Use `pnpm run dev` for hot reloading instead of production build
@@ -198,6 +226,8 @@ Once finished, add a summary of the changes made in a commit message. Also updat
 ### 14. Configure Global React Query Defaults
 
 **Task:** Set up global defaults for React Query options
+
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
 
 -   **Steps:**
     1. Update `QueryProvider` to configure global defaults for common options:
@@ -219,6 +249,8 @@ Once finished, add a summary of the changes made in a commit message. Also updat
 
 **Task:** Simplify API URL handling to avoid dual attempts
 
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
+
 -   **Steps:**
     1. Ensure the backend consistently enforces or removes trailing slashes
     2. Update frontend API client to use consistent URL format
@@ -227,6 +259,8 @@ Once finished, add a summary of the changes made in a commit message. Also updat
 ### 16. Clean Up Code Issues
 
 **Task:** Resolve minor code quality issues
+
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
 
 -   **Steps:**
     1. Remove unused imports in `backend/api/views/api_views.py`
@@ -240,6 +274,8 @@ Once finished, add a summary of the changes made in a commit message. Also updat
 
 **Task:** Improve global layout structure
 
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
+
 -   **Steps:**
     1. Add common structural elements to `frontend/src/app/layout.tsx`:
         - Header component
@@ -249,6 +285,8 @@ Once finished, add a summary of the changes made in a commit message. Also updat
 ### 18. Update GitIgnore with Standard Ignores
 
 **Task:** Add missing standard ignores to .gitignore
+
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
 
 -   **Steps:**
     1. Add the following to `.gitignore`:
@@ -262,6 +300,8 @@ Once finished, add a summary of the changes made in a commit message. Also updat
 
 **Task:** Ensure documentation is synchronized with current code
 
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
+
 -   **Steps:**
     1. Review and update the documents in the `docs/` directory
     2. Ensure API documentation reflects the current implementation
@@ -270,6 +310,8 @@ Once finished, add a summary of the changes made in a commit message. Also updat
 ### 20. Update Tests to Match Current Database Configuration
 
 **Task:** Fix API tests to work with PostgreSQL Docker setup
+
+IMPORTANT: make sure to create a **new Git feature branch before starting work**.
 
 -   **Description:** The existing tests are failing because they expect a different URL structure and database configuration than what is currently used. The project has moved from SQLite to PostgreSQL with Docker.
 -   **Steps:**

@@ -169,6 +169,19 @@ class TechniquesViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self) -> Type[TechniqueSerializer]:
         """Return appropriate serializer class based on action."""
         return TechniqueSerializer
+    
+    def get_queryset(self):
+        """Get queryset with optimized prefetching for related entities."""
+        return Technique.objects.all().prefetch_related(
+            'assurance_goals',
+            'categories',
+            'subcategories',
+            'tags',
+            'attribute_values',
+            'resources',
+            'example_use_cases',
+            'limitations'
+        )
         
     def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """Standard list method for techniques"""

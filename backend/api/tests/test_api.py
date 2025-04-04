@@ -1,3 +1,6 @@
+import os
+import pytest
+import json
 from django.test import TestCase
 from django.test.utils import CaptureQueriesContext
 from django.db import connection
@@ -24,7 +27,6 @@ from api.tests.factories import (
     AttributeValueFactory,
     ResourceTypeFactory,
 )
-import json
 
 # Get the User model
 User = get_user_model()
@@ -54,47 +56,47 @@ class ApiEndpointTestCase(APITestCase):
 
     def test_api_root(self):
         """Test that API root works"""
-        response = self.client.get("/api/")
+        response = self.client.get("/api")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_assurance_goals_list(self):
         """Test the assurance goals endpoint"""
-        response = self.client.get("/api/assurance-goals/")
+        response = self.client.get("/api/assurance-goals")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_categories_list(self):
         """Test the categories endpoint"""
-        response = self.client.get("/api/categories/")
+        response = self.client.get("/api/categories")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_subcategories_list(self):
         """Test the subcategories endpoint"""
-        response = self.client.get("/api/subcategories/")
+        response = self.client.get("/api/subcategories")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_tags_list(self):
         """Test the tags endpoint"""
-        response = self.client.get("/api/tags/")
+        response = self.client.get("/api/tags")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_techniques_list(self):
         """Test the techniques endpoint"""
-        response = self.client.get("/api/techniques/")
+        response = self.client.get("/api/techniques")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_attribute_types_list(self):
         """Test the attribute types endpoint"""
-        response = self.client.get("/api/attribute-types/")
+        response = self.client.get("/api/attribute-types")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_attribute_values_list(self):
         """Test the attribute values endpoint"""
-        response = self.client.get("/api/attribute-values/")
+        response = self.client.get("/api/attribute-values")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_resource_types_list(self):
         """Test the resource types endpoint"""
-        response = self.client.get("/api/resource-types/")
+        response = self.client.get("/api/resource-types")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -147,7 +149,7 @@ class TechniqueAPITestCase(APITestCase):
         )
 
         # URL for technique operations
-        self.techniques_url = "/api/techniques/"
+        self.techniques_url = "/api/techniques"
 
         # Create a client
         self.client = APIClient()
@@ -172,7 +174,7 @@ class TechniqueAPITestCase(APITestCase):
 
     def test_get_technique_detail(self):
         """Test retrieving a specific technique"""
-        url = f"{self.techniques_url}{self.technique1.id}/"
+        url = f"{self.techniques_url}/{self.technique1.id}"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -260,7 +262,7 @@ class TechniqueAPITestCase(APITestCase):
 
     def test_update_technique(self):
         """Test updating a technique"""
-        url = f"{self.techniques_url}{self.technique1.id}/"
+        url = f"{self.techniques_url}/{self.technique1.id}"
 
         # Update the technique
         data = {
@@ -287,7 +289,7 @@ class TechniqueAPITestCase(APITestCase):
 
     def test_partial_update_technique(self):
         """Test partially updating a technique"""
-        url = f"{self.techniques_url}{self.technique1.id}/"
+        url = f"{self.techniques_url}/{self.technique1.id}"
 
         # Partially update the technique (only name)
         data = {"name": "Partially Updated SHAP"}
@@ -306,7 +308,7 @@ class TechniqueAPITestCase(APITestCase):
 
     def test_delete_technique(self):
         """Test deleting a technique"""
-        url = f"{self.techniques_url}{self.technique1.id}/"
+        url = f"{self.techniques_url}/{self.technique1.id}"
         response = self.client.delete(url)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -446,7 +448,7 @@ class TechniqueAPITestCase(APITestCase):
     def test_relation_specific_endpoints(self):
         """Test the endpoints for filtering categories and subcategories by parent"""
         # Test categories by assurance goal
-        url = f"/api/categories-by-goal/{self.assurance_goal.id}/"
+        url = f"/api/categories-by-goal/{self.assurance_goal.id}"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()
@@ -456,7 +458,7 @@ class TechniqueAPITestCase(APITestCase):
         self.assertIn(self.category.id, category_ids)
 
         # Test subcategories by category
-        url = f"/api/subcategories-by-category/{self.category.id}/"
+        url = f"/api/subcategories-by-category/{self.category.id}"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()
@@ -467,7 +469,7 @@ class TechniqueAPITestCase(APITestCase):
 
     def test_debug_endpoint(self):
         """Test that the debug endpoint works in debug mode"""
-        url = "/api/debug/"
+        url = "/api/debug"
         
         # Mock settings.DEBUG to True for this test
         from unittest import mock
@@ -567,8 +569,8 @@ class TechniqueAPITestCase(APITestCase):
         
         # Capture database queries during request
         with CaptureQueriesContext(connection) as queries:
-            # Make sure to use the correct URL format ending with /
-            url = self.techniques_url if self.techniques_url.endswith('/') else f"{self.techniques_url}/"
+            # Use the correct URL format without trailing slash
+            url = self.techniques_url
             response = self.client.get(url)
             
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -622,8 +624,7 @@ class TechniqueAPITestCase(APITestCase):
         )
         
         # Get the detail URL
-        base_url = self.techniques_url if self.techniques_url.endswith('/') else f"{self.techniques_url}/"
-        detail_url = f"{base_url}{technique.id}/"
+        detail_url = f"{self.techniques_url}/{technique.id}"
         
         # Capture database queries during request
         with CaptureQueriesContext(connection) as queries:
@@ -668,6 +669,47 @@ class TechniqueAPITestCase(APITestCase):
         response = self.client.get(f"{self.techniques_url}?categories={category.id}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn(technique.name, [t["name"] for t in response.json()["results"]])
+
+
+class PostgreSQLTestCase(APITestCase):
+    """Tests that specifically verify PostgreSQL functionality."""
+
+    def setUp(self):
+        # Create basic test data
+        self.assurance_goal = AssuranceGoalFactory()
+        self.category = CategoryFactory(assurance_goal=self.assurance_goal)
+        self.tag = TagFactory()
+        self.technique = TechniqueFactory(
+            assurance_goals=[self.assurance_goal],
+            categories=[self.category],
+            tags=[self.tag],
+        )
+        self.client = APIClient()
+
+    @pytest.mark.skipif(
+        os.getenv("USE_POSTGRES_FOR_TESTS") != "True",
+        reason="Test requires PostgreSQL database"
+    )
+    def test_postgres_full_text_search(self):
+        """Test PostgreSQL-specific full-text search functionality.
+        
+        This test verifies that search works correctly in a PostgreSQL environment
+        when using complex search terms that depend on PostgreSQL's full-text search.
+        """
+        # Create a technique with specific text to search for
+        technique = TechniqueFactory(
+            name="PostgreSQL Testing Technique",
+            description="This is a specialized search text for PostgreSQL testing"
+        )
+        
+        # Test complex search query
+        response = self.client.get(f"/api/techniques?search=special+search")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+        
+        # Should find our technique
+        found = any(t["name"] == technique.name for t in data["results"])
+        self.assertTrue(found, "PostgreSQL full-text search failed to find relevant results")
 
 
 class AuthenticationTestCase(APITestCase):

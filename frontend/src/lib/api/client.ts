@@ -1,20 +1,16 @@
 // src/lib/api/client.ts
 import axios from "axios";
+import { config } from "@/lib/config";
 
-// Select the appropriate base URL based on environment
+// Get the appropriate base URL based on client/server environment
 const getBaseUrl = () => {
-  // For server-side rendering in Docker environment
+  // For server-side rendering, use the internal URL for container-to-container communication
   if (typeof window === 'undefined') {
-    // When running on the server
-    if (process.env.DOCKER_ENV === 'true') {
-      return process.env.BACKEND_URL || 'http://backend:8000';
-    } else {
-      return process.env.BACKEND_URL || 'http://localhost:8000';
-    }
+    return config.internalApiUrl;
   }
   
-  // For browser (client-side) requests, always use relative URLs
-  // that will be handled by Next.js rewrites
+  // For browser (client-side) requests, use an empty base URL 
+  // to ensure all API paths are relative and handled by Next.js rewrites
   return '';
 };
 

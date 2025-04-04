@@ -38,38 +38,29 @@ const calculateTotalPages = (
 };
 
 /**
- * Helper function to try API calls with and without trailing slash
+ * Helper function to fetch data from API endpoints with consistent URL handling
  * 
- * This function attempts to fetch data from an API endpoint, trying both with
- * and without a trailing slash to handle potential server configuration differences.
+ * This function provides a standardized way to access API endpoints,
+ * following Next.js config trailing slash setting.
  * 
- * @param url - The base URL to fetch from
+ * @param path - The API path to fetch from (starting with /api)
  * @param params - Optional query parameters
  * @returns Promise resolving to the requested data
- * @throws Error if both attempts fail
+ * @throws Error if the API call fails
  */
 const fetchAPI = async <T>(
-    url: string,
+    path: string,
     params?: Record<string, string | number | string[]>
 ): Promise<T> => {
-    // Remove any trailing slash first 
-    const urlWithoutSlash = url.endsWith("/") ? url.slice(0, -1) : url;
-    const urlWithSlash = urlWithoutSlash + "/";
-    
-    // Try both URL variants in sequence
     try {
-        // Try without trailing slash first
-        try {
-            const response = await apiClient.get(urlWithoutSlash, { params });
-            return response.data as T;
-        } catch {
-            // If first attempt fails, try with trailing slash
-            const response = await apiClient.get(urlWithSlash, { params });
-            return response.data as T;
-        }
+        // Ensure the path has a trailing slash to match Next.js trailingSlash config
+        const normalizedPath = path.endsWith("/") ? path : `${path}/`;
+        
+        // Make the request with normalized path
+        const response = await apiClient.get(normalizedPath, { params });
+        return response.data as T;
     } catch (error) {
-        // This catch will handle any errors from both attempts
-        console.error("API request failed with both URL variations:", error);
+        console.error("API request failed:", error);
         throw error;
     }
 };
@@ -335,34 +326,19 @@ export const useTechniqueDetail = (id: number) => {
 		queryKey: ["technique", id],
 		queryFn: async () => {
 			try {
+				// Ensure the path has a trailing slash to match Next.js trailingSlash config
+				const normalizedPath = `/api/techniques/${id}/`;
 				
-				try {
-					// Try without trailing slash first
-					const response = await apiClient.get(`/api/techniques/${id}`);
-					const data = response.data;
-					
-					// Validate and log the response
-
-					// Check if the data has the expected structure
-					if (!data.id || !data.name) {
-						throw new Error(`API returned malformed data`);
-					}
-
-					return data as Technique;
-				} catch {
-					// Try with trailing slash as fallback
-					const response = await apiClient.get(`/api/techniques/${id}/`);
-					const data = response.data;
-					
-					// Validate and log the response
-
-					// Check if the data has the expected structure
-					if (!data.id || !data.name) {
-						throw new Error(`API returned malformed data`);
-					}
-
-					return data as Technique;
+				// Make the request with normalized path
+				const response = await apiClient.get(normalizedPath);
+				const data = response.data;
+				
+				// Validate the response
+				if (!data.id || !data.name) {
+					throw new Error(`API returned malformed data`);
 				}
+
+				return data as Technique;
 			} catch (error: unknown) {
 				logApiError('useTechniqueDetail', error);
 				throw error;
@@ -380,16 +356,12 @@ export const useCreateTechnique = () => {
 	return useMutation({
 		mutationFn: async (data: TechniqueFormData) => {
 			try {
+				// Ensure the path has a trailing slash to match Next.js trailingSlash config
+				const normalizedPath = `/api/techniques/`;
 				
-				try {
-					// Try without trailing slash first
-					const response = await apiClient.post(`/api/techniques`, data);
-					return response.data as Technique;
-				} catch {
-					// Try with trailing slash as fallback
-					const response = await apiClient.post(`/api/techniques/`, data);
-					return response.data as Technique;
-				}
+				// Make the request with normalized path
+				const response = await apiClient.post(normalizedPath, data);
+				return response.data as Technique;
 			} catch (error: unknown) {
 				logApiError('useCreateTechnique', error);
 				throw error;
@@ -407,16 +379,12 @@ export const useUpdateTechnique = (id: number) => {
 	return useMutation({
 		mutationFn: async (data: TechniqueFormData) => {
 			try {
+				// Ensure the path has a trailing slash to match Next.js trailingSlash config
+				const normalizedPath = `/api/techniques/${id}/`;
 				
-				try {
-					// Try without trailing slash first
-					const response = await apiClient.put(`/api/techniques/${id}`, data);
-					return response.data as Technique;
-				} catch {
-					// Try with trailing slash as fallback
-					const response = await apiClient.put(`/api/techniques/${id}/`, data);
-					return response.data as Technique;
-				}
+				// Make the request with normalized path
+				const response = await apiClient.put(normalizedPath, data);
+				return response.data as Technique;
 			} catch (error: unknown) {
 				logApiError('useUpdateTechnique', error);
 				throw error;
@@ -435,16 +403,12 @@ export const useDeleteTechnique = () => {
 	return useMutation({
 		mutationFn: async (id: number) => {
 			try {
+				// Ensure the path has a trailing slash to match Next.js trailingSlash config
+				const normalizedPath = `/api/techniques/${id}/`;
 				
-				try {
-					// Try without trailing slash first
-					await apiClient.delete(`/api/techniques/${id}`);
-					return id;
-				} catch {
-					// Try with trailing slash as fallback
-					await apiClient.delete(`/api/techniques/${id}/`);
-					return id;
-				}
+				// Make the request with normalized path
+				await apiClient.delete(normalizedPath);
+				return id;
 			} catch (error: unknown) {
 				logApiError('useDeleteTechnique', error);
 				throw error;

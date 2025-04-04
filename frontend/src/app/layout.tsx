@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { DarkModeProvider } from "@/lib/context/dark-mode";
 import { AuthProvider } from "@/lib/context/auth-context";
 import { QueryProvider } from "@/lib/providers/query-provider";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -28,11 +30,17 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+				className={`${geistSans.variable} ${geistMono.variable} antialiased flex min-h-screen flex-col`}
 			>
 				<QueryProvider>
 					<AuthProvider>
-						<DarkModeProvider>{children}</DarkModeProvider>
+						<DarkModeProvider>
+							<Header />
+							<main className="flex-1 container mx-auto py-8 px-4">
+								{children}
+							</main>
+							<Footer />
+						</DarkModeProvider>
 					</AuthProvider>
 				</QueryProvider>
 			</body>

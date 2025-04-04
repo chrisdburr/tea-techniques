@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import logging
+import datetime
 from typing import Any, Dict, List, Optional, Union, Tuple, cast
 from django.core.management.base import BaseCommand
 from django.db import transaction
@@ -138,6 +139,44 @@ class Command(BaseCommand):
                 defaults={"icon": resource_type.lower().replace(" ", "_")},
             )
 
+    def _parse_date(self, date_str: Optional[str]) -> Optional[datetime.date]:
+        """Parse a date string into a Python date object."""
+        if not date_str or not date_str.strip():
+            return None
+            
+        date_str = date_str.strip()
+        
+        # Try different date formats
+        formats = [
+            "%Y-%m-%d",       # 2023-01-15
+            "%d/%m/%Y",       # 15/01/2023
+            "%m/%d/%Y",       # 01/15/2023
+            "%B %d, %Y",      # January 15, 2023
+            "%d %B %Y",       # 15 January 2023
+            "%Y",             # 2023 (just year)
+            "%B %Y",          # January 2023
+            "%m-%Y",          # 01-2023
+            "%m/%Y",          # 01/2023
+        ]
+        
+        for fmt in formats:
+            try:
+                return datetime.datetime.strptime(date_str, fmt).date()
+            except ValueError:
+                continue
+                
+        # If we couldn't parse the date with any format, just extract the year if possible
+        # This handles cases like "Published in 2023" or "2023 (Conference)"
+        import re
+        year_match = re.search(r'20\d{2}|19\d{2}', date_str)
+        if year_match:
+            year = int(year_match.group(0))
+            return datetime.date(year, 1, 1)  # Default to January 1st of the year
+            
+        # If all else fails, return None
+        logger.warning(f"Could not parse date string: {date_str}")
+        return None
+        
     def _parse_category_tags(self, category_tags: str) -> List[Dict[str, Optional[str]]]:
         """Parse category tags from #category/subcategory format."""
         if not category_tags:
@@ -483,6 +522,9 @@ class Command(BaseCommand):
                 if isinstance(resource_authors, list):
                     resource_authors = ", ".join(resource_authors)
 
+                # Parse the publication date
+                parsed_date = self._parse_date(resource_publication_date)
+                
                 # Create resource
                 TechniqueResource.objects.create(
                     technique=technique,
@@ -491,7 +533,7 @@ class Command(BaseCommand):
                     title=resource_title,
                     description=resource_desc,
                     authors=resource_authors,
-                    publication_date=resource_publication_date,
+                    publication_date=parsed_date,
                     source_type=resource_source_type,
                 )
 

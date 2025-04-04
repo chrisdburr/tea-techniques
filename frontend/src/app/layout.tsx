@@ -5,6 +5,7 @@ import { AuthProvider } from "@/lib/context/auth-context";
 import { QueryProvider } from "@/lib/providers/query-provider";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import DismissibleBanner from "@/components/ui/DismissibleBanner";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -35,6 +36,7 @@ export default function RootLayout({
 				<QueryProvider>
 					<AuthProvider>
 						<DarkModeProvider>
+							<DismissibleBanner message="This application is in active development and should not be shared publicly. Features are still being worked on and some content exists as a placeholder only." />
 							<Header />
 							<main className="flex-1 container mx-auto py-8 px-4">
 								{children}

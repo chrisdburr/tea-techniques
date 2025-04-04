@@ -48,13 +48,19 @@ services:
                 - NEXT_PUBLIC_SWAGGER_URL=${NEXT_PUBLIC_SWAGGER_URL:-/swagger/}
         env_file:
             - .env
-        command: node server.js
+        command: pnpm run dev
         volumes:
+            - ./frontend:/app
             - /app/node_modules
+            - /app/.next
         ports:
             - "3000:3000"
         depends_on:
             - backend
+        environment:
+            - NODE_ENV=development
+            - NEXT_TELEMETRY_DISABLED=1
+            - WATCHPACK_POLLING=true
         healthcheck:
             test: ["CMD", "curl", "--fail", "http://localhost:3000"]
             interval: 30s

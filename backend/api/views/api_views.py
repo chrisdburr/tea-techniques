@@ -59,6 +59,17 @@ class AssuranceGoalsViewSet(viewsets.ModelViewSet):
     filterset_fields = ["name"]
     search_fields = ["name", "description"]
     ordering_fields = ["id", "name"]
+    
+    def get_permissions(self) -> List[BasePermission]:
+        """
+        Customize permissions based on action:
+        - list and retrieve are allowed for any user (even unauthenticated)
+        - create, update, delete require authentication
+        """
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsAuthenticated()]
+        # Default permission for list and retrieve
+        return [AllowAny()]
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -72,6 +83,12 @@ class CategoryViewSet(viewsets.ModelViewSet):
     filterset_fields = ["name", "assurance_goal"]
     search_fields = ["name", "assurance_goal__name"]
     ordering_fields = ["id", "name"]
+    
+    def get_permissions(self) -> List[BasePermission]:
+        """Require authentication for write operations"""
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsAuthenticated()]
+        return [AllowAny()]
 
 
 class SubCategoryViewSet(viewsets.ModelViewSet):
@@ -85,6 +102,12 @@ class SubCategoryViewSet(viewsets.ModelViewSet):
     filterset_fields = ["name", "category"]
     search_fields = ["name", "category__name"]
     ordering_fields = ["id", "name"]
+    
+    def get_permissions(self) -> List[BasePermission]:
+        """Require authentication for write operations"""
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsAuthenticated()]
+        return [AllowAny()]
 
 
 class TagsViewSet(viewsets.ModelViewSet):
@@ -98,6 +121,12 @@ class TagsViewSet(viewsets.ModelViewSet):
     filterset_fields = ["name"]
     search_fields = ["name"]
     ordering_fields = ["id", "name"]
+    
+    def get_permissions(self) -> List[BasePermission]:
+        """Require authentication for write operations"""
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsAuthenticated()]
+        return [AllowAny()]
 
 
 class TechniquesViewSet(viewsets.ModelViewSet):
@@ -182,6 +211,12 @@ class AttributeTypesViewSet(viewsets.ModelViewSet):
     filterset_fields = ["name", "applicable_goals", "required_for_goals"]
     search_fields = ["name", "description"]
     ordering_fields = ["id", "name"]
+    
+    def get_permissions(self) -> List[BasePermission]:
+        """Require authentication for write operations"""
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsAuthenticated()]
+        return [AllowAny()]
 
 
 class AttributeValuesViewSet(viewsets.ModelViewSet):
@@ -195,6 +230,12 @@ class AttributeValuesViewSet(viewsets.ModelViewSet):
     filterset_fields = ["name", "attribute_type"]
     search_fields = ["name", "description"]
     ordering_fields = ["id", "name"]
+    
+    def get_permissions(self) -> List[BasePermission]:
+        """Require authentication for write operations"""
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsAuthenticated()]
+        return [AllowAny()]
 
 
 class ResourceTypesViewSet(viewsets.ModelViewSet):
@@ -208,6 +249,12 @@ class ResourceTypesViewSet(viewsets.ModelViewSet):
     filterset_fields = ["name"]
     search_fields = ["name"]
     ordering_fields = ["id", "name"]
+    
+    def get_permissions(self) -> List[BasePermission]:
+        """Require authentication for write operations"""
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsAuthenticated()]
+        return [AllowAny()]
 
 
 @api_view(["GET"])
@@ -257,16 +304,19 @@ def health_check(request: Request) -> Response:
 
 
 @api_view(["GET", "POST"])
-@csrf_exempt
 def debug_endpoint(request: Request) -> Response:
-    """
-    Debugging endpoint to check what the API is receiving and can return.
-    GET: Returns the available models and their structure
-    POST: Echoes back the received data, useful for checking what's being sent
-    """
+    """Debugging endpoint with restricted access."""
+    from django.conf import settings
+
+    # Only allow debug endpoint in development
+    if not settings.DEBUG:
+        return Response(
+            {"error": "Debug endpoint not available in production"},
+            status=status.HTTP_403_FORBIDDEN
+        )
+    
     if request.method == "GET":
         # Return connection information for debugging
-        from django.conf import settings
         
         # Safe version of settings that doesn't expose sensitive information
         safe_settings = {

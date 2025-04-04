@@ -9,84 +9,8 @@ jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
-// Mock API hooks with more complete mock data
-jest.mock('@/lib/api/hooks', () => ({
-  useCreateTechnique: () => ({ 
-    mutateAsync: jest.fn().mockResolvedValue({ id: 123 }), 
-    isPending: false 
-  }),
-  useUpdateTechnique: () => ({ 
-    mutateAsync: jest.fn().mockResolvedValue({ id: 456 }), 
-    isPending: false 
-  }),
-  useAssuranceGoals: () => ({ 
-    data: { 
-      results: [
-        { id: 1, name: 'Accuracy' },
-        { id: 2, name: 'Fairness' },
-        { id: 3, name: 'Safety' }
-      ] 
-    }, 
-    isLoading: false 
-  }),
-  useCategories: () => ({ 
-    data: { 
-      results: [
-        { id: 1, name: 'Testing', assurance_goal: 1 },
-        { id: 2, name: 'Monitoring', assurance_goal: 1 },
-        { id: 3, name: 'Bias Detection', assurance_goal: 2 }
-      ] 
-    }, 
-    isLoading: false 
-  }),
-  useSubCategories: () => ({ 
-    data: { 
-      results: [
-        { id: 1, name: 'Unit Testing', category: 1 },
-        { id: 2, name: 'Integration Testing', category: 1 },
-        { id: 3, name: 'Real-time Monitoring', category: 2 }
-      ] 
-    }, 
-    isLoading: false 
-  }),
-  useTags: () => ({ 
-    data: { 
-      results: [
-        { id: 1, name: 'ML' },
-        { id: 2, name: 'NLP' },
-        { id: 3, name: 'Computer Vision' }
-      ] 
-    }, 
-    isLoading: false 
-  }),
-  useResourceTypes: () => ({ 
-    data: { 
-      results: [
-        { id: 1, name: 'Paper' },
-        { id: 2, name: 'Code Repository' },
-        { id: 3, name: 'Documentation' }
-      ] 
-    }, 
-    isLoading: false 
-  }),
-  useTechniqueDetail: (id) => ({ 
-    data: id ? {
-      id: id,
-      name: 'Test Technique',
-      description: 'Test Description',
-      model_dependency: 'Model-Agnostic',
-      assurance_goals: [{ id: 1, name: 'Accuracy' }],
-      categories: [{ id: 1, name: 'Testing' }],
-      subcategories: [],
-      tags: [],
-      attribute_values: [],
-      example_use_cases: [{ description: 'Example use case', assurance_goal: 1 }],
-      limitations: [{ description: 'Limitation example' }],
-      resources: [{ resource_type: 1, title: 'Resource', url: 'https://example.com', description: 'Resource Description' }],
-    } : null, 
-    isLoading: false 
-  }),
-}));
+// Mock API hooks are no longer needed as MSW will handle API requests
+// All API requests will be intercepted by MSW handlers from src/mocks/handlers.ts
 
 // Mock API error hook
 jest.mock('@/lib/hooks/useApiError', () => ({

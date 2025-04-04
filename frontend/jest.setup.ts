@@ -1,9 +1,10 @@
 import '@testing-library/jest-dom';
 
-// MSW setup is disabled temporarily to allow tests to run
-// We're manually mocking all API calls in our tests
+// MSW integration is commented out due to module resolution issues
+// We'll use the manual mocks in the test files for now and fix the MSW setup later
+// Once the module resolution issue with msw/node is resolved
 
-// Mock handlers that would be provided by MSW
+// Mock setup
 beforeAll(() => {
   console.log('Setting up test environment');
 });

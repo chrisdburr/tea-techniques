@@ -318,7 +318,11 @@ def health_check(request: Request) -> Response:
 
 @api_view(["GET", "POST"])
 def debug_endpoint(request: Request) -> Response:
-    """Debugging endpoint with restricted access."""
+    """
+    Debugging endpoint with restricted access.
+    
+    Only available in development mode (DEBUG=True).
+    """
     from django.conf import settings
 
     # Only allow debug endpoint in development
@@ -327,7 +331,7 @@ def debug_endpoint(request: Request) -> Response:
             {"error": "Debug endpoint not available in production"},
             status=status.HTTP_403_FORBIDDEN
         )
-    
+
     if request.method == "GET":
         # Return connection information for debugging
         

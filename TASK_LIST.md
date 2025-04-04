@@ -303,19 +303,21 @@ IMPORTANT: make sure to create a **new Git feature branch before starting work**
         - Added flex container layout with min-height for full-page layout
 -   **Branch:** `task-17-update-layout`
 
-### 18. Update GitIgnore with Standard Ignores
+### 18. ✅ Update GitIgnore with Standard Ignores
 
 **Task:** Add missing standard ignores to .gitignore
 
 IMPORTANT: make sure to create a **new Git feature branch before starting work**.
 
--   **Steps:**
-    1. Add the following to `.gitignore`:
+-   **Status:** Completed
+-   **Changes:**
+    1. Added the following to `.gitignore`:
         ```
         frontend/.next/
         backend/.coverage
         ```
-    2. Consider generating a more comprehensive .gitignore from templates
+    2. Added these entries to the root .gitignore instead of creating separate entries in the frontend and backend directories
+-   **Branch:** `task-18-update-gitignore`
 
 ### 19. Update Documentation to Match Implementation
 

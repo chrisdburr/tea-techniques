@@ -20,7 +20,15 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
 
-# Disable browsable API in production
-REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = [  # noqa
-    "rest_framework.renderers.JSONRenderer",
-]
+# REST Framework settings for production
+REST_FRAMEWORK = {
+    **REST_FRAMEWORK,  # Include existing settings
+    # Override insecure default permissions for production
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ],
+    # Disable browsable API in production
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+    ],
+}

@@ -53,13 +53,22 @@ const fetchAPI = async <T>(
     params?: Record<string, string | number | string[]>
 ): Promise<T> => {
     try {
-        // Remove trailing slash to match Django's APPEND_SLASH=False and DRF's TRAILING_SLASH=False
-        const normalizedPath = path.endsWith("/") ? path.slice(0, -1) : path;
+        // For Next.js rewrites to work correctly, we need to ensure paths start with /api
+        // and keep any trailing slashes intact to match Django DRF configuration
+        let normalizedPath = path;
         
-        // Make the request with normalized path
+        // If path doesn't start with /api, add it
+        if (!normalizedPath.startsWith('/api')) {
+            normalizedPath = `/api${normalizedPath.startsWith('/') ? '' : '/'}${normalizedPath}`;
+        }
+        
+        console.log(`API Request to: ${normalizedPath}`);
+        
+        // Make the request with the properly formatted path
         const response = await apiClient.get(normalizedPath, { params });
         return response.data as T;
     } catch (error) {
+        console.error(`API request failed for path: ${path}`, error);
         // Error will be logged by logApiError in the calling function
         throw error;
     }
@@ -326,19 +335,34 @@ export const useTechniqueDetail = (id: number) => {
 	});
 };
 
+// Helper function to normalize paths for all API requests
+const normalizePath = (path: string): string => {
+    // For Next.js rewrites to work correctly, we need to ensure paths start with /api
+    let normalizedPath = path;
+    
+    // If path doesn't start with /api, add it
+    if (!normalizedPath.startsWith('/api')) {
+        normalizedPath = `/api${normalizedPath.startsWith('/') ? '' : '/'}${normalizedPath}`;
+    }
+    
+    return normalizedPath;
+};
+
 export const useCreateTechnique = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
 		mutationFn: async (data: TechniqueFormData) => {
 			try {
-				// Remove trailing slash to match backend configuration
-				const path = `/api/techniques`;
+				// Normalize the path to ensure proper routing
+				const path = normalizePath('/api/techniques');
+				console.log(`Creating technique at: ${path}`);
 				
 				// Make the request with proper path
 				const response = await apiClient.post(path, data);
 				return response.data as Technique;
 			} catch (error: unknown) {
+				console.error('Create technique error:', error);
 				logApiError('useCreateTechnique', error);
 				throw error;
 			}
@@ -355,13 +379,15 @@ export const useUpdateTechnique = (id: number) => {
 	return useMutation({
 		mutationFn: async (data: TechniqueFormData) => {
 			try {
-				// Remove trailing slash to match backend configuration
-				const path = `/api/techniques/${id}`;
+				// Normalize the path to ensure proper routing
+				const path = normalizePath(`/api/techniques/${id}`);
+				console.log(`Updating technique at: ${path}`);
 				
 				// Make the request with proper path
 				const response = await apiClient.put(path, data);
 				return response.data as Technique;
 			} catch (error: unknown) {
+				console.error('Update technique error:', error);
 				logApiError('useUpdateTechnique', error);
 				throw error;
 			}
@@ -379,13 +405,15 @@ export const useDeleteTechnique = () => {
 	return useMutation({
 		mutationFn: async (id: number) => {
 			try {
-				// Remove trailing slash to match backend configuration
-				const path = `/api/techniques/${id}`;
+				// Normalize the path to ensure proper routing
+				const path = normalizePath(`/api/techniques/${id}`);
+				console.log(`Deleting technique at: ${path}`);
 				
 				// Make the request with proper path
 				await apiClient.delete(path);
 				return id;
 			} catch (error: unknown) {
+				console.error('Delete technique error:', error);
 				logApiError('useDeleteTechnique', error);
 				throw error;
 			}

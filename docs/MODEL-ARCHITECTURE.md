@@ -3,6 +3,14 @@
 > [!NOTE]
 > The TEA Techniques application is built around a core set of models that represent techniques for evidencing claims about responsible AI design, development, and deployment. The model architecture follows a hierarchical structure with assurance goals at the top level, followed by categories, subcategories, and techniques.
 
+The model implementation uses Django's built-in validation system:
+
+```python
+from django.core.validators import MinValueValidator, MaxValueValidator
+```
+
+These validators are used to enforce data constraints, particularly for rating fields.
+
 ## Entity Relationship Diagram
 
 ```
@@ -109,8 +117,16 @@ class Technique(models.Model):
     description = models.TextField()
     model_dependency = models.CharField(max_length=100)
     category_tags = models.CharField(max_length=500, blank=True)
-    complexity_rating = models.PositiveSmallIntegerField(null=True, blank=True)
-    computational_cost_rating = models.PositiveSmallIntegerField(null=True, blank=True)
+    complexity_rating = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    computational_cost_rating = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
     applicable_models = models.JSONField(null=True, blank=True)
     assurance_goals = models.ManyToManyField(AssuranceGoal, related_name="techniques")
     categories = models.ManyToManyField(Category, related_name="techniques")
@@ -161,7 +177,7 @@ class TechniqueResource(models.Model):
     url = models.URLField()
     description = models.TextField(blank=True)
     authors = models.CharField(max_length=500, blank=True, null=True)
-    publication_date = models.CharField(max_length=50, blank=True, null=True)
+    publication_date = models.DateField(blank=True, null=True)
     source_type = models.CharField(max_length=100, blank=True, null=True)
 ```
 
@@ -202,7 +218,7 @@ Techniques include two rating fields:
 - **computational_cost_rating**: How computationally expensive the technique is to run (1-5 scale)
 
 > [!IMPORTANT] Database Considerations
-> The application supports both SQLite (for development) and PostgreSQL (for production) databases. Some special handling is required for SQLite due to schema compatibility issues, particularly with JSONField.
+> The application now uses PostgreSQL consistently across all environments (development, testing, and production). This ensures consistent behavior and eliminates compatibility issues that were previously encountered with SQLite, particularly with JSONField.
 
 ## Schema Evolution
 
@@ -212,7 +228,18 @@ When modifying the model schema, follow these steps in order:
 2. Apply migrations: `python manage.py migrate`
 3. Update the related serializers in `serializers.py`
 4. Update the JSON data structure in `techniques.json`
-5. For SQLite deployments, handle missing columns with `add_missing_columns` management command
+5. Update tests to reflect the new model schema
+6. Run tests to ensure all changes are working correctly: `pytest`
+
+For Docker environments, use:
+
+```bash
+docker-compose -f docker-compose.development.yml exec backend python manage.py makemigrations
+docker-compose -f docker-compose.development.yml exec backend python manage.py migrate
+```
+
+> [!IMPORTANT]
+> All migration files must be committed to version control to ensure consistent database schemas across all environments.
 
 ## Related Links
 

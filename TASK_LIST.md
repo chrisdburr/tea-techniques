@@ -319,16 +319,28 @@ IMPORTANT: make sure to create a **new Git feature branch before starting work**
     2. Added these entries to the root .gitignore instead of creating separate entries in the frontend and backend directories
 -   **Branch:** `task-18-update-gitignore`
 
-### 19. Update Documentation to Match Implementation
+### 19. ✅ Update Documentation to Match Implementation
 
 **Task:** Ensure documentation is synchronized with current code
 
 IMPORTANT: make sure to create a **new Git feature branch before starting work**.
 
--   **Steps:**
-    1. Review and update the documents in the `docs/` directory
-    2. Ensure API documentation reflects the current implementation
-    3. Document process for updating documentation with code changes
+-   **Status:** Completed
+-   **Changes:**
+    1. Updated `API-GUIDE.md` to reflect current API implementation:
+       - Added authentication endpoints
+       - Updated URL patterns (removed trailing slashes)
+       - Added security section for permissions
+       - Added description of all available hooks
+    2. Updated `MODEL-ARCHITECTURE.md` to reflect current model implementation:
+       - Added validators for rating fields
+       - Updated TechniqueResource.publication_date to DateField
+       - Updated database section to indicate PostgreSQL is used consistently
+       - Updated schema evolution process
+    3. Updated `TESTING.md` with Docker testing information and test categories
+    4. Updated `DEPLOYMENT.md` with detailed environment variable requirements
+    5. Created new `DOCUMENTATION-GUIDE.md` with process for keeping docs in sync with code
+-   **Branch:** `task-19-update-documentation`
 
 ### 20. Update Tests to Match Current Database Configuration
 

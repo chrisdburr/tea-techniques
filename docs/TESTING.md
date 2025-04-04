@@ -44,6 +44,7 @@ The backend uses pytest and Django's testing tools for model and API testing.
 > - pytest and pytest-django for test running
 > - Factory Boy for test data generation
 > - pytest-cov for test coverage
+> - Django REST framework's test utilities for API testing
 
 ### Running Tests
 
@@ -60,6 +61,30 @@ For test coverage report:
 cd backend
 poetry run pytest --cov=api
 ```
+
+### Docker Testing
+
+To run tests in the Docker development environment:
+
+```bash
+docker-compose -f docker-compose.development.yml exec backend pytest
+```
+
+For specific test files or classes:
+
+```bash
+docker-compose -f docker-compose.development.yml exec backend pytest api/tests/test_api.py::TechniqueAPITestCase
+```
+
+### Test Categories
+
+The backend tests are organized into several categories:
+
+1. **Model Tests**: Verify model constraints, validators, and relationships
+2. **API Tests**: Verify API endpoints, permissions, and data formatting
+3. **Authentication Tests**: Verify proper access control for authenticated/unauthenticated users
+4. **Error Handling Tests**: Verify proper error responses for invalid requests
+5. **Environment Validation Tests**: Verify that required environment variables are validated correctly
 
 ## Related Documentation
 

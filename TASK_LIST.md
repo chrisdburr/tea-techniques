@@ -238,14 +238,13 @@ IMPORTANT: make sure to create a **new Git feature branch before starting work**
        - Added WATCHPACK_POLLING for better file watching in Docker
 -   **Branch:** `task-13-fix-frontend-dev-experience`
 
-### 14. Configure Global React Query Defaults
+### 14. ✅ Configure Global React Query Defaults
 
 **Task:** Set up global defaults for React Query options
 
-IMPORTANT: make sure to create a **new Git feature branch before starting work**.
-
--   **Steps:**
-    1. Update `QueryProvider` to configure global defaults for common options:
+-   **Status:** Completed
+-   **Changes:**
+    1. Updated both `QueryProvider` implementations to configure global defaults for common options:
         ```typescript
         // Configure global defaults in the QueryClient
         const queryClient = new QueryClient({
@@ -258,7 +257,8 @@ IMPORTANT: make sure to create a **new Git feature branch before starting work**
         	},
         });
         ```
-    2. Remove redundant configurations from individual hooks
+    2. Removed redundant configurations from all individual hooks across the application
+-   **Branch:** `task-14-react-query-defaults`
 
 ### 15. Fix Trailing Slash Handling in API Hooks
 

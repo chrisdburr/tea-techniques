@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  db-test:
+    image: postgres:16
+    environment:
+      - POSTGRES_DB=techniques_test
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5433:5432"  # Use different port to avoid conflicts with development DB
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  backend-test:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      - DEBUG=False
+      - SECRET_KEY=test-key-not-for-production
+      - DB_NAME=techniques_test
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_HOST=db-test
+      - DB_PORT=5432
+      - USE_POSTGRES_FOR_TESTS=True
+      - DJANGO_SETTINGS_MODULE=config.settings.test
+    command: ["python", "manage.py", "test", "api"]
+    volumes:
+      - ./backend:/app
+    depends_on:
+      db-test:
+        condition: service_healthy

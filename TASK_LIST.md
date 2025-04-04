@@ -260,16 +260,17 @@ IMPORTANT: make sure to create a **new Git feature branch before starting work**
     2. Removed redundant configurations from all individual hooks across the application
 -   **Branch:** `task-14-react-query-defaults`
 
-### 15. Fix Trailing Slash Handling in API Hooks
+### 15. ✅ Fix Trailing Slash Handling in API Hooks
 
 **Task:** Simplify API URL handling to avoid dual attempts
 
-IMPORTANT: make sure to create a **new Git feature branch before starting work**.
-
--   **Steps:**
-    1. Ensure the backend consistently enforces or removes trailing slashes
-    2. Update frontend API client to use consistent URL format
-    3. Remove the complex try/catch fallback logic in hooks.ts
+-   **Status:** Completed
+-   **Changes:**
+    1. Updated the fetchAPI helper in hooks.ts to always remove trailing slashes to align with backend configuration
+    2. Modified all API endpoints to use a consistent format without trailing slashes
+    3. Removed redundant URL normalization from individual hooks
+    4. Updated comments in client.ts and config.ts to reflect the URL handling approach
+-   **Branch:** `task-15-fix-trailing-slash`
 
 ### 16. Clean Up Code Issues
 

@@ -203,13 +203,7 @@ class TechniqueSerializer(serializers.ModelSerializer):
         Get the applicable_models field from the Technique object.
         Returns an empty list if the field doesn't exist or is None.
         """
-        try:
-            if hasattr(obj, 'applicable_models') and obj.applicable_models is not None:
-                return cast(List[str], obj.applicable_models)
-            return []
-        except Exception as e:
-            logger.warning(f"Error accessing applicable_models: {str(e)}")
-            return []
+        return obj.applicable_models or []
 
     class Meta:
         model = Technique

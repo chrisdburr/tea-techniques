@@ -21,9 +21,9 @@ from ..models import (
     Technique,
     AttributeType,
     AttributeValue,
-    TechniqueResource,
-    TechniqueExampleUseCase,
-    TechniqueLimitation,
+    # TechniqueResource, # Unused import
+    # TechniqueExampleUseCase, # Unused import
+    # TechniqueLimitation, # Unused import
 )
 from ..serializers import (
     AssuranceGoalSerializer,
@@ -34,9 +34,9 @@ from ..serializers import (
     AttributeTypeSerializer,
     AttributeValueSerializer,
     ResourceTypeSerializer,
-    TechniqueResourceSerializer,
-    TechniqueExampleUseCaseSerializer,
-    TechniqueLimitationSerializer,
+    # TechniqueResourceSerializer, # Unused import
+    # TechniqueExampleUseCaseSerializer, # Unused import
+    # TechniqueLimitationSerializer, # Unused import
 )
 
 # Set up logger
@@ -54,14 +54,14 @@ class AssuranceGoalsViewSet(viewsets.ModelViewSet):
     filterset_fields = ["name"]
     search_fields = ["name", "description"]
     ordering_fields = ["id", "name"]
-    
+
     def get_permissions(self) -> List[BasePermission]:
         """
         Customize permissions based on action:
         - list and retrieve are allowed for any user (even unauthenticated)
         - create, update, delete require authentication
         """
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+        if self.action in ["create", "update", "partial_update", "destroy"]:
             return [IsAuthenticated()]
         # Default permission for list and retrieve
         return [AllowAny()]
@@ -78,10 +78,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
     filterset_fields = ["name", "assurance_goal"]
     search_fields = ["name", "assurance_goal__name"]
     ordering_fields = ["id", "name"]
-    
+
     def get_permissions(self) -> List[BasePermission]:
         """Require authentication for write operations"""
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+        if self.action in ["create", "update", "partial_update", "destroy"]:
             return [IsAuthenticated()]
         return [AllowAny()]
 
@@ -97,10 +97,10 @@ class SubCategoryViewSet(viewsets.ModelViewSet):
     filterset_fields = ["name", "category"]
     search_fields = ["name", "category__name"]
     ordering_fields = ["id", "name"]
-    
+
     def get_permissions(self) -> List[BasePermission]:
         """Require authentication for write operations"""
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+        if self.action in ["create", "update", "partial_update", "destroy"]:
             return [IsAuthenticated()]
         return [AllowAny()]
 
@@ -116,10 +116,10 @@ class TagsViewSet(viewsets.ModelViewSet):
     filterset_fields = ["name"]
     search_fields = ["name"]
     ordering_fields = ["id", "name"]
-    
+
     def get_permissions(self) -> List[BasePermission]:
         """Require authentication for write operations"""
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+        if self.action in ["create", "update", "partial_update", "destroy"]:
             return [IsAuthenticated()]
         return [AllowAny()]
 
@@ -128,7 +128,7 @@ class TechniquesViewSet(viewsets.ModelViewSet):
     """
     ViewSet for Techniques that provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
-    
+
     Authentication is required for create, update, and delete operations.
     """
 
@@ -149,14 +149,14 @@ class TechniquesViewSet(viewsets.ModelViewSet):
     ]
     search_fields = ["name", "description"]
     ordering_fields = ["id", "name"]
-    
+
     def get_permissions(self) -> List[BasePermission]:
         """
         Customize permissions based on action:
         - list and retrieve are allowed for any user (even unauthenticated)
         - create, update, delete require authentication
         """
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+        if self.action in ["create", "update", "partial_update", "destroy"]:
             return [IsAuthenticated()]
         # Default permission for list and retrieve
         return [AllowAny()]
@@ -164,24 +164,24 @@ class TechniquesViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self) -> Type[TechniqueSerializer]:
         """Return appropriate serializer class based on action."""
         return TechniqueSerializer
-    
+
     def get_queryset(self):
         """Get queryset with optimized prefetching for related entities."""
         return Technique.objects.all().prefetch_related(
-            'assurance_goals',
-            'categories',
-            'subcategories',
-            'tags',
-            'attribute_values',
-            'resources',
-            'example_use_cases',
-            'limitations'
+            "assurance_goals",
+            "categories",
+            "subcategories",
+            "tags",
+            "attribute_values",
+            "resources",
+            "example_use_cases",
+            "limitations",
         )
-        
+
     def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """Standard list method for techniques"""
         return super().list(request, *args, **kwargs)
-                
+
     def retrieve(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """Standard retrieve method for techniques"""
         return super().retrieve(request, *args, **kwargs)
@@ -190,7 +190,7 @@ class TechniquesViewSet(viewsets.ModelViewSet):
         """Create a new technique."""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        instance = serializer.save()
+        serializer.save()  # Removed unused 'instance' variable
 
         # Return the created instance
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -202,7 +202,7 @@ class TechniquesViewSet(viewsets.ModelViewSet):
             instance, data=request.data, partial=kwargs.get("partial", False)
         )
         serializer.is_valid(raise_exception=True)
-        updated_instance = serializer.save()
+        serializer.save()  # Removed unused 'updated_instance' variable
 
         # Return the updated instance
         return Response(serializer.data)
@@ -216,13 +216,15 @@ class AttributeTypesViewSet(viewsets.ModelViewSet):
         filters.SearchFilter,
         filters.OrderingFilter,
     ]
-    filterset_fields = ["name", "applicable_goals", "required_for_goals"]
+    filterset_fields = [
+        "name"
+    ]  # Removed non-existent fields: applicable_goals, required_for_goals
     search_fields = ["name", "description"]
     ordering_fields = ["id", "name"]
-    
+
     def get_permissions(self) -> List[BasePermission]:
         """Require authentication for write operations"""
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+        if self.action in ["create", "update", "partial_update", "destroy"]:
             return [IsAuthenticated()]
         return [AllowAny()]
 
@@ -238,10 +240,10 @@ class AttributeValuesViewSet(viewsets.ModelViewSet):
     filterset_fields = ["name", "attribute_type"]
     search_fields = ["name", "description"]
     ordering_fields = ["id", "name"]
-    
+
     def get_permissions(self) -> List[BasePermission]:
         """Require authentication for write operations"""
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+        if self.action in ["create", "update", "partial_update", "destroy"]:
             return [IsAuthenticated()]
         return [AllowAny()]
 
@@ -257,10 +259,10 @@ class ResourceTypesViewSet(viewsets.ModelViewSet):
     filterset_fields = ["name"]
     search_fields = ["name"]
     ordering_fields = ["id", "name"]
-    
+
     def get_permissions(self) -> List[BasePermission]:
         """Require authentication for write operations"""
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+        if self.action in ["create", "update", "partial_update", "destroy"]:
             return [IsAuthenticated()]
         return [AllowAny()]
 
@@ -291,7 +293,7 @@ def health_check(request: Request) -> Response:
             cursor.execute("SELECT 1")
             one = cursor.fetchone()[0]
             assert one == 1
-        
+
         return Response(
             {
                 "status": "healthy",
@@ -312,10 +314,12 @@ def health_check(request: Request) -> Response:
 
 
 @api_view(["GET", "POST"])
-def debug_endpoint(request: Request) -> Response:
+def debug_endpoint(
+    request: Request,
+) -> Response:  # noqa: C901 # Ignore complexity for debug view
     """
     Debugging endpoint with restricted access.
-    
+
     Only available in development mode (DEBUG=True).
     """
     from django.conf import settings
@@ -324,30 +328,36 @@ def debug_endpoint(request: Request) -> Response:
     if not settings.DEBUG:
         return Response(
             {"error": "Debug endpoint not available in production"},
-            status=status.HTTP_403_FORBIDDEN
+            status=status.HTTP_403_FORBIDDEN,
         )
 
     if request.method == "GET":
         # Return connection information for debugging
-        
+
         # Safe version of settings that doesn't expose sensitive information
         safe_settings = {
             "DEBUG": settings.DEBUG,
             "ALLOWED_HOSTS": settings.ALLOWED_HOSTS,
-            "CORS_ALLOWED_ORIGINS": getattr(settings, "CORS_ALLOWED_ORIGINS", "Not set"),
-            "CORS_ALLOW_ALL_ORIGINS": getattr(settings, "CORS_ALLOW_ALL_ORIGINS", "Not set"),
+            "CORS_ALLOWED_ORIGINS": getattr(
+                settings, "CORS_ALLOWED_ORIGINS", "Not set"
+            ),
+            "CORS_ALLOW_ALL_ORIGINS": getattr(
+                settings, "CORS_ALLOW_ALL_ORIGINS", "Not set"
+            ),
             "DATABASE_ENGINE": settings.DATABASES["default"]["ENGINE"],
             "INSTALLED_APPS": settings.INSTALLED_APPS,
             "MIDDLEWARE": settings.MIDDLEWARE,
         }
-        
+
         # Get current database connection info
         db_info = {
             "vendor": connection.vendor,
-            "queries_executed": len(connection.queries) if settings.DEBUG else "Query logging disabled",
+            "queries_executed": (
+                len(connection.queries) if settings.DEBUG else "Query logging disabled"
+            ),
             "is_usable": connection.is_usable(),
         }
-        
+
         # Return model information for debugging
         assurance_goals_count = AssuranceGoal.objects.count()
         categories_count = Category.objects.count()
@@ -361,7 +371,11 @@ def debug_endpoint(request: Request) -> Response:
                 "host": request.get_host(),
                 "method": request.method,
                 "content_type": request.content_type or "Not set",
-                "headers": {k: v for k, v in request.headers.items() if k.lower() not in ('cookie', 'authorization')},
+                "headers": {
+                    k: v
+                    for k, v in request.headers.items()
+                    if k.lower() not in ("cookie", "authorization")
+                },
             },
             "database_info": db_info,
             "database_counts": {
@@ -389,9 +403,15 @@ def debug_endpoint(request: Request) -> Response:
                 "received_data": request.data,
                 "content_type": request.content_type,
                 "method": request.method,
-                "headers": {k: v for k, v in request.headers.items() if k.lower() not in ('cookie', 'authorization')},
+                "headers": {
+                    k: v
+                    for k, v in request.headers.items()
+                    if k.lower() not in ("cookie", "authorization")
+                },
             }
         )
-        
+
     # Default fallback response - should never reach here due to DRF's api_view decorator
-    return Response({"error": "Unsupported HTTP method"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    return Response(
+        {"error": "Unsupported HTTP method"}, status=status.HTTP_405_METHOD_NOT_ALLOWED
+    )

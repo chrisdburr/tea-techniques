@@ -3,7 +3,8 @@
 from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework.documentation import include_docs_urls
+
+# from rest_framework.documentation import include_docs_urls # Unused import
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
@@ -28,19 +29,21 @@ urlpatterns = [
     path(
         "swagger/",
         schema_view.with_ui("swagger", cache_timeout=0),
-        name="schema-swagger-ui",
+        name="schema-swagger-ui",  # Keep only the version without trailing slash
     ),
+    # path(
+    #     "swagger/", # Removed redundant trailing slash version
+    #     schema_view.with_ui("swagger", cache_timeout=0),
+    #     name="schema-swagger-ui",
+    # ),
     path(
-        "swagger",
-        schema_view.with_ui("swagger", cache_timeout=0),
-        name="schema-swagger-ui-no-slash",
-    ),
-    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
-    path(
-        "redoc",
-        schema_view.with_ui("redoc", cache_timeout=0),
-        name="schema-redoc-no-slash",
-    ),
+        "redoc", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
+    ),  # Keep only the version without trailing slash
+    # path(
+    #     "redoc/", # Removed redundant trailing slash version
+    #     schema_view.with_ui("redoc", cache_timeout=0),
+    #     name="schema-redoc",
+    # ),
     path("", include("api.root_urls")),
 ]
 

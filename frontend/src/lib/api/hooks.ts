@@ -83,9 +83,6 @@ export const useAssuranceGoals = () => {
 				throw error;
 			}
 		},
-		refetchOnWindowFocus: false,
-		staleTime: 5 * 60 * 1000, // 5 minutes - this data rarely changes
-		retry: 1,
 	});
 };
 
@@ -112,8 +109,6 @@ export const useCategories = (assuranceGoalId?: number) => {
 				throw error;
 			}
 		},
-		refetchOnWindowFocus: false,
-		retry: 1,
 	});
 };
 
@@ -140,8 +135,6 @@ export const useSubCategories = (categoryId?: number) => {
 				throw error;
 			}
 		},
-		refetchOnWindowFocus: false,
-		retry: 1,
 		enabled: !!categoryId, // Only run if categoryId is provided
 	});
 };
@@ -162,8 +155,6 @@ export const useTags = () => {
 				throw error;
 			}
 		},
-		refetchOnWindowFocus: false,
-		retry: 1,
 	});
 };
 
@@ -179,8 +170,6 @@ export const useAttributeTypes = () => {
 				throw error;
 			}
 		},
-		refetchOnWindowFocus: false,
-		retry: 1,
 	});
 };
 
@@ -201,8 +190,6 @@ export const useAttributeValues = (attributeTypeId?: number) => {
 				throw error;
 			}
 		},
-		refetchOnWindowFocus: false,
-		retry: 1,
 		enabled: !!attributeTypeId, // Only run if attributeTypeId is provided
 	});
 };
@@ -219,8 +206,6 @@ export const useResourceTypes = () => {
 				throw error;
 			}
 		},
-		refetchOnWindowFocus: false,
-		retry: 1,
 	});
 };
 
@@ -315,9 +300,6 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 				throw error;
 			}
 		},
-		refetchOnWindowFocus: false,
-		staleTime: 60000, // 1 minute stale time
-		retry: 1, // Reduce retries to avoid spamming errors
 	});
 };
 
@@ -345,8 +327,6 @@ export const useTechniqueDetail = (id: number) => {
 			}
 		},
 		enabled: !!id, // Only run if id is provided
-		refetchOnWindowFocus: false,
-		retry: 1,
 	});
 };
 
@@ -438,8 +418,6 @@ export const useTechniqueRelationships = (techniqueId: number) => {
 				throw error;
 			}
 		},
-		refetchOnWindowFocus: false,
-		retry: 1,
 		enabled: !!techniqueId, // Only run if techniqueId is provided
 	});
 };

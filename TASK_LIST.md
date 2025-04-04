@@ -222,15 +222,21 @@ IMPORTANT: make sure to create a **new Git feature branch before starting work**
 
 ## Lower Priority Tasks
 
-### 13. Fix Frontend Development Experience in Docker
+### 13. ✅ Fix Frontend Development Experience in Docker
 
 **Task:** Improve the development workflow for frontend
 
-IMPORTANT: make sure to create a **new Git feature branch before starting work**.
-
--   **Steps:**
-    1. Update `docker-compose.development.yml` and `frontend/Dockerfile` to use development mode
-    2. Use `pnpm run dev` for hot reloading instead of production build
+-   **Status:** Completed
+-   **Changes:**
+    1. Updated `frontend/Dockerfile` to:
+       - Use development mode (NODE_ENV=development)
+       - Removed multi-stage build (not needed for development)
+       - Set up proper dependencies for development workflow
+    2. Modified `docker-compose.development.yml` to:
+       - Use `pnpm run dev` for hot reloading instead of production build
+       - Added volume mappings to reflect code changes without rebuilding
+       - Added WATCHPACK_POLLING for better file watching in Docker
+-   **Branch:** `task-13-fix-frontend-dev-experience`
 
 ### 14. Configure Global React Query Defaults
 

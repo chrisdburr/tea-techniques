@@ -13,6 +13,7 @@ afterAll(() => {
 });
 
 // Helper to create Axios errors for testing
+// This test still needs to create Axios errors directly as it's testing the error handler specifically
 function createAxiosError(status: number, data: any): AxiosError {
   const headers = new AxiosHeaders();
   

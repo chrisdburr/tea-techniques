@@ -51,8 +51,10 @@
 >
 >    - `SECRET_KEY`: Django's secret key for cryptographic operations (must be unique and secure)
 >    - `ALLOWED_HOSTS`: Comma-separated list of allowed hosts for Django (e.g., `yourdomain.com,api.yourdomain.com`)
+>    - `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`: PostgreSQL connection parameters
+>    - `DJANGO_SETTINGS_MODULE`: Should be set to `config.settings.production` for production deployments
 >
->    The application will refuse to start if these variables are missing in production.
+>    The application performs validation for critical environment variables and will refuse to start if `SECRET_KEY` or `ALLOWED_HOSTS` are missing in production.
 >
 > 4. **Additional Environment Variables**: Create appropriate `.env` files or use cloud provider's environment variable features for other settings
 

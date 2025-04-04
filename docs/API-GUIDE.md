@@ -5,41 +5,54 @@
 
 ## Base URL
 
-When [deployed locally](DEPLOYMENT.md), the API is available at: `http://localhost:8000/api/`
+When [deployed locally](DEPLOYMENT.md), the API is available at: `http://localhost:8000/api`
 
 ## Authentication
 
 > [!IMPORTANT]
-> The API currently supports session-based authentication for admin access. Authentication is required for create, update, and delete operations.
+> The API uses session-based authentication for admin access. Authentication is required for create, update, and delete operations.
 >
 > To authenticate:
 >
 > 1. Log in through the Django admin interface at `/admin/`
-> 2. Session cookie will be automatically applied to subsequent API requests
+> 2. Use the custom authentication endpoints at `/api/auth/login` 
+> 3. Session cookie will be automatically applied to subsequent API requests
 
 ## Core Endpoints
 
-| Endpoint                              | Description                               | Methods                 |
-| ------------------------------------- | ----------------------------------------- | ----------------------- |
-| `/api/`                               | API root with links to all endpoints      | GET                     |
-| `/api/techniques`                     | List, create, and filter techniques       | GET, POST               |
-| `/api/techniques/{id}`                | Retrieve, update, delete technique        | GET, PUT, PATCH, DELETE |
-| `/api/assurance-goals`                | List and manage assurance goals           | GET, POST               |
-| `/api/categories`                     | List and manage categories                | GET, POST               |
-| `/api/subcategories`                  | List and manage subcategories             | GET, POST               |
-| `/api/tags`                           | List and manage tags                      | GET, POST               |
-| `/api/categories-by-goal/{id}`        | Get categories for a specific goal        | GET                     |
-| `/api/subcategories-by-category/{id}` | Get subcategories for a specific category | GET                     |
-| `/api/attribute-types`                | List and manage attribute types           | GET, POST               |
-| `/api/attribute-values`               | List and manage attribute values          | GET, POST               |
-| `/api/resource-types`                 | List and manage resource types            | GET, POST               |
+| Endpoint                              | Description                               | Methods                 | Auth Required |
+| ------------------------------------- | ----------------------------------------- | ----------------------- | ------------ |
+| `/api`                                | API root with links to all endpoints      | GET                     | No           |
+| `/api/techniques`                     | List, create, and filter techniques       | GET, POST               | POST only    |
+| `/api/techniques/{id}`                | Retrieve, update, delete technique        | GET, PUT, PATCH, DELETE | All except GET |
+| `/api/assurance-goals`                | List and manage assurance goals           | GET, POST               | POST only    |
+| `/api/categories`                     | List and manage categories                | GET, POST               | POST only    |
+| `/api/subcategories`                  | List and manage subcategories             | GET, POST               | POST only    |
+| `/api/tags`                           | List and manage tags                      | GET, POST               | POST only    |
+| `/api/categories-by-goal/{id}`        | Get categories for a specific goal        | GET                     | No           |
+| `/api/subcategories-by-category/{id}` | Get subcategories for a specific category | GET                     | No           |
+| `/api/attribute-types`                | List and manage attribute types           | GET, POST               | POST only    |
+| `/api/attribute-values`               | List and manage attribute values          | GET, POST               | POST only    |
+| `/api/resource-types`                 | List and manage resource types            | GET, POST               | POST only    |
+| `/api/health`                         | Health check for API status               | GET                     | No           |
+
+## Authentication Endpoints
+
+| Endpoint          | Description                        | Methods | Auth Required |
+| ----------------- | ---------------------------------- | ------- | ------------ |
+| `/api/auth/csrf`  | Get CSRF token for authentication  | GET     | No           |
+| `/api/auth/login` | Log in with username and password  | POST    | No           |
+| `/api/auth/logout`| Log out current user               | POST    | Yes          |
+| `/api/auth/user`  | Get current user information       | GET     | Yes          |
+| `/api/auth/status`| Check authentication status        | GET     | No           |
 
 ## Documentation
 
 > [!TIP]
 > Interactive API documentation is available at:
 >
-> - Swagger UI: `/swagger`
+> - Swagger UI: `/swagger` (no trailing slash)
+> - ReDoc: `/redoc` (no trailing slash)
 
 ## Pagination
 
@@ -75,6 +88,10 @@ Available filters for techniques:
 - `categories` - Filter by category ID
 - `subcategories` - Filter by subcategory ID
 - `tags` - Filter by tag ID
+- `complexity_min` - Filter by minimum complexity rating
+- `complexity_max` - Filter by maximum complexity rating
+- `computational_cost_min` - Filter by minimum computational cost rating
+- `computational_cost_max` - Filter by maximum computational cost rating
 
 ## Searching
 
@@ -106,6 +123,7 @@ The API returns standard HTTP status codes:
 - `403 Forbidden` - Authenticated but insufficient permissions
 - `404 Not Found` - Resource not found
 - `500 Internal Server Error` - Server error
+- `503 Service Unavailable` - Service unavailable (e.g., database connection error)
 
 Error responses include descriptive messages:
 
@@ -217,7 +235,8 @@ Response:
 > [!WARNING]
 > For troubleshooting API issues:
 >
-> - Use the `/api/debug` endpoint to check API status and configuration
+> - Use the `/api/debug` endpoint to check API status and configuration (only available in development mode)
+> - Check API health with `/api/health` (available in all environments)
 > - Check server logs for detailed error messages
 > - Verify correct Content-Type headers (application/json) for POST/PUT requests
 
@@ -231,8 +250,33 @@ Key hooks include:
 - `useTechniqueDetail` - Get technique details
 - `useCreateTechnique` - Create a new technique
 - `useUpdateTechnique` - Update an existing technique
+- `useDeleteTechnique` - Delete a technique
 - `useAssuranceGoals` - List assurance goals
 - `useCategories` - List categories
+- `useSubCategories` - List subcategories for a category
+- `useTags` - List all tags
+- `useAttributeTypes` - List attribute types
+- `useAttributeValues` - List attribute values
+- `useResourceTypes` - List resource types
+
+> [!IMPORTANT]
+> The frontend uses a consistent URL handling approach with NO trailing slashes to align with the backend configuration.
+
+## URL Configuration
+
+The API is configured with:
+- `APPEND_SLASH = False` in Django settings
+- `trailing_slash = False` in the DefaultRouter configuration
+
+This means all API endpoints should be accessed without trailing slashes (e.g., `/api/techniques` not `/api/techniques/`).
+
+## Security
+
+In production, the API uses `IsAuthenticatedOrReadOnly` as the default permission class, which means:
+- Read operations (GET, HEAD, OPTIONS) are allowed for all users
+- Write operations (POST, PUT, PATCH, DELETE) require authentication
+
+The debug endpoint (`/api/debug`) is completely disabled in production environments.
 
 ## Rate Limiting
 

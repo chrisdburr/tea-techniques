@@ -131,10 +131,11 @@ services:
 - Templates use environment variable substitution
 - Docker Compose uses these variables automatically
 - Default values are provided for optional variables
+- Validation for required environment variables has been implemented
+  - The application will fail to start if `SECRET_KEY` or `ALLOWED_HOSTS` are missing in production
 
 **Recommended further improvements**:
 
-- Add validation for required environment variables
 - Create separate `.env.production` and `.env.development` for other deployment scenarios
 - Document all environment variables in a central location
 

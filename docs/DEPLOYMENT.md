@@ -47,7 +47,14 @@
 >    - Static: `/static/*` → Backend service
 >    - Swagger: `/swagger/*` → Backend service
 >
-> 3. **Environment Variables**: Create appropriate `.env` files or use cloud provider's environment variable features
+> 3. **Required Environment Variables**: You MUST set the following environment variables in production:
+>
+>    - `SECRET_KEY`: Django's secret key for cryptographic operations (must be unique and secure)
+>    - `ALLOWED_HOSTS`: Comma-separated list of allowed hosts for Django (e.g., `yourdomain.com,api.yourdomain.com`)
+>
+>    The application will refuse to start if these variables are missing in production.
+>
+> 4. **Additional Environment Variables**: Create appropriate `.env` files or use cloud provider's environment variable features for other settings
 
 ## Troubleshooting
 

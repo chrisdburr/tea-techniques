@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.core.exceptions import ValidationError
 from api.models import (
     Technique,
     Category,
@@ -190,3 +191,30 @@ class ModelTestCase(TestCase):
         self.assertEqual(limitation.technique, technique)
         self.assertEqual(limitation.description, "Test limitation")
         self.assertIn(technique.name, str(limitation))
+
+    def test_technique_rating_validators(self):
+        """Test that rating validators enforce the correct range"""
+        # Test valid values (1-5)
+        for valid_value in range(1, 6):
+            technique = TechniqueFactory(
+                complexity_rating=valid_value,
+                computational_cost_rating=valid_value
+            )
+            technique.full_clean()  # Should not raise exception
+            self.assertEqual(technique.complexity_rating, valid_value)
+            self.assertEqual(technique.computational_cost_rating, valid_value)
+
+        # Test invalid values
+        invalid_values = [0, 6, -1, 10]
+        for invalid_value in invalid_values:
+            # Test complexity_rating validator
+            technique = TechniqueFactory()
+            technique.complexity_rating = invalid_value
+            with self.assertRaises(ValidationError):
+                technique.full_clean()
+
+            # Test computational_cost_rating validator
+            technique = TechniqueFactory()
+            technique.computational_cost_rating = invalid_value
+            with self.assertRaises(ValidationError):
+                technique.full_clean()

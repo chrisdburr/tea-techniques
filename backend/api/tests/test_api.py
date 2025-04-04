@@ -462,24 +462,65 @@ class TechniqueAPITestCase(APITestCase):
         self.assertIn(self.subcategory.id, subcategory_ids)
 
     def test_debug_endpoint(self):
-        """Test that the debug endpoint works"""
+        """Test that the debug endpoint works in debug mode"""
         url = "/api/debug/"
+        
+        # Mock settings.DEBUG to True for this test
+        from unittest import mock
+        
+        with mock.patch('django.conf.settings.DEBUG', True):
+            # Test GET
+            response = self.client.get(url)
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        # Test GET
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+            # Test POST
+            test_data = {"test": "data"}
+            response = self.client.post(
+                url, data=json.dumps(test_data), content_type="application/json"
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        # Test POST
-        test_data = {"test": "data"}
-        response = self.client.post(
-            url, data=json.dumps(test_data), content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        # Check that our test data was echoed back
-        data = response.json()
-        self.assertIn("received_data", data)
-        self.assertEqual(data["received_data"], test_data)
+            # Check that our test data was echoed back
+            data = response.json()
+            self.assertIn("received_data", data)
+            self.assertEqual(data["received_data"], test_data)
+        
+    def test_debug_endpoint_production_access_control(self):
+        """Test that the debug endpoint is completely disabled in production mode"""
+        from django.conf import settings
+        from django.contrib.auth import get_user_model
+        from unittest import mock
+        
+        url = "/api/debug/"
+        
+        # Mock settings.DEBUG to False to simulate production environment
+        with mock.patch('django.conf.settings.DEBUG', False):
+            # Test as anonymous user
+            response = self.client.get(url)
+            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+            self.assertIn("Debug endpoint not available in production", response.json()["error"])
+            
+            # Create and login as admin user
+            User = get_user_model()
+            admin_user = User.objects.create_superuser(
+                username="adminuser", 
+                email="admin@example.com",
+                password="adminpass123"
+            )
+            self.client.force_authenticate(user=admin_user)
+            
+            # Test as admin user - should still be forbidden in production
+            response = self.client.get(url)
+            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+            self.assertIn("Debug endpoint not available in production", response.json()["error"])
+            
+            # Test POST in production (should be forbidden)
+            test_data = {"test": "data"}
+            response = self.client.post(
+                url, data=json.dumps(test_data), content_type="application/json"
+            )
+            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+            self.assertIn("Debug endpoint not available in production", response.json()["error"])
         
     def test_techniques_list_query_optimization(self):
         """Test that techniques list endpoint uses optimized queries"""

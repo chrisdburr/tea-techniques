@@ -1,0 +1,13 @@
+[MASTER]
+# Add paths to the Python path
+init-hook='import sys; import os; sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))'
+disable=no-member,missing-class-docstring,missing-module-docstring,missing-function-docstring,invalid-name,wrong-import-order,unused-argument,useless-parent-delegation,logging-fstring-interpolation,broad-exception-caught,import-outside-toplevel,too-many-ancestors,too-many-arguments,too-many-instance-attributes,too-few-public-methods,too-many-public-methods,line-too-long,duplicate-code
+
+[TYPECHECK]
+# Django models have many attributes generated in runtime
+ignored-classes=SQLObject, optparse.Values, thread._local, _thread._local, *Manager, ModelViewSet, *
+ignored-modules=rest_framework, django, django_filters, django.db, rest_framework.viewsets, django.contrib
+generated-members=REQUEST,acl_users,aq_parent,objects,DoesNotExist,id,pk,_meta,is_valid,save,base_fields,context,data
+
+[FORMAT]
+max-line-length=120

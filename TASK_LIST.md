@@ -313,3 +313,15 @@ Once finished, add a summary of the changes made in a commit message. Also updat
     1. Review and update the documents in the `docs/` directory
     2. Ensure API documentation reflects the current implementation
     3. Document process for updating documentation with code changes
+
+### 20. Update Tests to Match Current Database Configuration
+
+**Task:** Fix API tests to work with PostgreSQL Docker setup
+
+-   **Description:** The existing tests are failing because they expect a different URL structure and database configuration than what is currently used. The project has moved from SQLite to PostgreSQL with Docker.
+-   **Steps:**
+    1. Update test settings to better align with current database approach
+    2. Fix URL handling in tests to match current URL configuration (no trailing slashes)
+    3. Add Docker-aware test configuration that can run against PostgreSQL
+    4. Ensure API test URLs are consistent with `APPEND_SLASH = False` and `TRAILING_SLASH = False` settings
+    5. Consider adding environment-specific test runners for different deployment scenarios

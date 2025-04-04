@@ -60,7 +60,7 @@ const fetchAPI = async <T>(
         const response = await apiClient.get(normalizedPath, { params });
         return response.data as T;
     } catch (error) {
-        console.error("API request failed:", error);
+        // Error will be logged by logApiError in the calling function
         throw error;
     }
 };
@@ -396,27 +396,7 @@ export const useDeleteTechnique = () => {
 	});
 };
 
-// Relationship hooks
-export const useTechniqueRelationships = (techniqueId: number) => {
-	// Create params object for axios
-	const params: Record<string, string | number> = {};
-	if (techniqueId) {
-		params.technique_from = techniqueId;
-	}
-
-	return useQuery({
-		queryKey: ["technique-relationships", techniqueId],
-		queryFn: async () => {
-			try {
-				return await fetchAPI('/api/technique-relationships', params);
-			} catch (error: unknown) {
-				logApiError('useTechniqueRelationships', error);
-				throw error;
-			}
-		},
-		enabled: !!techniqueId, // Only run if techniqueId is provided
-	});
-};
+// Removed the unused useTechniqueRelationships hook as it references a non-existent endpoint
 
 // Export the utility functions for use in components
 export { calculateTotalPages };

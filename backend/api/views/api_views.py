@@ -8,14 +8,9 @@ from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.permissions import BasePermission, IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
-from django.http import JsonResponse
-from django.core import serializers
-from django.views.decorators.csrf import csrf_exempt
-from django.middleware.common import CommonMiddleware
 from django.db import connection
-import json
 import logging
-from typing import Any, Dict, List, Optional, Type, Union, cast
+from typing import Any, List, Type
 
 from ..models import (
     AssuranceGoal,

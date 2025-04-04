@@ -1,0 +1,318 @@
+# TEA Techniques - Prioritized Tasks
+
+For each task listed below, make sure to create a new Git feature branch before starting work.
+
+If the task involves significant changes to the codebase, run linting and testing to ensure everything is working as expected. Otherwise, run the tests once the final task is complete.
+
+Once finished, add a summary of the changes made in a commit message. Also update this file with the task status and any relevant notes once a task is started/completed.
+
+## Critical Priority Tasks
+
+### 1. Fix API Security Vulnerabilities
+
+**Task:** Override insecure default API permissions in production settings
+
+-   **Description:** The API is currently public by default with `AllowAny` permission
+-   **Steps:**
+    1. Modify `backend/config/settings/production.py` to override the default permission classes:
+        ```python
+        # Override insecure default permissions for production
+        REST_FRAMEWORK = {
+            **REST_FRAMEWORK,  # Include existing settings
+            "DEFAULT_PERMISSION_CLASSES": [
+                "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+            ],
+        }
+        ```
+    2. Review individual ViewSets in `backend/api/views/api_views.py` to ensure appropriate permission settings
+
+### 2. Fix Database Migration Tracking
+
+**Task:** Fix critical database migration tracking issue
+
+-   **Description:** Initial migration is incorrectly ignored in Git, breaking database functionality
+-   **Steps:**
+    1. Edit `.gitignore` to remove the line `backend/api/migrations/0001_initial.py`
+    2. Verify the initial migration file exists in the repository
+    3. Add and commit the migration file to Git
+    4. Document migration handling in development guidelines
+
+### 3. Fix N+1 Query Performance Issues in API
+
+**Task:** Resolve critical N+1 query bottleneck in Techniques API
+
+-   **Description:** The primary technique listing endpoint suffers from excessive database queries
+-   **Steps:**
+    1. Modify `TechniquesViewSet.get_queryset()` method in `backend/api/views/api_views.py` to add prefetch_related:
+        ```python
+        def get_queryset(self):
+            """Get queryset with optimized prefetching for related entities."""
+            return Technique.objects.all().prefetch_related(
+                'assurance_goals',
+                'categories',
+                'subcategories',
+                'tags',
+                'attribute_values',
+                'resources',
+                'example_use_cases',
+                'limitations'
+            )
+        ```
+    2. Add database query testing using Django's `assertNumQueries` in API tests
+
+### 4. Secure Debug Endpoint
+
+**Task:** Restrict access to the debug endpoint
+
+-   **Description:** The debug endpoint exposes internal configuration information
+-   **Steps:**
+
+    1. Modify the `debug_endpoint` view in `backend/api/views/api_views.py`:
+
+        ```python
+        @api_view(["GET", "POST"])
+        def debug_endpoint(request: Request) -> Response:
+            """Debugging endpoint with restricted access."""
+            from django.conf import settings
+
+            # Only allow debug endpoint in development
+            if not settings.DEBUG:
+                return Response(
+                    {"error": "Debug endpoint not available in production"},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+
+            # Existing code...
+        ```
+
+    2. Remove the `@csrf_exempt` decorator
+    3. Add a permission class like `IsAdminUser` if the endpoint should be available in production
+
+## High Priority Tasks
+
+### 5. Add Missing Production Logging Configuration
+
+**Task:** Implement robust logging for production environment
+
+-   **Steps:**
+    1. Add a `LOGGING` configuration to `backend/config/settings/production.py`:
+        ```python
+        LOGGING = {
+            'version': 1,
+            'disable_existing_loggers': False,
+            'formatters': {
+                'verbose': {
+                    'format': '{levelname} {asctime} {module} {message}',
+                    'style': '{',
+                },
+            },
+            'handlers': {
+                'console': {
+                    'class': 'logging.StreamHandler',
+                    'formatter': 'verbose',
+                },
+                'file': {
+                    'class': 'logging.handlers.RotatingFileHandler',
+                    'formatter': 'verbose',
+                    'filename': os.path.join(BASE_DIR, 'logs', 'backend.log'),
+                    'maxBytes': 10485760,  # 10MB
+                    'backupCount': 5,
+                },
+            },
+            'root': {
+                'handlers': ['console', 'file'],
+                'level': 'INFO',
+            },
+            'loggers': {
+                'django': {
+                    'handlers': ['console', 'file'],
+                    'level': 'INFO',
+                    'propagate': False,
+                },
+                'api': {
+                    'handlers': ['console', 'file'],
+                    'level': 'INFO',
+                    'propagate': False,
+                },
+            },
+        }
+        ```
+    2. Ensure the logs directory exists and is writable
+    3. Add appropriate error logging throughout the application
+
+### 6. Implement Authentication Tests
+
+**Task:** Add comprehensive authentication tests for API
+
+-   **Steps:**
+    1. Update `backend/api/tests/test_api.py` to include tests for:
+        - Anonymous user access (list/retrieve endpoints)
+        - Unauthenticated write operations (create/update/delete) - should return 401
+        - Authenticated write operations - should succeed
+
+### 7. Fix Field Type for TechniqueResource.publication_date
+
+**Task:** Change `publication_date` field type from CharField to DateField
+
+-   **Steps:**
+    1. Update the model in `backend/api/models.py`:
+        ```python
+        publication_date = models.DateField(blank=True, null=True)
+        ```
+    2. Create a data migration to handle the conversion
+    3. Update the import script to parse date strings properly
+
+### 8. Refactor Complex Import Script Logic
+
+**Task:** Simplify data import logic
+
+-   **Steps:**
+    1. Standardize the JSON data format for consistency
+    2. Refactor `_process_technique` method to:
+        - Compare existing relationships before clearing
+        - Simplify category/subcategory handling
+        - Implement logic for the unused `--force` argument
+        - Use the logger instead of stdout for internal logging
+
+## Medium Priority Tasks
+
+### 9. Fix Environment Variable Handling for Production Security
+
+**Task:** Improve handling of critical environment variables
+
+-   **Steps:**
+    1. Add validation for required environment variables in `production.py`:
+        ```python
+        # Check for required environment variables in production
+        if not DEBUG:
+            required_env_vars = ['SECRET_KEY', 'ALLOWED_HOSTS']
+            missing_vars = [var for var in required_env_vars if not os.getenv(var)]
+            if missing_vars:
+                raise Exception(f"Missing required environment variables: {', '.join(missing_vars)}")
+        ```
+    2. Update deployment documentation to emphasize these requirements
+
+### 10. Add Validators for Rating Fields
+
+**Task:** Implement validators for rating fields to enforce ranges
+
+-   **Steps:**
+
+    1. Update the model fields in `backend/api/models.py`:
+
+        ```python
+        from django.core.validators import MinValueValidator, MaxValueValidator
+
+        complexity_rating = models.PositiveSmallIntegerField(
+            null=True,
+            blank=True,
+            validators=[MinValueValidator(1), MaxValueValidator(5)]
+        )
+        computational_cost_rating = models.PositiveSmallIntegerField(
+            null=True,
+            blank=True,
+            validators=[MinValueValidator(1), MaxValueValidator(5)]
+        )
+        ```
+
+### 11. Re-enable MSW API Mocking in Frontend Tests
+
+**Task:** Fix and re-enable Mock Service Worker for frontend tests
+
+-   **Steps:**
+    1. Update `frontend/jest.setup.ts` to properly use MSW for API mocking
+    2. Set up the handlers in `frontend/src/mocks/handlers.ts`
+    3. Remove manual API mocking from individual tests
+
+### 12. Consolidate API Base URL Configuration
+
+**Task:** Simplify and standardize API URL configuration across frontend
+
+-   **Steps:**
+    1. Consolidate logic in `frontend/src/lib/config.ts`
+    2. Use consistent environment variables:
+        - NEXT_PUBLIC_API_URL for browser access
+        - INTERNAL_API_URL for server-side container access
+    3. Remove complex conditional logic based on `window` or `DOCKER_ENV`
+
+## Lower Priority Tasks
+
+### 13. Fix Frontend Development Experience in Docker
+
+**Task:** Improve the development workflow for frontend
+
+-   **Steps:**
+    1. Update `docker-compose.development.yml` and `frontend/Dockerfile` to use development mode
+    2. Use `pnpm run dev` for hot reloading instead of production build
+
+### 14. Configure Global React Query Defaults
+
+**Task:** Set up global defaults for React Query options
+
+-   **Steps:**
+    1. Update `QueryProvider` to configure global defaults for common options:
+        ```typescript
+        // Configure global defaults in the QueryClient
+        const queryClient = new QueryClient({
+        	defaultOptions: {
+        		queries: {
+        			refetchOnWindowFocus: false,
+        			retry: 1,
+        			staleTime: 5 * 60 * 1000, // 5 minutes
+        		},
+        	},
+        });
+        ```
+    2. Remove redundant configurations from individual hooks
+
+### 15. Fix Trailing Slash Handling in API Hooks
+
+**Task:** Simplify API URL handling to avoid dual attempts
+
+-   **Steps:**
+    1. Ensure the backend consistently enforces or removes trailing slashes
+    2. Update frontend API client to use consistent URL format
+    3. Remove the complex try/catch fallback logic in hooks.ts
+
+### 16. Clean Up Code Issues
+
+**Task:** Resolve minor code quality issues
+
+-   **Steps:**
+    1. Remove unused imports in `backend/api/views/api_views.py`
+    2. Remove debug console logs in `frontend/src/lib/config.ts`
+    3. Remove or implement the dead code in `useTechniqueRelationships` hook
+    4. Simplify overly defensive code in `TechniqueSerializer.get_applicable_models`
+    5. Consider removing explicit `db_table` definitions unless needed
+    6. Plan to remove the deprecated `category_tags` field
+
+### 17. Update Frontend Global Layout
+
+**Task:** Improve global layout structure
+
+-   **Steps:**
+    1. Add common structural elements to `frontend/src/app/layout.tsx`:
+        - Header component
+        - Main content area
+        - Footer component
+
+### 18. Update GitIgnore with Standard Ignores
+
+**Task:** Add missing standard ignores to .gitignore
+
+-   **Steps:**
+    1. Add the following to `.gitignore`:
+        ```
+        frontend/.next/
+        backend/.coverage
+        ```
+    2. Consider generating a more comprehensive .gitignore from templates
+
+### 19. Update Documentation to Match Implementation
+
+**Task:** Ensure documentation is synchronized with current code
+
+-   **Steps:**
+    1. Review and update the documents in the `docs/` directory
+    2. Ensure API documentation reflects the current implementation
+    3. Document process for updating documentation with code changes

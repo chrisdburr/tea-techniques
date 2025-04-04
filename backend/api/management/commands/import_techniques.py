@@ -6,7 +6,8 @@ import os
 from pathlib import Path
 import logging
 import datetime
-from typing import Any, Dict, List, Optional, Union, Tuple, cast
+import re
+from typing import Any, Dict, List, Optional, Union, Tuple, cast, Set
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.conf import settings
@@ -44,7 +45,7 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Dict[str, Any]) -> None:
         file_path_option = options.get("file")
-        force = options.get("force", False)
+        self.force = options.get("force", False)
 
         # Get the file path
         if not file_path_option:
@@ -58,9 +59,11 @@ class Command(BaseCommand):
             file_path = str(file_path_option)
 
         if not os.path.exists(file_path):
+            logger.error(f"File not found: {file_path}")
             self.stdout.write(self.style.ERROR(f"File not found: {file_path}"))
             return
 
+        logger.info(f"Importing techniques from {file_path}")
         self.stdout.write(self.style.SUCCESS(f"Importing techniques from {file_path}"))
 
         # Create initial records needed for import
@@ -78,11 +81,15 @@ class Command(BaseCommand):
                     self._process_technique(technique_data)
                     count += 1
 
+            logger.info(f"Successfully imported {count} techniques")
             self.stdout.write(
                 self.style.SUCCESS(f"Successfully imported {count} techniques")
             )
         except Exception as e:
+            logger.error(f"Error processing JSON file: {str(e)}")
             self.stdout.write(self.style.ERROR(f"Error processing JSON file: {str(e)}"))
+            if not self.force:
+                raise
 
     def _create_base_records(self) -> None:
         """Create necessary base records (goals, attributes, etc.)"""
@@ -167,7 +174,6 @@ class Command(BaseCommand):
                 
         # If we couldn't parse the date with any format, just extract the year if possible
         # This handles cases like "Published in 2023" or "2023 (Conference)"
-        import re
         year_match = re.search(r'20\d{2}|19\d{2}', date_str)
         if year_match:
             year = int(year_match.group(0))
@@ -203,6 +209,206 @@ class Command(BaseCommand):
 
         return results
 
+    def _process_limitation(self, technique: Technique, limitation: Any) -> None:
+        """Process a single limitation and add it to the technique."""
+        # Check if the limitation is already a dict/object with description field
+        if isinstance(limitation, dict) and "description" in limitation:
+            description = limitation["description"].strip()
+            if description:
+                TechniqueLimitation.objects.create(
+                    technique=technique, description=description
+                )
+        # Check if it's a string 
+        elif isinstance(limitation, str):
+            if limitation.strip().startswith(('[', '{')):
+                try:
+                    # Try to parse as JSON if it looks like JSON
+                    parsed_limitation = json.loads(limitation)
+                    
+                    # Handle case where the parsed result is an array of limitation objects
+                    if isinstance(parsed_limitation, list):
+                        for item in parsed_limitation:
+                            if isinstance(item, dict) and "description" in item:
+                                desc = item["description"].strip()
+                                if desc:
+                                    TechniqueLimitation.objects.create(
+                                        technique=technique, description=desc
+                                    )
+                            elif isinstance(item, str) and item.strip():
+                                TechniqueLimitation.objects.create(
+                                    technique=technique, description=item.strip()
+                                )
+                    # Handle case where the parsed result is a single limitation object
+                    elif isinstance(parsed_limitation, dict) and "description" in parsed_limitation:
+                        desc = parsed_limitation["description"].strip()
+                        if desc:
+                            TechniqueLimitation.objects.create(
+                                technique=technique, description=desc
+                            )
+                except json.JSONDecodeError:
+                    # If parsing fails, treat it as a plain string
+                    if limitation.strip():
+                        TechniqueLimitation.objects.create(
+                            technique=technique, description=limitation.strip()
+                        )
+            # Handle plain strings
+            elif limitation.strip():
+                TechniqueLimitation.objects.create(
+                    technique=technique, description=limitation.strip()
+                )
+
+    def _process_categories(self, technique: Technique, data: Dict[str, Any]) -> None:
+        """Process categories and subcategories for a technique."""
+        assurance_goals_list = data.get("assurance_goals", [])
+        category_tags = data.get("category_tags", "")
+        categories_data = data.get("categories", [])
+        subcategories_data = data.get("subcategories", [])
+        
+        # First try to process direct categories and subcategories data
+        if categories_data or subcategories_data:
+            # Process direct categories
+            for cat_data in categories_data:
+                if isinstance(cat_data, dict):
+                    cat_name = cat_data.get("name")
+                    cat_goal_name = cat_data.get("assurance_goal")
+                else:
+                    cat_name = cat_data
+                    cat_goal_name = assurance_goals_list[0] if assurance_goals_list else "Explainability"
+                
+                if not cat_name:
+                    continue
+                    
+                # Get or create the assurance goal
+                goal, _ = AssuranceGoal.objects.get_or_create(
+                    name=cat_goal_name,
+                    defaults={
+                        "description": f"{cat_goal_name} techniques for trustworthy AI"
+                    },
+                )
+                
+                # Get or create category
+                category, _ = Category.objects.get_or_create(
+                    name=cat_name,
+                    assurance_goal=goal,
+                    defaults={"description": f"Category for {cat_name}"},
+                )
+                
+                # Add category to technique
+                technique.categories.add(category)
+        
+            # Process direct subcategories
+            for subcat_data in subcategories_data:
+                if isinstance(subcat_data, dict):
+                    subcat_name = subcat_data.get("name")
+                    cat_name = subcat_data.get("category")
+                    cat_goal_name = subcat_data.get("assurance_goal", 
+                                                    assurance_goals_list[0] if assurance_goals_list else "Explainability")
+                else:
+                    # If it's not a dict with detailed info, skip it
+                    continue
+                
+                if not subcat_name or not cat_name:
+                    continue
+                
+                # Get or create the assurance goal
+                goal, _ = AssuranceGoal.objects.get_or_create(
+                    name=cat_goal_name,
+                    defaults={
+                        "description": f"{cat_goal_name} techniques for trustworthy AI"
+                    },
+                )
+                
+                # Get or create category
+                category, _ = Category.objects.get_or_create(
+                    name=cat_name,
+                    assurance_goal=goal,
+                    defaults={"description": f"Category for {cat_name}"},
+                )
+                
+                # Get or create subcategory
+                subcategory, _ = SubCategory.objects.get_or_create(
+                    name=subcat_name,
+                    category=category,
+                    defaults={"description": f"Subcategory for {subcat_name}"},
+                )
+                
+                # Add subcategory to technique
+                technique.subcategories.add(subcategory)
+        
+        # Fallback to category_tags only if direct categories are not available
+        elif category_tags:
+            parsed_categories = self._parse_category_tags(category_tags)
+
+            for cat_data in parsed_categories:
+                cat_name = cat_data.get("category")
+                subcat_name = cat_data.get("subcategory")
+
+                # Use first available assurance goal, or default to Explainability
+                goal_name = (
+                    assurance_goals_list[0]
+                    if assurance_goals_list
+                    else "Explainability"
+                )
+
+                goal, _ = AssuranceGoal.objects.get_or_create(
+                    name=goal_name,
+                    defaults={
+                        "description": f"{goal_name} techniques for trustworthy AI"
+                    },
+                )
+
+                # Get or create category
+                category, _ = Category.objects.get_or_create(
+                    name=cat_name,
+                    assurance_goal=goal,
+                    defaults={"description": f"Category for {cat_name}"},
+                )
+
+                # Add category to technique
+                technique.categories.add(category)
+
+                # Process subcategory if present
+                if subcat_name:
+                    subcategory, _ = SubCategory.objects.get_or_create(
+                        name=subcat_name,
+                        category=category,
+                        defaults={"description": f"Subcategory for {subcat_name}"},
+                    )
+
+                    # Add subcategory to technique
+                    technique.subcategories.add(subcategory)
+
+    def _compare_relationships(self, technique: Technique, data: Dict[str, Any]) -> Dict[str, bool]:
+        """Compare existing relationships with incoming data to determine what needs to be cleared."""
+        needs_clearing = {
+            "assurance_goals": False,
+            "categories": False,
+            "subcategories": False,
+            "attributes": False, 
+            "resources": False,
+            "example_use_cases": False,
+            "limitations": False
+        }
+        
+        # Check assurance goals
+        incoming_goals = set(data.get("assurance_goals", []))
+        existing_goals = set(technique.assurance_goals.values_list('name', flat=True))
+        if incoming_goals and incoming_goals != existing_goals:
+            needs_clearing["assurance_goals"] = True
+            
+        # If there are categories or subcategories in the data, we'll need to clear
+        if data.get("categories") or data.get("subcategories") or data.get("category_tags"):
+            needs_clearing["categories"] = True
+            needs_clearing["subcategories"] = True
+            
+        # Always clear these relationships as they're completely replaced
+        needs_clearing["attributes"] = True 
+        needs_clearing["resources"] = True
+        needs_clearing["example_use_cases"] = True
+        needs_clearing["limitations"] = True
+        
+        return needs_clearing
+
     def _process_technique(self, data: Dict[str, Any]) -> None:
         """Process a single technique from JSON data"""
         try:
@@ -211,9 +417,7 @@ class Command(BaseCommand):
             description = data.get("description", "")
             model_dependency = data.get("model_dependency", "Model-Agnostic")
             assurance_goals_list = data.get("assurance_goals", [])
-            category_tags = data.get("category_tags", "")  # Keep for backward compatibility
-            categories_data = data.get("categories", [])  # New direct categories list
-            subcategories_data = data.get("subcategories", [])  # New direct subcategories list
+            category_tags = data.get("category_tags", "")
             complexity_rating = data.get("complexity_rating")
             computational_cost_rating = data.get("computational_cost_rating")
             applicable_models = data.get("applicable_models", [])
@@ -224,14 +428,13 @@ class Command(BaseCommand):
             resources_data = data.get("resources", [])
             limitations_data = data.get("limitations", [])
 
-            # Skip if essential data is missing
+            # Skip if essential data is missing, unless force is true
             if not name or not description:
-                self.stdout.write(
-                    self.style.WARNING(
-                        f"Skipping technique with missing name or description"
-                    )
-                )
-                return
+                logger.warning(f"Skipping technique with missing name or description")
+                if not self.force:
+                    return
+                else:
+                    logger.info(f"Force flag enabled, continuing with incomplete data")
 
             # Create default values
             defaults = {
@@ -240,10 +443,8 @@ class Command(BaseCommand):
                 "category_tags": category_tags,  # Keep for backward compatibility
                 "complexity_rating": complexity_rating,
                 "computational_cost_rating": computational_cost_rating,
+                "applicable_models": applicable_models if applicable_models else None
             }
-
-            # Add applicable_models to defaults
-            defaults["applicable_models"] = applicable_models if applicable_models else None
 
             # Create or update the technique
             technique, created = Technique.objects.update_or_create(
@@ -251,19 +452,25 @@ class Command(BaseCommand):
                 defaults=defaults,
             )
 
-            # Clear existing relationships if updating
+            # If updating, selectively clear relationships based on what's changing
             if not created:
-                # Clear M2M relationships
-                technique.assurance_goals.clear()
-                technique.categories.clear()
-                technique.subcategories.clear()
-                technique.tags.clear()
-
-                # Delete related objects
-                AttributeValue.objects.filter(technique=technique).delete()
-                TechniqueResource.objects.filter(technique=technique).delete()
-                TechniqueExampleUseCase.objects.filter(technique=technique).delete()
-                TechniqueLimitation.objects.filter(technique=technique).delete()
+                clearing_needed = self._compare_relationships(technique, data)
+                
+                # Clear only the relationships that need updating
+                if clearing_needed["assurance_goals"]:
+                    technique.assurance_goals.clear()
+                if clearing_needed["categories"]:
+                    technique.categories.clear()
+                if clearing_needed["subcategories"]:
+                    technique.subcategories.clear()
+                if clearing_needed["attributes"]:
+                    AttributeValue.objects.filter(technique=technique).delete()
+                if clearing_needed["resources"]:
+                    TechniqueResource.objects.filter(technique=technique).delete()
+                if clearing_needed["example_use_cases"]:
+                    TechniqueExampleUseCase.objects.filter(technique=technique).delete()
+                if clearing_needed["limitations"]:
+                    TechniqueLimitation.objects.filter(technique=technique).delete()
 
             # Process assurance goals
             for goal_name in assurance_goals_list:
@@ -275,124 +482,8 @@ class Command(BaseCommand):
                 )
                 technique.assurance_goals.add(goal)
 
-            # First try to process direct categories and subcategories data
-            has_direct_categories = False
-            
-            # Process direct categories data if available
-            if categories_data:
-                has_direct_categories = True
-                for cat_data in categories_data:
-                    if isinstance(cat_data, dict):
-                        cat_name = cat_data.get("name")
-                        cat_goal_name = cat_data.get("assurance_goal")
-                    else:
-                        cat_name = cat_data
-                        cat_goal_name = assurance_goals_list[0] if assurance_goals_list else "Explainability"
-                    
-                    if not cat_name:
-                        continue
-                        
-                    # Get or create the assurance goal
-                    goal, _ = AssuranceGoal.objects.get_or_create(
-                        name=cat_goal_name,
-                        defaults={
-                            "description": f"{cat_goal_name} techniques for trustworthy AI"
-                        },
-                    )
-                    
-                    # Get or create category
-                    category, _ = Category.objects.get_or_create(
-                        name=cat_name,
-                        assurance_goal=goal,
-                        defaults={"description": f"Category for {cat_name}"},
-                    )
-                    
-                    # Add category to technique
-                    technique.categories.add(category)
-            
-            # Process direct subcategories data if available
-            if subcategories_data:
-                has_direct_categories = True
-                for subcat_data in subcategories_data:
-                    if isinstance(subcat_data, dict):
-                        subcat_name = subcat_data.get("name")
-                        cat_name = subcat_data.get("category")
-                        cat_goal_name = subcat_data.get("assurance_goal", 
-                                                        assurance_goals_list[0] if assurance_goals_list else "Explainability")
-                    else:
-                        # If it's not a dict with detailed info, skip it
-                        continue
-                    
-                    if not subcat_name or not cat_name:
-                        continue
-                    
-                    # Get or create the assurance goal
-                    goal, _ = AssuranceGoal.objects.get_or_create(
-                        name=cat_goal_name,
-                        defaults={
-                            "description": f"{cat_goal_name} techniques for trustworthy AI"
-                        },
-                    )
-                    
-                    # Get or create category
-                    category, _ = Category.objects.get_or_create(
-                        name=cat_name,
-                        assurance_goal=goal,
-                        defaults={"description": f"Category for {cat_name}"},
-                    )
-                    
-                    # Get or create subcategory
-                    subcategory, _ = SubCategory.objects.get_or_create(
-                        name=subcat_name,
-                        category=category,
-                        defaults={"description": f"Subcategory for {subcat_name}"},
-                    )
-                    
-                    # Add subcategory to technique
-                    technique.subcategories.add(subcategory)
-            
-            # Fallback to category_tags only if direct categories are not available
-            if not has_direct_categories and category_tags:
-                parsed_categories = self._parse_category_tags(category_tags)
-
-                for cat_data in parsed_categories:
-                    cat_name = cat_data.get("category")
-                    subcat_name = cat_data.get("subcategory")
-
-                    # Use first available assurance goal, or default to Explainability
-                    goal_name = (
-                        assurance_goals_list[0]
-                        if assurance_goals_list
-                        else "Explainability"
-                    )
-
-                    goal, _ = AssuranceGoal.objects.get_or_create(
-                        name=goal_name,
-                        defaults={
-                            "description": f"{goal_name} techniques for trustworthy AI"
-                        },
-                    )
-
-                    # Get or create category
-                    category, _ = Category.objects.get_or_create(
-                        name=cat_name,
-                        assurance_goal=goal,
-                        defaults={"description": f"Category for {cat_name}"},
-                    )
-
-                    # Add category to technique
-                    technique.categories.add(category)
-
-                    # Process subcategory if present
-                    if subcat_name:
-                        subcategory, _ = SubCategory.objects.get_or_create(
-                            name=subcat_name,
-                            category=category,
-                            defaults={"description": f"Subcategory for {subcat_name}"},
-                        )
-
-                        # Add subcategory to technique
-                        technique.subcategories.add(subcategory)
+            # Process categories
+            self._process_categories(technique, data)
 
             # Process attributes
             for attr_data in attributes_data:
@@ -445,57 +536,13 @@ class Command(BaseCommand):
                         assurance_goal=use_case_goal,
                     )
                 except Exception as e:
-                    self.stdout.write(
-                        self.style.WARNING(f"Error creating use case for {name}: {e}")
-                    )
+                    logger.warning(f"Error creating use case for {name}: {e}")
+                    if not self.force:
+                        raise
 
-            # Process limitations - handle both string and object formats
+            # Process limitations - now using a dedicated helper method
             for limitation in limitations_data:
-                # Check if the limitation is already a dict/object with description field
-                if isinstance(limitation, dict) and "description" in limitation:
-                    description = limitation["description"].strip()
-                    if description:
-                        TechniqueLimitation.objects.create(
-                            technique=technique, description=description
-                        )
-                # Check if it's a string that might be a JSON string
-                elif isinstance(limitation, str):
-                    # If it looks like a JSON array or object, try to parse it
-                    if limitation.strip().startswith(('[', '{')):
-                        try:
-                            parsed_limitation = json.loads(limitation)
-                            
-                            # Handle case where the parsed result is an array of limitation objects
-                            if isinstance(parsed_limitation, list):
-                                for item in parsed_limitation:
-                                    if isinstance(item, dict) and "description" in item:
-                                        desc = item["description"].strip()
-                                        if desc:
-                                            TechniqueLimitation.objects.create(
-                                                technique=technique, description=desc
-                                            )
-                                    elif isinstance(item, str) and item.strip():
-                                        TechniqueLimitation.objects.create(
-                                            technique=technique, description=item.strip()
-                                        )
-                            # Handle case where the parsed result is a single limitation object
-                            elif isinstance(parsed_limitation, dict) and "description" in parsed_limitation:
-                                desc = parsed_limitation["description"].strip()
-                                if desc:
-                                    TechniqueLimitation.objects.create(
-                                        technique=technique, description=desc
-                                    )
-                        except json.JSONDecodeError:
-                            # If parsing fails, treat it as a plain string
-                            if limitation.strip():
-                                TechniqueLimitation.objects.create(
-                                    technique=technique, description=limitation.strip()
-                                )
-                    # Handle plain strings
-                    elif limitation.strip():
-                        TechniqueLimitation.objects.create(
-                            technique=technique, description=limitation.strip()
-                        )
+                self._process_limitation(technique, limitation)
 
             # Process resources
             for resource_data in resources_data:
@@ -538,11 +585,12 @@ class Command(BaseCommand):
                 )
 
             status = "Created" if created else "Updated"
+            logger.info(f"{status} technique: {name}")
             self.stdout.write(self.style.SUCCESS(f"{status} technique: {name}"))
 
         except Exception as e:
-            self.stdout.write(
-                self.style.ERROR(
-                    f'Error processing technique {data.get("name", "Unknown")}: {str(e)}'
-                )
-            )
+            error_msg = f'Error processing technique {data.get("name", "Unknown")}: {str(e)}'
+            logger.error(error_msg)
+            self.stdout.write(self.style.ERROR(error_msg))
+            if not self.force:
+                raise

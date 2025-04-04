@@ -10,20 +10,19 @@ if (process.env.ANALYZE === 'true') {
   });
 }
 
-// Uncomment for debugging at runtime if needed
-// console.log('Running next.config.ts - Environment variables:');
-// console.log('BACKEND_URL:', process.env.BACKEND_URL);
-// console.log('DOCKER_ENV:', process.env.DOCKER_ENV);
-// console.log('NODE_ENV:', process.env.NODE_ENV);
-
 // Get the backend URL from environment or use a sensible default
 const getBackendUrl = () => {
-  // First check for environment variable
+  // First priority: NEXT_PUBLIC_API_URL (without the /api part)
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL.replace(/\/api\/?$/, '');
+  }
+
+  // Second priority: BACKEND_URL
   if (process.env.BACKEND_URL) {
     return process.env.BACKEND_URL;
   }
   
-  // For Docker environments, try to use the service name
+  // For Docker environments, use the service name
   if (process.env.DOCKER_ENV === 'true') {
     return 'http://backend:8000';
   }

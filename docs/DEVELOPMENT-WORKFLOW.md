@@ -233,6 +233,23 @@ Technique data is managed via the JSON file in `backend/data/techniques.json`.
 
 ## Common Development Tasks
 
+### Database Migration Handling
+
+Database migrations are critical for tracking schema changes in the application. Follow these guidelines when working with migrations:
+
+1. **All migration files should be committed to the repository**, including the initial migration files (e.g., `0001_initial.py`).
+2. **Never ignore migration files in `.gitignore`** except for temporary files (`*.py~`).
+3. When creating new migrations:
+   ```bash
+   docker-compose -f docker-compose.development.yml exec backend python manage.py makemigrations
+   ```
+4. Always commit the generated migration files and include them in your pull requests.
+5. When receiving new migrations from other developers, apply them:
+   ```bash
+   docker-compose -f docker-compose.development.yml exec backend python manage.py migrate
+   ```
+6. If you encounter migration conflicts, coordinate with the team to resolve them rather than deleting or modifying existing migrations that others may be using.
+
 ### Adding a New Model (Backend)
 
 1.  Define the model in `backend/api/models.py`.

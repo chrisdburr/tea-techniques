@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.test.utils import CaptureQueriesContext
 from django.db import connection
+from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from api.models import (
@@ -24,6 +25,9 @@ from api.tests.factories import (
     ResourceTypeFactory,
 )
 import json
+
+# Get the User model
+User = get_user_model()
 
 
 class ApiEndpointTestCase(APITestCase):
@@ -664,3 +668,325 @@ class TechniqueAPITestCase(APITestCase):
         response = self.client.get(f"{self.techniques_url}?categories={category.id}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn(technique.name, [t["name"] for t in response.json()["results"]])
+
+
+class AuthenticationTestCase(APITestCase):
+    """
+    Test authentication requirements for API operations.
+    
+    Test scenarios:
+    - Anonymous user access (list/retrieve endpoints)
+    - Unauthenticated write operations (create/update/delete) - should return 401
+    - Authenticated write operations - should succeed
+    """
+
+    def setUp(self):
+        # Create base objects for relationships
+        self.assurance_goal = AssuranceGoalFactory()
+        self.category = CategoryFactory(assurance_goal=self.assurance_goal)
+        self.subcategory = SubCategoryFactory(category=self.category)
+        self.tag = TagFactory()
+        self.technique = TechniqueFactory(
+            assurance_goals=[self.assurance_goal],
+            categories=[self.category],
+            subcategories=[self.subcategory],
+            tags=[self.tag],
+        )
+        
+        # Define the common URLs - NO trailing slashes as per router config
+        self.techniques_url = "/api/techniques"
+        self.technique_detail_url = f"{self.techniques_url}/{self.technique.id}"
+        self.goals_url = "/api/assurance-goals"
+        self.categories_url = "/api/categories"
+        self.subcategories_url = "/api/subcategories"
+        self.tags_url = "/api/tags"
+        # Skip attribute types due to serializer issues
+        self.resource_types_url = "/api/resource-types"
+        
+        # Create a test user
+        self.username = "testuser"
+        self.password = "testpassword"
+        self.user = User.objects.create_user(
+            username=self.username,
+            email="test@example.com",
+            password=self.password
+        )
+        
+        # Create admin user
+        self.admin = User.objects.create_superuser(
+            username="admin", 
+            email="admin@example.com",
+            password="adminpass"
+        )
+        
+        # Create client
+        self.client = APIClient()
+        
+        # Create sample data for POST/PUT tests
+        self.technique_data = {
+            "name": "Auth Test Technique",
+            "description": "Description for auth test technique",
+            "model_dependency": "Model-Agnostic",
+            "assurance_goal_ids": [self.assurance_goal.id],
+            "category_ids": [self.category.id],
+            "subcategory_ids": [self.subcategory.id],
+            "tag_ids": [self.tag.id],
+        }
+        
+        self.goal_data = {
+            "name": "Auth Test Goal",
+            "description": "Goal created in auth test"
+        }
+        
+        self.category_data = {
+            "name": "Auth Test Category",
+            "description": "Category created in auth test",
+            "assurance_goal": self.assurance_goal.id
+        }
+        
+        self.tag_data = {
+            "name": "auth-test-tag"
+        }
+
+    def test_anonymous_read_access(self):
+        """Test that anonymous users can access read endpoints (list/retrieve)"""
+        # Test list endpoints
+        endpoints = [
+            self.techniques_url,
+            self.goals_url,
+            self.categories_url,
+            self.subcategories_url,
+            self.tags_url,
+            self.resource_types_url,
+        ]
+        
+        for url in endpoints:
+            response = self.client.get(url)
+            self.assertEqual(response.status_code, status.HTTP_200_OK,
+                            f"Anonymous user could not access list endpoint {url}")
+        
+        # Test retrieve endpoints
+        response = self.client.get(self.technique_detail_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK,
+                        "Anonymous user could not access technique detail endpoint")
+        
+        # Test filtering endpoints
+        response = self.client.get(f"/api/categories-by-goal/{self.assurance_goal.id}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK,
+                        "Anonymous user could not access categories-by-goal endpoint")
+        
+        response = self.client.get(f"/api/subcategories-by-category/{self.category.id}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK,
+                        "Anonymous user could not access subcategories-by-category endpoint")
+
+    def test_anonymous_write_operations_fail(self):
+        """Test that anonymous users cannot perform write operations"""
+        # Test create operations
+        post_data = [
+            (self.techniques_url, self.technique_data),
+            (self.goals_url, self.goal_data),
+            (self.categories_url, self.category_data),
+            (self.tags_url, self.tag_data),
+        ]
+        
+        for url, data in post_data:
+            response = self.client.post(
+                url,
+                data=json.dumps(data),
+                content_type="application/json"
+            )
+            # Check for either 401 or 403 - both indicate authentication failure
+            self.assertIn(response.status_code, 
+                        [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
+                        f"Anonymous POST to {url} should not succeed")
+        
+        # Test update operations
+        put_data = [
+            (self.technique_detail_url, self.technique_data),
+            (f"{self.goals_url}/{self.assurance_goal.id}", self.goal_data),
+            (f"{self.categories_url}/{self.category.id}", self.category_data),
+            (f"{self.tags_url}/{self.tag.id}", self.tag_data),
+        ]
+        
+        for url, data in put_data:
+            response = self.client.put(
+                url,
+                data=json.dumps(data),
+                content_type="application/json"
+            )
+            self.assertIn(response.status_code, 
+                        [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
+                        f"Anonymous PUT to {url} should not succeed")
+            
+            # Also test PATCH
+            response = self.client.patch(
+                url,
+                data=json.dumps({"name": "Updated Name"}),
+                content_type="application/json"
+            )
+            self.assertIn(response.status_code, 
+                        [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
+                        f"Anonymous PATCH to {url} should not succeed")
+        
+        # Test delete operations
+        delete_urls = [
+            self.technique_detail_url,
+            f"{self.goals_url}/{self.assurance_goal.id}",
+            f"{self.categories_url}/{self.category.id}",
+            f"{self.tags_url}/{self.tag.id}",
+        ]
+        
+        for url in delete_urls:
+            response = self.client.delete(url)
+            self.assertIn(response.status_code, 
+                        [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
+                        f"Anonymous DELETE to {url} should not succeed")
+
+    def test_authenticated_write_operations_succeed(self):
+        """Test that authenticated users can perform write operations"""
+        # Log in
+        self.client.force_authenticate(user=self.user)
+        
+        # Test create operations
+        post_data = [
+            (self.techniques_url, self.technique_data),
+            (self.goals_url, self.goal_data),
+            (self.categories_url, self.category_data),
+            (self.tags_url, self.tag_data),
+        ]
+        
+        for url, data in post_data:
+            response = self.client.post(
+                url,
+                data=json.dumps(data),
+                content_type="application/json"
+            )
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED,
+                            f"Authenticated POST to {url} failed with status {response.status_code}")
+        
+        # Get IDs of newly created objects for update tests
+        techniques = Technique.objects.filter(name=self.technique_data["name"])
+        self.assertTrue(techniques.exists(), "Technique was not created")
+        new_technique_id = techniques.first().id
+        
+        goals = AssuranceGoal.objects.filter(name=self.goal_data["name"])
+        self.assertTrue(goals.exists(), "Goal was not created")
+        new_goal_id = goals.first().id
+        
+        categories = Category.objects.filter(name=self.category_data["name"])
+        self.assertTrue(categories.exists(), "Category was not created")
+        new_category_id = categories.first().id
+        
+        tags = Tag.objects.filter(name=self.tag_data["name"])
+        self.assertTrue(tags.exists(), "Tag was not created")
+        new_tag_id = tags.first().id
+        
+        # Test update operations
+        put_data = [
+            (f"{self.techniques_url}/{new_technique_id}", {"name": "Updated Auth Test Technique"}),
+            (f"{self.goals_url}/{new_goal_id}", {"name": "Updated Auth Test Goal"}),
+            (f"{self.categories_url}/{new_category_id}", {"name": "Updated Auth Test Category"}),
+            (f"{self.tags_url}/{new_tag_id}", {"name": "updated-auth-test-tag"}),
+        ]
+        
+        for url, data in put_data:
+            response = self.client.patch(
+                url,
+                data=json.dumps(data),
+                content_type="application/json"
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK,
+                            f"Authenticated PATCH to {url} failed with status {response.status_code}")
+            
+        # Test delete operations
+        delete_urls = [
+            f"{self.techniques_url}/{new_technique_id}",
+            f"{self.goals_url}/{new_goal_id}",
+            f"{self.categories_url}/{new_category_id}",
+            f"{self.tags_url}/{new_tag_id}",
+        ]
+        
+        for url in delete_urls:
+            response = self.client.delete(url)
+            self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT,
+                            f"Authenticated DELETE to {url} failed with status {response.status_code}")
+
+    def test_auth_with_real_credentials(self):
+        """
+        Test authentication workflow with login/logout using real credentials
+        instead of force_authenticate
+        """
+        # Try to create a technique without authentication
+        response = self.client.post(
+            self.techniques_url,
+            data=json.dumps(self.technique_data),
+            content_type="application/json"
+        )
+        self.assertIn(response.status_code, 
+                     [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
+                     "Unauthenticated request should not succeed")
+        
+        # Use login endpoint to authenticate
+        login_data = {
+            "username": self.username,
+            "password": self.password
+        }
+        
+        response = self.client.post(
+            "/api/auth/login",
+            data=json.dumps(login_data),
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("username", response.json())
+        self.assertEqual(response.json()["username"], self.username)
+        
+        # Now try the create operation again - should work
+        response = self.client.post(
+            self.techniques_url,
+            data=json.dumps(self.technique_data),
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        
+        # Verify the technique was created
+        techniques = Technique.objects.filter(name=self.technique_data["name"])
+        self.assertTrue(techniques.exists())
+        
+        # Logout - might succeed without auth in DRF's built-in auth
+        response = self.client.post("/api/auth/logout")
+        
+        # Log back in for proper logout test
+        self.client.post(
+            "/api/auth/login",
+            data=json.dumps(login_data),
+            content_type="application/json"
+        )
+        
+        # Try logout now
+        response = self.client.post("/api/auth/logout")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Verify we're logged out by trying a write operation
+        response = self.client.post(
+            self.techniques_url,
+            data=json.dumps(self.technique_data),
+            content_type="application/json"
+        )
+        self.assertIn(response.status_code, 
+                     [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
+                     "User should be logged out, write operation should fail")
+
+    def test_auth_status_endpoint(self):
+        """Test the authentication status endpoint behavior"""
+        # Test with anonymous user
+        response = self.client.get("/api/auth/status")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertFalse(response.json()["isAuthenticated"])
+        
+        # Test with authenticated user
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get("/api/auth/status")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.json()["isAuthenticated"])
+        self.assertEqual(response.json()["user"]["username"], self.username)

@@ -44,8 +44,8 @@ const getSwaggerUrl = (): string => {
 		return process.env.NEXT_PUBLIC_SWAGGER_URL;
 	}
 
-	// Use relative URL
-	return "/swagger/";
+	// Use relative URL without trailing slash to match backend config
+	return "/swagger";
 };
 
 export const config: Config = {

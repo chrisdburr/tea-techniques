@@ -116,7 +116,6 @@ class Technique(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
     model_dependency = models.CharField(max_length=100)
-    category_tags = models.CharField(max_length=500, blank=True)
     complexity_rating = models.PositiveSmallIntegerField(
         null=True,
         blank=True,

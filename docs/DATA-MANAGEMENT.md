@@ -25,7 +25,6 @@ The JSON file includes the following key fields:
 - `description`: Technique description
 - `model_dependency`: Model dependency type (i.e. agnostic or specific)
 - `assurance_goals`: Array of assurance goals to which the technique belongs
-- `category_tags`: String containing category tags in format "#category/subcategory"
 - `attributes`: Array of attributes for the technique (e.g. `{"type": "Scope", "value": "local"}`)
 - `example_use_cases`: Array of example use cases for the technique
 - `limitations`: Array of limitations for the technique

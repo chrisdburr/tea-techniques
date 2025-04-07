@@ -12,7 +12,6 @@ const mockTechniques: Technique[] = [
     name: 'Test Technique 1',
     description: 'Description for test technique 1',
     model_dependency: 'Model-Agnostic',
-    category_tags: '', 
     example_use_cases: [
       {
         id: 101,
@@ -21,15 +20,16 @@ const mockTechniques: Technique[] = [
         assurance_goal_name: 'Explainability'
       }
     ],
-    assurance_goals: [{ id: 1, name: 'Accuracy' }],
-    categories: [{ id: 1, name: 'Testing' }],
+    assurance_goals: [{ id: 1, name: 'Accuracy', description: 'Goal description' }],
+    categories: [{ id: 1, name: 'Testing', description: 'Category description', assurance_goal: 1, assurance_goal_name: 'Accuracy' }],
     subcategories: [],
     attribute_values: [],
     resources: [{ 
       id: 201, 
-      resource_type: 1, 
-      title: 'Resource', 
-      url: 'https://example.com', 
+      resource_type: 1,
+      resource_type_name: 'Paper', // Added missing field
+      title: 'Resource',
+      url: 'https://example.com',
       description: 'Resource Description',
       publication_date: '2023-01-01'
     }],
@@ -70,7 +70,7 @@ const mockResourceTypes = [
 ];
 
 // For pagination endpoints
-const createPaginatedResponse = (items) => ({
+const createPaginatedResponse = <T,>(items: T[]) => ({
   count: items.length,
   next: null,
   previous: null,

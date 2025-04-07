@@ -7,7 +7,7 @@ from pathlib import Path
 import logging
 import datetime
 import re
-from typing import Any, Dict, List, Optional, Union, Tuple, cast, Set
+from typing import Any, Dict, Optional
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.conf import settings
@@ -17,7 +17,6 @@ from api.models import (
     AssuranceGoal,
     Category,
     SubCategory,
-    Tag,
     AttributeType,
     AttributeValue,
     ResourceType,
@@ -37,8 +36,8 @@ class Command(BaseCommand):
     def add_arguments(self, parser: ArgumentParser) -> None:
         parser.add_argument("--file", type=str, help="Path to the JSON file")
         parser.add_argument(
-            "--force", 
-            action="store_true", 
+            "--force",
+            action="store_true",
             default=False,
             help="Force import even if errors occur",
         )
@@ -150,64 +149,38 @@ class Command(BaseCommand):
         """Parse a date string into a Python date object."""
         if not date_str or not date_str.strip():
             return None
-            
+
         date_str = date_str.strip()
-        
+
         # Try different date formats
         formats = [
-            "%Y-%m-%d",       # 2023-01-15
-            "%d/%m/%Y",       # 15/01/2023
-            "%m/%d/%Y",       # 01/15/2023
-            "%B %d, %Y",      # January 15, 2023
-            "%d %B %Y",       # 15 January 2023
-            "%Y",             # 2023 (just year)
-            "%B %Y",          # January 2023
-            "%m-%Y",          # 01-2023
-            "%m/%Y",          # 01/2023
+            "%Y-%m-%d",  # 2023-01-15
+            "%d/%m/%Y",  # 15/01/2023
+            "%m/%d/%Y",  # 01/15/2023
+            "%B %d, %Y",  # January 15, 2023
+            "%d %B %Y",  # 15 January 2023
+            "%Y",  # 2023 (just year)
+            "%B %Y",  # January 2023
+            "%m-%Y",  # 01-2023
+            "%m/%Y",  # 01/2023
         ]
-        
+
         for fmt in formats:
             try:
                 return datetime.datetime.strptime(date_str, fmt).date()
             except ValueError:
                 continue
-                
+
         # If we couldn't parse the date with any format, just extract the year if possible
         # This handles cases like "Published in 2023" or "2023 (Conference)"
-        year_match = re.search(r'20\d{2}|19\d{2}', date_str)
+        year_match = re.search(r"20\d{2}|19\d{2}", date_str)
         if year_match:
             year = int(year_match.group(0))
             return datetime.date(year, 1, 1)  # Default to January 1st of the year
-            
+
         # If all else fails, return None
         logger.warning(f"Could not parse date string: {date_str}")
         return None
-        
-    def _parse_category_tags(self, category_tags: str) -> List[Dict[str, Optional[str]]]:
-        """Parse category tags from #category/subcategory format."""
-        if not category_tags:
-            return []
-
-        results: List[Dict[str, Optional[str]]] = []
-        tags = category_tags.split("#")
-
-        for tag in tags:
-            tag = tag.strip()
-            if not tag:
-                continue
-
-            if "/" in tag:
-                category_name, subcategory_name = tag.split("/", 1)
-                results.append(
-                    {
-                        "category": category_name.strip(),
-                        "subcategory": subcategory_name.strip(),
-                    }
-                )
-            else:
-                results.append({"category": tag.strip(), "subcategory": None})
-
-        return results
 
     def _process_limitation(self, technique: Technique, limitation: Any) -> None:
         """Process a single limitation and add it to the technique."""
@@ -218,13 +191,13 @@ class Command(BaseCommand):
                 TechniqueLimitation.objects.create(
                     technique=technique, description=description
                 )
-        # Check if it's a string 
+        # Check if it's a string
         elif isinstance(limitation, str):
-            if limitation.strip().startswith(('[', '{')):
+            if limitation.strip().startswith(("[", "{")):
                 try:
                     # Try to parse as JSON if it looks like JSON
                     parsed_limitation = json.loads(limitation)
-                    
+
                     # Handle case where the parsed result is an array of limitation objects
                     if isinstance(parsed_limitation, list):
                         for item in parsed_limitation:
@@ -239,7 +212,10 @@ class Command(BaseCommand):
                                     technique=technique, description=item.strip()
                                 )
                     # Handle case where the parsed result is a single limitation object
-                    elif isinstance(parsed_limitation, dict) and "description" in parsed_limitation:
+                    elif (
+                        isinstance(parsed_limitation, dict)
+                        and "description" in parsed_limitation
+                    ):
                         desc = parsed_limitation["description"].strip()
                         if desc:
                             TechniqueLimitation.objects.create(
@@ -263,7 +239,7 @@ class Command(BaseCommand):
         category_tags = data.get("category_tags", "")
         categories_data = data.get("categories", [])
         subcategories_data = data.get("subcategories", [])
-        
+
         # First try to process direct categories and subcategories data
         if categories_data or subcategories_data:
             # Process direct categories
@@ -273,11 +249,15 @@ class Command(BaseCommand):
                     cat_goal_name = cat_data.get("assurance_goal")
                 else:
                     cat_name = cat_data
-                    cat_goal_name = assurance_goals_list[0] if assurance_goals_list else "Explainability"
-                
+                    cat_goal_name = (
+                        assurance_goals_list[0]
+                        if assurance_goals_list
+                        else "Explainability"
+                    )
+
                 if not cat_name:
                     continue
-                    
+
                 # Get or create the assurance goal
                 goal, _ = AssuranceGoal.objects.get_or_create(
                     name=cat_goal_name,
@@ -285,31 +265,37 @@ class Command(BaseCommand):
                         "description": f"{cat_goal_name} techniques for trustworthy AI"
                     },
                 )
-                
+
                 # Get or create category
                 category, _ = Category.objects.get_or_create(
                     name=cat_name,
                     assurance_goal=goal,
                     defaults={"description": f"Category for {cat_name}"},
                 )
-                
+
                 # Add category to technique
                 technique.categories.add(category)
-        
+
             # Process direct subcategories
             for subcat_data in subcategories_data:
                 if isinstance(subcat_data, dict):
                     subcat_name = subcat_data.get("name")
                     cat_name = subcat_data.get("category")
-                    cat_goal_name = subcat_data.get("assurance_goal", 
-                                                    assurance_goals_list[0] if assurance_goals_list else "Explainability")
+                    cat_goal_name = subcat_data.get(
+                        "assurance_goal",
+                        (
+                            assurance_goals_list[0]
+                            if assurance_goals_list
+                            else "Explainability"
+                        ),
+                    )
                 else:
                     # If it's not a dict with detailed info, skip it
                     continue
-                
+
                 if not subcat_name or not cat_name:
                     continue
-                
+
                 # Get or create the assurance goal
                 goal, _ = AssuranceGoal.objects.get_or_create(
                     name=cat_goal_name,
@@ -317,24 +303,24 @@ class Command(BaseCommand):
                         "description": f"{cat_goal_name} techniques for trustworthy AI"
                     },
                 )
-                
+
                 # Get or create category
                 category, _ = Category.objects.get_or_create(
                     name=cat_name,
                     assurance_goal=goal,
                     defaults={"description": f"Category for {cat_name}"},
                 )
-                
+
                 # Get or create subcategory
                 subcategory, _ = SubCategory.objects.get_or_create(
                     name=subcat_name,
                     category=category,
                     defaults={"description": f"Subcategory for {subcat_name}"},
                 )
-                
+
                 # Add subcategory to technique
                 technique.subcategories.add(subcategory)
-        
+
         # Fallback to category_tags only if direct categories are not available
         elif category_tags:
             parsed_categories = self._parse_category_tags(category_tags)
@@ -378,35 +364,37 @@ class Command(BaseCommand):
                     # Add subcategory to technique
                     technique.subcategories.add(subcategory)
 
-    def _compare_relationships(self, technique: Technique, data: Dict[str, Any]) -> Dict[str, bool]:
+    def _compare_relationships(
+        self, technique: Technique, data: Dict[str, Any]
+    ) -> Dict[str, bool]:
         """Compare existing relationships with incoming data to determine what needs to be cleared."""
         needs_clearing = {
             "assurance_goals": False,
             "categories": False,
             "subcategories": False,
-            "attributes": False, 
+            "attributes": False,
             "resources": False,
             "example_use_cases": False,
-            "limitations": False
+            "limitations": False,
         }
-        
+
         # Check assurance goals
         incoming_goals = set(data.get("assurance_goals", []))
-        existing_goals = set(technique.assurance_goals.values_list('name', flat=True))
+        existing_goals = set(technique.assurance_goals.values_list("name", flat=True))
         if incoming_goals and incoming_goals != existing_goals:
             needs_clearing["assurance_goals"] = True
-            
+
         # If there are categories or subcategories in the data, we'll need to clear
-        if data.get("categories") or data.get("subcategories") or data.get("category_tags"):
+        if data.get("categories") or data.get("subcategories"):
             needs_clearing["categories"] = True
             needs_clearing["subcategories"] = True
-            
+
         # Always clear these relationships as they're completely replaced
-        needs_clearing["attributes"] = True 
+        needs_clearing["attributes"] = True
         needs_clearing["resources"] = True
         needs_clearing["example_use_cases"] = True
         needs_clearing["limitations"] = True
-        
+
         return needs_clearing
 
     def _process_technique(self, data: Dict[str, Any]) -> None:
@@ -417,7 +405,6 @@ class Command(BaseCommand):
             description = data.get("description", "")
             model_dependency = data.get("model_dependency", "Model-Agnostic")
             assurance_goals_list = data.get("assurance_goals", [])
-            category_tags = data.get("category_tags", "")
             complexity_rating = data.get("complexity_rating")
             computational_cost_rating = data.get("computational_cost_rating")
             applicable_models = data.get("applicable_models", [])
@@ -440,10 +427,9 @@ class Command(BaseCommand):
             defaults = {
                 "description": description,
                 "model_dependency": model_dependency,
-                "category_tags": category_tags,  # Keep for backward compatibility
                 "complexity_rating": complexity_rating,
                 "computational_cost_rating": computational_cost_rating,
-                "applicable_models": applicable_models if applicable_models else None
+                "applicable_models": applicable_models if applicable_models else None,
             }
 
             # Create or update the technique
@@ -455,7 +441,7 @@ class Command(BaseCommand):
             # If updating, selectively clear relationships based on what's changing
             if not created:
                 clearing_needed = self._compare_relationships(technique, data)
-                
+
                 # Clear only the relationships that need updating
                 if clearing_needed["assurance_goals"]:
                     technique.assurance_goals.clear()
@@ -571,7 +557,7 @@ class Command(BaseCommand):
 
                 # Parse the publication date
                 parsed_date = self._parse_date(resource_publication_date)
-                
+
                 # Create resource
                 TechniqueResource.objects.create(
                     technique=technique,
@@ -589,7 +575,9 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f"{status} technique: {name}"))
 
         except Exception as e:
-            error_msg = f'Error processing technique {data.get("name", "Unknown")}: {str(e)}'
+            error_msg = (
+                f'Error processing technique {data.get("name", "Unknown")}: {str(e)}'
+            )
             logger.error(error_msg)
             self.stdout.write(self.style.ERROR(error_msg))
             if not self.force:

@@ -1,19 +1,18 @@
 from __future__ import annotations
 
 from django.db import models
-from django.db.models.query import QuerySet
 from django.core.validators import MinValueValidator, MaxValueValidator
-from typing import Dict, List, Optional, Any, Union, cast
 
 
 class AssuranceGoal(models.Model):
     """
     Represents a high-level assurance goal for AI systems.
-    
+
     Assurance goals are the broadest categorization of techniques, representing
     what the technique aims to achieve in terms of AI safety or quality assurance.
     Examples include fairness, robustness, explainability, etc.
     """
+
     name: models.CharField = models.CharField(max_length=255, unique=True)
     description: models.TextField = models.TextField()
 
@@ -28,11 +27,12 @@ class AssuranceGoal(models.Model):
 class Category(models.Model):
     """
     Represents a category within an assurance goal.
-    
+
     Categories provide the second level of classification for techniques,
     organizing techniques into logical groups under each assurance goal.
     A category belongs to exactly one assurance goal.
     """
+
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     assurance_goal = models.ForeignKey(AssuranceGoal, on_delete=models.CASCADE)
@@ -49,11 +49,12 @@ class Category(models.Model):
 class SubCategory(models.Model):
     """
     Represents a subcategory within a category.
-    
+
     Subcategories provide the third level of classification for techniques,
     allowing for more specific grouping of related techniques.
     A subcategory belongs to exactly one category.
     """
+
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     category = models.ForeignKey(
@@ -72,11 +73,12 @@ class SubCategory(models.Model):
 class Tag(models.Model):
     """
     Represents a generic tag that can be applied to techniques.
-    
+
     Tags provide a flexible, non-hierarchical way to classify techniques
     based on various attributes or properties, complementing the hierarchical
     classification system of goals, categories, and subcategories.
     """
+
     name = models.CharField(max_length=255, unique=True)
 
     class Meta:
@@ -89,10 +91,11 @@ class Tag(models.Model):
 class ResourceType(models.Model):
     """
     Represents a type of resource associated with techniques.
-    
+
     Resource types categorize the different kinds of resources that can be
     linked to techniques, such as papers, websites, tools, implementations, etc.
     """
+
     name = models.CharField(max_length=100, unique=True)
     icon = models.CharField(max_length=50, blank=True)
 
@@ -106,28 +109,21 @@ class ResourceType(models.Model):
 class Technique(models.Model):
     """
     Represents an AI assurance technique.
-    
+
     This is the central model in the application, representing individual techniques
     that can be applied to AI systems for various assurance purposes. Each technique
-    includes detailed information about its purpose, implementation, cost, and 
+    includes detailed information about its purpose, implementation, cost, and
     relationships to goals, categories, and other classification systems.
     """
+
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
     model_dependency = models.CharField(max_length=100)
-    category_tags = models.CharField(
-        max_length=500, blank=True, 
-        help_text="Format: #category/subcategory (DEPRECATED: Use categories/subcategories relationships instead)"
-    )
     complexity_rating = models.PositiveSmallIntegerField(
-        null=True,
-        blank=True,
-        validators=[MinValueValidator(1), MaxValueValidator(5)]
+        null=True, blank=True, validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
     computational_cost_rating = models.PositiveSmallIntegerField(
-        null=True,
-        blank=True,
-        validators=[MinValueValidator(1), MaxValueValidator(5)]
+        null=True, blank=True, validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
     applicable_models = models.JSONField(
         null=True,
@@ -151,11 +147,12 @@ class Technique(models.Model):
 class AttributeType(models.Model):
     """
     Represents a type of attribute that can characterize techniques.
-    
+
     Attribute types define various characteristics by which techniques can be
     described, such as 'prerequisites', 'output format', 'implementation complexity', etc.
     These provide a flexible way to add structured metadata to techniques.
     """
+
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField(blank=True)
 
@@ -169,12 +166,13 @@ class AttributeType(models.Model):
 class AttributeValue(models.Model):
     """
     Represents a specific value for an attribute type, associated with a technique.
-    
+
     AttributeValue links a technique to a specific value for a given attribute type,
     creating a flexible system for storing structured metadata about techniques.
     For example, a technique might have an attribute type of 'Implementation Effort'
     with a value of 'High'.
     """
+
     attribute_type = models.ForeignKey(
         AttributeType, on_delete=models.CASCADE, related_name="values"
     )
@@ -196,11 +194,12 @@ class AttributeValue(models.Model):
 class TechniqueResource(models.Model):
     """
     Represents an external resource associated with a technique.
-    
+
     TechniqueResource stores references to external materials related to a technique,
     such as academic papers, websites, code repositories, tools, etc. These resources
     provide additional information, implementations, or examples of the technique.
     """
+
     technique = models.ForeignKey(
         Technique, on_delete=models.CASCADE, related_name="resources"
     )
@@ -223,12 +222,13 @@ class TechniqueResource(models.Model):
 class TechniqueExampleUseCase(models.Model):
     """
     Represents an example use case for a technique.
-    
+
     TechniqueExampleUseCase stores concrete examples of how a technique can be
     applied in practice, providing context for users to understand when and how
     to use the technique. Each use case can be associated with a specific assurance
     goal to clarify its purpose.
     """
+
     technique = models.ForeignKey(
         Technique, on_delete=models.CASCADE, related_name="example_use_cases"
     )
@@ -247,11 +247,12 @@ class TechniqueExampleUseCase(models.Model):
 class TechniqueLimitation(models.Model):
     """
     Represents a limitation or constraint of a technique.
-    
+
     TechniqueLimitation documents the known limitations, constraints, or cautionary
     notes about a technique. This helps users understand the boundaries and potential
     drawbacks of each technique, enabling more informed decisions about when to apply it.
     """
+
     technique = models.ForeignKey(
         Technique, on_delete=models.CASCADE, related_name="limitations"
     )

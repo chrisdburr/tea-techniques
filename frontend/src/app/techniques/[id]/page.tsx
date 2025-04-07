@@ -425,35 +425,6 @@ export default function TechniqueDetailPage() {
 			? technique.applicable_models || findApplicableModels(technique.id)
 			: [];
 
-	// Helper function to parse category tags
-	const parseCategoryTags = (categoryTagsStr: string) => {
-		if (!categoryTagsStr) return [];
-
-		return categoryTagsStr
-			.split("#")
-			.filter((tag) => tag.trim().length > 0)
-			.map((tag) => {
-				const parts = tag.trim().split("/");
-				// Format category name (remove hyphens, title case)
-				const formatName = (name: string) => {
-					return name
-						.split("-")
-						.map(
-							(word) =>
-								word.charAt(0).toUpperCase() + word.slice(1)
-						)
-						.join(" ");
-				};
-
-				return {
-					category: formatName(parts[0]),
-					subcategory: parts.length > 1 ? formatName(parts[1]) : null,
-				};
-			});
-	};
-
-	const categoryTags = parseCategoryTags(technique.category_tags);
-
 	// Map assurance goals to their respective icons
 	const goalIcons = {
 		Explainability: <Brain className="h-5 w-5" />,
@@ -552,46 +523,35 @@ export default function TechniqueDetailPage() {
 									</div>
 								</div>
 
-								{/* Categories (from category tags) */}
-								{technique.category_tags &&
-									categoryTags.length > 0 && (
-										<div className="space-y-2">
-											<h3 className="text-sm font-medium flex items-center">
-												Categories
-												<span
-													className="ml-1 inline-flex"
-													title="Classification categories for this technique"
-												>
-													<Info className="h-4 w-4 text-muted-foreground" />
-												</span>
-											</h3>
-											<div className="space-y-2">
-												{categoryTags.map(
-													(tag, index) => (
-														<div
-															key={index}
-															className="flex justify-between items-center text-sm py-1 border-b last:border-0 border-muted"
-														>
-															<span>
-																{tag.category}
-															</span>
-															{tag.subcategory && (
-																<Badge
-																	variant="outline"
-																	className="text-xs"
-																>
-																	{
-																		tag.subcategory
-																	}
-																</Badge>
-															)}
-														</div>
-													)
-												)}
-											</div>
-										</div>
-									)}
+		{/* Categories & Subcategories */}
+		<div className="space-y-2">
+			<h4 className="font-medium text-sm">Categories</h4>
+			<div className="flex flex-wrap gap-2">
+				{technique.categories && technique.categories.length > 0 ? (
+					technique.categories.map((category) => (
+						<Badge key={category.id} variant="secondary">
+							{category.name}
+						</Badge>
+					))
+				) : (
+					<span className="text-xs text-muted-foreground">None</span>
+				)}
+			</div>
+			{technique.subcategories && technique.subcategories.length > 0 && (
+				<>
+					<h4 className="font-medium text-sm pt-2">Subcategories</h4>
+					<div className="flex flex-wrap gap-2">
+						{technique.subcategories.map((subcategory) => (
+							<Badge key={subcategory.id} variant="outline">
+								{subcategory.name}
+							</Badge>
+						))}
+					</div>
+				</>
+			)}
+		</div>
 
+{/* Ratings */}
 								{/* Ratings */}
 								{technique.complexity_rating ? (
 									<div className="space-y-2">

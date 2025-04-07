@@ -100,7 +100,6 @@ export interface Technique {
 	name: string;
 	description: string;
 	model_dependency: string;
-	category_tags: string;
 	complexity_rating?: number;
 	computational_cost_rating?: number;
 	applicable_models?: string[];

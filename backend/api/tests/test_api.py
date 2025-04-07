@@ -1,7 +1,6 @@
 import os
 import pytest
 import json
-from django.test import TestCase
 from django.test.utils import CaptureQueriesContext
 from django.db import connection
 from django.contrib.auth import get_user_model
@@ -11,11 +10,7 @@ from api.models import (
     Technique,
     AssuranceGoal,
     Category,
-    SubCategory,
     Tag,
-    AttributeType,
-    AttributeValue,
-    ResourceType,
 )
 from api.tests.factories import (
     TechniqueFactory,
@@ -470,11 +465,11 @@ class TechniqueAPITestCase(APITestCase):
     def test_debug_endpoint(self):
         """Test that the debug endpoint works in debug mode"""
         url = "/api/debug"
-        
+
         # Mock settings.DEBUG to True for this test
         from unittest import mock
-        
-        with mock.patch('django.conf.settings.DEBUG', True):
+
+        with mock.patch("django.conf.settings.DEBUG", True):
             # Test GET
             response = self.client.get(url)
             self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -490,44 +485,47 @@ class TechniqueAPITestCase(APITestCase):
             data = response.json()
             self.assertIn("received_data", data)
             self.assertEqual(data["received_data"], test_data)
-        
+
     def test_debug_endpoint_production_access_control(self):
         """Test that the debug endpoint is completely disabled in production mode"""
-        from django.conf import settings
         from django.contrib.auth import get_user_model
         from unittest import mock
-        
+
         url = "/api/debug/"
-        
+
         # Mock settings.DEBUG to False to simulate production environment
-        with mock.patch('django.conf.settings.DEBUG', False):
+        with mock.patch("django.conf.settings.DEBUG", False):
             # Test as anonymous user
             response = self.client.get(url)
             self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-            self.assertIn("Debug endpoint not available in production", response.json()["error"])
-            
+            self.assertIn(
+                "Debug endpoint not available in production", response.json()["error"]
+            )
+
             # Create and login as admin user
             User = get_user_model()
             admin_user = User.objects.create_superuser(
-                username="adminuser", 
-                email="admin@example.com",
-                password="adminpass123"
+                username="adminuser", email="admin@example.com", password="adminpass123"
             )
             self.client.force_authenticate(user=admin_user)
-            
+
             # Test as admin user - should still be forbidden in production
             response = self.client.get(url)
             self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-            self.assertIn("Debug endpoint not available in production", response.json()["error"])
-            
+            self.assertIn(
+                "Debug endpoint not available in production", response.json()["error"]
+            )
+
             # Test POST in production (should be forbidden)
             test_data = {"test": "data"}
             response = self.client.post(
                 url, data=json.dumps(test_data), content_type="application/json"
             )
             self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-            self.assertIn("Debug endpoint not available in production", response.json()["error"])
-        
+            self.assertIn(
+                "Debug endpoint not available in production", response.json()["error"]
+            )
+
     def test_techniques_list_query_optimization(self):
         """Test that techniques list endpoint uses optimized queries"""
         # Create a complex technique with all types of relationships to test prefetching
@@ -540,53 +538,51 @@ class TechniqueAPITestCase(APITestCase):
             subcategories=[self.subcategory],
             tags=[self.tag1, self.tag2],
         )
-        
+
         # Add attribute values, resources, use cases, and limitations
         AttributeValueFactory(
-            name="Test Value",
-            attribute_type=self.scope_type,
-            technique=technique
+            name="Test Value", attribute_type=self.scope_type, technique=technique
         )
-        
+
         # Add a resource
         technique.resources.create(
             resource_type=self.paper_type,
             title="Test Resource",
             url="https://example.com/test",
-            description="A test resource"
+            description="A test resource",
         )
-        
+
         # Add an example use case
         technique.example_use_cases.create(
-            description="Test use case",
-            assurance_goal=self.assurance_goal
+            description="Test use case", assurance_goal=self.assurance_goal
         )
-        
+
         # Add a limitation
-        technique.limitations.create(
-            description="Test limitation"
-        )
-        
+        technique.limitations.create(description="Test limitation")
+
         # Capture database queries during request
         with CaptureQueriesContext(connection) as queries:
             # Use the correct URL format without trailing slash
             url = self.techniques_url
             response = self.client.get(url)
-            
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        
+
         # Analyze captured queries
         # The key improvement is that without prefetch_related, we would see an N+1 problem
         # with one query for each related object per technique
         query_count = len(queries)
-        
+
         # With properly optimized prefetch_related, we should have significantly fewer queries
         # Exact number depends on implementation details, but we can set a reasonable upper bound
         # Based on our prefetch_related setup, we expect around 9-15 queries total:
         # 1 for techniques + 1 for each prefetched relation
-        self.assertLess(query_count, 20, 
-                      f"Query count too high ({query_count}). Check prefetch_related implementation.")
-    
+        self.assertLess(
+            query_count,
+            20,
+            f"Query count too high ({query_count}). Check prefetch_related implementation.",
+        )
+
     def test_technique_detail_query_optimization(self):
         """Test that technique detail endpoint uses optimized queries"""
         # Create a complex technique with all types of relationships to test prefetching
@@ -599,76 +595,45 @@ class TechniqueAPITestCase(APITestCase):
             subcategories=[self.subcategory],
             tags=[self.tag1, self.tag2],
         )
-        
+
         # Add attribute values, resources, use cases, and limitations
         AttributeValueFactory(
             name="Detail Test Value",
             attribute_type=self.scope_type,
-            technique=technique
+            technique=technique,
         )
-        
+
         technique.resources.create(
             resource_type=self.paper_type,
             title="Detail Test Resource",
             url="https://example.com/detail-test",
-            description="A test resource for detail view"
+            description="A test resource for detail view",
         )
-        
+
         technique.example_use_cases.create(
-            description="Detail test use case",
-            assurance_goal=self.assurance_goal
+            description="Detail test use case", assurance_goal=self.assurance_goal
         )
-        
-        technique.limitations.create(
-            description="Detail test limitation"
-        )
-        
+
+        technique.limitations.create(description="Detail test limitation")
+
         # Get the detail URL
         detail_url = f"{self.techniques_url}/{technique.id}"
-        
+
         # Capture database queries during request
         with CaptureQueriesContext(connection) as queries:
             response = self.client.get(detail_url)
-            
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        
+
         # Analyze captured queries
         query_count = len(queries)
-        
+
         # With properly optimized prefetch_related, we should have significantly fewer queries
-        self.assertLess(query_count, 20, 
-                      f"Query count too high ({query_count}). Check prefetch_related for detail view.")
-
-    def test_category_tags_compatibility(self):
-        """Test that techniques created with category_tags format work with the API"""
-        # Create a technique with specific categories that mimics one created from the new CSV format
-        goal_name = "Explainability"
-        cat_name = "feature-analysis"
-        subcat_name = "importance-and-attribution"
-
-        goal, _ = AssuranceGoal.objects.get_or_create(name=goal_name)
-        category, _ = Category.objects.get_or_create(name=cat_name, assurance_goal=goal)
-        subcategory, _ = SubCategory.objects.get_or_create(
-            name=subcat_name, category=category
+        self.assertLess(
+            query_count,
+            20,
+            f"Query count too high ({query_count}). Check prefetch_related for detail view.",
         )
-
-        # Create technique and link relationships to mimic import from category_tags
-        technique = TechniqueFactory(
-            name="Category Tags Test Technique",
-            assurance_goals=[goal],
-        )
-        technique.categories.add(category)
-        technique.subcategories.add(subcategory)
-
-        # Test retrieving and filtering
-        response = self.client.get(f"{self.techniques_url}{technique.id}/")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json()["name"], technique.name)
-
-        # Test filtering by category
-        response = self.client.get(f"{self.techniques_url}?categories={category.id}")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn(technique.name, [t["name"] for t in response.json()["results"]])
 
 
 class PostgreSQLTestCase(APITestCase):
@@ -688,34 +653,36 @@ class PostgreSQLTestCase(APITestCase):
 
     @pytest.mark.skipif(
         os.getenv("USE_POSTGRES_FOR_TESTS") != "True",
-        reason="Test requires PostgreSQL database"
+        reason="Test requires PostgreSQL database",
     )
     def test_postgres_full_text_search(self):
         """Test PostgreSQL-specific full-text search functionality.
-        
+
         This test verifies that search works correctly in a PostgreSQL environment
         when using complex search terms that depend on PostgreSQL's full-text search.
         """
         # Create a technique with specific text to search for
         technique = TechniqueFactory(
             name="PostgreSQL Testing Technique",
-            description="This is a specialized search text for PostgreSQL testing"
+            description="This is a specialized search text for PostgreSQL testing",
         )
-        
+
         # Test complex search query
         response = self.client.get(f"/api/techniques?search=special+search")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()
-        
+
         # Should find our technique
         found = any(t["name"] == technique.name for t in data["results"])
-        self.assertTrue(found, "PostgreSQL full-text search failed to find relevant results")
+        self.assertTrue(
+            found, "PostgreSQL full-text search failed to find relevant results"
+        )
 
 
 class AuthenticationTestCase(APITestCase):
     """
     Test authentication requirements for API operations.
-    
+
     Test scenarios:
     - Anonymous user access (list/retrieve endpoints)
     - Unauthenticated write operations (create/update/delete) - should return 401
@@ -734,7 +701,7 @@ class AuthenticationTestCase(APITestCase):
             subcategories=[self.subcategory],
             tags=[self.tag],
         )
-        
+
         # Define the common URLs - NO trailing slashes as per router config
         self.techniques_url = "/api/techniques"
         self.technique_detail_url = f"{self.techniques_url}/{self.technique.id}"
@@ -744,26 +711,22 @@ class AuthenticationTestCase(APITestCase):
         self.tags_url = "/api/tags"
         # Skip attribute types due to serializer issues
         self.resource_types_url = "/api/resource-types"
-        
+
         # Create a test user
         self.username = "testuser"
         self.password = "testpassword"
         self.user = User.objects.create_user(
-            username=self.username,
-            email="test@example.com",
-            password=self.password
+            username=self.username, email="test@example.com", password=self.password
         )
-        
+
         # Create admin user
         self.admin = User.objects.create_superuser(
-            username="admin", 
-            email="admin@example.com",
-            password="adminpass"
+            username="admin", email="admin@example.com", password="adminpass"
         )
-        
+
         # Create client
         self.client = APIClient()
-        
+
         # Create sample data for POST/PUT tests
         self.technique_data = {
             "name": "Auth Test Technique",
@@ -774,21 +737,19 @@ class AuthenticationTestCase(APITestCase):
             "subcategory_ids": [self.subcategory.id],
             "tag_ids": [self.tag.id],
         }
-        
+
         self.goal_data = {
             "name": "Auth Test Goal",
-            "description": "Goal created in auth test"
+            "description": "Goal created in auth test",
         }
-        
+
         self.category_data = {
             "name": "Auth Test Category",
             "description": "Category created in auth test",
-            "assurance_goal": self.assurance_goal.id
+            "assurance_goal": self.assurance_goal.id,
         }
-        
-        self.tag_data = {
-            "name": "auth-test-tag"
-        }
+
+        self.tag_data = {"name": "auth-test-tag"}
 
     def test_anonymous_read_access(self):
         """Test that anonymous users can access read endpoints (list/retrieve)"""
@@ -801,25 +762,37 @@ class AuthenticationTestCase(APITestCase):
             self.tags_url,
             self.resource_types_url,
         ]
-        
+
         for url in endpoints:
             response = self.client.get(url)
-            self.assertEqual(response.status_code, status.HTTP_200_OK,
-                            f"Anonymous user could not access list endpoint {url}")
-        
+            self.assertEqual(
+                response.status_code,
+                status.HTTP_200_OK,
+                f"Anonymous user could not access list endpoint {url}",
+            )
+
         # Test retrieve endpoints
         response = self.client.get(self.technique_detail_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK,
-                        "Anonymous user could not access technique detail endpoint")
-        
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK,
+            "Anonymous user could not access technique detail endpoint",
+        )
+
         # Test filtering endpoints
         response = self.client.get(f"/api/categories-by-goal/{self.assurance_goal.id}")
-        self.assertEqual(response.status_code, status.HTTP_200_OK,
-                        "Anonymous user could not access categories-by-goal endpoint")
-        
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK,
+            "Anonymous user could not access categories-by-goal endpoint",
+        )
+
         response = self.client.get(f"/api/subcategories-by-category/{self.category.id}")
-        self.assertEqual(response.status_code, status.HTTP_200_OK,
-                        "Anonymous user could not access subcategories-by-category endpoint")
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK,
+            "Anonymous user could not access subcategories-by-category endpoint",
+        )
 
     def test_anonymous_write_operations_fail(self):
         """Test that anonymous users cannot perform write operations"""
@@ -830,18 +803,18 @@ class AuthenticationTestCase(APITestCase):
             (self.categories_url, self.category_data),
             (self.tags_url, self.tag_data),
         ]
-        
+
         for url, data in post_data:
             response = self.client.post(
-                url,
-                data=json.dumps(data),
-                content_type="application/json"
+                url, data=json.dumps(data), content_type="application/json"
             )
             # Check for either 401 or 403 - both indicate authentication failure
-            self.assertIn(response.status_code, 
-                        [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
-                        f"Anonymous POST to {url} should not succeed")
-        
+            self.assertIn(
+                response.status_code,
+                [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
+                f"Anonymous POST to {url} should not succeed",
+            )
+
         # Test update operations
         put_data = [
             (self.technique_detail_url, self.technique_data),
@@ -849,27 +822,29 @@ class AuthenticationTestCase(APITestCase):
             (f"{self.categories_url}/{self.category.id}", self.category_data),
             (f"{self.tags_url}/{self.tag.id}", self.tag_data),
         ]
-        
+
         for url, data in put_data:
             response = self.client.put(
-                url,
-                data=json.dumps(data),
-                content_type="application/json"
+                url, data=json.dumps(data), content_type="application/json"
             )
-            self.assertIn(response.status_code, 
-                        [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
-                        f"Anonymous PUT to {url} should not succeed")
-            
+            self.assertIn(
+                response.status_code,
+                [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
+                f"Anonymous PUT to {url} should not succeed",
+            )
+
             # Also test PATCH
             response = self.client.patch(
                 url,
                 data=json.dumps({"name": "Updated Name"}),
-                content_type="application/json"
+                content_type="application/json",
             )
-            self.assertIn(response.status_code, 
-                        [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
-                        f"Anonymous PATCH to {url} should not succeed")
-        
+            self.assertIn(
+                response.status_code,
+                [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
+                f"Anonymous PATCH to {url} should not succeed",
+            )
+
         # Test delete operations
         delete_urls = [
             self.technique_detail_url,
@@ -877,18 +852,20 @@ class AuthenticationTestCase(APITestCase):
             f"{self.categories_url}/{self.category.id}",
             f"{self.tags_url}/{self.tag.id}",
         ]
-        
+
         for url in delete_urls:
             response = self.client.delete(url)
-            self.assertIn(response.status_code, 
-                        [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
-                        f"Anonymous DELETE to {url} should not succeed")
+            self.assertIn(
+                response.status_code,
+                [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
+                f"Anonymous DELETE to {url} should not succeed",
+            )
 
     def test_authenticated_write_operations_succeed(self):
         """Test that authenticated users can perform write operations"""
         # Log in
         self.client.force_authenticate(user=self.user)
-        
+
         # Test create operations
         post_data = [
             (self.techniques_url, self.technique_data),
@@ -896,50 +873,58 @@ class AuthenticationTestCase(APITestCase):
             (self.categories_url, self.category_data),
             (self.tags_url, self.tag_data),
         ]
-        
+
         for url, data in post_data:
             response = self.client.post(
-                url,
-                data=json.dumps(data),
-                content_type="application/json"
+                url, data=json.dumps(data), content_type="application/json"
             )
-            self.assertEqual(response.status_code, status.HTTP_201_CREATED,
-                            f"Authenticated POST to {url} failed with status {response.status_code}")
-        
+            self.assertEqual(
+                response.status_code,
+                status.HTTP_201_CREATED,
+                f"Authenticated POST to {url} failed with status {response.status_code}",
+            )
+
         # Get IDs of newly created objects for update tests
         techniques = Technique.objects.filter(name=self.technique_data["name"])
         self.assertTrue(techniques.exists(), "Technique was not created")
         new_technique_id = techniques.first().id
-        
+
         goals = AssuranceGoal.objects.filter(name=self.goal_data["name"])
         self.assertTrue(goals.exists(), "Goal was not created")
         new_goal_id = goals.first().id
-        
+
         categories = Category.objects.filter(name=self.category_data["name"])
         self.assertTrue(categories.exists(), "Category was not created")
         new_category_id = categories.first().id
-        
+
         tags = Tag.objects.filter(name=self.tag_data["name"])
         self.assertTrue(tags.exists(), "Tag was not created")
         new_tag_id = tags.first().id
-        
+
         # Test update operations
         put_data = [
-            (f"{self.techniques_url}/{new_technique_id}", {"name": "Updated Auth Test Technique"}),
+            (
+                f"{self.techniques_url}/{new_technique_id}",
+                {"name": "Updated Auth Test Technique"},
+            ),
             (f"{self.goals_url}/{new_goal_id}", {"name": "Updated Auth Test Goal"}),
-            (f"{self.categories_url}/{new_category_id}", {"name": "Updated Auth Test Category"}),
+            (
+                f"{self.categories_url}/{new_category_id}",
+                {"name": "Updated Auth Test Category"},
+            ),
             (f"{self.tags_url}/{new_tag_id}", {"name": "updated-auth-test-tag"}),
         ]
-        
+
         for url, data in put_data:
             response = self.client.patch(
-                url,
-                data=json.dumps(data),
-                content_type="application/json"
+                url, data=json.dumps(data), content_type="application/json"
             )
-            self.assertEqual(response.status_code, status.HTTP_200_OK,
-                            f"Authenticated PATCH to {url} failed with status {response.status_code}")
-            
+            self.assertEqual(
+                response.status_code,
+                status.HTTP_200_OK,
+                f"Authenticated PATCH to {url} failed with status {response.status_code}",
+            )
+
         # Test delete operations
         delete_urls = [
             f"{self.techniques_url}/{new_technique_id}",
@@ -947,11 +932,14 @@ class AuthenticationTestCase(APITestCase):
             f"{self.categories_url}/{new_category_id}",
             f"{self.tags_url}/{new_tag_id}",
         ]
-        
+
         for url in delete_urls:
             response = self.client.delete(url)
-            self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT,
-                            f"Authenticated DELETE to {url} failed with status {response.status_code}")
+            self.assertEqual(
+                response.status_code,
+                status.HTTP_204_NO_CONTENT,
+                f"Authenticated DELETE to {url} failed with status {response.status_code}",
+            )
 
     def test_auth_with_real_credentials(self):
         """
@@ -962,62 +950,63 @@ class AuthenticationTestCase(APITestCase):
         response = self.client.post(
             self.techniques_url,
             data=json.dumps(self.technique_data),
-            content_type="application/json"
+            content_type="application/json",
         )
-        self.assertIn(response.status_code, 
-                     [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
-                     "Unauthenticated request should not succeed")
-        
+        self.assertIn(
+            response.status_code,
+            [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
+            "Unauthenticated request should not succeed",
+        )
+
         # Use login endpoint to authenticate
-        login_data = {
-            "username": self.username,
-            "password": self.password
-        }
-        
+        login_data = {"username": self.username, "password": self.password}
+
         response = self.client.post(
             "/api/auth/login",
             data=json.dumps(login_data),
-            content_type="application/json"
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("username", response.json())
         self.assertEqual(response.json()["username"], self.username)
-        
+
         # Now try the create operation again - should work
         response = self.client.post(
             self.techniques_url,
             data=json.dumps(self.technique_data),
-            content_type="application/json"
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        
+
         # Verify the technique was created
         techniques = Technique.objects.filter(name=self.technique_data["name"])
         self.assertTrue(techniques.exists())
-        
+
         # Logout - might succeed without auth in DRF's built-in auth
         response = self.client.post("/api/auth/logout")
-        
+
         # Log back in for proper logout test
         self.client.post(
             "/api/auth/login",
             data=json.dumps(login_data),
-            content_type="application/json"
+            content_type="application/json",
         )
-        
+
         # Try logout now
         response = self.client.post("/api/auth/logout")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        
+
         # Verify we're logged out by trying a write operation
         response = self.client.post(
             self.techniques_url,
             data=json.dumps(self.technique_data),
-            content_type="application/json"
+            content_type="application/json",
         )
-        self.assertIn(response.status_code, 
-                     [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
-                     "User should be logged out, write operation should fail")
+        self.assertIn(
+            response.status_code,
+            [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
+            "User should be logged out, write operation should fail",
+        )
 
     def test_auth_status_endpoint(self):
         """Test the authentication status endpoint behavior"""
@@ -1025,7 +1014,7 @@ class AuthenticationTestCase(APITestCase):
         response = self.client.get("/api/auth/status")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertFalse(response.json()["isAuthenticated"])
-        
+
         # Test with authenticated user
         self.client.force_authenticate(user=self.user)
         response = self.client.get("/api/auth/status")

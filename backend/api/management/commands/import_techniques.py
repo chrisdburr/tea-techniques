@@ -417,11 +417,11 @@ class Command(BaseCommand):
 
             # Skip if essential data is missing, unless force is true
             if not name or not description:
-                logger.warning(f"Skipping technique with missing name or description")
+                logger.warning("Skipping technique with missing name or description")
                 if not self.force:
                     return
                 else:
-                    logger.info(f"Force flag enabled, continuing with incomplete data")
+                    logger.info("Force flag enabled, continuing with incomplete data")
 
             # Create default values
             defaults = {

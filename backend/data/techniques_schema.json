@@ -1,7 +1,7 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "TEA Techniques Schema",
-	"description": "Schema for the TEA Techniques dataset which catalogs ML/AI techniques with relevant attributes",
+	"description": "Schema for the TEA Techniques dataset",
 	"type": "array",
 	"items": {
 		"type": "object",
@@ -157,10 +157,6 @@
 				"maximum": 5,
 				"description": "Rating of computational cost on a scale from 1 to 5"
 			},
-			"category_tags": {
-				"type": "string",
-				"description": "DEPRECATED: Hashtag-formatted categorization. Use categories and subcategories fields instead."
-			},
 			"categories": {
 				"type": "array",
 				"items": {
@@ -189,7 +185,7 @@
 							"description": "Name of the subcategory"
 						},
 						"category": {
-							"type": "string", 
+							"type": "string",
 							"description": "The parent category for this subcategory"
 						},
 						"assurance_goal": {
@@ -202,6 +198,9 @@
 				"description": "List of subcategories this technique belongs to"
 			}
 		},
-		"required": ["name", "description", "model_dependency"]
+		"required": ["id", "name", "description", "assurance_goals"],
+		"dependentRequired": {
+			"subcategories": ["categories"]
+		}
 	}
 }

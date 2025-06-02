@@ -11,6 +11,7 @@ import React, {
 import Link from "next/link";
 import {
 	useAssuranceGoals,
+	useTags,
 	calculateTotalPages,
 	useTechniques,
 } from "@/lib/api/hooks";
@@ -185,8 +186,7 @@ export default function TechniquesList() {
 	const { currentPage } = useFilterParams({
 		search: "",
 		assurance_goal: "all",
-		category: "all",
-		model_dependency: "all",
+		tags: "",
 	});
 
 	// Parse filters from URL with useCallback to prevent recreating on each render
@@ -194,8 +194,7 @@ export default function TechniquesList() {
 		const initialFilters: FilterState = {
 			search: "",
 			assurance_goals: [],
-			categories: [],
-			model_dependency: [],
+			tags: [],
 			complexity_max: 5,
 			computational_cost_max: 5,
 		};
@@ -214,16 +213,11 @@ export default function TechniquesList() {
 			initialFilters.assurance_goals = assuranceGoalParams;
 		}
 
-		// Similarly get categories
-		const categoryParams = searchParams.getAll("categories");
-		if (categoryParams.length > 0) {
-			initialFilters.categories = categoryParams;
-		}
-
-		// Get model dependency
-		const modelDependencyParam = searchParams.get("model_dependency");
-		if (modelDependencyParam) {
-			initialFilters.model_dependency = [modelDependencyParam];
+		// Get multiple tags from URL
+		const tagParams = searchParams.getAll("tags");
+		if (tagParams.length > 0) {
+			console.log("Found tags in URL:", tagParams);
+			initialFilters.tags = tagParams;
 		}
 
 		// Get rating filters
@@ -265,12 +259,10 @@ export default function TechniquesList() {
 				appliedFilters.assurance_goals.length > 0
 					? appliedFilters.assurance_goals
 					: undefined,
-			category:
-				appliedFilters.categories.length === 1 ? appliedFilters.categories[0] : "all",
-			model_dependency:
-				appliedFilters.model_dependency.length > 0
-					? appliedFilters.model_dependency[0]
-					: "all",
+			tags:
+				appliedFilters.tags.length > 0
+					? appliedFilters.tags
+					: undefined,
 			complexity_max: appliedFilters.complexity_max?.toString(),
 			computational_cost_max: appliedFilters.computational_cost_max?.toString(),
 		};
@@ -283,13 +275,8 @@ export default function TechniquesList() {
 		error,
 	} = useTechniques(apiFilters, currentPage);
 
-	// Fetch filtered categories based on selected assurance goal
-	const { data: categoriesData, isLoading: isLoadingCategories } =
-		useCategories(
-			filters.assurance_goals.length === 1
-				? parseInt(filters.assurance_goals[0])
-				: undefined
-		);
+	// Fetch tags and assurance goals for sidebar
+	const { data: tagsData, isLoading: isLoadingTags } = useTags();
 	const { data: assuranceGoalsData, isLoading: isLoadingGoals } =
 		useAssuranceGoals();
 
@@ -373,16 +360,12 @@ export default function TechniquesList() {
 			});
 		}
 
-		// Add categories
-		if (filtersToApply.categories.length > 0) {
-			filtersToApply.categories.forEach((catId) => {
-				params.append("categories", catId);
+		// Add tags - each as a separate parameter
+		if (filtersToApply.tags.length > 0) {
+			console.log("Adding tags to URL:", filtersToApply.tags);
+			filtersToApply.tags.forEach((tagId) => {
+				params.append("tags", tagId);
 			});
-		}
-
-		// Add model dependency
-		if (filtersToApply.model_dependency.length > 0) {
-			params.set("model_dependency", filtersToApply.model_dependency[0]);
 		}
 
 		// Add complexity and computational cost
@@ -450,16 +433,11 @@ export default function TechniquesList() {
 			});
 		}
 
-		// Add categories
-		if (appliedFilters.categories.length > 0) {
-			appliedFilters.categories.forEach((catId) => {
-				params.append("categories", catId);
+		// Add tags - each as a separate parameter
+		if (appliedFilters.tags.length > 0) {
+			appliedFilters.tags.forEach((tagId) => {
+				params.append("tags", tagId);
 			});
-		}
-
-		// Add model dependency
-		if (appliedFilters.model_dependency.length > 0) {
-			params.set("model_dependency", appliedFilters.model_dependency[0]);
 		}
 
 		// Add max complexity if not at default
@@ -514,9 +492,9 @@ export default function TechniquesList() {
 							applyFilters={applyFilters}
 							resetFilters={resetFilters}
 							assuranceGoals={assuranceGoalsData?.results}
-							categories={categoriesData?.results}
+							tags={tagsData?.results}
 							isDataLoading={
-								isLoadingGoals || isLoadingCategories
+								isLoadingGoals || isLoadingTags
 							}
 							isMobileOpen={isSidebarOpen}
 							setIsMobileOpen={setSidebarOpen}

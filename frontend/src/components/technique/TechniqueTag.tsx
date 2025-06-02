@@ -1,7 +1,7 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { formatTagDisplay, getTagValue } from "@/lib/utils";
+import { formatTagDisplay } from "@/lib/utils";
 
 interface TechniqueTagProps {
 	name: string;

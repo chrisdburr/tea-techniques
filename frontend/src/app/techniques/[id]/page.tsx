@@ -48,8 +48,6 @@ import {
 	TechniqueResource,
 	TechniqueExampleUseCase,
 	TechniqueLimitation,
-	AttributeValue,
-	Technique,
 } from "@/lib/types";
 import {
 	getApplicableModels,
@@ -299,11 +297,9 @@ function TechniqueLimitations({
 
 // Component to display related techniques
 function RelatedTechniques({ 
-	techniqueIds, 
-	currentTechniqueId 
+	techniqueIds 
 }: { 
-	techniqueIds: number[]; 
-	currentTechniqueId: number;
+	techniqueIds: number[];
 }) {
 	// In a real implementation, this would fetch technique details
 	// For now, we'll just show a list of technique IDs as links
@@ -438,7 +434,6 @@ export default function TechniqueDetailPage() {
 							<Section title="Related Techniques">
 								<RelatedTechniques
 									techniqueIds={technique.related_techniques}
-									currentTechniqueId={technique.id}
 								/>
 							</Section>
 						)}

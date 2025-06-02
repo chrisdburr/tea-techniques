@@ -15,7 +15,7 @@ import {
 	AccordionTrigger,
 } from "@/components/ui/accordion";
 import GoalIcon from "./GoalIcon";
-import { formatTagDisplay, groupTagsByPrefix, parseTagsByPrefix } from "@/lib/utils";
+import { formatTagDisplay, groupTagsByPrefix } from "@/lib/utils";
 
 // Export this interface so it can be imported by TechniquesList.tsx
 export interface FilterState {

@@ -99,8 +99,8 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
   });
 
   // Watch relevant fields for dependent selections
-  const watchedAssuranceGoalIds = watch("assurance_goal_ids");
-  const watchedTagIds = watch("tag_ids");
+  // const watchedAssuranceGoalIds = watch("assurance_goal_ids");
+  // const watchedTagIds = watch("tag_ids");
 
   const { handleError } = useApiError();
 
@@ -311,11 +311,6 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
       value: technique.id.toString(),
       label: technique.name,
     })) || [];
-
-  const resourceTypeOptions = resourceTypesData?.results?.map(type => ({
-    { value: "Model-Agnostic", label: "Model-Agnostic" },
-    { value: "Model-Specific", label: "Model-Specific" },
-  ];
 
   const resourceTypeOptions = resourceTypesData?.results?.map(rt => ({
     value: rt.id.toString(),

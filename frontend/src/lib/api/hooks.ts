@@ -243,17 +243,21 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 	) {
 		// For axios, we need to format this correctly for the backend
 		apiParams.assurance_goals = params.assurance_goals;
-	} else if (params.assurance_goal && params.assurance_goal !== "all") {
-		// Backward compatibility for single goal
-		apiParams.assurance_goals = params.assurance_goal;
+	} else if (params.assurance_goals && params.assurance_goals !== "all") {
+		// Single goal
+		apiParams.assurance_goals = params.assurance_goals;
 	}
 
-	if (params.category && params.category !== "all") {
-		apiParams.categories = params.category;
-	}
-
-	if (params.model_dependency && params.model_dependency !== "all") {
-		apiParams.model_dependency = params.model_dependency;
+	// Handle tags as an array
+	if (
+		params.tags &&
+		Array.isArray(params.tags) &&
+		params.tags.length > 0
+	) {
+		apiParams.tags = params.tags;
+	} else if (params.tags && params.tags !== "all") {
+		// Single tag
+		apiParams.tags = params.tags;
 	}
 
 	// Add rating parameters
@@ -280,16 +284,14 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 	const queryKey = [
 		"techniques",
 		params.search || "",
-		params.search_fields || "",
 		// Include all assurance_goals values
 		Array.isArray(apiParams.assurance_goals) 
 			? apiParams.assurance_goals.join(',') 
 			: apiParams.assurance_goals || "all",
-		// Include all categories values
-		Array.isArray(apiParams.categories)
-			? apiParams.categories.join(',')
-			: apiParams.categories || "all",
-		params.model_dependency || "all",
+		// Include all tags values
+		Array.isArray(apiParams.tags)
+			? apiParams.tags.join(',')
+			: apiParams.tags || "all",
 		// Include rating filters
 		params.complexity_min || "1",
 		params.complexity_max || "5",

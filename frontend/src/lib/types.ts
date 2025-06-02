@@ -7,50 +7,12 @@ export interface AssuranceGoal {
 	description: string;
 }
 
-export interface Category {
-	id: number;
-	name: string;
-	description: string;
-	assurance_goal: number;
-	assurance_goal_name: string;
-}
-
-export interface SubCategory {
-	id: number;
-	name: string;
-	description: string;
-	category: number;
-	category_name: string;
-}
 
 export interface Tag {
 	id: number;
 	name: string;
 }
 
-// Attribute System
-export interface AttributeType {
-	id: number;
-	name: string;
-	description: string;
-	applicable_goals: number[];
-	required_for_goals: number[];
-}
-
-export interface AttributeValue {
-	id: number;
-	attribute_type: number;
-	attribute_type_name: string;
-	name: string;
-	description: string;
-}
-
-export interface TechniqueAttribute {
-	id: number;
-	attribute_type: string;
-	attribute_value: number;
-	attribute_value_name: string;
-}
 
 // Resource Management
 export interface ResourceType {
@@ -84,34 +46,21 @@ export interface TechniqueLimitation {
 	description: string;
 }
 
-// Technique Relationship
-export interface TechniqueRelationship {
-	id: number;
-	technique_from: number;
-	technique_from_name: string;
-	technique_to: number;
-	technique_to_name: string;
-	relationship_type: string;
-}
 
 // Main Technique Type
 export interface Technique {
 	id: number;
 	name: string;
 	description: string;
-	model_dependency: string;
 	complexity_rating?: number;
 	computational_cost_rating?: number;
-	applicable_models?: string[];
 
 	// Many-to-many relationships
 	assurance_goals: AssuranceGoal[];
-	categories: Category[];
-	subcategories: SubCategory[];
 	tags: Tag[];
+	related_techniques: number[];
 
-	// Renamed from attributes to attribute_values to match API
-	attribute_values: AttributeValue[];
+	// Related data
 	resources: TechniqueResource[];
 	example_use_cases: TechniqueExampleUseCase[];
 	limitations: TechniqueLimitation[];
@@ -121,20 +70,19 @@ export interface Technique {
 export interface TechniqueFormData {
 	name: string;
 	description: string;
-	model_dependency: string;
+	complexity_rating?: number;
+	computational_cost_rating?: number;
 	assurance_goal_ids: number[];
-	category_ids: number[];
-	subcategory_ids: number[];
 	tag_ids: number[];
-	attributes: {
-		attribute_type: number;
-		attribute_value: number;
-	}[];
+	related_technique_ids: number[];
 	resources: {
 		resource_type: number;
 		title: string;
 		url: string;
 		description: string;
+		authors?: string;
+		publication_date?: string;
+		source_type?: string;
 	}[];
 	example_use_cases: {
 		description: string;

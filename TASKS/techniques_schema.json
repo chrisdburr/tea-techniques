@@ -1,0 +1,139 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "TEA Techniques Schema",
+	"description": "Schema for the TEA Techniques dataset",
+	"type": "array",
+	"items": {
+		"type": "object",
+		"properties": {
+			"id": {
+				"type": "integer",
+				"description": "Unique identifier for the technique"
+			},
+			"name": {
+				"type": "string",
+				"description": "Name of the technique"
+			},
+			"description": {
+				"type": "string",
+				"description": "Description of what the technique does and how it works"
+			},
+			"assurance_goals": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				},
+				"description": "List of applicable assurance goals."
+			},
+			"tags": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				},
+				"description": "List of tags to help categorise and describe key attributes for the technique using the format 'prefix/category/...' (see docs/TAG_DEFINITIONS.md)"
+			},
+			"example_use_cases": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"description": {
+							"type": "string",
+							"description": "Description of the use case"
+						},
+						"goal": {
+							"type": "string",
+							"description": "The assurance goal this use case addresses"
+						}
+					},
+					"required": ["description"]
+				},
+				"description": "Examples of how the technique can be used in practice"
+			},
+			"limitations": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"description": {
+							"type": "string",
+							"description": "Description of the limitation"
+						}
+					},
+					"required": ["description"],
+					"description": "Structured limitation object"
+				},
+				"description": "Limitations and drawbacks of the technique"
+			},
+			"resources": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
+							"description": "Type of resource"
+						},
+						"title": {
+							"type": "string",
+							"description": "Title of the resource"
+						},
+						"url": {
+							"type": "string",
+							"format": "uri",
+							"description": "URL of the resource"
+						},
+						"description": {
+							"type": "string",
+							"description": "Description of the resource"
+						},
+						"authors": {
+							"oneOf": [
+								{
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								{
+									"type": "string"
+								}
+							],
+							"description": "Authors of the resource"
+						},
+						"publication_date": {
+							"type": "string",
+							"description": "Publication date of the resource"
+						},
+						"source_type": {
+							"type": "string",
+							"description": "Type of source"
+						}
+					},
+					"required": ["title", "url"]
+				},
+				"description": "Resources related to the technique (papers, libraries, etc.)"
+			},
+			"complexity_rating": {
+				"type": ["integer", "null"],
+				"minimum": 1,
+				"maximum": 5,
+				"description": "Rating of implementation complexity on a scale from 1 to 5"
+			},
+			"computational_cost_rating": {
+				"type": ["integer", "null"],
+				"minimum": 1,
+				"maximum": 5,
+				"description": "Rating of computational cost on a scale from 1 to 5"
+			},
+			"related_techniques": {
+				"type": "array",
+				"items": {
+					"type": "integer"
+				},
+				"description": "IDs of related techniques"
+			}
+		},
+		"required": ["id", "name", "description", "tags"]
+	}
+}

@@ -40,10 +40,10 @@ export function useFilterParams(
       filtersFromUrl.assurance_goal = assuranceGoalsParam;
     }
     
-    // Handle categories (plural) -> category (singular) for component state
-    const categoriesParam = searchParams.get("categories");
-    if (categoriesParam) {
-      filtersFromUrl.category = categoriesParam;
+    // Handle tags parameter
+    const tagsParam = searchParams.get("tags");
+    if (tagsParam) {
+      filtersFromUrl.tags = tagsParam;
     }
     
     // Get page from URL
@@ -85,12 +85,12 @@ export function useFilterParams(
         }
       }
       
-      // Handle categories (plural) -> category (singular)
-      const categoriesParam = searchParams.get("categories");
-      if (categoriesParam) {
-        if (filtersFromUrl.category !== categoriesParam) {
+      // Handle tags parameter
+      const tagsParam = searchParams.get("tags");
+      if (tagsParam) {
+        if (filtersFromUrl.tags !== tagsParam) {
           hasChanged = true;
-          filtersFromUrl.category = categoriesParam;
+          filtersFromUrl.tags = tagsParam;
         }
       }
       
@@ -156,9 +156,9 @@ export function useFilterParams(
       params.set("assurance_goals", filters.assurance_goal); 
     }
     
-    // Handle category -> categories (backend expects plural)
-    if (filters.category && filters.category !== "all") {
-      params.set("categories", filters.category);
+    // Handle tags parameter
+    if (filters.tags && filters.tags !== "all") {
+      params.set("tags", filters.tags);
     }
     
     // Add search parameter if provided
@@ -232,9 +232,9 @@ export function useFilterParams(
       params.set("assurance_goals", filters.assurance_goal);
     }
     
-    // Handle category -> categories (plural)
-    if (filters.category && filters.category !== "all") {
-      params.set("categories", filters.category);
+    // Handle tags parameter
+    if (filters.tags && filters.tags !== "all") {
+      params.set("tags", filters.tags);
     }
     
     // Add search parameter if provided

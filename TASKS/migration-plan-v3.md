@@ -120,7 +120,38 @@
    - Supports showing/hiding tag prefix
 
 ### Next Steps:
-- Phase 4: Filtering and Search Updates
+- Phase 4: Filtering and Search Updates ✅ COMPLETED
+- Phase 5: Data Migration and Testing
+
+## Phase 4 Completion Summary (Completed 2025-06-02)
+
+### Completed Tasks:
+1. **useFilterParams.ts Updated** ✅
+   - Added support for tags parameter in URL
+   - Updated state initialization to handle tags from URL
+   - Modified createSearchParams to include tags
+   - Updated changePage function to preserve tag filters
+
+2. **TechniquesList.tsx Updated** ✅
+   - Removed category and model_dependency from initial filters
+   - Replaced useCategories with useTags hook
+   - Updated apiFilters to use tags instead of categories
+   - Modified applyFilters function to handle tag-based filtering
+   - Updated handlePageChange to include tags in pagination
+   - Updated sidebar props to pass tags data
+
+3. **Tag Aggregation Maintained** ✅
+   - TechniquesSidebar already properly groups tags by prefix
+   - Dynamic tag sections created based on available tags
+   - Proper checkbox selection for multi-tag filtering
+
+4. **Code Quality Verified** ✅
+   - Fixed unused import errors
+   - Fixed syntax errors in TechniqueForm
+   - Build completes successfully
+   - Linting issues addressed for changed files
+
+### Next Steps:
 - Phase 5: Data Migration and Testing
 
 ## Overview
@@ -337,6 +368,8 @@ python manage.py import_techniques --file=TASKS/techniques_v3.json
 ```
 
 Note: Since this app is not in production and has only one user, we can freely reset the database without maintaining Django migrations. The migration files are created for development purposes but aren't required for the final deployment.
+
+Note 2: this app is currently being developed on a Macbook Pro, and while Docker is running there may not be an active database. Therefore, you may need to build and run the docker containers first to have an active DB.
 
 #### 5.2 Update Docker Configuration
 - Verify Dockerfile still works with simplified models

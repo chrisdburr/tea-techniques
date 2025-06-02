@@ -5,11 +5,10 @@ import {
   useCreateTechnique,
   useUpdateTechnique,
   useAssuranceGoals,
-  useCategories,
-  useSubCategories,
   useTags,
   useResourceTypes,
   useTechniqueDetail,
+  useTechniques,
 } from "@/lib/api/hooks";
 import {
   TechniqueFormData
@@ -38,12 +37,11 @@ import { Textarea } from "@/components/ui/textarea";
 const initialFormData: TechniqueFormData = {
   name: "",
   description: "",
-  model_dependency: "Model-Agnostic", // Default value
+  complexity_rating: undefined,
+  computational_cost_rating: undefined,
   assurance_goal_ids: [],
-  category_ids: [],
-  subcategory_ids: [],
   tag_ids: [],
-  attributes: [],
+  related_technique_ids: [],
   resources: [],
   example_use_cases: [],
   limitations: [],
@@ -53,23 +51,20 @@ const initialFormData: TechniqueFormData = {
 const techniqueSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
   description: z.string().min(1, { message: "Description is required" }),
-  model_dependency: z.string().min(1, { message: "Model dependency is required" }),
+  complexity_rating: z.number().min(1).max(5).optional(),
+  computational_cost_rating: z.number().min(1).max(5).optional(),
   assurance_goal_ids: z.array(z.number()).min(1, { message: "At least one assurance goal is required" }),
-  category_ids: z.array(z.number()).min(1, { message: "At least one category is required" }),
-  subcategory_ids: z.array(z.number()),
   tag_ids: z.array(z.number()),
-  attributes: z.array(
-    z.object({
-      attribute_type: z.number(),
-      attribute_value: z.number(),
-    })
-  ),
+  related_technique_ids: z.array(z.number()),
   resources: z.array(
     z.object({
       resource_type: z.number(),
       title: z.string(),
       url: z.string(),
       description: z.string(),
+      authors: z.string().optional(),
+      publication_date: z.string().optional(),
+      source_type: z.string().optional(),
     })
   ),
   example_use_cases: z.array(
@@ -105,15 +100,15 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
 
   // Watch relevant fields for dependent selections
   const watchedAssuranceGoalIds = watch("assurance_goal_ids");
-  const watchedCategoryIds = watch("category_ids");
+  const watchedTagIds = watch("tag_ids");
 
   const { handleError } = useApiError();
 
   // State for dynamic arrays
   const [useCases, setUseCases] = useState<Array<{ description: string; assurance_goal?: number }>>([{ description: "" }]);
   const [limitations, setLimitations] = useState<string[]>([""]);
-  const [resources, setResources] = useState<Array<{ resource_type: number; title: string; url: string; description: string }>>([
-    { resource_type: 0, title: "", url: "", description: "" }
+  const [resources, setResources] = useState<Array<{ resource_type: number; title: string; url: string; description: string; authors?: string; publication_date?: string; source_type?: string }>>([
+    { resource_type: 0, title: "", url: "", description: "", authors: "", publication_date: "", source_type: "" }
   ]);
 
   // Fetch technique details if in edit mode
@@ -124,38 +119,20 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
   const { data: tagsData, isLoading: isLoadingTags } = useTags();
   const { data: resourceTypesData, isLoading: isLoadingResourceTypes } = useResourceTypes();
 
-  // Fetch categories filtered by selected assurance goals
-  const [selectedGoals, setSelectedGoals] = useState<number[]>([]);
-  const { data: categoriesData, isLoading: isLoadingCategories } = useCategories();
-
-  // Filter categories to only show those belonging to selected goals
-  const filteredCategories = categoriesData?.results
-    ? categoriesData.results.filter(cat =>
-      selectedGoals.length === 0 || selectedGoals.includes(cat.assurance_goal)
-    )
-    : [];
-
-  // Fetch subcategories filtered by selected categories
-  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
-  const { data: subcategoriesData } = useSubCategories();
-
-  // Filter subcategories to only show those belonging to selected categories
-  const filteredSubcategories = subcategoriesData?.results
-    ? subcategoriesData.results.filter(subcat =>
-      selectedCategories.length === 0 || selectedCategories.includes(subcat.category)
-    )
-    : [];
+  // Fetch all techniques for related techniques selection
+  const { data: techniquesData, isLoading: isLoadingTechniques } = useTechniques();
 
   // Mutations for create/update
   const createMutation = useCreateTechnique();
   const updateMutation = useUpdateTechnique(id || 0);
 
   // Track overall loading state
+  // Track overall loading state
   const isLoading =
     isLoadingGoals ||
-    isLoadingCategories ||
     isLoadingTags ||
     isLoadingResourceTypes ||
+    isLoadingTechniques ||
     (isEditMode && isLoadingTechnique) ||
     isSubmitting ||
     createMutation.isPending ||
@@ -166,17 +143,9 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
     if (isEditMode && techniqueData) {
       // Extract IDs from relationships
       const assurance_goal_ids = techniqueData.assurance_goals.map(goal => goal.id);
-      const category_ids = techniqueData.categories.map(cat => cat.id);
-      const subcategory_ids = techniqueData.subcategories.map(subcat => subcat.id);
       const tag_ids = techniqueData.tags.map(tag => tag.id);
+      const related_technique_ids = techniqueData.related_techniques || [];
 
-      // Format attributes
-      const attributes = techniqueData.attribute_values.map(attr => ({
-        attribute_type: typeof attr.attribute_type === 'string'
-          ? parseInt(attr.attribute_type)
-          : attr.attribute_type,
-        attribute_value: parseInt(attr.name) || 0 // Parse to number, default to 0 if NaN
-      }));
 
       // Set state for dynamic arrays
       setUseCases(techniqueData.example_use_cases.length > 0
@@ -197,7 +166,10 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
           resource_type: res.resource_type,
           title: res.title,
           url: res.url,
-          description: res.description
+          description: res.description,
+          authors: res.authors || "",
+          publication_date: res.publication_date || "",
+          source_type: res.source_type || ""
         }))
         : [{ resource_type: 0, title: "", url: "", description: "" }]
       );
@@ -206,38 +178,17 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
       reset({
         name: techniqueData.name,
         description: techniqueData.description,
-        model_dependency: techniqueData.model_dependency,
+        complexity_rating: techniqueData.complexity_rating,
+        computational_cost_rating: techniqueData.computational_cost_rating,
         assurance_goal_ids,
-        category_ids,
-        subcategory_ids,
         tag_ids,
-        attributes,
+        related_technique_ids,
         resources: [], // Will be handled by resources state
         example_use_cases: [], // Will be handled by useCases state
         limitations: [], // Will be handled by limitations state
       });
-
-      // Update selected goals/categories for filtering, directly instead of through effects
-      setSelectedGoals([...assurance_goal_ids]); // Use a new array to prevent reference sharing
-      setSelectedCategories([...category_ids]);
     }
   }, [isEditMode, techniqueData, reset]);
-
-  // Make sure selectedGoals and selectedCategories are memoized based on watched fields
-  // without creating effects that might cause infinite loops
-  const memoizedSelectedGoals = React.useMemo(() => watchedAssuranceGoalIds, [watchedAssuranceGoalIds]);
-  const memoizedSelectedCategories = React.useMemo(() => watchedCategoryIds, [watchedCategoryIds]);
-
-  // Update selected goals/categories with memoized values - only runs once after memo values are computed
-  React.useEffect(() => {
-    // Use functional updates to avoid potential loops
-    setSelectedGoals(() => memoizedSelectedGoals);
-  }, [memoizedSelectedGoals]);
-
-  React.useEffect(() => {
-    // Use functional updates to avoid potential loops
-    setSelectedCategories(() => memoizedSelectedCategories);
-  }, [memoizedSelectedCategories]);
 
   // Handle form submission using react-hook-form
   const onSubmit: SubmitHandler<TechniqueFormData> = async (data) => {
@@ -288,17 +239,6 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
     }
   };
 
-  // Handle category selection changes with react-hook-form
-  const handleCategoryChange = (values: string[]) => {
-    try {
-      // Use setValue from react-hook-form
-      const categoryIds = values.map(v => parseInt(v));
-      setValue("category_ids", categoryIds, { shouldValidate: true });
-    } catch (error) {
-      console.error("Error in handleCategoryChange:", error);
-    }
-  };
-
   // Dynamic array management functions
   const addUseCase = () => {
     setUseCases([...useCases, { description: "" }]);
@@ -337,7 +277,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
   };
 
   const addResource = () => {
-    setResources([...resources, { resource_type: 0, title: "", url: "", description: "" }]);
+    setResources([...resources, { resource_type: 0, title: "", url: "", description: "", authors: "", publication_date: "", source_type: "" }]);
   };
 
   const updateResource = (index: number, field: keyof typeof resources[0], value: string | number) => {
@@ -350,7 +290,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
     if (resources.length > 1) {
       setResources(resources.filter((_, i) => i !== index));
     } else {
-      setResources([{ resource_type: 0, title: "", url: "", description: "" }]);
+      setResources([{ resource_type: 0, title: "", url: "", description: "", authors: "", publication_date: "", source_type: "" }]);
     }
   };
 
@@ -360,22 +300,19 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
     label: goal.name,
   })) || [];
 
-  const categoryOptions = filteredCategories.map(category => ({
-    value: category.id.toString(),
-    label: category.name,
-  }));
-
-  const subcategoryOptions = filteredSubcategories.map(subcategory => ({
-    value: subcategory.id.toString(),
-    label: subcategory.name,
-  }));
-
   const tagOptions = tagsData?.results?.map(tag => ({
     value: tag.id.toString(),
     label: tag.name,
   })) || [];
 
-  const modelDependencyOptions = [
+  const relatedTechniqueOptions = techniquesData?.results
+    ?.filter(t => t.id !== id) // Don't show current technique as option
+    ?.map(technique => ({
+      value: technique.id.toString(),
+      label: technique.name,
+    })) || [];
+
+  const resourceTypeOptions = resourceTypesData?.results?.map(type => ({
     { value: "Model-Agnostic", label: "Model-Agnostic" },
     { value: "Model-Specific", label: "Model-Specific" },
   ];
@@ -469,30 +406,60 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                   )}
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="model_dependency">
-                    Model Dependency <span className="text-destructive">*</span>
-                  </Label>
-                  <Controller
-                    name="model_dependency"
-                    control={control}
-                    render={({ field }) => (
-                      <select
-                        id="model_dependency"
-                        className="w-full px-3 py-2 border rounded-md"
-                        disabled={isLoading}
-                        {...field}
-                      >
-                        <option value="" disabled>Select Model Dependency</option>
-                        {modelDependencyOptions.map(option => (
-                          <option key={option.value} value={option.value}>{option.label}</option>
-                        ))}
-                      </select>
-                    )}
-                  />
-                  {errors?.model_dependency && (
-                    <p className="text-sm text-destructive">{errors.model_dependency.message}</p>
-                  )}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="complexity_rating">
+                      Complexity Rating
+                    </Label>
+                    <Controller
+                      name="complexity_rating"
+                      control={control}
+                      render={({ field }) => (
+                        <select
+                          id="complexity_rating"
+                          className="w-full px-3 py-2 border rounded-md"
+                          disabled={isLoading}
+                          {...field}
+                          onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                          value={field.value?.toString() || ""}
+                        >
+                          <option value="">Select rating</option>
+                          <option value="1">1 - Very Low</option>
+                          <option value="2">2 - Low</option>
+                          <option value="3">3 - Medium</option>
+                          <option value="4">4 - High</option>
+                          <option value="5">5 - Very High</option>
+                        </select>
+                      )}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="computational_cost_rating">
+                      Computational Cost Rating
+                    </Label>
+                    <Controller
+                      name="computational_cost_rating"
+                      control={control}
+                      render={({ field }) => (
+                        <select
+                          id="computational_cost_rating"
+                          className="w-full px-3 py-2 border rounded-md"
+                          disabled={isLoading}
+                          {...field}
+                          onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                          value={field.value?.toString() || ""}
+                        >
+                          <option value="">Select rating</option>
+                          <option value="1">1 - Very Low</option>
+                          <option value="2">2 - Low</option>
+                          <option value="3">3 - Medium</option>
+                          <option value="4">4 - High</option>
+                          <option value="5">5 - Very High</option>
+                        </select>
+                      )}
+                    />
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -545,79 +512,6 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                     )}
                   </div>
 
-                  <div className="space-y-2">
-                    <label htmlFor="category_ids" className="block font-medium">
-                      Categories <span className="text-destructive">*</span>
-                    </label>
-                    <Controller
-                      name="category_ids"
-                      control={control}
-                      render={({ field }) => (
-                        <select
-                          id="category_ids"
-                          multiple
-                          className="w-full px-3 py-2 border rounded-md"
-                          onChange={(e) => {
-                            const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
-                            handleCategoryChange(selectedOptions);
-                          }}
-                          disabled={isLoading || watchedAssuranceGoalIds.length === 0}
-                          size={4}
-                          value={field.value.map(id => id.toString())}
-                        >
-                          {categoryOptions.map(option => (
-                            <option key={option.value} value={option.value}>
-                              {option.label}
-                            </option>
-                          ))}
-                        </select>
-                      )}
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      {watchedAssuranceGoalIds.length === 0
-                        ? "Select assurance goals first to see available categories"
-                        : "Hold Ctrl (or Cmd) to select multiple options"}
-                    </p>
-                    {errors?.category_ids && (
-                      <p className="text-sm text-destructive">{errors.category_ids.message}</p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <label htmlFor="subcategory_ids" className="block font-medium">
-                      Subcategories
-                    </label>
-                    <Controller
-                      name="subcategory_ids"
-                      control={control}
-                      render={({ field }) => (
-                        <select
-                          id="subcategory_ids"
-                          multiple
-                          className="w-full px-3 py-2 border rounded-md"
-                          onChange={(e) => {
-                            const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
-                            const subcategoryIds = selectedOptions.map(v => parseInt(v));
-                            setValue("subcategory_ids", subcategoryIds);
-                          }}
-                          disabled={isLoading || watchedCategoryIds.length === 0}
-                          size={4}
-                          value={field.value.map(id => id.toString())}
-                        >
-                          {subcategoryOptions.map(option => (
-                            <option key={option.value} value={option.value}>
-                              {option.label}
-                            </option>
-                          ))}
-                        </select>
-                      )}
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      {watchedCategoryIds.length === 0
-                        ? "Select categories first to see available subcategories"
-                        : "Hold Ctrl (or Cmd) to select multiple options"}
-                    </p>
-                  </div>
 
                   <div className="space-y-2">
                     <label htmlFor="tag_ids" className="block font-medium">
@@ -637,7 +531,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                             setValue("tag_ids", tagIds);
                           }}
                           disabled={isLoading}
-                          size={4}
+                          size={8}
                           value={field.value.map(id => id.toString())}
                         >
                           {tagOptions.map(option => (
@@ -649,7 +543,41 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                       )}
                     />
                     <p className="text-xs text-muted-foreground">
-                      Hold Ctrl (or Cmd) to select multiple options
+                      Hold Ctrl (or Cmd) to select multiple tags. Tags help categorize and filter techniques.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="related_technique_ids" className="block font-medium">
+                      Related Techniques
+                    </label>
+                    <Controller
+                      name="related_technique_ids"
+                      control={control}
+                      render={({ field }) => (
+                        <select
+                          id="related_technique_ids"
+                          multiple
+                          className="w-full px-3 py-2 border rounded-md"
+                          onChange={(e) => {
+                            const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
+                            const techniqueIds = selectedOptions.map(v => parseInt(v));
+                            setValue("related_technique_ids", techniqueIds);
+                          }}
+                          disabled={isLoading}
+                          size={6}
+                          value={field.value.map(id => id.toString())}
+                        >
+                          {relatedTechniqueOptions.map(option => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Select techniques that are related or complementary to this one.
                     </p>
                   </div>
                 </div>
@@ -845,6 +773,41 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                           onChange={(e) => updateResource(index, "description", e.target.value)}
                           placeholder="Enter resource description"
                           rows={2}
+                          disabled={isLoading}
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor={`resource-authors-${index}`}>Authors (Optional)</Label>
+                          <Input
+                            id={`resource-authors-${index}`}
+                            value={resource.authors || ""}
+                            onChange={(e) => updateResource(index, "authors", e.target.value)}
+                            placeholder="Enter authors"
+                            disabled={isLoading}
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor={`resource-publication-date-${index}`}>Publication Date (Optional)</Label>
+                          <Input
+                            id={`resource-publication-date-${index}`}
+                            value={resource.publication_date || ""}
+                            onChange={(e) => updateResource(index, "publication_date", e.target.value)}
+                            placeholder="e.g., 2023-01-15"
+                            disabled={isLoading}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor={`resource-source-type-${index}`}>Source Type (Optional)</Label>
+                        <Input
+                          id={`resource-source-type-${index}`}
+                          value={resource.source_type || ""}
+                          onChange={(e) => updateResource(index, "source_type", e.target.value)}
+                          placeholder="e.g., technical_paper, tutorial, etc."
                           disabled={isLoading}
                         />
                       </div>

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { ArrowRightFromLine, ChevronLeft, Search } from "lucide-react";
-import { AssuranceGoal, Category } from "@/lib/types";
+import { AssuranceGoal, Tag } from "@/lib/types";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import {
@@ -15,14 +15,13 @@ import {
 	AccordionTrigger,
 } from "@/components/ui/accordion";
 import GoalIcon from "./GoalIcon";
-import CategoryTag from "./CategoryTag";
+import { formatTagDisplay, groupTagsByPrefix, parseTagsByPrefix } from "@/lib/utils";
 
 // Export this interface so it can be imported by TechniquesList.tsx
 export interface FilterState {
 	search: string;
 	assurance_goals: string[];
-	categories: string[];
-	model_dependency: string[];
+	tags: string[];
 	complexity_max?: number;
 	computational_cost_max?: number;
 }
@@ -36,7 +35,7 @@ interface TechniquesSidebarProps {
 
 	// Data for populating filters
 	assuranceGoals?: AssuranceGoal[];
-	categories?: Category[];
+	tags?: Tag[];
 	isDataLoading: boolean;
 
 	// Mobile state
@@ -53,7 +52,7 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 	applyFilters,
 	resetFilters,
 	assuranceGoals = [],
-	categories = [],
+	tags = [],
 	isDataLoading,
 	isMobileOpen,
 	setIsMobileOpen,
@@ -177,7 +176,6 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 					type="multiple"
 					defaultValue={[
 						"assurance_goals",
-						"model_dependency",
 						"ratings",
 					]}
 				>
@@ -227,87 +225,52 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 						</AccordionContent>
 					</AccordionItem>
 
-					{/* Categories Filter */}
-					<AccordionItem value="categories">
-						<AccordionTrigger className="px-4">
-							Categories
-						</AccordionTrigger>
-						<AccordionContent className="px-4">
-							{isDataLoading ? (
-								<div className="text-sm text-muted-foreground py-2">
-									Loading...
-								</div>
-							) : (
-								<div className="space-y-3">
-									{categories?.map((category) => (
-										<div
-											key={category.id}
-											className="flex items-start space-x-2"
-										>
-											<Checkbox
-												id={`category-${category.id}`}
-												checked={filters.categories.includes(
-													category.id.toString()
-												)}
-												onCheckedChange={() =>
-													toggleArrayFilter(
-														"categories",
-														category.id.toString()
-													)
-												}
-											/>
-											<Label
-												htmlFor={`category-${category.id}`}
-												className="cursor-pointer text-sm font-normal"
-											>
-												<CategoryTag
-													name={category.name}
-												/>
-											</Label>
+					{/* Tag-based Filters */}
+					{(() => {
+						const tagGroups = groupTagsByPrefix(tags);
+						return Object.entries(tagGroups).map(([prefix, groupTags]) => (
+							<AccordionItem key={prefix} value={`tags-${prefix}`}>
+								<AccordionTrigger className="px-4">
+									{formatTagDisplay(prefix)}
+								</AccordionTrigger>
+								<AccordionContent className="px-4">
+									{isDataLoading ? (
+										<div className="text-sm text-muted-foreground py-2">
+											Loading...
 										</div>
-									))}
-								</div>
-							)}
-						</AccordionContent>
-					</AccordionItem>
-
-					{/* Model Dependency Filter */}
-					<AccordionItem value="model_dependency">
-						<AccordionTrigger className="px-4">
-							Model Dependency
-						</AccordionTrigger>
-						<AccordionContent className="px-4">
-							<div className="space-y-3">
-								{["Model-Agnostic", "Model-Specific"].map(
-									(dependency) => (
-										<div
-											key={dependency}
-											className="flex items-start space-x-2"
-										>
-											<Checkbox
-												id={`dependency-${dependency}`}
-												checked={filters.model_dependency.includes(
-													dependency
-												)}
-												onCheckedChange={() =>
-													toggleArrayFilter(
-														"model_dependency",
-														dependency
-													)
-												}
-											/>
-											<Label
-												htmlFor={`dependency-${dependency}`}
-												className="cursor-pointer text-sm font-normal"
-											>
-												{dependency}
-											</Label>
+									) : (
+										<div className="space-y-3">
+											{groupTags.map((tag) => (
+												<div
+													key={tag.id}
+													className="flex items-start space-x-2"
+												>
+													<Checkbox
+														id={`tag-${tag.id}`}
+														checked={filters.tags.includes(
+															tag.id.toString()
+														)}
+														onCheckedChange={() =>
+															toggleArrayFilter(
+																"tags",
+																tag.id.toString()
+															)
+														}
+													/>
+													<Label
+														htmlFor={`tag-${tag.id}`}
+														className="cursor-pointer text-sm font-normal"
+													>
+														{formatTagDisplay(tag.name)}
+													</Label>
+												</div>
+											))}
 										</div>
-									)
-								)}
-							</div>
-						</AccordionContent>
-					</AccordionItem>
+									)}
+								</AccordionContent>
+							</AccordionItem>
+						));
+					})()} 
 
 					{/* Ratings Filter */}
 					<AccordionItem value="ratings">

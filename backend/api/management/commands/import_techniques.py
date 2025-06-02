@@ -15,10 +15,7 @@ from argparse import ArgumentParser
 
 from api.models import (
     AssuranceGoal,
-    Category,
-    SubCategory,
-    AttributeType,
-    AttributeValue,
+    Tag,
     ResourceType,
     Technique,
     TechniqueResource,
@@ -76,9 +73,20 @@ class Command(BaseCommand):
             # Use a transaction to ensure data consistency
             with transaction.atomic():
                 count = 0
+                self._related_techniques_to_process = {}
+                
+                # First pass: import all techniques
                 for technique_data in techniques_data:
                     self._process_technique(technique_data)
                     count += 1
+                
+                # Second pass: process related techniques
+                for technique_id, related_ids in self._related_techniques_to_process.items():
+                    try:
+                        technique = Technique.objects.get(id=technique_id)
+                        self._process_related_techniques(technique, related_ids)
+                    except Technique.DoesNotExist:
+                        logger.warning(f"Technique {technique_id} not found for related techniques processing")
 
             logger.info(f"Successfully imported {count} techniques")
             self.stdout.write(
@@ -107,21 +115,6 @@ class Command(BaseCommand):
                 defaults={"description": f"{goal_name} techniques for trustworthy AI"},
             )
 
-        # Create attribute types for common fields in the JSON
-        attribute_types = [
-            "Scope",
-            "Data Type",
-            "Model Type",
-            "Programming Language",
-            "Fairness Approach",
-            "Project Lifecycle Stage",
-            "Explanatory Scope",
-        ]
-        for attr_type in attribute_types:
-            AttributeType.objects.get_or_create(
-                name=attr_type,
-                defaults={"description": f"The {attr_type.lower()} of the technique"},
-            )
 
         # Create resource types for the JSON
         resource_types = [
@@ -233,169 +226,22 @@ class Command(BaseCommand):
                     technique=technique, description=limitation.strip()
                 )
 
-    def _process_categories(self, technique: Technique, data: Dict[str, Any]) -> None:
-        """Process categories and subcategories for a technique."""
-        assurance_goals_list = data.get("assurance_goals", [])
-        category_tags = data.get("category_tags", "")
-        categories_data = data.get("categories", [])
-        subcategories_data = data.get("subcategories", [])
+    def _process_tags(self, technique: Technique, tags_data: list) -> None:
+        """Process tags for a technique."""
+        for tag_name in tags_data:
+            tag, _ = Tag.objects.get_or_create(name=tag_name)
+            technique.tags.add(tag)
 
-        # First try to process direct categories and subcategories data
-        if categories_data or subcategories_data:
-            # Process direct categories
-            for cat_data in categories_data:
-                if isinstance(cat_data, dict):
-                    cat_name = cat_data.get("name")
-                    cat_goal_name = cat_data.get("assurance_goal")
-                else:
-                    cat_name = cat_data
-                    cat_goal_name = (
-                        assurance_goals_list[0]
-                        if assurance_goals_list
-                        else "Explainability"
-                    )
+    def _process_related_techniques(self, technique: Technique, related_ids: list) -> None:
+        """Process related techniques after all techniques are imported."""
+        for related_id in related_ids:
+            try:
+                related_technique = Technique.objects.get(id=related_id)
+                technique.related_techniques.add(related_technique)
+            except Technique.DoesNotExist:
+                logger.warning(f"Related technique {related_id} not found")
 
-                if not cat_name:
-                    continue
 
-                # Get or create the assurance goal
-                goal, _ = AssuranceGoal.objects.get_or_create(
-                    name=cat_goal_name,
-                    defaults={
-                        "description": f"{cat_goal_name} techniques for trustworthy AI"
-                    },
-                )
-
-                # Get or create category
-                category, _ = Category.objects.get_or_create(
-                    name=cat_name,
-                    assurance_goal=goal,
-                    defaults={"description": f"Category for {cat_name}"},
-                )
-
-                # Add category to technique
-                technique.categories.add(category)
-
-            # Process direct subcategories
-            for subcat_data in subcategories_data:
-                if isinstance(subcat_data, dict):
-                    subcat_name = subcat_data.get("name")
-                    cat_name = subcat_data.get("category")
-                    cat_goal_name = subcat_data.get(
-                        "assurance_goal",
-                        (
-                            assurance_goals_list[0]
-                            if assurance_goals_list
-                            else "Explainability"
-                        ),
-                    )
-                else:
-                    # If it's not a dict with detailed info, skip it
-                    continue
-
-                if not subcat_name or not cat_name:
-                    continue
-
-                # Get or create the assurance goal
-                goal, _ = AssuranceGoal.objects.get_or_create(
-                    name=cat_goal_name,
-                    defaults={
-                        "description": f"{cat_goal_name} techniques for trustworthy AI"
-                    },
-                )
-
-                # Get or create category
-                category, _ = Category.objects.get_or_create(
-                    name=cat_name,
-                    assurance_goal=goal,
-                    defaults={"description": f"Category for {cat_name}"},
-                )
-
-                # Get or create subcategory
-                subcategory, _ = SubCategory.objects.get_or_create(
-                    name=subcat_name,
-                    category=category,
-                    defaults={"description": f"Subcategory for {subcat_name}"},
-                )
-
-                # Add subcategory to technique
-                technique.subcategories.add(subcategory)
-
-        # Fallback to category_tags only if direct categories are not available
-        elif category_tags:
-            parsed_categories = self._parse_category_tags(category_tags)
-
-            for cat_data in parsed_categories:
-                cat_name = cat_data.get("category")
-                subcat_name = cat_data.get("subcategory")
-
-                # Use first available assurance goal, or default to Explainability
-                goal_name = (
-                    assurance_goals_list[0]
-                    if assurance_goals_list
-                    else "Explainability"
-                )
-
-                goal, _ = AssuranceGoal.objects.get_or_create(
-                    name=goal_name,
-                    defaults={
-                        "description": f"{goal_name} techniques for trustworthy AI"
-                    },
-                )
-
-                # Get or create category
-                category, _ = Category.objects.get_or_create(
-                    name=cat_name,
-                    assurance_goal=goal,
-                    defaults={"description": f"Category for {cat_name}"},
-                )
-
-                # Add category to technique
-                technique.categories.add(category)
-
-                # Process subcategory if present
-                if subcat_name:
-                    subcategory, _ = SubCategory.objects.get_or_create(
-                        name=subcat_name,
-                        category=category,
-                        defaults={"description": f"Subcategory for {subcat_name}"},
-                    )
-
-                    # Add subcategory to technique
-                    technique.subcategories.add(subcategory)
-
-    def _compare_relationships(
-        self, technique: Technique, data: Dict[str, Any]
-    ) -> Dict[str, bool]:
-        """Compare existing relationships with incoming data to determine what needs to be cleared."""
-        needs_clearing = {
-            "assurance_goals": False,
-            "categories": False,
-            "subcategories": False,
-            "attributes": False,
-            "resources": False,
-            "example_use_cases": False,
-            "limitations": False,
-        }
-
-        # Check assurance goals
-        incoming_goals = set(data.get("assurance_goals", []))
-        existing_goals = set(technique.assurance_goals.values_list("name", flat=True))
-        if incoming_goals and incoming_goals != existing_goals:
-            needs_clearing["assurance_goals"] = True
-
-        # If there are categories or subcategories in the data, we'll need to clear
-        if data.get("categories") or data.get("subcategories"):
-            needs_clearing["categories"] = True
-            needs_clearing["subcategories"] = True
-
-        # Always clear these relationships as they're completely replaced
-        needs_clearing["attributes"] = True
-        needs_clearing["resources"] = True
-        needs_clearing["example_use_cases"] = True
-        needs_clearing["limitations"] = True
-
-        return needs_clearing
 
     def _process_technique(self, data: Dict[str, Any]) -> None:
         """Process a single technique from JSON data"""
@@ -403,14 +249,13 @@ class Command(BaseCommand):
             # Extract basic data
             name = data.get("name", "")
             description = data.get("description", "")
-            model_dependency = data.get("model_dependency", "Model-Agnostic")
             assurance_goals_list = data.get("assurance_goals", [])
             complexity_rating = data.get("complexity_rating")
             computational_cost_rating = data.get("computational_cost_rating")
-            applicable_models = data.get("applicable_models", [])
+            tags_data = data.get("tags", [])
+            related_techniques_ids = data.get("related_techniques", [])
 
             # Process nested data structures directly from JSON
-            attributes_data = data.get("attributes", [])
             example_use_cases_data = data.get("example_use_cases", [])
             resources_data = data.get("resources", [])
             limitations_data = data.get("limitations", [])
@@ -426,10 +271,8 @@ class Command(BaseCommand):
             # Create default values
             defaults = {
                 "description": description,
-                "model_dependency": model_dependency,
                 "complexity_rating": complexity_rating,
                 "computational_cost_rating": computational_cost_rating,
-                "applicable_models": applicable_models if applicable_models else None,
             }
 
             # Create or update the technique
@@ -438,25 +281,14 @@ class Command(BaseCommand):
                 defaults=defaults,
             )
 
-            # If updating, selectively clear relationships based on what's changing
+            # If updating, clear existing relationships
             if not created:
-                clearing_needed = self._compare_relationships(technique, data)
-
-                # Clear only the relationships that need updating
-                if clearing_needed["assurance_goals"]:
-                    technique.assurance_goals.clear()
-                if clearing_needed["categories"]:
-                    technique.categories.clear()
-                if clearing_needed["subcategories"]:
-                    technique.subcategories.clear()
-                if clearing_needed["attributes"]:
-                    AttributeValue.objects.filter(technique=technique).delete()
-                if clearing_needed["resources"]:
-                    TechniqueResource.objects.filter(technique=technique).delete()
-                if clearing_needed["example_use_cases"]:
-                    TechniqueExampleUseCase.objects.filter(technique=technique).delete()
-                if clearing_needed["limitations"]:
-                    TechniqueLimitation.objects.filter(technique=technique).delete()
+                technique.assurance_goals.clear()
+                technique.tags.clear()
+                technique.related_techniques.clear()
+                TechniqueResource.objects.filter(technique=technique).delete()
+                TechniqueExampleUseCase.objects.filter(technique=technique).delete()
+                TechniqueLimitation.objects.filter(technique=technique).delete()
 
             # Process assurance goals
             for goal_name in assurance_goals_list:
@@ -468,32 +300,15 @@ class Command(BaseCommand):
                 )
                 technique.assurance_goals.add(goal)
 
-            # Process categories
-            self._process_categories(technique, data)
+            # Process tags
+            self._process_tags(technique, tags_data)
 
-            # Process attributes
-            for attr_data in attributes_data:
-                attr_type_name = attr_data.get("type")
-                attr_value_name = attr_data.get("value")
-
-                if not attr_type_name or not attr_value_name:
-                    continue
-
-                # Get or create attribute type
-                attr_type, _ = AttributeType.objects.get_or_create(
-                    name=attr_type_name,
-                    defaults={
-                        "description": f"The {attr_type_name.lower()} of the technique"
-                    },
-                )
-
-                # Create attribute value directly related to technique
-                AttributeValue.objects.create(
-                    attribute_type=attr_type,
-                    name=attr_value_name,
-                    description=f"{attr_value_name} {attr_type_name.lower()}",
-                    technique=technique,
-                )
+            # Process related techniques (this will be done in a second pass)
+            # Store the IDs for later processing
+            if hasattr(self, '_related_techniques_to_process'):
+                self._related_techniques_to_process[technique.id] = related_techniques_ids
+            else:
+                self._related_techniques_to_process = {technique.id: related_techniques_ids}
 
             # Process example use cases
             for use_case_data in example_use_cases_data:

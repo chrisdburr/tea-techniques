@@ -10,14 +10,8 @@ from drf_yasg import openapi
 from rest_framework import permissions
 from .views.api_views import (
     AssuranceGoalsViewSet,
-    CategoryViewSet,
-    SubCategoryViewSet,
     TagsViewSet,
     TechniquesViewSet,
-    get_categorylist,
-    get_subcategorylist,
-    AttributeTypesViewSet,
-    AttributeValuesViewSet,
     ResourceTypesViewSet,
     debug_endpoint,
     health_check,
@@ -41,18 +35,8 @@ def api_root(request, format=None):
             "assurance_goals": reverse(
                 "assurancegoal-list", request=request, format=format
             ),
-            "categories": reverse("category-list", request=request, format=format),
-            "subcategories": reverse(
-                "subcategory-list", request=request, format=format
-            ),
             "tags": reverse("tag-list", request=request, format=format),
             "techniques": reverse("technique-list", request=request, format=format),
-            "attribute_types": reverse(
-                "attributetype-list", request=request, format=format
-            ),
-            "attribute_values": reverse(
-                "attributevalue-list", request=request, format=format
-            ),
             "resource_types": reverse(
                 "resourcetype-list", request=request, format=format
             ),
@@ -78,12 +62,8 @@ schema_view = get_schema_view(
 
 router = DefaultRouter(trailing_slash=False)
 router.register(r"assurance-goals", AssuranceGoalsViewSet)
-router.register(r"categories", CategoryViewSet)
-router.register(r"subcategories", SubCategoryViewSet)
 router.register(r"tags", TagsViewSet)
 router.register(r"techniques", TechniquesViewSet)
-router.register(r"attribute-types", AttributeTypesViewSet)
-router.register(r"attribute-values", AttributeValuesViewSet)
 router.register(r"resource-types", ResourceTypesViewSet)
 
 urlpatterns = [
@@ -92,16 +72,6 @@ urlpatterns = [
     path("debug/", debug_endpoint, name="debug-endpoint-slash"),
     path("", api_root, name="api-root"),
     path("", include(router.urls)),
-    path(
-        "categories-by-goal/<int:assurance_goal_id>",
-        get_categorylist,
-        name="categories-by-goal",
-    ),
-    path(
-        "subcategories-by-category/<int:category_id>",
-        get_subcategorylist,
-        name="subcategories-by-category",
-    ),
     # Authentication - DRF's built-in auth views
     path("auth/", include("rest_framework.urls")),
     # Custom auth endpoints

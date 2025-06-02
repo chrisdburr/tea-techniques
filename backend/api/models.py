@@ -24,50 +24,6 @@ class AssuranceGoal(models.Model):
         return self.name
 
 
-class Category(models.Model):
-    """
-    Represents a category within an assurance goal.
-
-    Categories provide the second level of classification for techniques,
-    organizing techniques into logical groups under each assurance goal.
-    A category belongs to exactly one assurance goal.
-    """
-
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-    assurance_goal = models.ForeignKey(AssuranceGoal, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = "category"
-        verbose_name_plural = "Categories"
-        unique_together = ("name", "assurance_goal")
-
-    def __str__(self) -> str:
-        return f"{self.name} ({self.assurance_goal.name})"
-
-
-class SubCategory(models.Model):
-    """
-    Represents a subcategory within a category.
-
-    Subcategories provide the third level of classification for techniques,
-    allowing for more specific grouping of related techniques.
-    A subcategory belongs to exactly one category.
-    """
-
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-    category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, related_name="subcategories"
-    )
-
-    class Meta:
-        db_table = "subcategory"
-        verbose_name_plural = "Subcategories"
-        unique_together = ("name", "category")
-
-    def __str__(self) -> str:
-        return f"{self.name} ({self.category.name})"
 
 
 class Tag(models.Model):
@@ -118,24 +74,15 @@ class Technique(models.Model):
 
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
-    model_dependency = models.CharField(max_length=100)
     complexity_rating = models.PositiveSmallIntegerField(
         null=True, blank=True, validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
     computational_cost_rating = models.PositiveSmallIntegerField(
         null=True, blank=True, validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
-    applicable_models = models.JSONField(
-        null=True,
-        blank=True,
-        help_text="List of model types this technique is applicable to (for model-specific techniques)",
-    )
     assurance_goals = models.ManyToManyField(AssuranceGoal, related_name="techniques")
-    categories = models.ManyToManyField(Category, related_name="techniques")
-    subcategories = models.ManyToManyField(
-        SubCategory, related_name="techniques", blank=True
-    )
     tags = models.ManyToManyField(Tag, related_name="techniques", blank=True)
+    related_techniques = models.ManyToManyField('self', blank=True, symmetrical=False)
 
     class Meta:
         db_table = "technique"
@@ -144,51 +91,6 @@ class Technique(models.Model):
         return self.name
 
 
-class AttributeType(models.Model):
-    """
-    Represents a type of attribute that can characterize techniques.
-
-    Attribute types define various characteristics by which techniques can be
-    described, such as 'prerequisites', 'output format', 'implementation complexity', etc.
-    These provide a flexible way to add structured metadata to techniques.
-    """
-
-    name = models.CharField(max_length=255, unique=True)
-    description = models.TextField(blank=True)
-
-    class Meta:
-        db_table = "attribute_type"
-
-    def __str__(self) -> str:
-        return self.name
-
-
-class AttributeValue(models.Model):
-    """
-    Represents a specific value for an attribute type, associated with a technique.
-
-    AttributeValue links a technique to a specific value for a given attribute type,
-    creating a flexible system for storing structured metadata about techniques.
-    For example, a technique might have an attribute type of 'Implementation Effort'
-    with a value of 'High'.
-    """
-
-    attribute_type = models.ForeignKey(
-        AttributeType, on_delete=models.CASCADE, related_name="values"
-    )
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-
-    technique = models.ForeignKey(
-        Technique, on_delete=models.CASCADE, related_name="attribute_values"
-    )
-
-    class Meta:
-        db_table = "attribute_value"
-        unique_together = ("attribute_type", "name", "technique")
-
-    def __str__(self) -> str:
-        return f"{self.attribute_type.name}: {self.name}"
 
 
 class TechniqueResource(models.Model):

@@ -14,29 +14,15 @@ from typing import Any, List, Type
 
 from ..models import (
     AssuranceGoal,
-    Category,
-    SubCategory,
     Tag,
     ResourceType,
     Technique,
-    AttributeType,
-    AttributeValue,
-    # TechniqueResource, # Unused import
-    # TechniqueExampleUseCase, # Unused import
-    # TechniqueLimitation, # Unused import
 )
 from ..serializers import (
     AssuranceGoalSerializer,
-    CategorySerializer,
-    SubCategorySerializer,
     TagSerializer,
     TechniqueSerializer,
-    AttributeTypeSerializer,
-    AttributeValueSerializer,
     ResourceTypeSerializer,
-    # TechniqueResourceSerializer, # Unused import
-    # TechniqueExampleUseCaseSerializer, # Unused import
-    # TechniqueLimitationSerializer, # Unused import
 )
 
 # Set up logger
@@ -64,44 +50,6 @@ class AssuranceGoalsViewSet(viewsets.ModelViewSet):
         if self.action in ["create", "update", "partial_update", "destroy"]:
             return [IsAuthenticated()]
         # Default permission for list and retrieve
-        return [AllowAny()]
-
-
-class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-    filter_backends = [
-        DjangoFilterBackend,
-        filters.SearchFilter,
-        filters.OrderingFilter,
-    ]
-    filterset_fields = ["name", "assurance_goal"]
-    search_fields = ["name", "assurance_goal__name"]
-    ordering_fields = ["id", "name"]
-
-    def get_permissions(self) -> List[BasePermission]:
-        """Require authentication for write operations"""
-        if self.action in ["create", "update", "partial_update", "destroy"]:
-            return [IsAuthenticated()]
-        return [AllowAny()]
-
-
-class SubCategoryViewSet(viewsets.ModelViewSet):
-    queryset = SubCategory.objects.all()
-    serializer_class = SubCategorySerializer
-    filter_backends = [
-        DjangoFilterBackend,
-        filters.SearchFilter,
-        filters.OrderingFilter,
-    ]
-    filterset_fields = ["name", "category"]
-    search_fields = ["name", "category__name"]
-    ordering_fields = ["id", "name"]
-
-    def get_permissions(self) -> List[BasePermission]:
-        """Require authentication for write operations"""
-        if self.action in ["create", "update", "partial_update", "destroy"]:
-            return [IsAuthenticated()]
         return [AllowAny()]
 
 
@@ -141,10 +89,7 @@ class TechniquesViewSet(viewsets.ModelViewSet):
     ]
     filterset_fields = [
         "name",
-        "model_dependency",
         "assurance_goals",
-        "categories",
-        "subcategories",
         "tags",
     ]
     search_fields = ["name", "description"]
@@ -169,10 +114,8 @@ class TechniquesViewSet(viewsets.ModelViewSet):
         """Get queryset with optimized prefetching for related entities."""
         return Technique.objects.all().prefetch_related(
             "assurance_goals",
-            "categories",
-            "subcategories",
             "tags",
-            "attribute_values",
+            "related_techniques",
             "resources",
             "example_use_cases",
             "limitations",
@@ -208,46 +151,6 @@ class TechniquesViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class AttributeTypesViewSet(viewsets.ModelViewSet):
-    queryset = AttributeType.objects.all()
-    serializer_class = AttributeTypeSerializer
-    filter_backends = [
-        DjangoFilterBackend,
-        filters.SearchFilter,
-        filters.OrderingFilter,
-    ]
-    filterset_fields = [
-        "name"
-    ]  # Removed non-existent fields: applicable_goals, required_for_goals
-    search_fields = ["name", "description"]
-    ordering_fields = ["id", "name"]
-
-    def get_permissions(self) -> List[BasePermission]:
-        """Require authentication for write operations"""
-        if self.action in ["create", "update", "partial_update", "destroy"]:
-            return [IsAuthenticated()]
-        return [AllowAny()]
-
-
-class AttributeValuesViewSet(viewsets.ModelViewSet):
-    queryset = AttributeValue.objects.all()
-    serializer_class = AttributeValueSerializer
-    filter_backends = [
-        DjangoFilterBackend,
-        filters.SearchFilter,
-        filters.OrderingFilter,
-    ]
-    filterset_fields = ["name", "attribute_type"]
-    search_fields = ["name", "description"]
-    ordering_fields = ["id", "name"]
-
-    def get_permissions(self) -> List[BasePermission]:
-        """Require authentication for write operations"""
-        if self.action in ["create", "update", "partial_update", "destroy"]:
-            return [IsAuthenticated()]
-        return [AllowAny()]
-
-
 class ResourceTypesViewSet(viewsets.ModelViewSet):
     queryset = ResourceType.objects.all()
     serializer_class = ResourceTypeSerializer
@@ -265,20 +168,6 @@ class ResourceTypesViewSet(viewsets.ModelViewSet):
         if self.action in ["create", "update", "partial_update", "destroy"]:
             return [IsAuthenticated()]
         return [AllowAny()]
-
-
-@api_view(["GET"])
-def get_categorylist(request: Request, assurance_goal_id: int) -> Response:
-    categories = Category.objects.filter(assurance_goal_id=assurance_goal_id)
-    serializer = CategorySerializer(categories, many=True)
-    return Response(serializer.data)
-
-
-@api_view(["GET"])
-def get_subcategorylist(request: Request, category_id: int) -> Response:
-    subcategories = SubCategory.objects.filter(category_id=category_id)
-    serializer = SubCategorySerializer(subcategories, many=True)
-    return Response(serializer.data)
 
 
 @api_view(["GET"])
@@ -360,8 +249,7 @@ def debug_endpoint(
 
         # Return model information for debugging
         assurance_goals_count = AssuranceGoal.objects.count()
-        categories_count = Category.objects.count()
-        subcategories_count = SubCategory.objects.count()
+        tags_count = Tag.objects.count()
         techniques_count = Technique.objects.count()
 
         response_data = {
@@ -380,13 +268,12 @@ def debug_endpoint(
             "database_info": db_info,
             "database_counts": {
                 "assurance_goals": assurance_goals_count,
-                "categories": categories_count,
-                "subcategories": subcategories_count,
+                "tags": tags_count,
                 "techniques": techniques_count,
             },
             "api_endpoints": {
                 "assurance_goals": "/api/assurance-goals/",
-                "categories": "/api/categories/",
+                "tags": "/api/tags/",
                 "techniques": "/api/techniques/",
                 "debug": "/api/debug/",
             },

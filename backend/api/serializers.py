@@ -15,13 +15,9 @@ from typing import List, Optional
 
 from .models import (
     AssuranceGoal,
-    Category,
-    SubCategory,
     Tag,
     ResourceType,
     Technique,
-    AttributeType,
-    AttributeValue,
     TechniqueResource,
     TechniqueExampleUseCase,
     TechniqueLimitation,
@@ -43,34 +39,6 @@ class AssuranceGoalSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CategorySerializer(serializers.ModelSerializer):
-    """
-    Serializer for the Category model.
-
-    Includes the name of the associated AssuranceGoal as a read-only field.
-    """
-
-    assurance_goal_name = serializers.ReadOnlyField(source="assurance_goal.name")
-
-    class Meta:
-        model = Category
-        fields = ["id", "name", "description", "assurance_goal", "assurance_goal_name"]
-
-
-class SubCategorySerializer(serializers.ModelSerializer):
-    """
-    Serializer for the SubCategory model.
-
-    Includes the name of the associated Category as a read-only field.
-    """
-
-    category_name = serializers.ReadOnlyField(source="category.name")
-
-    class Meta:
-        model = SubCategory
-        fields = ["id", "name", "description", "category", "category_name"]
-
-
 class TagSerializer(serializers.ModelSerializer):
     """
     Serializer for the Tag model.
@@ -81,39 +49,6 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = "__all__"
-
-
-class AttributeTypeSerializer(serializers.ModelSerializer):
-    """
-    Serializer for the AttributeType model.
-
-    Serializes all fields of the AttributeType model without any additional fields.
-    """
-
-    class Meta:
-        model = AttributeType
-        fields = "__all__"
-
-
-class AttributeValueSerializer(serializers.ModelSerializer):
-    """
-    Serializer for the AttributeValue model.
-
-    Includes the name of the associated AttributeType as a read-only field.
-    """
-
-    attribute_type_name = serializers.ReadOnlyField(source="attribute_type.name")
-
-    class Meta:
-        model = AttributeValue
-        fields = [
-            "id",
-            "attribute_type",
-            "attribute_type_name",
-            "name",
-            "description",
-            "technique",
-        ]
 
 
 class ResourceTypeSerializer(serializers.ModelSerializer):
@@ -196,25 +131,13 @@ class TechniqueSerializer(serializers.ModelSerializer):
 
     # Relationship fields
     assurance_goals = AssuranceGoalSerializer(many=True, read_only=True)
-    categories = CategorySerializer(many=True, read_only=True)
-    subcategories = SubCategorySerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)
-
-    # Additional relationship fields - note the change from attributes to attribute_values
-    attribute_values = AttributeValueSerializer(many=True, read_only=True)
+    related_techniques = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    
+    # Additional relationship fields
     resources = TechniqueResourceSerializer(many=True, read_only=True)
     example_use_cases = TechniqueExampleUseCaseSerializer(many=True, read_only=True)
     limitations = TechniqueLimitationSerializer(many=True, read_only=True)
-
-    # Add a dummy field for applicable_models if it doesn't exist in the database
-    applicable_models = serializers.SerializerMethodField()
-
-    def get_applicable_models(self, obj: Technique) -> List[str]:
-        """
-        Get the applicable_models field from the Technique object.
-        Returns an empty list if the field doesn't exist or is None.
-        """
-        return obj.applicable_models or []
 
     class Meta:
         model = Technique
@@ -222,16 +145,12 @@ class TechniqueSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "description",
-            "model_dependency",
             "complexity_rating",
             "computational_cost_rating",
             "assurance_goals",
-            "categories",
-            "subcategories",
             "tags",
-            "attribute_values",
+            "related_techniques",
             "resources",
             "example_use_cases",
             "limitations",
-            "applicable_models",
         ]

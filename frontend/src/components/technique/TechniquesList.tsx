@@ -13,7 +13,6 @@ import {
 	useAssuranceGoals,
 	calculateTotalPages,
 	useTechniques,
-	useCategories,
 } from "@/lib/api/hooks";
 import { useFilterParams } from "@/lib/hooks/useFilterParams";
 import TechniquesSidebar, {
@@ -32,7 +31,7 @@ import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/ui/pagination";
 import { Loader2, Filter } from "lucide-react";
 import type { Technique } from "@/lib/types";
-import { formatCategoryName } from "./CategoryTag";
+import { formatTagDisplay, getApplicableModels, getDataTypes } from "@/lib/utils";
 import GoalIcon from "./GoalIcon";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
@@ -48,28 +47,15 @@ const TechniqueCard = ({
 }: {
 	technique: Technique;
 }): JSX.Element => {
-	// Get first category and subcategory if available
-	const primaryCategory =
-		technique.categories.length > 0
-			? formatCategoryName(technique.categories[0].name)
-			: "Uncategorized";
-
-	// Get subcategory if available
-	const subcategory =
-		technique.subcategories.length > 0
-			? formatCategoryName(technique.subcategories[0].name)
-			: null;
-
-	// Truncate only subcategory if too long
-	const truncateSubcategory = (text: string, maxLength = 20) => {
-		if (!text || text.length <= maxLength) return text;
-		return text.substring(0, maxLength) + "...";
-	};
-
-	// Build category display text with truncation only for subcategory
-	const categoryText = subcategory
-		? `${primaryCategory} | ${truncateSubcategory(subcategory)}`
-		: primaryCategory;
+	// Get key tags for display
+	const applicableModels = getApplicableModels(technique.tags);
+	const dataTypes = getDataTypes(technique.tags);
+	
+	// Create a display text from key tags
+	const tagDisplayText = [
+		...applicableModels.map(m => formatTagDisplay(m)),
+		...dataTypes.map(d => formatTagDisplay(d))
+	].slice(0, 3).join(" • ") || "No tags";
 
 	// Format the title to remove parenthetical content if it's too long
 	const formatTitle = (title: string) => {
@@ -92,10 +78,10 @@ const TechniqueCard = ({
 		return description.substring(0, cutoff) + "...";
 	};
 
-	// Build full category text for hover tooltip
-	const fullCategoryText = subcategory
-		? `${primaryCategory} | ${subcategory}`
-		: primaryCategory;
+	// Build full tag text for hover tooltip
+	const fullTagText = technique.tags
+		.map(tag => formatTagDisplay(tag.name, true))
+		.join(", ") || "No tags";
 
 	return (
 		<Card className="h-full flex flex-col">
@@ -108,9 +94,9 @@ const TechniqueCard = ({
 				</CardTitle>
 				<CardDescription
 					className="text-xs sm:text-sm text-muted-foreground line-clamp-1"
-					title={fullCategoryText}
+					title={fullTagText}
 				>
-					{categoryText}
+					{tagDisplayText}
 				</CardDescription>
 			</CardHeader>
 

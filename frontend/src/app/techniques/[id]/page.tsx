@@ -39,101 +39,27 @@ import {
 	Scroll,
 	Shield,
 	ShieldCheck,
+	Tag,
+	Layers,
+	Database,
+	Clock,
 } from "lucide-react";
 import {
 	TechniqueResource,
 	TechniqueExampleUseCase,
 	TechniqueLimitation,
 	AttributeValue,
+	Technique,
 } from "@/lib/types";
+import {
+	getApplicableModels,
+	getDataTypes,
+	getLifecycleStages,
+	groupTagsByPrefix,
+	formatTagDisplay,
+	getTagValue,
+} from "@/lib/utils";
 
-// Utility function to find applicable models for model-specific techniques
-// This simulates what we would expect from the backend API when updated
-function findApplicableModels(techniqueId: number): string[] {
-	// Sample data based on model-specific.json structure
-	const modelSpecificData = {
-		"Tree-based Models": {
-			techniques: [
-				{
-					id: 3,
-					name: "Mean Decrease Impurity",
-					applicable_models: [
-						"Decision Trees",
-						"Random Forests",
-						"Gradient Boosting Models",
-					],
-				},
-				{
-					id: 4,
-					name: "Gini Importance",
-					applicable_models: ["Decision Trees", "Random Forests"],
-				},
-				{
-					id: 9,
-					name: "Variable Importance in Random Forests (MDA MDG)",
-					applicable_models: ["Random Forests"],
-				},
-			],
-		},
-		"Linear Models": {
-			techniques: [
-				{
-					id: 5,
-					name: "Coefficient Magnitudes (in Linear Models)",
-					applicable_models: [
-						"Linear Regression",
-						"Logistic Regression",
-						"Ridge Regression",
-						"Lasso Regression",
-					],
-				},
-			],
-		},
-		"Neural Networks": {
-			techniques: [
-				{
-					id: 6,
-					name: "Integrated Gradients",
-					applicable_models: [
-						"General Neural Networks",
-						"CNNs",
-						"RNNs",
-						"Transformers",
-					],
-				},
-				{
-					id: 7,
-					name: "DeepLIFT",
-					applicable_models: [
-						"General Neural Networks",
-						"CNNs",
-						"RNNs",
-					],
-				},
-				{
-					id: 8,
-					name: "Layer-wise Relevance Propagation (LRP)",
-					applicable_models: [
-						"General Neural Networks",
-						"CNNs",
-						"RNNs",
-					],
-				},
-			],
-		},
-	};
-
-	// Search through all categories and techniques to find the matching ID
-	for (const category of Object.values(modelSpecificData)) {
-		for (const technique of category.techniques) {
-			if (technique.id === techniqueId) {
-				return technique.applicable_models || [];
-			}
-		}
-	}
-
-	return [];
-}
 
 // Helper component for section containers
 function Section({
@@ -371,6 +297,44 @@ function TechniqueLimitations({
 	);
 }
 
+// Component to display related techniques
+function RelatedTechniques({ 
+	techniqueIds, 
+	currentTechniqueId 
+}: { 
+	techniqueIds: number[]; 
+	currentTechniqueId: number;
+}) {
+	// In a real implementation, this would fetch technique details
+	// For now, we'll just show a list of technique IDs as links
+	if (!techniqueIds || techniqueIds.length === 0) {
+		return <p className="text-muted-foreground">No related techniques specified.</p>;
+	}
+
+	return (
+		<div className="space-y-2">
+			<p className="text-sm text-muted-foreground mb-3">
+				These techniques are related or complementary to this one:
+			</p>
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+				{techniqueIds.map((id) => (
+					<Link
+						key={id}
+						href={`/techniques/${id}`}
+						className="flex items-center gap-2 p-3 rounded-md border hover:border-primary transition-colors"
+					>
+						<Layers className="h-4 w-4 text-primary" />
+						<span className="text-sm font-medium">
+							View Technique #{id}
+						</span>
+						<ArrowRight className="h-4 w-4 ml-auto" />
+					</Link>
+				))}
+			</div>
+		</div>
+	);
+}
+
 export default function TechniqueDetailPage() {
 	const params = useParams();
 	const id = Number(params.id);
@@ -420,10 +384,11 @@ export default function TechniqueDetailPage() {
 		);
 	}
 
-	const applicableModels =
-		technique.model_dependency === "Model-Specific"
-			? technique.applicable_models || findApplicableModels(technique.id)
-			: [];
+	// Extract key information from tags
+	const applicableModels = getApplicableModels(technique.tags);
+	const dataTypes = getDataTypes(technique.tags);
+	const lifecycleStages = getLifecycleStages(technique.tags);
+	const groupedTags = groupTagsByPrefix(technique.tags);
 
 	// Map assurance goals to their respective icons
 	const goalIcons = {
@@ -467,6 +432,16 @@ export default function TechniqueDetailPage() {
 								limitations={technique.limitations}
 							/>
 						</Section>
+
+						{/* Related Techniques Section */}
+						{technique.related_techniques && technique.related_techniques.length > 0 && (
+							<Section title="Related Techniques">
+								<RelatedTechniques
+									techniqueIds={technique.related_techniques}
+									currentTechniqueId={technique.id}
+								/>
+							</Section>
+						)}
 
 						<Section title="Resources" noBorder={true}>
 							<TechniqueResources
@@ -523,35 +498,6 @@ export default function TechniqueDetailPage() {
 									</div>
 								</div>
 
-		{/* Categories & Subcategories */}
-		<div className="space-y-2">
-			<h4 className="font-medium text-sm">Categories</h4>
-			<div className="flex flex-wrap gap-2">
-				{technique.categories && technique.categories.length > 0 ? (
-					technique.categories.map((category) => (
-						<Badge key={category.id} variant="secondary">
-							{category.name}
-						</Badge>
-					))
-				) : (
-					<span className="text-xs text-muted-foreground">None</span>
-				)}
-			</div>
-			{technique.subcategories && technique.subcategories.length > 0 && (
-				<>
-					<h4 className="font-medium text-sm pt-2">Subcategories</h4>
-					<div className="flex flex-wrap gap-2">
-						{technique.subcategories.map((subcategory) => (
-							<Badge key={subcategory.id} variant="outline">
-								{subcategory.name}
-							</Badge>
-						))}
-					</div>
-				</>
-			)}
-		</div>
-
-{/* Ratings */}
 								{/* Ratings */}
 								{technique.complexity_rating ? (
 									<div className="space-y-2">
@@ -583,37 +529,15 @@ export default function TechniqueDetailPage() {
 									</div>
 								) : null}
 
-								{/* Model Dependency */}
-								<div className="space-y-2">
-									<h3 className="text-sm font-medium flex items-center">
-										Model Dependency
-										<span
-											className="ml-1 inline-flex"
-											title="Indicates whether this technique requires access to model internals"
-										>
-											<Info className="h-4 w-4 text-muted-foreground" />
-										</span>
-									</h3>
-									<div>
-										<Badge
-											variant="outline"
-											className="text-sm"
-										>
-											{technique.model_dependency}
-										</Badge>
-									</div>
-								</div>
 
-								{/* Applicable Models Section (for model-specific techniques) */}
-								{technique.model_dependency ===
-									"Model-Specific" &&
-									applicableModels.length > 0 && (
+								{/* Applicable Models Section */}
+								{applicableModels.length > 0 && (
 										<div className="space-y-2">
 											<h3 className="text-sm font-medium flex items-center">
 												Applicable Models
 												<span
 													className="ml-1 inline-flex"
-													title="Specific model architectures this technique can be applied to"
+													title="Model architectures this technique can be applied to"
 												>
 													<Info className="h-4 w-4 text-muted-foreground" />
 												</span>
@@ -627,7 +551,7 @@ export default function TechniqueDetailPage() {
 															className="flex items-center gap-1.5 text-xs py-1"
 														>
 															<Cpu className="h-3 w-3" />
-															<span>{model}</span>
+															<span>{formatTagDisplay(model)}</span>
 														</Badge>
 													)
 												)}
@@ -635,85 +559,99 @@ export default function TechniqueDetailPage() {
 										</div>
 									)}
 
-								{/* Goal-Specific Attributes section */}
-								<div className="space-y-3 border-t pt-3">
-									<h3 className="text-sm font-medium flex items-center">
-										Goal-Specific Attributes
-										<span
-											className="ml-1 inline-flex"
-											title="Attributes specific to the technique's assurance goals"
-										>
-											<Info className="h-4 w-4 text-muted-foreground" />
-										</span>
-									</h3>
-
-									{/* Add Explanatory Scope and other attributes */}
-									{technique.attribute_values &&
-										technique.attribute_values.length > 0 &&
-										Object.entries(
-											technique.attribute_values.reduce(
-												(acc, attr) => {
-													const type =
-														attr.attribute_type_name;
-													if (!acc[type]) {
-														acc[type] = [];
-													}
-													acc[type].push(attr);
-													return acc;
-												},
-												{} as Record<
-													string,
-													AttributeValue[]
-												>
-											)
-										).map(([type, values]) => (
-											<div
-												className="space-y-1"
-												key={type}
+								{/* Data Types Section */}
+								{dataTypes.length > 0 && (
+									<div className="space-y-2">
+										<h3 className="text-sm font-medium flex items-center">
+											Data Types
+											<span
+												className="ml-1 inline-flex"
+												title="Types of data this technique can work with"
 											>
-												<h4 className="text-xs text-muted-foreground">
-													{type}
-												</h4>
-												<div className="flex flex-wrap gap-2">
-													{values.map((value) => (
-														<Badge
-															key={value.id}
-															variant="outline"
-															className="text-sm"
-														>
-															{value.name}
-														</Badge>
-													))}
-												</div>
-											</div>
-										))}
-								</div>
-
-								{/* Tags */}
-								{technique.tags &&
-									technique.tags.length > 0 && (
-										<div className="space-y-2">
-											<h3 className="text-sm font-medium flex items-center">
-												Tags
-												<span
-													className="ml-1 inline-flex"
-													title="Keywords associated with this technique"
-												>
-													<Info className="h-4 w-4 text-muted-foreground" />
-												</span>
-											</h3>
-											<div className="flex flex-wrap gap-2">
-												{technique.tags.map((tag) => (
+												<Info className="h-4 w-4 text-muted-foreground" />
+											</span>
+										</h3>
+										<div className="flex flex-wrap gap-2">
+											{dataTypes.map(
+												(dataType) => (
 													<Badge
-														key={tag.id}
-														variant="secondary"
+														key={dataType}
+														variant="outline"
+														className="flex items-center gap-1.5 text-xs py-1"
 													>
-														{tag.name}
+														<Database className="h-3 w-3" />
+														<span>{formatTagDisplay(dataType)}</span>
 													</Badge>
-												))}
-											</div>
+												)
+											)}
 										</div>
-									)}
+									</div>
+								)}
+
+								{/* Lifecycle Stages Section */}
+								{lifecycleStages.length > 0 && (
+									<div className="space-y-2">
+										<h3 className="text-sm font-medium flex items-center">
+											Lifecycle Stages
+											<span
+												className="ml-1 inline-flex"
+												title="When in the ML lifecycle this technique can be applied"
+											>
+												<Info className="h-4 w-4 text-muted-foreground" />
+											</span>
+										</h3>
+										<div className="flex flex-wrap gap-2">
+											{lifecycleStages.map(
+												(stage) => (
+													<Badge
+														key={stage}
+														variant="outline"
+														className="flex items-center gap-1.5 text-xs py-1"
+													>
+														<Clock className="h-3 w-3" />
+														<span>{formatTagDisplay(stage)}</span>
+													</Badge>
+												)
+											)}
+										</div>
+									</div>
+								)}
+
+								{/* All Tags Section */}
+								{Object.keys(groupedTags).length > 0 && (
+									<div className="space-y-3 border-t pt-3">
+										<h3 className="text-sm font-medium flex items-center">
+											All Tags
+											<span
+												className="ml-1 inline-flex"
+												title="All tags associated with this technique"
+											>
+												<Info className="h-4 w-4 text-muted-foreground" />
+											</span>
+										</h3>
+										{Object.entries(groupedTags)
+											.filter(([prefix]) => !['applicable-models', 'data-type', 'lifecycle-stage'].includes(prefix))
+											.map(([prefix, tags]) => (
+												<div key={prefix} className="space-y-1">
+													<h4 className="text-xs text-muted-foreground capitalize">
+														{formatTagDisplay(prefix)}
+													</h4>
+													<div className="flex flex-wrap gap-1.5">
+														{tags.map((tag) => (
+															<Badge
+																key={tag.id}
+																variant="secondary"
+																className="text-xs flex items-center gap-1"
+															>
+																<Tag className="h-3 w-3" />
+																<span>{getTagValue(tag.name)}</span>
+															</Badge>
+														))}
+													</div>
+												</div>
+											))}
+									</div>
+								)}
 							</CardContent>
 
 							{/* Edit section - delete will be accessible from edit form later */}

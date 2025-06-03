@@ -74,17 +74,28 @@ class Command(BaseCommand):
             with transaction.atomic():
                 count = 0
                 self._related_techniques_to_process = {}
+                self._json_id_to_db_id = {}  # Map JSON IDs to database IDs
                 
-                # First pass: import all techniques
+                # First pass: import all techniques and build ID mapping
                 for technique_data in techniques_data:
-                    self._process_technique(technique_data)
+                    json_id = technique_data.get("id")
+                    technique = self._process_technique(technique_data)
+                    if technique and json_id is not None:
+                        self._json_id_to_db_id[json_id] = technique.id
                     count += 1
                 
-                # Second pass: process related techniques
-                for technique_id, related_ids in self._related_techniques_to_process.items():
+                # Second pass: process related techniques using ID mapping
+                for technique_id, related_json_ids in self._related_techniques_to_process.items():
                     try:
                         technique = Technique.objects.get(id=technique_id)
-                        self._process_related_techniques(technique, related_ids)
+                        # Convert JSON IDs to database IDs
+                        related_db_ids = []
+                        for json_id in related_json_ids:
+                            if json_id in self._json_id_to_db_id:
+                                related_db_ids.append(self._json_id_to_db_id[json_id])
+                            else:
+                                logger.warning(f"Related technique with JSON ID {json_id} not found in mapping")
+                        self._process_related_techniques(technique, related_db_ids)
                     except Technique.DoesNotExist:
                         logger.warning(f"Technique {technique_id} not found for related techniques processing")
 
@@ -243,7 +254,7 @@ class Command(BaseCommand):
 
 
 
-    def _process_technique(self, data: Dict[str, Any]) -> None:
+    def _process_technique(self, data: Dict[str, Any]) -> Optional[Technique]:
         """Process a single technique from JSON data"""
         try:
             # Extract basic data
@@ -388,6 +399,8 @@ class Command(BaseCommand):
             status = "Created" if created else "Updated"
             logger.info(f"{status} technique: {name}")
             self.stdout.write(self.style.SUCCESS(f"{status} technique: {name}"))
+            
+            return technique
 
         except Exception as e:
             error_msg = (
@@ -397,3 +410,4 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR(error_msg))
             if not self.force:
                 raise
+            return None

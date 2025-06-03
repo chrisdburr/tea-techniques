@@ -1,79 +1,88 @@
 [
   {
-		"id": 1,
-		"name": "SHapley Additive exPlanations (SHAP)",
-		"description": "SHAP provides explanations by calculating how much each input feature contributes to a model's prediction. It assigns an importance score to each feature, showing whether the feature pushes the prediction toward or away from the expected outcome. The method works by systematically evaluating how predictions change when features are included or excluded, similar to calculating fair contributions in team scenarios.",
-		"assurance_goals": ["Explainability"],
-		"tags": [
-			"applicable-models/agnostic",
-			"assurance-goal-category/explainability",
-			"assurance-goal-category/explainability/feature-analysis",
-			"assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
-			"data-requirements/no-special-requirements",
-			"data-type/tabular",
-			"evidence-type/quantitative-metric",
-			"expertise-needed/statistics",
-			"explanatory-scope/global",
-			"explanatory-scope/local",
-			"lifecycle-stage/model-development",
-			"technique-type/algorithmic"
-		],
-		"example_use_cases": [
-			{
-				"description": "Explaining why a complex model (like a neural network) made a specific prediction by showing how each feature influenced that prediction.",
-				"goal": "Explainability"
-			},
-			{
-				"description": "Identifying which factors contributed most to a loan approval decision in a financial model using SHAP values.",
-				"goal": "Explainability"
-			}
-		],
-		"limitations": [
-			{
-				"description": "Assumes feature independence, so results can be less reliable when features are highly correlated."
-			},
-			{
-				"description": "Computationally intensive for large models or datasets (calculating many Shapley values is slow)."
-			}
-		],
-		"resources": [
-			{
-				"title": "shap/shap",
-				"url": "https://github.com/shap/shap",
-				"source_type": "software_package"
-			},
-			{
-				"title": "Introduction to SHapley Additive exPlanations (SHAP) \u2014 XAI Tutorials",
-				"url": "https://xai-tutorials.readthedocs.io/en/latest/_model_agnostic_xai/shap.html",
-				"source_type": "tutorial"
-			},
-			{
-				"title": "An empirical study of the effect of background data size on the stability of SHapley Additive exPlanations (SHAP) for deep learning models",
-				"url": "http://arxiv.org/pdf/2204.11351v3",
-				"source_type": "technical_paper",
-				"authors": [
-					"Han Yuan",
-					"Mingxuan Liu",
-					"Lican Kang",
-					"Chenkui Miao",
-					"Ying Wu"
-				],
-				"publication_date": "2022-04-24"
-			},
-			{
-				"title": "SHAP: Shapley Additive Explanations | Towards Data Science",
-				"url": "https://towardsdatascience.com/shap-shapley-additive-explanations-5a2a271ed9c3/",
-				"source_type": "tutorial"
-			},
-			{
-				"title": "MAIF/shapash",
-				"url": "https://github.com/MAIF/shapash",
-				"source_type": "software_package"
-			}
-		],
-		"complexity_rating": 3,
-		"computational_cost_rating": 3,
-		"related_techniques": [5, 6, 7, 12, 27, 28]
+    "id": 1,
+    "name": "SHapley Additive exPlanations (SHAP)",
+    "description": "SHAP provides explanations by calculating how much each input feature contributes to a model's prediction. It assigns an importance score to each feature, showing whether the feature pushes the prediction toward or away from the expected outcome. The method works by systematically evaluating how predictions change when features are included or excluded, similar to calculating fair contributions in team scenarios.",
+    "assurance_goals": [
+      "Explainability"
+    ],
+    "tags": [
+      "applicable-models/agnostic",
+      "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/feature-analysis",
+      "assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
+      "data-requirements/no-special-requirements",
+      "data-type/tabular",
+      "evidence-type/quantitative-metric",
+      "expertise-needed/statistics",
+      "explanatory-scope/global",
+      "explanatory-scope/local",
+      "lifecycle-stage/model-development",
+      "technique-type/algorithmic"
+    ],
+    "example_use_cases": [
+      {
+        "description": "Explaining why a complex model (like a neural network) made a specific prediction by showing how each feature influenced that prediction.",
+        "goal": "Explainability"
+      },
+      {
+        "description": "Identifying which factors contributed most to a loan approval decision in a financial model using SHAP values.",
+        "goal": "Explainability"
+      }
+    ],
+    "limitations": [
+      {
+        "description": "Assumes feature independence, so results can be less reliable when features are highly correlated."
+      },
+      {
+        "description": "Computationally intensive for large models or datasets (calculating many Shapley values is slow)."
+      }
+    ],
+    "resources": [
+      {
+        "title": "shap/shap",
+        "url": "https://github.com/shap/shap",
+        "source_type": "software_package"
+      },
+      {
+        "title": "Introduction to SHapley Additive exPlanations (SHAP) \u2014 XAI Tutorials",
+        "url": "https://xai-tutorials.readthedocs.io/en/latest/_model_agnostic_xai/shap.html",
+        "source_type": "tutorial"
+      },
+      {
+        "title": "An empirical study of the effect of background data size on the stability of SHapley Additive exPlanations (SHAP) for deep learning models",
+        "url": "http://arxiv.org/pdf/2204.11351v3",
+        "source_type": "technical_paper",
+        "authors": [
+          "Han Yuan",
+          "Mingxuan Liu",
+          "Lican Kang",
+          "Chenkui Miao",
+          "Ying Wu"
+        ],
+        "publication_date": "2022-04-24"
+      },
+      {
+        "title": "SHAP: Shapley Additive Explanations | Towards Data Science",
+        "url": "https://towardsdatascience.com/shap-shapley-additive-explanations-5a2a271ed9c3/",
+        "source_type": "tutorial"
+      },
+      {
+        "title": "MAIF/shapash",
+        "url": "https://github.com/MAIF/shapash",
+        "source_type": "software_package"
+      }
+    ],
+    "complexity_rating": 3,
+    "computational_cost_rating": 3,
+    "related_techniques": [
+      5,
+      6,
+      7,
+      12,
+      27,
+      28
+    ]
   },
   {
     "id": 2,
@@ -110,7 +119,44 @@
         "description": "Can be misleading when features are correlated, and computationally expensive on high-dimensional datasets due to repetitive model evaluations."
       }
     ],
-    "resources": [],
+    "resources": [
+      {
+        "title": "Asymptotic Unbiasedness of the Permutation Importance Measure in Random Forest Models",
+        "url": "http://arxiv.org/pdf/1912.03306v1",
+        "source_type": "technical_paper",
+        "authors": [
+          "Burim Ramosaj",
+          "Markus Pauly"
+        ],
+        "publication_date": "2019-12-05"
+      },
+      {
+        "title": "eli5.permutation_importance \u2014 ELI5 0.15.0 documentation",
+        "url": "https://eli5.readthedocs.io/en/latest/autodocs/permutation_importance.html",
+        "source_type": "documentation"
+      },
+      {
+        "title": "Permutation Importance \u2014 PermutationImportance 1.2.1.5 ...",
+        "url": "https://permutationimportance.readthedocs.io/en/latest/permutation.html",
+        "source_type": "documentation"
+      },
+      {
+        "title": "parrt/random-forest-importances",
+        "url": "https://github.com/parrt/random-forest-importances",
+        "source_type": "software_package"
+      },
+      {
+        "title": "Statistically Valid Variable Importance Assessment through Conditional Permutations",
+        "url": "http://arxiv.org/pdf/2309.07593v2",
+        "source_type": "technical_paper",
+        "authors": [
+          "Ahmad Chamma",
+          "Denis A. Engemann",
+          "Bertrand Thirion"
+        ],
+        "publication_date": "2023-09-14"
+      }
+    ],
     "complexity_rating": 2,
     "computational_cost_rating": 2,
     "related_techniques": [
@@ -148,7 +194,51 @@
         "description": "Biased towards features with more splits or categories; only applicable to tree-based models and can overestimate importance of high-cardinality features."
       }
     ],
-    "resources": [],
+    "resources": [
+      {
+        "title": "Trees, forests, and impurity-based variable importance",
+        "url": "http://arxiv.org/pdf/2001.04295v3",
+        "source_type": "technical_paper",
+        "authors": [
+          "Erwan Scornet"
+        ],
+        "publication_date": "2020-01-13"
+      },
+      {
+        "title": "A Debiased MDI Feature Importance Measure for Random Forests",
+        "url": "http://arxiv.org/pdf/1906.10845v2",
+        "source_type": "technical_paper",
+        "authors": [
+          "Xiao Li",
+          "Yu Wang",
+          "Sumanta Basu",
+          "Karl Kumbier",
+          "Bin Yu"
+        ],
+        "publication_date": "2019-06-26"
+      },
+      {
+        "title": "Variable Importance in Random Forests | Towards Data Science",
+        "url": "https://towardsdatascience.com/variable-importance-in-random-forests-20c6690e44e0/",
+        "source_type": "tutorial"
+      },
+      {
+        "title": "Interpreting Deep Forest through Feature Contribution and MDI Feature Importance",
+        "url": "http://arxiv.org/pdf/2305.00805v1",
+        "source_type": "technical_paper",
+        "authors": [
+          "Yi-Xiao He",
+          "Shen-Huan Lyu",
+          "Yuan Jiang"
+        ],
+        "publication_date": "2023-05-01"
+      },
+      {
+        "title": "optuna.importance.MeanDecreaseImpurityImportanceEvaluator ...",
+        "url": "https://optuna.readthedocs.io/en/stable/reference/generated/optuna.importance.MeanDecreaseImpurityImportanceEvaluator.html",
+        "source_type": "documentation"
+      }
+    ],
     "complexity_rating": 2,
     "computational_cost_rating": 1,
     "related_techniques": [
@@ -203,18 +293,19 @@
       "Explainability"
     ],
     "tags": [
-      "applicable-models/neural-network",
-      "assurance-goal-category/explainability",
-      "data-requirements/labelled-data",
-      "data-requirements/reference-dataset",
-      "data-type/tabular",
-      "evidence-type/quantitative-metric",
-      "expertise-needed/ml-engineering",
-      "expertise-needed/statistics",
-      "explanatory-scope/local",
-      "lifecycle-stage/model-development",
-      "technique-type/algorithmic"
-    ],
+		"applicable-models/neural-network",
+		"assurance-goal-category/explainability",
+		"data-requirements/labelled-data",
+		"data-requirements/reference-dataset",
+		"data-type/tabular",
+		"data-type/image",
+		"evidence-type/quantitative-metric",
+		"expertise-needed/ml-engineering",
+		"expertise-needed/statistics",
+		"explanatory-scope/local",
+		"lifecycle-stage/model-development",
+		"technique-type/algorithmic"
+	],
     "example_use_cases": [
       {
         "description": "Understanding pixel contributions in image classification with deep neural networks.",
@@ -226,7 +317,45 @@
         "description": "Requires a meaningful baseline input; results can be sensitive to the choice of baseline and model must be differentiable, limiting use with non-differentiable components."
       }
     ],
-    "resources": [],
+    "resources": [
+      {
+        "title": "ankurtaly/Integrated-Gradients",
+        "url": "https://github.com/ankurtaly/Integrated-Gradients",
+        "source_type": "software_package"
+      },
+      {
+        "title": "pytorch/captum",
+        "url": "https://github.com/pytorch/captum",
+        "source_type": "software_package"
+      },
+      {
+        "title": "Maximum Entropy Baseline for Integrated Gradients",
+        "url": "http://arxiv.org/pdf/2204.05948v1",
+        "source_type": "technical_paper",
+        "authors": [
+          "Hanxiao Tan"
+        ],
+        "publication_date": "2022-04-12"
+      },
+      {
+        "title": "Integrated Gradients from Scratch | Towards Data Science",
+        "url": "https://towardsdatascience.com/integrated-gradients-from-scratch-b46311e4ab4/",
+        "source_type": "tutorial"
+      },
+      {
+        "title": "Understanding Integrated Gradients with SmoothTaylor for Deep Neural Network Attribution",
+        "url": "http://arxiv.org/pdf/2004.10484v2",
+        "source_type": "technical_paper",
+        "authors": [
+          "Gary S. W. Goh",
+          "Sebastian Lapuschkin",
+          "Leander Weber",
+          "Wojciech Samek",
+          "Alexander Binder"
+        ],
+        "publication_date": "2020-04-22"
+      }
+    ],
     "complexity_rating": 4,
     "computational_cost_rating": 3,
     "related_techniques": [

@@ -1,5 +1,5 @@
 // src/lib/api/hooks.ts
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueries, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/client";
 import { logApiError } from "@/lib/api/errorUtils";
 import type {
@@ -248,6 +248,46 @@ export const useTechniqueDetail = (id: number) => {
 		},
 		enabled: !!id, // Only run if id is provided
 	});
+};
+
+/**
+ * Hook for fetching basic details (id and name) of multiple techniques
+ * Used for displaying related techniques with names instead of just IDs
+ * 
+ * @param ids - Array of technique IDs to fetch
+ * @returns Array of query objects with technique basic details
+ */
+export const useMultipleTechniqueNames = (ids: number[]) => {
+	const queries = useQueries({
+		queries: ids.map((id) => ({
+			queryKey: ["technique-name", id],
+			queryFn: async () => {
+				try {
+					// Fetch full technique but only use id and name for performance
+					const data = await fetchAPI<Technique>(`/api/techniques/${id}`);
+					
+					// Return only the data we need for related techniques display
+					return {
+						id: data.id,
+						name: data.name,
+					};
+				} catch (error: unknown) {
+					logApiError('useMultipleTechniqueNames', error);
+					throw error;
+				}
+			},
+			enabled: !!id, // Only run if id is provided
+			staleTime: 5 * 60 * 1000, // Cache for 5 minutes since names don't change often
+		})),
+	});
+
+	// Combine the results into a more usable format
+	return {
+		techniques: queries.map(query => query.data).filter(Boolean),
+		isLoading: queries.some(query => query.isLoading),
+		isError: queries.some(query => query.isError),
+		errors: queries.filter(query => query.error).map(query => query.error),
+	};
 };
 
 // Helper function to normalize paths for all API requests

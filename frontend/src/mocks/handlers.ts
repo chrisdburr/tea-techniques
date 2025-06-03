@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { Technique } from '@/lib/api/useTechniques';
+import { Technique } from '@/lib/types';
 
 // This file contains comprehensive API mock handlers for MSW
 // Currently MSW integration is disabled due to module resolution issues
@@ -11,30 +11,29 @@ const mockTechniques: Technique[] = [
     id: 1,
     name: 'Test Technique 1',
     description: 'Description for test technique 1',
-    model_dependency: 'Model-Agnostic',
+    complexity_rating: 3,
+    computational_cost_rating: 2,
     example_use_cases: [
       {
         id: 101,
         description: 'Example use case',
         assurance_goal: 1,
-        assurance_goal_name: 'Explainability'
+        assurance_goal_name: 'Accuracy'
       }
     ],
     assurance_goals: [{ id: 1, name: 'Accuracy', description: 'Goal description' }],
-    categories: [{ id: 1, name: 'Testing', description: 'Category description', assurance_goal: 1, assurance_goal_name: 'Accuracy' }],
-    subcategories: [],
-    attribute_values: [],
+    tags: [{ id: 1, name: 'ML' }, { id: 2, name: 'Testing' }],
+    related_techniques: [2, 3],
     resources: [{ 
       id: 201, 
       resource_type: 1,
-      resource_type_name: 'Paper', // Added missing field
+      resource_type_name: 'Paper',
       title: 'Resource',
       url: 'https://example.com',
       description: 'Resource Description',
       publication_date: '2023-01-01'
     }],
-    limitations: [{ id: 301, description: 'Limitation example' }],
-    tags: []
+    limitations: [{ id: 301, description: 'Limitation example' }]
   }
 ];
 
@@ -45,22 +44,14 @@ const mockAssuranceGoals = [
   { id: 3, name: 'Safety' }
 ];
 
-const mockCategories = [
-  { id: 1, name: 'Testing', assurance_goal: 1 },
-  { id: 2, name: 'Monitoring', assurance_goal: 1 },
-  { id: 3, name: 'Bias Detection', assurance_goal: 2 }
-];
-
-const mockSubCategories = [
-  { id: 1, name: 'Unit Testing', category: 1 },
-  { id: 2, name: 'Integration Testing', category: 1 },
-  { id: 3, name: 'Real-time Monitoring', category: 2 }
-];
 
 const mockTags = [
   { id: 1, name: 'ML' },
-  { id: 2, name: 'NLP' },
-  { id: 3, name: 'Computer Vision' }
+  { id: 2, name: 'Testing' },
+  { id: 3, name: 'NLP' },
+  { id: 4, name: 'Computer Vision' },
+  { id: 5, name: 'Monitoring' },
+  { id: 6, name: 'Bias Detection' }
 ];
 
 const mockResourceTypes = [
@@ -125,14 +116,6 @@ export const handlers = [
   // Related entity endpoints
   http.get('/api/assurance-goals/', () => {
     return HttpResponse.json(createPaginatedResponse(mockAssuranceGoals));
-  }),
-
-  http.get('/api/categories/', () => {
-    return HttpResponse.json(createPaginatedResponse(mockCategories));
-  }),
-
-  http.get('/api/subcategories/', () => {
-    return HttpResponse.json(createPaginatedResponse(mockSubCategories));
   }),
 
   http.get('/api/tags/', () => {

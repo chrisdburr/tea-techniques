@@ -6,6 +6,9 @@ Extends the base settings with test-specific settings.
 import os
 from .base import *  # noqa
 
+# Test-specific SECRET_KEY
+SECRET_KEY = 'test-secret-key-for-testing-only'
+
 # Allow for test database configuration to be overridden by environment variables
 # This enables using PostgreSQL in Docker for tests
 if os.getenv("USE_POSTGRES_FOR_TESTS") == "True":

@@ -85,7 +85,7 @@ class TestErrorHandling:
         # Create a technique with missing required fields
         invalid_data = {
             "name": "Test Technique",
-            # Missing model_dependency which is required
+            # Missing description which might be required
         }
         
         response = self.client.post(self.techniques_url, invalid_data, format="json")

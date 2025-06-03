@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
 		return [
 			{
 				source: '/api',
-				destination: `${BACKEND_URL}/api/` 
+				destination: `${BACKEND_URL}/api` 
 			},
 			{
 				source: '/api/:path*',
@@ -42,7 +42,7 @@ const nextConfig: NextConfig = {
 			},
 			{
 				source: '/swagger',
-				destination: `${BACKEND_URL}/swagger/`
+				destination: `${BACKEND_URL}/swagger`
 			},
 			{
 				source: '/swagger/:path*',

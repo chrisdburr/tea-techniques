@@ -9,17 +9,12 @@ from rest_framework.test import APITestCase, APIClient
 from api.models import (
     Technique,
     AssuranceGoal,
-    Category,
     Tag,
 )
 from api.tests.factories import (
     TechniqueFactory,
-    CategoryFactory,
-    SubCategoryFactory,
     AssuranceGoalFactory,
     TagFactory,
-    AttributeTypeFactory,
-    AttributeValueFactory,
     ResourceTypeFactory,
 )
 
@@ -33,16 +28,10 @@ class ApiEndpointTestCase(APITestCase):
     def setUp(self):
         # Create base objects for relationships
         self.assurance_goal = AssuranceGoalFactory()
-        self.category = CategoryFactory(assurance_goal=self.assurance_goal)
-        self.subcategory = SubCategoryFactory(category=self.category)
         self.tag = TagFactory()
-        self.attribute_type = AttributeTypeFactory()
-        self.attribute_value = AttributeValueFactory(attribute_type=self.attribute_type)
         self.resource_type = ResourceTypeFactory()
         self.technique = TechniqueFactory(
             assurance_goals=[self.assurance_goal],
-            categories=[self.category],
-            subcategories=[self.subcategory],
             tags=[self.tag],
         )
 
@@ -51,7 +40,7 @@ class ApiEndpointTestCase(APITestCase):
 
     def test_api_root(self):
         """Test that API root works"""
-        response = self.client.get("/api")
+        response = self.client.get("/api/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_assurance_goals_list(self):
@@ -59,15 +48,6 @@ class ApiEndpointTestCase(APITestCase):
         response = self.client.get("/api/assurance-goals")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_categories_list(self):
-        """Test the categories endpoint"""
-        response = self.client.get("/api/categories")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_subcategories_list(self):
-        """Test the subcategories endpoint"""
-        response = self.client.get("/api/subcategories")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_tags_list(self):
         """Test the tags endpoint"""
@@ -79,15 +59,6 @@ class ApiEndpointTestCase(APITestCase):
         response = self.client.get("/api/techniques")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_attribute_types_list(self):
-        """Test the attribute types endpoint"""
-        response = self.client.get("/api/attribute-types")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_attribute_values_list(self):
-        """Test the attribute values endpoint"""
-        response = self.client.get("/api/attribute-values")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_resource_types_list(self):
         """Test the resource types endpoint"""
@@ -100,23 +71,8 @@ class TechniqueAPITestCase(APITestCase):
 
     def setUp(self):
         self.assurance_goal = AssuranceGoalFactory(name="Explainability")
-        self.category = CategoryFactory(
-            name="Feature Analysis", assurance_goal=self.assurance_goal
-        )
-        self.subcategory = SubCategoryFactory(
-            name="Importance and Attribution", category=self.category
-        )
         self.tag1 = TagFactory(name="Machine Learning")
         self.tag2 = TagFactory(name="Neural Networks")
-
-        # Create attribute types and values
-        self.scope_type = AttributeTypeFactory(name="Scope")
-        self.global_value = AttributeValueFactory(
-            name="Global", attribute_type=self.scope_type
-        )
-        self.local_value = AttributeValueFactory(
-            name="Local", attribute_type=self.scope_type
-        )
 
         # Create resource types
         self.paper_type = ResourceTypeFactory(name="Paper", icon="paper")
@@ -126,20 +82,14 @@ class TechniqueAPITestCase(APITestCase):
         self.technique1 = TechniqueFactory(
             name="SHAP",
             description="SHapley Additive exPlanations",
-            model_dependency="Model-Agnostic",
             assurance_goals=[self.assurance_goal],
-            categories=[self.category],
-            subcategories=[self.subcategory],
             tags=[self.tag1],
         )
 
         self.technique2 = TechniqueFactory(
             name="Grad-CAM",
             description="Gradient-weighted Class Activation Mapping",
-            model_dependency="Model-Specific",
             assurance_goals=[self.assurance_goal],
-            categories=[self.category],
-            subcategories=[self.subcategory],
             tags=[self.tag1, self.tag2],
         )
 
@@ -148,6 +98,11 @@ class TechniqueAPITestCase(APITestCase):
 
         # Create a client
         self.client = APIClient()
+        
+        # Create a test user and authenticate
+        from django.contrib.auth.models import User
+        self.user = User.objects.create_user(username='testuser', password='testpass')
+        self.client.force_authenticate(user=self.user)
 
     def test_get_technique_list(self):
         """Test retrieving a list of techniques"""
@@ -176,17 +131,10 @@ class TechniqueAPITestCase(APITestCase):
         data = response.json()
         self.assertEqual(data["name"], self.technique1.name)
         self.assertEqual(data["description"], self.technique1.description)
-        self.assertEqual(data["model_dependency"], self.technique1.model_dependency)
 
         # Check relationships
         self.assertEqual(len(data["assurance_goals"]), 1)
         self.assertEqual(data["assurance_goals"][0]["name"], self.assurance_goal.name)
-
-        self.assertEqual(len(data["categories"]), 1)
-        self.assertEqual(data["categories"][0]["name"], self.category.name)
-
-        self.assertEqual(len(data["subcategories"]), 1)
-        self.assertEqual(data["subcategories"][0]["name"], self.subcategory.name)
 
         self.assertEqual(len(data["tags"]), 1)
         self.assertEqual(data["tags"][0]["name"], self.tag1.name)
@@ -197,17 +145,8 @@ class TechniqueAPITestCase(APITestCase):
         data = {
             "name": "New Test Technique",
             "description": "Description for new test technique",
-            "model_dependency": "Model-Agnostic",
             "assurance_goal_ids": [self.assurance_goal.id],
-            "category_ids": [self.category.id],
-            "subcategory_ids": [self.subcategory.id],
             "tag_ids": [self.tag1.id, self.tag2.id],
-            "attributes": [
-                {
-                    "attribute_type": self.scope_type.id,
-                    "attribute_value": self.global_value.id,
-                }
-            ],
             "resources": [
                 {
                     "resource_type": self.paper_type.id,
@@ -243,14 +182,10 @@ class TechniqueAPITestCase(APITestCase):
         self.assertEqual(
             created_technique.description, "Description for new test technique"
         )
-        self.assertEqual(created_technique.model_dependency, "Model-Agnostic")
 
         # Check relationships
         self.assertEqual(created_technique.assurance_goals.count(), 1)
-        self.assertEqual(created_technique.categories.count(), 1)
-        self.assertEqual(created_technique.subcategories.count(), 1)
         self.assertEqual(created_technique.tags.count(), 2)
-        self.assertEqual(created_technique.attribute_values.count(), 1)
         self.assertEqual(created_technique.resources.count(), 2)
         self.assertEqual(created_technique.example_use_cases.count(), 1)
         self.assertEqual(created_technique.limitations.count(), 2)
@@ -263,10 +198,7 @@ class TechniqueAPITestCase(APITestCase):
         data = {
             "name": "Updated SHAP",
             "description": "Updated description for SHAP",
-            "model_dependency": self.technique1.model_dependency,
             "assurance_goal_ids": [self.assurance_goal.id],
-            "category_ids": [self.category.id],
-            "subcategory_ids": [self.subcategory.id],
             "tag_ids": [self.tag1.id, self.tag2.id],  # Add a new tag
         }
 
@@ -332,30 +264,6 @@ class TechniqueAPITestCase(APITestCase):
         self.assertIn(self.technique2.name, technique_names)
         self.assertNotIn(fairness_technique.name, technique_names)
 
-    def test_filter_techniques_by_category(self):
-        """Test filtering techniques by category"""
-        # Create a new category and technique for testing filters
-        new_category = CategoryFactory(
-            name="New Category", assurance_goal=self.assurance_goal
-        )
-        new_technique = TechniqueFactory(
-            name="New Technique",
-            categories=[new_category],
-            assurance_goals=[self.assurance_goal],
-        )
-
-        # Filter by original category
-        url = f"{self.techniques_url}?categories={self.category.id}"
-        response = self.client.get(url)
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        data = response.json()
-
-        # Should only include techniques with this category
-        technique_names = [t["name"] for t in data["results"]]
-        self.assertIn(self.technique1.name, technique_names)
-        self.assertIn(self.technique2.name, technique_names)
-        self.assertNotIn(new_technique.name, technique_names)
 
     def test_filter_techniques_by_search(self):
         """Test searching techniques by name or description"""
@@ -381,19 +289,6 @@ class TechniqueAPITestCase(APITestCase):
         technique_names = [t["name"] for t in data["results"]]
         self.assertIn(self.technique2.name, technique_names)
 
-    def test_filter_techniques_by_model_dependency(self):
-        """Test filtering techniques by model dependency"""
-        url = f"{self.techniques_url}?model_dependency=Model-Agnostic"
-        response = self.client.get(url)
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        data = response.json()
-
-        # Should only include techniques with this model dependency
-        self.assertGreaterEqual(data["count"], 1)
-        technique_names = [t["name"] for t in data["results"]]
-        self.assertIn(self.technique1.name, technique_names)
-        self.assertNotIn(self.technique2.name, technique_names)
 
     def test_filter_techniques_by_tag(self):
         """Test filtering techniques by tag"""
@@ -440,27 +335,6 @@ class TechniqueAPITestCase(APITestCase):
             data = response.json()
             self.assertIn("results", data)
 
-    def test_relation_specific_endpoints(self):
-        """Test the endpoints for filtering categories and subcategories by parent"""
-        # Test categories by assurance goal
-        url = f"/api/categories-by-goal/{self.assurance_goal.id}"
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        data = response.json()
-
-        # Should include the category created in setup
-        category_ids = [c["id"] for c in data]
-        self.assertIn(self.category.id, category_ids)
-
-        # Test subcategories by category
-        url = f"/api/subcategories-by-category/{self.category.id}"
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        data = response.json()
-
-        # Should include the subcategory created in setup
-        subcategory_ids = [sc["id"] for sc in data]
-        self.assertIn(self.subcategory.id, subcategory_ids)
 
     def test_debug_endpoint(self):
         """Test that the debug endpoint works in debug mode"""
@@ -532,16 +406,8 @@ class TechniqueAPITestCase(APITestCase):
         technique = TechniqueFactory(
             name="Comprehensive Test Technique",
             description="A test technique with all relationships",
-            model_dependency="Model-Agnostic",
             assurance_goals=[self.assurance_goal],
-            categories=[self.category],
-            subcategories=[self.subcategory],
             tags=[self.tag1, self.tag2],
-        )
-
-        # Add attribute values, resources, use cases, and limitations
-        AttributeValueFactory(
-            name="Test Value", attribute_type=self.scope_type, technique=technique
         )
 
         # Add a resource
@@ -589,18 +455,8 @@ class TechniqueAPITestCase(APITestCase):
         technique = TechniqueFactory(
             name="Detail Test Technique",
             description="A test technique for detail view optimization",
-            model_dependency="Model-Agnostic",
             assurance_goals=[self.assurance_goal],
-            categories=[self.category],
-            subcategories=[self.subcategory],
             tags=[self.tag1, self.tag2],
-        )
-
-        # Add attribute values, resources, use cases, and limitations
-        AttributeValueFactory(
-            name="Detail Test Value",
-            attribute_type=self.scope_type,
-            technique=technique,
         )
 
         technique.resources.create(
@@ -642,11 +498,9 @@ class PostgreSQLTestCase(APITestCase):
     def setUp(self):
         # Create basic test data
         self.assurance_goal = AssuranceGoalFactory()
-        self.category = CategoryFactory(assurance_goal=self.assurance_goal)
         self.tag = TagFactory()
         self.technique = TechniqueFactory(
             assurance_goals=[self.assurance_goal],
-            categories=[self.category],
             tags=[self.tag],
         )
         self.client = APIClient()
@@ -692,13 +546,9 @@ class AuthenticationTestCase(APITestCase):
     def setUp(self):
         # Create base objects for relationships
         self.assurance_goal = AssuranceGoalFactory()
-        self.category = CategoryFactory(assurance_goal=self.assurance_goal)
-        self.subcategory = SubCategoryFactory(category=self.category)
         self.tag = TagFactory()
         self.technique = TechniqueFactory(
             assurance_goals=[self.assurance_goal],
-            categories=[self.category],
-            subcategories=[self.subcategory],
             tags=[self.tag],
         )
 
@@ -706,10 +556,7 @@ class AuthenticationTestCase(APITestCase):
         self.techniques_url = "/api/techniques"
         self.technique_detail_url = f"{self.techniques_url}/{self.technique.id}"
         self.goals_url = "/api/assurance-goals"
-        self.categories_url = "/api/categories"
-        self.subcategories_url = "/api/subcategories"
         self.tags_url = "/api/tags"
-        # Skip attribute types due to serializer issues
         self.resource_types_url = "/api/resource-types"
 
         # Create a test user
@@ -731,22 +578,13 @@ class AuthenticationTestCase(APITestCase):
         self.technique_data = {
             "name": "Auth Test Technique",
             "description": "Description for auth test technique",
-            "model_dependency": "Model-Agnostic",
             "assurance_goal_ids": [self.assurance_goal.id],
-            "category_ids": [self.category.id],
-            "subcategory_ids": [self.subcategory.id],
             "tag_ids": [self.tag.id],
         }
 
         self.goal_data = {
             "name": "Auth Test Goal",
             "description": "Goal created in auth test",
-        }
-
-        self.category_data = {
-            "name": "Auth Test Category",
-            "description": "Category created in auth test",
-            "assurance_goal": self.assurance_goal.id,
         }
 
         self.tag_data = {"name": "auth-test-tag"}
@@ -757,8 +595,6 @@ class AuthenticationTestCase(APITestCase):
         endpoints = [
             self.techniques_url,
             self.goals_url,
-            self.categories_url,
-            self.subcategories_url,
             self.tags_url,
             self.resource_types_url,
         ]
@@ -779,20 +615,6 @@ class AuthenticationTestCase(APITestCase):
             "Anonymous user could not access technique detail endpoint",
         )
 
-        # Test filtering endpoints
-        response = self.client.get(f"/api/categories-by-goal/{self.assurance_goal.id}")
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_200_OK,
-            "Anonymous user could not access categories-by-goal endpoint",
-        )
-
-        response = self.client.get(f"/api/subcategories-by-category/{self.category.id}")
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_200_OK,
-            "Anonymous user could not access subcategories-by-category endpoint",
-        )
 
     def test_anonymous_write_operations_fail(self):
         """Test that anonymous users cannot perform write operations"""
@@ -800,7 +622,6 @@ class AuthenticationTestCase(APITestCase):
         post_data = [
             (self.techniques_url, self.technique_data),
             (self.goals_url, self.goal_data),
-            (self.categories_url, self.category_data),
             (self.tags_url, self.tag_data),
         ]
 
@@ -819,7 +640,6 @@ class AuthenticationTestCase(APITestCase):
         put_data = [
             (self.technique_detail_url, self.technique_data),
             (f"{self.goals_url}/{self.assurance_goal.id}", self.goal_data),
-            (f"{self.categories_url}/{self.category.id}", self.category_data),
             (f"{self.tags_url}/{self.tag.id}", self.tag_data),
         ]
 
@@ -849,7 +669,6 @@ class AuthenticationTestCase(APITestCase):
         delete_urls = [
             self.technique_detail_url,
             f"{self.goals_url}/{self.assurance_goal.id}",
-            f"{self.categories_url}/{self.category.id}",
             f"{self.tags_url}/{self.tag.id}",
         ]
 
@@ -870,7 +689,6 @@ class AuthenticationTestCase(APITestCase):
         post_data = [
             (self.techniques_url, self.technique_data),
             (self.goals_url, self.goal_data),
-            (self.categories_url, self.category_data),
             (self.tags_url, self.tag_data),
         ]
 
@@ -893,9 +711,6 @@ class AuthenticationTestCase(APITestCase):
         self.assertTrue(goals.exists(), "Goal was not created")
         new_goal_id = goals.first().id
 
-        categories = Category.objects.filter(name=self.category_data["name"])
-        self.assertTrue(categories.exists(), "Category was not created")
-        new_category_id = categories.first().id
 
         tags = Tag.objects.filter(name=self.tag_data["name"])
         self.assertTrue(tags.exists(), "Tag was not created")
@@ -908,10 +723,6 @@ class AuthenticationTestCase(APITestCase):
                 {"name": "Updated Auth Test Technique"},
             ),
             (f"{self.goals_url}/{new_goal_id}", {"name": "Updated Auth Test Goal"}),
-            (
-                f"{self.categories_url}/{new_category_id}",
-                {"name": "Updated Auth Test Category"},
-            ),
             (f"{self.tags_url}/{new_tag_id}", {"name": "updated-auth-test-tag"}),
         ]
 
@@ -929,7 +740,6 @@ class AuthenticationTestCase(APITestCase):
         delete_urls = [
             f"{self.techniques_url}/{new_technique_id}",
             f"{self.goals_url}/{new_goal_id}",
-            f"{self.categories_url}/{new_category_id}",
             f"{self.tags_url}/{new_tag_id}",
         ]
 

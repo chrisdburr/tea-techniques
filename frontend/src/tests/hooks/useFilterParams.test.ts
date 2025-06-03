@@ -25,7 +25,7 @@ describe('useFilterParams', () => {
   it('initializes with default values', () => {
     const initialFilters = {
       search: '',
-      category: 'all',
+      tags: 'all',
       assurance_goal: 'all',
     };
 
@@ -41,7 +41,7 @@ describe('useFilterParams', () => {
   it('updates a single filter', () => {
     const initialFilters = {
       search: '',
-      category: 'all',
+      tags: 'all',
       assurance_goal: 'all',
     };
 
@@ -58,7 +58,7 @@ describe('useFilterParams', () => {
     const router = require('next/navigation').useRouter();
     const initialFilters = {
       search: '',
-      category: 'all',
+      tags: 'all',
       assurance_goal: 'all',
     };
 
@@ -67,7 +67,7 @@ describe('useFilterParams', () => {
     // Update filters
     act(() => {
       result.current.setFilter('search', 'test');
-      result.current.setFilter('category', '5');
+      result.current.setFilter('tags', '5');
       result.current.setFilter('assurance_goal', '3');
     });
 
@@ -81,7 +81,7 @@ describe('useFilterParams', () => {
       expect.stringContaining('/techniques?')
     );
     expect(router.push).toHaveBeenCalledWith(
-      expect.stringContaining('categories=5')
+      expect.stringContaining('tags=5')
     );
     expect(router.push).toHaveBeenCalledWith(
       expect.stringContaining('assurance_goals=3')
@@ -98,7 +98,7 @@ describe('useFilterParams', () => {
     const router = require('next/navigation').useRouter();
     const initialFilters = {
       search: '',
-      category: 'all',
+      tags: 'all',
       assurance_goal: 'all',
     };
 
@@ -107,7 +107,7 @@ describe('useFilterParams', () => {
     // First update some filters
     act(() => {
       result.current.setFilter('search', 'test query');
-      result.current.setFilter('category', '5');
+      result.current.setFilter('tags', '5');
     });
 
     // Then reset
@@ -123,7 +123,7 @@ describe('useFilterParams', () => {
     const router = require('next/navigation').useRouter();
     const initialFilters = {
       search: 'test',
-      category: '5',
+      tags: '5',
       assurance_goal: '3',
     };
 

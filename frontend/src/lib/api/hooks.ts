@@ -5,13 +5,9 @@ import { logApiError } from "@/lib/api/errorUtils";
 import type {
 	Technique,
 	TechniqueFormData,
-	Category,
-	SubCategory,
 	AssuranceGoal,
 	APIResponse,
 	Tag,
-	AttributeType,
-	AttributeValue,
 	ResourceType,
 } from "@/lib/types";
 
@@ -19,7 +15,11 @@ interface QueryParams {
 	search?: string;
 	assurance_goal?: string;
 	assurance_goals?: string | string[];
-	category?: string;
+	tags?: string | string[];
+	complexity_min?: string;
+	complexity_max?: string;
+	computational_cost_min?: string;
+	computational_cost_max?: string;
 	[key: string]: string | string[] | undefined;
 }
 
@@ -95,58 +95,6 @@ export const useAssuranceGoals = () => {
 	});
 };
 
-/**
- * Hook for fetching categories, optionally filtered by assurance goal
- * 
- * @param assuranceGoalId - Optional ID to filter categories by assurance goal
- * @returns Query object with categories data
- */
-export const useCategories = (assuranceGoalId?: number) => {
-	// Create params object for axios
-	const params: Record<string, string | number> = {};
-	if (assuranceGoalId) {
-		params.assurance_goal = assuranceGoalId;
-	}
-
-	return useQuery({
-		queryKey: ["categories", assuranceGoalId],
-		queryFn: async () => {
-			try {
-				return await fetchAPI<APIResponse<Category>>('/api/categories', params);
-			} catch (error: unknown) {
-				logApiError('useCategories', error);
-				throw error;
-			}
-		},
-	});
-};
-
-/**
- * Hook for fetching subcategories for a specific category
- * 
- * @param categoryId - Optional ID to filter subcategories by category
- * @returns Query object with subcategories data
- */
-export const useSubCategories = (categoryId?: number) => {
-	// Create params object for axios
-	const params: Record<string, string | number> = {};
-	if (categoryId) {
-		params.category = categoryId;
-	}
-
-	return useQuery({
-		queryKey: ["subcategories", categoryId],
-		queryFn: async () => {
-			try {
-				return await fetchAPI<APIResponse<SubCategory>>('/api/subcategories', params);
-			} catch (error: unknown) {
-				logApiError('useSubCategories', error);
-				throw error;
-			}
-		},
-		enabled: !!categoryId, // Only run if categoryId is provided
-	});
-};
 
 /**
  * Hook for fetching all tags
@@ -167,41 +115,6 @@ export const useTags = () => {
 	});
 };
 
-// New hooks for the flexible attribute system
-export const useAttributeTypes = () => {
-	return useQuery({
-		queryKey: ["attribute-types"],
-		queryFn: async () => {
-			try {
-				return await fetchAPI<APIResponse<AttributeType>>('/api/attribute-types');
-			} catch (error: unknown) {
-				logApiError('useAttributeTypes', error);
-				throw error;
-			}
-		},
-	});
-};
-
-export const useAttributeValues = (attributeTypeId?: number) => {
-	// Create params object for axios
-	const params: Record<string, string | number> = {};
-	if (attributeTypeId) {
-		params.attribute_type = attributeTypeId;
-	}
-
-	return useQuery({
-		queryKey: ["attribute-values", attributeTypeId],
-		queryFn: async () => {
-			try {
-				return await fetchAPI<APIResponse<AttributeValue>>('/api/attribute-values', params);
-			} catch (error: unknown) {
-				logApiError('useAttributeValues', error);
-				throw error;
-			}
-		},
-		enabled: !!attributeTypeId, // Only run if attributeTypeId is provided
-	});
-};
 
 // New hooks for the resource system
 export const useResourceTypes = () => {

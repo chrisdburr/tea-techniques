@@ -62,7 +62,7 @@ describe('TechniqueForm', () => {
     // Check that required fields are present
     expect(screen.getByLabelText(/Technique Name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Description/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Model Dependency/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Complexity Rating/i)).toBeInTheDocument();
     
     // Check that submit button is present
     expect(screen.getByText('Create Technique')).toBeInTheDocument();
@@ -106,9 +106,9 @@ describe('TechniqueForm', () => {
     const assuranceGoalSelect = screen.getByLabelText(/Assurance Goals/i);
     await user.selectOptions(assuranceGoalSelect, ['1']); // Select 'Accuracy'
     
-    // Select a category
-    const categorySelect = screen.getByLabelText(/Categories/i);
-    await user.selectOptions(categorySelect, ['1']); // Select 'Testing'
+    // Select tags
+    const tagsSelect = screen.getByLabelText(/Tags/i);
+    await user.selectOptions(tagsSelect, ['1']); // Select 'ML'
     
     // Submit the form
     await user.click(screen.getByText('Create Technique'));
@@ -198,7 +198,6 @@ describe('TechniqueForm', () => {
     
     await waitFor(() => {
       expect(screen.getByText('At least one assurance goal is required')).toBeInTheDocument();
-      expect(screen.getByText('At least one category is required')).toBeInTheDocument();
     });
   });
 
@@ -226,9 +225,9 @@ describe('TechniqueForm', () => {
     const assuranceGoalSelect = screen.getByLabelText(/Assurance Goals/i);
     await user.selectOptions(assuranceGoalSelect, ['1']); // Select 'Accuracy'
     
-    // Select a category
-    const categorySelect = screen.getByLabelText(/Categories/i);
-    await user.selectOptions(categorySelect, ['1']); // Select 'Testing'
+    // Select tags
+    const tagsSelect = screen.getByLabelText(/Tags/i);
+    await user.selectOptions(tagsSelect, ['1']); // Select 'ML'
     
     // Submit the form
     await user.click(screen.getByText('Create Technique'));

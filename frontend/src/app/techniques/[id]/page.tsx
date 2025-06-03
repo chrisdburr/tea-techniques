@@ -4,7 +4,7 @@
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import MainLayout from "@/components/layout/MainLayout";
-import { useTechniqueDetail } from "@/lib/api/hooks";
+import { useTechniqueDetail, useMultipleTechniqueNames } from "@/lib/api/hooks";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -301,10 +301,27 @@ function RelatedTechniques({
 }: { 
 	techniqueIds: number[];
 }) {
-	// In a real implementation, this would fetch technique details
-	// For now, we'll just show a list of technique IDs as links
+	const { techniques, isLoading, isError } = useMultipleTechniqueNames(techniqueIds);
+
 	if (!techniqueIds || techniqueIds.length === 0) {
 		return <p className="text-muted-foreground">No related techniques specified.</p>;
+	}
+
+	if (isLoading) {
+		return (
+			<div className="flex items-center gap-2">
+				<Loader2 className="h-4 w-4 animate-spin" />
+				<span className="text-sm text-muted-foreground">Loading related techniques...</span>
+			</div>
+		);
+	}
+
+	if (isError) {
+		return (
+			<p className="text-sm text-muted-foreground">
+				Error loading related techniques. They may not exist or you may not have permission to view them.
+			</p>
+		);
 	}
 
 	return (
@@ -313,15 +330,15 @@ function RelatedTechniques({
 				These techniques are related or complementary to this one:
 			</p>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-				{techniqueIds.map((id) => (
+				{techniques.map((technique) => (
 					<Link
-						key={id}
-						href={`/techniques/${id}`}
+						key={technique.id}
+						href={`/techniques/${technique.id}`}
 						className="flex items-center gap-2 p-3 rounded-md border hover:border-primary transition-colors"
 					>
 						<Layers className="h-4 w-4 text-primary" />
 						<span className="text-sm font-medium">
-							View Technique #{id}
+							{technique.name}
 						</span>
 						<ArrowRight className="h-4 w-4 ml-auto" />
 					</Link>
@@ -626,25 +643,64 @@ export default function TechniqueDetailPage() {
 										</h3>
 										{Object.entries(groupedTags)
 											.filter(([prefix]) => !['applicable-models', 'data-type', 'lifecycle-stage'].includes(prefix))
-											.map(([prefix, tags]) => (
-												<div key={prefix} className="space-y-1">
-													<h4 className="text-xs text-muted-foreground capitalize">
-														{formatTagDisplay(prefix)}
-													</h4>
-													<div className="flex flex-wrap gap-1.5">
-														{tags.map((tag) => (
-															<Badge
-																key={tag.id}
-																variant="secondary"
-																className="text-xs flex items-center gap-1"
-															>
-																<Tag className="h-3 w-3" />
-																<span>{getTagValue(tag.name)}</span>
-															</Badge>
-														))}
+											.map(([prefix, tags]) => {
+												// Special handling for assurance-goal-category to show subcategories only
+												if (prefix === 'assurance-goal-category') {
+													// Filter out tags that only have the parent goal (no subcategories)
+													const subcategoryTags = tags.filter(tag => {
+														const parts = tag.name.split('/');
+														return parts.length > 2; // prefix/goal/subcategory (at least 3 parts)
+													});
+													
+													if (subcategoryTags.length === 0) return null;
+													
+													return (
+														<div key={prefix} className="space-y-1">
+															<h4 className="text-xs text-muted-foreground">
+																Assurance Goal Sub-Categories
+															</h4>
+															<div className="flex flex-wrap gap-1.5">
+																{subcategoryTags.map((tag) => {
+																	// Extract subcategory parts (everything after prefix/goal/)
+																	const parts = tag.name.split('/');
+																	const subcategories = parts.slice(2).join('/');
+																	return (
+																		<Badge
+																			key={tag.id}
+																			variant="secondary"
+																			className="text-xs flex items-center gap-1"
+																		>
+																			<Tag className="h-3 w-3" />
+																			<span>{formatTagDisplay(subcategories)}</span>
+																		</Badge>
+																	);
+																})}
+															</div>
+														</div>
+													);
+												}
+												
+												// Standard handling for other tag prefixes
+												return (
+													<div key={prefix} className="space-y-1">
+														<h4 className="text-xs text-muted-foreground">
+															{formatTagDisplay(prefix)}
+														</h4>
+														<div className="flex flex-wrap gap-1.5">
+															{tags.map((tag) => (
+																<Badge
+																	key={tag.id}
+																	variant="secondary"
+																	className="text-xs flex items-center gap-1"
+																>
+																	<Tag className="h-3 w-3" />
+																	<span>{formatTagDisplay(getTagValue(tag.name))}</span>
+																</Badge>
+															))}
+														</div>
 													</div>
-												</div>
-											))}
+												);
+											})}
 									</div>
 								)}
 							</CardContent>

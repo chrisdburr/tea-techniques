@@ -19,21 +19,12 @@ import { useFilterParams } from "@/lib/hooks/useFilterParams";
 import TechniquesSidebar, {
 	FilterState,
 } from "@/components/technique/TechniquesSidebar";
+import TechniqueCard from "@/components/technique/TechniqueCard";
 
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/ui/pagination";
 import { Loader2, Filter } from "lucide-react";
 import type { Technique } from "@/lib/types";
-import { formatTagDisplay, getApplicableModels, getDataTypes } from "@/lib/utils";
-import GoalIcon from "./GoalIcon";
+import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 // Number of items per page - must match backend setting (20)
@@ -42,101 +33,6 @@ const PAGE_SIZE = 20;
 // Default filter values structure
 // Used for reference when resetting filters
 
-// Extracted TechniqueCard component with improved responsive design
-const TechniqueCard = ({
-	technique,
-}: {
-	technique: Technique;
-}): JSX.Element => {
-	// Get key tags for display
-	const applicableModels = getApplicableModels(technique.tags);
-	const dataTypes = getDataTypes(technique.tags);
-	
-	// Create a display text from key tags
-	const tagDisplayText = [
-		...applicableModels.map(m => formatTagDisplay(m)),
-		...dataTypes.map(d => formatTagDisplay(d))
-	].slice(0, 3).join(" • ") || "No tags";
-
-	// Format the title to remove parenthetical content if it's too long
-	const formatTitle = (title: string) => {
-		// If the title is potentially too long (over ~35 chars), try to simplify it
-		if (title.length > 35 && title.includes("(")) {
-			// Return everything before the first parenthesis, trimmed
-			return title.split("(")[0].trim();
-		}
-		return title;
-	};
-
-	// Truncate description for display and add ellipsis if needed
-	const truncateDescription = (description: string, maxLength = 110) => {
-		if (description.length <= maxLength) return description;
-
-		// Find the last space before the maxLength to avoid cutting words
-		let cutoff = description.lastIndexOf(" ", maxLength);
-		if (cutoff === -1) cutoff = maxLength;
-
-		return description.substring(0, cutoff) + "...";
-	};
-
-	// Build full tag text for hover tooltip
-	const fullTagText = technique.tags
-		.map(tag => formatTagDisplay(tag.name, true))
-		.join(", ") || "No tags";
-
-	return (
-		<Card className="h-full flex flex-col">
-			<CardHeader className="pb-2 px-4 pt-4 sm:px-6 sm:pt-6">
-				<CardTitle
-					className="line-clamp-1 text-base sm:text-lg"
-					title={technique.name}
-				>
-					{formatTitle(technique.name)}
-				</CardTitle>
-				<CardDescription
-					className="text-xs sm:text-sm text-muted-foreground line-clamp-1"
-					title={fullTagText}
-				>
-					{tagDisplayText}
-				</CardDescription>
-			</CardHeader>
-
-			<CardContent className="pt-0 pb-0 px-4 sm:px-6 flex-grow flex flex-col">
-				<p
-					className="text-xs sm:text-sm text-foreground mb-3 h-8 sm:h-10 overflow-hidden"
-					title={technique.description}
-				>
-					{truncateDescription(technique.description, 90)}
-				</p>
-
-				<div className="flex flex-wrap items-center gap-1 sm:gap-2 mt-auto">
-					{technique.assurance_goals.map((goal) => (
-						<div
-							key={goal.id}
-							className="p-1 sm:p-1.5 rounded-full flex items-center bg-secondary"
-							title={goal.name}
-						>
-							<GoalIcon goalName={goal.name} size={14} />
-						</div>
-					))}
-				</div>
-			</CardContent>
-
-			<CardFooter className="pt-3 pb-4 px-4 sm:px-6 sm:pt-4">
-				<Button
-					asChild
-					variant="default"
-					size="sm"
-					className="w-full text-xs sm:text-sm"
-				>
-					<Link href={`/techniques/${technique.id}`}>
-						View Details
-					</Link>
-				</Button>
-			</CardFooter>
-		</Card>
-	);
-};
 
 // Define EmptyStateComponent
 const EmptyStateComponent = (): JSX.Element => {

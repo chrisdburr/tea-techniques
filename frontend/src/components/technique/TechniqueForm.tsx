@@ -11,7 +11,8 @@ import {
   useTechniques,
 } from "@/lib/api/hooks";
 import {
-  TechniqueFormData
+  TechniqueFormData,
+  Technique
 } from "@/lib/types";
 import { useApiError } from "@/lib/hooks/useApiError";
 import { SelectField } from "@/components/common/SelectField";
@@ -305,9 +306,9 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
     label: tag.name,
   })) || [];
 
-  const relatedTechniqueOptions = techniquesData?.results
-    ?.filter(t => t.id !== id) // Don't show current technique as option
-    ?.map(technique => ({
+  const relatedTechniqueOptions = (techniquesData as any)?.results
+    ?.filter((t: Technique) => t.id !== id) // Don't show current technique as option
+    ?.map((technique: Technique) => ({
       value: technique.id.toString(),
       label: technique.name,
     })) || [];
@@ -563,7 +564,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                           size={6}
                           value={field.value.map(id => id.toString())}
                         >
-                          {relatedTechniqueOptions.map(option => (
+                          {relatedTechniqueOptions.map((option: any) => (
                             <option key={option.value} value={option.value}>
                               {option.label}
                             </option>

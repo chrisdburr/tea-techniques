@@ -1,1 +1,1 @@
-- [ ] Draft plan for schema and dataset overhaul
+- Implement glossary and tooltips (needs research to ensure good approach)

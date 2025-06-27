@@ -4,9 +4,11 @@ from __future__ import annotations
 
 from rest_framework import viewsets, filters, status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.request import Request
 from rest_framework.permissions import BasePermission, IsAuthenticated, AllowAny
+
+from ..permissions import ReadOnlyOrModeratorPermission, AdminOnlyWritePermission
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db import connection
 import logging
@@ -32,6 +34,7 @@ logger = logging.getLogger(__name__)
 class AssuranceGoalsViewSet(viewsets.ModelViewSet):
     queryset = AssuranceGoal.objects.all()
     serializer_class = AssuranceGoalSerializer
+    permission_classes = [AdminOnlyWritePermission]
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
@@ -41,21 +44,11 @@ class AssuranceGoalsViewSet(viewsets.ModelViewSet):
     search_fields = ["name", "description"]
     ordering_fields = ["id", "name"]
 
-    def get_permissions(self) -> List[BasePermission]:
-        """
-        Customize permissions based on action:
-        - list and retrieve are allowed for any user (even unauthenticated)
-        - create, update, delete require authentication
-        """
-        if self.action in ["create", "update", "partial_update", "destroy"]:
-            return [IsAuthenticated()]
-        # Default permission for list and retrieve
-        return [AllowAny()]
-
 
 class TagsViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    permission_classes = [AdminOnlyWritePermission]
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
@@ -65,23 +58,18 @@ class TagsViewSet(viewsets.ModelViewSet):
     search_fields = ["name"]
     ordering_fields = ["id", "name"]
 
-    def get_permissions(self) -> List[BasePermission]:
-        """Require authentication for write operations"""
-        if self.action in ["create", "update", "partial_update", "destroy"]:
-            return [IsAuthenticated()]
-        return [AllowAny()]
-
 
 class TechniquesViewSet(viewsets.ModelViewSet):
     """
     ViewSet for Techniques that provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
 
-    Authentication is required for create, update, and delete operations.
+    Uses role-based permissions: read access for all, write access for editors/admins.
     """
 
     queryset = Technique.objects.all()
     serializer_class = TechniqueSerializer
+    permission_classes = [ReadOnlyOrModeratorPermission]
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
@@ -95,17 +83,6 @@ class TechniquesViewSet(viewsets.ModelViewSet):
     search_fields = ["name", "description"]
     ordering_fields = ["id", "name"]
 
-    def get_permissions(self) -> List[BasePermission]:
-        """
-        Customize permissions based on action:
-        - list and retrieve are allowed for any user (even unauthenticated)
-        - create, update, delete require authentication
-        """
-        if self.action in ["create", "update", "partial_update", "destroy"]:
-            return [IsAuthenticated()]
-        # Default permission for list and retrieve
-        return [AllowAny()]
-
     def get_serializer_class(self) -> Type[TechniqueSerializer]:
         """Return appropriate serializer class based on action."""
         return TechniqueSerializer
@@ -116,8 +93,8 @@ class TechniquesViewSet(viewsets.ModelViewSet):
             "assurance_goals",
             "tags",
             "related_techniques",
-            "resources",
-            "example_use_cases",
+            "resources__resource_type",  # Optimize nested FK lookup
+            "example_use_cases__assurance_goal",  # Optimize nested FK lookup
             "limitations",
         )
 
@@ -154,6 +131,7 @@ class TechniquesViewSet(viewsets.ModelViewSet):
 class ResourceTypesViewSet(viewsets.ModelViewSet):
     queryset = ResourceType.objects.all()
     serializer_class = ResourceTypeSerializer
+    permission_classes = [AdminOnlyWritePermission]
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
@@ -163,14 +141,9 @@ class ResourceTypesViewSet(viewsets.ModelViewSet):
     search_fields = ["name"]
     ordering_fields = ["id", "name"]
 
-    def get_permissions(self) -> List[BasePermission]:
-        """Require authentication for write operations"""
-        if self.action in ["create", "update", "partial_update", "destroy"]:
-            return [IsAuthenticated()]
-        return [AllowAny()]
-
 
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def health_check(request: Request) -> Response:
     """
     Simple health check endpoint that verifies the API is running

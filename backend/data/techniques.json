@@ -298,15 +298,16 @@
   {
     "id": 5,
     "name": "Integrated Gradients",
-    "description": "Integrated Gradients explains predictions by calculating how much each input feature contributes to the final output. It works by gradually changing each feature from a neutral starting point (baseline) to its actual value, measuring the model's sensitivity to these changes step by step. This produces importance scores showing which features most influenced the prediction.",
+    "description": "Integrated Gradients is an attribution technique that explains a model's prediction by quantifying the contribution of each input feature. It works by accumulating gradients along a straight path from a user-defined baseline input (e.g., a black image or an all-zero vector) to the actual input. This path integral ensures that the attributions satisfy fundamental axioms like completeness (attributions sum up to the difference between the prediction and the baseline prediction) and sensitivity (non-zero attributions for features that change the prediction). The output is a set of importance scores, often visualised as heatmaps, indicating which parts of the input were most influential for the model's decision.",
     "assurance_goals": ["Explainability"],
     "tags": [
       "applicable-models/neural-network",
       "assurance-goal-category/explainability",
       "data-requirements/labelled-data",
       "data-requirements/reference-dataset",
-      "data-type/tabular",
+      "data-type/any",
       "evidence-type/quantitative-metric",
+      "evidence-type/visualization",
       "expertise-needed/ml-engineering",
       "expertise-needed/statistics",
       "explanatory-scope/local",
@@ -315,13 +316,26 @@
     ],
     "example_use_cases": [
       {
-        "description": "Understanding pixel contributions in image classification with deep neural networks.",
+        "description": "Analysing a medical image classification model to understand which specific pixels or regions in an X-ray image contribute most to a diagnosis of pneumonia, ensuring the model focuses on relevant pathological features rather than artifacts.",
+        "goal": "Explainability"
+      },
+      {
+        "description": "Explaining the sentiment prediction of a natural language processing model by highlighting which words or phrases in a review most strongly influenced its classification as positive or negative, revealing the model's interpretative focus.",
         "goal": "Explainability"
       }
     ],
     "limitations": [
       {
-        "description": "Requires a meaningful baseline input; results can be sensitive to the choice of baseline and model must be differentiable, limiting use with non-differentiable components."
+        "description": "Requires a carefully chosen and meaningful baseline input; an inappropriate baseline can lead to misleading or uninformative attributions."
+      },
+      {
+        "description": "The model must be differentiable, which limits its direct application to models with non-differentiable components or discrete inputs without workarounds."
+      },
+      {
+        "description": "Computationally more expensive than simple gradient-based methods, as it requires multiple gradient calculations along the integration path."
+      },
+      {
+        "description": "While satisfying completeness, the attributions can sometimes be visually noisy or difficult for humans to interpret intuitively, especially for complex inputs."
       }
     ],
     "resources": [
@@ -368,7 +382,7 @@
   {
     "id": 6,
     "name": "DeepLIFT",
-    "description": "DeepLIFT assigns credit (or blame) to each input feature by comparing a neuron's activation to a reference (baseline) and tracking the difference backward through the network. It attributes the change in the output to changes in each input feature relative to what the output would be at the reference input.",
+    "description": "DeepLIFT (Deep Learning Important FeaTures) explains neural network predictions by decomposing the difference between the actual output and a reference output back to individual input features. It compares each neuron's activation to a reference activation (typically from a baseline input like all zeros or the dataset mean) and propagates these differences backwards through the network using chain rule modifications. Unlike gradient-based methods, DeepLIFT satisfies the sensitivity property (zero input gets zero attribution) and provides more stable attributions by using discrete differences rather than gradients.",
     "assurance_goals": ["Explainability"],
     "tags": [
       "applicable-models/neural-network",
@@ -412,16 +426,6 @@
         "title": "Tutorial A3: DeepLIFT/SHAP \u2014 tangermeme v0.1.0 documentation",
         "url": "https://tangermeme.readthedocs.io/en/latest/tutorials/Tutorial_A3_Deep_LIFT_SHAP.html",
         "source_type": "tutorial"
-      },
-      {
-        "title": "SHAP, Deep LIFT and so on through Captum Integration - PyTorch ...",
-        "url": "https://pytorch-tabular.readthedocs.io/en/latest/tutorials/14-Explainability/",
-        "source_type": "tutorial"
-      },
-      {
-        "title": "iNNvestigate Documentation",
-        "url": "https://innvestigate.readthedocs.io/_/downloads/en/latest/pdf/",
-        "source_type": "documentation"
       }
     ],
     "complexity_rating": 4,
@@ -776,28 +780,48 @@
   {
     "id": 12,
     "name": "Local Interpretable Model-Agnostic Explanations (LIME)",
-    "description": "LIME explains an individual prediction by training a simple surrogate model around that specific data point. It perturbs the input data point to create synthetic data, gets the complex model's predictions for these new points, and then fits an interpretable model (like a small linear model) on this local dataset. The surrogate's parameters (or rules) then highlight which features of the original data point influenced the prediction the most in that locality.",
-    "assurance_goals": ["Explainability"],
+    "description": "LIME (Local Interpretable Model-agnostic Explanations) explains individual predictions by approximating the complex model's behaviour in a small neighbourhood around a specific instance. It works by creating perturbed versions of the input (e.g., removing words from text, changing pixel values in images, or varying feature values), obtaining the model's predictions for these variations, and training a simple interpretable model (typically linear regression) weighted by proximity to the original instance. The coefficients of this local surrogate model reveal which features most influenced the specific prediction.",
+    "assurance_goals": ["Explainability", "Transparency"],
     "tags": [
       "applicable-models/agnostic",
       "assurance-goal-category/explainability",
-      "data-requirements/access-to-training-data",
-      "data-type/tabular",
+      "assurance-goal-category/transparency",
+      "data-requirements/no-special-requirements",
+      "data-type/any",
       "evidence-type/qualitative-report",
+      "evidence-type/quantitative-metric",
       "expertise-needed/ml-engineering",
       "explanatory-scope/local",
       "lifecycle-stage/model-development",
+      "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
     "example_use_cases": [
       {
-        "description": "Explaining why a customer was denied a loan by approximating the model's decision locally.",
+        "description": "Explaining why a specific patient received a high-risk diagnosis by showing which symptoms (fever, blood pressure, age) contributed most to the prediction, helping doctors validate the AI's reasoning.",
         "goal": "Explainability"
+      },
+      {
+        "description": "Debugging a text classifier's misclassification of a movie review by highlighting which words (e.g., sarcastic phrases) confused the model, enabling targeted model improvements.",
+        "goal": "Explainability"
+      },
+      {
+        "description": "Providing transparent explanations to customers about automated decisions in insurance claims, showing which claim features influenced approval or denial to meet regulatory requirements.",
+        "goal": "Transparency"
       }
     ],
     "limitations": [
       {
-        "description": "Explanations can vary with repeated runs due to randomness; the linear surrogate may not be faithful if the model behavior is highly non-linear in that locality."
+        "description": "Explanations can be unstable due to random sampling, producing different results across multiple runs."
+      },
+      {
+        "description": "The linear surrogate may poorly approximate highly non-linear model behaviour in the local region."
+      },
+      {
+        "description": "Defining the neighbourhood size and perturbation strategy requires careful tuning for each data type."
+      },
+      {
+        "description": "Can be computationally expensive for explaining many instances due to repeated model queries."
       }
     ],
     "resources": [
@@ -807,7 +831,7 @@
         "source_type": "software_package"
       },
       {
-        "title": "thomasp85/lime",
+        "title": "thomasp85/lime (R package)",
         "url": "https://github.com/thomasp85/lime",
         "source_type": "software_package"
       },
@@ -817,10 +841,16 @@
         "source_type": "documentation"
       },
       {
-        "title": "DLIME: A Deterministic Local Interpretable Model-Agnostic Explanations Approach for Computer-Aided Diagnosis Systems",
-        "url": "https://www.semanticscholar.org/paper/e5c703aba8af983c36fedf08c32a6978eadd91b9",
+        "title": "'Why Should I Trust You?' Explaining the Predictions of Any Classifier",
+        "url": "https://arxiv.org/abs/1602.04938",
         "source_type": "technical_paper",
-        "authors": ["Muhammad Rehman Zafar", "N. Khan"]
+        "authors": ["Marco Tulio Ribeiro", "Sameer Singh", "Carlos Guestrin"],
+        "publication_date": "2016-02-16"
+      },
+      {
+        "title": "How to convince your boss to trust your ML/DL models - Towards Data Science",
+        "url": "https://towardsdatascience.com/how-to-convince-your-boss-to-trust-your-ml-dl-models-671f707246a8",
+        "source_type": "tutorial"
       },
       {
         "title": "Enhanced LIME \u2014 ADS 2.6.5 documentation",
@@ -1374,14 +1404,16 @@
   {
     "id": 21,
     "name": "Factor Analysis",
-    "description": "Factor analysis identifies hidden themes or patterns that explain why certain features in data tend to vary together. It works by finding a smaller number of underlying factors that can explain the relationships between many observed features. For example, it might discover that several test scores are all influenced by a single underlying 'intelligence' factor.",
-    "assurance_goals": ["Explainability"],
+    "description": "Factor analysis is a statistical technique that identifies latent variables (hidden factors) underlying observed correlations in data. It works by analysing how variables relate to each other, finding a smaller number of unobserved factors that explain patterns among multiple observed variables. Unlike PCA which maximises total variance, factor analysis focuses on shared variance (communalities - the variance variables have in common) whilst separating out unique variance and measurement error. After extracting factors, rotation methods like varimax (which creates uncorrelated factors) or oblimin (allowing correlated factors) help make factors more interpretable by aligning them with distinct groups of variables.",
+    "assurance_goals": ["Explainability", "Transparency"],
     "tags": [
       "applicable-models/agnostic",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/transparency",
       "data-requirements/no-special-requirements",
-      "data-type/any",
+      "data-type/tabular",
       "evidence-type/quantitative-metric",
+      "evidence-type/structured-output",
       "expertise-needed/statistics",
       "explanatory-scope/global",
       "lifecycle-stage/model-development",
@@ -1389,13 +1421,30 @@
     ],
     "example_use_cases": [
       {
-        "description": "Discovering underlying factors in psychological survey data for social science research.",
+        "description": "Analysing customer satisfaction surveys to identify key drivers (e.g., 'service quality', 'product value', 'convenience') from dozens of individual questions, helping businesses focus improvement efforts.",
         "goal": "Explainability"
+      },
+      {
+        "description": "Reducing dimensionality of financial indicators to identify underlying economic factors (e.g., 'growth', 'inflation', 'credit risk') for more interpretable risk models.",
+        "goal": "Explainability"
+      },
+      {
+        "description": "Creating transparent feature groups for regulatory reporting by showing how multiple correlated features can be summarised into interpretable factors with clear business meaning.",
+        "goal": "Transparency"
       }
     ],
     "limitations": [
       {
-        "description": "Assumes linear relationships and normality; results (factors) can be abstract and not directly interpretable, and requires deciding on number of factors and rotation method."
+        "description": "Assumes linear relationships between variables and multivariate normality of data."
+      },
+      {
+        "description": "Results can be abstract and require domain expertise to interpret meaningfully."
+      },
+      {
+        "description": "Sensitive to the choice of number of factors and rotation method, which can significantly affect interpretability."
+      },
+      {
+        "description": "Requires sufficiently large sample sizes relative to the number of variables for stable results."
       }
     ],
     "resources": [
@@ -1412,19 +1461,14 @@
         "publication_date": "2021-01-04"
       },
       {
-        "title": "Exploratory Factor Analysis (efa) \u2014 jamovi Documentation",
-        "url": "https://jamovi.readthedocs.io/ko/latest/jmv/jmv_efa.html",
-        "source_type": "documentation"
-      },
-      {
         "title": "Factor Analysis in R Course | DataCamp",
         "url": "https://www.datacamp.com/courses/factor-analysis-in-r",
         "source_type": "tutorial"
       },
       {
-        "title": "Welcome to the FactorAnalyzer documentation! \u2014 factor_analyzer ...",
-        "url": "https://factor-analyzer.readthedocs.io/",
-        "source_type": "documentation"
+        "title": "EducationalTestingService/factor_analyzer",
+        "url": "https://github.com/EducationalTestingService/factor_analyzer",
+        "source_type": "software_package"
       },
       {
         "title": "Confirmatory Factor Analysis Fundamentals | Towards Data Science",
@@ -5015,30 +5059,44 @@
   {
     "id": 79,
     "name": "Reweighing",
-    "description": "Assigns weights to instances in the training data to ensure different groups are equally represented in all labels.",
+    "description": "Reweighing is a pre-processing technique that mitigates bias by assigning different weights to training examples based on their group membership and class label. The weights are calculated to ensure that privileged and unprivileged groups have equal influence on the model's training process, effectively balancing the dataset without altering the feature values themselves. This helps to train fairer models by correcting for historical imbalances in how different groups are represented in the data.",
     "assurance_goals": ["Fairness"],
     "tags": [
       "applicable-models/agnostic",
       "assurance-goal-category/fairness",
-      "data-requirements/access-to-model-internals",
+      "assurance-goal-category/fairness/group/statistical-parity",
       "data-requirements/access-to-training-data",
       "data-requirements/sensitive-attributes",
-      "data-type/any",
-      "evidence-type/quantitative-metric",
+      "data-type/tabular",
+      "evidence-type/fairness-metric",
       "expertise-needed/low",
       "fairness-approach/group",
+      "lifecycle-stage/data-handling/preprocessing",
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
     "example_use_cases": [
       {
-        "description": "Balancing gender representation in credit approval datasets before training a classifier.",
+        "description": "In a loan application system, if historical data shows that a higher proportion of applicants from a minority group were denied loans (negative outcome), reweighing would assign higher weights to these instances. This forces the model to pay more attention to correctly classifying the underrepresented group, aiming to correct for historical bias and improve fairness metrics like equal opportunity.",
+        "goal": "Fairness"
+      },
+      {
+        "description": "When developing a hiring model, if the training data contains fewer female applicants for senior roles, reweighing can be applied to increase the importance of these instances. This helps to prevent the model from learning a spurious correlation between gender and seniority, ensuring that female candidates are evaluated more equitably during the screening process.",
         "goal": "Fairness"
       }
     ],
     "limitations": [
       {
-        "description": "Does not remove bias present in features; simply changing weights can lead to higher variance if some groups are underrepresented, and it assumes labels are unbiased which might not hold."
+        "description": "The technique only adjusts the overall influence of demographic groups and does not address biases that may be encoded within the features themselves."
+      },
+      {
+        "description": "Assigning very high weights to a small number of instances from an underrepresented group can increase the model's variance and make it sensitive to outliers, potentially harming generalisation."
+      },
+      {
+        "description": "The effectiveness of reweighing depends on the assumption that the labels in the training data are accurate; it cannot correct for label bias where outcomes were themselves the result of historical discrimination."
+      },
+      {
+        "description": "It may not be effective if the feature distributions for different groups are fundamentally different, as it cannot change the underlying data relationships."
       }
     ],
     "resources": [
@@ -5072,11 +5130,6 @@
           "Fengxiang He"
         ],
         "publication_date": "2023-09-15"
-      },
-      {
-        "title": "aif360.sklearn.preprocessing.ReweighingMeta \u2014 aif360 0.6.1 ...",
-        "url": "https://aif360.readthedocs.io/en/latest/modules/generated/aif360.sklearn.preprocessing.ReweighingMeta.html",
-        "source_type": "documentation"
       }
     ],
     "complexity_rating": 2,

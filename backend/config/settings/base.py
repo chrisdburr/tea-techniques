@@ -37,6 +37,9 @@ DEBUG = os.getenv("DEBUG") == "True"
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
+# Custom user model
+AUTH_USER_MODEL = 'api.User'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -74,9 +77,9 @@ REST_FRAMEWORK = {
         "rest_framework.filters.SearchFilter",
         "rest_framework.filters.OrderingFilter",
     ],
-    # Temporarily allow any access for development
+    # Require authentication by default
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
+        "rest_framework.permissions.IsAuthenticated",
     ],
     # Exception handler to make error responses consistent
     "EXCEPTION_HANDLER": "api.utils.custom_exception_handler",

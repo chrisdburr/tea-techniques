@@ -9,9 +9,10 @@ as well as validation of input data.
 
 from __future__ import annotations
 
-from rest_framework import serializers
 import logging
-from typing import List, Optional
+from typing import Optional
+
+from rest_framework import serializers
 
 from .models import (
     AssuranceGoal,
@@ -71,6 +72,10 @@ class TechniqueResourceSerializer(serializers.ModelSerializer):
     """
 
     resource_type_name = serializers.ReadOnlyField(source="resource_type.name")
+    resource_type = serializers.PrimaryKeyRelatedField(
+        queryset=ResourceType.objects.all(),
+        required=True
+    )
 
     class Meta:
         model = TechniqueResource
@@ -85,6 +90,7 @@ class TechniqueResourceSerializer(serializers.ModelSerializer):
             "publication_date",
             "source_type",
         ]
+        read_only_fields = ['id']
 
 
 class TechniqueExampleUseCaseSerializer(serializers.ModelSerializer):
@@ -96,10 +102,16 @@ class TechniqueExampleUseCaseSerializer(serializers.ModelSerializer):
     """
 
     assurance_goal_name = serializers.SerializerMethodField()
+    assurance_goal = serializers.PrimaryKeyRelatedField(
+        queryset=AssuranceGoal.objects.all(),
+        required=False,
+        allow_null=True
+    )
 
     class Meta:
         model = TechniqueExampleUseCase
         fields = ["id", "description", "assurance_goal", "assurance_goal_name"]
+        read_only_fields = ['id']
 
     def get_assurance_goal_name(self, obj: TechniqueExampleUseCase) -> Optional[str]:
         """Return the name of the associated assurance goal, or None if not set."""
@@ -118,6 +130,7 @@ class TechniqueLimitationSerializer(serializers.ModelSerializer):
     class Meta:
         model = TechniqueLimitation
         fields = ["id", "description"]
+        read_only_fields = ['id']
 
 
 class TechniqueSerializer(serializers.ModelSerializer):
@@ -126,7 +139,7 @@ class TechniqueSerializer(serializers.ModelSerializer):
 
     Includes nested serializers for all related models, providing a comprehensive
     representation of a technique and all its associated data. Supports both reading
-    and writing relationships through ID fields.
+    and writing relationships through ID fields and nested serializers.
     """
 
     # Read-only relationship fields (for output)
@@ -157,10 +170,10 @@ class TechniqueSerializer(serializers.ModelSerializer):
         source='related_techniques'
     )
     
-    # Nested relationship fields
-    resources = TechniqueResourceSerializer(many=True, read_only=True)
-    example_use_cases = TechniqueExampleUseCaseSerializer(many=True, read_only=True)
-    limitations = TechniqueLimitationSerializer(many=True, read_only=True)
+    # Nested relationship fields - now writable
+    resources = TechniqueResourceSerializer(many=True, required=False)
+    example_use_cases = TechniqueExampleUseCaseSerializer(many=True, required=False)
+    limitations = TechniqueLimitationSerializer(many=True, required=False)
 
     class Meta:
         model = Technique
@@ -185,19 +198,18 @@ class TechniqueSerializer(serializers.ModelSerializer):
         """
         Create a new technique with relationships.
         
-        Handles creation of the technique and all its relationships including
-        assurance goals, tags, related techniques, resources, example use cases,
-        and limitations.
+        Uses DRF's built-in support for nested serializers to handle
+        related object creation automatically.
         """
         # Extract M2M relationships
         assurance_goals = validated_data.pop('assurance_goals', [])
         tags = validated_data.pop('tags', [])
         related_techniques = validated_data.pop('related_techniques', [])
         
-        # Extract nested data from request context
-        resources_data = self.context.get('request').data.get('resources', [])
-        example_use_cases_data = self.context.get('request').data.get('example_use_cases', [])
-        limitations_data = self.context.get('request').data.get('limitations', [])
+        # Extract nested data
+        resources_data = validated_data.pop('resources', [])
+        example_use_cases_data = validated_data.pop('example_use_cases', [])
+        limitations_data = validated_data.pop('limitations', [])
         
         # Create the technique
         technique = Technique.objects.create(**validated_data)
@@ -207,36 +219,27 @@ class TechniqueSerializer(serializers.ModelSerializer):
         technique.tags.set(tags)
         technique.related_techniques.set(related_techniques)
         
-        # Create resources
+        # Create nested objects using serializers
         for resource_data in resources_data:
-            # Convert resource_type ID to instance if needed
-            resource_data_copy = resource_data.copy()
-            if 'resource_type' in resource_data_copy and isinstance(resource_data_copy['resource_type'], int):
-                resource_data_copy['resource_type'] = ResourceType.objects.get(pk=resource_data_copy['resource_type'])
-            TechniqueResource.objects.create(technique=technique, **resource_data_copy)
+            resource_data['technique'] = technique
+            resource_serializer = TechniqueResourceSerializer(data=resource_data)
+            resource_serializer.is_valid(raise_exception=True)
+            resource_serializer.save(technique=technique)
         
-        # Create example use cases
         for use_case_data in example_use_cases_data:
-            # Convert assurance_goal ID to instance if needed
-            use_case_data_copy = use_case_data.copy()
-            if 'assurance_goal' in use_case_data_copy and isinstance(use_case_data_copy['assurance_goal'], int):
-                use_case_data_copy['assurance_goal'] = AssuranceGoal.objects.get(pk=use_case_data_copy['assurance_goal'])
-            TechniqueExampleUseCase.objects.create(technique=technique, **use_case_data_copy)
+            use_case_data['technique'] = technique
+            use_case_serializer = TechniqueExampleUseCaseSerializer(data=use_case_data)
+            use_case_serializer.is_valid(raise_exception=True)
+            use_case_serializer.save(technique=technique)
         
-        # Create limitations
         for limitation_data in limitations_data:
+            # Handle both string and dict formats
             if isinstance(limitation_data, str):
-                # Handle simple string format
-                TechniqueLimitation.objects.create(
-                    technique=technique,
-                    description=limitation_data
-                )
-            else:
-                # Handle dict format
-                TechniqueLimitation.objects.create(
-                    technique=technique,
-                    **limitation_data
-                )
+                limitation_data = {'description': limitation_data}
+            limitation_data['technique'] = technique
+            limitation_serializer = TechniqueLimitationSerializer(data=limitation_data)
+            limitation_serializer.is_valid(raise_exception=True)
+            limitation_serializer.save(technique=technique)
         
         return technique
 
@@ -244,19 +247,18 @@ class TechniqueSerializer(serializers.ModelSerializer):
         """
         Update an existing technique with relationships.
         
-        Updates the technique and all its relationships. Replaces existing
-        relationships with the new data provided.
+        Uses DRF's built-in support for nested serializers to handle
+        related object updates automatically.
         """
         # Extract M2M relationships
         assurance_goals = validated_data.pop('assurance_goals', None)
         tags = validated_data.pop('tags', None)
         related_techniques = validated_data.pop('related_techniques', None)
         
-        # Extract nested data from request context
-        request_data = self.context.get('request').data
-        resources_data = request_data.get('resources', None)
-        example_use_cases_data = request_data.get('example_use_cases', None)
-        limitations_data = request_data.get('limitations', None)
+        # Extract nested data
+        resources_data = validated_data.pop('resources', None)
+        example_use_cases_data = validated_data.pop('example_use_cases', None)
+        limitations_data = validated_data.pop('limitations', None)
         
         # Update basic fields
         for attr, value in validated_data.items():
@@ -271,47 +273,35 @@ class TechniqueSerializer(serializers.ModelSerializer):
         if related_techniques is not None:
             instance.related_techniques.set(related_techniques)
         
-        # Update resources if provided
+        # Update nested objects if provided
         if resources_data is not None:
-            # Delete existing resources
+            # Delete existing and create new
             instance.resources.all().delete()
-            # Create new resources
             for resource_data in resources_data:
-                # Convert resource_type ID to instance if needed
-                resource_data_copy = resource_data.copy()
-                if 'resource_type' in resource_data_copy and isinstance(resource_data_copy['resource_type'], int):
-                    resource_data_copy['resource_type'] = ResourceType.objects.get(pk=resource_data_copy['resource_type'])
-                TechniqueResource.objects.create(technique=instance, **resource_data_copy)
+                resource_data['technique'] = instance
+                resource_serializer = TechniqueResourceSerializer(data=resource_data)
+                resource_serializer.is_valid(raise_exception=True)
+                resource_serializer.save(technique=instance)
         
-        # Update example use cases if provided
         if example_use_cases_data is not None:
-            # Delete existing use cases
+            # Delete existing and create new
             instance.example_use_cases.all().delete()
-            # Create new use cases
             for use_case_data in example_use_cases_data:
-                # Convert assurance_goal ID to instance if needed
-                use_case_data_copy = use_case_data.copy()
-                if 'assurance_goal' in use_case_data_copy and isinstance(use_case_data_copy['assurance_goal'], int):
-                    use_case_data_copy['assurance_goal'] = AssuranceGoal.objects.get(pk=use_case_data_copy['assurance_goal'])
-                TechniqueExampleUseCase.objects.create(technique=instance, **use_case_data_copy)
+                use_case_data['technique'] = instance
+                use_case_serializer = TechniqueExampleUseCaseSerializer(data=use_case_data)
+                use_case_serializer.is_valid(raise_exception=True)
+                use_case_serializer.save(technique=instance)
         
-        # Update limitations if provided
         if limitations_data is not None:
-            # Delete existing limitations
+            # Delete existing and create new
             instance.limitations.all().delete()
-            # Create new limitations
             for limitation_data in limitations_data:
+                # Handle both string and dict formats
                 if isinstance(limitation_data, str):
-                    # Handle simple string format
-                    TechniqueLimitation.objects.create(
-                        technique=instance,
-                        description=limitation_data
-                    )
-                else:
-                    # Handle dict format
-                    TechniqueLimitation.objects.create(
-                        technique=instance,
-                        **limitation_data
-                    )
+                    limitation_data = {'description': limitation_data}
+                limitation_data['technique'] = instance
+                limitation_serializer = TechniqueLimitationSerializer(data=limitation_data)
+                limitation_serializer.is_valid(raise_exception=True)
+                limitation_serializer.save(technique=instance)
         
         return instance

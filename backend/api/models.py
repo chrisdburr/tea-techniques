@@ -2,6 +2,59 @@ from __future__ import annotations
 
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth.models import AbstractUser
+
+
+class User(AbstractUser):
+    """
+    Custom user model with role-based access control.
+    
+    Extends Django's AbstractUser to add role-based permissions
+    for controlling access to different parts of the application.
+    """
+    
+    class Role(models.TextChoices):
+        ADMIN = 'admin', 'Admin'
+        MODERATOR = 'moderator', 'Moderator'
+        USER = 'user', 'User'
+    
+    role = models.CharField(
+        max_length=20,
+        choices=Role.choices,
+        default=Role.USER,
+        help_text="User's role determining their permissions"
+    )
+    
+    class Meta:
+        pass
+    
+    def is_admin(self) -> bool:
+        """Check if user has admin role."""
+        return self.role == self.Role.ADMIN
+    
+    def is_moderator(self) -> bool:
+        """Check if user has moderator role or higher."""
+        return self.role in [self.Role.ADMIN, self.Role.MODERATOR]
+    
+    def is_authenticated_user(self) -> bool:
+        """Check if user is authenticated (all signed-in users)."""
+        return self.role in [self.Role.ADMIN, self.Role.MODERATOR, self.Role.USER]
+    
+    def can_suggest_changes(self) -> bool:
+        """Check if user can suggest changes to techniques."""
+        return self.role in [self.Role.ADMIN, self.Role.MODERATOR, self.Role.USER]
+    
+    def can_approve_suggestions(self) -> bool:
+        """Check if user can approve suggestions and edit techniques."""
+        return self.role in [self.Role.ADMIN, self.Role.MODERATOR]
+    
+    def can_delete_techniques(self) -> bool:
+        """Check if user can delete techniques."""
+        return self.role == self.Role.ADMIN
+    
+    def can_manage_users(self) -> bool:
+        """Check if user can promote users to moderator."""
+        return self.role == self.Role.ADMIN
 
 
 class AssuranceGoal(models.Model):
@@ -165,3 +218,87 @@ class TechniqueLimitation(models.Model):
 
     def __str__(self) -> str:
         return f"Limitation for {self.technique.name}"
+
+
+class TechniqueSuggestion(models.Model):
+    """
+    Represents a suggestion for creating or modifying a technique.
+    
+    TechniqueSuggestion allows authenticated users to suggest changes to existing
+    techniques or propose new techniques. Moderators and admins can review and
+    approve these suggestions.
+    """
+    
+    class SuggestionType(models.TextChoices):
+        CREATE = 'create', 'Create New Technique'
+        EDIT = 'edit', 'Edit Existing Technique'
+    
+    class Status(models.TextChoices):
+        PENDING = 'pending', 'Pending Review'
+        APPROVED = 'approved', 'Approved'
+        REJECTED = 'rejected', 'Rejected'
+    
+    # Suggestion metadata
+    suggestion_type = models.CharField(max_length=10, choices=SuggestionType.choices)
+    status = models.CharField(max_length=10, choices=Status.choices, default=Status.PENDING)
+    
+    # User who made the suggestion
+    suggested_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='technique_suggestions')
+    
+    # Moderator who reviewed (if any)
+    reviewed_by = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name='reviewed_suggestions'
+    )
+    
+    # If editing an existing technique
+    original_technique = models.ForeignKey(
+        Technique, 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True, 
+        related_name='suggestions'
+    )
+    
+    # Suggested changes (stored as JSON)
+    suggested_name = models.CharField(max_length=255)
+    suggested_description = models.TextField()
+    suggested_complexity_rating = models.PositiveSmallIntegerField(
+        null=True, 
+        blank=True, 
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    suggested_computational_cost_rating = models.PositiveSmallIntegerField(
+        null=True, 
+        blank=True, 
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    
+    # Suggestion notes
+    suggestion_notes = models.TextField(
+        blank=True, 
+        help_text="Additional notes or reasoning for the suggestion"
+    )
+    
+    # Review notes
+    review_notes = models.TextField(
+        blank=True, 
+        help_text="Notes from the moderator during review"
+    )
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        db_table = "technique_suggestion"
+        ordering = ['-created_at']
+    
+    def __str__(self) -> str:
+        action = "Create" if self.suggestion_type == self.SuggestionType.CREATE else "Edit"
+        target = self.suggested_name if self.suggestion_type == self.SuggestionType.CREATE else self.original_technique.name
+        return f"{action} suggestion for '{target}' by {self.suggested_by.username}"

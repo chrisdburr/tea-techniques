@@ -29,30 +29,19 @@ console.log(`Backend URL for API proxy: ${BACKEND_URL}`);
 const nextConfig: NextConfig = {
 	reactStrictMode: true,
 	
-	// Add rewrites to proxy API requests to the backend
-	async rewrites() {
-		return [
-			{
-				source: '/api',
-				destination: `${BACKEND_URL}/api` 
-			},
-			{
-				source: '/api/:path*',
-				destination: `${BACKEND_URL}/api/:path*`
-			},
-			{
-				source: '/swagger',
-				destination: `${BACKEND_URL}/swagger`
-			},
-			{
-				source: '/swagger/:path*',
-				destination: `${BACKEND_URL}/swagger/:path*`
-			}
-		];
+	// Configure for static export to GitHub Pages
+	output: "export",
+	
+	// Remove rewrites and API proxy for static build
+	// (These would be needed for the dynamic version)
+	
+	// Disable image optimization for static export
+	images: {
+		unoptimized: true,
 	},
 	
-	// Add this output configuration for standalone mode
-	output: "standalone",
+	// Configure trailing slash for GitHub Pages compatibility
+	trailingSlash: true,
 	
 };
 

@@ -78,7 +78,7 @@ const techniqueSchema = z.object({
 });
 
 interface TechniqueFormProps {
-  id?: number;
+  id?: number | string; // Support both numeric ID and slug
   isEditMode?: boolean;
 }
 
@@ -91,8 +91,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
     handleSubmit: hookFormSubmit,
     formState: { errors, isSubmitting },
     setValue,
-    reset,
-    watch
+    reset
   } = useForm<TechniqueFormData>({
     resolver: zodResolver(techniqueSchema),
     defaultValues: initialFormData,
@@ -113,7 +112,8 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
   ]);
 
   // Fetch technique details if in edit mode
-  const { data: techniqueData, isLoading: isLoadingTechnique } = useTechniqueDetail(id || 0);
+  const numericId = typeof id === 'number' ? id : 0;
+  const { data: techniqueData, isLoading: isLoadingTechnique } = useTechniqueDetail(numericId);
 
   // Fetch reference data
   const { data: assuranceGoalsData, isLoading: isLoadingGoals } = useAssuranceGoals();
@@ -125,7 +125,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
 
   // Mutations for create/update
   const createMutation = useCreateTechnique();
-  const updateMutation = useUpdateTechnique(id || 0);
+  const updateMutation = useUpdateTechnique(numericId);
 
   // Track overall loading state
   // Track overall loading state
@@ -142,17 +142,29 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
   // Initialize form when editing
   useEffect(() => {
     if (isEditMode && techniqueData) {
-      // Extract IDs from relationships
-      const assurance_goal_ids = techniqueData.assurance_goals.map(goal => goal.id);
-      const tag_ids = techniqueData.tags.map(tag => tag.id);
-      const related_technique_ids = techniqueData.related_techniques || [];
+      // Handle both old schema (objects with id) and new schema (strings)
+      const assurance_goal_ids = Array.isArray(techniqueData.assurance_goals) 
+        ? techniqueData.assurance_goals.map((goal: string | { id: number }) => 
+            typeof goal === 'string' ? 0 : goal.id // Convert strings to placeholder IDs for form compatibility
+          )
+        : [];
+      
+      const tag_ids = Array.isArray(techniqueData.tags)
+        ? techniqueData.tags.map((tag: string | { id: number }) => 
+            typeof tag === 'string' ? 0 : tag.id // Convert strings to placeholder IDs for form compatibility
+          )
+        : [];
+      
+      const related_technique_ids = Array.isArray(techniqueData.related_techniques)
+        ? techniqueData.related_techniques.map(() => 0) // Convert slugs to placeholder IDs for form compatibility
+        : [];
 
 
       // Set state for dynamic arrays
       setUseCases(techniqueData.example_use_cases.length > 0
         ? techniqueData.example_use_cases.map(uc => ({
           description: uc.description,
-          assurance_goal: uc.assurance_goal
+          assurance_goal: uc.goal ? 0 : undefined // Convert goal string to placeholder ID for form compatibility
         }))
         : [{ description: "" }]
       );
@@ -164,11 +176,11 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
 
       setResources(techniqueData.resources.length > 0
         ? techniqueData.resources.map(res => ({
-          resource_type: res.resource_type,
+          resource_type: 0, // Placeholder ID for form compatibility
           title: res.title,
           url: res.url,
-          description: res.description,
-          authors: res.authors || "",
+          description: "",
+          authors: Array.isArray(res.authors) ? res.authors.join(", ") : res.authors || "",
           publication_date: res.publication_date || "",
           source_type: res.source_type || ""
         }))
@@ -210,15 +222,18 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
       if (isEditMode && id) {
         // Update existing technique
         await updateMutation.mutateAsync(finalFormData);
-        router.push(`/techniques/${id}`);
+        // Use slug if available from techniqueData, otherwise fallback to id
+        const identifier = techniqueData?.slug || id;
+        router.push(`/techniques/${identifier}`);
       } else {
         // Create new technique
         const result = await createMutation.mutateAsync(finalFormData);
         // Add a null check to handle the case when result might be null
-        if (result && result.id) {
-          router.push(`/techniques/${result.id}`);
+        if (result && (result.slug || (result as { id?: number }).id)) {
+          const identifier = result.slug || (result as { id?: number }).id;
+          router.push(`/techniques/${identifier}`);
         } else {
-          // Fallback if result or result.id is null
+          // Fallback if result or result.slug/id is null
           router.push(`/techniques`);
           console.warn("Received null or invalid result from API");
         }
@@ -306,10 +321,10 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
     label: tag.name,
   })) || [];
 
-  const relatedTechniqueOptions = (techniquesData as any)?.results
-    ?.filter((t: Technique) => t.id !== id) // Don't show current technique as option
+  const relatedTechniqueOptions = (techniquesData as { results?: Technique[] })?.results
+    ?.filter((t: Technique) => t.slug !== id) // Don't show current technique as option
     ?.map((technique: Technique) => ({
-      value: technique.id.toString(),
+      value: technique.slug,
       label: technique.name,
     })) || [];
 
@@ -564,7 +579,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                           size={6}
                           value={field.value.map(id => id.toString())}
                         >
-                          {relatedTechniqueOptions.map((option: any) => (
+                          {relatedTechniqueOptions.map((option: { value: string; label: string }) => (
                             <option key={option.value} value={option.value}>
                               {option.label}
                             </option>

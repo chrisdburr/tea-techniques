@@ -236,7 +236,7 @@ export const useTechniqueDetail = (id: number) => {
 				const data = await fetchAPI<Technique>(`/api/techniques/${id}`);
 				
 				// Validate the response
-				if (!data.id || !data.name) {
+				if ((!data.slug && !(data as { id?: number }).id) || !data.name) {
 					throw new Error(`API returned malformed data`);
 				}
 
@@ -268,7 +268,7 @@ export const useMultipleTechniqueNames = (ids: number[]) => {
 					
 					// Return only the data we need for related techniques display
 					return {
-						id: data.id,
+						id: data.slug || (data as { id?: number }).id,
 						name: data.name,
 					};
 				} catch (error: unknown) {

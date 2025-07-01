@@ -62,31 +62,61 @@ export function parseHierarchicalTag(tagName: string): {
 
 /**
  * Get applicable models from tags
- * @param tags - Array of tags
+ * @param tags - Array of tags (objects) or strings
  * @returns Array of applicable model types
  */
-export function getApplicableModels(tags: Tag[]): string[] {
-	return parseTagsByPrefix(tags, 'applicable-models')
+export function getApplicableModels(tags: Tag[] | string[]): string[] {
+	if (tags.length === 0) return [];
+	
+	// Handle string arrays (new schema)
+	if (typeof tags[0] === 'string') {
+		return (tags as string[])
+			.filter(tag => tag.startsWith('applicable-models/'))
+			.map(tag => getTagValue(tag));
+	}
+	
+	// Handle Tag objects (old schema)
+	return parseTagsByPrefix(tags as Tag[], 'applicable-models')
 		.map(tag => getTagValue(tag.name));
 }
 
 /**
  * Get lifecycle stages from tags
- * @param tags - Array of tags
+ * @param tags - Array of tags (objects) or strings
  * @returns Array of lifecycle stages
  */
-export function getLifecycleStages(tags: Tag[]): string[] {
-	return parseTagsByPrefix(tags, 'lifecycle-stage')
+export function getLifecycleStages(tags: Tag[] | string[]): string[] {
+	if (tags.length === 0) return [];
+	
+	// Handle string arrays (new schema)
+	if (typeof tags[0] === 'string') {
+		return (tags as string[])
+			.filter(tag => tag.startsWith('lifecycle-stage/'))
+			.map(tag => getTagValue(tag));
+	}
+	
+	// Handle Tag objects (old schema)
+	return parseTagsByPrefix(tags as Tag[], 'lifecycle-stage')
 		.map(tag => getTagValue(tag.name));
 }
 
 /**
  * Get data types from tags
- * @param tags - Array of tags
+ * @param tags - Array of tags (objects) or strings
  * @returns Array of data types
  */
-export function getDataTypes(tags: Tag[]): string[] {
-	return parseTagsByPrefix(tags, 'data-type')
+export function getDataTypes(tags: Tag[] | string[]): string[] {
+	if (tags.length === 0) return [];
+	
+	// Handle string arrays (new schema)
+	if (typeof tags[0] === 'string') {
+		return (tags as string[])
+			.filter(tag => tag.startsWith('data-type/'))
+			.map(tag => getTagValue(tag));
+	}
+	
+	// Handle Tag objects (old schema)
+	return parseTagsByPrefix(tags as Tag[], 'data-type')
 		.map(tag => getTagValue(tag.name));
 }
 
@@ -113,18 +143,19 @@ export function getAssuranceGoalCategories(tags: Tag[]): Array<{
 
 /**
  * Group tags by their prefix
- * @param tags - Array of tags
+ * @param tags - Array of tags (objects) or strings
  * @returns Object with tags grouped by prefix
  */
-export function groupTagsByPrefix(tags: Tag[]): Record<string, Tag[]> {
-	const grouped: Record<string, Tag[]> = {};
+export function groupTagsByPrefix(tags: Tag[] | string[]): Record<string, string[]> {
+	const grouped: Record<string, string[]> = {};
 	
 	tags.forEach(tag => {
-		const prefix = tag.name.split('/')[0];
+		const tagName = typeof tag === 'string' ? tag : tag.name;
+		const prefix = tagName.split('/')[0];
 		if (!grouped[prefix]) {
 			grouped[prefix] = [];
 		}
-		grouped[prefix].push(tag);
+		grouped[prefix].push(tagName);
 	});
 	
 	return grouped;

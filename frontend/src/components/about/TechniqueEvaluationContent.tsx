@@ -16,7 +16,7 @@ export default function TechniqueEvaluationContent() {
 					</p>
 
 					<div className="space-y-4">
-						<h3 className="text-lg font-semibold">What is a "Technique" in this Context?</h3>
+						<h3 className="text-lg font-semibold">What is a &quot;Technique&quot; in this Context?</h3>
 						<p>
 							A <strong>technique</strong> refers to a specific method, tool, process, algorithm, or approach 
 							used to generate evidence about the properties of an AI system. These properties align with core 

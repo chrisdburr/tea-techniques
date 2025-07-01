@@ -22,43 +22,37 @@ export interface ResourceType {
 }
 
 export interface TechniqueResource {
-	id: number;
-	resource_type: number;
-	resource_type_name: string;
-	source_type?: string;  // Added based on data in techniques.csv
 	title: string;
 	url: string;
-	description: string;
-	authors?: string;
+	source_type: string;
+	authors?: string[];
 	publication_date?: string;
 }
 
-// Use Cases and Limitations
+// Use Cases and Limitations - Simplified for static data
 export interface TechniqueExampleUseCase {
-	id: number;
 	description: string;
-	assurance_goal?: number;
-	assurance_goal_name?: string;
+	goal: string; // Changed from assurance_goal number to goal string to match JSON schema
 }
 
 export interface TechniqueLimitation {
-	id: number;
 	description: string;
 }
 
 
-// Main Technique Type
+// Main Technique Type - Updated for static data with slug-based identifiers
 export interface Technique {
-	id: number;
+	slug: string;
 	name: string;
 	description: string;
 	complexity_rating?: number;
 	computational_cost_rating?: number;
+	acronym?: string;
 
-	// Many-to-many relationships
-	assurance_goals: AssuranceGoal[];
-	tags: Tag[];
-	related_techniques: number[];
+	// Simple arrays for static data
+	assurance_goals: string[];
+	tags: string[];
+	related_techniques: string[];
 
 	// Related data
 	resources: TechniqueResource[];

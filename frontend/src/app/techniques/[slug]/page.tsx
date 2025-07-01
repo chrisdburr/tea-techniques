@@ -1,17 +1,12 @@
-// src/app/techniques/[id]/page.tsx
-"use client";
-
-import { useParams } from "next/navigation";
-import { useEffect } from "react";
+// src/app/techniques/[slug]/page.tsx
 import MainLayout from "@/components/layout/MainLayout";
-import { useTechniqueDetail, useMultipleTechniqueNames } from "@/lib/api/hooks";
+import { getTechniqueBySlug, getTechniquesBySlug, getTechniques } from "@/lib/data/static-data";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
 	CardHeader,
 	CardTitle,
-	CardFooter,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -23,16 +18,12 @@ import {
 	Brain,
 	CheckCircle,
 	Cpu,
-	Edit,
-	Eye,
 	ExternalLink,
 	FileCode2,
 	Book,
 	Package,
 	GraduationCap,
 	Info,
-	Loader2,
-	Lock,
 	NotebookText,
 	Rss,
 	Scale,
@@ -43,8 +34,10 @@ import {
 	Layers,
 	Database,
 	Clock,
+	Eye,
+	Lock,
 } from "lucide-react";
-import {
+import type {
 	TechniqueResource,
 	TechniqueExampleUseCase,
 	TechniqueLimitation,
@@ -57,7 +50,7 @@ import {
 	formatTagDisplay,
 	getTagValue,
 } from "@/lib/utils";
-
+import { notFound } from "next/navigation";
 
 // Helper component for section containers
 function Section({
@@ -92,9 +85,6 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 	if (!resources || resources.length === 0) {
 		return <p className="text-muted-foreground">No resources available.</p>;
 	}
-	
-	// Debug: Log resources to see what we're actually getting from the API
-	console.log("Resources from API:", JSON.stringify(resources, null, 2));
 
 	// Function to get the appropriate icon for source type
 	const getResourceIcon = (resource: TechniqueResource) => {
@@ -123,13 +113,11 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 				return <Book className="h-5 w-5" aria-hidden="true" />;
 		}
 	};
-	
 
 	// Format source type for display
 	const formatSourceType = (sourceType: string): string => {
 		if (!sourceType) return "Unknown";
 		
-		// Convert snake_case to Title Case
 		return sourceType
 			.split(/_|\s/)
 			.map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -138,9 +126,9 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 
 	return (
 		<>
-			{resources.map((resource) => (
+			{resources.map((resource, index) => (
 				<div
-					key={resource.id}
+					key={`${resource.title}-${index}`}
 					className="border rounded-md p-4 mb-4 hover:border-primary transition-colors"
 				>
 					<div className="flex">
@@ -169,7 +157,7 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 								</Button>
 							</div>
 
-							{/* Display metadata - all with same style */}
+							{/* Display metadata */}
 							<div className="mt-2 text-sm text-muted-foreground">
 								{resource.source_type && (
 									<div>
@@ -177,9 +165,9 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 									</div>
 								)}
 								
-								{resource.authors && (
+								{resource.authors && resource.authors.length > 0 && (
 									<div>
-										Authors: {resource.authors}
+										Authors: {resource.authors.join(", ")}
 									</div>
 								)}
 								{resource.publication_date && (
@@ -188,12 +176,6 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 									</div>
 								)}
 							</div>
-
-							{resource.description && (
-								<p className="text-sm mt-2 text-muted-foreground">
-									{resource.description}
-								</p>
-							)}
 						</div>
 					</div>
 				</div>
@@ -215,9 +197,9 @@ function TechniqueExampleUseCases({
 		);
 	}
 
-	// Group use cases by assurance goal
+	// Group use cases by goal
 	const groupedUseCases = useCases.reduce((acc, useCase) => {
-		const goalName = useCase.assurance_goal_name || "Other";
+		const goalName = useCase.goal || "Other";
 		if (!acc[goalName]) {
 			acc[goalName] = [];
 		}
@@ -248,8 +230,8 @@ function TechniqueExampleUseCases({
 						<h3 className="font-medium">{goalName}</h3>
 					</div>
 					<div className="space-y-4 pl-7">
-						{cases.map((useCase) => (
-							<div key={useCase.id} className="space-y-1">
+						{cases.map((useCase, index) => (
+							<div key={`${goalName}-${index}`} className="space-y-1">
 								<p className="whitespace-pre-line">
 									{useCase.description}
 								</p>
@@ -262,7 +244,6 @@ function TechniqueExampleUseCases({
 	);
 }
 
-// Component to display technique limitations
 function TechniqueLimitations({
 	limitations,
 }: {
@@ -276,53 +257,33 @@ function TechniqueLimitations({
 
 	return (
 		<div className="space-y-4">
-			{limitations.map((limitation) => {
-				// No need to parse JSON anymore as the backend now handles it properly
-				return (
-					<div
-						key={limitation.id}
-						className="flex items-start gap-2 py-1"
-					>
-						<ArrowRight
-							className="h-4 w-4 text-primary mt-1 flex-shrink-0"
-							aria-hidden="true"
-						/>
-						<span>{limitation.description}</span>
-					</div>
-				);
-			})}
+			{limitations.map((limitation, index) => (
+				<div
+					key={index}
+					className="flex items-start gap-2 py-1"
+				>
+					<ArrowRight
+						className="h-4 w-4 text-primary mt-1 flex-shrink-0"
+						aria-hidden="true"
+					/>
+					<span>{limitation.description}</span>
+				</div>
+			))}
 		</div>
 	);
 }
 
-// Component to display related techniques
-function RelatedTechniques({ 
-	techniqueIds 
+// Component to display related techniques using slugs
+async function RelatedTechniques({ 
+	techniqueSlugs 
 }: { 
-	techniqueIds: number[];
+	techniqueSlugs: string[];
 }) {
-	const { techniques, isLoading, isError } = useMultipleTechniqueNames(techniqueIds);
-
-	if (!techniqueIds || techniqueIds.length === 0) {
+	if (!techniqueSlugs || techniqueSlugs.length === 0) {
 		return <p className="text-muted-foreground">No related techniques specified.</p>;
 	}
 
-	if (isLoading) {
-		return (
-			<div className="flex items-center gap-2">
-				<Loader2 className="h-4 w-4 animate-spin" />
-				<span className="text-sm text-muted-foreground">Loading related techniques...</span>
-			</div>
-		);
-	}
-
-	if (isError) {
-		return (
-			<p className="text-sm text-muted-foreground">
-				Error loading related techniques. They may not exist or you may not have permission to view them.
-			</p>
-		);
-	}
+	const relatedTechniques = await getTechniquesBySlug(techniqueSlugs);
 
 	return (
 		<div className="space-y-2">
@@ -330,10 +291,10 @@ function RelatedTechniques({
 				These techniques are related or complementary to this one:
 			</p>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-				{techniques.map((technique) => (
+				{relatedTechniques.map((technique) => (
 					<Link
-						key={technique.id}
-						href={`/techniques/${technique.id}`}
+						key={technique.slug}
+						href={`/techniques/${technique.slug}`}
 						className="flex items-center gap-2 p-3 rounded-md border hover:border-primary transition-colors"
 					>
 						<Layers className="h-4 w-4 text-primary" />
@@ -348,56 +309,28 @@ function RelatedTechniques({
 	);
 }
 
-export default function TechniqueDetailPage() {
-	const params = useParams();
-	const id = Number(params.id);
+// Generate static params for all technique slugs
+export async function generateStaticParams() {
+	const techniques = await getTechniques();
+	return techniques.map((technique) => ({
+		slug: technique.slug,
+	}));
+}
 
-	// This would be replaced with actual auth state - for now always false
-	const isAuthenticated = false;
+// Main page component
+export default async function TechniqueDetailPage({
+	params,
+}: {
+	params: Promise<{ slug: string }>;
+}) {
+	const { slug } = await params;
+	const technique = await getTechniqueBySlug(slug);
 
-	const { data: technique, isLoading, error } = useTechniqueDetail(id);
-
-	// Debug logging - can be removed in production
-	useEffect(() => {
-		if (technique) {
-			console.log("Technique data loaded:", technique);
-		}
-	}, [technique]);
-
-	if (isLoading) {
-		return (
-			<MainLayout>
-				<div className="flex justify-center items-center py-12">
-					<Loader2
-						className="h-8 w-8 animate-spin text-primary"
-						aria-hidden="true"
-					/>
-					<span className="ml-2">Loading technique details...</span>
-				</div>
-			</MainLayout>
-		);
+	if (!technique) {
+		notFound();
 	}
 
-	if (error || !technique) {
-		return (
-			<MainLayout>
-				<div className="flex flex-col items-center justify-center py-20">
-					<h1 className="text-2xl font-bold mb-4">
-						Error Loading Technique
-					</h1>
-					<p className="text-muted-foreground mb-8">
-						There was an error loading this technique. It may not
-						exist or you may not have permission to view it.
-					</p>
-					<Button asChild>
-						<Link href="/techniques">Back to Techniques</Link>
-					</Button>
-				</div>
-			</MainLayout>
-		);
-	}
-
-	// Extract key information from tags
+	// Extract key information from tags using existing utility functions
 	const applicableModels = getApplicableModels(technique.tags);
 	const dataTypes = getDataTypes(technique.tags);
 	const lifecycleStages = getLifecycleStages(technique.tags);
@@ -424,8 +357,14 @@ export default function TechniqueDetailPage() {
 						<div className="mb-6">
 							<h1 className="text-3xl font-bold">
 								{technique.name}
+								{technique.acronym && (
+									<span className="text-2xl text-muted-foreground ml-2">
+										({technique.acronym})
+									</span>
+								)}
 							</h1>
 						</div>
+						
 						<Section title="Description">
 							<div className="prose max-w-none">
 								<p className="whitespace-pre-line">
@@ -450,7 +389,7 @@ export default function TechniqueDetailPage() {
 						{technique.related_techniques && technique.related_techniques.length > 0 && (
 							<Section title="Related Techniques">
 								<RelatedTechniques
-									techniqueIds={technique.related_techniques}
+									techniqueSlugs={technique.related_techniques}
 								/>
 							</Section>
 						)}
@@ -489,24 +428,20 @@ export default function TechniqueDetailPage() {
 										</span>
 									</h3>
 									<div className="flex flex-wrap gap-3">
-										{technique.assurance_goals.map(
-											(goal) => (
-												<div
-													key={goal.id}
-													className="flex items-center gap-2 p-2 bg-secondary rounded-md"
-													title={goal.name}
-												>
-													{goalIcons[
-														goal.name as keyof typeof goalIcons
-													] || (
-														<Info className="h-5 w-5" />
-													)}
-													<span className="font-medium text-sm">
-														{goal.name}
-													</span>
-												</div>
-											)
-										)}
+										{technique.assurance_goals.map((goal) => (
+											<div
+												key={goal}
+												className="flex items-center gap-2 p-2 bg-secondary rounded-md"
+												title={goal}
+											>
+												{goalIcons[goal as keyof typeof goalIcons] || (
+													<Info className="h-5 w-5" />
+												)}
+												<span className="font-medium text-sm">
+													{goal}
+												</span>
+											</div>
+										))}
 									</div>
 								</div>
 
@@ -531,9 +466,7 @@ export default function TechniqueDetailPage() {
 											Computational Cost
 										</h3>
 										<StarRating
-											rating={
-												technique.computational_cost_rating
-											}
+											rating={technique.computational_cost_rating}
 											maxRating={5}
 											className="text-amber-400"
 											aria-label={`Computational cost rating: ${technique.computational_cost_rating} out of 5`}
@@ -541,35 +474,32 @@ export default function TechniqueDetailPage() {
 									</div>
 								) : null}
 
-
 								{/* Applicable Models Section */}
 								{applicableModels.length > 0 && (
-										<div className="space-y-2">
-											<h3 className="text-sm font-medium flex items-center">
-												Applicable Models
-												<span
-													className="ml-1 inline-flex"
-													title="Model architectures this technique can be applied to"
+									<div className="space-y-2">
+										<h3 className="text-sm font-medium flex items-center">
+											Applicable Models
+											<span
+												className="ml-1 inline-flex"
+												title="Model architectures this technique can be applied to"
+											>
+												<Info className="h-4 w-4 text-muted-foreground" />
+											</span>
+										</h3>
+										<div className="flex flex-wrap gap-2">
+											{applicableModels.map((model) => (
+												<Badge
+													key={model}
+													variant="outline"
+													className="flex items-center gap-1.5 text-xs py-1"
 												>
-													<Info className="h-4 w-4 text-muted-foreground" />
-												</span>
-											</h3>
-											<div className="flex flex-wrap gap-2">
-												{applicableModels.map(
-													(model) => (
-														<Badge
-															key={model}
-															variant="outline"
-															className="flex items-center gap-1.5 text-xs py-1"
-														>
-															<Cpu className="h-3 w-3" />
-															<span>{formatTagDisplay(model)}</span>
-														</Badge>
-													)
-												)}
-											</div>
+													<Cpu className="h-3 w-3" />
+													<span>{formatTagDisplay(model)}</span>
+												</Badge>
+											))}
 										</div>
-									)}
+									</div>
+								)}
 
 								{/* Data Types Section */}
 								{dataTypes.length > 0 && (
@@ -584,18 +514,16 @@ export default function TechniqueDetailPage() {
 											</span>
 										</h3>
 										<div className="flex flex-wrap gap-2">
-											{dataTypes.map(
-												(dataType) => (
-													<Badge
-														key={dataType}
-														variant="outline"
-														className="flex items-center gap-1.5 text-xs py-1"
-													>
-														<Database className="h-3 w-3" />
-														<span>{formatTagDisplay(dataType)}</span>
-													</Badge>
-												)
-											)}
+											{dataTypes.map((dataType) => (
+												<Badge
+													key={dataType}
+													variant="outline"
+													className="flex items-center gap-1.5 text-xs py-1"
+												>
+													<Database className="h-3 w-3" />
+													<span>{formatTagDisplay(dataType)}</span>
+												</Badge>
+											))}
 										</div>
 									</div>
 								)}
@@ -613,18 +541,16 @@ export default function TechniqueDetailPage() {
 											</span>
 										</h3>
 										<div className="flex flex-wrap gap-2">
-											{lifecycleStages.map(
-												(stage) => (
-													<Badge
-														key={stage}
-														variant="outline"
-														className="flex items-center gap-1.5 text-xs py-1"
-													>
-														<Clock className="h-3 w-3" />
-														<span>{formatTagDisplay(stage)}</span>
-													</Badge>
-												)
-											)}
+											{lifecycleStages.map((stage) => (
+												<Badge
+													key={stage}
+													variant="outline"
+													className="flex items-center gap-1.5 text-xs py-1"
+												>
+													<Clock className="h-3 w-3" />
+													<span>{formatTagDisplay(stage)}</span>
+												</Badge>
+											))}
 										</div>
 									</div>
 								)}
@@ -648,7 +574,7 @@ export default function TechniqueDetailPage() {
 												if (prefix === 'assurance-goal-category') {
 													// Filter out tags that only have the parent goal (no subcategories)
 													const subcategoryTags = tags.filter(tag => {
-														const parts = tag.name.split('/');
+														const parts = tag.split('/');
 														return parts.length > 2; // prefix/goal/subcategory (at least 3 parts)
 													});
 													
@@ -662,11 +588,11 @@ export default function TechniqueDetailPage() {
 															<div className="flex flex-wrap gap-1.5">
 																{subcategoryTags.map((tag) => {
 																	// Extract subcategory parts (everything after prefix/goal/)
-																	const parts = tag.name.split('/');
+																	const parts = tag.split('/');
 																	const subcategories = parts.slice(2).join('/');
 																	return (
 																		<Badge
-																			key={tag.id}
+																			key={tag}
 																			variant="secondary"
 																			className="text-xs flex items-center gap-1"
 																		>
@@ -689,12 +615,12 @@ export default function TechniqueDetailPage() {
 														<div className="flex flex-wrap gap-1.5">
 															{tags.map((tag) => (
 																<Badge
-																	key={tag.id}
+																	key={tag}
 																	variant="secondary"
 																	className="text-xs flex items-center gap-1"
 																>
 																	<Tag className="h-3 w-3" />
-																	<span>{formatTagDisplay(getTagValue(tag.name))}</span>
+																	<span>{formatTagDisplay(getTagValue(tag))}</span>
 																</Badge>
 															))}
 														</div>
@@ -704,41 +630,6 @@ export default function TechniqueDetailPage() {
 									</div>
 								)}
 							</CardContent>
-
-							{/* Edit section - delete will be accessible from edit form later */}
-							<CardFooter className="flex flex-col items-stretch pt-4 pb-4 border-t">
-								<div
-									className={`bg-muted/50 rounded p-3 mb-4 flex items-center ${
-										isAuthenticated ? "hidden" : ""
-									}`}
-								>
-									<Lock
-										className="h-4 w-4 mr-2 text-muted-foreground"
-										aria-hidden="true"
-									/>
-									<p className="text-sm text-muted-foreground">
-										Authentication is required to edit a
-										technique. Not implemented yet.
-									</p>
-								</div>
-								<Button
-									asChild
-									variant="outline"
-									className="w-full"
-									disabled={!isAuthenticated}
-								>
-									<Link
-										href="#"
-										aria-label="Edit technique (disabled)"
-									>
-										<Edit
-											className="h-4 w-4 mr-2"
-											aria-hidden="true"
-										/>{" "}
-										Edit Technique
-									</Link>
-								</Button>
-							</CardFooter>
 						</Card>
 					</div>
 				</div>

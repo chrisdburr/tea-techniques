@@ -227,7 +227,7 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 
 					{/* Tag-based Filters */}
 					{(() => {
-						const tagGroups = groupTagsByPrefix(tags);
+						const tagGroups = groupTagsByPrefix(tags || []);
 						return Object.entries(tagGroups).map(([prefix, groupTags]) => (
 							<AccordionItem key={prefix} value={`tags-${prefix}`}>
 								<AccordionTrigger className="px-4">
@@ -240,28 +240,23 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
 										</div>
 									) : (
 										<div className="space-y-3">
-											{groupTags.map((tag) => (
+											{groupTags.map((tagName, index) => (
 												<div
-													key={tag.id}
+													key={`${prefix}-${index}`}
 													className="flex items-start space-x-2"
 												>
 													<Checkbox
-														id={`tag-${tag.id}`}
-														checked={filters.tags.includes(
-															tag.id.toString()
-														)}
+														id={`tag-${prefix}-${index}`}
+														checked={filters.tags.includes(tagName)}
 														onCheckedChange={() =>
-															toggleArrayFilter(
-																"tags",
-																tag.id.toString()
-															)
+															toggleArrayFilter("tags", tagName)
 														}
 													/>
 													<Label
-														htmlFor={`tag-${tag.id}`}
+														htmlFor={`tag-${prefix}-${index}`}
 														className="cursor-pointer text-sm font-normal"
 													>
-														{formatTagDisplay(tag.name)}
+														{formatTagDisplay(tagName)}
 													</Label>
 												</div>
 											))}

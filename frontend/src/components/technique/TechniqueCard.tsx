@@ -53,11 +53,11 @@ const TechniqueCard = ({ technique }: TechniqueCardProps): JSX.Element => {
 				<div className="flex flex-wrap items-center gap-1 sm:gap-2 pt-1">
 					{technique.assurance_goals.map((goal) => (
 						<div
-							key={goal.id}
+							key={goal}
 							className="p-1 sm:p-1.5 rounded-full flex items-center bg-secondary"
-							title={goal.name}
+							title={goal}
 						>
-							<GoalIcon goalName={goal.name} size={14} />
+							<GoalIcon goalName={goal} size={14} />
 						</div>
 					))}
 				</div>
@@ -80,7 +80,7 @@ const TechniqueCard = ({ technique }: TechniqueCardProps): JSX.Element => {
 					size="sm"
 					className="w-full text-xs sm:text-sm"
 				>
-					<Link href={`/techniques/${technique.id}`}>
+					<Link href={`/techniques/${technique.slug}`}>
 						View Details
 					</Link>
 				</Button>

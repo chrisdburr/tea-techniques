@@ -1,20 +1,52 @@
 import '@testing-library/jest-dom';
+import { server } from './src/tests/mocks/server';
 
-// MSW integration is commented out due to module resolution issues
-// We'll use the manual mocks in the test files for now and fix the MSW setup later
-// Once the module resolution issue with msw/node is resolved
-
-// Mock setup
+// Establish API mocking before all tests
 beforeAll(() => {
-  console.log('Setting up test environment');
+  server.listen({
+    onUnhandledRequest: 'warn',
+  });
 });
 
-// Clean up after each test
+// Reset any request handlers that we may add during the tests,
+// so they don't affect other tests
 afterEach(() => {
-  console.log('Cleaning up after test');
+  server.resetHandlers();
 });
 
-// Final cleanup
+// Clean up after the tests are finished
 afterAll(() => {
-  console.log('Test suite completed');
+  server.close();
 });
+
+// Mock next/navigation
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+    back: jest.fn(),
+    forward: jest.fn(),
+    refresh: jest.fn(),
+    replace: jest.fn(),
+    prefetch: jest.fn(),
+  }),
+  useSearchParams: () => ({
+    get: jest.fn(),
+    getAll: jest.fn(),
+    has: jest.fn(),
+    keys: jest.fn(),
+    values: jest.fn(),
+    entries: jest.fn(),
+    forEach: jest.fn(),
+    toString: jest.fn(),
+  }),
+  usePathname: () => '/',
+}));
+
+// Mock next/image
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: (props: any) => {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img {...props} alt={props.alt} />;
+  },
+}));

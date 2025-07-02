@@ -71,6 +71,86 @@ DJANGO_SETTINGS_MODULE = "config.settings_sqlite"
 python_files = ["test_*.py", "*_test.py"]
 testpaths = ["api/tests"]
 filterwarnings = ["ignore::DeprecationWarning"]
+addopts = [
+    "--cov=api",
+    "--cov-report=term-missing",
+    "--cov-report=html:coverage_html",
+    "--cov-report=xml:coverage.xml",
+    "--cov-fail-under=90",
+    "--strict-markers",
+    "--strict-config",
+    "-v",
+]
+markers = [
+    "unit: Unit tests that don't require database",
+    "integration: Integration tests that use database",
+    "api: API endpoint tests",
+    "slow: Tests that take longer than 1 second",
+    "performance: Performance benchmarking tests",
+]
+
+[tool.coverage.run]
+source = ["api"]
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+    "*/venv/*",
+    "manage.py",
+    "config/settings/*",
+    "*/conftest.py",
+    "*/factories.py",
+]
+branch = true
+
+[tool.coverage.report]
+# Fail if total coverage is below 90%
+fail_under = 90
+show_missing = true
+skip_covered = false
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "def __str__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+
+[tool.coverage.html]
+directory = "coverage_html"
+
+[tool.coverage.xml]
+output = "coverage.xml"
+
+[tool.pylint.main]
+load-plugins = ["pylint_django"]
+django-settings-module = "config.settings.development"
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.messages_control]
+disable = [
+    "missing-docstring",
+    "too-few-public-methods",
+    "import-error",
+    "no-member",
+    "fixme",
+    "unused-argument",
+]
+
+[tool.pylint.design]
+max-args = 8
+max-locals = 20
+max-returns = 8
+max-branches = 15
+max-statements = 60
+
+[tool.pylint.similarities]
+min-similarity-lines = 6
+ignore-comments = true
+ignore-docstrings = true
 
 [build-system]
 requires = ["poetry-core"]

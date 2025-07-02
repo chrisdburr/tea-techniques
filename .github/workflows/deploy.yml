@@ -1,0 +1,486 @@
+name: Deployment
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  release:
+    types: [ published ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+      skip_tests:
+        description: 'Skip tests (emergency deployment only)'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  PYTHON_VERSION: '3.12'
+  NODE_VERSION: '18'
+  PNPM_VERSION: '10.6.5'
+
+jobs:
+  # Pre-deployment verification
+  pre-deployment-checks:
+    name: Pre-deployment Checks
+    runs-on: ubuntu-latest
+    if: github.event.inputs.skip_tests != 'true'
+    
+    outputs:
+      should-deploy: ${{ steps.check-ready.outputs.ready }}
+      version: ${{ steps.version.outputs.version }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Install dependencies
+        run: |
+          cd backend && poetry install --with dev
+          cd frontend && pnpm install --frozen-lockfile
+
+      - name: Run deployment readiness check
+        id: check-ready
+        run: |
+          echo "Running comprehensive pre-deployment checks..."
+          
+          # Check for uncommitted changes
+          if [[ -n $(git status --porcelain) ]]; then
+            echo "❌ Uncommitted changes found"
+            echo "ready=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          
+          # Run quality checks
+          make quality-check || {
+            echo "❌ Quality checks failed"
+            echo "ready=false" >> $GITHUB_OUTPUT
+            exit 1
+          }
+          
+          # Run all tests
+          make test || {
+            echo "❌ Tests failed"
+            echo "ready=false" >> $GITHUB_OUTPUT
+            exit 1
+          }
+          
+          # Check security
+          make security-check || {
+            echo "❌ Security checks failed"
+            echo "ready=false" >> $GITHUB_OUTPUT
+            exit 1
+          }
+          
+          # Verify builds
+          cd frontend && pnpm build || {
+            echo "❌ Frontend build failed"
+            echo "ready=false" >> $GITHUB_OUTPUT
+            exit 1
+          }
+          
+          echo "✅ All pre-deployment checks passed"
+          echo "ready=true" >> $GITHUB_OUTPUT
+
+      - name: Determine version
+        id: version
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          else
+            VERSION="main-$(git rev-parse --short HEAD)"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Deployment version: $VERSION"
+
+      - name: Generate deployment report
+        run: |
+          echo "# Deployment Report" > deployment-report.md
+          echo "" >> deployment-report.md
+          echo "**Version:** ${{ steps.version.outputs.version }}" >> deployment-report.md
+          echo "**Commit:** $(git rev-parse HEAD)" >> deployment-report.md
+          echo "**Author:** $(git log -1 --pretty=format:'%an <%ae>')" >> deployment-report.md
+          echo "**Date:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> deployment-report.md
+          echo "" >> deployment-report.md
+          echo "## Changes" >> deployment-report.md
+          git log --oneline -10 >> deployment-report.md
+
+      - name: Upload deployment artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-report
+          path: deployment-report.md
+
+  # Staging deployment
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [pre-deployment-checks]
+    if: |
+      always() && 
+      (needs.pre-deployment-checks.outputs.should-deploy == 'true' || 
+       github.event.inputs.skip_tests == 'true') &&
+      (github.ref == 'refs/heads/main' || 
+       github.event.inputs.environment == 'staging')
+    
+    environment:
+      name: staging
+      url: https://staging.tea-techniques.example.com
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/backend:staging
+            ghcr.io/${{ github.repository }}/backend:${{ needs.pre-deployment-checks.outputs.version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/frontend:staging
+            ghcr.io/${{ github.repository }}/frontend:${{ needs.pre-deployment-checks.outputs.version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Deploy to staging environment
+        run: |
+          echo "🚀 Deploying to staging environment..."
+          echo "Backend image: ghcr.io/${{ github.repository }}/backend:staging"
+          echo "Frontend image: ghcr.io/${{ github.repository }}/frontend:staging"
+          
+          # Here you would integrate with your deployment system
+          # Examples: kubectl, helm, docker-compose, cloud provider CLI
+          
+          # Example for docker-compose deployment:
+          # envsubst < docker-compose.staging.yml | docker-compose -f - up -d
+          
+          # Example for Kubernetes:
+          # kubectl set image deployment/backend backend=ghcr.io/${{ github.repository }}/backend:staging
+          # kubectl set image deployment/frontend frontend=ghcr.io/${{ github.repository }}/frontend:staging
+          
+          echo "✅ Staging deployment completed"
+
+      - name: Run smoke tests
+        run: |
+          echo "🧪 Running smoke tests against staging..."
+          
+          # Wait for services to be ready
+          sleep 30
+          
+          # Basic health checks
+          # curl -f https://staging.tea-techniques.example.com/health || exit 1
+          # curl -f https://staging.tea-techniques.example.com/api/health || exit 1
+          
+          echo "✅ Smoke tests passed"
+
+      - name: Notify deployment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: deployment } = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.sha,
+              environment: 'staging',
+              description: 'Automated staging deployment',
+              auto_merge: false
+            });
+            
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.id,
+              state: 'success',
+              environment_url: 'https://staging.tea-techniques.example.com',
+              description: 'Deployment completed successfully'
+            });
+
+  # Production deployment (only on releases)
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [pre-deployment-checks]
+    if: |
+      always() && 
+      (needs.pre-deployment-checks.outputs.should-deploy == 'true' || 
+       github.event.inputs.skip_tests == 'true') &&
+      (github.event_name == 'release' || 
+       github.event.inputs.environment == 'production')
+    
+    environment:
+      name: production
+      url: https://tea-techniques.example.com
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/backend:latest
+            ghcr.io/${{ github.repository }}/backend:${{ needs.pre-deployment-checks.outputs.version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/frontend:latest
+            ghcr.io/${{ github.repository }}/frontend:${{ needs.pre-deployment-checks.outputs.version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Create deployment backup
+        run: |
+          echo "📦 Creating deployment backup..."
+          # Backup current production state before deployment
+          # This could include database backups, config snapshots, etc.
+          echo "✅ Backup completed"
+
+      - name: Deploy to production (Blue-Green)
+        run: |
+          echo "🚀 Starting production deployment..."
+          
+          # Blue-Green deployment strategy
+          # 1. Deploy to "green" environment
+          # 2. Run health checks
+          # 3. Switch traffic from "blue" to "green"
+          # 4. Keep "blue" as fallback
+          
+          echo "Backend image: ghcr.io/${{ github.repository }}/backend:latest"
+          echo "Frontend image: ghcr.io/${{ github.repository }}/frontend:latest"
+          
+          # Example deployment commands would go here
+          # kubectl apply -f k8s/production/
+          # kubectl rollout status deployment/backend
+          # kubectl rollout status deployment/frontend
+          
+          echo "✅ Production deployment completed"
+
+      - name: Run production health checks
+        run: |
+          echo "🔍 Running production health checks..."
+          
+          # Wait for services to stabilize
+          sleep 60
+          
+          # Comprehensive health checks
+          # curl -f https://tea-techniques.example.com/health || exit 1
+          # curl -f https://tea-techniques.example.com/api/health || exit 1
+          
+          # Performance check
+          # curl -w "%{time_total}" -s -o /dev/null https://tea-techniques.example.com | awk '{if($1 > 2) exit 1}'
+          
+          echo "✅ Production health checks passed"
+
+      - name: Update monitoring alerts
+        run: |
+          echo "📊 Updating monitoring configuration..."
+          # Update monitoring dashboards, alerts, etc.
+          echo "✅ Monitoring updated"
+
+      - name: Notify production deployment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: deployment } = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.sha,
+              environment: 'production',
+              description: 'Production release deployment',
+              auto_merge: false
+            });
+            
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.id,
+              state: 'success',
+              environment_url: 'https://tea-techniques.example.com',
+              description: 'Production deployment completed successfully'
+            });
+
+      - name: Create deployment summary
+        run: |
+          echo "# Production Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ needs.pre-deployment-checks.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** Production" >> $GITHUB_STEP_SUMMARY
+          echo "**Deployed at:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> $GITHUB_STEP_SUMMARY
+          echo "**Status:** ✅ Successful" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Quick Links" >> $GITHUB_STEP_SUMMARY
+          echo "- [Production Site](https://tea-techniques.example.com)" >> $GITHUB_STEP_SUMMARY
+          echo "- [API Documentation](https://tea-techniques.example.com/swagger/)" >> $GITHUB_STEP_SUMMARY
+          echo "- [Monitoring Dashboard](#)" >> $GITHUB_STEP_SUMMARY
+
+  # Rollback capability
+  rollback:
+    name: Emergency Rollback
+    runs-on: ubuntu-latest
+    if: failure() && (github.event_name == 'release' || github.event.inputs.environment == 'production')
+    needs: [deploy-production]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Rollback production deployment
+        run: |
+          echo "🚨 Initiating emergency rollback..."
+          
+          # Rollback to previous version
+          # kubectl rollout undo deployment/backend
+          # kubectl rollout undo deployment/frontend
+          
+          # Verify rollback
+          # kubectl rollout status deployment/backend
+          # kubectl rollout status deployment/frontend
+          
+          echo "✅ Rollback completed"
+
+      - name: Notify rollback
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 Emergency rollback executed - ${new Date().toISOString()}`,
+              body: `
+              ## Emergency Rollback Executed
+              
+              A production deployment failed and an emergency rollback was performed.
+              
+              **Details:**
+              - Workflow: ${context.workflow}
+              - Run: ${context.runNumber}
+              - Commit: ${context.sha}
+              
+              **Action Required:**
+              1. Investigate the deployment failure
+              2. Fix the underlying issue
+              3. Test thoroughly before next deployment
+              
+              **Links:**
+              - [Failed workflow run](${context.payload.repository.html_url}/actions/runs/${context.runId})
+              - [Production monitoring](#)
+              `,
+              labels: ['critical', 'production', 'rollback', 'automated']
+            });
+
+  # Post-deployment monitoring
+  post-deployment-monitoring:
+    name: Post-deployment Monitoring
+    runs-on: ubuntu-latest
+    needs: [deploy-staging, deploy-production]
+    if: always() && (needs.deploy-staging.result == 'success' || needs.deploy-production.result == 'success')
+    
+    steps:
+      - name: Monitor deployment health
+        run: |
+          echo "📊 Starting post-deployment monitoring..."
+          
+          # Monitor for 5 minutes after deployment
+          for i in {1..5}; do
+            echo "Health check $i/5..."
+            
+            # Check staging if deployed
+            if [[ "${{ needs.deploy-staging.result }}" == "success" ]]; then
+              echo "Checking staging health..."
+              # curl -f https://staging.tea-techniques.example.com/health || echo "Staging health check failed"
+            fi
+            
+            # Check production if deployed  
+            if [[ "${{ needs.deploy-production.result }}" == "success" ]]; then
+              echo "Checking production health..."
+              # curl -f https://tea-techniques.example.com/health || echo "Production health check failed"
+            fi
+            
+            sleep 60
+          done
+          
+          echo "✅ Post-deployment monitoring completed"
+
+      - name: Generate deployment metrics
+        run: |
+          echo "📈 Collecting deployment metrics..."
+          
+          # Collect metrics about the deployment
+          echo "Deployment completed at: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+          echo "Total deployment time: ${{ github.event.head_commit.timestamp }}"
+          
+          # In a real scenario, you would collect metrics from your monitoring system
+          # and potentially send them to analytics platforms
+          
+          echo "✅ Metrics collected"

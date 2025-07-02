@@ -1,0 +1,192 @@
+# Pre-commit hooks for TEA Techniques quality enforcement
+# Install: pre-commit install
+# Run manually: pre-commit run --all-files
+
+repos:
+  # General code quality
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: debug-statements
+      - id: mixed-line-ending
+        args: [--fix=lf]
+
+  # Python backend quality
+  - repo: https://github.com/psf/black
+    rev: 23.3.0
+    hooks:
+      - id: black
+        files: ^backend/
+        language_version: python3.12
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        files: ^backend/
+        args: ["--profile", "black", "--line-length", "120"]
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        files: ^backend/
+        args: [--max-line-length=120, --extend-ignore=E203,W503]
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.5
+    hooks:
+      - id: bandit
+        files: ^backend/
+        args: [--exclude, "*/tests/*,*/migrations/*"]
+
+  # Python type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.3.0
+    hooks:
+      - id: mypy
+        files: ^backend/
+        additional_dependencies: [
+          django-stubs,
+          djangorestframework-stubs,
+          types-requests,
+          types-markdown
+        ]
+
+  # JavaScript/TypeScript frontend quality
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.0.0
+    hooks:
+      - id: prettier
+        files: ^frontend/
+        types_or: [javascript, jsx, ts, tsx, json, yaml, css, scss, html, markdown]
+        exclude: |
+          (?x)^(
+            frontend/\.next/.*|
+            frontend/node_modules/.*|
+            frontend/coverage/.*|
+            frontend/\.vitest/.*
+          )$
+
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v8.44.0
+    hooks:
+      - id: eslint
+        files: ^frontend/src/.*\.(js|jsx|ts|tsx)$
+        args: [--fix, --max-warnings=0]
+        additional_dependencies:
+          - eslint@^9
+          - "@eslint/eslintrc@^3"
+          - eslint-config-next@15.2.0
+          - eslint-plugin-react-hooks@^5.2.0
+
+  # Security scanning for dependencies
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: [--baseline, .secrets.baseline]
+        exclude: |
+          (?x)^(
+            .*\.lock$|
+            .*package-lock\.json$|
+            .*\.git/.*|
+            .*\.env\.example$
+          )$
+
+  # Markdown and documentation quality
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.35.0
+    hooks:
+      - id: markdownlint
+        args: [--fix]
+        exclude: |
+          (?x)^(
+            CHANGELOG\.md|
+            frontend/node_modules/.*|
+            backend/coverage_html/.*
+          )$
+
+  # Git commit message quality
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v2.3.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args: [
+          --types, "feat,fix,docs,style,refactor,test,chore,ci,perf,build,revert",
+          --scopes, "backend,frontend,ci,docs,deps,config,tests"
+        ]
+
+  # Local custom hooks for project-specific checks
+  - repo: local
+    hooks:
+      # Backend test execution
+      - id: backend-tests
+        name: Backend tests
+        entry: bash -c 'cd backend && poetry run pytest --cov=api --cov-fail-under=90 -x'
+        language: system
+        files: ^backend/
+        types: [python]
+        pass_filenames: false
+
+      # Frontend type checking
+      - id: frontend-typecheck
+        name: Frontend type checking
+        entry: bash -c 'cd frontend && pnpm type-check'
+        language: system
+        files: ^frontend/src/
+        types_or: [ts, tsx]
+        pass_filenames: false
+
+      # Frontend tests
+      - id: frontend-tests
+        name: Frontend tests
+        entry: bash -c 'cd frontend && pnpm test:ci'
+        language: system
+        files: ^frontend/src/
+        types_or: [ts, tsx, js, jsx]
+        pass_filenames: false
+
+      # Check for TODO/FIXME comments in production code
+      - id: no-todos-in-main
+        name: No TODO/FIXME in main branch
+        entry: bash -c 'if git branch --show-current | grep -q "^main$"; then grep -r "TODO\|FIXME" --include="*.py" --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" backend/api/ frontend/src/ && exit 1 || exit 0; fi'
+        language: system
+        pass_filenames: false
+
+      # Ensure coverage files are not committed
+      - id: no-coverage-files
+        name: No coverage files in repo
+        entry: bash -c 'find . -name "coverage" -o -name ".coverage" -o -name "coverage.xml" -o -name "coverage_html" | grep -v ".gitignore" && exit 1 || exit 0'
+        language: system
+        pass_filenames: false
+
+      # Check for large files
+      - id: check-large-files
+        name: Check for large files
+        entry: bash -c 'find . -type f -size +1M ! -path "./.*" ! -path "*/node_modules/*" ! -path "*/coverage/*" -exec ls -lh {} + && exit 1 || exit 0'
+        language: system
+        pass_filenames: false
+
+# Configuration for CI environments
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit.com hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ''
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: [backend-tests, frontend-tests, frontend-typecheck]  # Skip expensive checks in CI
+  submodules: false

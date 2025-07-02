@@ -13,10 +13,14 @@ SECRET_KEY = 'test-secret-key-for-testing-only'
 # CI/CD Database Configuration
 if "DATABASE_URL" in os.environ:
     # PostgreSQL for CI (matches production database type)
-    import dj_database_url
-    DATABASES = {
-        "default": dj_database_url.parse(os.environ["DATABASE_URL"])
-    }
+    try:
+        import dj_database_url
+        DATABASES = {
+            "default": dj_database_url.parse(os.environ["DATABASE_URL"])
+        }
+    except ImportError:
+        # Fall back to SQLite if dj_database_url is not available
+        pass
 elif os.getenv("USE_POSTGRES_FOR_TESTS") == "True":
     # Use the same database configuration as base settings
     pass

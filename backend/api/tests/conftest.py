@@ -19,6 +19,7 @@ from api.tests.factories import (
     TechniqueFactory,
     CompleteTechniqueFactory,
     MinimalTechniqueFactory,
+    IsolatedTechniqueFactory,
 )
 
 
@@ -354,18 +355,11 @@ class ErrorTestMixin:
 
 # Test configuration
 
-pytest_plugins = ['django_db']
+# pytest-django is automatically loaded
 
 
 # Pytest fixtures for Django integration
-
-@pytest.fixture(scope='session')
-def django_db_setup():
-    """Set up the test database"""
-    from django.test.utils import setup_test_environment, teardown_test_environment
-    setup_test_environment()
-    yield
-    teardown_test_environment()
+# pytest-django provides django_db_setup automatically
 
 
 @pytest.fixture

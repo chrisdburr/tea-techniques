@@ -229,19 +229,36 @@ class MinimalTechniqueFactory(TechniqueFactory):
     
     @factory.post_generation
     def assurance_goals(self, create, extracted, **kwargs):
-        if not create:
-            return
-        # Only add one goal for minimal setup
-        if not extracted:
-            self.assurance_goals.add(AssuranceGoalFactory())
+        # Don't auto-create any relationships
+        pass
 
     @factory.post_generation
     def tags(self, create, extracted, **kwargs):
-        if not create:
-            return
-        # Only add one tag for minimal setup
-        if not extracted:
-            self.tags.add(TagFactory())
+        # Don't auto-create any relationships
+        pass
+
+    @factory.post_generation
+    def related_techniques(self, create, extracted, **kwargs):
+        # Don't auto-create any relationships
+        pass
+
+
+class IsolatedTechniqueFactory(factory.django.DjangoModelFactory):
+    """Factory that creates a technique with NO automatic relationships"""
+    
+    class Meta:
+        model = Technique
+
+    name = factory.LazyFunction(
+        lambda: f"Isolated Technique {fake.word()} ({fake.random_int(min=1000, max=9999)})"
+    )
+    
+    description = factory.LazyFunction(
+        lambda: f"Test technique for isolated testing. {fake.sentence(nb_words=10)}"
+    )
+    
+    complexity_rating = factory.LazyFunction(lambda: fake.random_int(min=1, max=5))
+    computational_cost_rating = factory.LazyFunction(lambda: fake.random_int(min=1, max=5))
 
 
 # Test data utility functions

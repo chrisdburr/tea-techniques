@@ -1,0 +1,48 @@
+name: Task
+description: Create a new task or feature request
+title: "[TASK] "
+labels: ["task"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Provide a clear and detailed description of the task or feature
+      placeholder: Describe what needs to be done...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: prerequisites
+    attributes:
+      label: Prerequisites (Optional)
+      description: List any prerequisites, dependencies, or conditions that must be met
+      placeholder: |
+        - Prerequisite 1
+        - Prerequisite 2
+    validations:
+      required: false
+  
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Tasks
+      description: Break down the work into specific, actionable tasks
+      placeholder: |
+        - [ ] Task 1
+        - [ ] Task 2
+        - [ ] Task 3
+    validations:
+      required: true
+  
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance Criteria
+      description: Define what constitutes completion of this task
+      placeholder: |
+        - Criteria 1
+        - Criteria 2
+        - Criteria 3
+    validations:
+      required: true

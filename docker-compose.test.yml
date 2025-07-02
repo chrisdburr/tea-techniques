@@ -1,38 +1,71 @@
 version: '3.8'
 
 services:
-  db-test:
-    image: postgres:16
+  db:
+    image: postgres:15
     environment:
-      - POSTGRES_DB=techniques_test
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_DB: tea_techniques_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
     ports:
-      - "5433:5432"  # Use different port to avoid conflicts with development DB
+      - "5433:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 3s
+      interval: 10s
+      timeout: 5s
       retries: 5
-      start_period: 5s
 
-  backend-test:
+  backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     environment:
-      - DEBUG=False
-      - SECRET_KEY=test-key-not-for-production
-      - DB_NAME=techniques_test
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
-      - DB_HOST=db-test
-      - DB_PORT=5432
-      - USE_POSTGRES_FOR_TESTS=True
       - DJANGO_SETTINGS_MODULE=config.settings.test
-    command: ["python", "manage.py", "test", "api"]
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/tea_techniques_test
+      - DEBUG=False
+      - SECRET_KEY=test-secret-key-for-ci-only
+      - ALLOWED_HOSTS=localhost,127.0.0.1,backend
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://frontend:3000
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
     volumes:
       - ./backend:/app
+    command: >
+      sh -c "
+        python manage.py migrate &&
+        python manage.py collectstatic --noinput &&
+        gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2
+      "
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
     depends_on:
-      db-test:
+      backend:
         condition: service_healthy
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_test_data:

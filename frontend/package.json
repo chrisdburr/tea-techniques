@@ -13,6 +13,12 @@
 		"lint": "next lint",
 		"test": "jest",
 		"test:watch": "jest --watch",
+		"test:coverage": "jest --coverage",
+		"test:ci": "jest --ci --coverage --passWithNoTests",
+		"type-check": "tsc --noEmit",
+		"e2e": "playwright test",
+		"e2e:headed": "playwright test --headed",
+		"e2e:debug": "playwright test --debug",
 		"install-tests": "pnpm add -D '@testing-library/jest-dom' '@testing-library/react' '@testing-library/user-event' '@types/jest' 'jest' 'jest-environment-jsdom' 'msw' 'ts-jest' 'ts-node'"
 	},
 	"engines": {
@@ -64,9 +70,7 @@
 		"postcss": "^8.5.3",
 		"shadcn": "^2.4.0-canary.9",
 		"tailwindcss": "^4.0.9",
-		"typescript": "^5"
-	},
-	"optionalDependencies": {
+		"typescript": "^5",
 		"@testing-library/jest-dom": "^6.5.1",
 		"@testing-library/react": "^15.0.0",
 		"@testing-library/user-event": "^14.5.2",
@@ -74,7 +78,9 @@
 		"jest": "^29.7.0",
 		"jest-environment-jsdom": "^29.7.0",
 		"ts-jest": "^29.1.2",
-		"ts-node": "^10.9.2"
+		"ts-node": "^10.9.2",
+		"@axe-core/playwright": "^4.8.2",
+		"@playwright/test": "^1.40.1"
 	},
 	"overrides": {
 		"inflight": "npm:lru-cache@^7.14.1"

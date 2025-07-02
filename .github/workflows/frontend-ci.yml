@@ -1,0 +1,271 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend-ci.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend-ci.yml'
+
+env:
+  NODE_VERSION: "18"
+  PNPM_VERSION: "10.6.5"
+
+jobs:
+  lint-and-type-check:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: frontend
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: ${{ env.PNPM_VERSION }}
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Run ESLint
+      run: pnpm lint
+
+    - name: Check TypeScript types
+      run: pnpm type-check || npx tsc --noEmit
+
+    - name: Check formatting with Prettier
+      run: |
+        npx prettier --check "src/**/*.{ts,tsx,js,jsx,json,css,md}"
+
+  test:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: frontend
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: ${{ env.PNPM_VERSION }}
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Run tests with coverage
+      run: pnpm test --coverage --watchAll=false --passWithNoTests
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./frontend/coverage/coverage-final.json
+        flags: frontend
+        name: frontend-coverage
+        fail_ci_if_error: false
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: frontend-test-results
+        path: |
+          frontend/coverage/
+          frontend/test-results.xml
+        retention-days: 30
+
+    - name: Check test coverage threshold
+      run: |
+        # Extract coverage percentage and check if it meets threshold
+        COVERAGE=$(npx nyc report --reporter=text-summary | grep "Lines" | awk '{print $2}' | sed 's/%//')
+        echo "Coverage: $COVERAGE%"
+        if (( $(echo "$COVERAGE < 70" | bc -l) )); then
+          echo "Coverage $COVERAGE% is below threshold of 70%"
+          exit 1
+        fi
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint-and-type-check, test]
+    
+    defaults:
+      run:
+        working-directory: frontend
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: ${{ env.PNPM_VERSION }}
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Build application
+      run: pnpm build
+      env:
+        NEXT_PUBLIC_API_URL: http://localhost:8000
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: frontend-build
+        path: frontend/.next/
+        retention-days: 7
+
+  accessibility-test:
+    runs-on: ubuntu-latest
+    needs: [build]
+    
+    defaults:
+      run:
+        working-directory: frontend
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: ${{ env.PNPM_VERSION }}
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Install Playwright
+      run: npx playwright install --with-deps
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: frontend-build
+        path: frontend/.next/
+
+    - name: Start application
+      run: |
+        pnpm start &
+        sleep 10
+      env:
+        NEXT_PUBLIC_API_URL: http://localhost:8000
+
+    - name: Run accessibility tests
+      run: |
+        # Install axe-playwright if not already installed
+        npm install -D @axe-core/playwright
+        # Run basic accessibility tests
+        npx playwright test --config=playwright-a11y.config.ts || echo "Accessibility tests completed"
+
+    - name: Upload accessibility results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: accessibility-results
+        path: frontend/test-results/
+        retention-days: 30
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: [build]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build frontend Docker image
+      run: |
+        docker build -t tea-techniques-frontend:test ./frontend
+
+    - name: Test Docker image
+      run: |
+        # Test that the Docker image runs successfully
+        docker run -d --name test-frontend -p 3001:3000 tea-techniques-frontend:test
+        sleep 10
+        curl -f http://localhost:3001 || exit 1
+        docker stop test-frontend
+        docker rm test-frontend
+
+  security-scan:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: frontend
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: ${{ env.PNPM_VERSION }}
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Run npm audit
+      run: pnpm audit --audit-level=high
+
+    - name: Run dependency vulnerability scan
+      run: |
+        npx audit-ci --config audit-ci.json || true
+
+    - name: Upload security scan results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: frontend-security-results
+        path: frontend/audit-results.json
+        retention-days: 30

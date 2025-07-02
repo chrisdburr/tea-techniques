@@ -1,143 +1,26 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, waitFor } from '@/tests/utils/test-utils';
 import TechniqueForm from '@/components/technique/TechniqueForm';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import { server } from '@/tests/mocks/server';
+import { http, HttpResponse } from 'msw';
+
+const mockPush = jest.fn();
+const mockBack = jest.fn();
 
 // Mock the next/navigation
 jest.mock('next/navigation', () => ({
-  useRouter: jest.fn(),
-}));
-
-// Mock API hooks since MSW is not working properly
-jest.mock('@/lib/api/hooks', () => ({
-  useAssuranceGoals: () => ({
-    data: {
-      results: [
-        { id: 1, name: 'Accuracy', description: 'Test goal' },
-        { id: 2, name: 'Fairness', description: 'Test goal 2' }
-      ]
-    },
-    isLoading: false,
-    error: null
-  }),
-  useTags: () => ({
-    data: {
-      results: [
-        { id: 1, name: 'applicable-models/agnostic' },
-        { id: 2, name: 'data-type/tabular' }
-      ]
-    },
-    isLoading: false,
-    error: null
-  }),
-  useResourceTypes: () => ({
-    data: {
-      results: [
-        { id: 1, name: 'Paper' },
-        { id: 2, name: 'Website' }
-      ]
-    },
-    isLoading: false,
-    error: null
-  }),
-  useTechniques: () => ({
-    data: {
-      results: [
-        { id: 2, name: 'Test Technique 2' },
-        { id: 3, name: 'Test Technique 3' }
-      ]
-    },
-    isLoading: false,
-    error: null
-  }),
-  useTechnique: (id: number) => ({
-    data: id === 1 ? {
-      id: 1,
-      name: 'Test Technique',
-      description: 'Test Description',
-      complexity_rating: 3,
-      computational_cost_rating: 2,
-      assurance_goals: [{ id: 1, name: 'Accuracy', description: 'Test goal' }],
-      tags: [{ id: 1, name: 'applicable-models/agnostic' }],
-      related_techniques: [],
-      resources: [],
-      example_use_cases: [],
-      limitations: []
-    } : null,
-    isLoading: false,
-    error: null
-  }),
-  useTechniqueDetail: (id: number) => ({
-    data: id === 1 ? {
-      id: 1,
-      name: 'Test Technique',
-      description: 'Test Description',
-      complexity_rating: 3,
-      computational_cost_rating: 2,
-      assurance_goals: [{ id: 1, name: 'Accuracy', description: 'Test goal' }],
-      tags: [{ id: 1, name: 'applicable-models/agnostic' }],
-      related_techniques: [],
-      resources: [],
-      example_use_cases: [],
-      limitations: []
-    } : null,
-    isLoading: false,
-    error: null
-  }),
-  useCreateTechnique: () => ({
-    mutateAsync: jest.fn().mockResolvedValue({ id: 123 }),
-    isPending: false
-  }),
-  useUpdateTechnique: () => ({
-    mutateAsync: jest.fn().mockResolvedValue({ id: 456 }),
-    isPending: false
-  })
-}));
-
-// Mock API error hook
-jest.mock('@/lib/hooks/useApiError', () => ({
-  useApiError: () => ({ 
-    error: null, 
-    handleError: jest.fn() 
+  useRouter: () => ({
+    push: mockPush,
+    back: mockBack,
   }),
 }));
 
 describe('TechniqueForm', () => {
-  let queryClient: QueryClient;
-  let user: ReturnType<typeof userEvent.setup>;
-  const pushMock = jest.fn();
-  const backMock = jest.fn();
-
   beforeEach(() => {
-    queryClient = new QueryClient({
-      defaultOptions: {
-        queries: {
-          retry: false,
-        },
-      },
-    });
-
-    user = userEvent.setup();
-
-    // Setup router mock
-    (useRouter as jest.Mock).mockImplementation(() => ({
-      push: pushMock,
-      back: backMock,
-    }));
-  });
-
-  afterEach(() => {
     jest.clearAllMocks();
-    queryClient.clear();
   });
 
   it('renders the form for creating a new technique', async () => {
-    render(
-      <QueryClientProvider client={queryClient}>
-        <TechniqueForm />
-      </QueryClientProvider>
-    );
+    const { user } = render(<TechniqueForm />);
 
     // Check that the form title is rendered
     expect(screen.getByText('Create New Technique')).toBeInTheDocument();
@@ -156,11 +39,7 @@ describe('TechniqueForm', () => {
   });
 
   it('renders the form for editing an existing technique', async () => {
-    render(
-      <QueryClientProvider client={queryClient}>
-        <TechniqueForm id={1} isEditMode={true} />
-      </QueryClientProvider>
-    );
+    const { user } = render(<TechniqueForm id={1} isEditMode={true} />);
 
     // Check that the form title is for editing
     expect(screen.getByText('Edit Technique')).toBeInTheDocument();
@@ -177,13 +56,7 @@ describe('TechniqueForm', () => {
   });
 
   it('successfully submits a new technique', async () => {
-    // This test will verify the form can be filled and submitted
-    // The actual API call is mocked in the module mock above
-    render(
-      <QueryClientProvider client={queryClient}>
-        <TechniqueForm />
-      </QueryClientProvider>
-    );
+    const { user } = render(<TechniqueForm />);
 
     // Wait for form to load
     await waitFor(() => {
@@ -215,16 +88,12 @@ describe('TechniqueForm', () => {
     
     // Wait for the submission to complete and navigation to occur
     await waitFor(() => {
-      expect(pushMock).toHaveBeenCalledWith('/techniques/123');
+      expect(mockPush).toHaveBeenCalledWith('/techniques/4');
     });
   });
 
   it('successfully updates an existing technique', async () => {
-    render(
-      <QueryClientProvider client={queryClient}>
-        <TechniqueForm id={1} isEditMode={true} />
-      </QueryClientProvider>
-    );
+    const { user } = render(<TechniqueForm id={1} isEditMode={true} />);
 
     // Wait for form to load with data
     await waitFor(() => {
@@ -241,16 +110,12 @@ describe('TechniqueForm', () => {
     
     // Wait for the submission to complete
     await waitFor(() => {
-      expect(pushMock).toHaveBeenCalledWith('/techniques/456');
+      expect(mockPush).toHaveBeenCalledWith('/techniques/1');
     });
   });
 
   it('adds and removes dynamic fields - use cases', async () => {
-    render(
-      <QueryClientProvider client={queryClient}>
-        <TechniqueForm />
-      </QueryClientProvider>
-    );
+    const { user } = render(<TechniqueForm />);
 
     // Navigate to the Examples & Limitations tab
     await user.click(screen.getByRole('tab', { name: /Examples & Limitations/i }));
@@ -279,11 +144,7 @@ describe('TechniqueForm', () => {
   });
 
   it('shows validation errors when submitting invalid data', async () => {  
-    render(
-      <QueryClientProvider client={queryClient}>
-        <TechniqueForm />
-      </QueryClientProvider>
-    );
+    const { user } = render(<TechniqueForm />);
     
     // Wait for form to load
     await waitFor(() => {
@@ -308,13 +169,7 @@ describe('TechniqueForm', () => {
   });
 
   it('displays loading state when submitting', async () => {
-    // This test will verify loading state display
-    // We'll skip the actual loading simulation due to complexity with mocked hooks
-    render(
-      <QueryClientProvider client={queryClient}>
-        <TechniqueForm />
-      </QueryClientProvider>
-    );
+    const { user } = render(<TechniqueForm />);
 
     // Wait for form to load
     await waitFor(() => {
@@ -346,16 +201,12 @@ describe('TechniqueForm', () => {
   });
 
   it('handles browser back navigation', async () => {
-    render(
-      <QueryClientProvider client={queryClient}>
-        <TechniqueForm />
-      </QueryClientProvider>
-    );
+    const { user } = render(<TechniqueForm />);
 
     // Click the back button
     await user.click(screen.getByText('Back'));
     
     // Check that router.back was called
-    expect(backMock).toHaveBeenCalled();
+    expect(mockBack).toHaveBeenCalled();
   });
 });

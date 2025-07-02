@@ -10,7 +10,7 @@ from rest_framework.permissions import BasePermission, IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db import connection
 import logging
-from typing import Any, List, Type
+from typing import Any, Dict, List, Type
 
 from ..models import (
     AssuranceGoal,
@@ -202,103 +202,108 @@ def health_check(request: Request) -> Response:
         )
 
 
-@api_view(["GET", "POST"])
-def debug_endpoint(
-    request: Request,
-) -> Response:  # noqa: C901 # Ignore complexity for debug view
-    """
-    Debugging endpoint with restricted access.
+# Debug utility functions
 
-    Only available in development mode (DEBUG=True).
-    """
+def _sanitize_settings():
+    """Extract and sanitize settings for debug output."""
     from django.conf import settings
+    
+    return {
+        "DEBUG": settings.DEBUG,
+        "ALLOWED_HOSTS": settings.ALLOWED_HOSTS,
+        "CORS_ALLOWED_ORIGINS": getattr(settings, "CORS_ALLOWED_ORIGINS", "Not set"),
+        "CORS_ALLOW_ALL_ORIGINS": getattr(settings, "CORS_ALLOW_ALL_ORIGINS", "Not set"),
+        "DATABASE_ENGINE": settings.DATABASES["default"]["ENGINE"],
+        "INSTALLED_APPS": settings.INSTALLED_APPS,
+        "MIDDLEWARE": settings.MIDDLEWARE,
+    }
 
-    # Only allow debug endpoint in development
+
+def _get_database_info():
+    """Get current database connection information."""
+    from django.conf import settings
+    
+    return {
+        "vendor": connection.vendor,
+        "queries_executed": (
+            len(connection.queries) if settings.DEBUG else "Query logging disabled"
+        ),
+        "is_usable": connection.is_usable(),
+    }
+
+
+def _get_model_counts():
+    """Get count of records in each model for debugging."""
+    return {
+        "assurance_goals": AssuranceGoal.objects.count(),
+        "tags": Tag.objects.count(),
+        "techniques": Technique.objects.count(),
+    }
+
+
+def _format_request_info(request: Request):
+    """Format request information excluding sensitive data."""
+    return {
+        "path": request.path,
+        "host": request.get_host(),
+        "method": request.method,
+        "content_type": request.content_type or "Not set",
+        "headers": {
+            k: v
+            for k, v in request.headers.items()
+            if k.lower() not in ("cookie", "authorization")
+        },
+    }
+
+
+def _get_api_endpoints():
+    """Get list of available API endpoints."""
+    return {
+        "assurance_goals": "/api/assurance-goals/",
+        "tags": "/api/tags/",
+        "techniques": "/api/techniques/",
+        "debug": "/api/debug/",
+    }
+
+
+@api_view(["GET"])
+def health_check_detailed(request: Request) -> Response:
+    """Comprehensive health check with detailed system information."""
+    from django.conf import settings
+    
+    # Only allow in development
     if not settings.DEBUG:
         return Response(
-            {"error": "Debug endpoint not available in production"},
+            {"error": "Detailed health check not available in production"},
             status=status.HTTP_403_FORBIDDEN,
         )
 
-    if request.method == "GET":
-        # Return connection information for debugging
+    response_data = {
+        "api_status": "API is running correctly",
+        "request_info": _format_request_info(request),
+        "database_info": _get_database_info(),
+        "database_counts": _get_model_counts(),
+        "api_endpoints": _get_api_endpoints(),
+        "settings": _sanitize_settings(),
+    }
 
-        # Safe version of settings that doesn't expose sensitive information
-        safe_settings = {
-            "DEBUG": settings.DEBUG,
-            "ALLOWED_HOSTS": settings.ALLOWED_HOSTS,
-            "CORS_ALLOWED_ORIGINS": getattr(
-                settings, "CORS_ALLOWED_ORIGINS", "Not set"
-            ),
-            "CORS_ALLOW_ALL_ORIGINS": getattr(
-                settings, "CORS_ALLOW_ALL_ORIGINS", "Not set"
-            ),
-            "DATABASE_ENGINE": settings.DATABASES["default"]["ENGINE"],
-            "INSTALLED_APPS": settings.INSTALLED_APPS,
-            "MIDDLEWARE": settings.MIDDLEWARE,
-        }
+    return Response(response_data)
 
-        # Get current database connection info
-        db_info = {
-            "vendor": connection.vendor,
-            "queries_executed": (
-                len(connection.queries) if settings.DEBUG else "Query logging disabled"
-            ),
-            "is_usable": connection.is_usable(),
-        }
 
-        # Return model information for debugging
-        assurance_goals_count = AssuranceGoal.objects.count()
-        tags_count = Tag.objects.count()
-        techniques_count = Technique.objects.count()
-
-        response_data = {
-            "api_status": "API is running correctly",
-            "request_info": {
-                "path": request.path,
-                "host": request.get_host(),
-                "method": request.method,
-                "content_type": request.content_type or "Not set",
-                "headers": {
-                    k: v
-                    for k, v in request.headers.items()
-                    if k.lower() not in ("cookie", "authorization")
-                },
-            },
-            "database_info": db_info,
-            "database_counts": {
-                "assurance_goals": assurance_goals_count,
-                "tags": tags_count,
-                "techniques": techniques_count,
-            },
-            "api_endpoints": {
-                "assurance_goals": "/api/assurance-goals/",
-                "tags": "/api/tags/",
-                "techniques": "/api/techniques/",
-                "debug": "/api/debug/",
-            },
-            "settings": safe_settings,
-        }
-
-        return Response(response_data)
-
-    elif request.method == "POST":
-        # Echo back received data for debugging
+@api_view(["POST"])
+def debug_echo(request: Request) -> Response:
+    """Echo back received data for debugging POST requests."""
+    from django.conf import settings
+    
+    # Only allow in development
+    if not settings.DEBUG:
         return Response(
-            {
-                "api_status": "API is running correctly",
-                "received_data": request.data,
-                "content_type": request.content_type,
-                "method": request.method,
-                "headers": {
-                    k: v
-                    for k, v in request.headers.items()
-                    if k.lower() not in ("cookie", "authorization")
-                },
-            }
+            {"error": "Debug echo not available in production"},
+            status=status.HTTP_403_FORBIDDEN,
         )
 
-    # Default fallback response - should never reach here due to DRF's api_view decorator
-    return Response(
-        {"error": "Unsupported HTTP method"}, status=status.HTTP_405_METHOD_NOT_ALLOWED
-    )
+    return Response({
+        "api_status": "API is running correctly",
+        "received_data": request.data,
+        "request_info": _format_request_info(request),
+    })

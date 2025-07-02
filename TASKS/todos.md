@@ -1,1 +1,0 @@
-- Implement glossary and tooltips (needs research to ensure good approach)

@@ -69,7 +69,17 @@ class Command(BaseCommand):
         try:
             with open(file_path, "r", encoding="utf-8") as json_file:
                 techniques_data = json.load(json_file)
+        except json.JSONDecodeError as e:
+            error_msg = f"Invalid JSON in file {file_path}: {str(e)}"
+            logger.error(error_msg)
+            self.stdout.write(self.style.ERROR(f"Error processing JSON file: {str(e)}"))
+            if not self.force:
+                return
+            else:
+                logger.info("Force flag enabled, but cannot continue with invalid JSON")
+                return
 
+        try:
             # Use a transaction to ensure data consistency
             with transaction.atomic():
                 count = 0

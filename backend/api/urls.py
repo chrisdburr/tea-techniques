@@ -13,7 +13,8 @@ from .views.api_views import (
     TagsViewSet,
     TechniquesViewSet,
     ResourceTypesViewSet,
-    debug_endpoint,
+    health_check_detailed,
+    debug_echo,
     health_check,
 )
 from .views.auth_views import (
@@ -41,7 +42,8 @@ def api_root(request, format=None):
                 "resourcetype-list", request=request, format=format
             ),
             "health": reverse("health-check", request=request, format=format),
-            "debug": reverse("debug-endpoint", request=request, format=format),
+            "debug_info": reverse("debug-info", request=request, format=format),
+            "debug_echo": reverse("debug-echo", request=request, format=format),
         }
     )
 
@@ -68,8 +70,10 @@ router.register(r"resource-types", ResourceTypesViewSet)
 
 urlpatterns = [
     path("health/", health_check, name="health-check"),
-    path("debug", debug_endpoint, name="debug-endpoint"),
-    path("debug/", debug_endpoint, name="debug-endpoint-slash"),
+    path("debug/info", health_check_detailed, name="debug-info"),
+    path("debug/info/", health_check_detailed, name="debug-info-slash"),
+    path("debug/echo", debug_echo, name="debug-echo"),
+    path("debug/echo/", debug_echo, name="debug-echo-slash"),
     path("", api_root, name="api-root"),
     path("", include(router.urls)),
     # Authentication - DRF's built-in auth views

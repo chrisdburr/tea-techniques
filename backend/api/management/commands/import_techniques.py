@@ -5,9 +5,7 @@ import json
 import os
 from pathlib import Path
 import logging
-import datetime
-import re
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.conf import settings
@@ -21,6 +19,11 @@ from api.models import (
     TechniqueResource,
     TechniqueExampleUseCase,
     TechniqueLimitation,
+)
+from api.utils import (
+    TechniqueDataExtractor,
+    TechniqueDataValidator, 
+    DataValidationError,
 )
 
 # Set up logger
@@ -159,93 +162,10 @@ class Command(BaseCommand):
                 defaults={"icon": resource_type.lower().replace(" ", "_")},
             )
 
-    def _parse_date(self, date_str: Optional[str]) -> Optional[datetime.date]:
-        """Parse a date string into a Python date object."""
-        if not date_str or not date_str.strip():
-            return None
-
-        date_str = date_str.strip()
-
-        # Try different date formats
-        formats = [
-            "%Y-%m-%d",  # 2023-01-15
-            "%d/%m/%Y",  # 15/01/2023
-            "%m/%d/%Y",  # 01/15/2023
-            "%B %d, %Y",  # January 15, 2023
-            "%d %B %Y",  # 15 January 2023
-            "%Y",  # 2023 (just year)
-            "%B %Y",  # January 2023
-            "%m-%Y",  # 01-2023
-            "%m/%Y",  # 01/2023
-        ]
-
-        for fmt in formats:
-            try:
-                return datetime.datetime.strptime(date_str, fmt).date()
-            except ValueError:
-                continue
-
-        # If we couldn't parse the date with any format, just extract the year if possible
-        # This handles cases like "Published in 2023" or "2023 (Conference)"
-        year_match = re.search(r"20\d{2}|19\d{2}", date_str)
-        if year_match:
-            year = int(year_match.group(0))
-            return datetime.date(year, 1, 1)  # Default to January 1st of the year
-
-        # If all else fails, return None
-        logger.warning(f"Could not parse date string: {date_str}")
-        return None
-
-    def _process_limitation(self, technique: Technique, limitation: Any) -> None:
-        """Process a single limitation and add it to the technique."""
-        # Check if the limitation is already a dict/object with description field
-        if isinstance(limitation, dict) and "description" in limitation:
-            description = limitation["description"].strip()
-            if description:
-                TechniqueLimitation.objects.create(
-                    technique=technique, description=description
-                )
-        # Check if it's a string
-        elif isinstance(limitation, str):
-            if limitation.strip().startswith(("[", "{")):
-                try:
-                    # Try to parse as JSON if it looks like JSON
-                    parsed_limitation = json.loads(limitation)
-
-                    # Handle case where the parsed result is an array of limitation objects
-                    if isinstance(parsed_limitation, list):
-                        for item in parsed_limitation:
-                            if isinstance(item, dict) and "description" in item:
-                                desc = item["description"].strip()
-                                if desc:
-                                    TechniqueLimitation.objects.create(
-                                        technique=technique, description=desc
-                                    )
-                            elif isinstance(item, str) and item.strip():
-                                TechniqueLimitation.objects.create(
-                                    technique=technique, description=item.strip()
-                                )
-                    # Handle case where the parsed result is a single limitation object
-                    elif (
-                        isinstance(parsed_limitation, dict)
-                        and "description" in parsed_limitation
-                    ):
-                        desc = parsed_limitation["description"].strip()
-                        if desc:
-                            TechniqueLimitation.objects.create(
-                                technique=technique, description=desc
-                            )
-                except json.JSONDecodeError:
-                    # If parsing fails, treat it as a plain string
-                    if limitation.strip():
-                        TechniqueLimitation.objects.create(
-                            technique=technique, description=limitation.strip()
-                        )
-            # Handle plain strings
-            elif limitation.strip():
-                TechniqueLimitation.objects.create(
-                    technique=technique, description=limitation.strip()
-                )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.data_extractor = TechniqueDataExtractor()
+        self.validator = TechniqueDataValidator()
 
     def _process_tags(self, technique: Technique, tags_data: list) -> None:
         """Process tags for a technique."""
@@ -265,159 +185,182 @@ class Command(BaseCommand):
 
 
     def _process_technique(self, data: Dict[str, Any]) -> Optional[Technique]:
-        """Process a single technique from JSON data"""
+        """Process a single technique from JSON data using refactored approach."""
         try:
-            # Extract basic data
-            name = data.get("name", "")
-            description = data.get("description", "")
-            assurance_goals_list = data.get("assurance_goals", [])
-            complexity_rating = data.get("complexity_rating")
-            computational_cost_rating = data.get("computational_cost_rating")
-            tags_data = data.get("tags", [])
-            related_techniques_ids = data.get("related_techniques", [])
+            # Validate required fields
+            if not self.validator.validate_required_fields(data, force=self.force):
+                return None
 
-            # Process nested data structures directly from JSON
-            example_use_cases_data = data.get("example_use_cases", [])
-            resources_data = data.get("resources", [])
-            limitations_data = data.get("limitations", [])
+            # Extract data using utility classes
+            basic_data = self.data_extractor.extract_basic_data(data)
+            relationship_data = self.data_extractor.extract_relationship_data(data)
+            nested_data = self.data_extractor.extract_nested_data(data)
 
-            # Skip if essential data is missing, unless force is true
-            if not name or not description:
-                logger.warning("Skipping technique with missing name or description")
+            # Validate ratings
+            if not self.validator.validate_ratings(data):
+                logger.warning(f"Invalid ratings for technique {basic_data['name']}")
                 if not self.force:
-                    return
-                else:
-                    logger.info("Force flag enabled, continuing with incomplete data")
-
-            # Create default values
-            defaults = {
-                "description": description,
-                "complexity_rating": complexity_rating,
-                "computational_cost_rating": computational_cost_rating,
-            }
+                    return None
 
             # Create or update the technique
-            technique, created = Technique.objects.update_or_create(
-                name=name,
-                defaults=defaults,
-            )
+            technique = self._create_or_update_technique(basic_data)
+            
+            # Process relationships
+            self._process_assurance_goals(technique, relationship_data['assurance_goals'])
+            self._process_tags(technique, relationship_data['tags'])
+            self._store_related_techniques(technique, relationship_data['related_techniques'])
+            
+            # Process nested objects
+            self._process_resources(technique, nested_data['resources'])
+            self._process_use_cases(technique, nested_data['example_use_cases'], relationship_data['assurance_goals'])
+            self._process_limitations(technique, nested_data['limitations'])
 
-            # If updating, clear existing relationships
-            if not created:
-                technique.assurance_goals.clear()
-                technique.tags.clear()
-                technique.related_techniques.clear()
-                TechniqueResource.objects.filter(technique=technique).delete()
-                TechniqueExampleUseCase.objects.filter(technique=technique).delete()
-                TechniqueLimitation.objects.filter(technique=technique).delete()
-
-            # Process assurance goals
-            for goal_name in assurance_goals_list:
-                goal, _ = AssuranceGoal.objects.get_or_create(
-                    name=goal_name,
-                    defaults={
-                        "description": f"{goal_name} techniques for trustworthy AI"
-                    },
-                )
-                technique.assurance_goals.add(goal)
-
-            # Process tags
-            self._process_tags(technique, tags_data)
-
-            # Process related techniques (this will be done in a second pass)
-            # Store the IDs for later processing
-            if hasattr(self, '_related_techniques_to_process'):
-                self._related_techniques_to_process[technique.id] = related_techniques_ids
-            else:
-                self._related_techniques_to_process = {technique.id: related_techniques_ids}
-
-            # Process example use cases
-            for use_case_data in example_use_cases_data:
-                use_case_desc = use_case_data.get("description")
-                use_case_goal_name = use_case_data.get("goal")
-
-                if not use_case_goal_name and assurance_goals_list:
-                    use_case_goal_name = assurance_goals_list[0]
-
-                if not use_case_desc:
-                    continue
-
-                # Find the goal
-                try:
-                    use_case_goal, _ = AssuranceGoal.objects.get_or_create(
-                        name=use_case_goal_name,
-                        defaults={
-                            "description": f"{use_case_goal_name} techniques for trustworthy AI"
-                        },
-                    )
-
-                    # Create example use case
-                    TechniqueExampleUseCase.objects.create(
-                        technique=technique,
-                        description=use_case_desc,
-                        assurance_goal=use_case_goal,
-                    )
-                except Exception as e:
-                    logger.warning(f"Error creating use case for {name}: {e}")
-                    if not self.force:
-                        raise
-
-            # Process limitations - now using a dedicated helper method
-            for limitation in limitations_data:
-                self._process_limitation(technique, limitation)
-
-            # Process resources
-            for resource_data in resources_data:
-                resource_type_name = resource_data.get("type", "Website")
-                resource_title = resource_data.get("title", "Resource")
-                resource_url = resource_data.get("url", "")
-                resource_desc = resource_data.get("description", "")
-                resource_authors = resource_data.get("authors", [])
-                resource_publication_date = resource_data.get("publication_date", "")
-                resource_source_type = resource_data.get(
-                    "source_type", resource_type_name
-                )
-
-                if not resource_url:
-                    continue
-
-                # Get or create resource type
-                resource_type, _ = ResourceType.objects.get_or_create(
-                    name=resource_type_name,
-                    defaults={"icon": resource_type_name.lower().replace(" ", "_")},
-                )
-
-                # Convert authors list to comma-separated string if it's a list
-                if isinstance(resource_authors, list):
-                    resource_authors = ", ".join(resource_authors)
-
-                # Parse the publication date
-                parsed_date = self._parse_date(resource_publication_date)
-
-                # Create resource
-                TechniqueResource.objects.create(
-                    technique=technique,
-                    resource_type=resource_type,
-                    url=resource_url,
-                    title=resource_title,
-                    description=resource_desc,
-                    authors=resource_authors,
-                    publication_date=parsed_date,
-                    source_type=resource_source_type,
-                )
-
-            status = "Created" if created else "Updated"
-            logger.info(f"{status} technique: {name}")
-            self.stdout.write(self.style.SUCCESS(f"{status} technique: {name}"))
+            status = "Updated" if hasattr(technique, '_created') and not technique._created else "Created"
+            logger.info(f"{status} technique: {basic_data['name']}")
+            self.stdout.write(self.style.SUCCESS(f"{status} technique: {basic_data['name']}"))
             
             return technique
 
+        except DataValidationError as e:
+            logger.warning(f"Validation error for technique {data.get('name', 'Unknown')}: {str(e)}")
+            if not self.force:
+                return None
+            return self._handle_incomplete_technique(data)
         except Exception as e:
-            error_msg = (
-                f'Error processing technique {data.get("name", "Unknown")}: {str(e)}'
-            )
+            error_msg = f'Error processing technique {data.get("name", "Unknown")}: {str(e)}'
             logger.error(error_msg)
             self.stdout.write(self.style.ERROR(error_msg))
             if not self.force:
                 raise
             return None
+
+    def _create_or_update_technique(self, basic_data: Dict[str, Any]) -> Technique:
+        """Create or update a technique with basic data."""
+        technique, created = Technique.objects.update_or_create(
+            name=basic_data['name'],
+            defaults={
+                'description': basic_data['description'],
+                'complexity_rating': basic_data['complexity_rating'],
+                'computational_cost_rating': basic_data['computational_cost_rating'],
+            }
+        )
+        
+        # Store creation status for logging
+        technique._created = created
+        
+        # If updating, clear existing relationships
+        if not created:
+            self._clear_existing_relationships(technique)
+            
+        return technique
+
+    def _clear_existing_relationships(self, technique: Technique) -> None:
+        """Clear all existing relationships for a technique being updated."""
+        technique.assurance_goals.clear()
+        technique.tags.clear()
+        technique.related_techniques.clear()
+        TechniqueResource.objects.filter(technique=technique).delete()
+        TechniqueExampleUseCase.objects.filter(technique=technique).delete()
+        TechniqueLimitation.objects.filter(technique=technique).delete()
+
+    def _process_assurance_goals(self, technique: Technique, goals_list: List[str]) -> None:
+        """Process assurance goals for a technique."""
+        for goal_name in goals_list:
+            goal, _ = AssuranceGoal.objects.get_or_create(
+                name=goal_name,
+                defaults={"description": f"{goal_name} techniques for trustworthy AI"}
+            )
+            technique.assurance_goals.add(goal)
+
+    def _store_related_techniques(self, technique: Technique, related_ids: List[Any]) -> None:
+        """Store related technique IDs for later processing."""
+        if not hasattr(self, '_related_techniques_to_process'):
+            self._related_techniques_to_process = {}
+        self._related_techniques_to_process[technique.id] = related_ids
+
+    def _process_resources(self, technique: Technique, resources_data: List[Dict[str, Any]]) -> None:
+        """Process resources for a technique using utility classes."""
+        for resource_data in resources_data:
+            processed_resource = self.data_extractor.process_resource_data(resource_data)
+            
+            if not self.validator.validate_resource_data(processed_resource):
+                logger.warning(f"Invalid resource data for technique {technique.name}")
+                continue
+                
+            self._create_resource(technique, processed_resource)
+
+    def _create_resource(self, technique: Technique, resource_data: Dict[str, Any]) -> None:
+        """Create a single resource for a technique."""
+        # Get or create resource type
+        resource_type, _ = ResourceType.objects.get_or_create(
+            name=resource_data['type'],
+            defaults={"icon": resource_data['type'].lower().replace(" ", "_")}
+        )
+
+        TechniqueResource.objects.create(
+            technique=technique,
+            resource_type=resource_type,
+            url=resource_data['url'],
+            title=resource_data['title'],
+            description=resource_data['description'],
+            authors=resource_data['authors'],
+            publication_date=resource_data['parsed_publication_date'],
+            source_type=resource_data['source_type'],
+        )
+
+    def _process_use_cases(self, technique: Technique, use_cases_data: List[Dict[str, Any]], default_goals: List[str]) -> None:
+        """Process use cases for a technique using utility classes."""
+        default_goal = default_goals[0] if default_goals else None
+        
+        for use_case_data in use_cases_data:
+            processed_use_case = self.data_extractor.process_use_case_data(use_case_data, default_goal)
+            
+            if not processed_use_case['description']:
+                continue
+                
+            self._create_use_case(technique, processed_use_case)
+
+    def _create_use_case(self, technique: Technique, use_case_data: Dict[str, Any]) -> None:
+        """Create a single use case for a technique."""
+        try:
+            goal = None
+            if use_case_data['goal_name']:
+                goal, _ = AssuranceGoal.objects.get_or_create(
+                    name=use_case_data['goal_name'],
+                    defaults={"description": f"{use_case_data['goal_name']} techniques for trustworthy AI"}
+                )
+
+            TechniqueExampleUseCase.objects.create(
+                technique=technique,
+                description=use_case_data['description'],
+                assurance_goal=goal,
+            )
+        except Exception as e:
+            logger.warning(f"Error creating use case for {technique.name}: {e}")
+            if not self.force:
+                raise
+
+    def _process_limitations(self, technique: Technique, limitations_data: List[Any]) -> None:
+        """Process limitations for a technique using utility classes."""
+        processed_limitations = self.data_extractor.process_limitation_data(limitations_data)
+        
+        for description in processed_limitations:
+            TechniqueLimitation.objects.create(
+                technique=technique,
+                description=description
+            )
+
+    def _handle_incomplete_technique(self, data: Dict[str, Any]) -> Optional[Technique]:
+        """Handle techniques with incomplete data when force flag is enabled."""
+        logger.info("Force flag enabled, attempting to create technique with incomplete data")
+        
+        # Provide minimal defaults
+        name = data.get('name', 'Unknown Technique')
+        description = data.get('description', 'No description provided')
+        
+        technique, created = Technique.objects.update_or_create(
+            name=name,
+            defaults={'description': description}
+        )
+        
+        return technique

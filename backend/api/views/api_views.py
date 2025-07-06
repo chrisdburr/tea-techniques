@@ -89,11 +89,13 @@ class TechniquesViewSet(viewsets.ModelViewSet):
     ]
     filterset_fields = [
         "name",
+        "complexity_rating",
+        "computational_cost_rating",
         "assurance_goals",
         "tags",
     ]
     search_fields = ["name", "description"]
-    ordering_fields = ["id", "name"]
+    ordering_fields = ["id", "name", "complexity_rating", "computational_cost_rating"]
 
     def get_permissions(self) -> List[BasePermission]:
         """
@@ -290,16 +292,23 @@ def health_check_detailed(request: Request) -> Response:
     return Response(response_data)
 
 
-@api_view(["POST"])
+@api_view(["GET", "POST"])
 def debug_echo(request: Request) -> Response:
     """Echo back received data for debugging POST requests."""
     from django.conf import settings
     
-    # Only allow in development
+    # Only allow in development - check this before method validation
     if not settings.DEBUG:
         return Response(
             {"error": "Debug echo not available in production"},
             status=status.HTTP_403_FORBIDDEN,
+        )
+
+    # Only allow POST method in production
+    if request.method != "POST":
+        return Response(
+            {"error": "Debug echo only accepts POST requests"},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED,
         )
 
     return Response({

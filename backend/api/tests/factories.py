@@ -82,7 +82,7 @@ class TechniqueFactory(factory.django.DjangoModelFactory):
         model = Technique
 
     name = factory.LazyFunction(
-        lambda: f"{fake.random_element(TECHNIQUE_PREFIXES)} ({fake.random_element(['SHAP', 'LIME', 'GRAD', 'ATT', 'CF'])})"
+        lambda: f"{fake.random_element(TECHNIQUE_PREFIXES)} ({fake.random_element(['SHAP', 'LIME', 'GRAD', 'ATT', 'CF'])}) - {fake.uuid4()[:8]}"
     )
     
     description = factory.LazyFunction(

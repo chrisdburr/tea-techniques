@@ -1,6 +1,8 @@
 # backend/api/management/commands/reset_and_import_techniques.py
 from django.core.management.base import BaseCommand
 from django.core.management import call_command
+from django.db import transaction
+from api.models import Technique
 
 
 class Command(BaseCommand):
@@ -25,12 +27,21 @@ class Command(BaseCommand):
         file_format = options.get("format", "json")
 
         # First, reset the database
-        reset_options = {"force": force}
+        reset_options = {"force": force, "stdout": self.stdout, "stderr": self.stderr}
         self.stdout.write(self.style.NOTICE("Step 1: Resetting database"))
         call_command("reset_database", **reset_options)
 
+        # Delete all existing techniques and related data
+        with transaction.atomic():
+            deleted_count = Technique.objects.count()
+            Technique.objects.all().delete()
+            if deleted_count > 0:
+                self.stdout.write(
+                    self.style.WARNING(f"Deleted {deleted_count} existing techniques")
+                )
+
         # Then import techniques
-        import_options = {}
+        import_options = {"stdout": self.stdout, "stderr": self.stderr, "force": force}
         if file_path:
             import_options["file"] = file_path
 

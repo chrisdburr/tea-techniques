@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 import logging
 from typing import Any, Dict, List, Optional
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.conf import settings
 from argparse import ArgumentParser
@@ -41,10 +41,17 @@ class Command(BaseCommand):
             default=False,
             help="Force import even if errors occur",
         )
+        parser.add_argument(
+            "--dry-run",
+            action="store_true",
+            default=False,
+            help="Validate the file without actually importing data",
+        )
 
     def handle(self, *args: Any, **options: Dict[str, Any]) -> None:
         file_path_option = options.get("file")
         self.force = options.get("force", False)
+        self.dry_run = options.get("dry_run", False)
 
         # Get the file path
         if not file_path_option:
@@ -58,15 +65,24 @@ class Command(BaseCommand):
             file_path = str(file_path_option)
 
         if not os.path.exists(file_path):
-            logger.error(f"File not found: {file_path}")
-            self.stdout.write(self.style.ERROR(f"File not found: {file_path}"))
-            return
+            error_msg = f"File not found: {file_path}"
+            logger.error(error_msg)
+            raise CommandError(error_msg)
 
-        logger.info(f"Importing techniques from {file_path}")
-        self.stdout.write(self.style.SUCCESS(f"Importing techniques from {file_path}"))
+        if self.dry_run:
+            logger.info(f"Dry run: Validating techniques from {file_path}")
+            self.stdout.write(self.style.SUCCESS(f"Dry run: Validating techniques from {file_path}"))
+        else:
+            logger.info(f"Importing techniques from {file_path}")
+            self.stdout.write(self.style.SUCCESS(f"Importing techniques from {file_path}"))
+        
+        if self.force:
+            logger.info("Force mode enabled: Will continue processing despite errors")
+            self.stdout.write(self.style.WARNING("Force mode enabled: Will continue processing despite errors"))
 
-        # Create initial records needed for import
-        self._create_base_records()
+        # Create initial records needed for import (skip in dry run mode)
+        if not self.dry_run:
+            self._create_base_records()
 
         # Process the JSON file
         try:
@@ -75,47 +91,60 @@ class Command(BaseCommand):
         except json.JSONDecodeError as e:
             error_msg = f"Invalid JSON in file {file_path}: {str(e)}"
             logger.error(error_msg)
-            self.stdout.write(self.style.ERROR(f"Error processing JSON file: {str(e)}"))
-            if not self.force:
-                return
-            else:
-                logger.info("Force flag enabled, but cannot continue with invalid JSON")
-                return
+            raise CommandError(error_msg)
+        
+        # Validate that techniques_data is a list
+        if not isinstance(techniques_data, list):
+            error_msg = f"JSON file must contain a list of techniques, got {type(techniques_data).__name__}"
+            logger.error(error_msg)
+            raise CommandError(error_msg)
 
         try:
-            # Use a transaction to ensure data consistency
-            with transaction.atomic():
+            if self.dry_run:
+                # In dry run mode, just validate the data without saving
                 count = 0
-                self._related_techniques_to_process = {}
-                self._json_id_to_db_id = {}  # Map JSON IDs to database IDs
-                
-                # First pass: import all techniques and build ID mapping
                 for technique_data in techniques_data:
-                    json_id = technique_data.get("id")
-                    technique = self._process_technique(technique_data)
-                    if technique and json_id is not None:
-                        self._json_id_to_db_id[json_id] = technique.id
+                    self._validate_technique(technique_data)
                     count += 1
                 
-                # Second pass: process related techniques using ID mapping
-                for technique_id, related_json_ids in self._related_techniques_to_process.items():
-                    try:
-                        technique = Technique.objects.get(id=technique_id)
-                        # Convert JSON IDs to database IDs
-                        related_db_ids = []
-                        for json_id in related_json_ids:
-                            if json_id in self._json_id_to_db_id:
-                                related_db_ids.append(self._json_id_to_db_id[json_id])
-                            else:
-                                logger.warning(f"Related technique with JSON ID {json_id} not found in mapping")
-                        self._process_related_techniques(technique, related_db_ids)
-                    except Technique.DoesNotExist:
-                        logger.warning(f"Technique {technique_id} not found for related techniques processing")
+                logger.info(f"Dry run: Successfully validated {count} techniques")
+                self.stdout.write(
+                    self.style.SUCCESS(f"Dry run: Successfully validated {count} techniques")
+                )
+            else:
+                # Use a transaction to ensure data consistency
+                with transaction.atomic():
+                    count = 0
+                    self._related_techniques_to_process = {}
+                    self._json_id_to_db_id = {}  # Map JSON IDs to database IDs
+                    
+                    # First pass: import all techniques and build ID mapping
+                    for technique_data in techniques_data:
+                        json_id = technique_data.get("id")
+                        technique = self._process_technique(technique_data)
+                        if technique and json_id is not None:
+                            self._json_id_to_db_id[json_id] = technique.id
+                        count += 1
+                    
+                    # Second pass: process related techniques using ID mapping
+                    for technique_id, related_json_ids in self._related_techniques_to_process.items():
+                        try:
+                            technique = Technique.objects.get(id=technique_id)
+                            # Convert JSON IDs to database IDs
+                            related_db_ids = []
+                            for json_id in related_json_ids:
+                                if json_id in self._json_id_to_db_id:
+                                    related_db_ids.append(self._json_id_to_db_id[json_id])
+                                else:
+                                    logger.warning(f"Related technique with JSON ID {json_id} not found in mapping")
+                            self._process_related_techniques(technique, related_db_ids)
+                        except Technique.DoesNotExist:
+                            logger.warning(f"Technique {technique_id} not found for related techniques processing")
 
-            logger.info(f"Successfully imported {count} techniques")
-            self.stdout.write(
-                self.style.SUCCESS(f"Successfully imported {count} techniques")
-            )
+                logger.info(f"Successfully imported {count} techniques")
+                self.stdout.write(
+                    self.style.SUCCESS(f"Successfully imported {count} techniques")
+                )
         except Exception as e:
             logger.error(f"Error processing JSON file: {str(e)}")
             self.stdout.write(self.style.ERROR(f"Error processing JSON file: {str(e)}"))
@@ -222,7 +251,9 @@ class Command(BaseCommand):
             return technique
 
         except DataValidationError as e:
+            error_msg = f"Error importing technique {data.get('name', 'Unknown')}: {str(e)}"
             logger.warning(f"Validation error for technique {data.get('name', 'Unknown')}: {str(e)}")
+            self.stderr.write(self.style.ERROR(error_msg))
             if not self.force:
                 return None
             return self._handle_incomplete_technique(data)
@@ -233,6 +264,47 @@ class Command(BaseCommand):
             if not self.force:
                 raise
             return None
+
+    def _validate_technique(self, data: Dict[str, Any]) -> bool:
+        """Validate a technique without saving to database (for dry run mode)."""
+        try:
+            # Validate required fields
+            if not self.validator.validate_required_fields(data, force=self.force):
+                return False
+
+            # Extract data using utility classes
+            basic_data = self.data_extractor.extract_basic_data(data)
+            nested_data = self.data_extractor.extract_nested_data(data)
+
+            # Validate ratings
+            if not self.validator.validate_ratings(data):
+                logger.warning(f"Invalid ratings for technique {basic_data['name']}")
+                if not self.force:
+                    return False
+
+            # Validate nested data
+            for resource_data in nested_data['resources']:
+                processed_resource = self.data_extractor.process_resource_data(resource_data)
+                if not self.validator.validate_resource_data(processed_resource):
+                    logger.warning(f"Invalid resource data for technique {basic_data['name']}")
+                    if not self.force:
+                        return False
+
+            logger.info(f"Validated technique: {basic_data['name']}")
+            self.stdout.write(self.style.SUCCESS(f"Validated technique: {basic_data['name']}"))
+            
+            return True
+
+        except DataValidationError as e:
+            logger.warning(f"Validation error for technique {data.get('name', 'Unknown')}: {str(e)}")
+            return self.force
+        except Exception as e:
+            error_msg = f'Error validating technique {data.get("name", "Unknown")}: {str(e)}'
+            logger.error(error_msg)
+            self.stdout.write(self.style.ERROR(error_msg))
+            if not self.force:
+                raise
+            return False
 
     def _create_or_update_technique(self, basic_data: Dict[str, Any]) -> Technique:
         """Create or update a technique with basic data."""
@@ -266,11 +338,12 @@ class Command(BaseCommand):
     def _process_assurance_goals(self, technique: Technique, goals_list: List[str]) -> None:
         """Process assurance goals for a technique."""
         for goal_name in goals_list:
-            goal, _ = AssuranceGoal.objects.get_or_create(
-                name=goal_name,
-                defaults={"description": f"{goal_name} techniques for trustworthy AI"}
-            )
-            technique.assurance_goals.add(goal)
+            try:
+                goal = AssuranceGoal.objects.get(name=goal_name)
+                technique.assurance_goals.add(goal)
+            except AssuranceGoal.DoesNotExist:
+                logger.warning(f"AssuranceGoal '{goal_name}' not found for technique '{technique.name}'")
+                self.stderr.write(self.style.WARNING(f"AssuranceGoal not found: {goal_name}"))
 
     def _store_related_techniques(self, technique: Technique, related_ids: List[Any]) -> None:
         """Store related technique IDs for later processing."""
@@ -291,11 +364,13 @@ class Command(BaseCommand):
 
     def _create_resource(self, technique: Technique, resource_data: Dict[str, Any]) -> None:
         """Create a single resource for a technique."""
-        # Get or create resource type
-        resource_type, _ = ResourceType.objects.get_or_create(
-            name=resource_data['type'],
-            defaults={"icon": resource_data['type'].lower().replace(" ", "_")}
-        )
+        # Check if resource type exists
+        try:
+            resource_type = ResourceType.objects.get(name=resource_data['type'])
+        except ResourceType.DoesNotExist:
+            logger.warning(f"ResourceType '{resource_data['type']}' not found for technique '{technique.name}', skipping resource")
+            self.stderr.write(self.style.WARNING(f"ResourceType not found: {resource_data['type']}"))
+            return
 
         TechniqueResource.objects.create(
             technique=technique,

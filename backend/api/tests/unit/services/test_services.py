@@ -355,6 +355,8 @@ class TechniqueServiceTests(TransactionTestCase):
         """Test that transaction rolls back on update error."""
         technique = TechniqueFactory(name="Original")
         original_name = technique.name
+        original_goal_count = technique.assurance_goals.count()
+        original_goal_ids = set(technique.assurance_goals.values_list('id', flat=True))
         
         # Mock the basic field update to fail after M2M relationships are set
         with patch.object(self.service, '_update_basic_fields', side_effect=Exception("Update error")):
@@ -370,7 +372,9 @@ class TechniqueServiceTests(TransactionTestCase):
             # Verify technique wasn't updated due to transaction rollback
             technique.refresh_from_db()
             self.assertEqual(technique.name, original_name)
-            self.assertEqual(technique.assurance_goals.count(), 0)
+            self.assertEqual(technique.assurance_goals.count(), original_goal_count)
+            current_goal_ids = set(technique.assurance_goals.values_list('id', flat=True))
+            self.assertEqual(current_goal_ids, original_goal_ids)
 
 
 class TechniqueResourceServiceTests(TestCase):
@@ -474,8 +478,7 @@ class TechniqueResourceServiceTests(TestCase):
         self.assertEqual(resource.title, 'Test Resource')
         self.assertEqual(resource.resource_type, self.resource_type)
     
-    @patch('api.services.logger')
-    def test_create_single_resource_with_invalid_resource_type_id(self, mock_logger):
+    def test_create_single_resource_with_invalid_resource_type_id(self):
         """Test creating a resource with invalid resource_type ID."""
         resource_data = {
             'resource_type': 99999,  # Non-existent ID
@@ -483,13 +486,15 @@ class TechniqueResourceServiceTests(TestCase):
             'url': 'https://example.com'
         }
         
-        self.service._create_single_resource(self.technique, resource_data)
+        # Should raise TechniqueOperationError for invalid resource type
+        with self.assertRaises(TechniqueOperationError) as context:
+            self.service._create_single_resource(self.technique, resource_data)
+        
+        # Verify the error message
+        self.assertIn("ResourceType with ID 99999 does not exist", str(context.exception))
         
         # Verify no resource was created
         self.assertEqual(self.technique.resources.count(), 0)
-        
-        # Verify warning was logged
-        mock_logger.warning.assert_called_once()
 
 
 class TechniqueUseCaseServiceTests(TestCase):

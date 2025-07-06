@@ -66,7 +66,9 @@ class TechniqueService:
             nested_data = self._extract_nested_data(request_data)
             
             # Create the technique
-            technique = Technique.objects.create(**validated_data)
+            technique = Technique(**validated_data)
+            technique.full_clean()  # Trigger validation
+            technique.save()
             
             # Set M2M relationships
             self._set_m2m_relationships(technique, m2m_data)
@@ -185,11 +187,13 @@ class TechniqueService:
 class TechniqueResourceService:
     """Service for handling technique resource operations."""
 
+    @transaction.atomic
     def create_resources(self, technique: Technique, resources_data: List[Dict[str, Any]]) -> None:
         """Create resources for a technique."""
         for resource_data in resources_data:
             self._create_single_resource(technique, resource_data)
 
+    @transaction.atomic
     def replace_resources(self, technique: Technique, resources_data: List[Dict[str, Any]]) -> None:
         """Replace all existing resources with new ones."""
         # Delete existing resources
@@ -207,20 +211,42 @@ class TechniqueResourceService:
                     pk=resource_data_copy['resource_type']
                 )
             except ResourceType.DoesNotExist:
-                logger.warning(f"ResourceType {resource_data_copy['resource_type']} not found")
-                return
+                raise TechniqueOperationError(f"ResourceType with ID {resource_data_copy['resource_type']} does not exist")
 
-        TechniqueResource.objects.create(technique=technique, **resource_data_copy)
+        try:
+            # Validate URL format if present
+            if 'url' in resource_data_copy:
+                url = resource_data_copy['url']
+                # Only allow http and https protocols
+                if not (url.startswith('http://') or url.startswith('https://')):
+                    raise TechniqueOperationError(f"Invalid URL format: {url}. Only HTTP and HTTPS protocols are allowed.")
+                
+                from django.core.validators import URLValidator
+                from django.core.exceptions import ValidationError as DjangoValidationError
+                validator = URLValidator()
+                try:
+                    validator(url)
+                except DjangoValidationError:
+                    raise TechniqueOperationError(f"Invalid URL format: {url}")
+            
+            TechniqueResource.objects.create(technique=technique, **resource_data_copy)
+        except Exception as e:
+            if not isinstance(e, TechniqueOperationError):
+                logger.error(f"Failed to create resource: {str(e)}")
+                raise TechniqueOperationError(f"Failed to create resource: {str(e)}")
+            raise
 
 
 class TechniqueUseCaseService:
     """Service for handling technique use case operations."""
 
+    @transaction.atomic
     def create_use_cases(self, technique: Technique, use_cases_data: List[Dict[str, Any]]) -> None:
         """Create use cases for a technique."""
         for use_case_data in use_cases_data:
             self._create_single_use_case(technique, use_case_data)
 
+    @transaction.atomic
     def replace_use_cases(self, technique: Technique, use_cases_data: List[Dict[str, Any]]) -> None:
         """Replace all existing use cases with new ones."""
         # Delete existing use cases
@@ -230,6 +256,10 @@ class TechniqueUseCaseService:
 
     def _create_single_use_case(self, technique: Technique, use_case_data: Dict[str, Any]) -> None:
         """Create a single use case for a technique."""
+        # Validate required fields
+        if not use_case_data.get('description', '').strip():
+            raise TechniqueOperationError("Use case description cannot be empty")
+        
         # Convert assurance_goal ID to instance if needed
         use_case_data_copy = use_case_data.copy()
         if ('assurance_goal' in use_case_data_copy and 
@@ -239,20 +269,28 @@ class TechniqueUseCaseService:
                     pk=use_case_data_copy['assurance_goal']
                 )
             except AssuranceGoal.DoesNotExist:
-                logger.warning(f"AssuranceGoal {use_case_data_copy['assurance_goal']} not found")
+                logger.warning(f"AssuranceGoal {use_case_data_copy['assurance_goal']} not found, setting to None")
                 use_case_data_copy['assurance_goal'] = None
 
-        TechniqueExampleUseCase.objects.create(technique=technique, **use_case_data_copy)
+        try:
+            TechniqueExampleUseCase.objects.create(technique=technique, **use_case_data_copy)
+        except Exception as e:
+            if not isinstance(e, TechniqueOperationError):
+                logger.error(f"Failed to create use case: {str(e)}")
+                raise TechniqueOperationError(f"Failed to create use case: {str(e)}")
+            raise
 
 
 class TechniqueLimitationService:
     """Service for handling technique limitation operations."""
 
+    @transaction.atomic
     def create_limitations(self, technique: Technique, limitations_data: List[Any]) -> None:
         """Create limitations for a technique."""
         for limitation_data in limitations_data:
             self._create_single_limitation(technique, limitation_data)
 
+    @transaction.atomic
     def replace_limitations(self, technique: Technique, limitations_data: List[Any]) -> None:
         """Replace all existing limitations with new ones."""
         # Delete existing limitations

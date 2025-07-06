@@ -15,8 +15,16 @@ from typing import Any, Dict, List, Optional, Union
 from django.core.exceptions import ValidationError
 from rest_framework.views import exception_handler
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 
 logger = logging.getLogger(__name__)
+
+
+class CustomPageNumberPagination(PageNumberPagination):
+    """Custom pagination class that allows dynamic page size."""
+    page_size = 20
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 
 
 class DateParsingError(Exception):
@@ -357,12 +365,14 @@ def custom_exception_handler(exc, context):
     """
     Custom exception handler that provides more detailed error responses.
     """
+    from rest_framework import status
+    
     # Call REST framework's default exception handler first,
     # to get the standard error response.
     response = exception_handler(exc, context)
 
     if response is not None:
-        # Log the error for debugging
+        # Log the error for debugging only when DRF handles it
         view = context.get('view', None)
         request = context.get('request', None)
         
@@ -373,8 +383,7 @@ def custom_exception_handler(exc, context):
         
         if hasattr(request, 'path'):
             logger.error(f"Request path: {request.path}")
-        
-        # Customize the error response
+        # Customize the error response for DRF-handled exceptions
         custom_response_data = {
             'error': True,
             'message': 'An error occurred while processing your request.',

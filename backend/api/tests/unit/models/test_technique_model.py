@@ -15,6 +15,7 @@ from api.models import Technique, AssuranceGoal, Tag, ResourceType
 from api.tests.factories import (
     TechniqueFactory,
     MinimalTechniqueFactory,
+    IsolatedTechniqueFactory,
     AssuranceGoalFactory,
     TagFactory,
     ResourceTypeFactory,
@@ -156,7 +157,7 @@ class TechniqueModelRelationshipTests(TestCase):
         self.goal2 = AssuranceGoalFactory(name="Fairness")
         self.tag1 = TagFactory(name="interpretability")
         self.tag2 = TagFactory(name="post-hoc")
-        self.technique = TechniqueFactory()
+        self.technique = IsolatedTechniqueFactory()
 
     def test_assurance_goals_many_to_many_relationship(self):
         """Test many-to-many relationship with AssuranceGoal."""
@@ -240,7 +241,7 @@ class TechniqueModelCascadeTests(TestCase):
     def test_deleting_assurance_goal_removes_relationship(self):
         """Test that deleting an assurance goal removes the relationship but not the technique."""
         goal = AssuranceGoalFactory()
-        technique = TechniqueFactory()
+        technique = IsolatedTechniqueFactory()
         technique.assurance_goals.add(goal)
         
         # Verify relationship exists
@@ -257,7 +258,7 @@ class TechniqueModelCascadeTests(TestCase):
     def test_deleting_tag_removes_relationship(self):
         """Test that deleting a tag removes the relationship but not the technique."""
         tag = TagFactory()
-        technique = TechniqueFactory()
+        technique = IsolatedTechniqueFactory()
         technique.tags.add(tag)
         
         # Verify relationship exists
@@ -348,11 +349,11 @@ class TechniqueModelEdgeCaseTests(TestCase):
 
     def test_multiple_techniques_with_maximum_relationships(self):
         """Test techniques with many relationships to verify performance."""
-        # Create many goals and tags
-        goals = [AssuranceGoalFactory() for _ in range(10)]
-        tags = [TagFactory() for _ in range(20)]
+        # Create many goals and tags with unique names to avoid duplicates
+        goals = [AssuranceGoalFactory(name=f"Goal {i}") for i in range(10)]
+        tags = [TagFactory(name=f"Tag {i}") for i in range(20)]
         
-        technique = TechniqueFactory()
+        technique = IsolatedTechniqueFactory()
         
         # Add all relationships
         technique.assurance_goals.set(goals)
@@ -366,7 +367,7 @@ class TechniqueModelEdgeCaseTests(TestCase):
     def test_technique_creation_in_transaction(self):
         """Test technique creation within a database transaction."""
         with transaction.atomic():
-            technique = TechniqueFactory()
+            technique = IsolatedTechniqueFactory()
             self.assertTrue(technique.id)
             
             # Add some relationships within transaction
@@ -383,18 +384,20 @@ class TechniqueModelEdgeCaseTests(TestCase):
     def test_technique_ordering_consistency(self):
         """Test that technique queries return consistent ordering."""
         # Create techniques with known names
-        technique_a = TechniqueFactory(name="A Technique")
-        technique_b = TechniqueFactory(name="B Technique")
-        technique_c = TechniqueFactory(name="C Technique")
+        technique_a = IsolatedTechniqueFactory(name="A Technique")
+        technique_b = IsolatedTechniqueFactory(name="B Technique")
+        technique_c = IsolatedTechniqueFactory(name="C Technique")
         
-        # Test default ordering (should be by ID if no explicit ordering)
-        techniques = list(Technique.objects.all())
+        # Get the techniques we just created
+        created_techniques = Technique.objects.filter(
+            id__in=[technique_a.id, technique_b.id, technique_c.id]
+        )
         
-        # Verify we get all techniques
-        self.assertEqual(len(techniques), 3)
+        # Verify we get all our techniques
+        self.assertEqual(created_techniques.count(), 3)
         
         # Test ordering by name
-        techniques_by_name = list(Technique.objects.order_by('name'))
+        techniques_by_name = list(created_techniques.order_by('name'))
         expected_order = [technique_a, technique_b, technique_c]
         
         self.assertEqual(techniques_by_name, expected_order)

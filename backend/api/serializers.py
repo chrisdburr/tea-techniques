@@ -72,11 +72,16 @@ class TechniqueResourceSerializer(serializers.ModelSerializer):
     """
 
     resource_type_name = serializers.ReadOnlyField(source="resource_type.name")
+    technique = serializers.PrimaryKeyRelatedField(
+        queryset=Technique.objects.all(),
+        write_only=True
+    )
 
     class Meta:
         model = TechniqueResource
         fields = [
             "id",
+            "technique",
             "resource_type",
             "resource_type_name",
             "title",
@@ -86,6 +91,21 @@ class TechniqueResourceSerializer(serializers.ModelSerializer):
             "publication_date",
             "source_type",
         ]
+
+    def validate_url(self, value):
+        """Validate URL format."""
+        import re
+        url_pattern = re.compile(
+            r'^https?://'  # http:// or https://
+            r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|'  # domain...
+            r'localhost|'  # localhost...
+            r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
+            r'(?::\d+)?'  # optional port
+            r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+        
+        if not url_pattern.match(value):
+            raise serializers.ValidationError("Enter a valid URL.")
+        return value
 
 
 class TechniqueExampleUseCaseSerializer(serializers.ModelSerializer):
@@ -97,10 +117,14 @@ class TechniqueExampleUseCaseSerializer(serializers.ModelSerializer):
     """
 
     assurance_goal_name = serializers.SerializerMethodField()
+    technique = serializers.PrimaryKeyRelatedField(
+        queryset=Technique.objects.all(),
+        write_only=True
+    )
 
     class Meta:
         model = TechniqueExampleUseCase
-        fields = ["id", "description", "assurance_goal", "assurance_goal_name"]
+        fields = ["id", "technique", "description", "assurance_goal", "assurance_goal_name"]
 
     def get_assurance_goal_name(self, obj: TechniqueExampleUseCase) -> Optional[str]:
         """Return the name of the associated assurance goal, or None if not set."""
@@ -113,12 +137,17 @@ class TechniqueLimitationSerializer(serializers.ModelSerializer):
     """
     Serializer for the TechniqueLimitation model.
 
-    Only includes the id and description fields.
+    Includes id and description fields for output, and accepts technique for input.
     """
+
+    technique = serializers.PrimaryKeyRelatedField(
+        queryset=Technique.objects.all(),
+        write_only=True
+    )
 
     class Meta:
         model = TechniqueLimitation
-        fields = ["id", "description"]
+        fields = ["id", "technique", "description"]
 
 
 class TechniqueSerializer(serializers.ModelSerializer):
@@ -188,6 +217,18 @@ class TechniqueSerializer(serializers.ModelSerializer):
             "limitations",
         ]
 
+    def validate_complexity_rating(self, value):
+        """Validate complexity rating is between 1 and 5."""
+        if value is not None and (value < 1 or value > 5):
+            raise serializers.ValidationError("Complexity rating must be between 1 and 5.")
+        return value
+
+    def validate_computational_cost_rating(self, value):
+        """Validate computational cost rating is between 1 and 5."""
+        if value is not None and (value < 1 or value > 5):
+            raise serializers.ValidationError("Computational cost rating must be between 1 and 5.")
+        return value
+
     def create(self, validated_data):
         """
         Create a new technique with relationships using TechniqueService.
@@ -196,7 +237,8 @@ class TechniqueSerializer(serializers.ModelSerializer):
         testability and maintainability.
         """
         try:
-            request_data = self.context.get('request', {}).data or {}
+            request = self.context.get('request', {})
+            request_data = getattr(request, 'data', {}) or {}
             return self.technique_service.create_technique(validated_data, request_data)
         except TechniqueOperationError as e:
             logger.error(f"Technique creation failed: {str(e)}")
@@ -210,7 +252,8 @@ class TechniqueSerializer(serializers.ModelSerializer):
         testability and maintainability.
         """
         try:
-            request_data = self.context.get('request', {}).data or {}
+            request = self.context.get('request', {})
+            request_data = getattr(request, 'data', {}) or {}
             return self.technique_service.update_technique(instance, validated_data, request_data)
         except TechniqueOperationError as e:
             logger.error(f"Technique update failed: {str(e)}")

@@ -46,10 +46,12 @@ def login_view(request):
     if user is not None:
         login(request, user)
         return Response({
-            "id": user.id,
-            "username": user.username,
-            "email": user.email,
-            "isStaff": user.is_staff,
+            "user": {
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+                "isStaff": user.is_staff,
+            }
         })
     else:
         return Response(

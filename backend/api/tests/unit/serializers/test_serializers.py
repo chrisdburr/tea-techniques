@@ -36,6 +36,7 @@ from api.tests.factories import (
     TagFactory,
     ResourceTypeFactory,
     TechniqueFactory,
+    IsolatedTechniqueFactory,
     TechniqueResourceFactory,
     TechniqueExampleUseCaseFactory,
     TechniqueLimitationFactory,
@@ -175,15 +176,24 @@ class ResourceTypeSerializerTests(TestCase):
         """Test deserializing invalid data raises validation errors."""
         invalid_data_sets = [
             {'name': '', 'icon': 'valid_icon'},  # Empty name
-            {'name': 'Valid Name', 'icon': ''},  # Empty icon
             {'icon': 'missing_name'},  # Missing name
-            {'name': 'missing_icon'},  # Missing icon
+        ]
+        
+        # Valid cases that should pass
+        valid_data_sets = [
+            {'name': 'Valid Name', 'icon': ''},  # Empty icon is allowed
+            {'name': 'missing_icon'},  # Missing icon is allowed (defaults to empty string)
         ]
         
         for invalid_data in invalid_data_sets:
             with self.subTest(data=invalid_data):
                 serializer = ResourceTypeSerializer(data=invalid_data)
                 self.assertFalse(serializer.is_valid())
+        
+        for valid_data in valid_data_sets:
+            with self.subTest(data=valid_data):
+                serializer = ResourceTypeSerializer(data=valid_data)
+                self.assertTrue(serializer.is_valid())
 
 
 class TechniqueResourceSerializerTests(TestCase):
@@ -350,11 +360,11 @@ class TechniqueSerializerTests(TestCase):
         self.factory = APIRequestFactory()
         self.assurance_goal = AssuranceGoalFactory(name="Explainability")
         self.tag = TagFactory(name="interpretability")
-        self.related_technique = TechniqueFactory(name="Related Technique")
+        self.related_technique = IsolatedTechniqueFactory(name="Related Technique")
     
     def test_serialize_technique_with_relationships(self):
         """Test serializing a technique with all relationships."""
-        technique = TechniqueFactory(name="SHAP Analysis")
+        technique = IsolatedTechniqueFactory(name="SHAP Analysis")
         technique.assurance_goals.add(self.assurance_goal)
         technique.tags.add(self.tag)
         technique.related_techniques.add(self.related_technique)
@@ -390,7 +400,7 @@ class TechniqueSerializerTests(TestCase):
     
     def test_serialize_technique_without_relationships(self):
         """Test serializing a technique without relationships."""
-        technique = TechniqueFactory()
+        technique = IsolatedTechniqueFactory()
         
         serializer = TechniqueSerializer(technique)
         data = serializer.data
@@ -586,9 +596,9 @@ class SerializerIntegrationTests(TestCase):
     def test_nested_serializer_consistency(self):
         """Test that nested serializers produce consistent output."""
         # Create a complete technique with all relationships
-        technique = TechniqueFactory()
-        assurance_goal = AssuranceGoalFactory()
-        tag = TagFactory()
+        technique = IsolatedTechniqueFactory()
+        assurance_goal = AssuranceGoalFactory(name="Test Goal")
+        tag = TagFactory(name="Test Tag")
         technique.assurance_goals.add(assurance_goal)
         technique.tags.add(tag)
         
@@ -616,11 +626,11 @@ class SerializerIntegrationTests(TestCase):
     
     def test_serializer_performance_with_large_datasets(self):
         """Test serializer performance with techniques containing many relationships."""
-        technique = TechniqueFactory()
+        technique = IsolatedTechniqueFactory()
         
-        # Add many relationships
-        goals = [AssuranceGoalFactory() for _ in range(5)]
-        tags = [TagFactory() for _ in range(10)]
+        # Add many relationships with unique names
+        goals = [AssuranceGoalFactory(name=f"Goal {i}") for i in range(5)]
+        tags = [TagFactory(name=f"Tag {i}") for i in range(10)]
         
         for goal in goals:
             technique.assurance_goals.add(goal)

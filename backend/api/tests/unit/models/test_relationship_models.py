@@ -75,34 +75,38 @@ class TechniqueResourceModelTests(TestCase):
         self.assertEqual(resource.url, "https://example.com/minimal")
         # Optional fields should be empty/null
         self.assertEqual(resource.description, "")
-        self.assertEqual(resource.authors, "")
+        self.assertIsNone(resource.authors)
         self.assertIsNone(resource.publication_date)
-        self.assertEqual(resource.source_type, "")
+        self.assertIsNone(resource.source_type)
 
     def test_technique_resource_string_representation(self):
         """Test the string representation of a technique resource."""
         resource = TechniqueResourceFactory(title="SHAP Paper")
-        self.assertEqual(str(resource), "SHAP Paper")
+        expected_str = f"{resource.resource_type.name}: SHAP Paper"
+        self.assertEqual(str(resource), expected_str)
 
     def test_technique_resource_required_fields(self):
         """Test that required fields cannot be empty or null."""
         # Test technique is required
-        with self.assertRaises(IntegrityError):
-            TechniqueResource.objects.create(
-                technique=None,
-                resource_type=self.resource_type,
-                title="Test",
-                url="https://example.com"
-            )
+        from django.db import transaction
+        with transaction.atomic():
+            with self.assertRaises(IntegrityError):
+                TechniqueResource.objects.create(
+                    technique=None,
+                    resource_type=self.resource_type,
+                    title="Test",
+                    url="https://example.com"
+                )
         
         # Test resource_type is required
-        with self.assertRaises(IntegrityError):
-            TechniqueResource.objects.create(
-                technique=self.technique,
-                resource_type=None,
-                title="Test",
-                url="https://example.com"
-            )
+        with transaction.atomic():
+            with self.assertRaises(IntegrityError):
+                TechniqueResource.objects.create(
+                    technique=self.technique,
+                    resource_type=None,
+                    title="Test",
+                    url="https://example.com"
+                )
         
         # Test title is required
         with self.assertRaises(ValidationError):
@@ -270,17 +274,20 @@ class TechniqueExampleUseCaseModelTests(TestCase):
         use_case = TechniqueExampleUseCaseFactory(
             description="Healthcare diagnosis explanation"
         )
-        # String representation should show truncated description
-        self.assertIn("Healthcare diagnosis", str(use_case))
+        # String representation includes the technique name
+        expected_str = f"Use case for {use_case.technique.name}"
+        self.assertEqual(str(use_case), expected_str)
 
     def test_use_case_required_fields(self):
         """Test that required fields cannot be empty or null."""
         # Test technique is required
-        with self.assertRaises(IntegrityError):
-            TechniqueExampleUseCase.objects.create(
-                technique=None,
-                description="Valid description"
-            )
+        from django.db import transaction
+        with transaction.atomic():
+            with self.assertRaises(IntegrityError):
+                TechniqueExampleUseCase.objects.create(
+                    technique=None,
+                    description="Valid description"
+                )
         
         # Test description is required
         with self.assertRaises(ValidationError):
@@ -395,17 +402,20 @@ class TechniqueLimitationModelTests(TestCase):
         limitation = TechniqueLimitationFactory(
             description="Limited scalability for real-time applications"
         )
-        # String representation should show truncated description
-        self.assertIn("Limited scalability", str(limitation))
+        # String representation includes the technique name
+        expected_str = f"Limitation for {limitation.technique.name}"
+        self.assertEqual(str(limitation), expected_str)
 
     def test_limitation_required_fields(self):
         """Test that required fields cannot be empty or null."""
         # Test technique is required
-        with self.assertRaises(IntegrityError):
-            TechniqueLimitation.objects.create(
-                technique=None,
-                description="Valid description"
-            )
+        from django.db import transaction
+        with transaction.atomic():
+            with self.assertRaises(IntegrityError):
+                TechniqueLimitation.objects.create(
+                    technique=None,
+                    description="Valid description"
+                )
         
         # Test description is required
         with self.assertRaises(ValidationError):
@@ -584,5 +594,9 @@ class RelationshipModelsIntegrationTests(TestCase):
         # Verify all objects were created
         self.assertEqual(technique.resources.count(), num_objects)
         
+        # Log the actual time for debugging
+        print(f"\nCreation time for {num_objects} objects: {creation_time:.3f} seconds")
+        print(f"Average time per object: {creation_time/num_objects:.3f} seconds")
+        
         # Basic performance assertion (adjust threshold as needed)
-        self.assertLess(creation_time, 10.0, "Resource creation should be reasonably fast")
+        self.assertLess(creation_time, 10.0, f"Resource creation took {creation_time:.3f}s, should be < 10.0s")

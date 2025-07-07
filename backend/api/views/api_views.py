@@ -78,10 +78,12 @@ class TechniquesViewSet(viewsets.ModelViewSet):
     `update` and `destroy` actions.
 
     Authentication is required for create, update, and delete operations.
+    Uses slug-based lookups instead of numeric IDs.
     """
 
     queryset = Technique.objects.all()
     serializer_class = TechniqueSerializer
+    lookup_field = 'slug'
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
@@ -89,13 +91,15 @@ class TechniquesViewSet(viewsets.ModelViewSet):
     ]
     filterset_fields = [
         "name",
+        "slug",
+        "acronym",
         "complexity_rating",
         "computational_cost_rating",
         "assurance_goals",
         "tags",
     ]
-    search_fields = ["name", "description"]
-    ordering_fields = ["id", "name", "complexity_rating", "computational_cost_rating"]
+    search_fields = ["name", "description", "acronym"]
+    ordering_fields = ["slug", "name", "complexity_rating", "computational_cost_rating"]
 
     def get_permissions(self) -> List[BasePermission]:
         """

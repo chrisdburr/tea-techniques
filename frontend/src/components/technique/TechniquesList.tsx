@@ -457,7 +457,7 @@ export default function TechniquesList() {
 										{techniques.map(
 											(technique: Technique) => (
 												<TechniqueCard
-													key={technique.id}
+													key={technique.slug}
 													technique={technique}
 												/>
 											)

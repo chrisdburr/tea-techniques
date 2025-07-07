@@ -42,7 +42,7 @@ const initialFormData: TechniqueFormData = {
   computational_cost_rating: undefined,
   assurance_goal_ids: [],
   tag_ids: [],
-  related_technique_ids: [],
+  related_technique_slugs: [],
   resources: [],
   example_use_cases: [],
   limitations: [],
@@ -56,7 +56,7 @@ const techniqueSchema = z.object({
   computational_cost_rating: z.number().min(1).max(5).optional(),
   assurance_goal_ids: z.array(z.number()).min(1, { message: "At least one assurance goal is required" }),
   tag_ids: z.array(z.number()),
-  related_technique_ids: z.array(z.number()),
+  related_technique_slugs: z.array(z.string()),
   resources: z.array(
     z.object({
       resource_type: z.number(),
@@ -78,11 +78,11 @@ const techniqueSchema = z.object({
 });
 
 interface TechniqueFormProps {
-  id?: number;
+  slug?: string;
   isEditMode?: boolean;
 }
 
-export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormProps) {
+export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFormProps) {
   const router = useRouter();
 
   // Form state management with react-hook-form
@@ -113,7 +113,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
   ]);
 
   // Fetch technique details if in edit mode
-  const { data: techniqueData, isLoading: isLoadingTechnique } = useTechniqueDetail(id || 0);
+  const { data: techniqueData, isLoading: isLoadingTechnique } = useTechniqueDetail(slug || "");
 
   // Fetch reference data
   const { data: assuranceGoalsData, isLoading: isLoadingGoals } = useAssuranceGoals();
@@ -125,7 +125,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
 
   // Mutations for create/update
   const createMutation = useCreateTechnique();
-  const updateMutation = useUpdateTechnique(id || 0);
+  const updateMutation = useUpdateTechnique(slug || "");
 
   // Track overall loading state
   // Track overall loading state
@@ -145,7 +145,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
       // Extract IDs from relationships
       const assurance_goal_ids = techniqueData.assurance_goals.map(goal => goal.id);
       const tag_ids = techniqueData.tags.map(tag => tag.id);
-      const related_technique_ids = techniqueData.related_techniques || [];
+      const related_technique_slugs = techniqueData.related_techniques || [];
 
 
       // Set state for dynamic arrays
@@ -183,7 +183,7 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
         computational_cost_rating: techniqueData.computational_cost_rating,
         assurance_goal_ids,
         tag_ids,
-        related_technique_ids,
+        related_technique_slugs,
         resources: [], // Will be handled by resources state
         example_use_cases: [], // Will be handled by useCases state
         limitations: [], // Will be handled by limitations state
@@ -207,18 +207,18 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
     };
 
     try {
-      if (isEditMode && id) {
+      if (isEditMode && slug) {
         // Update existing technique
         await updateMutation.mutateAsync(finalFormData);
-        router.push(`/techniques/${id}`);
+        router.push(`/techniques/${slug}`);
       } else {
         // Create new technique
         const result = await createMutation.mutateAsync(finalFormData);
         // Add a null check to handle the case when result might be null
-        if (result && result.id) {
-          router.push(`/techniques/${result.id}`);
+        if (result && result.slug) {
+          router.push(`/techniques/${result.slug}`);
         } else {
-          // Fallback if result or result.id is null
+          // Fallback if result or result.slug is null
           router.push(`/techniques`);
           console.warn("Received null or invalid result from API");
         }
@@ -307,9 +307,9 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
   })) || [];
 
   const relatedTechniqueOptions = (techniquesData as any)?.results
-    ?.filter((t: Technique) => t.id !== id) // Don't show current technique as option
+    ?.filter((t: Technique) => t.slug !== slug) // Don't show current technique as option
     ?.map((technique: Technique) => ({
-      value: technique.id.toString(),
+      value: technique.slug,
       label: technique.name,
     })) || [];
 
@@ -544,25 +544,24 @@ export default function TechniqueForm({ id, isEditMode = false }: TechniqueFormP
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="related_technique_ids" className="block font-medium">
+                    <label htmlFor="related_technique_slugs" className="block font-medium">
                       Related Techniques
                     </label>
                     <Controller
-                      name="related_technique_ids"
+                      name="related_technique_slugs"
                       control={control}
                       render={({ field }) => (
                         <select
-                          id="related_technique_ids"
+                          id="related_technique_slugs"
                           multiple
                           className="w-full px-3 py-2 border rounded-md"
                           onChange={(e) => {
                             const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
-                            const techniqueIds = selectedOptions.map(v => parseInt(v));
-                            setValue("related_technique_ids", techniqueIds);
+                            setValue("related_technique_slugs", selectedOptions);
                           }}
                           disabled={isLoading}
                           size={6}
-                          value={field.value.map(id => id.toString())}
+                          value={field.value}
                         >
                           {relatedTechniqueOptions.map((option: any) => (
                             <option key={option.value} value={option.value}>

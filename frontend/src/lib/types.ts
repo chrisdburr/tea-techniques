@@ -49,8 +49,9 @@ export interface TechniqueLimitation {
 
 // Main Technique Type
 export interface Technique {
-	id: number;
+	slug: string;
 	name: string;
+	acronym?: string;
 	description: string;
 	complexity_rating?: number;
 	computational_cost_rating?: number;
@@ -58,7 +59,7 @@ export interface Technique {
 	// Many-to-many relationships
 	assurance_goals: AssuranceGoal[];
 	tags: Tag[];
-	related_techniques: number[];
+	related_techniques: string[]; // Now slugs instead of IDs
 
 	// Related data
 	resources: TechniqueResource[];
@@ -69,12 +70,13 @@ export interface Technique {
 // Form Data for Creating/Updating Techniques
 export interface TechniqueFormData {
 	name: string;
+	acronym?: string;
 	description: string;
 	complexity_rating?: number;
 	computational_cost_rating?: number;
 	assurance_goal_ids: number[];
 	tag_ids: number[];
-	related_technique_ids: number[];
+	related_technique_slugs: string[];
 	resources: {
 		resource_type: number;
 		title: string;

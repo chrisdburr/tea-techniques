@@ -72,7 +72,9 @@ class Technique(models.Model):
     relationships to goals, categories, and other classification systems.
     """
 
+    slug = models.SlugField(max_length=100, unique=True, primary_key=True)
     name = models.CharField(max_length=255, unique=True)
+    acronym = models.CharField(max_length=20, blank=True, null=True)
     description = models.TextField()
     complexity_rating = models.PositiveSmallIntegerField(
         null=True, blank=True, validators=[MinValueValidator(1), MaxValueValidator(5)]
@@ -88,6 +90,8 @@ class Technique(models.Model):
         db_table = "technique"
 
     def __str__(self) -> str:
+        if self.acronym:
+            return f"{self.name} ({self.acronym})"
         return self.name
 
 

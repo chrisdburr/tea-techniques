@@ -256,7 +256,9 @@ class TechniqueDataExtractor:
             Dictionary with basic technique fields
         """
         return {
+            "slug": data.get("slug", ""),
             "name": data.get("name", ""),
+            "acronym": data.get("acronym"),
             "description": data.get("description", ""),
             "complexity_rating": data.get("complexity_rating"),
             "computational_cost_rating": data.get("computational_cost_rating"),
@@ -304,8 +306,31 @@ class TechniqueDataExtractor:
         Returns:
             Processed resource data
         """
+        # Map source_type values to ResourceType names
+        source_type_mapping = {
+            "software_package": "Software Package",
+            "technical_paper": "Technical Paper",
+            "review_paper": "Review Paper", 
+            "introductory_paper": "Introductory Paper",
+            "paper": "Paper",
+            "github": "GitHub",
+            "documentation": "Documentation",
+            "tutorial": "Tutorial",
+            "book": "Book",
+            "survey": "Survey",
+            "blog": "Blog",
+            "tool": "Tool",
+            "law_policy": "Law/Policy",
+        }
+        
+        # Get the source_type from the data (primary field in migrated data)
+        raw_source_type = resource_data.get("source_type", resource_data.get("type", "paper"))
+        
+        # Map to database ResourceType name, defaulting to "Paper" if unmapped
+        mapped_type = source_type_mapping.get(raw_source_type.lower(), "Paper")
+        
         processed = {
-            "type": resource_data.get("type", "Website"),
+            "type": mapped_type,
             "title": resource_data.get("title", "Resource"),
             "url": resource_data.get("url", ""),
             "description": resource_data.get("description", ""),
@@ -313,7 +338,7 @@ class TechniqueDataExtractor:
                 resource_data.get("authors", [])
             ),
             "publication_date": resource_data.get("publication_date", ""),
-            "source_type": resource_data.get("source_type", resource_data.get("type", "Website")),
+            "source_type": raw_source_type,
         }
         
         # Parse the publication date

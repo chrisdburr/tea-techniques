@@ -227,16 +227,16 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
 	});
 };
 
-export const useTechniqueDetail = (id: number) => {
+export const useTechniqueDetail = (slug: string) => {
 	return useQuery({
-		queryKey: ["technique", id],
+		queryKey: ["technique", slug],
 		queryFn: async () => {
 			try {
 				// Use fetchAPI to handle URL normalization consistently
-				const data = await fetchAPI<Technique>(`/api/techniques/${id}`);
+				const data = await fetchAPI<Technique>(`/api/techniques/${slug}`);
 				
 				// Validate the response
-				if (!data.id || !data.name) {
+				if (!data.slug || !data.name) {
 					throw new Error(`API returned malformed data`);
 				}
 
@@ -246,37 +246,38 @@ export const useTechniqueDetail = (id: number) => {
 				throw error;
 			}
 		},
-		enabled: !!id, // Only run if id is provided
+		enabled: !!slug, // Only run if slug is provided
 	});
 };
 
 /**
- * Hook for fetching basic details (id and name) of multiple techniques
- * Used for displaying related techniques with names instead of just IDs
+ * Hook for fetching basic details (slug and name) of multiple techniques
+ * Used for displaying related techniques with names instead of just slugs
  * 
- * @param ids - Array of technique IDs to fetch
+ * @param slugs - Array of technique slugs to fetch
  * @returns Array of query objects with technique basic details
  */
-export const useMultipleTechniqueNames = (ids: number[]) => {
+export const useMultipleTechniqueNames = (slugs: string[]) => {
 	const queries = useQueries({
-		queries: ids.map((id) => ({
-			queryKey: ["technique-name", id],
+		queries: slugs.map((slug) => ({
+			queryKey: ["technique-name", slug],
 			queryFn: async () => {
 				try {
-					// Fetch full technique but only use id and name for performance
-					const data = await fetchAPI<Technique>(`/api/techniques/${id}`);
+					// Fetch full technique but only use slug and name for performance
+					const data = await fetchAPI<Technique>(`/api/techniques/${slug}`);
 					
 					// Return only the data we need for related techniques display
 					return {
-						id: data.id,
+						slug: data.slug,
 						name: data.name,
+						acronym: data.acronym,
 					};
 				} catch (error: unknown) {
 					logApiError('useMultipleTechniqueNames', error);
 					throw error;
 				}
 			},
-			enabled: !!id, // Only run if id is provided
+			enabled: !!slug, // Only run if slug is provided
 			staleTime: 5 * 60 * 1000, // Cache for 5 minutes since names don't change often
 		})),
 	});
@@ -328,14 +329,14 @@ export const useCreateTechnique = () => {
 	});
 };
 
-export const useUpdateTechnique = (id: number) => {
+export const useUpdateTechnique = (slug: string) => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
 		mutationFn: async (data: TechniqueFormData) => {
 			try {
 				// Normalize the path to ensure proper routing
-				const path = normalizePath(`/api/techniques/${id}`);
+				const path = normalizePath(`/api/techniques/${slug}`);
 				console.log(`Updating technique at: ${path}`);
 				
 				// Make the request with proper path
@@ -349,7 +350,7 @@ export const useUpdateTechnique = (id: number) => {
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["techniques"] });
-			queryClient.invalidateQueries({ queryKey: ["technique", id] });
+			queryClient.invalidateQueries({ queryKey: ["technique", slug] });
 		},
 	});
 };
@@ -358,15 +359,15 @@ export const useDeleteTechnique = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: async (id: number) => {
+		mutationFn: async (slug: string) => {
 			try {
 				// Normalize the path to ensure proper routing
-				const path = normalizePath(`/api/techniques/${id}`);
+				const path = normalizePath(`/api/techniques/${slug}`);
 				console.log(`Deleting technique at: ${path}`);
 				
 				// Make the request with proper path
 				await apiClient.delete(path);
-				return id;
+				return slug;
 			} catch (error: unknown) {
 				console.error('Delete technique error:', error);
 				logApiError('useDeleteTechnique', error);

@@ -59,7 +59,7 @@ class Command(BaseCommand):
             file_path = os.path.join(
                 BASE_DIR,
                 "data",
-                "techniques.json",
+                "techniques_migrated.json",
             )
         else:
             file_path = str(file_path_option)
@@ -116,30 +116,19 @@ class Command(BaseCommand):
                 with transaction.atomic():
                     count = 0
                     self._related_techniques_to_process = {}
-                    self._json_id_to_db_id = {}  # Map JSON IDs to database IDs
                     
-                    # First pass: import all techniques and build ID mapping
+                    # First pass: import all techniques  
                     for technique_data in techniques_data:
-                        json_id = technique_data.get("id")
                         technique = self._process_technique(technique_data)
-                        if technique and json_id is not None:
-                            self._json_id_to_db_id[json_id] = technique.id
                         count += 1
                     
-                    # Second pass: process related techniques using ID mapping
-                    for technique_id, related_json_ids in self._related_techniques_to_process.items():
+                    # Second pass: process related techniques using slug mapping
+                    for technique_slug, related_slugs in self._related_techniques_to_process.items():
                         try:
-                            technique = Technique.objects.get(id=technique_id)
-                            # Convert JSON IDs to database IDs
-                            related_db_ids = []
-                            for json_id in related_json_ids:
-                                if json_id in self._json_id_to_db_id:
-                                    related_db_ids.append(self._json_id_to_db_id[json_id])
-                                else:
-                                    logger.warning(f"Related technique with JSON ID {json_id} not found in mapping")
-                            self._process_related_techniques(technique, related_db_ids)
+                            technique = Technique.objects.get(slug=technique_slug)
+                            self._process_related_techniques(technique, related_slugs)
                         except Technique.DoesNotExist:
-                            logger.warning(f"Technique {technique_id} not found for related techniques processing")
+                            logger.warning(f"Technique {technique_slug} not found for related techniques processing")
 
                 logger.info(f"Successfully imported {count} techniques")
                 self.stdout.write(
@@ -202,14 +191,14 @@ class Command(BaseCommand):
             tag, _ = Tag.objects.get_or_create(name=tag_name)
             technique.tags.add(tag)
 
-    def _process_related_techniques(self, technique: Technique, related_ids: list) -> None:
+    def _process_related_techniques(self, technique: Technique, related_slugs: list) -> None:
         """Process related techniques after all techniques are imported."""
-        for related_id in related_ids:
+        for related_slug in related_slugs:
             try:
-                related_technique = Technique.objects.get(id=related_id)
+                related_technique = Technique.objects.get(slug=related_slug)
                 technique.related_techniques.add(related_technique)
             except Technique.DoesNotExist:
-                logger.warning(f"Related technique {related_id} not found")
+                logger.warning(f"Related technique {related_slug} not found")
 
 
 
@@ -309,8 +298,10 @@ class Command(BaseCommand):
     def _create_or_update_technique(self, basic_data: Dict[str, Any]) -> Technique:
         """Create or update a technique with basic data."""
         technique, created = Technique.objects.update_or_create(
-            name=basic_data['name'],
+            slug=basic_data['slug'],
             defaults={
+                'name': basic_data['name'],
+                'acronym': basic_data.get('acronym'),
                 'description': basic_data['description'],
                 'complexity_rating': basic_data['complexity_rating'],
                 'computational_cost_rating': basic_data['computational_cost_rating'],
@@ -345,11 +336,11 @@ class Command(BaseCommand):
                 logger.warning(f"AssuranceGoal '{goal_name}' not found for technique '{technique.name}'")
                 self.stderr.write(self.style.WARNING(f"AssuranceGoal not found: {goal_name}"))
 
-    def _store_related_techniques(self, technique: Technique, related_ids: List[Any]) -> None:
-        """Store related technique IDs for later processing."""
+    def _store_related_techniques(self, technique: Technique, related_slugs: List[Any]) -> None:
+        """Store related technique slugs for later processing."""
         if not hasattr(self, '_related_techniques_to_process'):
             self._related_techniques_to_process = {}
-        self._related_techniques_to_process[technique.id] = related_ids
+        self._related_techniques_to_process[technique.slug] = related_slugs
 
     def _process_resources(self, technique: Technique, resources_data: List[Dict[str, Any]]) -> None:
         """Process resources for a technique using utility classes."""

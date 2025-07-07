@@ -164,7 +164,7 @@ class TechniqueSerializer(serializers.ModelSerializer):
     # Read-only relationship fields (for output)
     assurance_goals = AssuranceGoalSerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)
-    related_techniques = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    related_techniques = serializers.SlugRelatedField(many=True, read_only=True, slug_field='slug')
     
     # Writable ID fields (for input)
     assurance_goal_ids = serializers.PrimaryKeyRelatedField(
@@ -181,9 +181,10 @@ class TechniqueSerializer(serializers.ModelSerializer):
         required=False,
         source='tags'
     )
-    related_technique_ids = serializers.PrimaryKeyRelatedField(
+    related_technique_slugs = serializers.SlugRelatedField(
         many=True,
         queryset=Technique.objects.all(),
+        slug_field='slug',
         write_only=True,
         required=False,
         source='related_techniques'
@@ -201,8 +202,9 @@ class TechniqueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Technique
         fields = [
-            "id",
+            "slug",
             "name",
+            "acronym",
             "description",
             "complexity_rating",
             "computational_cost_rating",
@@ -211,7 +213,7 @@ class TechniqueSerializer(serializers.ModelSerializer):
             "tags",
             "tag_ids",
             "related_techniques",
-            "related_technique_ids",
+            "related_technique_slugs",
             "resources",
             "example_use_cases",
             "limitations",

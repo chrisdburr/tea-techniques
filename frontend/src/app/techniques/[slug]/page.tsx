@@ -297,13 +297,13 @@ function TechniqueLimitations({
 
 // Component to display related techniques
 function RelatedTechniques({ 
-	techniqueIds 
+	techniqueSlugs 
 }: { 
-	techniqueIds: number[];
+	techniqueSlugs: string[];
 }) {
-	const { techniques, isLoading, isError } = useMultipleTechniqueNames(techniqueIds);
+	const { techniques, isLoading, isError } = useMultipleTechniqueNames(techniqueSlugs);
 
-	if (!techniqueIds || techniqueIds.length === 0) {
+	if (!techniqueSlugs || techniqueSlugs.length === 0) {
 		return <p className="text-muted-foreground">No related techniques specified.</p>;
 	}
 
@@ -332,13 +332,14 @@ function RelatedTechniques({
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 				{techniques.map((technique) => (
 					<Link
-						key={technique.id}
-						href={`/techniques/${technique.id}`}
+						key={technique.slug}
+						href={`/techniques/${technique.slug}`}
 						className="flex items-center gap-2 p-3 rounded-md border hover:border-primary transition-colors"
 					>
 						<Layers className="h-4 w-4 text-primary" />
 						<span className="text-sm font-medium">
 							{technique.name}
+							{technique.acronym && <span className="text-muted-foreground ml-1">({technique.acronym})</span>}
 						</span>
 						<ArrowRight className="h-4 w-4 ml-auto" />
 					</Link>
@@ -350,12 +351,12 @@ function RelatedTechniques({
 
 export default function TechniqueDetailPage() {
 	const params = useParams();
-	const id = Number(params.id);
+	const slug = params.slug as string;
 
 	// This would be replaced with actual auth state - for now always false
 	const isAuthenticated = false;
 
-	const { data: technique, isLoading, error } = useTechniqueDetail(id);
+	const { data: technique, isLoading, error } = useTechniqueDetail(slug);
 
 	// Debug logging - can be removed in production
 	useEffect(() => {
@@ -424,6 +425,11 @@ export default function TechniqueDetailPage() {
 						<div className="mb-6">
 							<h1 className="text-3xl font-bold">
 								{technique.name}
+								{technique.acronym && (
+									<span className="text-2xl text-muted-foreground ml-2">
+										({technique.acronym})
+									</span>
+								)}
 							</h1>
 						</div>
 						<Section title="Description">
@@ -450,7 +456,7 @@ export default function TechniqueDetailPage() {
 						{technique.related_techniques && technique.related_techniques.length > 0 && (
 							<Section title="Related Techniques">
 								<RelatedTechniques
-									techniqueIds={technique.related_techniques}
+									techniqueSlugs={technique.related_techniques}
 								/>
 							</Section>
 						)}

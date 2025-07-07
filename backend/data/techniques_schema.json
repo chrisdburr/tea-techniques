@@ -6,13 +6,18 @@
 	"items": {
 		"type": "object",
 		"properties": {
-			"id": {
-				"type": "integer",
-				"description": "Unique identifier for the technique"
+			"slug": {
+				"type": "string",
+				"pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+				"description": "URL-friendly unique identifier for the technique (lowercase, hyphen-separated)"
 			},
 			"name": {
 				"type": "string",
 				"description": "Name of the technique"
+			},
+			"acronym": {
+				"type": ["string", "null"],
+				"description": "Optional acronym for the technique (e.g., SHAP, LIME)"
 			},
 			"description": {
 				"type": "string",
@@ -198,7 +203,7 @@
 				"description": "List of subcategories this technique belongs to"
 			}
 		},
-		"required": ["id", "name", "description", "assurance_goals"],
+		"required": ["slug", "name", "description", "assurance_goals"],
 		"dependentRequired": {
 			"subcategories": ["categories"]
 		}

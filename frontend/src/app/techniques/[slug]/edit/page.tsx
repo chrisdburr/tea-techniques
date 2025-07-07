@@ -12,12 +12,12 @@ import { ArrowLeft } from "lucide-react";
 export default function EditTechniquePage() {
   const params = useParams();
   const router = useRouter();
-  const id = Number(params.id);
+  const slug = params.slug as string;
   
-  const { data: technique, isLoading, error } = useTechniqueDetail(id);
+  const { data: technique, isLoading, error } = useTechniqueDetail(slug);
   
   const goBack = () => {
-    router.push(`/techniques/${id}`);
+    router.push(`/techniques/${slug}`);
   };
   
   return (
@@ -44,7 +44,7 @@ export default function EditTechniquePage() {
               <p className="text-sm mt-2">{(error as Error)?.message || "Unknown error"}</p>
             </div>
           ) : technique ? (
-            <TechniqueForm id={id} isEditMode={true} />
+            <TechniqueForm slug={slug} isEditMode={true} />
           ) : (
             <div className="text-center py-8">No technique found</div>
           )}

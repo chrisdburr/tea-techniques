@@ -18,14 +18,13 @@ interface TechniqueCardProps {
 }
 
 const TechniqueCard = ({ technique }: TechniqueCardProps): JSX.Element => {
-	// Format the title to remove parenthetical content if it's too long
-	const formatTitle = (title: string) => {
-		// If the title is potentially too long (over ~35 chars), try to simplify it
-		if (title.length > 35 && title.includes("(")) {
-			// Return everything before the first parenthesis, trimmed
-			return title.split("(")[0].trim();
+	// Format the title to display name with acronym if available
+	const formatTitle = (name: string, acronym?: string) => {
+		// If we have an acronym, show it in parentheses
+		if (acronym) {
+			return `${name} (${acronym})`;
 		}
-		return title;
+		return name;
 	};
 
 	// Truncate description for display and add ellipsis if needed
@@ -44,9 +43,9 @@ const TechniqueCard = ({ technique }: TechniqueCardProps): JSX.Element => {
 			<CardHeader className="pb-2 px-4 pt-4 sm:px-6 sm:pt-6">
 				<CardTitle
 					className="line-clamp-1 text-base sm:text-lg"
-					title={technique.name}
+					title={formatTitle(technique.name, technique.acronym)}
 				>
-					{formatTitle(technique.name)}
+					{formatTitle(technique.name, technique.acronym)}
 				</CardTitle>
 				
 				{/* Assurance goal icons moved to replace model/data type tags */}
@@ -80,7 +79,7 @@ const TechniqueCard = ({ technique }: TechniqueCardProps): JSX.Element => {
 					size="sm"
 					className="w-full text-xs sm:text-sm"
 				>
-					<Link href={`/techniques/${technique.id}`}>
+					<Link href={`/techniques/${technique.slug}`}>
 						View Details
 					</Link>
 				</Button>

@@ -1,28 +1,29 @@
 # api/urls.py
 
-from django.urls import path, include, re_path
-from rest_framework.routers import DefaultRouter
+from django.urls import include, path, re_path
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
-from rest_framework import permissions
+from rest_framework.routers import DefaultRouter
+
 from .views.api_views import (
     AssuranceGoalsViewSet,
+    ResourceTypesViewSet,
     TagsViewSet,
     TechniquesViewSet,
-    ResourceTypesViewSet,
-    health_check_detailed,
     debug_echo,
     health_check,
+    health_check_detailed,
 )
 from .views.auth_views import (
+    auth_status_view,
     get_csrf,
     login_view,
     logout_view,
     user_view,
-    auth_status_view,
 )
 
 

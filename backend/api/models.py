@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class AssuranceGoal(models.Model):
@@ -22,8 +22,6 @@ class AssuranceGoal(models.Model):
 
     def __str__(self) -> str:
         return self.name
-
-
 
 
 class Tag(models.Model):
@@ -84,7 +82,7 @@ class Technique(models.Model):
     )
     assurance_goals = models.ManyToManyField(AssuranceGoal, related_name="techniques")
     tags = models.ManyToManyField(Tag, related_name="techniques", blank=True)
-    related_techniques = models.ManyToManyField('self', blank=True, symmetrical=False)
+    related_techniques = models.ManyToManyField("self", blank=True, symmetrical=False)
 
     class Meta:
         db_table = "technique"
@@ -93,8 +91,6 @@ class Technique(models.Model):
         if self.acronym:
             return f"{self.name} ({self.acronym})"
         return self.name
-
-
 
 
 class TechniqueResource(models.Model):

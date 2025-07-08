@@ -2,9 +2,10 @@
 import os
 import subprocess
 from pathlib import Path
-from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User
+
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.core.management.base import BaseCommand
 from django.db import connections
 
 
@@ -82,4 +83,7 @@ class Command(BaseCommand):
         self.stdout.write(f"Running: {cmd}")
         # Pass the current environment with any updates to subprocesses
         env = os.environ.copy()
-        subprocess.run(cmd, shell=True, check=True, env=env)
+        # Convert string command to list for safer execution
+        import shlex
+        cmd_list = shlex.split(cmd)
+        subprocess.run(cmd_list, check=True, env=env)

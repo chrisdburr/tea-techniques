@@ -31,8 +31,9 @@ export const mockResourceTypes = [
 
 export const mockTechniques = [
   {
-    id: 1,
+    slug: 'shapley-additive-explanations',
     name: 'SHapley Additive exPlanations (SHAP)',
+    acronym: 'SHAP',
     description: 'SHAP explains model predictions by quantifying how much each input feature contributes to the outcome. It assigns an importance score to every feature, indicating whether it pushes the prediction towards or away from the average. The method systematically evaluates how predictions change as features are included or excluded, drawing on game theory concepts to ensure a fair distribution of contributions.',
     complexity_rating: 3,
     computational_cost_rating: 2,
@@ -83,8 +84,9 @@ export const mockTechniques = [
     related_techniques: []
   },
   {
-    id: 2,
+    slug: 'local-interpretable-model-agnostic-explanations',
     name: 'Local Interpretable Model-agnostic Explanations (LIME)',
+    acronym: 'LIME',
     description: 'LIME explains individual predictions by learning a local interpretable model around the prediction. It perturbs the input data and observes the changes in predictions to understand which features are most important for a specific decision. The technique is model-agnostic, meaning it can explain any machine learning classifier.',
     complexity_rating: 2,
     computational_cost_rating: 2,
@@ -114,11 +116,12 @@ export const mockTechniques = [
         description: 'Local explanations may not be representative of the global model behavior, potentially missing important patterns that occur in other regions of the feature space.'
       }
     ],
-    related_techniques: [1] // Related to SHAP
+    related_techniques: ['shapley-additive-explanations'] // Related to SHAP
   },
   {
-    id: 3,
+    slug: 'differential-privacy',
     name: 'Differential Privacy',
+    acronym: '',
     description: 'Differential privacy provides a mathematical framework for measuring and controlling privacy loss when analyzing datasets. It ensures that the inclusion or exclusion of any single individual\'s data does not significantly affect the outcome of any analysis, providing strong privacy guarantees.',
     complexity_rating: 4,
     computational_cost_rating: 3,
@@ -162,8 +165,9 @@ export const mockTechniquesList = {
 // Edge case techniques for testing robustness
 export const mockEdgeCaseTechniques = [
   {
-    id: 999,
+    slug: 'technique-with-very-long-name-that-might-cause-layout-issues',
     name: 'Technique with Very Long Name That Might Cause Layout Issues in UI Components When Displayed',
+    acronym: '',
     description: 'A' + 'very '.repeat(200) + 'long description that tests how components handle extremely lengthy text content and whether proper truncation or wrapping occurs.',
     complexity_rating: 5,
     computational_cost_rating: 5,
@@ -175,8 +179,9 @@ export const mockEdgeCaseTechniques = [
     related_techniques: []
   },
   {
-    id: 1000,
+    slug: 'technique-with-special-characters',
     name: 'Technique with Special Characters: αβγδε & émojis 🤖📊',
+    acronym: '',
     description: 'This technique tests handling of unicode characters, special symbols, and emojis in the interface.',
     complexity_rating: 1,
     computational_cost_rating: 1,
@@ -191,8 +196,9 @@ export const mockEdgeCaseTechniques = [
 
 // Minimal technique for testing empty states
 export const mockEmptyTechnique = {
-  id: 0,
+  slug: '',
   name: '',
+  acronym: '',
   description: '',
   complexity_rating: 1,
   computational_cost_rating: 1,
@@ -208,7 +214,7 @@ export const mockEmptyTechnique = {
 export const createMockTechnique = (overrides: Partial<typeof mockTechniques[0]> = {}) => ({
   ...mockTechniques[0],
   ...overrides,
-  id: Math.floor(Math.random() * 10000), // Ensure unique ID
+  slug: `test-technique-${Math.floor(Math.random() * 10000)}`, // Ensure unique slug
 })
 
 export const createMockTechniquesList = (techniques = mockTechniques, pagination = {}) => ({

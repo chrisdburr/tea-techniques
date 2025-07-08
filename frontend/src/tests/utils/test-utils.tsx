@@ -155,8 +155,9 @@ export const waitForLoadingToFinish = async () => {
 // Test data validation helpers
 export const expectToMatchTechniqueShape = (technique: any) => {
   expect(technique).toMatchObject({
-    id: expect.any(Number),
+    slug: expect.any(String),
     name: expect.any(String),
+    acronym: expect.any(String),
     description: expect.any(String),
     complexity_rating: expect.any(Number),
     computational_cost_rating: expect.any(Number),
@@ -265,7 +266,7 @@ export const mockSearchParams = (params: Record<string, string>) => {
 // Re-export commonly used testing utilities
 export { screen, waitFor, within, fireEvent } from '@testing-library/react'
 export { vi } from 'vitest'
-export userEvent from '@testing-library/user-event'
+export { default as userEvent } from '@testing-library/user-event'
 
 // Default export for convenient importing
 export default renderWithProviders

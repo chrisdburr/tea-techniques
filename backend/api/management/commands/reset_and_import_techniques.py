@@ -1,7 +1,8 @@
 # backend/api/management/commands/reset_and_import_techniques.py
-from django.core.management.base import BaseCommand
 from django.core.management import call_command
+from django.core.management.base import BaseCommand
 from django.db import transaction
+
 from api.models import Technique
 
 
@@ -60,7 +61,5 @@ class Command(BaseCommand):
 
         # Add server startup instructions at the end
         self.stdout.write(
-            self.style.SUCCESS(
-                "➡️ Run 'python manage.py runserver' to start the server"
-            )
+            self.style.SUCCESS("➡️ Run 'python manage.py runserver' to start the server")
         )

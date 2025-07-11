@@ -1,0 +1,599 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch: # Allow manual triggering
+
+# Cancel previous runs if a new one is started
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Python version for backend
+  PYTHON_VERSION: '3.12'
+  # Node.js version for frontend
+  NODE_VERSION: '18'
+  # pnpm version
+  PNPM_VERSION: '10.6.5'
+  # Poetry version
+  POETRY_VERSION: '1.8.0'
+
+jobs:
+  # Stage 1: Static Analysis (< 2 minutes)
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # Fetch full history for better diff analysis
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: ${{ env.POETRY_VERSION }}
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Cache Python dependencies
+        uses: actions/cache@v4
+        with:
+          path: backend/.venv
+          key: python-${{ env.PYTHON_VERSION }}-${{ hashFiles('backend/poetry.lock') }}
+          restore-keys: |
+            python-${{ env.PYTHON_VERSION }}-
+
+      - name: Cache Node.js dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pnpm-store
+            frontend/node_modules
+          key: node-${{ env.NODE_VERSION }}-${{ hashFiles('frontend/pnpm-lock.yaml') }}
+          restore-keys: |
+            node-${{ env.NODE_VERSION }}-
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: poetry install --with dev
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
+
+      # Backend static analysis
+      - name: Backend code formatting check
+        working-directory: backend
+        run: poetry run black --check api/
+
+      - name: Backend import sorting check
+        working-directory: backend
+        run: poetry run isort --check-only api/
+
+      - name: Backend type checking
+        working-directory: backend
+        run: poetry run mypy api/
+
+      - name: Backend linting
+        working-directory: backend
+        run: poetry run pylint api/
+
+      - name: Backend security scanning
+        working-directory: backend
+        run: poetry run bandit -r api/ -x "*/tests/*,*/migrations/*" -f json -o bandit-report.json
+        continue-on-error: true
+
+      - name: Upload backend security report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-security-report
+          path: backend/bandit-report.json
+
+      # Frontend static analysis
+      - name: Frontend code formatting check
+        working-directory: frontend
+        run: pnpm prettier --check .
+
+      - name: Frontend type checking
+        working-directory: frontend
+        run: pnpm type-check
+
+      - name: Frontend linting
+        working-directory: frontend
+        run: pnpm lint
+
+      - name: Frontend security audit
+        working-directory: frontend
+        run: pnpm audit --audit-level moderate
+        continue-on-error: true
+
+      # Documentation quality
+      - name: Markdown linting
+        uses: articulate/actions-markdownlint@v1
+        with:
+          config: .markdownlint.yaml
+          files: '**/*.md'
+        continue-on-error: true
+
+  # Stage 2: Unit Testing (< 5 minutes)
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: static-analysis
+    
+    strategy:
+      matrix:
+        test-type: [backend, frontend]
+      fail-fast: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python (Backend)
+        if: matrix.test-type == 'backend'
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Set up Node.js (Frontend)
+        if: matrix.test-type == 'frontend'
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm (Frontend)
+        if: matrix.test-type == 'frontend'
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install Poetry (Backend)
+        if: matrix.test-type == 'backend'
+        uses: snok/install-poetry@v1
+        with:
+          version: ${{ env.POETRY_VERSION }}
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ matrix.test-type == 'backend' && 'backend/.venv' || '~/.pnpm-store' }}
+            ${{ matrix.test-type == 'frontend' && 'frontend/node_modules' || '' }}
+          key: ${{ matrix.test-type }}-${{ env.PYTHON_VERSION }}-${{ env.NODE_VERSION }}-${{ hashFiles(format('{0}/{1}', matrix.test-type, matrix.test-type == 'backend' && 'poetry.lock' || 'pnpm-lock.yaml')) }}
+
+      - name: Install backend dependencies
+        if: matrix.test-type == 'backend'
+        working-directory: backend
+        run: poetry install --with dev
+
+      - name: Install frontend dependencies
+        if: matrix.test-type == 'frontend'
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
+
+      # Backend unit tests
+      - name: Run backend unit tests
+        if: matrix.test-type == 'backend'
+        working-directory: backend
+        run: |
+          poetry run pytest \
+            --cov=api \
+            --cov-report=xml:coverage.xml \
+            --cov-report=html:coverage_html \
+            --cov-report=term-missing \
+            --cov-fail-under=90 \
+            --junit-xml=test-results.xml \
+            -m "unit or not (integration or api)" \
+            -v
+
+      # Frontend unit tests
+      - name: Run frontend unit tests
+        if: matrix.test-type == 'frontend'
+        working-directory: frontend
+        run: pnpm test:ci
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.test-type }}-test-results
+          path: |
+            ${{ matrix.test-type }}/test-results.xml
+            ${{ matrix.test-type }}/coverage.xml
+            ${{ matrix.test-type == 'backend' && 'backend/coverage_html/' || 'frontend/coverage/' }}
+
+      - name: Upload coverage to Codecov
+        if: always()
+        uses: codecov/codecov-action@v4
+        with:
+          file: ${{ matrix.test-type }}/coverage.xml
+          flags: ${{ matrix.test-type }}
+          name: ${{ matrix.test-type }}-coverage
+          fail_ci_if_error: false
+
+  # Stage 3: Integration Testing (< 8 minutes)
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: unit-tests
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: tea_techniques_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: ${{ env.POETRY_VERSION }}
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            backend/.venv
+            ~/.pnpm-store
+            frontend/node_modules
+          key: integration-${{ env.PYTHON_VERSION }}-${{ env.NODE_VERSION }}-${{ hashFiles('backend/poetry.lock', 'frontend/pnpm-lock.yaml') }}
+
+      - name: Install dependencies
+        run: |
+          cd backend && poetry install --with dev
+          cd frontend && pnpm install --frozen-lockfile
+
+      - name: Set up test database
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/tea_techniques_test
+        working-directory: backend
+        run: |
+          poetry run python manage.py migrate --settings=config.settings.test
+          poetry run python manage.py import_techniques --settings=config.settings.test
+
+      # Backend integration tests
+      - name: Run backend integration tests
+        working-directory: backend
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/tea_techniques_test
+        run: |
+          poetry run pytest \
+            --cov=api \
+            --cov-report=xml:integration-coverage.xml \
+            --cov-report=term-missing \
+            --junit-xml=integration-test-results.xml \
+            -m "integration" \
+            -v
+
+      # Frontend integration tests (with backend running)
+      - name: Start backend server
+        working-directory: backend
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/tea_techniques_test
+        run: |
+          poetry run python manage.py runserver 8000 --settings=config.settings.test &
+          sleep 10
+
+      - name: Run frontend integration tests
+        working-directory: frontend
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8000
+        run: pnpm test -- --run --coverage --reporter=verbose src/tests/integration/
+
+      - name: Upload integration test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-test-results
+          path: |
+            backend/integration-test-results.xml
+            backend/integration-coverage.xml
+            frontend/coverage/
+
+  # Stage 4: End-to-End Testing (< 10 minutes)
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: integration-tests
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: tea_techniques_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    strategy:
+      matrix:
+        browser: [chromium, firefox]
+      fail-fast: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: ${{ env.POETRY_VERSION }}
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            backend/.venv
+            ~/.pnpm-store
+            frontend/node_modules
+          key: e2e-${{ env.PYTHON_VERSION }}-${{ env.NODE_VERSION }}-${{ hashFiles('backend/poetry.lock', 'frontend/pnpm-lock.yaml') }}
+
+      - name: Install dependencies
+        run: |
+          cd backend && poetry install --with dev
+          cd frontend && pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        working-directory: frontend
+        run: pnpm exec playwright install ${{ matrix.browser }} --with-deps
+
+      - name: Set up test database and start services
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/tea_techniques_test
+        run: |
+          # Set up database
+          cd backend
+          poetry run python manage.py migrate --settings=config.settings.test
+          poetry run python manage.py import_techniques --settings=config.settings.test
+          
+          # Start backend
+          poetry run python manage.py runserver 8000 --settings=config.settings.test &
+          
+          # Build and start frontend
+          cd ../frontend
+          pnpm build
+          pnpm start &
+          
+          # Wait for services to be ready
+          sleep 30
+
+      - name: Run E2E tests
+        working-directory: frontend
+        env:
+          PLAYWRIGHT_BASE_URL: http://localhost:3000
+        run: pnpm exec playwright test --project=${{ matrix.browser }} --reporter=html
+
+      - name: Upload E2E test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results-${{ matrix.browser }}
+          path: |
+            frontend/playwright-report/
+            frontend/test-results/
+
+  # Stage 5: Security & Performance (< 3 minutes)
+  security-performance:
+    name: Security & Performance
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [static-analysis, unit-tests]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Cache Node.js dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pnpm-store
+            frontend/node_modules
+          key: security-${{ env.NODE_VERSION }}-${{ hashFiles('frontend/pnpm-lock.yaml') }}
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: Build frontend for analysis
+        working-directory: frontend
+        run: pnpm build
+
+      - name: Analyze bundle size
+        working-directory: frontend
+        run: |
+          du -sh .next/static/chunks/ || echo "No chunks directory found"
+          find .next/static -name "*.js" -exec ls -lh {} + | head -20
+
+      # Security scanning with CodeQL
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript, python
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+      # Lighthouse CI for performance
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          configPath: './frontend/.lighthouserc.json'
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+  # Build verification job
+  build-verification:
+    name: Build Verification
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: static-analysis
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: ${{ env.POETRY_VERSION }}
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            backend/.venv
+            ~/.pnpm-store
+            frontend/node_modules
+          key: build-${{ env.PYTHON_VERSION }}-${{ env.NODE_VERSION }}-${{ hashFiles('backend/poetry.lock', 'frontend/pnpm-lock.yaml') }}
+
+      - name: Install dependencies
+        run: |
+          cd backend && poetry install --with dev
+          cd frontend && pnpm install --frozen-lockfile
+
+      - name: Verify backend build
+        working-directory: backend
+        run: |
+          poetry run python manage.py check
+          poetry run python manage.py collectstatic --noinput --dry-run
+
+      - name: Verify frontend build
+        working-directory: frontend
+        run: pnpm build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            frontend/.next/
+          retention-days: 7
+
+  # Summary job that requires all other jobs to pass
+  ci-success:
+    name: CI Success
+    runs-on: ubuntu-latest
+    needs: [static-analysis, unit-tests, integration-tests, e2e-tests, security-performance, build-verification]
+    if: always()
+    
+    steps:
+      - name: Check all jobs status
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: |
+          echo "One or more CI jobs failed or were cancelled"
+          exit 1
+          
+      - name: CI Success
+        run: |
+          echo "🎉 All CI checks passed successfully!"
+          echo "The code is ready for deployment."

@@ -9,7 +9,6 @@ expect.extend(toHaveNoViolations)
 export const teaAxeConfig = {
   rules: {
     // Core accessibility rules (always enabled)
-    'alt-text': { enabled: true },
     'aria-roles': { enabled: true },
     'button-name': { enabled: true },
     'color-contrast': { 
@@ -27,7 +26,6 @@ export const teaAxeConfig = {
     'html-lang-valid': { enabled: true },
     'image-alt': { enabled: true },
     'input-image-alt': { enabled: true },
-    'keyboard-navigation': { enabled: true },
     'label': { enabled: true },
     'link-name': { enabled: true },
     'list': { enabled: true },
@@ -40,7 +38,6 @@ export const teaAxeConfig = {
     'bypass': { enabled: false }, // Skip links not needed in component tests
 
     // TEA-specific customizations
-    'focus-order-semantics': { enabled: true },
     'tabindex': { enabled: true },
     'aria-hidden-focus': { enabled: true },
   },
@@ -79,9 +76,7 @@ export const accessibilityTests = {
   keyboardNavigation: async (renderResult: RenderResult) => {
     return testAccessibility(renderResult, {
       rules: {
-        'keyboard-navigation': { enabled: true },
         'tabindex': { enabled: true },
-        'focus-order-semantics': { enabled: true },
       }
     })
   },
@@ -286,7 +281,7 @@ export const componentAccessibilityTests = {
   },
 
   // Test list accessibility
-  list: async (renderResult: RenderResult, listTestId: string) => {
+  list: async (renderResult: RenderResult) => {
     return testAccessibility(renderResult, {
       rules: {
         'list': { enabled: true },

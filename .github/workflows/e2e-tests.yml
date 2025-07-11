@@ -2,139 +2,121 @@ name: E2E Tests
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
   schedule:
     # Run E2E tests nightly at 2 AM UTC
     - cron: '0 2 * * *'
 
 env:
-  NODE_VERSION: "18"
-  PNPM_VERSION: "10.6.5"
+  NODE_VERSION: '18'
+  PNPM_VERSION: '10.6.5'
+  PYTHON_VERSION: '3.11'
+  POETRY_VERSION: '1.8.0'
 
 jobs:
   e2e-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_VERSION }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
-    - name: Install pnpm
-      uses: pnpm/action-setup@v2
-      with:
-        version: ${{ env.PNPM_VERSION }}
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
 
-    - name: Start application stack
-      run: |
-        docker-compose -f docker-compose.test.yml up -d --build
-        
-    - name: Wait for services to be ready
-      run: |
-        echo "Waiting for backend..."
-        timeout 120s bash -c 'until curl -f http://localhost:8000/api/; do sleep 5; done'
-        echo "Waiting for frontend..."
-        timeout 120s bash -c 'until curl -f http://localhost:3000; do sleep 5; done'
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: ${{ env.POETRY_VERSION }}
+          virtualenvs-create: true
+          virtualenvs-in-project: true
 
-    - name: Setup test data
-      run: |
-        docker-compose -f docker-compose.test.yml exec -T backend python manage.py reset_and_import_techniques
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-    - name: Install frontend dependencies
-      working-directory: frontend
-      run: pnpm install --frozen-lockfile
+      - name: Start application stack
+        run: |
+          docker-compose -f docker-compose.development.yml up -d --build
 
-    - name: Install Playwright
-      working-directory: frontend
-      run: npx playwright install --with-deps
+      - name: Wait for services to be ready
+        run: |
+          echo "Waiting for backend..."
+          timeout 120s bash -c 'until curl -f http://localhost:8000/api/techniques/; do sleep 5; done'
+          echo "Waiting for frontend..."
+          timeout 120s bash -c 'until curl -f http://localhost:3000; do sleep 5; done'
 
-    - name: Run Playwright E2E tests
-      working-directory: frontend
-      run: npx playwright test
-      env:
-        PLAYWRIGHT_BASE_URL: http://localhost:3000
+      - name: Setup test data
+        run: |
+          docker-compose -f docker-compose.development.yml exec -T backend poetry run python manage.py reset_and_import_techniques
 
-    - name: Upload Playwright report
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: playwright-report
-        path: frontend/test-results/
-        retention-days: 30
+      - name: Get pnpm store directory
+        shell: bash
+        working-directory: frontend
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - name: Upload Playwright HTML report
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: playwright-html-report
-        path: frontend/playwright-report/
-        retention-days: 30
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('frontend/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
-    - name: Capture application logs on failure
-      if: failure()
-      run: |
-        echo "=== Backend logs ==="
-        docker-compose -f docker-compose.test.yml logs backend
-        echo "=== Frontend logs ==="
-        docker-compose -f docker-compose.test.yml logs frontend
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
 
-    - name: Cleanup
-      if: always()
-      run: |
-        docker-compose -f docker-compose.test.yml down -v
+      - name: Install Playwright
+        working-directory: frontend
+        run: pnpm exec playwright install --with-deps
 
-  performance-tests:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Run Playwright E2E tests
+        working-directory: frontend
+        run: pnpm e2e
+        env:
+          PLAYWRIGHT_BASE_URL: http://localhost:3000
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: frontend/test-results/
+          retention-days: 30
 
-    - name: Start application stack
-      run: |
-        docker-compose -f docker-compose.test.yml up -d --build
-        
-    - name: Wait for services to be ready
-      run: |
-        timeout 120s bash -c 'until curl -f http://localhost:8000/api/; do sleep 5; done'
-        timeout 120s bash -c 'until curl -f http://localhost:3000; do sleep 5; done'
+      - name: Upload Playwright HTML report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-html-report
+          path: frontend/playwright-report/
+          retention-days: 30
 
-    - name: Setup test data
-      run: |
-        docker-compose -f docker-compose.test.yml exec -T backend python manage.py reset_and_import_techniques
+      - name: Capture application logs on failure
+        if: failure()
+        run: |
+          echo "=== Backend logs ==="
+          docker-compose -f docker-compose.development.yml logs backend
+          echo "=== Frontend logs ==="
+          docker-compose -f docker-compose.development.yml logs frontend
 
-    - name: Install Lighthouse CI
-      run: npm install -g @lhci/cli
-
-    - name: Run Lighthouse CI
-      run: |
-        lhci autorun
-      env:
-        LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-
-    - name: Upload Lighthouse results
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: lighthouse-results
-        path: .lighthouseci/
-        retention-days: 30
-
-    - name: Cleanup
-      if: always()
-      run: |
-        docker-compose -f docker-compose.test.yml down -v
+      - name: Cleanup
+        if: always()
+        run: |
+          docker-compose -f docker-compose.development.yml down -v

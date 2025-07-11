@@ -108,8 +108,7 @@ export const handlers = [
     return HttpResponse.json(updatedTechnique);
   }),
 
-  http.delete('/api/techniques/:id', ({ params }) => {
-    const { id } = params;
+  http.delete('/api/techniques/:id', () => {
     return HttpResponse.json({ success: true });
   }),
 
@@ -127,7 +126,7 @@ export const handlers = [
   }),
 
   // Auth endpoints
-  http.post('/api/auth/login/', async ({ request }) => {
+  http.post('/api/auth/login/', async () => {
     return HttpResponse.json({ detail: 'Login successful' });
   }),
 

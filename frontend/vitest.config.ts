@@ -9,6 +9,7 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
     css: true,
+    exclude: ['**/e2e/**', '**/node_modules/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
@@ -50,7 +51,7 @@ export default defineConfig({
     testTimeout: 10000,
     hookTimeout: 10000,
     // Better error output
-    reporter: ['verbose', 'html'],
+    reporters: ['verbose', 'html'],
     outputFile: {
       html: './coverage/index.html'
     }

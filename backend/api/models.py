@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
+
+if TYPE_CHECKING:
+    pass
 
 
 class AssuranceGoal(models.Model):
@@ -21,9 +25,8 @@ class AssuranceGoal(models.Model):
         verbose_name_plural = "Assurance Goals"
 
     def __str__(self) -> str:
-        return self.name
-
-
+        """Return the string representation of the AssuranceGoal."""
+        return str(self.name)
 
 
 class Tag(models.Model):
@@ -35,13 +38,14 @@ class Tag(models.Model):
     classification system of goals, categories, and subcategories.
     """
 
-    name = models.CharField(max_length=255, unique=True)
+    name: models.CharField = models.CharField(max_length=255, unique=True)
 
     class Meta:
         db_table = "tag"
 
     def __str__(self) -> str:
-        return self.name
+        """Return the string representation of the Tag."""
+        return str(self.name)
 
 
 class ResourceType(models.Model):
@@ -52,14 +56,15 @@ class ResourceType(models.Model):
     linked to techniques, such as papers, websites, tools, implementations, etc.
     """
 
-    name = models.CharField(max_length=100, unique=True)
-    icon = models.CharField(max_length=50, blank=True)
+    name: models.CharField = models.CharField(max_length=100, unique=True)
+    icon: models.CharField = models.CharField(max_length=50, blank=True)
 
     class Meta:
         db_table = "resource_type"
 
     def __str__(self) -> str:
-        return self.name
+        """Return the string representation of the ResourceType."""
+        return str(self.name)
 
 
 class Technique(models.Model):
@@ -72,29 +77,31 @@ class Technique(models.Model):
     relationships to goals, categories, and other classification systems.
     """
 
-    slug = models.SlugField(max_length=100, unique=True, primary_key=True)
-    name = models.CharField(max_length=255, unique=True)
-    acronym = models.CharField(max_length=20, blank=True, null=True)
-    description = models.TextField()
-    complexity_rating = models.PositiveSmallIntegerField(
+    slug: models.SlugField = models.SlugField(max_length=100, unique=True, primary_key=True)
+    name: models.CharField = models.CharField(max_length=255, unique=True)
+    acronym: models.CharField = models.CharField(max_length=20, blank=True, null=True)
+    description: models.TextField = models.TextField()
+    complexity_rating: models.PositiveSmallIntegerField = models.PositiveSmallIntegerField(
         null=True, blank=True, validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
-    computational_cost_rating = models.PositiveSmallIntegerField(
+    computational_cost_rating: models.PositiveSmallIntegerField = models.PositiveSmallIntegerField(
         null=True, blank=True, validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
-    assurance_goals = models.ManyToManyField(AssuranceGoal, related_name="techniques")
-    tags = models.ManyToManyField(Tag, related_name="techniques", blank=True)
-    related_techniques = models.ManyToManyField('self', blank=True, symmetrical=False)
+    assurance_goals: models.ManyToManyField = models.ManyToManyField(AssuranceGoal, related_name="techniques")
+    tags: models.ManyToManyField = models.ManyToManyField(Tag, related_name="techniques", blank=True)
+    related_techniques: models.ManyToManyField = models.ManyToManyField("self", blank=True, symmetrical=False)
 
     class Meta:
         db_table = "technique"
 
     def __str__(self) -> str:
+        """Return the string representation of the Technique.
+        
+        If acronym exists, returns 'Name (ACRONYM)', otherwise just 'Name'.
+        """
         if self.acronym:
             return f"{self.name} ({self.acronym})"
         return self.name
-
-
 
 
 class TechniqueResource(models.Model):
@@ -106,22 +113,26 @@ class TechniqueResource(models.Model):
     provide additional information, implementations, or examples of the technique.
     """
 
-    technique = models.ForeignKey(
+    technique: models.ForeignKey = models.ForeignKey(
         Technique, on_delete=models.CASCADE, related_name="resources"
     )
-    resource_type = models.ForeignKey(ResourceType, on_delete=models.PROTECT)
-    title = models.CharField(max_length=255)
-    url = models.URLField()
-    description = models.TextField(blank=True)
-    authors = models.CharField(max_length=500, blank=True, null=True)
-    publication_date = models.DateField(blank=True, null=True)
-    source_type = models.CharField(max_length=100, blank=True, null=True)
+    resource_type: models.ForeignKey = models.ForeignKey(ResourceType, on_delete=models.PROTECT)
+    title: models.CharField = models.CharField(max_length=255)
+    url: models.URLField = models.URLField()
+    description: models.TextField = models.TextField(blank=True)
+    authors: models.CharField = models.CharField(max_length=500, blank=True, null=True)
+    publication_date: models.DateField = models.DateField(blank=True, null=True)
+    source_type: models.CharField = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         db_table = "technique_resource"
         unique_together = ("technique", "url")
 
     def __str__(self) -> str:
+        """Return the string representation of the TechniqueResource.
+        
+        Format: 'ResourceType: Title'
+        """
         return f"{self.resource_type.name}: {self.title}"
 
 
@@ -135,11 +146,11 @@ class TechniqueExampleUseCase(models.Model):
     goal to clarify its purpose.
     """
 
-    technique = models.ForeignKey(
+    technique: models.ForeignKey = models.ForeignKey(
         Technique, on_delete=models.CASCADE, related_name="example_use_cases"
     )
-    description = models.TextField()
-    assurance_goal = models.ForeignKey(
+    description: models.TextField = models.TextField()
+    assurance_goal: models.ForeignKey = models.ForeignKey(
         AssuranceGoal, on_delete=models.CASCADE, null=True, blank=True
     )
 
@@ -147,6 +158,7 @@ class TechniqueExampleUseCase(models.Model):
         db_table = "technique_example_use_case"
 
     def __str__(self) -> str:
+        """Return the string representation of the TechniqueExampleUseCase."""
         return f"Use case for {self.technique.name}"
 
 
@@ -159,13 +171,14 @@ class TechniqueLimitation(models.Model):
     drawbacks of each technique, enabling more informed decisions about when to apply it.
     """
 
-    technique = models.ForeignKey(
+    technique: models.ForeignKey = models.ForeignKey(
         Technique, on_delete=models.CASCADE, related_name="limitations"
     )
-    description = models.TextField()
+    description: models.TextField = models.TextField()
 
     class Meta:
         db_table = "technique_limitation"
 
     def __str__(self) -> str:
+        """Return the string representation of the TechniqueLimitation."""
         return f"Limitation for {self.technique.name}"

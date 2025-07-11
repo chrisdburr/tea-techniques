@@ -1,8 +1,8 @@
 import React, { ReactElement } from 'react'
-import { render, RenderOptions, RenderResult } from '@testing-library/react'
+import { render, RenderOptions, RenderResult, cleanup } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import userEvent from '@testing-library/user-event'
-import { vi } from 'vitest'
+import { vi, afterEach } from 'vitest'
 
 // Test providers wrapper
 interface TestProvidersProps {
@@ -66,10 +66,14 @@ export const renderWithProviders = (
   // Setup user-event for better interaction testing
   const user = userEvent.setup()
 
-  return {
+  // Return enhanced result with cleanup utility
+  const result = {
     ...renderResult,
     user,
+    cleanup: () => cleanup(),
   }
+
+  return result
 }
 
 // Specialized render for testing components in isolation
@@ -124,7 +128,7 @@ export const createMockFetch = () => {
   return mockFetch
 }
 
-export const mockApiResponse = (data: any, status = 200) => {
+export const mockApiResponse = <T = unknown>(data: T, status = 200) => {
   return Promise.resolve({
     ok: status >= 200 && status < 300,
     status,
@@ -153,7 +157,7 @@ export const waitForLoadingToFinish = async () => {
 }
 
 // Test data validation helpers
-export const expectToMatchTechniqueShape = (technique: any) => {
+export const expectToMatchTechniqueShape = (technique: unknown) => {
   expect(technique).toMatchObject({
     slug: expect.any(String),
     name: expect.any(String),
@@ -170,7 +174,7 @@ export const expectToMatchTechniqueShape = (technique: any) => {
   })
 }
 
-export const expectToMatchAssuranceGoalShape = (goal: any) => {
+export const expectToMatchAssuranceGoalShape = (goal: unknown) => {
   expect(goal).toMatchObject({
     id: expect.any(Number),
     name: expect.any(String),

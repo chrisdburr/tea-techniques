@@ -31,6 +31,7 @@ from api.services import (
 )
 from api.tests.factories import (
     AssuranceGoalFactory,
+    IsolatedTechniqueFactory,
     ResourceTypeFactory,
     TagFactory,
     TechniqueExampleUseCaseFactory,
@@ -897,12 +898,12 @@ class TechniqueSlugUpdateTests(TransactionTestCase):
     def setUp(self):
         """Set up test data."""
         self.service = TechniqueService()
-        self.technique = TechniqueFactory(slug="original-technique")
+        self.technique = IsolatedTechniqueFactory(slug="original-technique")
 
         # Create relationships that need to be preserved
         self.assurance_goal = AssuranceGoalFactory()
         self.tag = TagFactory()
-        self.related_technique = TechniqueFactory()
+        self.related_technique = IsolatedTechniqueFactory()
 
         self.technique.assurance_goals.add(self.assurance_goal)
         self.technique.tags.add(self.tag)
@@ -1020,26 +1021,37 @@ class TechniqueSlugUpdateTests(TransactionTestCase):
         self.assertEqual(set(preserved_limitation_ids), set(limitation_ids))
 
     def test_update_technique_slug_transaction_rollback_on_fk_error(self):
-        """Test that transaction rolls back if FK update fails."""
-        # Mock the update operation to fail for one of the FK models
-        with patch("api.models.TechniqueResource.objects.filter") as mock_filter:
-            mock_queryset = Mock()
-            mock_queryset.update.side_effect = Exception("FK update failed")
-            mock_filter.return_value = mock_queryset
-
+        """Test that transaction rolls back if slug update fails."""
+        # Create a technique with related objects to test FK updates
+        technique = IsolatedTechniqueFactory(slug="rollback-test-technique")
+        TechniqueResourceFactory(technique=technique)
+        TechniqueExampleUseCaseFactory(technique=technique)
+        TechniqueLimitationFactory(technique=technique)
+        
+        original_slug = technique.slug
+        original_resource_count = technique.resources.count()
+        original_use_case_count = technique.example_use_cases.count()
+        original_limitation_count = technique.limitations.count()
+        
+        # Mock the _update_technique_slug method to raise an exception
+        with patch.object(self.service, '_update_technique_slug') as mock_update_slug:
+            mock_update_slug.side_effect = Exception("Slug update failed")
+            
             validated_data = {"slug": "should-fail-slug"}
             request_data = {}
 
-            # The update should raise an exception
-            with self.assertRaises(Exception):
-                self.service.update_technique(
-                    self.technique, validated_data, request_data
-                )
+            # The update should raise a TechniqueOperationError due to the mocked failure
+            with self.assertRaises(TechniqueOperationError):
+                self.service.update_technique(technique, validated_data, request_data)
 
-            # Verify the original technique still exists with original slug
-            # (transaction should have rolled back)
-            original_technique = Technique.objects.get(id=self.technique.id)
-            self.assertEqual(original_technique.slug, "original-technique")
+            # Verify the transaction rolled back - technique should still exist with original slug
+            technique.refresh_from_db()
+            self.assertEqual(technique.slug, original_slug)
+            
+            # Verify related objects are still intact (transaction rollback preserved them)
+            self.assertEqual(technique.resources.count(), original_resource_count)
+            self.assertEqual(technique.example_use_cases.count(), original_use_case_count)
+            self.assertEqual(technique.limitations.count(), original_limitation_count)
 
     def test_update_technique_without_slug_change_skips_fk_preservation(self):
         """Test that FK preservation logic is skipped when slug doesn't change."""

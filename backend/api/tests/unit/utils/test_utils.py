@@ -396,9 +396,9 @@ class TechniqueDataValidatorTests(TestCase):
         result = TechniqueDataValidator.validate_resource_data(resource_data)
         self.assertFalse(result)
         mock_logger.warning.assert_called_once()
-        self.assertIn(
-            "missing required field: url", mock_logger.warning.call_args[0][0]
-        )
+        # Check that logger.warning was called with the format string and 'url' field
+        self.assertEqual(mock_logger.warning.call_args[0][0], "Resource missing required field: %s")
+        self.assertEqual(mock_logger.warning.call_args[0][1], "url")
 
     @patch("api.utils.logger")
     def test_validate_resource_data_empty_url(self, mock_logger):
@@ -683,14 +683,15 @@ class CustomExceptionHandlerTests(TestCase):
         self.assertEqual(len(log_calls), 2)  # One for the error, one for the path
 
         # Check first log call (error details)
-        error_log = log_calls[0][0][0]
-        self.assertIn("TestView", error_log)
-        self.assertIn("ValidationError", error_log)
-        self.assertIn("Test validation error", error_log)
+        self.assertEqual(log_calls[0][0][0], "API Error in %s: %s: %s")
+        self.assertEqual(log_calls[0][0][1], "TestView")  # View name
+        self.assertEqual(log_calls[0][0][2], "ValidationError")  # Exception class name
+        # DRF ValidationError has ErrorDetail objects in its string representation
+        self.assertIn("Test validation error", log_calls[0][0][3])  # Exception message
 
         # Check second log call (request path)
-        path_log = log_calls[1][0][0]
-        self.assertIn("/api/test/", path_log)
+        self.assertEqual(log_calls[1][0][0], "Request path: %s")
+        self.assertEqual(log_calls[1][0][1], "/api/test/")  # Request path
 
         # Verify response structure
         self.assertEqual(result.status_code, 400)
@@ -740,8 +741,10 @@ class CustomExceptionHandlerTests(TestCase):
 
         # Verify logging with unknown view
         log_calls = mock_logger.error.call_args_list
-        error_log = log_calls[0][0][0]
-        self.assertIn("Unknown", error_log)  # Should handle missing view
+        self.assertEqual(log_calls[0][0][0], "API Error in %s: %s: %s")
+        self.assertEqual(log_calls[0][0][1], "Unknown")  # Should handle missing view
+        self.assertEqual(log_calls[0][0][2], "Exception")  # Exception class name
+        self.assertEqual(log_calls[0][0][3], "Test error")  # Exception message
 
         # Verify only one log call (no request path)
         self.assertEqual(len(log_calls), 1)

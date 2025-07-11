@@ -3,15 +3,14 @@ import { QueryClient } from '@tanstack/react-query'
 import { 
   mockTechniques, 
   mockTechniquesList, 
-  mockAssuranceGoals,
-  buildSuccessResponse,
-  buildErrorResponse 
+  mockAssuranceGoals
 } from '../fixtures/techniques'
+import type { TechniqueFormData } from '../../lib/types'
 
 // API endpoint constants
 export const API_ENDPOINTS = {
   TECHNIQUES: '/api/techniques/',
-  TECHNIQUE_DETAIL: (id: number) => `/api/techniques/${id}/`,
+  TECHNIQUE_DETAIL: (slug: string) => `/api/techniques/${slug}/`,
   ASSURANCE_GOALS: '/api/assurance-goals/',
   TAGS: '/api/tags/',
   SEARCH: '/api/search/',
@@ -45,24 +44,24 @@ export const createApiResponse = <T>(
 // Mock API handlers for common scenarios
 export const mockApiHandlers = {
   // Technique endpoints
-  getTechniques: (techniques = mockTechniques, pagination = {}) => {
+  getTechniques: () => {
     return createApiResponse(mockTechniquesList)
   },
 
-  getTechniqueById: (id: number, technique = mockTechniques.find(t => t.id === id)) => {
+  getTechniqueBySlug: (slug: string, technique = mockTechniques.find(t => t.slug === slug)) => {
     if (!technique) {
       return createApiResponse({ error: 'Technique not found' }, 404)
     }
     return createApiResponse(technique)
   },
 
-  createTechnique: (technique: any) => {
-    const newTechnique = { ...technique, id: Date.now() }
+  createTechnique: (technique: TechniqueFormData) => {
+    const newTechnique = { ...technique, slug: `technique-${Date.now()}` }
     return createApiResponse(newTechnique, 201)
   },
 
-  updateTechnique: (id: number, updates: any) => {
-    const technique = mockTechniques.find(t => t.id === id)
+  updateTechnique: (slug: string, updates: Partial<TechniqueFormData>) => {
+    const technique = mockTechniques.find(t => t.slug === slug)
     if (!technique) {
       return createApiResponse({ error: 'Technique not found' }, 404)
     }
@@ -70,7 +69,7 @@ export const mockApiHandlers = {
     return createApiResponse(updated)
   },
 
-  deleteTechnique: (id: number) => {
+  deleteTechnique: () => {
     return createApiResponse({}, 204)
   },
 
@@ -129,10 +128,10 @@ export class ApiMocker {
     return this
   }
 
-  onPost(pattern: string | RegExp, handler: (body?: any) => Promise<Response> | Response) {
+  onPost<T = unknown>(pattern: string | RegExp, handler: (body?: T) => Promise<Response> | Response) {
     this.handlers.set(`POST:${pattern.toString()}`, async (url, options) => {
       if (this.matchesPattern(url, pattern) && options?.method === 'POST') {
-        const body = options.body ? JSON.parse(options.body as string) : undefined
+        const body = options.body ? JSON.parse(options.body as string) as T : undefined
         return await handler(body)
       }
       throw new Error(`No handler found for POST ${url}`)
@@ -140,10 +139,10 @@ export class ApiMocker {
     return this
   }
 
-  onPut(pattern: string | RegExp, handler: (body?: any) => Promise<Response> | Response) {
+  onPut<T = unknown>(pattern: string | RegExp, handler: (body?: T) => Promise<Response> | Response) {
     this.handlers.set(`PUT:${pattern.toString()}`, async (url, options) => {
       if (this.matchesPattern(url, pattern) && options?.method === 'PUT') {
-        const body = options.body ? JSON.parse(options.body as string) : undefined
+        const body = options.body ? JSON.parse(options.body as string) as T : undefined
         return await handler(body)
       }
       throw new Error(`No handler found for PUT ${url}`)
@@ -170,7 +169,7 @@ export class ApiMocker {
         if (key.startsWith(`${method}:`)) {
           try {
             return await handler(url, options)
-          } catch (error) {
+          } catch {
             // Continue to next handler if this one doesn't match
             continue
           }
@@ -210,7 +209,7 @@ export const mockApiScenarios = {
     const mocker = createApiMocker()
     mocker
       .onGet(API_ENDPOINTS.TECHNIQUES, () => mockApiHandlers.getTechniques())
-      .onGet(/\/api\/techniques\/\d+\//, () => mockApiHandlers.getTechniqueById(1))
+      .onGet(/\/api\/techniques\/[a-z0-9-]+\//, () => mockApiHandlers.getTechniqueBySlug('shapley-additive-explanations'))
       .onGet(API_ENDPOINTS.ASSURANCE_GOALS, () => mockApiHandlers.getAssuranceGoals())
       .execute()
     return mocker
@@ -231,7 +230,7 @@ export const mockApiScenarios = {
     const mocker = createApiMocker()
     mocker
       .onGet(API_ENDPOINTS.TECHNIQUES, () => mockApiHandlers.serverError())
-      .onGet(/\/api\/techniques\/\d+\//, () => mockApiHandlers.serverError())
+      .onGet(/\/api\/techniques\/[a-z0-9-]+\//, () => mockApiHandlers.serverError())
       .execute()
     return mocker
   },

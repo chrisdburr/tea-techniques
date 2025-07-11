@@ -91,8 +91,7 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
     handleSubmit: hookFormSubmit,
     formState: { errors, isSubmitting },
     setValue,
-    reset,
-    watch
+    reset
   } = useForm<TechniqueFormData>({
     resolver: zodResolver(techniqueSchema),
     defaultValues: initialFormData,
@@ -306,7 +305,7 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
     label: tag.name,
   })) || [];
 
-  const relatedTechniqueOptions = (techniquesData as any)?.results
+  const relatedTechniqueOptions = techniquesData?.results
     ?.filter((t: Technique) => t.slug !== slug) // Don't show current technique as option
     ?.map((technique: Technique) => ({
       value: technique.slug,
@@ -563,7 +562,7 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                           size={6}
                           value={field.value}
                         >
-                          {relatedTechniqueOptions.map((option: any) => (
+                          {relatedTechniqueOptions.map((option) => (
                             <option key={option.value} value={option.value}>
                               {option.label}
                             </option>

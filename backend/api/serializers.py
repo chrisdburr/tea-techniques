@@ -11,10 +11,9 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import List, Optional
+from typing import Optional
 
 from django.utils.text import slugify
-from faker import Faker
 from rest_framework import serializers
 
 from .models import (
@@ -97,7 +96,6 @@ class TechniqueResourceSerializer(serializers.ModelSerializer):
 
     def validate_url(self, value):
         """Validate URL format."""
-        import re
 
         url_pattern = re.compile(
             r"^https?://"  # http:// or https://
@@ -309,7 +307,7 @@ class TechniqueSerializer(serializers.ModelSerializer):
             request_data = getattr(request, "data", {}) or {}
             return self.technique_service.create_technique(validated_data, request_data)
         except TechniqueOperationError as e:
-            logger.error(f"Technique creation failed: {str(e)}")
+            logger.error("Technique creation failed: %s", str(e))
             raise serializers.ValidationError(f"Failed to create technique: {str(e)}")
 
     def update(self, instance, validated_data):
@@ -326,5 +324,5 @@ class TechniqueSerializer(serializers.ModelSerializer):
                 instance, validated_data, request_data
             )
         except TechniqueOperationError as e:
-            logger.error(f"Technique update failed: {str(e)}")
+            logger.error("Technique update failed: %s", str(e))
             raise serializers.ValidationError(f"Failed to update technique: {str(e)}")

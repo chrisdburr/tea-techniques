@@ -106,7 +106,7 @@ class JSONDataParser:
             return description if description else None
 
         # Check if it's a string
-        elif isinstance(limitation, str):
+        if isinstance(limitation, str):
             if limitation.strip().startswith(("[", "{")):
                 try:
                     # Try to parse as JSON if it looks like JSON
@@ -132,7 +132,7 @@ class JSONDataParser:
             return desc if desc else None
 
         # Handle case where the parsed result is an array - take first valid item
-        elif isinstance(parsed_limitation, list) and parsed_limitation:
+        if isinstance(parsed_limitation, list) and parsed_limitation:
             for item in parsed_limitation:
                 if isinstance(item, dict) and "description" in item:
                     desc = item["description"].strip()
@@ -158,10 +158,10 @@ class JSONDataParser:
             return ", ".join(
                 str(author).strip() for author in authors_data if str(author).strip()
             )
-        elif isinstance(authors_data, str):
+        if isinstance(authors_data, str):
             return authors_data.strip()
-        else:
-            return str(authors_data).strip()
+        
+        return str(authors_data).strip()
 
 
 class TechniqueDataValidator:

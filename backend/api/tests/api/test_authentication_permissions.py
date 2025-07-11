@@ -38,8 +38,9 @@ class AuthenticationTests(APITestCase):
 
     def test_login_success(self):
         """Test successful login."""
+        from api.tests.conftest import TEST_USER_PASSWORD
         url = reverse("login")
-        data = {"username": "testuser", "password": "testpass123"}
+        data = {"username": "testuser", "password": TEST_USER_PASSWORD}
 
         response = self.client.post(url, data, format="json")
 
@@ -107,9 +108,10 @@ class AuthenticationTests(APITestCase):
 
     def test_session_authentication(self):
         """Test session-based authentication."""
+        from api.tests.conftest import TEST_USER_PASSWORD
         # Login to create session
         login_url = reverse("login")
-        login_data = {"username": "testuser", "password": "testpass123"}
+        login_data = {"username": "testuser", "password": TEST_USER_PASSWORD}
 
         login_response = self.client.post(login_url, login_data, format="json")
         self.assertEqual(login_response.status_code, status.HTTP_200_OK)
@@ -430,9 +432,10 @@ class SessionManagementTests(APITestCase):
 
     def test_session_invalidation_on_logout(self):
         """Test that session is invalidated on logout."""
+        from api.tests.conftest import TEST_USER_PASSWORD
         # Login using actual login endpoint
         login_url = reverse("login")
-        login_data = {"username": self.user.username, "password": "sessionpass123"}
+        login_data = {"username": self.user.username, "password": TEST_USER_PASSWORD}
         login_response = self.client.post(login_url, login_data, format="json")
         self.assertEqual(login_response.status_code, status.HTTP_200_OK)
 

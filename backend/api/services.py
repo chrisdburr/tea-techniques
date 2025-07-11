@@ -11,6 +11,9 @@ import logging
 from typing import Any, Dict, List
 from django.db import transaction
 
+from django.core.exceptions import ValidationError as DjangoValidationError
+from django.core.validators import URLValidator
+
 from .models import (
     AssuranceGoal,
     ResourceType,
@@ -35,6 +38,12 @@ class TechniqueService:
     techniques with their relationships, making the code more testable
     and maintainable.
     """
+
+    def __init__(self):
+        """Initialize the service with specialized service instances."""
+        self.resource_service = TechniqueResourceService()
+        self.use_case_service = TechniqueUseCaseService()
+        self.limitation_service = TechniqueLimitationService()
 
     @transaction.atomic
     def create_technique(
@@ -184,51 +193,61 @@ class TechniqueService:
 
     def _update_technique_slug(self, technique: Technique, new_slug: str) -> None:
         """Update technique slug (primary key) while preserving all relationships."""
-        # Preserve M2M relationships
-        preserved_m2m = {
-            "assurance_goals": list(technique.assurance_goals.all()),
-            "tags": list(technique.tags.all()),
-            "related_techniques": list(technique.related_techniques.all()),
-        }
-
-        # Preserve FK relationships
-        preserved_fk = {
-            "resources": list(technique.resources.all()),
-            "example_use_cases": list(technique.example_use_cases.all()),
-            "limitations": list(technique.limitations.all()),
-        }
-
-        # Update the slug (creates new object due to primary key change)
+        from django.db import connection
+        
+        old_slug = technique.slug
+        
+        # Temporarily disable foreign key checks for SQLite to allow primary key updates
+        with connection.cursor() as cursor:
+            # Disable foreign key constraints
+            cursor.execute("PRAGMA foreign_keys = OFF")
+            
+            try:
+                # Update the slug in the technique table directly
+                cursor.execute(
+                    "UPDATE technique SET slug = %s WHERE slug = %s",
+                    [new_slug, old_slug]
+                )
+                
+                # Update foreign key references in related tables
+                cursor.execute(
+                    "UPDATE technique_resource SET technique_id = %s WHERE technique_id = %s",
+                    [new_slug, old_slug]
+                )
+                cursor.execute(
+                    "UPDATE technique_example_use_case SET technique_id = %s WHERE technique_id = %s",
+                    [new_slug, old_slug]
+                )
+                cursor.execute(
+                    "UPDATE technique_limitation SET technique_id = %s WHERE technique_id = %s",
+                    [new_slug, old_slug]
+                )
+                
+                # Update M2M relationship tables
+                cursor.execute(
+                    "UPDATE technique_assurance_goals SET technique_id = %s WHERE technique_id = %s",
+                    [new_slug, old_slug]
+                )
+                cursor.execute(
+                    "UPDATE technique_tags SET technique_id = %s WHERE technique_id = %s",
+                    [new_slug, old_slug]
+                )
+                cursor.execute(
+                    "UPDATE technique_related_techniques SET from_technique_id = %s WHERE from_technique_id = %s",
+                    [new_slug, old_slug]
+                )
+                cursor.execute(
+                    "UPDATE technique_related_techniques SET to_technique_id = %s WHERE to_technique_id = %s",
+                    [new_slug, old_slug]
+                )
+                
+            finally:
+                # Re-enable foreign key constraints
+                cursor.execute("PRAGMA foreign_keys = ON")
+            
+        # Update the technique object to reflect the new slug
         technique.slug = new_slug
-        technique.save()
-
-        # Restore M2M relationships
-        if preserved_m2m["assurance_goals"]:
-            technique.assurance_goals.set(preserved_m2m["assurance_goals"])
-        if preserved_m2m["tags"]:
-            technique.tags.set(preserved_m2m["tags"])
-        if preserved_m2m["related_techniques"]:
-            technique.related_techniques.set(preserved_m2m["related_techniques"])
-
-        # Restore FK relationships by updating foreign keys
-        from .models import (
-            TechniqueExampleUseCase,
-            TechniqueLimitation,
-            TechniqueResource,
-        )
-
-        for resource in preserved_fk["resources"]:
-            TechniqueResource.objects.filter(id=resource.id).update(technique=technique)
-
-        for use_case in preserved_fk["example_use_cases"]:
-            TechniqueExampleUseCase.objects.filter(id=use_case.id).update(
-                technique=technique
-            )
-
-        for limitation in preserved_fk["limitations"]:
-            TechniqueLimitation.objects.filter(id=limitation.id).update(
-                technique=technique
-            )
+        technique.refresh_from_db()
 
     def _create_nested_objects(
         self, technique: Technique, nested_data: Dict[str, Any]
@@ -240,6 +259,30 @@ class TechniqueService:
             self._create_use_cases(technique, nested_data["example_use_cases"])
         if nested_data["limitations"]:
             self._create_limitations(technique, nested_data["limitations"])
+
+    def _create_resources(self, technique: Technique, resources_data: List[Dict[str, Any]]) -> None:
+        """Create resources for a technique."""
+        self.resource_service.create_resources(technique, resources_data)
+
+    def _replace_resources(self, technique: Technique, resources_data: List[Dict[str, Any]]) -> None:
+        """Replace resources for a technique."""
+        self.resource_service.replace_resources(technique, resources_data)
+
+    def _create_use_cases(self, technique: Technique, use_cases_data: List[Dict[str, Any]]) -> None:
+        """Create use cases for a technique."""
+        self.use_case_service.create_use_cases(technique, use_cases_data)
+
+    def _replace_use_cases(self, technique: Technique, use_cases_data: List[Dict[str, Any]]) -> None:
+        """Replace use cases for a technique."""
+        self.use_case_service.replace_use_cases(technique, use_cases_data)
+
+    def _create_limitations(self, technique: Technique, limitations_data: List[Any]) -> None:
+        """Create limitations for a technique."""
+        self.limitation_service.create_limitations(technique, limitations_data)
+
+    def _replace_limitations(self, technique: Technique, limitations_data: List[Any]) -> None:
+        """Replace limitations for a technique."""
+        self.limitation_service.replace_limitations(technique, limitations_data)
 
     def _update_nested_objects(
         self, technique: Technique, nested_data: Dict[str, Any]
@@ -287,10 +330,10 @@ class TechniqueResourceService:
                 resource_data_copy["resource_type"] = ResourceType.objects.get(
                     pk=resource_data_copy["resource_type"]
                 )
-            except ResourceType.DoesNotExist:
+            except ResourceType.DoesNotExist as e:
                 raise TechniqueOperationError(
                     f"ResourceType with ID {resource_data_copy['resource_type']} does not exist"
-                )
+                ) from e
 
         try:
             # Validate URL format if present
@@ -302,22 +345,17 @@ class TechniqueResourceService:
                         f"Invalid URL format: {url}. Only HTTP and HTTPS protocols are allowed."
                     )
 
-                from django.core.exceptions import (
-                    ValidationError as DjangoValidationError,
-                )
-                from django.core.validators import URLValidator
-
                 validator = URLValidator()
                 try:
                     validator(url)
-                except DjangoValidationError:
-                    raise TechniqueOperationError(f"Invalid URL format: {url}")
+                except DjangoValidationError as e:
+                    raise TechniqueOperationError(f"Invalid URL format: {url}") from e
 
             TechniqueResource.objects.create(technique=technique, **resource_data_copy)
         except Exception as e:
             if not isinstance(e, TechniqueOperationError):
                 logger.error("Failed to create resource: %s", str(e))
-                raise TechniqueOperationError(f"Failed to create resource: {str(e)}")
+                raise TechniqueOperationError(f"Failed to create resource: {str(e)}") from e
             raise
 
 
@@ -373,7 +411,7 @@ class TechniqueUseCaseService:
         except Exception as e:
             if not isinstance(e, TechniqueOperationError):
                 logger.error("Failed to create use case: %s", str(e))
-                raise TechniqueOperationError(f"Failed to create use case: {str(e)}")
+                raise TechniqueOperationError(f"Failed to create use case: {str(e)}") from e
             raise
 
 

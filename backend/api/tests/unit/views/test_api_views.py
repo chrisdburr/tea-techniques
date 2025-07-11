@@ -174,8 +174,9 @@ class TechniquesViewSetTests(APITestCase):
             "name": "Test Technique",
             "description": "Test description",
         }
-        request = self.factory.post("/api/techniques/", request_data, format="json")
-        force_authenticate(request, user=self.user)
+        django_request = self.factory.post("/api/techniques/", request_data, format="json")
+        force_authenticate(django_request, user=self.user)
+        request = Request(django_request, parsers=viewset.get_parsers())
 
         # Mock get_serializer and serializer methods
         mock_serializer = Mock()
@@ -196,10 +197,11 @@ class TechniquesViewSetTests(APITestCase):
             "name": self.technique.name,
             "description": "Updated description",
         }
-        request = self.factory.put(
+        django_request = self.factory.put(
             f"/api/techniques/{self.technique.slug}/", request_data, format="json"
         )
-        force_authenticate(request, user=self.user)
+        force_authenticate(django_request, user=self.user)
+        request = Request(django_request, parsers=viewset.get_parsers())
 
         # Mock get_object, get_serializer and serializer methods
         mock_serializer = Mock()
@@ -484,6 +486,7 @@ class ViewSetErrorHandlingTests(APITestCase):
 
     def setUp(self):
         """Set up test data."""
+        self.factory = APIRequestFactory()
         from api.tests.conftest import TEST_USER_PASSWORD
         self.user = User.objects.create_user(username="testuser", password=TEST_USER_PASSWORD)
         self.technique = TechniqueFactory()
@@ -491,8 +494,9 @@ class ViewSetErrorHandlingTests(APITestCase):
     def test_techniques_create_with_invalid_serializer(self):
         """Test create method with invalid serializer data."""
         viewset = TechniquesViewSet()
-        request = self.factory.post("/api/techniques/", {}, format="json")
-        force_authenticate(request, user=self.user)
+        django_request = self.factory.post("/api/techniques/", {}, format="json")
+        force_authenticate(django_request, user=self.user)
+        request = Request(django_request)
 
         # Mock get_serializer to return a serializer that raises validation error
         mock_serializer = Mock()
@@ -505,10 +509,11 @@ class ViewSetErrorHandlingTests(APITestCase):
     def test_techniques_update_with_invalid_serializer(self):
         """Test update method with invalid serializer data."""
         viewset = TechniquesViewSet()
-        request = self.factory.put(
+        django_request = self.factory.put(
             f"/api/techniques/{self.technique.slug}/", {}, format="json"
         )
-        force_authenticate(request, user=self.user)
+        force_authenticate(django_request, user=self.user)
+        request = Request(django_request)
 
         # Mock get_object and get_serializer
         mock_serializer = Mock()

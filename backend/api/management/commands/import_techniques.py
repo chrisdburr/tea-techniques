@@ -1,4 +1,3 @@
-# backend/api/management/commands/import_techniques.py
 from __future__ import annotations
 
 import json
@@ -27,7 +26,6 @@ from api.utils import (
     TechniqueDataValidator,
 )
 
-# Set up logger
 logger = logging.getLogger(__name__)
 
 
@@ -150,6 +148,11 @@ class Command(BaseCommand):
                 self.stdout.write(
                     self.style.SUCCESS(f"Successfully imported {count} techniques")
                 )
+        except KeyboardInterrupt:
+            error_msg = "Import process was interrupted by user"
+            logger.error(error_msg)
+            self.stdout.write(self.style.ERROR(error_msg))
+            raise CommandError(error_msg)
         except Exception as e:
             logger.error(f"Error processing JSON file: {str(e)}")
             self.stdout.write(self.style.ERROR(f"Error processing JSON file: {str(e)}"))
@@ -286,7 +289,7 @@ class Command(BaseCommand):
             logger.error(error_msg)
             self.stdout.write(self.style.ERROR(error_msg))
             if not self.force:
-                raise
+                raise CommandError(error_msg)
             return None
 
     def _validate_technique(self, data: Dict[str, Any]) -> bool:
@@ -326,9 +329,10 @@ class Command(BaseCommand):
             return True
 
         except DataValidationError as e:
-            logger.warning(
-                f"Validation error for technique {data.get('name', 'Unknown')}: {str(e)}"
-            )
+            error_msg = f"Validation error for technique {data.get('name', 'Unknown')}: {str(e)}"
+            logger.warning(error_msg)
+            if not self.force:
+                return False
             return self.force
         except Exception as e:
             error_msg = (
@@ -337,7 +341,7 @@ class Command(BaseCommand):
             logger.error(error_msg)
             self.stdout.write(self.style.ERROR(error_msg))
             if not self.force:
-                raise
+                raise CommandError(error_msg)
             return False
 
     def _create_or_update_technique(self, basic_data: Dict[str, Any]) -> Technique:

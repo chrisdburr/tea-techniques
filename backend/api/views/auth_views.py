@@ -30,7 +30,12 @@ def login_view(request):
     """
     Log in a user
     """
-    data = json.loads(request.body)
+    # Handle both JSON and form data
+    if request.content_type == 'application/json':
+        data = json.loads(request.body)
+    else:
+        data = request.data
+    
     username = data.get("username")
     password = data.get("password")
 
@@ -55,10 +60,10 @@ def login_view(request):
                 }
             }
         )
-    else:
-        return Response(
-            {"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED
-        )
+    
+    return Response(
+        {"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED
+    )
 
 
 @api_view(["POST"])
@@ -106,5 +111,5 @@ def auth_status_view(request):
                 },
             }
         )
-    else:
-        return Response({"isAuthenticated": False})
+    
+    return Response({"isAuthenticated": False})

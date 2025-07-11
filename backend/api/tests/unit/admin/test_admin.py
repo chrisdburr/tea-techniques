@@ -10,6 +10,9 @@ import pytest
 from django.contrib import admin
 from django.contrib.admin.sites import AdminSite
 from django.test import TestCase
+from faker import Faker
+
+fake = Faker()
 
 from api.admin import (
     TagAdmin,
@@ -29,6 +32,7 @@ from api.models import (
 )
 from api.tests.factories import (
     AssuranceGoalFactory,
+    IsolatedTechniqueFactory,
     TagFactory,
     TechniqueExampleUseCaseFactory,
     TechniqueFactory,
@@ -105,13 +109,14 @@ class TechniqueAdminTests(TestCase):
     def setUp(self):
         """Set up test data."""
         self.admin_instance = TechniqueAdmin(Technique, AdminSite())
-        self.technique = TechniqueFactory()
+        # Use IsolatedTechniqueFactory to avoid automatic relationships
+        self.technique = IsolatedTechniqueFactory()
 
         # Add some relationships for testing count methods
-        self.tag1 = TagFactory()
-        self.tag2 = TagFactory()
-        self.goal1 = AssuranceGoalFactory()
-        self.goal2 = AssuranceGoalFactory()
+        self.tag1 = TagFactory(name=f"admin-test-tag-1-{fake.uuid4()[:8]}")
+        self.tag2 = TagFactory(name=f"admin-test-tag-2-{fake.uuid4()[:8]}")
+        self.goal1 = AssuranceGoalFactory(name=f"Admin Test Goal 1 {fake.uuid4()[:8]}")
+        self.goal2 = AssuranceGoalFactory(name=f"Admin Test Goal 2 {fake.uuid4()[:8]}")
 
         self.technique.tags.add(self.tag1, self.tag2)
         self.technique.assurance_goals.add(self.goal1, self.goal2)
@@ -122,7 +127,7 @@ class TechniqueAdminTests(TestCase):
         self.assertEqual(result, 2)
 
         # Test with technique without tags
-        technique_no_tags = TechniqueFactory()
+        technique_no_tags = IsolatedTechniqueFactory()
         result_no_tags = self.admin_instance.get_tags_count(technique_no_tags)
         self.assertEqual(result_no_tags, 0)
 
@@ -132,7 +137,7 @@ class TechniqueAdminTests(TestCase):
         self.assertEqual(result, 2)
 
         # Test with technique without goals
-        technique_no_goals = TechniqueFactory()
+        technique_no_goals = IsolatedTechniqueFactory()
         result_no_goals = self.admin_instance.get_goals_count(technique_no_goals)
         self.assertEqual(result_no_goals, 0)
 
@@ -161,8 +166,8 @@ class TechniqueAdminTests(TestCase):
             TechniqueLimitationInline,
         ]
 
-        actual_inline_classes = [type(inline) for inline in self.admin_instance.inlines]
-        self.assertEqual(actual_inline_classes, expected_inline_classes)
+        # Inlines in Django admin are class references, not instances
+        self.assertEqual(list(self.admin_instance.inlines), expected_inline_classes)
 
 
 class TagAdminTests(TestCase):
@@ -174,9 +179,9 @@ class TagAdminTests(TestCase):
         self.tag = TagFactory()
 
         # Add some techniques for testing count method
-        self.technique1 = TechniqueFactory()
-        self.technique2 = TechniqueFactory()
-        self.technique3 = TechniqueFactory()
+        self.technique1 = IsolatedTechniqueFactory()
+        self.technique2 = IsolatedTechniqueFactory()
+        self.technique3 = IsolatedTechniqueFactory()
 
         self.tag.techniques.add(self.technique1, self.technique2, self.technique3)
 
@@ -254,7 +259,7 @@ class AdminIntegrationTests(TestCase):
     def test_admin_interface_with_real_data(self):
         """Test admin interface methods with realistic data."""
         # Create a technique with realistic relationships
-        technique = TechniqueFactory(
+        technique = IsolatedTechniqueFactory(
             name="SHAP (SHapley Additive exPlanations)",
             description="A game theoretic approach to explain the output of any machine learning model.",
         )

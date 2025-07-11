@@ -8,22 +8,12 @@ formats, and proper HTTP status codes for various error scenarios.
 
 from unittest.mock import Mock, patch
 
-import pytest
 from django.contrib.auth.models import User
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from api.models import (
-    AssuranceGoal,
-    ResourceType,
-    Tag,
-    Technique,
-)
 from api.tests.factories import (
-    AssuranceGoalFactory,
-    ResourceTypeFactory,
-    TagFactory,
     TechniqueFactory,
     create_test_assurance_goals,
     create_test_resource_types,
@@ -578,8 +568,8 @@ class ValidationDetailTests(APITestCase):
         url = reverse("technique-list")
 
         # Very long strings
-        very_long_name = "x" * 500  # Assuming max length is less than 500
-        very_long_description = "x" * 10000  # Very long description
+        very_long_name = "x" * 500
+        very_long_description = "x" * 10000
 
         data = {
             "name": very_long_name,
@@ -630,27 +620,26 @@ class CustomExceptionHandlerTests(APITestCase):
     def test_exception_handler_logging(self):
         """Test that custom exception handler logs errors."""
         with patch("api.utils.logger") as mock_logger:
-            # Generate an error
-            url = reverse("technique-detail", kwargs={"slug": "non-existent-technique"})
-            response = self.client.get(url)
+            # Generate a validation error that DRF will handle
+            url = reverse("technique-list")
+            data = {"name": "", "description": ""}  # Empty required fields
+            response = self.client.post(url, data, format="json")
 
-            self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
             # Verify logging was called
             mock_logger.error.assert_called()
 
-            # Verify log message format - check all log calls for API Error
-            log_calls = [call[0][0] for call in mock_logger.error.call_args_list]
+            # Check the actual calls - format string and arguments
+            calls = mock_logger.error.call_args_list
+            
+            # Look for "API Error" in format strings
+            api_error_logged = any("API Error" in str(call) for call in calls)
+            self.assertTrue(api_error_logged, f"API Error not found in calls: {calls}")
 
-            api_error_logged = any("API Error" in call for call in log_calls)
-            self.assertTrue(api_error_logged)
-
-            # Should mention the exception type - 404 errors use Http404
-            exception_logged = any(
-                "Http404" in call or "NotFound" in call or "DoesNotExist" in call
-                for call in log_calls
-            )
-            self.assertTrue(exception_logged)
+            # Should mention ValidationError in the arguments
+            exception_logged = any("ValidationError" in str(call) for call in calls)
+            self.assertTrue(exception_logged, f"ValidationError not found in calls: {calls}")
 
     def test_exception_handler_preserves_original_details(self):
         """Test that exception handler preserves original error details."""
@@ -671,7 +660,6 @@ class CustomExceptionHandlerTests(APITestCase):
     @patch("api.utils.logger")
     def test_exception_handler_with_unknown_view(self, mock_logger):
         """Test exception handler when view context is missing."""
-        # This is harder to test directly, but we can verify the handler
         # works when view is None
         from rest_framework.exceptions import NotFound
 
@@ -685,8 +673,10 @@ class CustomExceptionHandlerTests(APITestCase):
         self.assertIsNotNone(response)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-        # Should log with 'Unknown' view - check all log calls
+        # Should log with 'Unknown' view - check all calls
         mock_logger.error.assert_called()
-        log_calls = [call[0][0] for call in mock_logger.error.call_args_list]
-        unknown_logged = any("Unknown" in call for call in log_calls)
-        self.assertTrue(unknown_logged)
+        calls = mock_logger.error.call_args_list
+        
+        # Look for "Unknown" in the call arguments
+        unknown_logged = any("Unknown" in str(call) for call in calls)
+        self.assertTrue(unknown_logged, f"Unknown not found in calls: {calls}")

@@ -33,7 +33,8 @@ class AuthViewsTests(APITestCase):
 
     def test_login_view_success(self):
         """Test successful login."""
-        login_data = {"username": "testuser", "password": "testpass123"}
+        from api.tests.conftest import TEST_USER_PASSWORD
+        login_data = {"username": "testuser", "password": TEST_USER_PASSWORD}
         response = self.client.post(
             "/api/auth/login",
             data=json.dumps(login_data),

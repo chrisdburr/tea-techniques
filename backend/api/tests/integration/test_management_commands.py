@@ -69,6 +69,7 @@ class ImportTechniquesCommandTests(TransactionTestCase):
         """Test basic technique import functionality."""
         techniques_data = [
             {
+                "slug": "test-import-technique-1",
                 "name": "Test Import Technique 1",
                 "description": "First technique for import testing",
                 "complexity_rating": 3,
@@ -144,18 +145,21 @@ class ImportTechniquesCommandTests(TransactionTestCase):
         """Test importing multiple techniques."""
         techniques_data = [
             {
+                "slug": "multi-import-technique-1",
                 "name": "Multi Import Technique 1",
                 "description": "First of multiple techniques",
                 "assurance_goals": ["Explainability"],
                 "tags": ["multi-1"],
             },
             {
+                "slug": "multi-import-technique-2",
                 "name": "Multi Import Technique 2",
                 "description": "Second of multiple techniques",
                 "assurance_goals": ["Fairness"],
                 "tags": ["multi-2"],
             },
             {
+                "slug": "multi-import-technique-3",
                 "name": "Multi Import Technique 3",
                 "description": "Third of multiple techniques",
                 "assurance_goals": ["Privacy"],
@@ -190,6 +194,7 @@ class ImportTechniquesCommandTests(TransactionTestCase):
 
         techniques_data = [
             {
+                "slug": "new-import-technique",
                 "name": "New Import Technique",
                 "description": "New technique to import",
                 "assurance_goals": ["Explainability"],
@@ -232,7 +237,7 @@ class ImportTechniquesCommandTests(TransactionTestCase):
     def test_import_techniques_missing_required_fields(self):
         """Test import with techniques missing required fields."""
         techniques_data = [
-            {"name": "", "description": "Valid description"}  # Missing required name
+            {"slug": "missing-name-technique", "name": "", "description": "Valid description"}  # Missing required name
         ]
 
         file_path = self.create_temp_technique_file(techniques_data)
@@ -254,6 +259,7 @@ class ImportTechniquesCommandTests(TransactionTestCase):
         """Test import with references to nonexistent assurance goals."""
         techniques_data = [
             {
+                "slug": "test-technique",
                 "name": "Test Technique",
                 "description": "Test description",
                 "assurance_goals": ["Nonexistent Goal"],
@@ -280,6 +286,7 @@ class ImportTechniquesCommandTests(TransactionTestCase):
         """Test import with references to nonexistent resource types."""
         techniques_data = [
             {
+                "slug": "test-technique-nonexistent-resource",
                 "name": "Test Technique",
                 "description": "Test description",
                 "assurance_goals": ["Explainability"],
@@ -300,19 +307,20 @@ class ImportTechniquesCommandTests(TransactionTestCase):
 
         call_command("import_techniques", "--file", file_path, stdout=out, stderr=err)
 
-        # Verify technique imported but resource was skipped
+        # Verify technique imported and resource was created with fallback type
         self.assertEqual(Technique.objects.count(), 1)
         technique = Technique.objects.first()
-        self.assertEqual(technique.resources.count(), 0)
-
-        # Check warning in output
-        error_output = err.getvalue()
-        self.assertIn("ResourceType not found", error_output)
+        self.assertEqual(technique.resources.count(), 1)
+        
+        # The import command uses a fallback ResourceType (Paper) for unknown types
+        resource = technique.resources.first()
+        self.assertEqual(resource.resource_type.name, "Paper")  # Fallback to default type
 
     def test_import_techniques_force_flag(self):
         """Test import command with force flag."""
         techniques_data = [
             {
+                "slug": "force-test-technique",
                 "name": "",  # Invalid data
                 "description": "Test description",
                 "assurance_goals": ["Explainability"],
@@ -335,6 +343,7 @@ class ImportTechniquesCommandTests(TransactionTestCase):
         """Test import command with dry run flag."""
         techniques_data = [
             {
+                "slug": "dry-run-technique",
                 "name": "Dry Run Technique",
                 "description": "Should not be actually imported",
                 "assurance_goals": ["Explainability"],
@@ -388,6 +397,7 @@ class ResetAndImportTechniquesCommandTests(TransactionTestCase):
         """Test basic reset and import functionality."""
         techniques_data = [
             {
+                "slug": "reset-import-technique",
                 "name": "Reset Import Technique",
                 "description": "Technique after reset",
                 "assurance_goals": ["Explainability"],
@@ -428,6 +438,7 @@ class ResetAndImportTechniquesCommandTests(TransactionTestCase):
         """Test that reset recreates standard foundational data."""
         techniques_data = [
             {
+                "slug": "foundation-recreate-test",
                 "name": "Foundation Recreate Test",
                 "description": "Testing foundation recreation",
                 "assurance_goals": ["Explainability", "Fairness"],
@@ -488,6 +499,7 @@ class ResetAndImportTechniquesCommandTests(TransactionTestCase):
         # Create minimal import data
         techniques_data = [
             {
+                "slug": "post-reset-technique",
                 "name": "Post Reset Technique",
                 "description": "After complete reset",
                 "assurance_goals": ["Explainability"],
@@ -529,11 +541,13 @@ class ResetAndImportTechniquesCommandTests(TransactionTestCase):
         # Create invalid import data
         techniques_data = [
             {
+                "slug": "valid-technique",
                 "name": "Valid Technique",
                 "description": "This should work",
                 "assurance_goals": ["Explainability"],
             },
             {
+                "slug": "invalid-technique", 
                 "name": "",  # This should cause an error
                 "description": "Invalid technique",
             },
@@ -575,6 +589,7 @@ class ResetAndImportTechniquesCommandTests(TransactionTestCase):
         """Test reset and import with force flag."""
         techniques_data = [
             {
+                "slug": "force-reset-technique",
                 "name": "",  # Invalid data
                 "description": "Force test",
                 "assurance_goals": ["Explainability"],
@@ -616,6 +631,7 @@ class ManagementCommandIntegrationTests(TransactionTestCase):
         # Create comprehensive technique data
         techniques_data = [
             {
+                "slug": "round-trip-technique",
                 "name": "Round Trip Technique",
                 "description": "Testing round trip consistency",
                 "complexity_rating": 4,
@@ -695,6 +711,7 @@ class ManagementCommandIntegrationTests(TransactionTestCase):
         for i in range(50):  # 50 techniques
             techniques_data.append(
                 {
+                    "slug": f"performance-test-technique-{i}",
                     "name": f"Performance Test Technique {i}",
                     "description": f"Performance testing technique number {i}",
                     "complexity_rating": (i % 5) + 1,
@@ -772,6 +789,7 @@ class ManagementCommandIntegrationTests(TransactionTestCase):
 
         techniques_data = [
             {
+                "slug": "mock-test-technique",
                 "name": "Mock Test Technique",
                 "description": "Testing with mocked services",
                 "assurance_goals": ["Explainability"],

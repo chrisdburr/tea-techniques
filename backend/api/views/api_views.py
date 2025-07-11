@@ -31,6 +31,12 @@ logger = logging.getLogger(__name__)
 
 
 class AssuranceGoalsViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for managing AssuranceGoal instances.
+    
+    Provides CRUD operations for assurance goals with search and filtering capabilities.
+    Read operations are allowed for any user, while write operations require authentication.
+    """
     queryset = AssuranceGoal.objects.all()
     serializer_class = AssuranceGoalSerializer
     filter_backends = [
@@ -55,6 +61,12 @@ class AssuranceGoalsViewSet(viewsets.ModelViewSet):
 
 
 class TagsViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for managing Tag instances.
+    
+    Provides CRUD operations for tags with search and filtering capabilities.
+    Read operations are allowed for any user, while write operations require authentication.
+    """
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     filter_backends = [
@@ -128,15 +140,8 @@ class TechniquesViewSet(viewsets.ModelViewSet):
             "limitations",
         )
 
-    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
-        """Standard list method for techniques"""
-        return super().list(request, *args, **kwargs)
 
-    def retrieve(self, request: Request, *args: Any, **kwargs: Any) -> Response:
-        """Standard retrieve method for techniques"""
-        return super().retrieve(request, *args, **kwargs)
-
-    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+    def create(self, request: Request) -> Response:
         """Create a new technique."""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -145,7 +150,7 @@ class TechniquesViewSet(viewsets.ModelViewSet):
         # Return the created instance
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def update(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+    def update(self, request: Request, **kwargs: Any) -> Response:
         """Update a technique."""
         instance = self.get_object()
         serializer = self.get_serializer(
@@ -159,6 +164,12 @@ class TechniquesViewSet(viewsets.ModelViewSet):
 
 
 class ResourceTypesViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for managing ResourceType instances.
+    
+    Provides CRUD operations for resource types with search and filtering capabilities.
+    Read operations are allowed for any user, while write operations require authentication.
+    """
     queryset = ResourceType.objects.all()
     serializer_class = ResourceTypeSerializer
     filter_backends = [
@@ -178,7 +189,7 @@ class ResourceTypesViewSet(viewsets.ModelViewSet):
 
 
 @api_view(["GET"])
-def health_check(request: Request) -> Response:
+def health_check(_request: Request) -> Response:
     """
     Simple health check endpoint that verifies the API is running
     and the database connection is working.

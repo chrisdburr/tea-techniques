@@ -1,4 +1,3 @@
-# backend/api/management/commands/tailscale_setup.py
 import os
 import subprocess
 from pathlib import Path

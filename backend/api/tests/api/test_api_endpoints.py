@@ -14,12 +14,8 @@ from rest_framework.test import APITestCase
 
 from api.models import (
     AssuranceGoal,
-    ResourceType,
     Tag,
     Technique,
-    TechniqueExampleUseCase,
-    TechniqueLimitation,
-    TechniqueResource,
 )
 from api.tests.factories import (
     AssuranceGoalFactory,

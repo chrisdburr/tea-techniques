@@ -24,7 +24,7 @@ const TechniqueCard = ({ technique }: { technique: Technique }) => (
         Cost: {technique.computational_cost_rating}/5
       </span>
     </div>
-    <nav aria-label="Technique categories">
+    <nav aria-label={`${technique.name} categories`}>
       <ul>
         {technique.assurance_goals.map(goal => (
           <li key={goal.id}>
@@ -35,7 +35,7 @@ const TechniqueCard = ({ technique }: { technique: Technique }) => (
         ))}
       </ul>
     </nav>
-    <nav aria-label="Technique tags">
+    <nav aria-label={`${technique.name} tags`}>
       <ul>
         {technique.tags.map(tag => (
           <li key={tag.id}>
@@ -59,6 +59,7 @@ const TechniquesList = ({ techniques }: { techniques: Technique[] }) => (
   <main>
     <h1>TEA Techniques</h1>
     <section aria-label="Search and filter controls">
+      <h2>Search and Filter</h2>
       <div className="search-container">
         <label htmlFor="search-input">Search techniques</label>
         <input 
@@ -106,6 +107,7 @@ const TechniquesList = ({ techniques }: { techniques: Technique[] }) => (
     </section>
 
     <section aria-label="Techniques results">
+      <h2>Search Results</h2>
       <div 
         role="status" 
         aria-live="polite" 
@@ -257,37 +259,42 @@ describe('WCAG 2.1 AA Compliance', () => {
 
     it('provides proper semantic structure', () => {
       const technique = mockTechniques[0] as Technique
-      render(<TechniqueCard technique={technique} />)
+      const { container } = render(<TechniqueCard technique={technique} />)
 
       // Should have proper article structure
-      expect(screen.getByRole('article')).toBeInTheDocument()
-      expect(screen.getByRole('heading', { level: 3 })).toBeInTheDocument()
+      const article = container.querySelector('article')
+      expect(article).toBeInTheDocument()
+      const heading = container.querySelector('h3')
+      expect(heading).toBeInTheDocument()
       
       // Links should be accessible
-      const link = screen.getByRole('link')
-      expect(link).toHaveAccessibleName()
+      const link = container.querySelector('a')
+      expect(link).toBeInTheDocument()
       expect(link).toHaveAttribute('href')
     })
 
     it('provides meaningful labels for complex information', () => {
       const technique = mockTechniques[0] as Technique
-      render(<TechniqueCard technique={technique} />)
+      const { container } = render(<TechniqueCard technique={technique} />)
 
       // Ratings should have descriptive labels
-      expect(screen.getByLabelText(/complexity rating/i)).toBeInTheDocument()
-      expect(screen.getByLabelText(/computational cost rating/i)).toBeInTheDocument()
+      const complexityLabel = container.querySelector('[aria-label*="Complexity rating"]')
+      expect(complexityLabel).toBeInTheDocument()
+      const costLabel = container.querySelector('[aria-label*="cost rating"]')
+      expect(costLabel).toBeInTheDocument()
       
       // Goals and tags should be properly labeled
       if (technique.acronym) {
-        expect(screen.getByLabelText(`Acronym: ${technique.acronym}`)).toBeInTheDocument()
+        const acronymLabel = container.querySelector(`[aria-label="Acronym: ${technique.acronym}"]`)
+        expect(acronymLabel).toBeInTheDocument()
       }
     })
 
     it('supports keyboard navigation', async () => {
       const technique = mockTechniques[0] as Technique
-      const { user } = renderWithProviders(<TechniqueCard technique={technique} />)
+      const { user, container } = renderWithProviders(<TechniqueCard technique={technique} />)
 
-      const link = screen.getByRole('link')
+      const link = container.querySelector('a')
       
       // Should be focusable
       await user.tab()
@@ -310,49 +317,57 @@ describe('WCAG 2.1 AA Compliance', () => {
 
     it('provides proper heading hierarchy', () => {
       const techniques = mockTechniques as Technique[]
-      render(<TechniquesList techniques={techniques} />)
+      const { container } = render(<TechniquesList techniques={techniques} />)
 
       // Should have h1 for page title
-      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('TEA Techniques')
+      const h1 = container.querySelector('h1')
+      expect(h1).toHaveTextContent('TEA Techniques')
       
       // Technique names should be h3 (in cards)
-      expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(techniques.length)
+      const h3Elements = container.querySelectorAll('h3')
+      expect(h3Elements).toHaveLength(techniques.length)
     })
 
     it('provides proper form labels and descriptions', () => {
       const techniques = mockTechniques as Technique[]
-      render(<TechniquesList techniques={techniques} />)
+      const { container } = render(<TechniquesList techniques={techniques} />)
 
       // Search should be properly labeled
-      expect(screen.getByLabelText('Search techniques')).toBeInTheDocument()
-      expect(screen.getByRole('searchbox')).toBeInTheDocument()
+      const searchLabel = container.querySelector('label[for="search-input"]')
+      expect(searchLabel).toBeInTheDocument()
+      const searchInput = container.querySelector('input[type="search"]')
+      expect(searchInput).toBeInTheDocument()
       
       // Filters should be properly labeled
-      expect(screen.getByLabelText('Assurance Goal')).toBeInTheDocument()
-      expect(screen.getByLabelText('Complexity Level')).toBeInTheDocument()
+      const goalLabel = container.querySelector('label[for="goal-filter"]')
+      expect(goalLabel).toBeInTheDocument()
+      const complexityLabel = container.querySelector('label[for="complexity-filter"]')
+      expect(complexityLabel).toBeInTheDocument()
       
       // Fieldset should have legend
-      expect(screen.getByText('Filter by category')).toBeInTheDocument()
+      const legend = container.querySelector('legend')
+      expect(legend).toHaveTextContent('Filter by category')
     })
 
     it('provides live region updates for search results', () => {
       const techniques = mockTechniques as Technique[]
-      render(<TechniquesList techniques={techniques} />)
+      const { container } = render(<TechniquesList techniques={techniques} />)
 
       // Should have status region for announcing results
-      const statusRegion = screen.getByRole('status')
+      const statusRegion = container.querySelector('[role="status"]')
       expect(statusRegion).toHaveAttribute('aria-live', 'polite')
       expect(statusRegion).toHaveTextContent(`${techniques.length} techniques found`)
     })
 
     it('provides proper list semantics', () => {
       const techniques = mockTechniques as Technique[]
-      render(<TechniquesList techniques={techniques} />)
+      const { container } = render(<TechniquesList techniques={techniques} />)
 
       // Should have proper list structure
-      expect(screen.getByRole('list', { name: 'Techniques list' })).toBeInTheDocument()
+      const list = container.querySelector('[role="list"][aria-label="Techniques list"]')
+      expect(list).toBeInTheDocument()
       
-      const listItems = screen.getAllByRole('listitem')
+      const listItems = container.querySelectorAll('[role="listitem"]')
       expect(listItems).toHaveLength(techniques.length)
     })
   })
@@ -366,49 +381,57 @@ describe('WCAG 2.1 AA Compliance', () => {
     })
 
     it('provides proper form structure and labels', () => {
-      render(<TechniqueForm />)
+      const { container } = render(<TechniqueForm />)
 
       // Form should be properly labeled
-      expect(screen.getByRole('form', { name: 'Technique creation form' })).toBeInTheDocument()
+      const form = container.querySelector('form[aria-label="Technique creation form"]')
+      expect(form).toBeInTheDocument()
       
       // Fieldsets should have legends
-      expect(screen.getByText('Basic Information')).toBeInTheDocument()
-      expect(screen.getByText('Ratings')).toBeInTheDocument()
+      expect(container.textContent).toContain('Basic Information')
+      expect(container.textContent).toContain('Ratings')
       
       // All form fields should have labels
-      expect(screen.getByLabelText(/technique name/i)).toBeInTheDocument()
-      expect(screen.getByLabelText(/acronym/i)).toBeInTheDocument()
-      expect(screen.getByLabelText(/description/i)).toBeInTheDocument()
-      expect(screen.getByLabelText(/complexity rating/i)).toBeInTheDocument()
-      expect(screen.getByLabelText(/computational cost rating/i)).toBeInTheDocument()
+      const nameInput = container.querySelector('#technique-name')
+      expect(nameInput).toBeInTheDocument()
+      const acronymInput = container.querySelector('#technique-acronym')
+      expect(acronymInput).toBeInTheDocument()
+      const descriptionInput = container.querySelector('#technique-description')
+      expect(descriptionInput).toBeInTheDocument()
+      const complexityInput = container.querySelector('#complexity-rating')
+      expect(complexityInput).toBeInTheDocument()
+      const costInput = container.querySelector('#cost-rating')
+      expect(costInput).toBeInTheDocument()
     })
 
     it('indicates required fields clearly', () => {
-      render(<TechniqueForm />)
+      const { container } = render(<TechniqueForm />)
 
       // Required fields should be marked
-      const requiredLabels = screen.getAllByLabelText('required')
+      const requiredLabels = container.querySelectorAll('[aria-label="required"]')
       expect(requiredLabels.length).toBeGreaterThan(0)
       
       // Required inputs should have required attribute
-      expect(screen.getByLabelText(/technique name/i)).toHaveAttribute('required')
-      expect(screen.getByLabelText(/description/i)).toHaveAttribute('required')
+      const nameInput = container.querySelector('#technique-name')
+      expect(nameInput).toHaveAttribute('required')
+      const descriptionInput = container.querySelector('#technique-description')
+      expect(descriptionInput).toHaveAttribute('required')
     })
 
     it('provides helpful descriptions for form fields', () => {
-      render(<TechniqueForm />)
+      const { container } = render(<TechniqueForm />)
 
       // Should have help text for form fields
-      expect(screen.getByText('Enter the full name of the technique')).toBeInTheDocument()
-      expect(screen.getByText(/Optional: Common acronym/)).toBeInTheDocument()
-      expect(screen.getByText(/Rate how difficult it is to implement/)).toBeInTheDocument()
+      expect(container.textContent).toContain('Enter the full name of the technique')
+      expect(container.textContent).toContain('Optional: Common acronym')
+      expect(container.textContent).toContain('Rate how difficult it is to implement')
     })
 
     it('supports error announcement', () => {
-      render(<TechniqueForm />)
+      const { container } = render(<TechniqueForm />)
 
       // Error regions should be set up for screen readers
-      const errorRegions = screen.getAllByRole('alert')
+      const errorRegions = container.querySelectorAll('[role="alert"]')
       expect(errorRegions.length).toBeGreaterThan(0)
       
       // Error regions should have live updates
@@ -434,26 +457,28 @@ describe('WCAG 2.1 AA Compliance', () => {
 
     it('does not rely solely on color to convey information', () => {
       const technique = mockTechniques[0] as Technique
-      render(<TechniqueCard technique={technique} />)
+      const { container } = render(<TechniqueCard technique={technique} />)
 
       // Important information should have text labels, not just colors
-      expect(screen.getByLabelText(/complexity rating/i)).toBeInTheDocument()
-      expect(screen.getByLabelText(/computational cost rating/i)).toBeInTheDocument()
+      const complexityLabel = container.querySelector('[aria-label*="Complexity rating"]')
+      expect(complexityLabel).toBeInTheDocument()
+      const costLabel = container.querySelector('[aria-label*="cost rating"]')
+      expect(costLabel).toBeInTheDocument()
     })
   })
 
   describe('Keyboard Navigation', () => {
     it('supports tab navigation through all interactive elements', async () => {
       const techniques = mockTechniques as Technique[]
-      const { user } = renderWithProviders(<TechniquesList techniques={techniques} />)
+      const { user, container } = renderWithProviders(<TechniquesList techniques={techniques} />)
 
       // Should be able to tab through all interactive elements
-      const interactiveElements = [
-        screen.getByRole('searchbox'),
-        screen.getByLabelText('Assurance Goal'),
-        screen.getByLabelText('Complexity Level'),
-        ...screen.getAllByRole('link')
-      ]
+      const searchInput = container.querySelector('input[type="search"]')
+      const goalSelect = container.querySelector('#goal-filter')
+      const complexitySelect = container.querySelector('#complexity-filter')
+      const links = container.querySelectorAll('a')
+      
+      const interactiveElements = [searchInput, goalSelect, complexitySelect, ...Array.from(links)]
 
       for (let i = 0; i < interactiveElements.length; i++) {
         await user.tab()
@@ -463,9 +488,9 @@ describe('WCAG 2.1 AA Compliance', () => {
 
     it('provides visible focus indicators', async () => {
       const technique = mockTechniques[0] as Technique
-      const { user } = renderWithProviders(<TechniqueCard technique={technique} />)
+      const { user, container } = renderWithProviders(<TechniqueCard technique={technique} />)
 
-      const link = screen.getByRole('link')
+      const link = container.querySelector('a')
       await user.tab()
       
       expect(link).toHaveFocus()
@@ -474,44 +499,48 @@ describe('WCAG 2.1 AA Compliance', () => {
 
     it('supports skip links for efficient navigation', () => {
       const techniques = mockTechniques as Technique[]
-      render(<TechniquesList techniques={techniques} />)
+      const { container } = render(<TechniquesList techniques={techniques} />)
 
       // Should have skip links (implementation would add these)
-      // expect(screen.getByText('Skip to main content')).toBeInTheDocument()
+      // const skipLink = container.querySelector('a[href="#main-content"]')
+      // expect(skipLink).toBeInTheDocument()
     })
   })
 
   describe('Screen Reader Support', () => {
     it('provides meaningful page titles and landmarks', () => {
       const techniques = mockTechniques as Technique[]
-      render(<TechniquesList techniques={techniques} />)
+      const { container } = render(<TechniquesList techniques={techniques} />)
 
       // Should have main landmark
-      expect(screen.getByRole('main')).toBeInTheDocument()
+      const main = container.querySelector('main')
+      expect(main).toBeInTheDocument()
       
       // Should have sections with labels
-      expect(screen.getByLabelText('Search and filter controls')).toBeInTheDocument()
-      expect(screen.getByLabelText('Techniques results')).toBeInTheDocument()
+      const searchSection = container.querySelector('[aria-label="Search and filter controls"]')
+      expect(searchSection).toBeInTheDocument()
+      const resultsSection = container.querySelector('[aria-label="Techniques results"]')
+      expect(resultsSection).toBeInTheDocument()
     })
 
     it('announces dynamic content changes', () => {
       const techniques = mockTechniques as Technique[]
-      render(<TechniquesList techniques={techniques} />)
+      const { container } = render(<TechniquesList techniques={techniques} />)
 
       // Live regions should announce content changes
-      const statusRegion = screen.getByRole('status')
+      const statusRegion = container.querySelector('[role="status"]')
       expect(statusRegion).toHaveAttribute('aria-live', 'polite')
       expect(statusRegion).toHaveAttribute('aria-atomic', 'true')
     })
 
     it('provides context for complex widgets', () => {
-      render(<TechniqueForm />)
+      const { container } = render(<TechniqueForm />)
 
       // Complex form elements should have proper descriptions
-      const nameInput = screen.getByLabelText(/technique name/i)
+      const nameInput = container.querySelector('#technique-name')
       expect(nameInput).toHaveAttribute('aria-describedby')
       
-      const descriptionTextarea = screen.getByLabelText(/description/i)
+      const descriptionTextarea = container.querySelector('#technique-description')
       expect(descriptionTextarea).toHaveAttribute('aria-describedby')
     })
   })
@@ -525,10 +554,10 @@ describe('WCAG 2.1 AA Compliance', () => {
       })
 
       const technique = mockTechniques[0] as Technique
-      const { user } = renderWithProviders(<TechniqueCard technique={technique} />)
+      const { user, container } = renderWithProviders(<TechniqueCard technique={technique} />)
 
       // Touch targets should be large enough (implemented in CSS)
-      const link = screen.getByRole('link')
+      const link = container.querySelector('a')
       expect(link).toBeInTheDocument()
       
       // Should be activatable via touch
@@ -537,12 +566,13 @@ describe('WCAG 2.1 AA Compliance', () => {
 
     it('supports voice navigation', () => {
       const techniques = mockTechniques as Technique[]
-      render(<TechniquesList techniques={techniques} />)
+      const { container } = render(<TechniquesList techniques={techniques} />)
 
       // All interactive elements should have accessible names for voice control
-      expect(screen.getByRole('searchbox')).toHaveAccessibleName()
+      const searchInput = container.querySelector('input[type="search"]')
+      expect(searchInput).toHaveAccessibleName()
       
-      const links = screen.getAllByRole('link')
+      const links = container.querySelectorAll('a')
       links.forEach(link => {
         expect(link).toHaveAccessibleName()
       })

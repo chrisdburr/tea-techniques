@@ -11,11 +11,6 @@ An interactive database for exploring techniques for evidencing claims about res
 > [!WARNING]
 > These instructions assume you are using Docker and Docker Compose. They have been tested on MacOS and Linux. If you are using Windows, you may need to adjust some commands.
 
-<details>
-<summary>🐳 Docker Development Setup</summary>
-
-This is the standard way to set up the development environment using Docker Compose, which manages the necessary services (PostgreSQL, Backend, Frontend).
-
 1.  **Prerequisites:** Ensure you have Docker and Docker Compose installed ([Docker Desktop](https://www.docker.com/products/docker-desktop/) is recommended).
 2.  **Clone the repository:**
     ```bash
@@ -52,8 +47,6 @@ This is the standard way to set up the development environment using Docker Comp
     # Follow logs in real-time
     docker-compose -f docker-compose.development.yml logs -f backend
     ```
-
-</details>
 
 ## 🤝 Contributing
 

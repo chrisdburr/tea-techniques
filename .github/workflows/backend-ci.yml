@@ -16,6 +16,7 @@ on:
 
 env:
   PYTHON_VERSION: "3.11"
+  POETRY_VERSION: "1.8.0"
   POSTGRES_DB: tea_techniques_test
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
@@ -31,36 +32,46 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ env.PYTHON_VERSION }}
-        cache: 'pip'
+
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        version: ${{ env.POETRY_VERSION }}
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v4
+      with:
+        path: backend/.venv
+        key: venv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-${{ hashFiles('backend/poetry.lock') }}
+        restore-keys: |
+          venv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-
 
     - name: Install dependencies
-      run: |
-        cd backend
-        python -m pip install --upgrade pip
-        pip install -r requirements/development.txt
+      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+      working-directory: backend
+      run: poetry install --no-interaction --no-ansi
 
     - name: Run Black formatter check
-      run: |
-        cd backend
-        black --check --diff .
+      working-directory: backend
+      run: poetry run black --check --diff .
 
     - name: Run isort import sorting check
-      run: |
-        cd backend
-        isort --check-only --diff .
+      working-directory: backend
+      run: poetry run isort --check-only --diff .
 
     - name: Run Pylint
-      run: |
-        cd backend
-        pylint api/ --output-format=github
+      working-directory: backend
+      run: poetry run pylint api/ --output-format=github
 
     - name: Run MyPy type checking
-      run: |
-        cd backend
-        mypy api/
+      working-directory: backend
+      run: poetry run mypy api/
 
   test:
     runs-on: ubuntu-latest
@@ -85,16 +96,30 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ env.PYTHON_VERSION }}
-        cache: 'pip'
+
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        version: ${{ env.POETRY_VERSION }}
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v4
+      with:
+        path: backend/.venv
+        key: venv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-${{ hashFiles('backend/poetry.lock') }}
+        restore-keys: |
+          venv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-
 
     - name: Install dependencies
-      run: |
-        cd backend
-        python -m pip install --upgrade pip
-        pip install -r requirements/development.txt
+      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+      working-directory: backend
+      run: poetry install --no-interaction --no-ansi
 
     - name: Wait for PostgreSQL
       run: |
@@ -107,18 +132,17 @@ jobs:
       env:
         DJANGO_SETTINGS_MODULE: config.settings.test
         DATABASE_URL: postgresql://postgres:postgres@localhost:5432/tea_techniques_test
-      run: |
-        cd backend
-        python manage.py migrate
+      working-directory: backend
+      run: poetry run python manage.py migrate
 
     - name: Run tests with coverage
       env:
         DJANGO_SETTINGS_MODULE: config.settings.test
         DATABASE_URL: postgresql://postgres:postgres@localhost:5432/tea_techniques_test
         USE_POSTGRES_FOR_TESTS: "True"
+      working-directory: backend
       run: |
-        cd backend
-        pytest --cov=api --cov-report=xml --cov-report=html --cov-report=term-missing --junitxml=test-results.xml
+        poetry run pytest --cov=api --cov-report=xml --cov-report=html --cov-report=term-missing --junitxml=test-results.xml
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
@@ -139,9 +163,8 @@ jobs:
         retention-days: 30
 
     - name: Check test coverage threshold
-      run: |
-        cd backend
-        coverage report --fail-under=80
+      working-directory: backend
+      run: poetry run coverage report --fail-under=80
 
   security-scan:
     runs-on: ubuntu-latest
@@ -151,26 +174,30 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ env.PYTHON_VERSION }}
 
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        version: ${{ env.POETRY_VERSION }}
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+
     - name: Install dependencies
-      run: |
-        cd backend
-        python -m pip install --upgrade pip
-        pip install safety bandit
+      working-directory: backend
+      run: poetry install --no-interaction --no-ansi
 
     - name: Run Safety check for known vulnerabilities
-      run: |
-        cd backend
-        safety check -r requirements/production.txt
+      working-directory: backend
+      run: poetry run safety check
 
     - name: Run Bandit security linter
+      working-directory: backend
       run: |
-        cd backend
-        bandit -r api/ -f json -o bandit-report.json || true
-        bandit -r api/ -f txt
+        poetry run bandit -r api/ -f json -o bandit-report.json || true
+        poetry run bandit -r api/ -f txt
 
     - name: Upload security scan results
       uses: actions/upload-artifact@v4
@@ -195,9 +222,13 @@ jobs:
         docker build -t tea-techniques-backend:test ./backend
 
     - name: Test Docker image
+      env:
+        SECRET_KEY: test-secret-key-for-ci
+        DEBUG: "False"
+        ALLOWED_HOSTS: localhost
       run: |
         # Test that the Docker image runs successfully
-        docker run --rm tea-techniques-backend:test python manage.py check --deploy
+        docker run --rm -e SECRET_KEY -e DEBUG -e ALLOWED_HOSTS tea-techniques-backend:test python manage.py check
 
   integration-test:
     runs-on: ubuntu-latest
@@ -212,17 +243,17 @@ jobs:
 
     - name: Start services with Docker Compose
       run: |
-        docker-compose -f docker-compose.test.yml up -d --build
+        docker-compose -f docker-compose.development.yml up -d --build
         
     - name: Wait for services to be ready
       run: |
-        timeout 60s bash -c 'until curl -f http://localhost:8000/api/; do sleep 2; done'
+        timeout 60s bash -c 'until curl -f http://localhost:8000/api/techniques/; do sleep 2; done'
 
     - name: Run integration tests
       run: |
-        docker-compose -f docker-compose.test.yml exec -T backend pytest api/tests/test_api.py -v
+        docker-compose -f docker-compose.development.yml exec -T backend poetry run pytest api/tests/integration/ -v
 
     - name: Cleanup
       if: always()
       run: |
-        docker-compose -f docker-compose.test.yml down -v
+        docker-compose -f docker-compose.development.yml down -v

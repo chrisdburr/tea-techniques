@@ -58,7 +58,7 @@ class Command(BaseCommand):
             file_path = os.path.join(
                 BASE_DIR,
                 "data",
-                "techniques_migrated.json",
+                "techniques.json",
             )
         else:
             file_path = str(file_path_option)

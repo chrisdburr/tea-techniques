@@ -1,32 +1,31 @@
-# backend/api/management/commands/import_techniques.py
 from __future__ import annotations
 
 import json
-import os
-from pathlib import Path
 import logging
+import os
+from argparse import ArgumentParser
+from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
-from django.conf import settings
-from argparse import ArgumentParser
 
 from api.models import (
     AssuranceGoal,
-    Tag,
     ResourceType,
+    Tag,
     Technique,
-    TechniqueResource,
     TechniqueExampleUseCase,
     TechniqueLimitation,
+    TechniqueResource,
 )
 from api.utils import (
-    TechniqueDataExtractor,
-    TechniqueDataValidator, 
     DataValidationError,
+    TechniqueDataExtractor,
+    TechniqueDataValidator,
 )
 
-# Set up logger
 logger = logging.getLogger(__name__)
 
 
@@ -71,14 +70,22 @@ class Command(BaseCommand):
 
         if self.dry_run:
             logger.info(f"Dry run: Validating techniques from {file_path}")
-            self.stdout.write(self.style.SUCCESS(f"Dry run: Validating techniques from {file_path}"))
+            self.stdout.write(
+                self.style.SUCCESS(f"Dry run: Validating techniques from {file_path}")
+            )
         else:
             logger.info(f"Importing techniques from {file_path}")
-            self.stdout.write(self.style.SUCCESS(f"Importing techniques from {file_path}"))
-        
+            self.stdout.write(
+                self.style.SUCCESS(f"Importing techniques from {file_path}")
+            )
+
         if self.force:
             logger.info("Force mode enabled: Will continue processing despite errors")
-            self.stdout.write(self.style.WARNING("Force mode enabled: Will continue processing despite errors"))
+            self.stdout.write(
+                self.style.WARNING(
+                    "Force mode enabled: Will continue processing despite errors"
+                )
+            )
 
         # Create initial records needed for import (skip in dry run mode)
         if not self.dry_run:
@@ -92,7 +99,7 @@ class Command(BaseCommand):
             error_msg = f"Invalid JSON in file {file_path}: {str(e)}"
             logger.error(error_msg)
             raise CommandError(error_msg)
-        
+
         # Validate that techniques_data is a list
         if not isinstance(techniques_data, list):
             error_msg = f"JSON file must contain a list of techniques, got {type(techniques_data).__name__}"
@@ -106,34 +113,46 @@ class Command(BaseCommand):
                 for technique_data in techniques_data:
                     self._validate_technique(technique_data)
                     count += 1
-                
+
                 logger.info(f"Dry run: Successfully validated {count} techniques")
                 self.stdout.write(
-                    self.style.SUCCESS(f"Dry run: Successfully validated {count} techniques")
+                    self.style.SUCCESS(
+                        f"Dry run: Successfully validated {count} techniques"
+                    )
                 )
             else:
                 # Use a transaction to ensure data consistency
                 with transaction.atomic():
                     count = 0
                     self._related_techniques_to_process = {}
-                    
-                    # First pass: import all techniques  
+
+                    # First pass: import all techniques
                     for technique_data in techniques_data:
                         technique = self._process_technique(technique_data)
                         count += 1
-                    
+
                     # Second pass: process related techniques using slug mapping
-                    for technique_slug, related_slugs in self._related_techniques_to_process.items():
+                    for (
+                        technique_slug,
+                        related_slugs,
+                    ) in self._related_techniques_to_process.items():
                         try:
                             technique = Technique.objects.get(slug=technique_slug)
                             self._process_related_techniques(technique, related_slugs)
                         except Technique.DoesNotExist:
-                            logger.warning(f"Technique {technique_slug} not found for related techniques processing")
+                            logger.warning(
+                                f"Technique {technique_slug} not found for related techniques processing"
+                            )
 
                 logger.info(f"Successfully imported {count} techniques")
                 self.stdout.write(
                     self.style.SUCCESS(f"Successfully imported {count} techniques")
                 )
+        except KeyboardInterrupt:
+            error_msg = "Import process was interrupted by user"
+            logger.error(error_msg)
+            self.stdout.write(self.style.ERROR(error_msg))
+            raise CommandError(error_msg)
         except Exception as e:
             logger.error(f"Error processing JSON file: {str(e)}")
             self.stdout.write(self.style.ERROR(f"Error processing JSON file: {str(e)}"))
@@ -156,7 +175,6 @@ class Command(BaseCommand):
                 name=goal_name,
                 defaults={"description": f"{goal_name} techniques for trustworthy AI"},
             )
-
 
         # Create resource types for the JSON
         resource_types = [
@@ -191,7 +209,9 @@ class Command(BaseCommand):
             tag, _ = Tag.objects.get_or_create(name=tag_name)
             technique.tags.add(tag)
 
-    def _process_related_techniques(self, technique: Technique, related_slugs: list) -> None:
+    def _process_related_techniques(
+        self, technique: Technique, related_slugs: list
+    ) -> None:
         """Process related techniques after all techniques are imported."""
         for related_slug in related_slugs:
             try:
@@ -199,8 +219,6 @@ class Command(BaseCommand):
                 technique.related_techniques.add(related_technique)
             except Technique.DoesNotExist:
                 logger.warning(f"Related technique {related_slug} not found")
-
-
 
     def _process_technique(self, data: Dict[str, Any]) -> Optional[Technique]:
         """Process a single technique from JSON data using refactored approach."""
@@ -222,36 +240,56 @@ class Command(BaseCommand):
 
             # Create or update the technique
             technique = self._create_or_update_technique(basic_data)
-            
-            # Process relationships
-            self._process_assurance_goals(technique, relationship_data['assurance_goals'])
-            self._process_tags(technique, relationship_data['tags'])
-            self._store_related_techniques(technique, relationship_data['related_techniques'])
-            
-            # Process nested objects
-            self._process_resources(technique, nested_data['resources'])
-            self._process_use_cases(technique, nested_data['example_use_cases'], relationship_data['assurance_goals'])
-            self._process_limitations(technique, nested_data['limitations'])
 
-            status = "Updated" if hasattr(technique, '_created') and not technique._created else "Created"
+            # Process relationships
+            self._process_assurance_goals(
+                technique, relationship_data["assurance_goals"]
+            )
+            self._process_tags(technique, relationship_data["tags"])
+            self._store_related_techniques(
+                technique, relationship_data["related_techniques"]
+            )
+
+            # Process nested objects
+            self._process_resources(technique, nested_data["resources"])
+            self._process_use_cases(
+                technique,
+                nested_data["example_use_cases"],
+                relationship_data["assurance_goals"],
+            )
+            self._process_limitations(technique, nested_data["limitations"])
+
+            status = (
+                "Updated"
+                if hasattr(technique, "_created") and not technique._created
+                else "Created"
+            )
             logger.info(f"{status} technique: {basic_data['name']}")
-            self.stdout.write(self.style.SUCCESS(f"{status} technique: {basic_data['name']}"))
-            
+            self.stdout.write(
+                self.style.SUCCESS(f"{status} technique: {basic_data['name']}")
+            )
+
             return technique
 
         except DataValidationError as e:
-            error_msg = f"Error importing technique {data.get('name', 'Unknown')}: {str(e)}"
-            logger.warning(f"Validation error for technique {data.get('name', 'Unknown')}: {str(e)}")
+            error_msg = (
+                f"Error importing technique {data.get('name', 'Unknown')}: {str(e)}"
+            )
+            logger.warning(
+                f"Validation error for technique {data.get('name', 'Unknown')}: {str(e)}"
+            )
             self.stderr.write(self.style.ERROR(error_msg))
             if not self.force:
                 return None
             return self._handle_incomplete_technique(data)
         except Exception as e:
-            error_msg = f'Error processing technique {data.get("name", "Unknown")}: {str(e)}'
+            error_msg = (
+                f'Error processing technique {data.get("name", "Unknown")}: {str(e)}'
+            )
             logger.error(error_msg)
             self.stdout.write(self.style.ERROR(error_msg))
             if not self.force:
-                raise
+                raise CommandError(error_msg)
             return None
 
     def _validate_technique(self, data: Dict[str, Any]) -> bool:
@@ -272,49 +310,60 @@ class Command(BaseCommand):
                     return False
 
             # Validate nested data
-            for resource_data in nested_data['resources']:
-                processed_resource = self.data_extractor.process_resource_data(resource_data)
+            for resource_data in nested_data["resources"]:
+                processed_resource = self.data_extractor.process_resource_data(
+                    resource_data
+                )
                 if not self.validator.validate_resource_data(processed_resource):
-                    logger.warning(f"Invalid resource data for technique {basic_data['name']}")
+                    logger.warning(
+                        f"Invalid resource data for technique {basic_data['name']}"
+                    )
                     if not self.force:
                         return False
 
             logger.info(f"Validated technique: {basic_data['name']}")
-            self.stdout.write(self.style.SUCCESS(f"Validated technique: {basic_data['name']}"))
-            
+            self.stdout.write(
+                self.style.SUCCESS(f"Validated technique: {basic_data['name']}")
+            )
+
             return True
 
         except DataValidationError as e:
-            logger.warning(f"Validation error for technique {data.get('name', 'Unknown')}: {str(e)}")
+            error_msg = f"Validation error for technique {data.get('name', 'Unknown')}: {str(e)}"
+            logger.warning(error_msg)
+            if not self.force:
+                return False
             return self.force
         except Exception as e:
-            error_msg = f'Error validating technique {data.get("name", "Unknown")}: {str(e)}'
+            error_msg = (
+                f'Error validating technique {data.get("name", "Unknown")}: {str(e)}'
+            )
             logger.error(error_msg)
             self.stdout.write(self.style.ERROR(error_msg))
             if not self.force:
-                raise
+                raise CommandError(error_msg)
             return False
 
     def _create_or_update_technique(self, basic_data: Dict[str, Any]) -> Technique:
         """Create or update a technique with basic data."""
         technique, created = Technique.objects.update_or_create(
-            slug=basic_data['slug'],
+            slug=basic_data["slug"],
             defaults={
-                'name': basic_data['name'],
-                'acronym': basic_data.get('acronym'),
-                'description': basic_data['description'],
-                'complexity_rating': basic_data['complexity_rating'],
-                'computational_cost_rating': basic_data['computational_cost_rating'],
-            }
+                "name": basic_data["name"],
+                "acronym": basic_data.get("acronym"),
+                "description": basic_data["description"],
+                "complexity_rating": basic_data["complexity_rating"],
+                "computational_cost_rating": basic_data["computational_cost_rating"],
+            },
         )
-        
+
         # Store creation status for logging
         technique._created = created
-        
+
         # If updating, clear existing relationships
         if not created:
             self._clear_existing_relationships(technique)
-            
+
         return technique
 
     def _clear_existing_relationships(self, technique: Technique) -> None:
@@ -326,79 +375,108 @@ class Command(BaseCommand):
         TechniqueExampleUseCase.objects.filter(technique=technique).delete()
         TechniqueLimitation.objects.filter(technique=technique).delete()
 
-    def _process_assurance_goals(self, technique: Technique, goals_list: List[str]) -> None:
+    def _process_assurance_goals(
+        self, technique: Technique, goals_list: List[str]
+    ) -> None:
         """Process assurance goals for a technique."""
         for goal_name in goals_list:
             try:
                 goal = AssuranceGoal.objects.get(name=goal_name)
                 technique.assurance_goals.add(goal)
             except AssuranceGoal.DoesNotExist:
-                logger.warning(f"AssuranceGoal '{goal_name}' not found for technique '{technique.name}'")
-                self.stderr.write(self.style.WARNING(f"AssuranceGoal not found: {goal_name}"))
+                logger.warning(
+                    f"AssuranceGoal '{goal_name}' not found for technique '{technique.name}'"
+                )
+                self.stderr.write(
+                    self.style.WARNING(f"AssuranceGoal not found: {goal_name}")
+                )
 
-    def _store_related_techniques(self, technique: Technique, related_slugs: List[Any]) -> None:
+    def _store_related_techniques(
+        self, technique: Technique, related_slugs: List[Any]
+    ) -> None:
         """Store related technique slugs for later processing."""
-        if not hasattr(self, '_related_techniques_to_process'):
+        if not hasattr(self, "_related_techniques_to_process"):
             self._related_techniques_to_process = {}
         self._related_techniques_to_process[technique.slug] = related_slugs
 
-    def _process_resources(self, technique: Technique, resources_data: List[Dict[str, Any]]) -> None:
+    def _process_resources(
+        self, technique: Technique, resources_data: List[Dict[str, Any]]
+    ) -> None:
         """Process resources for a technique using utility classes."""
         for resource_data in resources_data:
-            processed_resource = self.data_extractor.process_resource_data(resource_data)
-            
+            processed_resource = self.data_extractor.process_resource_data(
+                resource_data
+            )
+
             if not self.validator.validate_resource_data(processed_resource):
                 logger.warning(f"Invalid resource data for technique {technique.name}")
                 continue
-                
+
             self._create_resource(technique, processed_resource)
 
-    def _create_resource(self, technique: Technique, resource_data: Dict[str, Any]) -> None:
+    def _create_resource(
+        self, technique: Technique, resource_data: Dict[str, Any]
+    ) -> None:
         """Create a single resource for a technique."""
         # Check if resource type exists
         try:
-            resource_type = ResourceType.objects.get(name=resource_data['type'])
+            resource_type = ResourceType.objects.get(name=resource_data["type"])
         except ResourceType.DoesNotExist:
-            logger.warning(f"ResourceType '{resource_data['type']}' not found for technique '{technique.name}', skipping resource")
-            self.stderr.write(self.style.WARNING(f"ResourceType not found: {resource_data['type']}"))
+            logger.warning(
+                f"ResourceType '{resource_data['type']}' not found for technique '{technique.name}', skipping resource"
+            )
+            self.stderr.write(
+                self.style.WARNING(f"ResourceType not found: {resource_data['type']}")
+            )
             return
 
         TechniqueResource.objects.create(
             technique=technique,
             resource_type=resource_type,
-            url=resource_data['url'],
-            title=resource_data['title'],
-            description=resource_data['description'],
-            authors=resource_data['authors'],
-            publication_date=resource_data['parsed_publication_date'],
-            source_type=resource_data['source_type'],
+            url=resource_data["url"],
+            title=resource_data["title"],
+            description=resource_data["description"],
+            authors=resource_data["authors"],
+            publication_date=resource_data["parsed_publication_date"],
+            source_type=resource_data["source_type"],
         )
 
-    def _process_use_cases(self, technique: Technique, use_cases_data: List[Dict[str, Any]], default_goals: List[str]) -> None:
+    def _process_use_cases(
+        self,
+        technique: Technique,
+        use_cases_data: List[Dict[str, Any]],
+        default_goals: List[str],
+    ) -> None:
         """Process use cases for a technique using utility classes."""
         default_goal = default_goals[0] if default_goals else None
-        
+
         for use_case_data in use_cases_data:
-            processed_use_case = self.data_extractor.process_use_case_data(use_case_data, default_goal)
-            
-            if not processed_use_case['description']:
+            processed_use_case = self.data_extractor.process_use_case_data(
+                use_case_data, default_goal
+            )
+
+            if not processed_use_case["description"]:
                 continue
-                
+
             self._create_use_case(technique, processed_use_case)
 
-    def _create_use_case(self, technique: Technique, use_case_data: Dict[str, Any]) -> None:
+    def _create_use_case(
+        self, technique: Technique, use_case_data: Dict[str, Any]
+    ) -> None:
         """Create a single use case for a technique."""
         try:
             goal = None
-            if use_case_data['goal_name']:
+            if use_case_data["goal_name"]:
                 goal, _ = AssuranceGoal.objects.get_or_create(
-                    name=use_case_data['goal_name'],
-                    defaults={"description": f"{use_case_data['goal_name']} techniques for trustworthy AI"}
+                    name=use_case_data["goal_name"],
+                    defaults={
+                        "description": f"{use_case_data['goal_name']} techniques for trustworthy AI"
+                    },
                 )
 
             TechniqueExampleUseCase.objects.create(
                 technique=technique,
-                description=use_case_data['description'],
+                description=use_case_data["description"],
                 assurance_goal=goal,
             )
         except Exception as e:
@@ -406,27 +484,31 @@ class Command(BaseCommand):
             if not self.force:
                 raise
 
-    def _process_limitations(self, technique: Technique, limitations_data: List[Any]) -> None:
+    def _process_limitations(
+        self, technique: Technique, limitations_data: List[Any]
+    ) -> None:
         """Process limitations for a technique using utility classes."""
-        processed_limitations = self.data_extractor.process_limitation_data(limitations_data)
-        
+        processed_limitations = self.data_extractor.process_limitation_data(
+            limitations_data
+        )
+
         for description in processed_limitations:
             TechniqueLimitation.objects.create(
-                technique=technique,
-                description=description
+                technique=technique, description=description
             )
 
     def _handle_incomplete_technique(self, data: Dict[str, Any]) -> Optional[Technique]:
         """Handle techniques with incomplete data when force flag is enabled."""
-        logger.info("Force flag enabled, attempting to create technique with incomplete data")
-        
-        # Provide minimal defaults
-        name = data.get('name', 'Unknown Technique')
-        description = data.get('description', 'No description provided')
-        
-        technique, created = Technique.objects.update_or_create(
-            name=name,
-            defaults={'description': description}
+        logger.info(
+            "Force flag enabled, attempting to create technique with incomplete data"
         )
-        
+
+        # Provide minimal defaults
+        name = data.get("name", "Unknown Technique")
+        description = data.get("description", "No description provided")
+
+        technique, created = Technique.objects.update_or_create(
+            name=name, defaults={"description": description}
+        )
+
         return technique

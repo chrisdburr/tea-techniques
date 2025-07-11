@@ -2,27 +2,28 @@
 
 from __future__ import annotations
 
-from rest_framework import viewsets, filters, status
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework.request import Request
-from rest_framework.permissions import BasePermission, IsAuthenticated, AllowAny
-from django_filters.rest_framework import DjangoFilterBackend
-from django.db import connection
 import logging
-from typing import Any, Dict, List, Type
+from typing import Any, List, Type
+
+from django.db import connection
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, status, viewsets
+from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated
+from rest_framework.request import Request
+from rest_framework.response import Response
 
 from ..models import (
     AssuranceGoal,
-    Tag,
     ResourceType,
+    Tag,
     Technique,
 )
 from ..serializers import (
     AssuranceGoalSerializer,
+    ResourceTypeSerializer,
     TagSerializer,
     TechniqueSerializer,
-    ResourceTypeSerializer,
 )
 
 # Set up logger
@@ -30,6 +31,12 @@ logger = logging.getLogger(__name__)
 
 
 class AssuranceGoalsViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for managing AssuranceGoal instances.
+    
+    Provides CRUD operations for assurance goals with search and filtering capabilities.
+    Read operations are allowed for any user, while write operations require authentication.
+    """
     queryset = AssuranceGoal.objects.all()
     serializer_class = AssuranceGoalSerializer
     filter_backends = [
@@ -54,6 +61,12 @@ class AssuranceGoalsViewSet(viewsets.ModelViewSet):
 
 
 class TagsViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for managing Tag instances.
+    
+    Provides CRUD operations for tags with search and filtering capabilities.
+    Read operations are allowed for any user, while write operations require authentication.
+    """
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     filter_backends = [
@@ -83,7 +96,7 @@ class TechniquesViewSet(viewsets.ModelViewSet):
 
     queryset = Technique.objects.all()
     serializer_class = TechniqueSerializer
-    lookup_field = 'slug'
+    lookup_field = "slug"
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
@@ -127,15 +140,8 @@ class TechniquesViewSet(viewsets.ModelViewSet):
             "limitations",
         )
 
-    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
-        """Standard list method for techniques"""
-        return super().list(request, *args, **kwargs)
 
-    def retrieve(self, request: Request, *args: Any, **kwargs: Any) -> Response:
-        """Standard retrieve method for techniques"""
-        return super().retrieve(request, *args, **kwargs)
-
-    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+    def create(self, request: Request) -> Response:
         """Create a new technique."""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -144,7 +150,7 @@ class TechniquesViewSet(viewsets.ModelViewSet):
         # Return the created instance
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def update(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+    def update(self, request: Request, **kwargs: Any) -> Response:
         """Update a technique."""
         instance = self.get_object()
         serializer = self.get_serializer(
@@ -158,6 +164,12 @@ class TechniquesViewSet(viewsets.ModelViewSet):
 
 
 class ResourceTypesViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for managing ResourceType instances.
+    
+    Provides CRUD operations for resource types with search and filtering capabilities.
+    Read operations are allowed for any user, while write operations require authentication.
+    """
     queryset = ResourceType.objects.all()
     serializer_class = ResourceTypeSerializer
     filter_backends = [
@@ -177,7 +189,7 @@ class ResourceTypesViewSet(viewsets.ModelViewSet):
 
 
 @api_view(["GET"])
-def health_check(request: Request) -> Response:
+def health_check(_request: Request) -> Response:
     """
     Simple health check endpoint that verifies the API is running
     and the database connection is working.
@@ -197,7 +209,7 @@ def health_check(request: Request) -> Response:
             }
         )
     except Exception as e:
-        logger.error(f"Health check failed: {str(e)}")
+        logger.error("Health check failed: %s", str(e))
         return Response(
             {
                 "status": "unhealthy",
@@ -210,15 +222,18 @@ def health_check(request: Request) -> Response:
 
 # Debug utility functions
 
+
 def _sanitize_settings():
     """Extract and sanitize settings for debug output."""
     from django.conf import settings
-    
+
     return {
         "DEBUG": settings.DEBUG,
         "ALLOWED_HOSTS": settings.ALLOWED_HOSTS,
         "CORS_ALLOWED_ORIGINS": getattr(settings, "CORS_ALLOWED_ORIGINS", "Not set"),
-        "CORS_ALLOW_ALL_ORIGINS": getattr(settings, "CORS_ALLOW_ALL_ORIGINS", "Not set"),
+        "CORS_ALLOW_ALL_ORIGINS": getattr(
+            settings, "CORS_ALLOW_ALL_ORIGINS", "Not set"
+        ),
         "DATABASE_ENGINE": settings.DATABASES["default"]["ENGINE"],
         "INSTALLED_APPS": settings.INSTALLED_APPS,
         "MIDDLEWARE": settings.MIDDLEWARE,
@@ -228,7 +243,7 @@ def _sanitize_settings():
 def _get_database_info():
     """Get current database connection information."""
     from django.conf import settings
-    
+
     return {
         "vendor": connection.vendor,
         "queries_executed": (
@@ -276,7 +291,7 @@ def _get_api_endpoints():
 def health_check_detailed(request: Request) -> Response:
     """Comprehensive health check with detailed system information."""
     from django.conf import settings
-    
+
     # Only allow in development
     if not settings.DEBUG:
         return Response(
@@ -300,7 +315,7 @@ def health_check_detailed(request: Request) -> Response:
 def debug_echo(request: Request) -> Response:
     """Echo back received data for debugging POST requests."""
     from django.conf import settings
-    
+
     # Only allow in development - check this before method validation
     if not settings.DEBUG:
         return Response(
@@ -315,8 +330,10 @@ def debug_echo(request: Request) -> Response:
             status=status.HTTP_405_METHOD_NOT_ALLOWED,
         )
 
-    return Response({
-        "api_status": "API is running correctly",
-        "received_data": request.data,
-        "request_info": _format_request_info(request),
-    })
+    return Response(
+        {
+            "api_status": "API is running correctly",
+            "received_data": request.data,
+            "request_info": _format_request_info(request),
+        }
+    )

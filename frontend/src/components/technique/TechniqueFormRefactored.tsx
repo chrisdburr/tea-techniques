@@ -189,7 +189,7 @@ export default function TechniqueFormRefactored({ id, isEditMode = false }: Tech
     label: tag.name,
   })) || [];
 
-  const relatedTechniqueOptions = (techniquesData as any)?.results
+  const relatedTechniqueOptions = techniquesData?.results
     ?.filter((t: Technique) => t.id !== id)
     ?.map((technique: Technique) => ({
       value: technique.id.toString(),

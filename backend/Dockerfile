@@ -24,9 +24,10 @@ COPY . .
 # Create directories for scripts and static files
 RUN mkdir -p /app/scripts /app/static /app/staticfiles
 
-# Copy entrypoint script and set permissions
+# Copy scripts and set permissions
 COPY entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
+COPY init-db.sh /app/init-db.sh
+RUN chmod +x /app/entrypoint.sh /app/init-db.sh
 
 # Set default settings module for Docker
 ENV DJANGO_SETTINGS_MODULE=config.settings.docker

@@ -179,7 +179,7 @@ export default function TagDefinitionsContent() {
 						<ul className="space-y-2">
 							<li><strong>Consistency:</strong> Tags should be applied uniformly across all techniques.</li>
 							<li><strong>Clarity:</strong> Tag definitions must be clear and unambiguous.</li>
-							<li><strong>Relevance:</strong> Tags should accurately reflect the technique's properties and align with the evaluation criteria.</li>
+							<li><strong>Relevance:</strong> Tags should accurately reflect the technique&apos;s properties and align with the evaluation criteria.</li>
 							<li><strong>Evolution:</strong> The tag system should be adaptable to new techniques and evolving concepts in TEA.</li>
 						</ul>
 					</div>

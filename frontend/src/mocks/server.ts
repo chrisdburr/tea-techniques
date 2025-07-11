@@ -2,9 +2,8 @@
 // Note: There are module resolution issues with msw/node in the current setup
 // This file is ready to be used once those issues are resolved
 
-import { http } from 'msw';
 // import { setupServer } from 'msw/node'; - This import is causing issues
-import { handlers } from './handlers';
+// import { handlers } from './handlers';
 
 // Set up MSW server with our handlers
 // export const server = setupServer(...handlers);

@@ -93,7 +93,7 @@ export const aboutTabs: TabConfig[] = [
 								Prerequisites
 							</h3>
 							<p className="text-muted-foreground mb-2">
-								This project uses Poetry for Python dependency management. If you don't have Poetry installed, follow the installation instructions.
+								This project uses Poetry for Python dependency management. If you don&apos;t have Poetry installed, follow the installation instructions.
 							</p>
 						</div>
 
@@ -197,7 +197,7 @@ export const aboutTabs: TabConfig[] = [
 					</h2>
 					<div className="bg-card rounded-lg border shadow-sm p-6">
 						<p className="mb-4">
-							Contributions to the TEA Techniques Database are welcome! Here's how you can contribute:
+							Contributions to the TEA Techniques Database are welcome! Here&apos;s how you can contribute:
 						</p>
 						<ol className="space-y-4">
 							<li className="flex gap-3 items-start">
@@ -220,7 +220,7 @@ export const aboutTabs: TabConfig[] = [
 								<div>
 									<strong className="text-primary">Commit your changes</strong>
 									<p className="text-sm text-muted-foreground mt-1">
-										git commit -m 'Add some amazing feature'
+										git commit -m &apos;Add some amazing feature&apos;
 									</p>
 								</div>
 							</li>
@@ -238,7 +238,7 @@ export const aboutTabs: TabConfig[] = [
 								<div>
 									<strong className="text-primary">Open a Pull Request</strong>
 									<p className="text-sm text-muted-foreground mt-2">
-										Please ensure your code follows the project's coding standards and includes appropriate tests.
+										Please ensure your code follows the project&apos;s coding standards and includes appropriate tests.
 									</p>
 								</div>
 							</li>
@@ -259,7 +259,7 @@ export const aboutTabs: TabConfig[] = [
 							<li className="flex items-start gap-2">
 								<div className="h-5 w-5 text-primary flex-shrink-0 mt-0.5">→</div>
 								<div>
-									<strong>Through the UI</strong>: Once logged in with appropriate permissions, you can use the "Add New Technique" form.
+									<strong>Through the UI</strong>: Once logged in with appropriate permissions, you can use the &quot;Add New Technique&quot; form.
 								</div>
 							</li>
 							<li className="flex items-start gap-2">

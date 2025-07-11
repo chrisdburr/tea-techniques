@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { http, HttpResponse } from 'msw'
 import { server } from '../../mocks/server'
 import { useTechniques, useTechniqueDetail } from '../../../lib/api/hooks'
-import { mockTechniques, createMockTechniquesList } from '../../fixtures/techniques'
+import { mockTechniques } from '../../fixtures/techniques'
 import type { Technique } from '../../../lib/types'
 
 // Create wrapper for React Query
@@ -17,11 +17,15 @@ const createWrapper = () => {
     },
   })
 
-  return ({ children }: { children: React.ReactNode }) => (
+  const TestWrapper = ({ children }: { children: React.ReactNode }) => (
     <QueryClientProvider client={queryClient}>
       {children}
     </QueryClientProvider>
   )
+  
+  TestWrapper.displayName = 'TestWrapper'
+  
+  return TestWrapper
 }
 
 describe('useTechniques Hook', () => {
@@ -48,7 +52,7 @@ describe('useTechniques Hook', () => {
     it('handles empty response', async () => {
       // Override handler for empty response
       server.use(
-        http.get('*/api/techniques/', () => {
+        http.get('*/api/techniques', () => {
           return HttpResponse.json({
             count: 0,
             next: null,
@@ -73,7 +77,7 @@ describe('useTechniques Hook', () => {
     it('handles API errors gracefully', async () => {
       // Override handler to return error
       server.use(
-        http.get('*/api/techniques/', () => {
+        http.get('*/api/techniques', () => {
           return new HttpResponse(null, { status: 500 })
         })
       )
@@ -147,7 +151,7 @@ describe('useTechniques Hook', () => {
     it('applies complexity rating filters', async () => {
       const complexityRating = 3
       
-      const { result } = renderHook(() => useTechniques({ complexity_rating: complexityRating }), {
+      const { result } = renderHook(() => useTechniques({ complexity_min: complexityRating.toString(), complexity_max: complexityRating.toString() }), {
         wrapper: createWrapper(),
       })
 
@@ -380,7 +384,7 @@ describe('useTechniqueDetail Hook', () => {
     it('handles network errors gracefully', async () => {
       // Mock network error
       server.use(
-        http.get(`*/api/techniques/${techniqueSlug}/`, () => {
+        http.get(`*/api/techniques/${techniqueSlug}`, () => {
           return new HttpResponse(null, { status: 500 })
         })
       )
@@ -400,18 +404,40 @@ describe('useTechniqueDetail Hook', () => {
     it('retries failed requests according to configuration', async () => {
       let requestCount = 0
       
+      // Create a custom wrapper with retries enabled
+      const createRetryWrapper = () => {
+        const queryClient = new QueryClient({
+          defaultOptions: {
+            queries: {
+              retry: 2, // Enable retries
+              retryDelay: 0, // No delay for tests
+              gcTime: 0,
+            },
+          },
+        })
+
+        const TestWrapper = ({ children }: { children: React.ReactNode }) => (
+          <QueryClientProvider client={queryClient}>
+            {children}
+          </QueryClientProvider>
+        )
+        
+        TestWrapper.displayName = 'TestWrapper'
+        return TestWrapper
+      }
+      
       server.use(
-        http.get(`*/api/techniques/${techniqueSlug}/`, () => {
+        http.get(`*/api/techniques/${techniqueSlug}`, () => {
           requestCount++
           if (requestCount < 2) {
-            return new HttpResponse(null, { status: 500 })
+            return HttpResponse.error()
           }
           return HttpResponse.json(mockTechniques[0])
         })
       )
 
       const { result } = renderHook(() => useTechniqueDetail(techniqueSlug), {
-        wrapper: createWrapper(),
+        wrapper: createRetryWrapper(),
       })
 
       await waitFor(() => {

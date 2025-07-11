@@ -12,23 +12,27 @@
  * This serves as a template for other component tests in the project.
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { screen, waitFor } from '@testing-library/react'
+import React from 'react'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { screen, cleanup } from '@testing-library/react'
 import { renderWithProviders } from '../utils/test-utils'
 import { testAccessibility } from '../utils/accessibility-test-utils'
 import { createApiMocker, mockApiScenarios } from '../utils/api-test-utils'
 import { mockTechniques, createMockTechnique } from '../fixtures/techniques'
+import type { Technique } from '@/lib/types'
 
 // Mock component for demonstration purposes
 // In real tests, you would import actual components
-const MockTechniqueCard: React.FC<{ technique: any }> = ({ technique }) => {
+const MockTechniqueCard: React.FC<{ technique: Technique }> = ({ technique }) => {
   return (
     <div 
       data-testid="technique-card"
       role="article"
-      aria-labelledby={`technique-${technique.id}-title`}
+      aria-labelledby={`technique-${technique.slug}-title`}
     >
-      <h3 id={`technique-${technique.id}-title`}>{technique.name}</h3>
+      <h2 id={`technique-${technique.slug}-title`}>
+        {technique.name} {technique.acronym && `(${technique.acronym})`}
+      </h2>
       <p>{technique.description}</p>
       <div>
         <span>Complexity: {technique.complexity_rating}/5</span>
@@ -37,7 +41,7 @@ const MockTechniqueCard: React.FC<{ technique: any }> = ({ technique }) => {
       <div>
         <strong>Assurance Goals:</strong>
         <ul>
-          {technique.assurance_goals.map((goal: any) => (
+          {technique.assurance_goals.map((goal) => (
             <li key={goal.id}>{goal.name}</li>
           ))}
         </ul>
@@ -62,7 +66,7 @@ const MockTechniqueList: React.FC = () => {
       <p>Explore techniques for trustworthy and ethical AI assurance</p>
       <div role="region" aria-label="List of TEA techniques">
         {techniques.map(technique => (
-          <MockTechniqueCard key={technique.id} technique={technique} />
+          <MockTechniqueCard key={technique.slug} technique={technique} />
         ))}
       </div>
     </main>
@@ -86,17 +90,21 @@ describe('TechniqueCard Component', () => {
     it('renders technique information correctly', () => {
       const technique = mockTechniques[0] // SHAP technique
       
-      renderWithProviders(<MockTechniqueCard technique={technique} />)
+      const { container } = renderWithProviders(<MockTechniqueCard technique={technique} />)
+      
+      // Check that the component renders at all
+      const card = container.querySelector('[data-testid="technique-card"]')
+      expect(card).toBeInTheDocument()
 
       // Test that domain-specific content is rendered
-      expect(screen.getByText('SHapley Additive exPlanations (SHAP)')).toBeInTheDocument()
-      expect(screen.getByText(/SHAP explains model predictions/)).toBeInTheDocument()
-      expect(screen.getByText('Complexity: 3/5')).toBeInTheDocument()
-      expect(screen.getByText('Cost: 2/5')).toBeInTheDocument()
+      expect(container.textContent).toContain('SHapley Additive exPlanations (SHAP)')
+      expect(container.textContent).toContain('SHAP explains model predictions')
+      expect(container.textContent).toContain('Complexity: 3/5')
+      expect(container.textContent).toContain('Cost: 2/5')
       
       // Test that assurance goals are displayed
-      expect(screen.getByText('Explainability')).toBeInTheDocument()
-      expect(screen.getByText('Fairness')).toBeInTheDocument()
+      expect(container.textContent).toContain('Explainability')
+      expect(container.textContent).toContain('Fairness')
     })
 
     it('handles edge cases gracefully', () => {
@@ -107,11 +115,12 @@ describe('TechniqueCard Component', () => {
         computational_cost_rating: 5,
       })
 
-      renderWithProviders(<MockTechniqueCard technique={edgeCaseTechnique} />)
+      const { container } = renderWithProviders(<MockTechniqueCard technique={edgeCaseTechnique} />)
 
       // Should still render without errors
-      expect(screen.getByTestId('technique-card')).toBeInTheDocument()
-      expect(screen.getByText('Complexity: 5/5')).toBeInTheDocument()
+      const card = container.querySelector('[data-testid="technique-card"]')
+      expect(card).toBeInTheDocument()
+      expect(container.textContent).toContain('Complexity: 5/5')
     })
   })
 
@@ -126,24 +135,24 @@ describe('TechniqueCard Component', () => {
 
     it('has proper semantic structure', () => {
       const technique = mockTechniques[0]
-      renderWithProviders(<MockTechniqueCard technique={technique} />)
+      const { container } = renderWithProviders(<MockTechniqueCard technique={technique} />)
 
       // Check semantic HTML structure
-      const article = screen.getByRole('article')
-      expect(article).toHaveAttribute('aria-labelledby', `technique-${technique.id}-title`)
+      const article = container.querySelector('[role="article"]')
+      expect(article).toHaveAttribute('aria-labelledby', `technique-${technique.slug}-title`)
 
-      const heading = screen.getByRole('heading', { level: 3 })
-      expect(heading).toHaveAttribute('id', `technique-${technique.id}-title`)
+      const heading = container.querySelector('h2')
+      expect(heading).toHaveAttribute('id', `technique-${technique.slug}-title`)
 
-      const button = screen.getByRole('button')
+      const button = container.querySelector('button')
       expect(button).toHaveAttribute('aria-label', `View details for ${technique.name}`)
     })
 
     it('supports keyboard navigation', async () => {
       const technique = mockTechniques[0]
-      const { user } = renderWithProviders(<MockTechniqueCard technique={technique} />)
+      const { user, container } = renderWithProviders(<MockTechniqueCard technique={technique} />)
 
-      const button = screen.getByRole('button')
+      const button = container.querySelector('button')
       
       // Tab to button
       await user.tab()
@@ -158,11 +167,9 @@ describe('TechniqueCard Component', () => {
   describe('User Interactions', () => {
     it('handles button clicks correctly', async () => {
       const technique = mockTechniques[0]
-      const { user } = renderWithProviders(<MockTechniqueCard technique={technique} />)
+      const { user, container } = renderWithProviders(<MockTechniqueCard technique={technique} />)
 
-      const viewButton = screen.getByRole('button', { 
-        name: `View details for ${technique.name}` 
-      })
+      const viewButton = container.querySelector('button')
 
       await user.click(viewButton)
       
@@ -218,15 +225,17 @@ describe('TechniqueList Component', () => {
 
   describe('Integration Testing', () => {
     it('renders list of techniques correctly', () => {
-      renderWithProviders(<MockTechniqueList />)
+      const { container } = renderWithProviders(<MockTechniqueList />)
 
       // Test main content
-      expect(screen.getByRole('main')).toBeInTheDocument()
-      expect(screen.getByRole('heading', { level: 1, name: 'TEA Techniques' })).toBeInTheDocument()
+      const main = container.querySelector('main')
+      expect(main).toBeInTheDocument()
+      const heading = container.querySelector('h1')
+      expect(heading).toHaveTextContent('TEA Techniques')
       
       // Test that multiple techniques are rendered
-      expect(screen.getByText('SHapley Additive exPlanations (SHAP)')).toBeInTheDocument()
-      expect(screen.getByText('Local Interpretable Model-agnostic Explanations (LIME)')).toBeInTheDocument()
+      expect(container.textContent).toContain('SHapley Additive exPlanations (SHAP)')
+      expect(container.textContent).toContain('Local Interpretable Model-agnostic Explanations (LIME)')
     })
 
     it('maintains accessibility with multiple components', async () => {
@@ -248,9 +257,9 @@ describe('TechniqueList Component', () => {
         </main>
       )
 
-      renderWithProviders(<MockEmptyList />)
+      const { container } = renderWithProviders(<MockEmptyList />)
       
-      expect(screen.getByText('No techniques found. Please check back later.')).toBeInTheDocument()
+      expect(container.textContent).toContain('No techniques found. Please check back later.')
     })
   })
 
@@ -269,10 +278,11 @@ describe('TechniqueList Component', () => {
         </div>
       )
 
-      renderWithProviders(<MockErrorComponent />)
+      const { container } = renderWithProviders(<MockErrorComponent />)
       
-      expect(screen.getByRole('alert')).toBeInTheDocument()
-      expect(screen.getByText('Unable to load techniques')).toBeInTheDocument()
+      const alert = container.querySelector('[role="alert"]')
+      expect(alert).toBeInTheDocument()
+      expect(container.textContent).toContain('Unable to load techniques')
     })
   })
 })
@@ -283,7 +293,7 @@ describe('Test Infrastructure Validation', () => {
     
     // Validate that our mock data has the expected structure
     expect(technique).toMatchObject({
-      id: expect.any(Number),
+      slug: expect.any(String),
       name: expect.any(String),
       description: expect.any(String),
       complexity_rating: expect.any(Number),
@@ -320,7 +330,7 @@ describe('Test Infrastructure Validation', () => {
     const data = await response.json()
     
     expect(data.results).toHaveLength(1)
-    expect(data.results[0].name).toBe('SHapley Additive exPlanations (SHAP)')
+    expect(data.results[0].name).toBe('SHapley Additive exPlanations')
     
     mocker.reset()
   })

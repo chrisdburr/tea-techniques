@@ -16,55 +16,78 @@ An interactive database for exploring techniques for evidencing claims about res
 - **Testing**: pytest (backend), Vitest (frontend), Playwright (E2E)
 - **Code Quality**: Ruff (linting/formatting), mypy (type checking)
 
-## 🛠️ Development Setup
+## 🚀 Quick Start
 
-This project supports two development approaches:
-1. **Docker-based development** (recommended for full-stack development)
-2. **Local development** (faster for backend-only development)
+Choose one of two deployment options:
 
-### Option 1: Docker Development
+### Option 1: Pull Pre-built Images (Recommended)
 
-> [!WARNING]
-> These instructions assume you are using Docker and Docker Compose. They have been tested on MacOS and Linux. If you are using Windows, you may need to adjust some commands.
+The fastest way to get started is using our pre-built Docker images from GitHub Container Registry.
 
-1.  **Prerequisites:** Ensure you have Docker and Docker Compose installed ([Docker Desktop](https://www.docker.com/products/docker-desktop/) is recommended).
-2.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/chrisdburr/tea-techniques.git
-    cd tea-techniques
-    ```
-3.  **Setup Environment Variables:**
-    ```bash
-    cp .env.example .env
-    ```
-    - Review the `.env` file. For development, the default database credentials used by Docker Compose should work fine, but you can customize them if needed.
-4.  **Build and Start Services:**
-    ```bash
-    # Use the development compose file
-    docker-compose -f docker-compose.development.yml up -d --build
-    ```
-5.  **Access the Application:**
-    - Frontend: http://localhost:3000
-    - Backend API: http://localhost:8000/api/
-    - Django Admin: http://localhost:8000/admin/ (Login with user: `admin`, password: `admin`)
-6.  **Stopping the Services:**
-    ```bash
-    docker-compose -f docker-compose.development.yml down
-    ```
-7.  **Viewing Logs:**
+1. **Prerequisites:** [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
 
-    ```bash
-    # View logs for all services
-    docker-compose -f docker-compose.development.yml logs
+2. **Download the deployment file:**
+   ```bash
+   curl -O https://raw.githubusercontent.com/chrisdburr/tea-techniques/main/docker-compose.ghcr.yml
+   ```
 
-    # View logs for a specific service (e.g., backend)
-    docker-compose -f docker-compose.development.yml logs backend
+3. **Start the application:**
+   ```bash
+   docker-compose -f docker-compose.ghcr.yml up -d
+   ```
 
-    # Follow logs in real-time
-    docker-compose -f docker-compose.development.yml logs -f backend
-    ```
+4. **Access the application:**
+   - **Frontend:** http://localhost:3000
+   - **Backend API:** http://localhost:8000/api/
+   - **API Documentation:** http://localhost:8000/swagger/
 
-### Option 2: Local Development (Backend)
+The application includes a pre-populated database with techniques data and is ready to use immediately.
+
+### Option 2: Build from Source
+
+For development or customization, build the application from source:
+
+1. **Clone and setup:**
+   ```bash
+   git clone https://github.com/chrisdburr/tea-techniques.git
+   cd tea-techniques
+   ```
+
+2. **Start with automatic setup:**
+   ```bash
+   docker-compose -f docker-compose.development.yml up -d --build
+   ```
+
+This automatically:
+- ✅ Builds all services from source
+- ✅ Sets up the database with migrations
+- ✅ Imports techniques data
+- ✅ Starts all services
+
+3. **Access the application:**
+   - **Frontend:** http://localhost:3000  
+   - **Backend API:** http://localhost:8000/api/
+   - **Django Admin:** http://localhost:8000/admin/ (admin/admin)
+
+### 📋 Management Commands
+
+```bash
+# Stop services
+docker-compose -f docker-compose.ghcr.yml down        # For pre-built images
+docker-compose -f docker-compose.development.yml down  # For source build
+
+# View logs
+docker-compose -f docker-compose.ghcr.yml logs -f backend
+
+# Update to latest images (Option 1)
+docker-compose -f docker-compose.ghcr.yml pull && docker-compose -f docker-compose.ghcr.yml up -d
+```
+
+---
+
+## 👨‍💻 Development
+
+### Local Development (Backend)
 
 For faster backend development, you can run the Django backend locally using [uv](https://docs.astral.sh/uv/), a modern Python package manager.
 

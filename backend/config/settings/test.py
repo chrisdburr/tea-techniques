@@ -19,8 +19,21 @@ if "DATABASE_URL" in os.environ:
 
         DATABASES = {"default": dj_database_url.parse(os.environ["DATABASE_URL"])}
     except ImportError:
-        # Fall back to SQLite if dj_database_url is not available
-        pass
+        # Manual parsing of DATABASE_URL as fallback
+        database_url = os.environ["DATABASE_URL"]
+        if database_url.startswith("postgresql://"):
+            from urllib.parse import urlparse
+            parsed = urlparse(database_url)
+            DATABASES = {
+                "default": {
+                    "ENGINE": "django.db.backends.postgresql",
+                    "NAME": parsed.path.lstrip('/'),
+                    "USER": parsed.username,
+                    "PASSWORD": parsed.password,
+                    "HOST": parsed.hostname,
+                    "PORT": parsed.port or 5432,
+                }
+            }
 elif os.getenv("USE_POSTGRES_FOR_TESTS") == "True":
     # Use the same database configuration as base settings
     pass

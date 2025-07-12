@@ -34,10 +34,26 @@ else:
 "
 fi
 
-# Import techniques data if requested
-if [ "$IMPORT_TECHNIQUES" = "true" ]; then
+# Import techniques data if database is empty or if explicitly requested
+TECHNIQUE_COUNT=$(python -c "
+import os
+import django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.production')
+django.setup()
+from api.models import Technique
+print(Technique.objects.count())
+" 2>/dev/null || echo "0")
+
+if [ "$TECHNIQUE_COUNT" = "0" ] || [ "$IMPORT_TECHNIQUES" = "true" ]; then
     echo "Importing techniques data..."
-    python manage.py import_techniques
+    if [ -f "data/techniques.json" ]; then
+        python manage.py import_techniques --file="data/techniques.json" --force
+        echo "✅ Techniques imported successfully!"
+    else
+        echo "⚠️  Warning: No techniques.json file found!"
+    fi
+else
+    echo "✅ Database already contains $TECHNIQUE_COUNT techniques"
 fi
 
 # Start Gunicorn

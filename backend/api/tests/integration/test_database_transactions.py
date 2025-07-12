@@ -13,28 +13,15 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 from django.test import TransactionTestCase
 
-from api.models import (
-    AssuranceGoal,
-    ResourceType,
-    Tag,
-    Technique,
-    TechniqueExampleUseCase,
-    TechniqueLimitation,
-    TechniqueResource,
-)
-from api.services import (
-    TechniqueLimitationService,
-    TechniqueOperationError,
-    TechniqueResourceService,
-    TechniqueService,
-    TechniqueUseCaseService,
-)
-from api.tests.factories import (
-    AssuranceGoalFactory,
-    IsolatedTechniqueFactory,
-    ResourceTypeFactory,
-    TagFactory,
-)
+from api.models import (AssuranceGoal, ResourceType, Tag, Technique,
+                        TechniqueExampleUseCase, TechniqueLimitation,
+                        TechniqueResource)
+from api.services import (TechniqueLimitationService, TechniqueOperationError,
+                          TechniqueResourceService, TechniqueService,
+                          TechniqueUseCaseService)
+from api.tests.factories import (AssuranceGoalFactory,
+                                 IsolatedTechniqueFactory, ResourceTypeFactory,
+                                 TagFactory)
 
 
 class DatabaseTransactionTests(TransactionTestCase):

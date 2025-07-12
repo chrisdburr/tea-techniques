@@ -14,30 +14,16 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.test import TransactionTestCase
 
-from api.models import (
-    AssuranceGoal,
-    ResourceType,
-    Tag,
-    Technique,
-    TechniqueExampleUseCase,
-    TechniqueLimitation,
-    TechniqueResource,
-)
+from api.models import (AssuranceGoal, ResourceType, Tag, Technique,
+                        TechniqueExampleUseCase, TechniqueLimitation,
+                        TechniqueResource)
 from api.serializers import TechniqueSerializer
-from api.services import (
-    TechniqueLimitationService,
-    TechniqueOperationError,
-    TechniqueResourceService,
-    TechniqueService,
-    TechniqueUseCaseService,
-)
-from api.tests.factories import (
-    AssuranceGoalFactory,
-    IsolatedTechniqueFactory,
-    ResourceTypeFactory,
-    TagFactory,
-    TechniqueFactory,
-)
+from api.services import (TechniqueLimitationService, TechniqueOperationError,
+                          TechniqueResourceService, TechniqueService,
+                          TechniqueUseCaseService)
+from api.tests.factories import (AssuranceGoalFactory,
+                                 IsolatedTechniqueFactory, ResourceTypeFactory,
+                                 TagFactory, TechniqueFactory)
 from api.utils import DataValidationError, TechniqueDataExtractor
 
 

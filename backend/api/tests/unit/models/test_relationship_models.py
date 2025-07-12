@@ -13,22 +13,13 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.test import TestCase
 
-from api.models import (
-    AssuranceGoal,
-    ResourceType,
-    Technique,
-    TechniqueExampleUseCase,
-    TechniqueLimitation,
-    TechniqueResource,
-)
-from api.tests.factories import (
-    AssuranceGoalFactory,
-    ResourceTypeFactory,
-    TechniqueExampleUseCaseFactory,
-    TechniqueFactory,
-    TechniqueLimitationFactory,
-    TechniqueResourceFactory,
-)
+from api.models import (AssuranceGoal, ResourceType, Technique,
+                        TechniqueExampleUseCase, TechniqueLimitation,
+                        TechniqueResource)
+from api.tests.factories import (AssuranceGoalFactory, ResourceTypeFactory,
+                                 TechniqueExampleUseCaseFactory,
+                                 TechniqueFactory, TechniqueLimitationFactory,
+                                 TechniqueResourceFactory)
 
 
 class TechniqueResourceModelTests(TestCase):

@@ -14,31 +14,16 @@ from faker import Faker
 
 fake = Faker()
 
-from api.admin import (
-    TagAdmin,
-    TechniqueAdmin,
-    TechniqueExampleUseCaseInline,
-    TechniqueLimitationInline,
-    TechniqueResourceInline,
-)
-from api.models import (
-    AssuranceGoal,
-    ResourceType,
-    Tag,
-    Technique,
-    TechniqueExampleUseCase,
-    TechniqueLimitation,
-    TechniqueResource,
-)
-from api.tests.factories import (
-    AssuranceGoalFactory,
-    IsolatedTechniqueFactory,
-    TagFactory,
-    TechniqueExampleUseCaseFactory,
-    TechniqueFactory,
-    TechniqueLimitationFactory,
-    TechniqueResourceFactory,
-)
+from api.admin import (TagAdmin, TechniqueAdmin, TechniqueExampleUseCaseInline,
+                       TechniqueLimitationInline, TechniqueResourceInline)
+from api.models import (AssuranceGoal, ResourceType, Tag, Technique,
+                        TechniqueExampleUseCase, TechniqueLimitation,
+                        TechniqueResource)
+from api.tests.factories import (AssuranceGoalFactory,
+                                 IsolatedTechniqueFactory, TagFactory,
+                                 TechniqueExampleUseCaseFactory,
+                                 TechniqueFactory, TechniqueLimitationFactory,
+                                 TechniqueResourceFactory)
 
 
 class AdminRegistrationTests(TestCase):

@@ -12,12 +12,8 @@ from django.db import IntegrityError
 from django.test import TestCase
 
 from api.models import AssuranceGoal, ResourceType, Tag, Technique
-from api.tests.factories import (
-    AssuranceGoalFactory,
-    ResourceTypeFactory,
-    TagFactory,
-    TechniqueFactory,
-)
+from api.tests.factories import (AssuranceGoalFactory, ResourceTypeFactory,
+                                 TagFactory, TechniqueFactory)
 
 
 class AssuranceGoalModelTests(TestCase):

@@ -15,15 +15,10 @@ from django.test import TestCase
 from rest_framework.exceptions import ValidationError as DRFValidationError
 from rest_framework.response import Response
 
-from api.utils import (
-    DataValidationError,
-    DateParsingError,
-    DateParsingUtility,
-    JSONDataParser,
-    TechniqueDataExtractor,
-    TechniqueDataValidator,
-    custom_exception_handler,
-)
+from api.utils import (DataValidationError, DateParsingError,
+                       DateParsingUtility, JSONDataParser,
+                       TechniqueDataExtractor, TechniqueDataValidator,
+                       custom_exception_handler)
 
 
 class DateParsingUtilityTests(TestCase):
@@ -397,7 +392,9 @@ class TechniqueDataValidatorTests(TestCase):
         self.assertFalse(result)
         mock_logger.warning.assert_called_once()
         # Check that logger.warning was called with the format string and 'url' field
-        self.assertEqual(mock_logger.warning.call_args[0][0], "Resource missing required field: %s")
+        self.assertEqual(
+            mock_logger.warning.call_args[0][0], "Resource missing required field: %s"
+        )
         self.assertEqual(mock_logger.warning.call_args[0][1], "url")
 
     @patch("api.utils.logger")

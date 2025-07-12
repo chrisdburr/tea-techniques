@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react'
 import { render, RenderOptions, RenderResult, cleanup } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import userEvent from '@testing-library/user-event'
-import { vi, afterEach } from 'vitest'
+import { vi } from 'vitest'
 
 // Test providers wrapper
 interface TestProvidersProps {
@@ -49,7 +49,10 @@ export const renderWithProviders = (
 
   // Mock router navigation if initial route is provided
   if (initialRoute) {
-    vi.mocked(require('next/navigation').usePathname).mockReturnValue(initialRoute)
+    // Mock the navigation hook for tests
+    vi.doMock('next/navigation', () => ({
+      usePathname: () => initialRoute
+    }))
   }
 
   const Wrapper = ({ children }: { children: React.ReactNode }) => (
@@ -195,19 +198,25 @@ export const measureRenderTime = async (renderFn: () => RenderResult) => {
 }
 
 // Accessibility testing setup
-export const setupAccessibilityTesting = () => {
+export const setupAccessibilityTesting = async () => {
   // Configure jest-axe for better accessibility testing
-  const { configureAxe } = require('jest-axe')
-  
-  return configureAxe({
-    rules: {
-      // Disable color contrast rule for non-production builds
-      'color-contrast': { enabled: process.env.NODE_ENV === 'production' },
-      // Allow landmark rules to be more flexible in tests
-      'landmark-one-main': { enabled: false },
-      'page-has-heading-one': { enabled: false },
-    },
-  })
+  try {
+    const jestAxe = await import('jest-axe')
+    const { configureAxe } = jestAxe
+    
+    return configureAxe({
+      rules: {
+        // Disable color contrast rule for non-production builds
+        'color-contrast': { enabled: process.env.NODE_ENV === 'production' },
+        // Allow landmark rules to be more flexible in tests
+        'landmark-one-main': { enabled: false },
+        'page-has-heading-one': { enabled: false },
+      },
+    })
+  } catch {
+    console.warn('jest-axe not available, skipping accessibility configuration')
+    return null
+  }
 }
 
 // Form testing utilities

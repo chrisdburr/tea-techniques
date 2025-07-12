@@ -9,22 +9,14 @@ from django.db import connection
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import api_view
-from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated
+from rest_framework.permissions import (AllowAny, BasePermission,
+                                        IsAuthenticated)
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from ..models import (
-    AssuranceGoal,
-    ResourceType,
-    Tag,
-    Technique,
-)
-from ..serializers import (
-    AssuranceGoalSerializer,
-    ResourceTypeSerializer,
-    TagSerializer,
-    TechniqueSerializer,
-)
+from ..models import AssuranceGoal, ResourceType, Tag, Technique
+from ..serializers import (AssuranceGoalSerializer, ResourceTypeSerializer,
+                           TagSerializer, TechniqueSerializer)
 
 # Set up logger
 logger = logging.getLogger(__name__)
@@ -33,10 +25,11 @@ logger = logging.getLogger(__name__)
 class AssuranceGoalsViewSet(viewsets.ModelViewSet):
     """
     ViewSet for managing AssuranceGoal instances.
-    
+
     Provides CRUD operations for assurance goals with search and filtering capabilities.
     Read operations are allowed for any user, while write operations require authentication.
     """
+
     queryset = AssuranceGoal.objects.all()
     serializer_class = AssuranceGoalSerializer
     filter_backends = [
@@ -63,10 +56,11 @@ class AssuranceGoalsViewSet(viewsets.ModelViewSet):
 class TagsViewSet(viewsets.ModelViewSet):
     """
     ViewSet for managing Tag instances.
-    
+
     Provides CRUD operations for tags with search and filtering capabilities.
     Read operations are allowed for any user, while write operations require authentication.
     """
+
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     filter_backends = [
@@ -140,7 +134,6 @@ class TechniquesViewSet(viewsets.ModelViewSet):
             "limitations",
         )
 
-
     def create(self, request: Request) -> Response:
         """Create a new technique."""
         serializer = self.get_serializer(data=request.data)
@@ -166,10 +159,11 @@ class TechniquesViewSet(viewsets.ModelViewSet):
 class ResourceTypesViewSet(viewsets.ModelViewSet):
     """
     ViewSet for managing ResourceType instances.
-    
+
     Provides CRUD operations for resource types with search and filtering capabilities.
     Read operations are allowed for any user, while write operations require authentication.
     """
+
     queryset = ResourceType.objects.all()
     serializer_class = ResourceTypeSerializer
     filter_backends = [

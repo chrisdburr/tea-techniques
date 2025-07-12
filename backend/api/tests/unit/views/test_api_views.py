@@ -11,29 +11,18 @@ from django.db import connection
 from django.test import TestCase, override_settings
 from rest_framework import status
 from rest_framework.request import Request
-from rest_framework.test import APIRequestFactory, APITestCase, force_authenticate
+from rest_framework.test import (APIRequestFactory, APITestCase,
+                                 force_authenticate)
 
 from api.models import AssuranceGoal, ResourceType, Tag, Technique
-from api.tests.factories import (
-    AssuranceGoalFactory,
-    ResourceTypeFactory,
-    TagFactory,
-    TechniqueFactory,
-)
-from api.views.api_views import (
-    AssuranceGoalsViewSet,
-    ResourceTypesViewSet,
-    TagsViewSet,
-    TechniquesViewSet,
-    _format_request_info,
-    _get_api_endpoints,
-    _get_database_info,
-    _get_model_counts,
-    _sanitize_settings,
-    debug_echo,
-    health_check,
-    health_check_detailed,
-)
+from api.tests.factories import (AssuranceGoalFactory, ResourceTypeFactory,
+                                 TagFactory, TechniqueFactory)
+from api.views.api_views import (AssuranceGoalsViewSet, ResourceTypesViewSet,
+                                 TagsViewSet, TechniquesViewSet,
+                                 _format_request_info, _get_api_endpoints,
+                                 _get_database_info, _get_model_counts,
+                                 _sanitize_settings, debug_echo, health_check,
+                                 health_check_detailed)
 
 
 class ViewSetPermissionTests(APITestCase):
@@ -43,7 +32,10 @@ class ViewSetPermissionTests(APITestCase):
         """Set up test data."""
         self.factory = APIRequestFactory()
         from api.tests.conftest import TEST_USER_PASSWORD
-        self.user = User.objects.create_user(username="testuser", password=TEST_USER_PASSWORD)
+
+        self.user = User.objects.create_user(
+            username="testuser", password=TEST_USER_PASSWORD
+        )
         self.assurance_goal = AssuranceGoalFactory()
         self.tag = TagFactory()
         self.technique = TechniqueFactory()
@@ -125,7 +117,10 @@ class TechniquesViewSetTests(APITestCase):
         """Set up test data."""
         self.factory = APIRequestFactory()
         from api.tests.conftest import TEST_USER_PASSWORD
-        self.user = User.objects.create_user(username="testuser", password=TEST_USER_PASSWORD)
+
+        self.user = User.objects.create_user(
+            username="testuser", password=TEST_USER_PASSWORD
+        )
         self.technique = TechniqueFactory()
 
     def test_get_serializer_class(self):
@@ -174,7 +169,9 @@ class TechniquesViewSetTests(APITestCase):
             "name": "Test Technique",
             "description": "Test description",
         }
-        django_request = self.factory.post("/api/techniques/", request_data, format="json")
+        django_request = self.factory.post(
+            "/api/techniques/", request_data, format="json"
+        )
         force_authenticate(django_request, user=self.user)
         request = Request(django_request, parsers=viewset.get_parsers())
 
@@ -488,7 +485,10 @@ class ViewSetErrorHandlingTests(APITestCase):
         """Set up test data."""
         self.factory = APIRequestFactory()
         from api.tests.conftest import TEST_USER_PASSWORD
-        self.user = User.objects.create_user(username="testuser", password=TEST_USER_PASSWORD)
+
+        self.user = User.objects.create_user(
+            username="testuser", password=TEST_USER_PASSWORD
+        )
         self.technique = TechniqueFactory()
 
     def test_techniques_create_with_invalid_serializer(self):

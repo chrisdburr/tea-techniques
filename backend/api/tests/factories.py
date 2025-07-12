@@ -6,15 +6,9 @@ import factory
 from django.utils.text import slugify
 from faker import Faker
 
-from api.models import (
-    AssuranceGoal,
-    ResourceType,
-    Tag,
-    Technique,
-    TechniqueExampleUseCase,
-    TechniqueLimitation,
-    TechniqueResource,
-)
+from api.models import (AssuranceGoal, ResourceType, Tag, Technique,
+                        TechniqueExampleUseCase, TechniqueLimitation,
+                        TechniqueResource)
 
 fake = Faker()
 

@@ -13,32 +13,17 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 from django.test import TestCase, TransactionTestCase
 
-from api.models import (
-    AssuranceGoal,
-    ResourceType,
-    Tag,
-    Technique,
-    TechniqueExampleUseCase,
-    TechniqueLimitation,
-    TechniqueResource,
-)
-from api.services import (
-    TechniqueLimitationService,
-    TechniqueOperationError,
-    TechniqueResourceService,
-    TechniqueService,
-    TechniqueUseCaseService,
-)
-from api.tests.factories import (
-    AssuranceGoalFactory,
-    IsolatedTechniqueFactory,
-    ResourceTypeFactory,
-    TagFactory,
-    TechniqueExampleUseCaseFactory,
-    TechniqueFactory,
-    TechniqueLimitationFactory,
-    TechniqueResourceFactory,
-)
+from api.models import (AssuranceGoal, ResourceType, Tag, Technique,
+                        TechniqueExampleUseCase, TechniqueLimitation,
+                        TechniqueResource)
+from api.services import (TechniqueLimitationService, TechniqueOperationError,
+                          TechniqueResourceService, TechniqueService,
+                          TechniqueUseCaseService)
+from api.tests.factories import (AssuranceGoalFactory,
+                                 IsolatedTechniqueFactory, ResourceTypeFactory,
+                                 TagFactory, TechniqueExampleUseCaseFactory,
+                                 TechniqueFactory, TechniqueLimitationFactory,
+                                 TechniqueResourceFactory)
 
 
 class TechniqueServiceTests(TransactionTestCase):
@@ -1027,16 +1012,16 @@ class TechniqueSlugUpdateTests(TransactionTestCase):
         TechniqueResourceFactory(technique=technique)
         TechniqueExampleUseCaseFactory(technique=technique)
         TechniqueLimitationFactory(technique=technique)
-        
+
         original_slug = technique.slug
         original_resource_count = technique.resources.count()
         original_use_case_count = technique.example_use_cases.count()
         original_limitation_count = technique.limitations.count()
-        
+
         # Mock the _update_technique_slug method to raise an exception
-        with patch.object(self.service, '_update_technique_slug') as mock_update_slug:
+        with patch.object(self.service, "_update_technique_slug") as mock_update_slug:
             mock_update_slug.side_effect = Exception("Slug update failed")
-            
+
             validated_data = {"slug": "should-fail-slug"}
             request_data = {}
 
@@ -1047,10 +1032,12 @@ class TechniqueSlugUpdateTests(TransactionTestCase):
             # Verify the transaction rolled back - technique should still exist with original slug
             technique.refresh_from_db()
             self.assertEqual(technique.slug, original_slug)
-            
+
             # Verify related objects are still intact (transaction rollback preserved them)
             self.assertEqual(technique.resources.count(), original_resource_count)
-            self.assertEqual(technique.example_use_cases.count(), original_use_case_count)
+            self.assertEqual(
+                technique.example_use_cases.count(), original_use_case_count
+            )
             self.assertEqual(technique.limitations.count(), original_limitation_count)
 
     def test_update_technique_without_slug_change_skips_fk_preservation(self):

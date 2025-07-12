@@ -5,19 +5,19 @@ Optimized for CI/CD environments and automated testing.
 
 import os
 import sys
+
 from .base import *  # noqa
 
 # Test-specific SECRET_KEY
-SECRET_KEY = 'test-secret-key-for-testing-only'
+SECRET_KEY = "test-secret-key-for-testing-only"
 
 # CI/CD Database Configuration
 if "DATABASE_URL" in os.environ:
     # PostgreSQL for CI (matches production database type)
     try:
         import dj_database_url
-        DATABASES = {
-            "default": dj_database_url.parse(os.environ["DATABASE_URL"])
-        }
+
+        DATABASES = {"default": dj_database_url.parse(os.environ["DATABASE_URL"])}
     except ImportError:
         # Fall back to SQLite if dj_database_url is not available
         pass
@@ -33,13 +33,15 @@ else:
         }
     }
 
+
 # Performance optimizations for tests
 class DisableMigrations:
     def __contains__(self, item):
         return True
-    
+
     def __getitem__(self, item):
         return None
+
 
 # Disable migrations for faster testing (when enabled)
 if os.environ.get("FAST_TESTS", "").lower() == "true":
@@ -51,10 +53,15 @@ TESTING = True
 
 # Optimized middleware for tests
 MIDDLEWARE = [
-    m for m in MIDDLEWARE if not any(skip in m for skip in [  # noqa
-        "debug_toolbar",
-        "browser_reload",
-    ])
+    m
+    for m in MIDDLEWARE
+    if not any(
+        skip in m
+        for skip in [  # noqa
+            "debug_toolbar",
+            "browser_reload",
+        ]
+    )
 ]
 
 # Use a simpler password hasher for speed

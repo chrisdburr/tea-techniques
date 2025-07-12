@@ -85,5 +85,6 @@ class Command(BaseCommand):
         env = os.environ.copy()
         # Convert string command to list for safer execution
         import shlex
+
         cmd_list = shlex.split(cmd)
         subprocess.run(cmd_list, check=True, env=env)

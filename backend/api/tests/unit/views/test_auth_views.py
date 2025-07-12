@@ -17,6 +17,7 @@ class AuthViewsTests(APITestCase):
     def setUp(self):
         """Set up test data."""
         from api.tests.conftest import TEST_USER_PASSWORD
+
         self.client = APIClient()
         self.factory = RequestFactory()
         self.user = User.objects.create_user(
@@ -34,6 +35,7 @@ class AuthViewsTests(APITestCase):
     def test_login_view_success(self):
         """Test successful login."""
         from api.tests.conftest import TEST_USER_PASSWORD
+
         login_data = {"username": "testuser", "password": TEST_USER_PASSWORD}
         response = self.client.post(
             "/api/auth/login",

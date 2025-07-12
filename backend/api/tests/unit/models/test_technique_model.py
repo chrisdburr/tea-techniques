@@ -12,17 +12,12 @@ from django.db import IntegrityError, transaction
 from django.test import TestCase
 
 from api.models import AssuranceGoal, ResourceType, Tag, Technique
-from api.tests.factories import (
-    AssuranceGoalFactory,
-    IsolatedTechniqueFactory,
-    MinimalTechniqueFactory,
-    ResourceTypeFactory,
-    TagFactory,
-    TechniqueExampleUseCaseFactory,
-    TechniqueFactory,
-    TechniqueLimitationFactory,
-    TechniqueResourceFactory,
-)
+from api.tests.factories import (AssuranceGoalFactory,
+                                 IsolatedTechniqueFactory,
+                                 MinimalTechniqueFactory, ResourceTypeFactory,
+                                 TagFactory, TechniqueExampleUseCaseFactory,
+                                 TechniqueFactory, TechniqueLimitationFactory,
+                                 TechniqueResourceFactory)
 
 
 class TechniqueModelBasicTests(TestCase):
@@ -405,11 +400,8 @@ class TechniqueModelCascadeTests(TestCase):
         technique.delete()
 
         # Verify related objects are deleted
-        from api.models import (
-            TechniqueExampleUseCase,
-            TechniqueLimitation,
-            TechniqueResource,
-        )
+        from api.models import (TechniqueExampleUseCase, TechniqueLimitation,
+                                TechniqueResource)
 
         with self.assertRaises(TechniqueResource.DoesNotExist):
             TechniqueResource.objects.get(id=resource_id)

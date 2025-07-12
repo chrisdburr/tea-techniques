@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
@@ -77,26 +78,42 @@ class Technique(models.Model):
     relationships to goals, categories, and other classification systems.
     """
 
-    slug: models.SlugField = models.SlugField(max_length=100, unique=True, primary_key=True)
+    slug: models.SlugField = models.SlugField(
+        max_length=100, unique=True, primary_key=True
+    )
     name: models.CharField = models.CharField(max_length=255, unique=True)
     acronym: models.CharField = models.CharField(max_length=20, blank=True, null=True)
     description: models.TextField = models.TextField()
-    complexity_rating: models.PositiveSmallIntegerField = models.PositiveSmallIntegerField(
-        null=True, blank=True, validators=[MinValueValidator(1), MaxValueValidator(5)]
+    complexity_rating: models.PositiveSmallIntegerField = (
+        models.PositiveSmallIntegerField(
+            null=True,
+            blank=True,
+            validators=[MinValueValidator(1), MaxValueValidator(5)],
+        )
     )
-    computational_cost_rating: models.PositiveSmallIntegerField = models.PositiveSmallIntegerField(
-        null=True, blank=True, validators=[MinValueValidator(1), MaxValueValidator(5)]
+    computational_cost_rating: models.PositiveSmallIntegerField = (
+        models.PositiveSmallIntegerField(
+            null=True,
+            blank=True,
+            validators=[MinValueValidator(1), MaxValueValidator(5)],
+        )
     )
-    assurance_goals: models.ManyToManyField = models.ManyToManyField(AssuranceGoal, related_name="techniques")
-    tags: models.ManyToManyField = models.ManyToManyField(Tag, related_name="techniques", blank=True)
-    related_techniques: models.ManyToManyField = models.ManyToManyField("self", blank=True, symmetrical=False)
+    assurance_goals: models.ManyToManyField = models.ManyToManyField(
+        AssuranceGoal, related_name="techniques"
+    )
+    tags: models.ManyToManyField = models.ManyToManyField(
+        Tag, related_name="techniques", blank=True
+    )
+    related_techniques: models.ManyToManyField = models.ManyToManyField(
+        "self", blank=True, symmetrical=False
+    )
 
     class Meta:
         db_table = "technique"
 
     def __str__(self) -> str:
         """Return the string representation of the Technique.
-        
+
         If acronym exists, returns 'Name (ACRONYM)', otherwise just 'Name'.
         """
         if self.acronym:
@@ -116,13 +133,17 @@ class TechniqueResource(models.Model):
     technique: models.ForeignKey = models.ForeignKey(
         Technique, on_delete=models.CASCADE, related_name="resources"
     )
-    resource_type: models.ForeignKey = models.ForeignKey(ResourceType, on_delete=models.PROTECT)
+    resource_type: models.ForeignKey = models.ForeignKey(
+        ResourceType, on_delete=models.PROTECT
+    )
     title: models.CharField = models.CharField(max_length=255)
     url: models.URLField = models.URLField()
     description: models.TextField = models.TextField(blank=True)
     authors: models.CharField = models.CharField(max_length=500, blank=True, null=True)
     publication_date: models.DateField = models.DateField(blank=True, null=True)
-    source_type: models.CharField = models.CharField(max_length=100, blank=True, null=True)
+    source_type: models.CharField = models.CharField(
+        max_length=100, blank=True, null=True
+    )
 
     class Meta:
         db_table = "technique_resource"
@@ -130,7 +151,7 @@ class TechniqueResource(models.Model):
 
     def __str__(self) -> str:
         """Return the string representation of the TechniqueResource.
-        
+
         Format: 'ResourceType: Title'
         """
         return f"{self.resource_type.name}: {self.title}"

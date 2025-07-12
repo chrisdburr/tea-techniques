@@ -1,18 +1,13 @@
 from django.contrib import admin
 
-from .models import (
-    AssuranceGoal,
-    ResourceType,
-    Tag,
-    Technique,
-    TechniqueExampleUseCase,
-    TechniqueLimitation,
-    TechniqueResource,
-)
+from .models import (AssuranceGoal, ResourceType, Tag, Technique,
+                     TechniqueExampleUseCase, TechniqueLimitation,
+                     TechniqueResource)
 
 
 class TechniqueResourceInline(admin.TabularInline):
     """Inline admin for TechniqueResource model."""
+
     model = TechniqueResource
     extra = 1
     fields = [
@@ -27,6 +22,7 @@ class TechniqueResourceInline(admin.TabularInline):
 
 class TechniqueExampleUseCaseInline(admin.TabularInline):
     """Inline admin for TechniqueExampleUseCase model."""
+
     model = TechniqueExampleUseCase
     extra = 1
     fields = ["description", "assurance_goal"]
@@ -34,6 +30,7 @@ class TechniqueExampleUseCaseInline(admin.TabularInline):
 
 class TechniqueLimitationInline(admin.TabularInline):
     """Inline admin for TechniqueLimitation model."""
+
     model = TechniqueLimitation
     extra = 1
     fields = ["description"]
@@ -42,6 +39,7 @@ class TechniqueLimitationInline(admin.TabularInline):
 @admin.register(Technique)
 class TechniqueAdmin(admin.ModelAdmin):
     """Admin interface for Technique model with comprehensive editing capabilities."""
+
     list_display = [
         "name",
         "complexity_rating",
@@ -88,6 +86,7 @@ class TechniqueAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     """Admin interface for Tag model."""
+
     list_display = ["name", "get_techniques_count"]
     search_fields = ["name"]
 

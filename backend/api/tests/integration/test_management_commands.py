@@ -18,23 +18,13 @@ from django.core.management.base import CommandError
 from django.db import IntegrityError
 from django.test import TransactionTestCase
 
-from api.models import (
-    AssuranceGoal,
-    ResourceType,
-    Tag,
-    Technique,
-    TechniqueExampleUseCase,
-    TechniqueLimitation,
-    TechniqueResource,
-)
-from api.tests.factories import (
-    AssuranceGoalFactory,
-    ResourceTypeFactory,
-    TagFactory,
-    TechniqueFactory,
-    create_test_assurance_goals,
-    create_test_resource_types,
-)
+from api.models import (AssuranceGoal, ResourceType, Tag, Technique,
+                        TechniqueExampleUseCase, TechniqueLimitation,
+                        TechniqueResource)
+from api.tests.factories import (AssuranceGoalFactory, ResourceTypeFactory,
+                                 TagFactory, TechniqueFactory,
+                                 create_test_assurance_goals,
+                                 create_test_resource_types)
 
 
 class ImportTechniquesCommandTests(TransactionTestCase):
@@ -237,7 +227,11 @@ class ImportTechniquesCommandTests(TransactionTestCase):
     def test_import_techniques_missing_required_fields(self):
         """Test import with techniques missing required fields."""
         techniques_data = [
-            {"slug": "missing-name-technique", "name": "", "description": "Valid description"}  # Missing required name
+            {
+                "slug": "missing-name-technique",
+                "name": "",
+                "description": "Valid description",
+            }  # Missing required name
         ]
 
         file_path = self.create_temp_technique_file(techniques_data)
@@ -311,10 +305,12 @@ class ImportTechniquesCommandTests(TransactionTestCase):
         self.assertEqual(Technique.objects.count(), 1)
         technique = Technique.objects.first()
         self.assertEqual(technique.resources.count(), 1)
-        
+
         # The import command uses a fallback ResourceType (Paper) for unknown types
         resource = technique.resources.first()
-        self.assertEqual(resource.resource_type.name, "Paper")  # Fallback to default type
+        self.assertEqual(
+            resource.resource_type.name, "Paper"
+        )  # Fallback to default type
 
     def test_import_techniques_force_flag(self):
         """Test import command with force flag."""
@@ -478,11 +474,9 @@ class ResetAndImportTechniquesCommandTests(TransactionTestCase):
     def test_reset_and_import_clears_all_technique_data(self):
         """Test that reset clears all technique-related data."""
         # Create techniques with all types of related data
-        from api.tests.factories import (
-            TechniqueExampleUseCaseFactory,
-            TechniqueLimitationFactory,
-            TechniqueResourceFactory,
-        )
+        from api.tests.factories import (TechniqueExampleUseCaseFactory,
+                                         TechniqueLimitationFactory,
+                                         TechniqueResourceFactory)
 
         technique = TechniqueFactory()
 
@@ -547,7 +541,7 @@ class ResetAndImportTechniquesCommandTests(TransactionTestCase):
                 "assurance_goals": ["Explainability"],
             },
             {
-                "slug": "invalid-technique", 
+                "slug": "invalid-technique",
                 "name": "",  # This should cause an error
                 "description": "Invalid technique",
             },

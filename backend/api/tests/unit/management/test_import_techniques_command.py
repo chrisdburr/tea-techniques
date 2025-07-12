@@ -18,7 +18,8 @@ from django.test import TestCase, TransactionTestCase
 
 from api.management.commands.import_techniques import Command
 from api.models import AssuranceGoal, ResourceType, Tag, Technique
-from api.tests.factories import AssuranceGoalFactory, ResourceTypeFactory, TagFactory
+from api.tests.factories import (AssuranceGoalFactory, ResourceTypeFactory,
+                                 TagFactory)
 
 
 class ImportTechniquesCommandUnitTests(TestCase):
@@ -201,7 +202,9 @@ class ImportTechniquesCommandUnitTests(TestCase):
     @patch("api.management.commands.import_techniques.logger")
     def test_logging_on_errors(self, mock_command_logger, mock_utils_logger):
         """Test that errors are properly logged."""
-        techniques_data = [{"name": "", "description": "Test"}]  # Empty name will cause validation error
+        techniques_data = [
+            {"name": "", "description": "Test"}
+        ]  # Empty name will cause validation error
         file_path = self.create_temp_json_file(techniques_data)
 
         out = StringIO()
@@ -215,8 +218,10 @@ class ImportTechniquesCommandUnitTests(TestCase):
 
         # Verify logger was called (could be either command logger or utils logger)
         self.assertTrue(
-            mock_command_logger.error.called or mock_command_logger.warning.called or
-            mock_utils_logger.error.called or mock_utils_logger.warning.called
+            mock_command_logger.error.called
+            or mock_command_logger.warning.called
+            or mock_utils_logger.error.called
+            or mock_utils_logger.warning.called
         )
 
     def test_handle_with_different_file_extensions(self):
@@ -286,7 +291,9 @@ class ImportTechniquesCommandDatabaseTests(TransactionTestCase):
         # Mock technique creation to raise a database error
         mock_update_or_create.side_effect = Exception("Database error")
 
-        techniques_data = [{"slug": "test-technique", "name": "Test Technique", "description": "Test"}]
+        techniques_data = [
+            {"slug": "test-technique", "name": "Test Technique", "description": "Test"}
+        ]
         file_path = self.create_temp_json_file(techniques_data)
 
         out = StringIO()
@@ -561,10 +568,8 @@ class ImportTechniquesCommandErrorRecoveryTests(TestCase):
         err = StringIO()
 
         # Should complete successfully but log validation errors
-        call_command(
-            "import_techniques", "--file", file_path, stdout=out, stderr=err
-        )
-        
+        call_command("import_techniques", "--file", file_path, stdout=out, stderr=err)
+
         # Check that validation error was logged to stderr
         error_output = err.getvalue()
         self.assertIn("Error importing technique", error_output)
@@ -594,7 +599,9 @@ class ImportTechniquesCommandErrorRecoveryTests(TestCase):
 
     def test_graceful_shutdown_on_keyboard_interrupt(self):
         """Test graceful handling of keyboard interrupts."""
-        techniques_data = [{"slug": "test-technique", "name": "Test", "description": "Test"}]
+        techniques_data = [
+            {"slug": "test-technique", "name": "Test", "description": "Test"}
+        ]
         file_path = self.create_temp_json_file(techniques_data)
 
         # Mock to simulate KeyboardInterrupt during processing

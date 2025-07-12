@@ -160,7 +160,7 @@ class JSONDataParser:
             )
         if isinstance(authors_data, str):
             return authors_data.strip()
-        
+
         return str(authors_data).strip()
 
 
@@ -408,9 +408,9 @@ def custom_exception_handler(exc, context):
 
         logger.error(
             "API Error in %s: %s: %s",
-            view.__class__.__name__ if view else 'Unknown',
+            view.__class__.__name__ if view else "Unknown",
             exc.__class__.__name__,
-            str(exc)
+            str(exc),
         )
 
         if hasattr(request, "path"):

@@ -16,15 +16,9 @@ from typing import Optional
 from django.utils.text import slugify
 from rest_framework import serializers
 
-from .models import (
-    AssuranceGoal,
-    ResourceType,
-    Tag,
-    Technique,
-    TechniqueExampleUseCase,
-    TechniqueLimitation,
-    TechniqueResource,
-)
+from .models import (AssuranceGoal, ResourceType, Tag, Technique,
+                     TechniqueExampleUseCase, TechniqueLimitation,
+                     TechniqueResource)
 from .services import TechniqueOperationError, TechniqueService
 
 # Set up logger

@@ -13,35 +13,19 @@ from django.test import TestCase
 from rest_framework.exceptions import ValidationError
 from rest_framework.test import APIRequestFactory
 
-from api.models import (
-    AssuranceGoal,
-    ResourceType,
-    Tag,
-    Technique,
-    TechniqueExampleUseCase,
-    TechniqueLimitation,
-    TechniqueResource,
-)
-from api.serializers import (
-    AssuranceGoalSerializer,
-    ResourceTypeSerializer,
-    TagSerializer,
-    TechniqueExampleUseCaseSerializer,
-    TechniqueLimitationSerializer,
-    TechniqueResourceSerializer,
-    TechniqueSerializer,
-)
+from api.models import (AssuranceGoal, ResourceType, Tag, Technique,
+                        TechniqueExampleUseCase, TechniqueLimitation,
+                        TechniqueResource)
+from api.serializers import (AssuranceGoalSerializer, ResourceTypeSerializer,
+                             TagSerializer, TechniqueExampleUseCaseSerializer,
+                             TechniqueLimitationSerializer,
+                             TechniqueResourceSerializer, TechniqueSerializer)
 from api.services import TechniqueOperationError
-from api.tests.factories import (
-    AssuranceGoalFactory,
-    IsolatedTechniqueFactory,
-    ResourceTypeFactory,
-    TagFactory,
-    TechniqueExampleUseCaseFactory,
-    TechniqueFactory,
-    TechniqueLimitationFactory,
-    TechniqueResourceFactory,
-)
+from api.tests.factories import (AssuranceGoalFactory,
+                                 IsolatedTechniqueFactory, ResourceTypeFactory,
+                                 TagFactory, TechniqueExampleUseCaseFactory,
+                                 TechniqueFactory, TechniqueLimitationFactory,
+                                 TechniqueResourceFactory)
 
 
 class AssuranceGoalSerializerTests(TestCase):

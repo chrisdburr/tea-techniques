@@ -1,6 +1,6 @@
 import React from 'react'
-import { screen, waitFor, within } from '@testing-library/react'
-import { renderWithProviders, mockRouteParams } from '../../utils/test-utils'
+import { waitFor } from '@testing-library/react'
+import { renderWithProviders } from '../../utils/test-utils'
 import { server } from '../../mocks/server'
 import { http, HttpResponse } from 'msw'
 import { mockTechniques, mockAssuranceGoals, mockTags } from '../../fixtures/techniques'
@@ -8,7 +8,7 @@ import { vi } from 'vitest'
 
 // Mock the techniques list page component
 // This would typically be imported from the actual page component
-const TechniquesListPage = ({ initialTechniques }: { initialTechniques?: any[] } = {}) => {
+const TechniquesListPage = ({ initialTechniques }: { initialTechniques?: typeof mockTechniques } = {}) => {
   const [filteredTechniques, setFilteredTechniques] = React.useState(initialTechniques || mockTechniques)
 
   console.log('TechniquesListPage rendering with', filteredTechniques.length, 'techniques')

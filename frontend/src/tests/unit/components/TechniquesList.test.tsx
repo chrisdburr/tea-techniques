@@ -2,8 +2,7 @@ import React from 'react'
 import { waitFor } from '@testing-library/react'
 import { renderWithProviders } from '../../utils/test-utils'
 import TechniquesList from '../../../components/technique/TechniquesList'
-import { mockTechniques, createMockTechniquesList } from '../../fixtures/techniques'
-import type { Technique } from '../../../lib/types'
+import { mockTechniques } from '../../fixtures/techniques'
 
 // Mock the hooks that TechniquesList uses
 import { vi } from 'vitest'
@@ -32,8 +31,6 @@ vi.mock('@/lib/hooks/useFilterParams', () => ({
 }))
 
 describe('TechniquesList', () => {
-  const mockTechniquesList = createMockTechniquesList(mockTechniques as Technique[])
-
   describe('Basic Rendering', () => {
     it('renders the page with techniques heading', async () => {
       const { container } = renderWithProviders(<TechniquesList />)

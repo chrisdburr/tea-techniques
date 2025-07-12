@@ -9,22 +9,11 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.routers import DefaultRouter
 
-from .views.api_views import (
-    AssuranceGoalsViewSet,
-    ResourceTypesViewSet,
-    TagsViewSet,
-    TechniquesViewSet,
-    debug_echo,
-    health_check,
-    health_check_detailed,
-)
-from .views.auth_views import (
-    auth_status_view,
-    get_csrf,
-    login_view,
-    logout_view,
-    user_view,
-)
+from .views.api_views import (AssuranceGoalsViewSet, ResourceTypesViewSet,
+                              TagsViewSet, TechniquesViewSet, debug_echo,
+                              health_check, health_check_detailed)
+from .views.auth_views import (auth_status_view, get_csrf, login_view,
+                               logout_view, user_view)
 
 
 @api_view(["GET"])

@@ -9,19 +9,14 @@ from __future__ import annotations
 
 import logging
 from typing import Any, Dict, List
-from django.db import transaction
 
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.validators import URLValidator
+from django.db import transaction
 
-from .models import (
-    AssuranceGoal,
-    ResourceType,
-    Technique,
-    TechniqueExampleUseCase,
-    TechniqueLimitation,
-    TechniqueResource,
-)
+from .models import (AssuranceGoal, ResourceType, Technique,
+                     TechniqueExampleUseCase, TechniqueLimitation,
+                     TechniqueResource)
 
 logger = logging.getLogger(__name__)
 
@@ -194,57 +189,57 @@ class TechniqueService:
     def _update_technique_slug(self, technique: Technique, new_slug: str) -> None:
         """Update technique slug (primary key) while preserving all relationships."""
         from django.db import connection
-        
+
         old_slug = technique.slug
-        
+
         # Temporarily disable foreign key checks for SQLite to allow primary key updates
         with connection.cursor() as cursor:
             # Disable foreign key constraints
             cursor.execute("PRAGMA foreign_keys = OFF")
-            
+
             try:
                 # Update the slug in the technique table directly
                 cursor.execute(
                     "UPDATE technique SET slug = %s WHERE slug = %s",
-                    [new_slug, old_slug]
+                    [new_slug, old_slug],
                 )
-                
+
                 # Update foreign key references in related tables
                 cursor.execute(
                     "UPDATE technique_resource SET technique_id = %s WHERE technique_id = %s",
-                    [new_slug, old_slug]
+                    [new_slug, old_slug],
                 )
                 cursor.execute(
                     "UPDATE technique_example_use_case SET technique_id = %s WHERE technique_id = %s",
-                    [new_slug, old_slug]
+                    [new_slug, old_slug],
                 )
                 cursor.execute(
                     "UPDATE technique_limitation SET technique_id = %s WHERE technique_id = %s",
-                    [new_slug, old_slug]
+                    [new_slug, old_slug],
                 )
-                
+
                 # Update M2M relationship tables
                 cursor.execute(
                     "UPDATE technique_assurance_goals SET technique_id = %s WHERE technique_id = %s",
-                    [new_slug, old_slug]
+                    [new_slug, old_slug],
                 )
                 cursor.execute(
                     "UPDATE technique_tags SET technique_id = %s WHERE technique_id = %s",
-                    [new_slug, old_slug]
+                    [new_slug, old_slug],
                 )
                 cursor.execute(
                     "UPDATE technique_related_techniques SET from_technique_id = %s WHERE from_technique_id = %s",
-                    [new_slug, old_slug]
+                    [new_slug, old_slug],
                 )
                 cursor.execute(
                     "UPDATE technique_related_techniques SET to_technique_id = %s WHERE to_technique_id = %s",
-                    [new_slug, old_slug]
+                    [new_slug, old_slug],
                 )
-                
+
             finally:
                 # Re-enable foreign key constraints
                 cursor.execute("PRAGMA foreign_keys = ON")
-            
+
         # Update the technique object to reflect the new slug
         technique.slug = new_slug
         technique.refresh_from_db()
@@ -260,27 +255,39 @@ class TechniqueService:
         if nested_data["limitations"]:
             self._create_limitations(technique, nested_data["limitations"])
 
-    def _create_resources(self, technique: Technique, resources_data: List[Dict[str, Any]]) -> None:
+    def _create_resources(
+        self, technique: Technique, resources_data: List[Dict[str, Any]]
+    ) -> None:
         """Create resources for a technique."""
         self.resource_service.create_resources(technique, resources_data)
 
-    def _replace_resources(self, technique: Technique, resources_data: List[Dict[str, Any]]) -> None:
+    def _replace_resources(
+        self, technique: Technique, resources_data: List[Dict[str, Any]]
+    ) -> None:
         """Replace resources for a technique."""
         self.resource_service.replace_resources(technique, resources_data)
 
-    def _create_use_cases(self, technique: Technique, use_cases_data: List[Dict[str, Any]]) -> None:
+    def _create_use_cases(
+        self, technique: Technique, use_cases_data: List[Dict[str, Any]]
+    ) -> None:
         """Create use cases for a technique."""
         self.use_case_service.create_use_cases(technique, use_cases_data)
 
-    def _replace_use_cases(self, technique: Technique, use_cases_data: List[Dict[str, Any]]) -> None:
+    def _replace_use_cases(
+        self, technique: Technique, use_cases_data: List[Dict[str, Any]]
+    ) -> None:
         """Replace use cases for a technique."""
         self.use_case_service.replace_use_cases(technique, use_cases_data)
 
-    def _create_limitations(self, technique: Technique, limitations_data: List[Any]) -> None:
+    def _create_limitations(
+        self, technique: Technique, limitations_data: List[Any]
+    ) -> None:
         """Create limitations for a technique."""
         self.limitation_service.create_limitations(technique, limitations_data)
 
-    def _replace_limitations(self, technique: Technique, limitations_data: List[Any]) -> None:
+    def _replace_limitations(
+        self, technique: Technique, limitations_data: List[Any]
+    ) -> None:
         """Replace limitations for a technique."""
         self.limitation_service.replace_limitations(technique, limitations_data)
 
@@ -355,7 +362,9 @@ class TechniqueResourceService:
         except Exception as e:
             if not isinstance(e, TechniqueOperationError):
                 logger.error("Failed to create resource: %s", str(e))
-                raise TechniqueOperationError(f"Failed to create resource: {str(e)}") from e
+                raise TechniqueOperationError(
+                    f"Failed to create resource: {str(e)}"
+                ) from e
             raise
 
 
@@ -411,7 +420,9 @@ class TechniqueUseCaseService:
         except Exception as e:
             if not isinstance(e, TechniqueOperationError):
                 logger.error("Failed to create use case: %s", str(e))
-                raise TechniqueOperationError(f"Failed to create use case: {str(e)}") from e
+                raise TechniqueOperationError(
+                    f"Failed to create use case: {str(e)}"
+                ) from e
             raise
 
 

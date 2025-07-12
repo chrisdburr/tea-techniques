@@ -13,11 +13,8 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from api.tests.factories import (
-    TechniqueFactory,
-    create_test_assurance_goals,
-    create_test_resource_types,
-)
+from api.tests.factories import (TechniqueFactory, create_test_assurance_goals,
+                                 create_test_resource_types)
 
 
 class ValidationErrorTests(APITestCase):
@@ -26,6 +23,7 @@ class ValidationErrorTests(APITestCase):
     def setUp(self):
         """Set up test data."""
         from api.tests.conftest import TEST_USER_PASSWORD
+
         self.user = User.objects.create_user(
             username="testuser", password=TEST_USER_PASSWORD
         )
@@ -273,6 +271,7 @@ class HTTPErrorTests(APITestCase):
     def setUp(self):
         """Set up test data."""
         from api.tests.conftest import TEST_USER_PASSWORD
+
         self.user = User.objects.create_user(
             username="testuser", password=TEST_USER_PASSWORD
         )
@@ -399,6 +398,7 @@ class ValidationDetailTests(APITestCase):
     def setUp(self):
         """Set up test data."""
         from api.tests.conftest import TEST_USER_PASSWORD
+
         self.user = User.objects.create_user(
             username="testuser", password=TEST_USER_PASSWORD
         )
@@ -594,6 +594,7 @@ class CustomExceptionHandlerTests(APITestCase):
     def setUp(self):
         """Set up test data."""
         from api.tests.conftest import TEST_USER_PASSWORD
+
         self.user = User.objects.create_user(
             username="testuser", password=TEST_USER_PASSWORD
         )
@@ -632,14 +633,16 @@ class CustomExceptionHandlerTests(APITestCase):
 
             # Check the actual calls - format string and arguments
             calls = mock_logger.error.call_args_list
-            
+
             # Look for "API Error" in format strings
             api_error_logged = any("API Error" in str(call) for call in calls)
             self.assertTrue(api_error_logged, f"API Error not found in calls: {calls}")
 
             # Should mention ValidationError in the arguments
             exception_logged = any("ValidationError" in str(call) for call in calls)
-            self.assertTrue(exception_logged, f"ValidationError not found in calls: {calls}")
+            self.assertTrue(
+                exception_logged, f"ValidationError not found in calls: {calls}"
+            )
 
     def test_exception_handler_preserves_original_details(self):
         """Test that exception handler preserves original error details."""
@@ -676,7 +679,7 @@ class CustomExceptionHandlerTests(APITestCase):
         # Should log with 'Unknown' view - check all calls
         mock_logger.error.assert_called()
         calls = mock_logger.error.call_args_list
-        
+
         # Look for "Unknown" in the call arguments
         unknown_logged = any("Unknown" in str(call) for call in calls)
         self.assertTrue(unknown_logged, f"Unknown not found in calls: {calls}")

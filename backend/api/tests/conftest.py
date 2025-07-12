@@ -10,18 +10,14 @@ from django.core.management import call_command
 from django.db import connection, transaction
 from django.test import TestCase, TransactionTestCase
 
-from api.tests.factories import (
-    AssuranceGoalFactory,
-    CompleteTechniqueFactory,
-    IsolatedTechniqueFactory,
-    MinimalTechniqueFactory,
-    ResourceTypeFactory,
-    TagFactory,
-    TechniqueFactory,
-    create_realistic_technique_dataset,
-    create_test_assurance_goals,
-    create_test_resource_types,
-)
+from api.tests.factories import (AssuranceGoalFactory,
+                                 CompleteTechniqueFactory,
+                                 IsolatedTechniqueFactory,
+                                 MinimalTechniqueFactory, ResourceTypeFactory,
+                                 TagFactory, TechniqueFactory,
+                                 create_realistic_technique_dataset,
+                                 create_test_assurance_goals,
+                                 create_test_resource_types)
 
 # Test configuration constants
 TEST_USER_PASSWORD = os.environ.get("TEST_USER_PASSWORD", "test-password-123")
@@ -80,12 +76,8 @@ class BaseIntegrationTestCase(TransactionTestCase):
 
     def clear_test_data(self):
         """Clear test data while preserving foundational data"""
-        from api.models import (
-            Technique,
-            TechniqueExampleUseCase,
-            TechniqueLimitation,
-            TechniqueResource,
-        )
+        from api.models import (Technique, TechniqueExampleUseCase,
+                                TechniqueLimitation, TechniqueResource)
 
         # Clear derived data but keep goals and resource types
         TechniqueLimitation.objects.all().delete()
@@ -130,12 +122,8 @@ class BaseAPITestCase(TransactionTestCase):
 
     def clear_test_data(self):
         """Clear test data while preserving foundational data"""
-        from api.models import (
-            Technique,
-            TechniqueExampleUseCase,
-            TechniqueLimitation,
-            TechniqueResource,
-        )
+        from api.models import (Technique, TechniqueExampleUseCase,
+                                TechniqueLimitation, TechniqueResource)
 
         TechniqueLimitation.objects.all().delete()
         TechniqueExampleUseCase.objects.all().delete()

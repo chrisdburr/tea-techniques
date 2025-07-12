@@ -14,12 +14,8 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from api.models import AssuranceGoal, ResourceType, Tag, Technique
-from api.tests.factories import (
-    AssuranceGoalFactory,
-    ResourceTypeFactory,
-    TagFactory,
-    TechniqueFactory,
-)
+from api.tests.factories import (AssuranceGoalFactory, ResourceTypeFactory,
+                                 TagFactory, TechniqueFactory)
 
 
 class AuthenticationTests(APITestCase):
@@ -27,7 +23,8 @@ class AuthenticationTests(APITestCase):
 
     def setUp(self):
         """Set up test data."""
-        from api.tests.conftest import TEST_USER_PASSWORD, TEST_ADMIN_PASSWORD
+        from api.tests.conftest import TEST_ADMIN_PASSWORD, TEST_USER_PASSWORD
+
         self.user = User.objects.create_user(
             username="testuser", password=TEST_USER_PASSWORD, email="test@example.com"
         )
@@ -39,6 +36,7 @@ class AuthenticationTests(APITestCase):
     def test_login_success(self):
         """Test successful login."""
         from api.tests.conftest import TEST_USER_PASSWORD
+
         url = reverse("login")
         data = {"username": "testuser", "password": TEST_USER_PASSWORD}
 
@@ -109,6 +107,7 @@ class AuthenticationTests(APITestCase):
     def test_session_authentication(self):
         """Test session-based authentication."""
         from api.tests.conftest import TEST_USER_PASSWORD
+
         # Login to create session
         login_url = reverse("login")
         login_data = {"username": "testuser", "password": TEST_USER_PASSWORD}
@@ -172,7 +171,8 @@ class PermissionTests(APITestCase):
 
     def setUp(self):
         """Set up test data."""
-        from api.tests.conftest import TEST_USER_PASSWORD, TEST_ADMIN_PASSWORD
+        from api.tests.conftest import TEST_ADMIN_PASSWORD, TEST_USER_PASSWORD
+
         self.regular_user = User.objects.create_user(
             username="regular", password=TEST_USER_PASSWORD
         )
@@ -334,6 +334,7 @@ class CSRFProtectionTests(APITestCase):
     def setUp(self):
         """Set up test data."""
         from api.tests.conftest import TEST_USER_PASSWORD
+
         self.user = User.objects.create_user(
             username="csrfuser", password=TEST_USER_PASSWORD
         )
@@ -394,6 +395,7 @@ class SessionManagementTests(APITestCase):
     def setUp(self):
         """Set up test data."""
         from api.tests.conftest import TEST_USER_PASSWORD
+
         self.user = User.objects.create_user(
             username="sessionuser", password=TEST_USER_PASSWORD
         )
@@ -402,6 +404,7 @@ class SessionManagementTests(APITestCase):
         """Test that session is created on login."""
         url = reverse("login")
         from api.tests.conftest import TEST_USER_PASSWORD
+
         data = {"username": "sessionuser", "password": TEST_USER_PASSWORD}
 
         response = self.client.post(url, data, format="json")
@@ -418,6 +421,7 @@ class SessionManagementTests(APITestCase):
         # Login
         login_url = reverse("login")
         from api.tests.conftest import TEST_USER_PASSWORD
+
         login_data = {"username": "sessionuser", "password": TEST_USER_PASSWORD}
 
         login_response = self.client.post(login_url, login_data, format="json")
@@ -433,6 +437,7 @@ class SessionManagementTests(APITestCase):
     def test_session_invalidation_on_logout(self):
         """Test that session is invalidated on logout."""
         from api.tests.conftest import TEST_USER_PASSWORD
+
         # Login using actual login endpoint
         login_url = reverse("login")
         login_data = {"username": self.user.username, "password": TEST_USER_PASSWORD}
@@ -477,6 +482,7 @@ class APISecurityTests(APITestCase):
     def setUp(self):
         """Set up test data."""
         from api.tests.conftest import TEST_USER_PASSWORD
+
         self.user = User.objects.create_user(
             username="securityuser", password=TEST_USER_PASSWORD
         )

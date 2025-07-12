@@ -2,6 +2,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import axios, { AxiosError } from 'axios';
 import { logApiError } from '@/lib/api/errorUtils';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 // Store original console methods
 const originalConsoleError = console.error;
 const originalConsoleWarn = console.warn;

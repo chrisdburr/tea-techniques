@@ -31,11 +31,11 @@ def login_view(request):
     Log in a user
     """
     # Handle both JSON and form data
-    if request.content_type == 'application/json':
+    if request.content_type == "application/json":
         data = json.loads(request.body)
     else:
         data = request.data
-    
+
     username = data.get("username")
     password = data.get("password")
 
@@ -60,7 +60,7 @@ def login_view(request):
                 }
             }
         )
-    
+
     return Response(
         {"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED
     )
@@ -111,5 +111,5 @@ def auth_status_view(request):
                 },
             }
         )
-    
+
     return Response({"isAuthenticated": False})

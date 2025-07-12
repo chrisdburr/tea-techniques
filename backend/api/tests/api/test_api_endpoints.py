@@ -12,22 +12,13 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from api.models import (
-    AssuranceGoal,
-    Tag,
-    Technique,
-)
-from api.tests.factories import (
-    AssuranceGoalFactory,
-    ResourceTypeFactory,
-    TagFactory,
-    TechniqueExampleUseCaseFactory,
-    TechniqueFactory,
-    TechniqueLimitationFactory,
-    TechniqueResourceFactory,
-    create_test_assurance_goals,
-    create_test_resource_types,
-)
+from api.models import AssuranceGoal, Tag, Technique
+from api.tests.factories import (AssuranceGoalFactory, ResourceTypeFactory,
+                                 TagFactory, TechniqueExampleUseCaseFactory,
+                                 TechniqueFactory, TechniqueLimitationFactory,
+                                 TechniqueResourceFactory,
+                                 create_test_assurance_goals,
+                                 create_test_resource_types)
 
 
 class BaseAPITestCase(APITestCase):
@@ -37,6 +28,7 @@ class BaseAPITestCase(APITestCase):
         """Set up test data and authentication."""
         # Create test user
         from api.tests.conftest import TEST_USER_PASSWORD
+
         self.user = User.objects.create_user(
             username="testuser", password=TEST_USER_PASSWORD, email="test@example.com"
         )

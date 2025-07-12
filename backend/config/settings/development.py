@@ -3,8 +3,9 @@ Development settings for the project.
 Extends the base settings with development-specific settings.
 """
 
-from .base import *  # noqa
 import os  # Import os module
+
+from .base import *  # noqa
 
 # Set DEBUG to True for development
 DEBUG = True

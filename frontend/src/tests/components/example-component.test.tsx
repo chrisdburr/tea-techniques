@@ -14,12 +14,11 @@
 
 import React from 'react'
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
-import { screen, cleanup } from '@testing-library/react'
 import { renderWithProviders } from '../utils/test-utils'
 import { testAccessibility } from '../utils/accessibility-test-utils'
 import { createApiMocker, mockApiScenarios } from '../utils/api-test-utils'
 import { mockTechniques, createMockTechnique } from '../fixtures/techniques'
-import type { Technique } from '@/lib/types'
+import type { Technique } from '../../lib/types'
 
 // Mock component for demonstration purposes
 // In real tests, you would import actual components

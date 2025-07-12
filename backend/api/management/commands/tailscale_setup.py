@@ -75,6 +75,7 @@ class Command(BaseCommand):
         try:
             # First attempt with quieter output - use shlex for safer execution
             import shlex
+
             cmd_list = shlex.split(cmd)
             result = subprocess.run(
                 cmd_list, check=True, env=env, capture_output=True, text=True

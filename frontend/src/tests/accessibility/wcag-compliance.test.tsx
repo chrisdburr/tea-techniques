@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import { axe, toHaveNoViolations } from 'jest-axe'
 import { renderWithProviders } from '../utils/test-utils'
 import { mockTechniques } from '../fixtures/techniques'
@@ -499,7 +499,7 @@ describe('WCAG 2.1 AA Compliance', () => {
 
     it('supports skip links for efficient navigation', () => {
       const techniques = mockTechniques as Technique[]
-      const { container } = render(<TechniquesList techniques={techniques} />)
+      render(<TechniquesList techniques={techniques} />)
 
       // Should have skip links (implementation would add these)
       // const skipLink = container.querySelector('a[href="#main-content"]')

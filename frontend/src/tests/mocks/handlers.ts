@@ -3,7 +3,6 @@ import { mockTechniques, mockAssuranceGoals, mockTags, mockResourceTypes } from 
 import type { Technique, TechniqueFormData } from '../../lib/types'
 
 // For tests, use wildcard patterns to catch both full URLs and relative paths
-const API_BASE_URL = '/api'
 
 export const handlers = [
   // Techniques endpoints - use wildcard pattern to match any host, both with and without trailing slash

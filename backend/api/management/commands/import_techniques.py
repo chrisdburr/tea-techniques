@@ -11,20 +11,11 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
-from api.models import (
-    AssuranceGoal,
-    ResourceType,
-    Tag,
-    Technique,
-    TechniqueExampleUseCase,
-    TechniqueLimitation,
-    TechniqueResource,
-)
-from api.utils import (
-    DataValidationError,
-    TechniqueDataExtractor,
-    TechniqueDataValidator,
-)
+from api.models import (AssuranceGoal, ResourceType, Tag, Technique,
+                        TechniqueExampleUseCase, TechniqueLimitation,
+                        TechniqueResource)
+from api.utils import (DataValidationError, TechniqueDataExtractor,
+                       TechniqueDataValidator)
 
 logger = logging.getLogger(__name__)
 

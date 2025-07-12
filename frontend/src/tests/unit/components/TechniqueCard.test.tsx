@@ -247,7 +247,7 @@ describe('TechniqueCard', () => {
     it('handles undefined acronym gracefully', () => {
       const technique = createMockTechnique({
         name: 'Test Technique',
-        acronym: undefined as any
+        acronym: undefined as unknown as string
       })
       
       const { container } = renderComponent(technique)

@@ -411,7 +411,7 @@ class SessionManagementTests(APITestCase):
         # Make multiple requests with same session
         technique_url = reverse("technique-list")
 
-        for i in range(3):
+        for _ in range(3):
             response = self.client.get(technique_url)
             self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -526,17 +526,13 @@ class APISecurityTests(APITestCase):
         url = reverse("technique-list")
 
         # Make multiple requests
-        for i in range(5):
+        for _ in range(5):
             response = self.client.get(url)
 
             # Check for rate limit headers (if implemented)
             # These are common rate limit headers
-            rate_limit_headers = [
-                "X-RateLimit-Limit",
-                "X-RateLimit-Remaining",
-                "X-RateLimit-Reset",
-                "Retry-After",
-            ]
+            # These are common rate limit headers:
+            # "X-RateLimit-Limit", "X-RateLimit-Remaining", "X-RateLimit-Reset", "Retry-After"
 
             # Just verify response is successful
             self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -565,11 +561,10 @@ class APISecurityTests(APITestCase):
 
         # Check for security headers (if implemented)
         # These might be set by middleware or server
-        security_headers = {
-            "X-Content-Type-Options": "nosniff",
-            "X-Frame-Options": ["DENY", "SAMEORIGIN"],
-            "X-XSS-Protection": "1; mode=block",
-        }
+        # Common security headers:
+        # "X-Content-Type-Options": "nosniff"
+        # "X-Frame-Options": ["DENY", "SAMEORIGIN"]
+        # "X-XSS-Protection": "1; mode=block"
 
         # Just verify response is successful
         self.assertEqual(response.status_code, status.HTTP_200_OK)

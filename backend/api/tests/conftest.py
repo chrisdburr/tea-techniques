@@ -190,11 +190,11 @@ def temp_json_file():
     files_created = []
 
     def cleanup():
+        import contextlib
+        from pathlib import Path
         for file_path in files_created:
-            try:
-                os.unlink(file_path)
-            except FileNotFoundError:
-                pass
+            with contextlib.suppress(FileNotFoundError):
+                Path(file_path).unlink()
 
     yield lambda data: (lambda path: (files_created.append(path), path)[1])(_create_temp_file(data))
     cleanup()
@@ -227,7 +227,7 @@ class PerformanceTestMixin:
 
     def measure_query_count(self, func, *args, **kwargs):
         """Measure and return the number of queries executed by a function"""
-        with connection.cursor() as cursor:
+        with connection.cursor():
             initial_queries = len(connection.queries)
             result = func(*args, **kwargs)
             final_queries = len(connection.queries)
@@ -267,8 +267,8 @@ def build_large_dataset(num_techniques=100):
     techniques = []
 
     # Create foundational data once
-    goals = create_test_assurance_goals()
-    resource_types = create_test_resource_types()
+    create_test_assurance_goals()
+    create_test_resource_types()
 
     for i in range(num_techniques):
         technique = CompleteTechniqueFactory()

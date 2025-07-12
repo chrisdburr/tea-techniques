@@ -225,7 +225,7 @@ class ImportTechniquesCommandUnitTests(TestCase):
 
         # Mock file operations to simulate permission error during file opening
         # The command currently doesn't catch these errors, so they bubble up as PermissionError
-        with patch("builtins.open", side_effect=PermissionError("Permission denied")):
+        with patch("pathlib.Path.open", side_effect=PermissionError("Permission denied")):
             out = StringIO()
             err = StringIO()
 
@@ -391,7 +391,7 @@ class ImportTechniquesCommandUtilityTests(TestCase):
 
             shutil.rmtree(temp_dir)
 
-    @patch("api.management.commands.import_techniques.os.path.exists")
+    @patch("pathlib.Path.exists")
     def test_pathlib_error_handling(self, mock_exists):
         """Test handling of file existence check errors."""
         mock_exists.side_effect = OSError("Path error")

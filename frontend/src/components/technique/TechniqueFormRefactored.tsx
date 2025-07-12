@@ -100,7 +100,7 @@ export default function TechniqueFormRefactored({ id, isEditMode = false }: Tech
       // Extract IDs from relationships
       const assurance_goal_ids = techniqueData.assurance_goals.map(goal => goal.id);
       const tag_ids = techniqueData.tags.map(tag => tag.id);
-      const related_technique_ids = techniqueData.related_techniques || [];
+      const related_technique_slugs = techniqueData.related_techniques || [];
 
       // Set dynamic arrays
       setUseCases(techniqueData.example_use_cases.length > 0
@@ -137,7 +137,7 @@ export default function TechniqueFormRefactored({ id, isEditMode = false }: Tech
         computational_cost_rating: techniqueData.computational_cost_rating,
         assurance_goal_ids,
         tag_ids,
-        related_technique_ids,
+        related_technique_slugs,
         resources: [],
         example_use_cases: [],
         limitations: [],
@@ -165,8 +165,8 @@ export default function TechniqueFormRefactored({ id, isEditMode = false }: Tech
         router.push(`/techniques/${id}`);
       } else {
         const result = await createMutation.mutateAsync(finalFormData);
-        if (result && result.id) {
-          router.push(`/techniques/${result.id}`);
+        if (result && result.slug) {
+          router.push(`/techniques/${result.slug}`);
         } else {
           router.push(`/techniques`);
           console.warn("Received null or invalid result from API");
@@ -189,10 +189,10 @@ export default function TechniqueFormRefactored({ id, isEditMode = false }: Tech
     label: tag.name,
   })) || [];
 
-  const relatedTechniqueOptions = techniquesData?.results
-    ?.filter((t: Technique) => t.id !== id)
+  const relatedTechniqueOptions = (techniquesData as any)?.results
+    ?.filter((t: Technique) => t.slug !== id)
     ?.map((technique: Technique) => ({
-      value: technique.id.toString(),
+      value: technique.slug,
       label: technique.name,
     })) || [];
 

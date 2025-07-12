@@ -130,7 +130,7 @@ class AssuranceGoalAPITests(BaseAPITestCase):
     def test_assurance_goal_filtering(self):
         """Test filtering assurance goals."""
         # Create specific goal for filtering with unique name
-        specific_goal = AssuranceGoalFactory(name="UniqueFilterGoalForTesting")
+        AssuranceGoalFactory(name="UniqueFilterGoalForTesting")
 
         url = reverse("assurancegoal-list")
         response = self.client.get(url, {"search": "UniqueFilterGoalForTesting"})

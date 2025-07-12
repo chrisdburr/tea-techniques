@@ -330,7 +330,7 @@ function RelatedTechniques({
 				These techniques are related or complementary to this one:
 			</p>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-				{techniques?.map((technique) => (
+				{techniques?.filter(Boolean).map((technique) => (
 					<Link
 						key={technique.slug}
 						href={`/techniques/${technique.slug}`}

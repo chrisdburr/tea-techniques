@@ -305,7 +305,7 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
     label: tag.name,
   })) || [];
 
-  const relatedTechniqueOptions = techniquesData?.results
+  const relatedTechniqueOptions = (techniquesData as any)?.results
     ?.filter((t: Technique) => t.slug !== slug) // Don't show current technique as option
     ?.map((technique: Technique) => ({
       value: technique.slug,
@@ -562,7 +562,7 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                           size={6}
                           value={field.value}
                         >
-                          {relatedTechniqueOptions.map((option) => (
+                          {relatedTechniqueOptions.map((option: any) => (
                             <option key={option.value} value={option.value}>
                               {option.label}
                             </option>

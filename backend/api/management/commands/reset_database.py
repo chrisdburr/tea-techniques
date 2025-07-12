@@ -82,4 +82,4 @@ class Command(BaseCommand):
         import shlex
 
         cmd_list = shlex.split(cmd)
-        subprocess.run(cmd_list, check=True, env=env)
+        subprocess.run(cmd_list, check=True, env=env)  # noqa: S603

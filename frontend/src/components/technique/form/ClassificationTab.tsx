@@ -129,7 +129,7 @@ export function ClassificationTab({
               Related Techniques
             </label>
             <Controller
-              name="related_technique_ids"
+              name="related_technique_slugs"
               control={control}
               render={({ field }) => (
                 <select
@@ -138,12 +138,11 @@ export function ClassificationTab({
                   className="w-full px-3 py-2 border rounded-md"
                   onChange={(e) => {
                     const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
-                    const techniqueIds = selectedOptions.map(v => parseInt(v));
-                    setValue("related_technique_ids", techniqueIds);
+                    setValue("related_technique_slugs", selectedOptions);
                   }}
                   disabled={isLoading}
                   size={6}
-                  value={field.value.map(id => id.toString())}
+                  value={field.value || []}
                 >
                   {relatedTechniqueOptions.map(option => (
                     <option key={option.value} value={option.value}>

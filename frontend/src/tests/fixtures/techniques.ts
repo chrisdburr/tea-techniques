@@ -43,7 +43,8 @@ export const mockTechniques = [
     resources: [
       {
         id: 1,
-        resource_type: mockResourceTypes[0], // Technical Paper
+        resource_type: 1,
+        resource_type_name: 'Technical Paper',
         title: 'A Unified Approach to Interpreting Model Predictions',
         url: 'https://proceedings.neurips.cc/paper/2017/hash/8a20a8621978632d76c43dfd28b67767-Abstract.html',
         description: 'Original SHAP paper introducing the unified framework for feature attribution',
@@ -52,7 +53,8 @@ export const mockTechniques = [
       },
       {
         id: 2,
-        resource_type: mockResourceTypes[1], // GitHub
+        resource_type: 2,
+        resource_type_name: 'GitHub',
         title: 'SHAP (SHapley Additive exPlanations)',
         url: 'https://github.com/slundberg/shap',
         description: 'Official SHAP library implementation in Python',
@@ -96,7 +98,8 @@ export const mockTechniques = [
     resources: [
       {
         id: 3,
-        resource_type: mockResourceTypes[0], // Technical Paper
+        resource_type: 1,
+        resource_type_name: 'Technical Paper',
         title: '"Why Should I Trust You?": Explaining the Predictions of Any Classifier',
         url: 'https://arxiv.org/abs/1602.04938',
         description: 'Original LIME paper introducing model-agnostic local explanations',
@@ -131,7 +134,8 @@ export const mockTechniques = [
     resources: [
       {
         id: 4,
-        resource_type: mockResourceTypes[0], // Technical Paper
+        resource_type: 1,
+        resource_type_name: 'Technical Paper',
         title: 'Differential Privacy',
         url: 'https://www.microsoft.com/en-us/research/publication/differential-privacy/',
         description: 'Foundational paper on differential privacy by Cynthia Dwork',

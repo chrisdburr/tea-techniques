@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # Get the base directory
-        BASE_DIR = Path(settings.BASE_DIR)
+        _base_dir = Path(settings.BASE_DIR)
 
         # Close existing connections to ensure we use the new config
         connections.close_all()
@@ -67,7 +67,7 @@ class Command(BaseCommand):
             import shlex
 
             cmd_list = shlex.split(cmd)
-            result = subprocess.run(cmd_list, check=True, env=env, capture_output=True, text=True)
+            result = subprocess.run(cmd_list, check=True, env=env, capture_output=True, text=True)  # noqa: S603
             self.stdout.write(self.style.SUCCESS("Command completed successfully"))
             return result
         except subprocess.CalledProcessError as e:

@@ -8,7 +8,7 @@ import { Technique } from '@/lib/types';
 // Create comprehensive mock data for all API endpoints
 const mockTechniques: Technique[] = [
   {
-    id: 1,
+    slug: 'test-technique-1',
     name: 'Test Technique 1',
     description: 'Description for test technique 1',
     complexity_rating: 3,
@@ -23,7 +23,7 @@ const mockTechniques: Technique[] = [
     ],
     assurance_goals: [{ id: 1, name: 'Accuracy', description: 'Goal description' }],
     tags: [{ id: 1, name: 'ML' }, { id: 2, name: 'Testing' }],
-    related_techniques: [2, 3],
+    related_techniques: ['lime', 'shap'],
     resources: [{ 
       id: 201, 
       resource_type: 1,
@@ -74,9 +74,9 @@ export const handlers = [
     return HttpResponse.json(createPaginatedResponse(mockTechniques));
   }),
 
-  http.get('/api/techniques/:id', ({ params }) => {
-    const { id } = params;
-    const technique = mockTechniques.find(t => t.id === Number(id));
+  http.get('/api/techniques/:slug', ({ params }) => {
+    const { slug } = params;
+    const technique = mockTechniques.find(t => t.slug === slug);
     
     if (!technique) {
       return new HttpResponse(null, { status: 404 });
@@ -95,10 +95,10 @@ export const handlers = [
     return HttpResponse.json(technique, { status: 201 });
   }),
 
-  http.put('/api/techniques/:id', async ({ params, request }) => {
-    const { id } = params;
+  http.put('/api/techniques/:slug', async ({ params, request }) => {
+    const { slug } = params;
     const updatedData = await request.json() as Partial<Technique>;
-    const technique = mockTechniques.find(t => t.id === Number(id));
+    const technique = mockTechniques.find(t => t.slug === slug);
     
     if (!technique) {
       return new HttpResponse(null, { status: 404 });

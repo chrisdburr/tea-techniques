@@ -39,7 +39,7 @@ export const initialFormData: TechniqueFormData = {
   computational_cost_rating: undefined,
   assurance_goal_ids: [],
   tag_ids: [],
-  related_technique_ids: [],
+  related_technique_slugs: [],
   resources: [],
   example_use_cases: [],
   limitations: [],

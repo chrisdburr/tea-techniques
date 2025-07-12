@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import logging
-import os
 from argparse import ArgumentParser
 from pathlib import Path
 from typing import Any
@@ -51,15 +50,11 @@ class Command(BaseCommand):
         # Get the file path
         if not file_path_option:
             BASE_DIR = Path(settings.BASE_DIR)
-            file_path = os.path.join(
-                BASE_DIR,
-                "data",
-                "techniques.json",
-            )
+            file_path = BASE_DIR / "data" / "techniques.json"
         else:
-            file_path = str(file_path_option)
+            file_path = Path(file_path_option)
 
-        if not os.path.exists(file_path):
+        if not file_path.exists():
             error_msg = f"File not found: {file_path}"
             logger.error(error_msg)
             raise CommandError(error_msg)
@@ -81,12 +76,12 @@ class Command(BaseCommand):
 
         # Process the JSON file
         try:
-            with open(file_path, encoding="utf-8") as json_file:
+            with file_path.open(encoding="utf-8") as json_file:
                 techniques_data = json.load(json_file)
         except json.JSONDecodeError as e:
             error_msg = f"Invalid JSON in file {file_path}: {e!s}"
             logger.error(error_msg)
-            raise CommandError(error_msg)
+            raise CommandError(error_msg) from e
 
         # Validate that techniques_data is a list
         if not isinstance(techniques_data, list):
@@ -132,12 +127,12 @@ class Command(BaseCommand):
             error_msg = "Import process was interrupted by user"
             logger.error(error_msg)
             self.stdout.write(self.style.ERROR(error_msg))
-            raise CommandError(error_msg)
+            raise CommandError(error_msg) from None
         except Exception as e:
             logger.error(f"Error processing JSON file: {e!s}")
             self.stdout.write(self.style.ERROR(f"Error processing JSON file: {e!s}"))
             if not self.force:
-                raise
+                raise CommandError(f"Error processing JSON file: {e!s}") from e
 
     def _create_base_records(self) -> None:
         """Create necessary base records (goals, attributes, etc.)"""
@@ -251,7 +246,7 @@ class Command(BaseCommand):
             logger.error(error_msg)
             self.stdout.write(self.style.ERROR(error_msg))
             if not self.force:
-                raise CommandError(error_msg)
+                raise CommandError(error_msg) from e
             return None
 
     def _validate_technique(self, data: dict[str, Any]) -> bool:
@@ -295,7 +290,7 @@ class Command(BaseCommand):
             logger.error(error_msg)
             self.stdout.write(self.style.ERROR(error_msg))
             if not self.force:
-                raise CommandError(error_msg)
+                raise CommandError(error_msg) from e
             return False
 
     def _create_or_update_technique(self, basic_data: dict[str, Any]) -> Technique:

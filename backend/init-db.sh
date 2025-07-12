@@ -5,7 +5,7 @@ echo "🔄 Initializing database..."
 
 # Wait for PostgreSQL to be ready
 echo "Waiting for PostgreSQL..."
-while ! python -c "
+while ! uv run python -c "
 import os
 import django
 from django.db import connections
@@ -27,11 +27,11 @@ done
 
 # Run migrations
 echo "🔄 Running migrations..."
-python manage.py migrate --noinput
+uv run python manage.py migrate --noinput
 
 # Import techniques if database is empty
 echo "🔄 Checking for existing techniques..."
-TECHNIQUE_COUNT=$(python -c "
+TECHNIQUE_COUNT=$(uv run python -c "
 import os
 import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.docker')
@@ -43,7 +43,7 @@ print(Technique.objects.count())
 if [ "$TECHNIQUE_COUNT" = "0" ]; then
     echo "📦 No techniques found, importing from JSON..."
     if [ -f "data/techniques.json" ]; then
-        python manage.py import_techniques --file="data/techniques.json" --force
+        uv run python manage.py import_techniques --file="data/techniques.json" --force
         echo "✅ Techniques imported successfully!"
     else
         echo "⚠️  Warning: No techniques.json file found!"

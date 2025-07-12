@@ -10,12 +10,12 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
+# Install uv
+RUN pip install uv
+
 # Install Python dependencies
 COPY pyproject.toml uv.lock ./
-RUN pip install uv && \
-    uv sync --frozen --no-editable && \
-    pip install gunicorn && \
-    pip install whitenoise
+RUN uv sync --frozen --no-editable
 
 # Copy project files
 COPY . .

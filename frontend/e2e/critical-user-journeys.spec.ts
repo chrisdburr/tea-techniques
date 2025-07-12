@@ -13,7 +13,8 @@ test.describe('Critical User Journeys', () => {
       
       // Verify techniques are loaded
       await expect(page.locator('[data-testid="techniques-grid"]')).toBeVisible()
-      await expect(page.locator('[data-testid^="technique-card-"]')).toHaveCount.greaterThan(0)
+      const techniqueCards = page.locator('[data-testid^="technique-card-"]')
+      await expect(techniqueCards.first()).toBeVisible()
       
       // Click on the first technique card
       const firstTechniqueCard = page.locator('[data-testid^="technique-card-"]').first()
@@ -62,7 +63,7 @@ test.describe('Critical User Journeys', () => {
       
       // Verify filtered results
       const techniqueCards = page.locator('[data-testid^="technique-card-"]')
-      await expect(techniqueCards).toHaveCount.greaterThan(0)
+      await expect(techniqueCards.first()).toBeVisible()
       
       // Results should contain SHAP
       await expect(page.locator('text=SHAP')).toBeVisible()
@@ -72,7 +73,7 @@ test.describe('Critical User Journeys', () => {
       await page.waitForTimeout(500)
       
       // Should show all techniques again
-      await expect(techniqueCards).toHaveCount.greaterThan(1)
+      await expect(techniqueCards.nth(1)).toBeVisible()
     })
 
     test('should allow user to filter by assurance goal', async ({ page }) => {
@@ -85,7 +86,7 @@ test.describe('Critical User Journeys', () => {
       
       // Verify filtered results show only techniques with that goal
       const techniqueCards = page.locator('[data-testid^="technique-card-"]')
-      await expect(techniqueCards).toHaveCount.greaterThan(0)
+      await expect(techniqueCards.first()).toBeVisible()
       
       // Should show techniques with explainability goal
       await expect(page.locator('text=Explainability')).toBeVisible()
@@ -101,7 +102,8 @@ test.describe('Critical User Journeys', () => {
       
       // Verify filtered results
       const techniqueCards = page.locator('[data-testid^="technique-card-"]')
-      await expect(techniqueCards).toHaveCount.greaterThanOrEqual(0)
+      // Ensure techniques grid is visible (may be empty)
+      await expect(page.locator('[data-testid="techniques-grid"]')).toBeVisible()
       
       // If results exist, they should have complexity rating 3
       if (await techniqueCards.count() > 0) {
@@ -251,7 +253,8 @@ test.describe('Critical User Journeys', () => {
       await expect(page.locator('h1')).toBeVisible()
       
       // Techniques should be displayed (possibly in a single column)
-      await expect(page.locator('[data-testid^="technique-card-"]')).toHaveCount.greaterThan(0)
+      const techniqueCards = page.locator('[data-testid^="technique-card-"]')
+      await expect(techniqueCards.first()).toBeVisible()
       
       // Search and filters should still work
       const searchInput = page.locator('input[placeholder*="search" i]')
@@ -271,7 +274,8 @@ test.describe('Critical User Journeys', () => {
       
       // Verify layout adapts appropriately
       await expect(page.locator('h1')).toBeVisible()
-      await expect(page.locator('[data-testid^="technique-card-"]')).toHaveCount.greaterThan(0)
+      const techniqueCards = page.locator('[data-testid^="technique-card-"]')
+      await expect(techniqueCards.first()).toBeVisible()
       
       // Multi-column layout should be maintained
       const grid = page.locator('[data-testid="techniques-grid"]')
@@ -287,7 +291,8 @@ test.describe('Critical User Journeys', () => {
       await page.goto('/')
       
       // Wait for techniques to load
-      await expect(page.locator('[data-testid^="technique-card-"]')).toHaveCount.greaterThan(0)
+      const techniqueCards = page.locator('[data-testid^="technique-card-"]')
+      await expect(techniqueCards.first()).toBeVisible()
       
       const loadTime = Date.now() - startTime
       
@@ -303,7 +308,8 @@ test.describe('Critical User Journeys', () => {
         await nextButton.click()
         
         // Should load next page quickly
-        await expect(page.locator('[data-testid^="technique-card-"]')).toHaveCount.greaterThan(0)
+        const techniqueCards = page.locator('[data-testid^="technique-card-"]')
+      await expect(techniqueCards.first()).toBeVisible()
         
         // URL should update
         await expect(page).toHaveURL(/page=2|p=2/)
@@ -320,10 +326,10 @@ test.describe('Critical User Journeys', () => {
       await page.goto('/')
       
       // Should show error message
-      await expect(page.locator('text=error', { ignoreCase: true })).toBeVisible()
+      await expect(page.locator('text=/error/i')).toBeVisible()
       
       // Error should be user-friendly
-      await expect(page.locator('text=try again', { ignoreCase: true })).toBeVisible()
+      await expect(page.locator('text=/try again/i')).toBeVisible()
     })
 
     test('should handle 404 errors appropriately', async ({ page }) => {
@@ -331,7 +337,7 @@ test.describe('Critical User Journeys', () => {
       await page.goto('/techniques/non-existent-technique-slug')
       
       // Should show 404 page or error message
-      await expect(page.locator('text=not found', { ignoreCase: true })).toBeVisible()
+      await expect(page.locator('text=/not found/i')).toBeVisible()
       
       // Should provide navigation back to main page
       await expect(page.locator('a[href="/"]')).toBeVisible()
@@ -363,7 +369,7 @@ test.describe('Critical User Journeys', () => {
       await expect(page.locator('h1')).toBeVisible()
       
       // Check for proper labels
-      await expect(page.locator('label')).toHaveCount.greaterThan(0)
+      await expect(page.locator('label').first()).toBeVisible()
       
       // Check for proper landmarks
       await expect(page.locator('main')).toBeVisible()

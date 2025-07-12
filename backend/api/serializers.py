@@ -291,7 +291,7 @@ class TechniqueSerializer(serializers.ModelSerializer):
             return self.technique_service.create_technique(validated_data, request_data)
         except TechniqueOperationError as e:
             logger.error("Technique creation failed: %s", str(e))
-            raise serializers.ValidationError(f"Failed to create technique: {e!s}")
+            raise serializers.ValidationError(f"Failed to create technique: {e!s}") from e
 
     def update(self, instance, validated_data):
         """
@@ -306,4 +306,4 @@ class TechniqueSerializer(serializers.ModelSerializer):
             return self.technique_service.update_technique(instance, validated_data, request_data)
         except TechniqueOperationError as e:
             logger.error("Technique update failed: %s", str(e))
-            raise serializers.ValidationError(f"Failed to update technique: {e!s}")
+            raise serializers.ValidationError(f"Failed to update technique: {e!s}") from e

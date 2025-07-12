@@ -109,8 +109,8 @@ CACHES = {
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
 # Media and static files for tests
-MEDIA_ROOT = "/tmp/tea_techniques_test_media"
-STATIC_ROOT = "/tmp/tea_techniques_test_static"
+MEDIA_ROOT = "/tmp/tea_techniques_test_media"  # noqa: S108
+STATIC_ROOT = "/tmp/tea_techniques_test_static"  # noqa: S108
 
 # Simplified password validation for tests
 AUTH_PASSWORD_VALIDATORS = []

@@ -4,6 +4,7 @@ import { axe, toHaveNoViolations } from 'jest-axe'
 import { renderWithProviders } from '../utils/test-utils'
 import { mockTechniques } from '../fixtures/techniques'
 import type { Technique } from '../../lib/types'
+import { describe, it, expect } from 'vitest'
 
 // Extend Jest matchers
 expect.extend(toHaveNoViolations)

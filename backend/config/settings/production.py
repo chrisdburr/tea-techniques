@@ -60,7 +60,7 @@ LOGGING = {
         "file": {
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "verbose",
-            "filename": os.path.join(BASE_DIR, "logs", "backend.log"),
+            "filename": BASE_DIR / "logs" / "backend.log",
             "maxBytes": 10485760,  # 10MB
             "backupCount": 5,
         },

@@ -59,7 +59,7 @@ export default function CategoriesPage() {
         const filteredResults = techniquesData.results.filter((technique: Technique) => {
             // Log each technique's goals for the first few techniques
             if (techniquesData.results.indexOf(technique) < 3) {
-                console.log(`Technique ${technique.id} (${technique.name}) goals:`,
+                console.log(`Technique ${technique.slug} (${technique.name}) goals:`,
                     technique.assurance_goals.map(g => g.name));
             }
 
@@ -128,7 +128,7 @@ export default function CategoriesPage() {
     const createPlaceholderTechniques = (goalName: string) => {
         return [
             {
-                id: 1000 + Math.random() * 1000,
+                slug: `example-${goalName.toLowerCase().replace(/\s+/g, '-')}-technique-1`,
                 name: `Example ${goalName} Technique 1`,
                 description: `This is a placeholder example for ${goalName}. In a production environment, this would be an actual technique from the database.`,
                 complexity_rating: 3,
@@ -141,7 +141,7 @@ export default function CategoriesPage() {
                 limitations: []
             },
             {
-                id: 2000 + Math.random() * 1000,
+                slug: `example-${goalName.toLowerCase().replace(/\s+/g, '-')}-technique-2`,
                 name: `Example ${goalName} Technique 2`,
                 description: `Another placeholder example for ${goalName}. Add real techniques through the admin interface.`,
                 complexity_rating: 4,
@@ -220,7 +220,7 @@ export default function CategoriesPage() {
                                     ) : goalTechniques?.results && goalTechniques.results.length > 0 ? (
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                             {goalTechniques.results.slice(0, 3).map((technique: Technique) => (
-                                                <Card key={technique.id} className="h-full flex flex-col">
+                                                <Card key={technique.slug} className="h-full flex flex-col">
                                                     <CardHeader>
                                                         <CardTitle className="line-clamp-2">{technique.name}</CardTitle>
                                                         <CardDescription>
@@ -232,7 +232,7 @@ export default function CategoriesPage() {
                                                     </CardContent>
                                                     <CardFooter>
                                                         <Button asChild variant="outline" size="sm" className="w-full">
-                                                            <Link href={`/techniques/${technique.id}`}>
+                                                            <Link href={`/techniques/${technique.slug}`}>
                                                                 View Details
                                                             </Link>
                                                         </Button>
@@ -243,7 +243,7 @@ export default function CategoriesPage() {
                                     ) : (
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                             {createPlaceholderTechniques(selectedGoal).map((technique: Technique) => (
-                                                <Card key={technique.id} className="h-full flex flex-col">
+                                                <Card key={technique.slug} className="h-full flex flex-col">
                                                     <CardHeader>
                                                         <CardTitle className="line-clamp-2">{technique.name}</CardTitle>
                                                         <CardDescription>

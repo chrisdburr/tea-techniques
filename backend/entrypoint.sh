@@ -13,7 +13,7 @@ fi
 
 # Collect static files (no input in case it asks)
 echo "📁 Collecting static files..."
-python manage.py collectstatic --noinput
+uv run python manage.py collectstatic --noinput
 
 # If arguments are passed, execute them (for development override)
 if [ $# -gt 0 ]; then
@@ -26,7 +26,7 @@ WORKERS=${GUNICORN_WORKERS:-2}
 echo "Starting Gunicorn with $WORKERS workers..."
 
 # Start server with Gunicorn (production default)
-exec gunicorn config.wsgi:application \
+exec uv run gunicorn config.wsgi:application \
     --bind 0.0.0.0:8000 \
     --workers $WORKERS \
     --timeout 180 \

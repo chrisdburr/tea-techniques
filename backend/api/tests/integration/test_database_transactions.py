@@ -330,7 +330,7 @@ class DatabaseTransactionTests(TransactionTestCase):
     def test_database_integrity_error_rollback(self):
         """Test rollback on database integrity constraint violations."""
         # Create technique with the same name as we'll try to create
-        existing_technique = IsolatedTechniqueFactory(name="Duplicate Name Test")
+        IsolatedTechniqueFactory(name="Duplicate Name Test")
 
         validated_data = {
             "slug": self._generate_slug("Duplicate Name Test"),
@@ -503,7 +503,7 @@ class ServiceLayerTransactionTests(TransactionTestCase):
     def test_resource_replacement_transaction_consistency(self):
         """Test transaction consistency during resource replacement."""
         # Create initial resources
-        initial_resources = [
+        [
             TechniqueResource.objects.create(
                 technique=self.technique,
                 resource_type=self.resource_type,

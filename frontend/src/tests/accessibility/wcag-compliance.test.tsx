@@ -251,7 +251,7 @@ const TechniqueForm = () => (
 describe('WCAG 2.1 AA Compliance', () => {
   describe('TechniqueCard Component', () => {
     it('should not have any accessibility violations', async () => {
-      const technique = mockTechniques[0] as Technique
+      const technique = mockTechniques[0] as unknown as Technique
       const { container } = render(<TechniqueCard technique={technique} />)
       
       const results = await axe(container)
@@ -259,7 +259,7 @@ describe('WCAG 2.1 AA Compliance', () => {
     })
 
     it('provides proper semantic structure', () => {
-      const technique = mockTechniques[0] as Technique
+      const technique = mockTechniques[0] as unknown as Technique
       const { container } = render(<TechniqueCard technique={technique} />)
 
       // Should have proper article structure
@@ -275,7 +275,7 @@ describe('WCAG 2.1 AA Compliance', () => {
     })
 
     it('provides meaningful labels for complex information', () => {
-      const technique = mockTechniques[0] as Technique
+      const technique = mockTechniques[0] as unknown as Technique
       const { container } = render(<TechniqueCard technique={technique} />)
 
       // Ratings should have descriptive labels
@@ -292,7 +292,7 @@ describe('WCAG 2.1 AA Compliance', () => {
     })
 
     it('supports keyboard navigation', async () => {
-      const technique = mockTechniques[0] as Technique
+      const technique = mockTechniques[0] as unknown as Technique
       const { user, container } = renderWithProviders(<TechniqueCard technique={technique} />)
 
       const link = container.querySelector('a')
@@ -309,7 +309,7 @@ describe('WCAG 2.1 AA Compliance', () => {
 
   describe('TechniquesList Component', () => {
     it('should not have any accessibility violations', async () => {
-      const techniques = mockTechniques as Technique[]
+      const techniques = mockTechniques as unknown as Technique[]
       const { container } = render(<TechniquesList techniques={techniques} />)
       
       const results = await axe(container)
@@ -317,7 +317,7 @@ describe('WCAG 2.1 AA Compliance', () => {
     })
 
     it('provides proper heading hierarchy', () => {
-      const techniques = mockTechniques as Technique[]
+      const techniques = mockTechniques as unknown as Technique[]
       const { container } = render(<TechniquesList techniques={techniques} />)
 
       // Should have h1 for page title
@@ -330,7 +330,7 @@ describe('WCAG 2.1 AA Compliance', () => {
     })
 
     it('provides proper form labels and descriptions', () => {
-      const techniques = mockTechniques as Technique[]
+      const techniques = mockTechniques as unknown as Technique[]
       const { container } = render(<TechniquesList techniques={techniques} />)
 
       // Search should be properly labeled
@@ -351,7 +351,7 @@ describe('WCAG 2.1 AA Compliance', () => {
     })
 
     it('provides live region updates for search results', () => {
-      const techniques = mockTechniques as Technique[]
+      const techniques = mockTechniques as unknown as Technique[]
       const { container } = render(<TechniquesList techniques={techniques} />)
 
       // Should have status region for announcing results
@@ -361,7 +361,7 @@ describe('WCAG 2.1 AA Compliance', () => {
     })
 
     it('provides proper list semantics', () => {
-      const techniques = mockTechniques as Technique[]
+      const techniques = mockTechniques as unknown as Technique[]
       const { container } = render(<TechniquesList techniques={techniques} />)
 
       // Should have proper list structure
@@ -444,7 +444,7 @@ describe('WCAG 2.1 AA Compliance', () => {
 
   describe('Color Contrast and Visual Accessibility', () => {
     it('ensures sufficient color contrast for text', async () => {
-      const technique = mockTechniques[0] as Technique
+      const technique = mockTechniques[0] as unknown as Technique
       const { container } = render(<TechniqueCard technique={technique} />)
       
       // Axe will check color contrast automatically
@@ -457,7 +457,7 @@ describe('WCAG 2.1 AA Compliance', () => {
     })
 
     it('does not rely solely on color to convey information', () => {
-      const technique = mockTechniques[0] as Technique
+      const technique = mockTechniques[0] as unknown as Technique
       const { container } = render(<TechniqueCard technique={technique} />)
 
       // Important information should have text labels, not just colors
@@ -470,7 +470,7 @@ describe('WCAG 2.1 AA Compliance', () => {
 
   describe('Keyboard Navigation', () => {
     it('supports tab navigation through all interactive elements', async () => {
-      const techniques = mockTechniques as Technique[]
+      const techniques = mockTechniques as unknown as Technique[]
       const { user, container } = renderWithProviders(<TechniquesList techniques={techniques} />)
 
       // Should be able to tab through all interactive elements
@@ -488,7 +488,7 @@ describe('WCAG 2.1 AA Compliance', () => {
     })
 
     it('provides visible focus indicators', async () => {
-      const technique = mockTechniques[0] as Technique
+      const technique = mockTechniques[0] as unknown as Technique
       const { user, container } = renderWithProviders(<TechniqueCard technique={technique} />)
 
       const link = container.querySelector('a')
@@ -499,7 +499,7 @@ describe('WCAG 2.1 AA Compliance', () => {
     })
 
     it('supports skip links for efficient navigation', () => {
-      const techniques = mockTechniques as Technique[]
+      const techniques = mockTechniques as unknown as Technique[]
       render(<TechniquesList techniques={techniques} />)
 
       // Should have skip links (implementation would add these)
@@ -510,7 +510,7 @@ describe('WCAG 2.1 AA Compliance', () => {
 
   describe('Screen Reader Support', () => {
     it('provides meaningful page titles and landmarks', () => {
-      const techniques = mockTechniques as Technique[]
+      const techniques = mockTechniques as unknown as Technique[]
       const { container } = render(<TechniquesList techniques={techniques} />)
 
       // Should have main landmark
@@ -525,7 +525,7 @@ describe('WCAG 2.1 AA Compliance', () => {
     })
 
     it('announces dynamic content changes', () => {
-      const techniques = mockTechniques as Technique[]
+      const techniques = mockTechniques as unknown as Technique[]
       const { container } = render(<TechniquesList techniques={techniques} />)
 
       // Live regions should announce content changes
@@ -554,7 +554,7 @@ describe('WCAG 2.1 AA Compliance', () => {
         writable: true
       })
 
-      const technique = mockTechniques[0] as Technique
+      const technique = mockTechniques[0] as unknown as Technique
       const { user, container } = renderWithProviders(<TechniqueCard technique={technique} />)
 
       // Touch targets should be large enough (implemented in CSS)
@@ -566,7 +566,7 @@ describe('WCAG 2.1 AA Compliance', () => {
     })
 
     it('supports voice navigation', () => {
-      const techniques = mockTechniques as Technique[]
+      const techniques = mockTechniques as unknown as Technique[]
       const { container } = render(<TechniquesList techniques={techniques} />)
 
       // All interactive elements should have accessible names for voice control

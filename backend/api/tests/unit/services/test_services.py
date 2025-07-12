@@ -825,7 +825,7 @@ class ServiceIntegrationTests(TransactionTestCase):
         # Test each specialized service error handling
         resource_service = TechniqueResourceService()
         use_case_service = TechniqueUseCaseService()
-        limitation_service = TechniqueLimitationService()
+        TechniqueLimitationService()
 
         # Invalid resource data (missing required fields)
         with self.assertRaises(Exception):

@@ -131,7 +131,7 @@ class DateParsingUtilityTests(TestCase):
             ("29/02/2020", datetime.date(2020, 2, 29)),  # Leap year
         ]
 
-        for date_str, expected in test_cases:
+        for date_str, _expected in test_cases:
             with self.subTest(date_str=date_str):
                 result = DateParsingUtility.parse_date(date_str)
                 # Note: Some formats might be ambiguous, test what we can

@@ -104,7 +104,7 @@ export const handlers = [
       return new HttpResponse(null, { status: 404 });
     }
     
-    const updatedTechnique = { ...technique, ...updatedData, id: Number(id) };
+    const updatedTechnique = { ...technique, ...updatedData, slug };
     return HttpResponse.json(updatedTechnique);
   }),
 

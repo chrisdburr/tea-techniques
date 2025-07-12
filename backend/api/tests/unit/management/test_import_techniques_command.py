@@ -3,6 +3,8 @@
 Unit tests for import_techniques management command to increase coverage.
 """
 
+import builtins
+import contextlib
 import json
 import os
 import tempfile
@@ -30,10 +32,8 @@ class ImportTechniquesCommandUnitTests(TestCase):
         """Clean up temp files."""
         import shutil
 
-        try:
+        with contextlib.suppress(builtins.BaseException):
             shutil.rmtree(self.temp_dir)
-        except:
-            pass
 
     def create_temp_json_file(self, data, filename="test_techniques.json"):
         """Helper to create temporary JSON file."""
@@ -191,10 +191,8 @@ class ImportTechniquesCommandUnitTests(TestCase):
 
         out = StringIO()
 
-        try:
+        with contextlib.suppress(builtins.BaseException):
             call_command("import_techniques", "--file", file_path, "--force", stdout=out)
-        except:
-            pass
 
         # Verify logger was called (could be either command logger or utils logger)
         self.assertTrue(
@@ -249,10 +247,8 @@ class ImportTechniquesCommandDatabaseTests(TransactionTestCase):
         """Clean up temp files."""
         import shutil
 
-        try:
+        with contextlib.suppress(builtins.BaseException):
             shutil.rmtree(self.temp_dir)
-        except:
-            pass
 
     def create_temp_json_file(self, data, filename="test_techniques.json"):
         """Helper to create temporary JSON file."""
@@ -473,10 +469,8 @@ class ImportTechniquesCommandErrorRecoveryTests(TestCase):
         """Clean up temp files."""
         import shutil
 
-        try:
+        with contextlib.suppress(builtins.BaseException):
             shutil.rmtree(self.temp_dir)
-        except:
-            pass
 
     def create_temp_json_file(self, data, filename="test_techniques.json"):
         """Helper to create temporary JSON file."""
@@ -541,10 +535,8 @@ class ImportTechniquesCommandErrorRecoveryTests(TestCase):
 
         out = StringIO()
 
-        try:
+        with contextlib.suppress(builtins.BaseException):
             call_command("import_techniques", "--file", file_path, "--force", stdout=out)
-        except:
-            pass
 
         # Verify that appropriate logging methods were called
         logged_calls = mock_logger.error.call_count + mock_logger.warning.call_count + mock_logger.info.call_count

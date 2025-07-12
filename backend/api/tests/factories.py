@@ -334,8 +334,8 @@ def create_realistic_technique_dataset(count: int = 10) -> list[Technique]:
     techniques = []
 
     # Create foundational data
-    goals = create_test_assurance_goals()
-    resource_types = create_test_resource_types()
+    create_test_assurance_goals()
+    create_test_resource_types()
 
     for _ in range(count):
         technique = CompleteTechniqueFactory()

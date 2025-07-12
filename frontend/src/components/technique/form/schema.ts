@@ -10,7 +10,7 @@ export const techniqueSchema = z.object({
   computational_cost_rating: z.number().min(1).max(5).optional(),
   assurance_goal_ids: z.array(z.number()).min(1, { message: "At least one assurance goal is required" }),
   tag_ids: z.array(z.number()),
-  related_technique_ids: z.array(z.number()),
+  related_technique_slugs: z.array(z.string()),
   resources: z.array(
     z.object({
       resource_type: z.number(),

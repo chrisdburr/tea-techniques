@@ -32,7 +32,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, Save } from "lucide-react";
 
 interface TechniqueFormProps {
-  id?: number;
+  id?: string;
   isEditMode?: boolean;
 }
 
@@ -73,7 +73,7 @@ export default function TechniqueFormRefactored({ id, isEditMode = false }: Tech
   } = useDynamicArrays();
 
   // API hooks
-  const { data: techniqueData, isLoading: isLoadingTechnique } = useTechniqueDetail(id || 0);
+  const { data: techniqueData, isLoading: isLoadingTechnique } = useTechniqueDetail(id || "");
   const { data: assuranceGoalsData, isLoading: isLoadingGoals } = useAssuranceGoals();
   const { data: tagsData, isLoading: isLoadingTags } = useTags();
   const { data: resourceTypesData, isLoading: isLoadingResourceTypes } = useResourceTypes();
@@ -81,7 +81,7 @@ export default function TechniqueFormRefactored({ id, isEditMode = false }: Tech
 
   // Mutations
   const createMutation = useCreateTechnique();
-  const updateMutation = useUpdateTechnique(id || 0);
+  const updateMutation = useUpdateTechnique(id || "");
 
   // Loading state
   const isLoading =

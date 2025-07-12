@@ -510,10 +510,9 @@ class ViewSetErrorHandlingTests(APITestCase):
 
         with (
             patch.object(viewset, "get_object", return_value=self.technique),
-            patch.object(viewset, "get_serializer", return_value=mock_serializer),
+            patch.object(viewset, "get_serializer", return_value=mock_serializer),self.assertRaises(Exception)
         ):
-            with self.assertRaises(Exception):
-                viewset.update(request, partial=False)
+            viewset.update(request, partial=False)
 
 
 class DatabaseConnectionTests(TestCase):

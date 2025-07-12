@@ -178,7 +178,7 @@ class ImportTechniquesCommandTests(TransactionTestCase):
     def test_import_techniques_with_existing_data(self):
         """Test importing when some techniques already exist."""
         # Create existing technique
-        existing_technique = TechniqueFactory(name="Existing Technique")
+        TechniqueFactory(name="Existing Technique")
 
         techniques_data = [
             {
@@ -475,9 +475,9 @@ class ResetAndImportTechniquesCommandTests(TransactionTestCase):
         technique = TechniqueFactory()
 
         # Add related objects
-        resource = TechniqueResourceFactory(technique=technique)
-        use_case = TechniqueExampleUseCaseFactory(technique=technique)
-        limitation = TechniqueLimitationFactory(technique=technique)
+        TechniqueResourceFactory(technique=technique)
+        TechniqueExampleUseCaseFactory(technique=technique)
+        TechniqueLimitationFactory(technique=technique)
 
         # Verify initial state
         self.assertEqual(TechniqueResource.objects.count(), 1)
@@ -543,7 +543,7 @@ class ResetAndImportTechniquesCommandTests(TransactionTestCase):
 
         file_path = self.create_temp_technique_file(techniques_data)
 
-        initial_technique_count = Technique.objects.count()
+        Technique.objects.count()
 
         # Run command - should handle errors gracefully
         out = StringIO()
@@ -562,7 +562,7 @@ class ResetAndImportTechniquesCommandTests(TransactionTestCase):
         # 1. Import only valid techniques after reset
         # 2. Rollback completely on any error
         # Check what actually happened
-        final_technique_count = Technique.objects.count()
+        Technique.objects.count()
 
         # The reset should have happened and only valid techniques should be imported
         technique_names = set(Technique.objects.values_list("name", flat=True))
@@ -804,7 +804,7 @@ class ManagementCommandIntegrationTests(TransactionTestCase):
 
         # Check error handling - the error should be logged via logger
         # We just verify that the command completed without crashing
-        output = out.getvalue()
+        out.getvalue()
         # The command should have tried to import but failed gracefully
         # No techniques should have been imported due to the mocked error
         self.assertEqual(Technique.objects.count(), 0)

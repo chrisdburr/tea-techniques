@@ -87,24 +87,22 @@ class TechniqueResourceModelTests(TestCase):
         # Test technique is required
         from django.db import transaction
 
-        with transaction.atomic():
-            with self.assertRaises(IntegrityError):
-                TechniqueResource.objects.create(
-                    technique=None,
-                    resource_type=self.resource_type,
-                    title="Test",
-                    url="https://example.com",
-                )
+        with transaction.atomic(), self.assertRaises(IntegrityError):
+            TechniqueResource.objects.create(
+                technique=None,
+                resource_type=self.resource_type,
+                title="Test",
+                url="https://example.com",
+            )
 
         # Test resource_type is required
-        with transaction.atomic():
-            with self.assertRaises(IntegrityError):
-                TechniqueResource.objects.create(
-                    technique=self.technique,
-                    resource_type=None,
-                    title="Test",
-                    url="https://example.com",
-                )
+        with transaction.atomic(), self.assertRaises(IntegrityError):
+            TechniqueResource.objects.create(
+                technique=self.technique,
+                resource_type=None,
+                title="Test",
+                url="https://example.com",
+            )
 
         # Test title is required
         with self.assertRaises(ValidationError):
@@ -182,7 +180,6 @@ class TechniqueResourceModelTests(TestCase):
     def test_technique_resource_cascade_on_resource_type_delete(self):
         """Test behavior when resource type is deleted."""
         resource = TechniqueResourceFactory(technique=self.technique, resource_type=self.resource_type)
-        resource_id = resource.id
 
         # Delete resource type
         # Behavior depends on the cascade setting in the model
@@ -202,9 +199,9 @@ class TechniqueResourceModelTests(TestCase):
 
     def test_multiple_resources_per_technique(self):
         """Test that a technique can have multiple resources."""
-        resource1 = TechniqueResourceFactory(technique=self.technique)
-        resource2 = TechniqueResourceFactory(technique=self.technique)
-        resource3 = TechniqueResourceFactory(technique=self.technique)
+        TechniqueResourceFactory(technique=self.technique)
+        TechniqueResourceFactory(technique=self.technique)
+        TechniqueResourceFactory(technique=self.technique)
 
         # Verify all resources belong to the technique
         technique_resources = TechniqueResource.objects.filter(technique=self.technique)
@@ -278,9 +275,8 @@ class TechniqueExampleUseCaseModelTests(TestCase):
         # Test technique is required
         from django.db import transaction
 
-        with transaction.atomic():
-            with self.assertRaises(IntegrityError):
-                TechniqueExampleUseCase.objects.create(technique=None, description="Valid description")
+        with transaction.atomic(), self.assertRaises(IntegrityError):
+            TechniqueExampleUseCase.objects.create(technique=None, description="Valid description")
 
         # Test description is required
         with self.assertRaises(ValidationError):
@@ -314,7 +310,6 @@ class TechniqueExampleUseCaseModelTests(TestCase):
     def test_use_case_behavior_on_goal_delete(self):
         """Test behavior when assurance goal is deleted."""
         use_case = TechniqueExampleUseCaseFactory(technique=self.technique, assurance_goal=self.assurance_goal)
-        use_case_id = use_case.id
 
         # Delete assurance goal
         self.assurance_goal.delete()
@@ -331,9 +326,9 @@ class TechniqueExampleUseCaseModelTests(TestCase):
 
     def test_multiple_use_cases_per_technique(self):
         """Test that a technique can have multiple use cases."""
-        use_case1 = TechniqueExampleUseCaseFactory(technique=self.technique)
-        use_case2 = TechniqueExampleUseCaseFactory(technique=self.technique)
-        use_case3 = TechniqueExampleUseCaseFactory(technique=self.technique)
+        TechniqueExampleUseCaseFactory(technique=self.technique)
+        TechniqueExampleUseCaseFactory(technique=self.technique)
+        TechniqueExampleUseCaseFactory(technique=self.technique)
 
         # Verify all use cases belong to the technique
         technique_use_cases = TechniqueExampleUseCase.objects.filter(technique=self.technique)
@@ -384,9 +379,8 @@ class TechniqueLimitationModelTests(TestCase):
         # Test technique is required
         from django.db import transaction
 
-        with transaction.atomic():
-            with self.assertRaises(IntegrityError):
-                TechniqueLimitation.objects.create(technique=None, description="Valid description")
+        with transaction.atomic(), self.assertRaises(IntegrityError):
+            TechniqueLimitation.objects.create(technique=None, description="Valid description")
 
         # Test description is required
         with self.assertRaises(ValidationError):
@@ -419,9 +413,9 @@ class TechniqueLimitationModelTests(TestCase):
 
     def test_multiple_limitations_per_technique(self):
         """Test that a technique can have multiple limitations."""
-        limitation1 = TechniqueLimitationFactory(technique=self.technique)
-        limitation2 = TechniqueLimitationFactory(technique=self.technique)
-        limitation3 = TechniqueLimitationFactory(technique=self.technique)
+        TechniqueLimitationFactory(technique=self.technique)
+        TechniqueLimitationFactory(technique=self.technique)
+        TechniqueLimitationFactory(technique=self.technique)
 
         # Verify all limitations belong to the technique
         technique_limitations = TechniqueLimitation.objects.filter(technique=self.technique)
@@ -538,7 +532,7 @@ class RelationshipModelsIntegrationTests(TestCase):
 
         start_time = time.time()
 
-        for i in range(num_objects):
+        for _i in range(num_objects):
             TechniqueResourceFactory(technique=technique)
 
         creation_time = time.time() - start_time

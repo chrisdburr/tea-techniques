@@ -119,7 +119,7 @@ class ServiceLayerIntegrationTests(TransactionTestCase):
         self.assertEqual(use_case.assurance_goal, self.assurance_goal)
 
         limitations = technique.limitations.all()
-        descriptions = [l.description for l in limitations]
+        descriptions = [limitation.description for limitation in limitations]
         self.assertIn("Integration test limitation", descriptions)
         self.assertIn("Complex limitation structure", descriptions)
 
@@ -432,7 +432,7 @@ class UtilsServiceIntegrationTests(TransactionTestCase):
 
         # Extract and process data
         basic_data = self.extractor.extract_basic_data(raw_data)
-        relationship_data = self.extractor.extract_relationship_data(raw_data)
+        self.extractor.extract_relationship_data(raw_data)
         nested_data = self.extractor.extract_nested_data(raw_data)
 
         # Process nested data
@@ -643,8 +643,8 @@ class CrossComponentDataFlowTests(TransactionTestCase):
             return service.update_technique(technique, validated_data, {})
 
         # Both operations should succeed (last one wins)
-        result1 = update_with_goal1()
-        result2 = update_with_goal2()
+        update_with_goal1()
+        update_with_goal2()
 
         # Verify final state
         final_technique = Technique.objects.get(slug=technique.slug)

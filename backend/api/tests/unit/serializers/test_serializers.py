@@ -419,9 +419,9 @@ class TechniqueSerializerTests(TestCase):
         technique.related_techniques.add(self.related_technique)
 
         # Add related objects
-        resource = TechniqueResourceFactory(technique=technique)
-        use_case = TechniqueExampleUseCaseFactory(technique=technique)
-        limitation = TechniqueLimitationFactory(technique=technique)
+        TechniqueResourceFactory(technique=technique)
+        TechniqueExampleUseCaseFactory(technique=technique)
+        TechniqueLimitationFactory(technique=technique)
 
         serializer = TechniqueSerializer(technique)
         data = serializer.data

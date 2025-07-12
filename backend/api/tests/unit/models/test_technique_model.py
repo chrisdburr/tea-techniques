@@ -108,15 +108,14 @@ class TechniqueModelBasicTests(TestCase):
         # Invalid ratings
         invalid_ratings = [0, 6, -1, 10]
         for rating in invalid_ratings:
-            with self.subTest(rating=rating):
-                with self.assertRaises(ValidationError):
-                    technique = Technique(
-                        slug=f"invalid-{rating}",
-                        name=f"Invalid {rating}",
-                        description="Test description",
-                        complexity_rating=rating,
-                    )
-                    technique.full_clean()
+            with self.subTest(rating=rating), self.assertRaises(ValidationError):
+                technique = Technique(
+                    slug=f"invalid-{rating}",
+                    name=f"Invalid {rating}",
+                    description="Test description",
+                    complexity_rating=rating,
+                )
+                technique.full_clean()
 
     def test_computational_cost_rating_validation(self):
         """Test computational cost rating validation (1-5 range)."""
@@ -133,15 +132,14 @@ class TechniqueModelBasicTests(TestCase):
         # Invalid ratings
         invalid_ratings = [0, 6, -1, 10]
         for rating in invalid_ratings:
-            with self.subTest(rating=rating):
-                with self.assertRaises(ValidationError):
-                    technique = Technique(
-                        slug=f"invalid-cost-{rating}",
-                        name=f"Invalid Cost {rating}",
-                        description="Test description",
-                        computational_cost_rating=rating,
-                    )
-                    technique.full_clean()
+            with self.subTest(rating=rating), self.assertRaises(ValidationError):
+                technique = Technique(
+                    slug=f"invalid-cost-{rating}",
+                    name=f"Invalid Cost {rating}",
+                    description="Test description",
+                    computational_cost_rating=rating,
+                )
+                technique.full_clean()
 
     def test_ratings_can_be_null(self):
         """Test that ratings can be null (optional)."""
@@ -352,7 +350,6 @@ class TechniqueModelCascadeTests(TestCase):
         self.assertEqual(technique.assurance_goals.count(), 1)
 
         # Delete the goal
-        goal_id = goal.id
         goal.delete()
 
         # Verify technique still exists but relationship is gone

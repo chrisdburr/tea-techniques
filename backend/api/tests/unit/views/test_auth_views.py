@@ -5,8 +5,8 @@ Unit tests for auth views to improve coverage.
 
 import json
 
-from django.contrib.auth.models import AnonymousUser, User
-from django.test import RequestFactory, TestCase
+from django.contrib.auth.models import User
+from django.test import RequestFactory
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
@@ -20,9 +20,7 @@ class AuthViewsTests(APITestCase):
 
         self.client = APIClient()
         self.factory = RequestFactory()
-        self.user = User.objects.create_user(
-            username="testuser", email="test@example.com", password=TEST_USER_PASSWORD
-        )
+        self.user = User.objects.create_user(username="testuser", email="test@example.com", password=TEST_USER_PASSWORD)
 
     def test_get_csrf_token(self):
         """Test getting CSRF token."""
@@ -72,9 +70,7 @@ class AuthViewsTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("detail", response.data)
-        self.assertEqual(
-            response.data["detail"], "Please provide both username and password"
-        )
+        self.assertEqual(response.data["detail"], "Please provide both username and password")
 
     def test_login_view_missing_password(self):
         """Test login with missing password."""
@@ -87,9 +83,7 @@ class AuthViewsTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("detail", response.data)
-        self.assertEqual(
-            response.data["detail"], "Please provide both username and password"
-        )
+        self.assertEqual(response.data["detail"], "Please provide both username and password")
 
     def test_logout_view_authenticated(self):
         """Test logout when authenticated."""

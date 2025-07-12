@@ -3,20 +3,18 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, List, Type
+from typing import Any
 
 from django.db import connection
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import api_view
-from rest_framework.permissions import (AllowAny, BasePermission,
-                                        IsAuthenticated)
+from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
 from ..models import AssuranceGoal, ResourceType, Tag, Technique
-from ..serializers import (AssuranceGoalSerializer, ResourceTypeSerializer,
-                           TagSerializer, TechniqueSerializer)
+from ..serializers import AssuranceGoalSerializer, ResourceTypeSerializer, TagSerializer, TechniqueSerializer
 
 # Set up logger
 logger = logging.getLogger(__name__)
@@ -41,7 +39,7 @@ class AssuranceGoalsViewSet(viewsets.ModelViewSet):
     search_fields = ["name", "description"]
     ordering_fields = ["id", "name"]
 
-    def get_permissions(self) -> List[BasePermission]:
+    def get_permissions(self) -> list[BasePermission]:
         """
         Customize permissions based on action:
         - list and retrieve are allowed for any user (even unauthenticated)
@@ -72,7 +70,7 @@ class TagsViewSet(viewsets.ModelViewSet):
     search_fields = ["name"]
     ordering_fields = ["id", "name"]
 
-    def get_permissions(self) -> List[BasePermission]:
+    def get_permissions(self) -> list[BasePermission]:
         """Require authentication for write operations"""
         if self.action in ["create", "update", "partial_update", "destroy"]:
             return [IsAuthenticated()]
@@ -108,7 +106,7 @@ class TechniquesViewSet(viewsets.ModelViewSet):
     search_fields = ["name", "description", "acronym"]
     ordering_fields = ["slug", "name", "complexity_rating", "computational_cost_rating"]
 
-    def get_permissions(self) -> List[BasePermission]:
+    def get_permissions(self) -> list[BasePermission]:
         """
         Customize permissions based on action:
         - list and retrieve are allowed for any user (even unauthenticated)
@@ -119,7 +117,7 @@ class TechniquesViewSet(viewsets.ModelViewSet):
         # Default permission for list and retrieve
         return [AllowAny()]
 
-    def get_serializer_class(self) -> Type[TechniqueSerializer]:
+    def get_serializer_class(self) -> type[TechniqueSerializer]:
         """Return appropriate serializer class based on action."""
         return TechniqueSerializer
 
@@ -146,9 +144,7 @@ class TechniquesViewSet(viewsets.ModelViewSet):
     def update(self, request: Request, **kwargs: Any) -> Response:
         """Update a technique."""
         instance = self.get_object()
-        serializer = self.get_serializer(
-            instance, data=request.data, partial=kwargs.get("partial", False)
-        )
+        serializer = self.get_serializer(instance, data=request.data, partial=kwargs.get("partial", False))
         serializer.is_valid(raise_exception=True)
         serializer.save()  # Removed unused 'updated_instance' variable
 
@@ -175,7 +171,7 @@ class ResourceTypesViewSet(viewsets.ModelViewSet):
     search_fields = ["name"]
     ordering_fields = ["id", "name"]
 
-    def get_permissions(self) -> List[BasePermission]:
+    def get_permissions(self) -> list[BasePermission]:
         """Require authentication for write operations"""
         if self.action in ["create", "update", "partial_update", "destroy"]:
             return [IsAuthenticated()]
@@ -225,9 +221,7 @@ def _sanitize_settings():
         "DEBUG": settings.DEBUG,
         "ALLOWED_HOSTS": settings.ALLOWED_HOSTS,
         "CORS_ALLOWED_ORIGINS": getattr(settings, "CORS_ALLOWED_ORIGINS", "Not set"),
-        "CORS_ALLOW_ALL_ORIGINS": getattr(
-            settings, "CORS_ALLOW_ALL_ORIGINS", "Not set"
-        ),
+        "CORS_ALLOW_ALL_ORIGINS": getattr(settings, "CORS_ALLOW_ALL_ORIGINS", "Not set"),
         "DATABASE_ENGINE": settings.DATABASES["default"]["ENGINE"],
         "INSTALLED_APPS": settings.INSTALLED_APPS,
         "MIDDLEWARE": settings.MIDDLEWARE,
@@ -240,9 +234,7 @@ def _get_database_info():
 
     return {
         "vendor": connection.vendor,
-        "queries_executed": (
-            len(connection.queries) if settings.DEBUG else "Query logging disabled"
-        ),
+        "queries_executed": (len(connection.queries) if settings.DEBUG else "Query logging disabled"),
         "is_usable": connection.is_usable(),
     }
 
@@ -263,11 +255,7 @@ def _format_request_info(request: Request):
         "host": request.get_host(),
         "method": request.method,
         "content_type": request.content_type or "Not set",
-        "headers": {
-            k: v
-            for k, v in request.headers.items()
-            if k.lower() not in ("cookie", "authorization")
-        },
+        "headers": {k: v for k, v in request.headers.items() if k.lower() not in ("cookie", "authorization")},
     }
 
 

@@ -6,20 +6,25 @@ Tests cover model validation, constraints, foreign key relationships, and cascad
 for models that represent relationships between techniques and their associated data.
 """
 
-from datetime import date, datetime
+from datetime import date
 
-import pytest
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.test import TestCase
 
-from api.models import (AssuranceGoal, ResourceType, Technique,
-                        TechniqueExampleUseCase, TechniqueLimitation,
-                        TechniqueResource)
-from api.tests.factories import (AssuranceGoalFactory, ResourceTypeFactory,
-                                 TechniqueExampleUseCaseFactory,
-                                 TechniqueFactory, TechniqueLimitationFactory,
-                                 TechniqueResourceFactory)
+from api.models import (
+    TechniqueExampleUseCase,
+    TechniqueLimitation,
+    TechniqueResource,
+)
+from api.tests.factories import (
+    AssuranceGoalFactory,
+    ResourceTypeFactory,
+    TechniqueExampleUseCaseFactory,
+    TechniqueFactory,
+    TechniqueLimitationFactory,
+    TechniqueResourceFactory,
+)
 
 
 class TechniqueResourceModelTests(TestCase):
@@ -176,9 +181,7 @@ class TechniqueResourceModelTests(TestCase):
 
     def test_technique_resource_cascade_on_resource_type_delete(self):
         """Test behavior when resource type is deleted."""
-        resource = TechniqueResourceFactory(
-            technique=self.technique, resource_type=self.resource_type
-        )
+        resource = TechniqueResourceFactory(technique=self.technique, resource_type=self.resource_type)
         resource_id = resource.id
 
         # Delete resource type
@@ -265,9 +268,7 @@ class TechniqueExampleUseCaseModelTests(TestCase):
 
     def test_use_case_string_representation(self):
         """Test the string representation of a use case."""
-        use_case = TechniqueExampleUseCaseFactory(
-            description="Healthcare diagnosis explanation"
-        )
+        use_case = TechniqueExampleUseCaseFactory(description="Healthcare diagnosis explanation")
         # String representation includes the technique name
         expected_str = f"Use case for {use_case.technique.name}"
         self.assertEqual(str(use_case), expected_str)
@@ -279,9 +280,7 @@ class TechniqueExampleUseCaseModelTests(TestCase):
 
         with transaction.atomic():
             with self.assertRaises(IntegrityError):
-                TechniqueExampleUseCase.objects.create(
-                    technique=None, description="Valid description"
-                )
+                TechniqueExampleUseCase.objects.create(technique=None, description="Valid description")
 
         # Test description is required
         with self.assertRaises(ValidationError):
@@ -292,16 +291,12 @@ class TechniqueExampleUseCaseModelTests(TestCase):
         """Test description field validation."""
         # Very long description should be allowed
         long_description = "A" * 5000
-        use_case = TechniqueExampleUseCase(
-            technique=self.technique, description=long_description
-        )
+        use_case = TechniqueExampleUseCase(technique=self.technique, description=long_description)
         use_case.full_clean()  # Should not raise
 
         # Description with special characters
         special_description = "Use case with unicode: αβγδε and emojis: 🤖🔬📊"
-        use_case = TechniqueExampleUseCase(
-            technique=self.technique, description=special_description
-        )
+        use_case = TechniqueExampleUseCase(technique=self.technique, description=special_description)
         use_case.full_clean()  # Should not raise
 
     def test_use_case_cascade_on_technique_delete(self):
@@ -318,9 +313,7 @@ class TechniqueExampleUseCaseModelTests(TestCase):
 
     def test_use_case_behavior_on_goal_delete(self):
         """Test behavior when assurance goal is deleted."""
-        use_case = TechniqueExampleUseCaseFactory(
-            technique=self.technique, assurance_goal=self.assurance_goal
-        )
+        use_case = TechniqueExampleUseCaseFactory(technique=self.technique, assurance_goal=self.assurance_goal)
         use_case_id = use_case.id
 
         # Delete assurance goal
@@ -343,9 +336,7 @@ class TechniqueExampleUseCaseModelTests(TestCase):
         use_case3 = TechniqueExampleUseCaseFactory(technique=self.technique)
 
         # Verify all use cases belong to the technique
-        technique_use_cases = TechniqueExampleUseCase.objects.filter(
-            technique=self.technique
-        )
+        technique_use_cases = TechniqueExampleUseCase.objects.filter(technique=self.technique)
         self.assertEqual(technique_use_cases.count(), 3)
 
         # Verify reverse relationship
@@ -353,12 +344,8 @@ class TechniqueExampleUseCaseModelTests(TestCase):
 
     def test_multiple_use_cases_same_goal(self):
         """Test that multiple use cases can share the same assurance goal."""
-        use_case1 = TechniqueExampleUseCaseFactory(
-            technique=self.technique, assurance_goal=self.assurance_goal
-        )
-        use_case2 = TechniqueExampleUseCaseFactory(
-            technique=self.technique, assurance_goal=self.assurance_goal
-        )
+        use_case1 = TechniqueExampleUseCaseFactory(technique=self.technique, assurance_goal=self.assurance_goal)
+        use_case2 = TechniqueExampleUseCaseFactory(technique=self.technique, assurance_goal=self.assurance_goal)
 
         # Both use cases should have the same goal
         self.assertEqual(use_case1.assurance_goal, self.assurance_goal)
@@ -387,9 +374,7 @@ class TechniqueLimitationModelTests(TestCase):
 
     def test_limitation_string_representation(self):
         """Test the string representation of a limitation."""
-        limitation = TechniqueLimitationFactory(
-            description="Limited scalability for real-time applications"
-        )
+        limitation = TechniqueLimitationFactory(description="Limited scalability for real-time applications")
         # String representation includes the technique name
         expected_str = f"Limitation for {limitation.technique.name}"
         self.assertEqual(str(limitation), expected_str)
@@ -401,9 +386,7 @@ class TechniqueLimitationModelTests(TestCase):
 
         with transaction.atomic():
             with self.assertRaises(IntegrityError):
-                TechniqueLimitation.objects.create(
-                    technique=None, description="Valid description"
-                )
+                TechniqueLimitation.objects.create(technique=None, description="Valid description")
 
         # Test description is required
         with self.assertRaises(ValidationError):
@@ -414,18 +397,12 @@ class TechniqueLimitationModelTests(TestCase):
         """Test description field validation."""
         # Very long description should be allowed
         long_description = "A" * 5000
-        limitation = TechniqueLimitation(
-            technique=self.technique, description=long_description
-        )
+        limitation = TechniqueLimitation(technique=self.technique, description=long_description)
         limitation.full_clean()  # Should not raise
 
         # Description with special characters
-        special_description = (
-            "Limitation with unicode: αβγδε and mathematical symbols: ∑∏∆"
-        )
-        limitation = TechniqueLimitation(
-            technique=self.technique, description=special_description
-        )
+        special_description = "Limitation with unicode: αβγδε and mathematical symbols: ∑∏∆"
+        limitation = TechniqueLimitation(technique=self.technique, description=special_description)
         limitation.full_clean()  # Should not raise
 
     def test_limitation_cascade_on_technique_delete(self):
@@ -447,9 +424,7 @@ class TechniqueLimitationModelTests(TestCase):
         limitation3 = TechniqueLimitationFactory(technique=self.technique)
 
         # Verify all limitations belong to the technique
-        technique_limitations = TechniqueLimitation.objects.filter(
-            technique=self.technique
-        )
+        technique_limitations = TechniqueLimitation.objects.filter(technique=self.technique)
         self.assertEqual(technique_limitations.count(), 3)
 
         # Verify reverse relationship
@@ -458,20 +433,12 @@ class TechniqueLimitationModelTests(TestCase):
     def test_limitation_ordering(self):
         """Test limitation ordering by creation order."""
         # Create limitations with known descriptions
-        limitation1 = TechniqueLimitationFactory(
-            technique=self.technique, description="First limitation"
-        )
-        limitation2 = TechniqueLimitationFactory(
-            technique=self.technique, description="Second limitation"
-        )
-        limitation3 = TechniqueLimitationFactory(
-            technique=self.technique, description="Third limitation"
-        )
+        limitation1 = TechniqueLimitationFactory(technique=self.technique, description="First limitation")
+        limitation2 = TechniqueLimitationFactory(technique=self.technique, description="Second limitation")
+        limitation3 = TechniqueLimitationFactory(technique=self.technique, description="Third limitation")
 
         # Get limitations in creation order (by ID)
-        limitations = list(
-            TechniqueLimitation.objects.filter(technique=self.technique).order_by("id")
-        )
+        limitations = list(TechniqueLimitation.objects.filter(technique=self.technique).order_by("id"))
 
         expected_order = [limitation1, limitation2, limitation3]
         self.assertEqual(limitations, expected_order)
@@ -581,7 +548,7 @@ class RelationshipModelsIntegrationTests(TestCase):
 
         # Log the actual time for debugging
         print(f"\nCreation time for {num_objects} objects: {creation_time:.3f} seconds")
-        print(f"Average time per object: {creation_time/num_objects:.3f} seconds")
+        print(f"Average time per object: {creation_time / num_objects:.3f} seconds")
 
         # Basic performance assertion (adjust threshold as needed)
         self.assertLess(

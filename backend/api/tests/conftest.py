@@ -1,23 +1,21 @@
 import json
 import os
 import tempfile
-from typing import Any, Dict, List
+from typing import Any
 
 import pytest
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.management import call_command
-from django.db import connection, transaction
+from django.db import connection
 from django.test import TestCase, TransactionTestCase
 
-from api.tests.factories import (AssuranceGoalFactory,
-                                 CompleteTechniqueFactory,
-                                 IsolatedTechniqueFactory,
-                                 MinimalTechniqueFactory, ResourceTypeFactory,
-                                 TagFactory, TechniqueFactory,
-                                 create_realistic_technique_dataset,
-                                 create_test_assurance_goals,
-                                 create_test_resource_types)
+from api.tests.factories import (
+    CompleteTechniqueFactory,
+    TechniqueFactory,
+    create_realistic_technique_dataset,
+    create_test_assurance_goals,
+    create_test_resource_types,
+)
 
 # Test configuration constants
 TEST_USER_PASSWORD = os.environ.get("TEST_USER_PASSWORD", "test-password-123")
@@ -76,8 +74,7 @@ class BaseIntegrationTestCase(TransactionTestCase):
 
     def clear_test_data(self):
         """Clear test data while preserving foundational data"""
-        from api.models import (Technique, TechniqueExampleUseCase,
-                                TechniqueLimitation, TechniqueResource)
+        from api.models import Technique, TechniqueExampleUseCase, TechniqueLimitation, TechniqueResource
 
         # Clear derived data but keep goals and resource types
         TechniqueLimitation.objects.all().delete()
@@ -122,8 +119,7 @@ class BaseAPITestCase(TransactionTestCase):
 
     def clear_test_data(self):
         """Clear test data while preserving foundational data"""
-        from api.models import (Technique, TechniqueExampleUseCase,
-                                TechniqueLimitation, TechniqueResource)
+        from api.models import Technique, TechniqueExampleUseCase, TechniqueLimitation, TechniqueResource
 
         TechniqueLimitation.objects.all().delete()
         TechniqueExampleUseCase.objects.all().delete()
@@ -163,9 +159,7 @@ def sample_technique_data():
             ],
             "limitations": [
                 {"description": "May not work well with very high-dimensional data"},
-                {
-                    "description": "Computational overhead increases with model complexity"
-                },
+                {"description": "Computational overhead increases with model complexity"},
             ],
         }
     ]
@@ -188,7 +182,7 @@ def invalid_technique_data():
 def temp_json_file():
     """Creates a temporary JSON file for testing file operations"""
 
-    def _create_temp_file(data: Dict[str, Any]) -> str:
+    def _create_temp_file(data: dict[str, Any]) -> str:
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(data, f)
             return f.name
@@ -202,9 +196,7 @@ def temp_json_file():
             except FileNotFoundError:
                 pass
 
-    yield lambda data: (lambda path: (files_created.append(path), path)[1])(
-        _create_temp_file(data)
-    )
+    yield lambda data: (lambda path: (files_created.append(path), path)[1])(_create_temp_file(data))
     cleanup()
 
 
@@ -300,9 +292,7 @@ def assert_technique_data_matches(technique, expected_data):
     assert technique.name == expected_data["name"]
     assert technique.description == expected_data["description"]
     assert technique.complexity_rating == expected_data.get("complexity_rating")
-    assert technique.computational_cost_rating == expected_data.get(
-        "computational_cost_rating"
-    )
+    assert technique.computational_cost_rating == expected_data.get("computational_cost_rating")
 
     # Check goals
     expected_goals = set(expected_data.get("assurance_goals", []))
@@ -346,9 +336,7 @@ def get_db_state_snapshot():
 def assert_db_state_unchanged(before_snapshot, after_snapshot):
     """Assert that database state is unchanged between snapshots"""
     for model, count in before_snapshot.items():
-        assert (
-            after_snapshot[model] == count
-        ), f"{model} count changed: {count} -> {after_snapshot[model]}"
+        assert after_snapshot[model] == count, f"{model} count changed: {count} -> {after_snapshot[model]}"
 
 
 # Error testing utilities
@@ -357,9 +345,7 @@ def assert_db_state_unchanged(before_snapshot, after_snapshot):
 class ErrorTestMixin:
     """Mixin for testing error conditions and edge cases"""
 
-    def assert_error_response(
-        self, response, expected_status, expected_error_type=None
-    ):
+    def assert_error_response(self, response, expected_status, expected_error_type=None):
         """Assert response contains expected error information"""
         assert response.status_code == expected_status
 
@@ -388,9 +374,7 @@ class ErrorTestMixin:
 @pytest.fixture
 def authenticated_client(client):
     """Provides an authenticated client for API testing"""
-    user = User.objects.create_user(
-        username="test_user", email="test@example.com", password=TEST_USER_PASSWORD
-    )
+    user = User.objects.create_user(username="test_user", email="test@example.com", password=TEST_USER_PASSWORD)
     client.force_login(user)
     client.user = user
     return client

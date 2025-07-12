@@ -11,7 +11,7 @@ import datetime
 import json
 import logging
 import re
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.views import exception_handler
@@ -51,7 +51,7 @@ class DateParsingUtility:
     ]
 
     @classmethod
-    def parse_date(cls, date_str: Optional[str]) -> Optional[datetime.date]:
+    def parse_date(cls, date_str: str | None) -> datetime.date | None:
         """
         Parse a date string into a Python date object.
 
@@ -90,7 +90,7 @@ class JSONDataParser:
     """Utility class for parsing and validating JSON data structures."""
 
     @staticmethod
-    def parse_limitation_data(limitation: Any) -> Optional[str]:
+    def parse_limitation_data(limitation: Any) -> str | None:
         """
         Parse limitation data from various formats.
 
@@ -111,9 +111,7 @@ class JSONDataParser:
                 try:
                     # Try to parse as JSON if it looks like JSON
                     parsed_limitation = json.loads(limitation)
-                    return JSONDataParser._extract_limitation_from_parsed(
-                        parsed_limitation
-                    )
+                    return JSONDataParser._extract_limitation_from_parsed(parsed_limitation)
                 except json.JSONDecodeError:
                     # If parsing fails, treat it as a plain string
                     return limitation.strip() if limitation.strip() else None
@@ -124,7 +122,7 @@ class JSONDataParser:
         return None
 
     @staticmethod
-    def _extract_limitation_from_parsed(parsed_limitation: Any) -> Optional[str]:
+    def _extract_limitation_from_parsed(parsed_limitation: Any) -> str | None:
         """Extract limitation description from parsed JSON data."""
         # Handle case where the parsed result is a single limitation object
         if isinstance(parsed_limitation, dict) and "description" in parsed_limitation:
@@ -144,7 +142,7 @@ class JSONDataParser:
         return None
 
     @staticmethod
-    def parse_authors_data(authors_data: Union[str, List[str]]) -> str:
+    def parse_authors_data(authors_data: str | list[str]) -> str:
         """
         Parse authors data from string or list format.
 
@@ -155,9 +153,7 @@ class JSONDataParser:
             Comma-separated string of authors
         """
         if isinstance(authors_data, list):
-            return ", ".join(
-                str(author).strip() for author in authors_data if str(author).strip()
-            )
+            return ", ".join(str(author).strip() for author in authors_data if str(author).strip())
         if isinstance(authors_data, str):
             return authors_data.strip()
 
@@ -168,7 +164,7 @@ class TechniqueDataValidator:
     """Validator for technique data integrity and completeness."""
 
     @staticmethod
-    def validate_required_fields(data: Dict[str, Any], force: bool = False) -> bool:
+    def validate_required_fields(data: dict[str, Any], force: bool = False) -> bool:
         """
         Validate that required fields are present and valid.
 
@@ -195,7 +191,7 @@ class TechniqueDataValidator:
         return True
 
     @staticmethod
-    def validate_ratings(data: Dict[str, Any]) -> bool:
+    def validate_ratings(data: dict[str, Any]) -> bool:
         """
         Validate complexity and computational cost ratings.
 
@@ -220,7 +216,7 @@ class TechniqueDataValidator:
         return True
 
     @staticmethod
-    def validate_resource_data(resource_data: Dict[str, Any]) -> bool:
+    def validate_resource_data(resource_data: dict[str, Any]) -> bool:
         """
         Validate resource data structure.
 
@@ -247,7 +243,7 @@ class TechniqueDataExtractor:
         self.json_parser = JSONDataParser()
         self.validator = TechniqueDataValidator()
 
-    def extract_basic_data(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def extract_basic_data(self, data: dict[str, Any]) -> dict[str, Any]:
         """
         Extract basic technique data fields.
 
@@ -266,7 +262,7 @@ class TechniqueDataExtractor:
             "computational_cost_rating": data.get("computational_cost_rating"),
         }
 
-    def extract_relationship_data(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def extract_relationship_data(self, data: dict[str, Any]) -> dict[str, Any]:
         """
         Extract relationship data (goals, tags, related techniques).
 
@@ -282,7 +278,7 @@ class TechniqueDataExtractor:
             "related_techniques": data.get("related_techniques", []),
         }
 
-    def extract_nested_data(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def extract_nested_data(self, data: dict[str, Any]) -> dict[str, Any]:
         """
         Extract nested object data (resources, use cases, limitations).
 
@@ -298,7 +294,7 @@ class TechniqueDataExtractor:
             "limitations": data.get("limitations", []),
         }
 
-    def process_resource_data(self, resource_data: Dict[str, Any]) -> Dict[str, Any]:
+    def process_resource_data(self, resource_data: dict[str, Any]) -> dict[str, Any]:
         """
         Process and clean resource data.
 
@@ -326,9 +322,7 @@ class TechniqueDataExtractor:
         }
 
         # Get the source_type from the data (primary field in migrated data)
-        raw_source_type = resource_data.get(
-            "source_type", resource_data.get("type", "paper")
-        )
+        raw_source_type = resource_data.get("source_type", resource_data.get("type", "paper"))
 
         # Map to database ResourceType name, defaulting to "Paper" if unmapped
         mapped_type = source_type_mapping.get(raw_source_type.lower(), "Paper")
@@ -338,23 +332,19 @@ class TechniqueDataExtractor:
             "title": resource_data.get("title", "Resource"),
             "url": resource_data.get("url", ""),
             "description": resource_data.get("description", ""),
-            "authors": self.json_parser.parse_authors_data(
-                resource_data.get("authors", [])
-            ),
+            "authors": self.json_parser.parse_authors_data(resource_data.get("authors", [])),
             "publication_date": resource_data.get("publication_date", ""),
             "source_type": raw_source_type,
         }
 
         # Parse the publication date
-        processed["parsed_publication_date"] = self.date_parser.parse_date(
-            processed["publication_date"]
-        )
+        processed["parsed_publication_date"] = self.date_parser.parse_date(processed["publication_date"])
 
         return processed
 
     def process_use_case_data(
-        self, use_case_data: Dict[str, Any], default_goal: Optional[str] = None
-    ) -> Dict[str, Any]:
+        self, use_case_data: dict[str, Any], default_goal: str | None = None
+    ) -> dict[str, Any]:
         """
         Process and clean use case data.
 
@@ -372,7 +362,7 @@ class TechniqueDataExtractor:
             "goal_name": goal_name,
         }
 
-    def process_limitation_data(self, limitations_data: List[Any]) -> List[str]:
+    def process_limitation_data(self, limitations_data: list[Any]) -> list[str]:
         """
         Process and clean limitations data.
 

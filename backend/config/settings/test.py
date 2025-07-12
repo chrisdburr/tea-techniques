@@ -6,7 +6,7 @@ Optimized for CI/CD environments and automated testing.
 import os
 import sys
 
-from .base import *  # noqa
+from .base import *
 
 # Test-specific SECRET_KEY
 SECRET_KEY = "test-secret-key-for-testing-only"
@@ -57,7 +57,7 @@ MIDDLEWARE = [
     for m in MIDDLEWARE
     if not any(
         skip in m
-        for skip in [  # noqa
+        for skip in [
             "debug_toolbar",
             "browser_reload",
         ]
@@ -124,7 +124,7 @@ APPEND_SLASH = False
 
 # REST Framework settings for tests
 REST_FRAMEWORK = {
-    **REST_FRAMEWORK,  # noqa
+    **REST_FRAMEWORK,
     "TRAILING_SLASH": False,
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",

@@ -6,24 +6,30 @@ Tests how different services work together, data flows between components,
 and complex workflows that span multiple service layers.
 """
 
-import json
 from unittest.mock import Mock, patch
 
-import pytest
-from django.core.exceptions import ValidationError
-from django.db import transaction
 from django.test import TransactionTestCase
 
-from api.models import (AssuranceGoal, ResourceType, Tag, Technique,
-                        TechniqueExampleUseCase, TechniqueLimitation,
-                        TechniqueResource)
+from api.models import (
+    Technique,
+    TechniqueExampleUseCase,
+    TechniqueLimitation,
+    TechniqueResource,
+)
 from api.serializers import TechniqueSerializer
-from api.services import (TechniqueLimitationService, TechniqueOperationError,
-                          TechniqueResourceService, TechniqueService,
-                          TechniqueUseCaseService)
-from api.tests.factories import (AssuranceGoalFactory,
-                                 IsolatedTechniqueFactory, ResourceTypeFactory,
-                                 TagFactory, TechniqueFactory)
+from api.services import (
+    TechniqueLimitationService,
+    TechniqueOperationError,
+    TechniqueResourceService,
+    TechniqueService,
+    TechniqueUseCaseService,
+)
+from api.tests.factories import (
+    AssuranceGoalFactory,
+    IsolatedTechniqueFactory,
+    ResourceTypeFactory,
+    TagFactory,
+)
 from api.utils import DataValidationError, TechniqueDataExtractor
 
 
@@ -89,9 +95,7 @@ class ServiceLayerIntegrationTests(TransactionTestCase):
         }
 
         # Create technique through service
-        technique = self.technique_service.create_technique(
-            validated_data, request_data
-        )
+        technique = self.technique_service.create_technique(validated_data, request_data)
 
         # Verify all components were created correctly
         self.assertEqual(technique.name, "Integration Test Technique")
@@ -135,9 +139,7 @@ class ServiceLayerIntegrationTests(TransactionTestCase):
             url="https://original.com",
         )
 
-        original_limitation = TechniqueLimitation.objects.create(
-            technique=technique, description="Original limitation"
-        )
+        original_limitation = TechniqueLimitation.objects.create(technique=technique, description="Original limitation")
 
         # Update data with new objects
         new_goal = AssuranceGoalFactory(name="New Goal")
@@ -166,9 +168,7 @@ class ServiceLayerIntegrationTests(TransactionTestCase):
         }
 
         # Update through service
-        updated_technique = self.technique_service.update_technique(
-            technique, validated_data, request_data
-        )
+        updated_technique = self.technique_service.update_technique(technique, validated_data, request_data)
 
         # Verify updates
         self.assertEqual(updated_technique.name, unique_updated_name)
@@ -209,9 +209,7 @@ class ServiceLayerIntegrationTests(TransactionTestCase):
         }
 
         # Mock the resource service to raise an error
-        with patch.object(
-            self.technique_service.resource_service, "create_resources"
-        ) as mock_create:
+        with patch.object(self.technique_service.resource_service, "create_resources") as mock_create:
             mock_create.side_effect = Exception("Resource creation failed")
 
             request_data = {
@@ -233,9 +231,7 @@ class ServiceLayerIntegrationTests(TransactionTestCase):
             self.assertIn("Resource creation failed", str(context.exception))
 
             # Verify no technique was created due to transaction rollback
-            self.assertFalse(
-                Technique.objects.filter(name="Error Test Technique").exists()
-            )
+            self.assertFalse(Technique.objects.filter(name="Error Test Technique").exists())
 
     def test_partial_update_workflow(self):
         """Test updating only specific parts of a technique."""
@@ -263,9 +259,7 @@ class ServiceLayerIntegrationTests(TransactionTestCase):
         }
         request_data = {}  # No nested updates
 
-        updated_technique = self.technique_service.update_technique(
-            technique, validated_data, request_data
-        )
+        updated_technique = self.technique_service.update_technique(technique, validated_data, request_data)
 
         # Verify basic fields were updated
         self.assertEqual(updated_technique.name, unique_name)
@@ -341,9 +335,7 @@ class SerializerServiceIntegrationTests(TransactionTestCase):
         serializer = TechniqueSerializer(data=data, context={"request": request})
 
         # Verify validation
-        self.assertTrue(
-            serializer.is_valid(), f"Validation errors: {serializer.errors}"
-        )
+        self.assertTrue(serializer.is_valid(), f"Validation errors: {serializer.errors}")
 
         # Create through serializer (which uses service)
         technique = serializer.save()
@@ -449,16 +441,12 @@ class UtilsServiceIntegrationTests(TransactionTestCase):
             processed_resource = self.extractor.process_resource_data(resource_data)
             processed_resources.append(processed_resource)
 
-        processed_limitations = self.extractor.process_limitation_data(
-            nested_data["limitations"]
-        )
+        processed_limitations = self.extractor.process_limitation_data(nested_data["limitations"])
 
         # Prepare service data
         validated_data = {
             **basic_data,
-            "slug": self._generate_slug(
-                "Extracted Technique"
-            ),  # Override extractor's empty slug
+            "slug": self._generate_slug("Extracted Technique"),  # Override extractor's empty slug
             "assurance_goals": [self.assurance_goal],  # Resolved from names
         }
 
@@ -469,18 +457,14 @@ class UtilsServiceIntegrationTests(TransactionTestCase):
                     "title": processed_resources[0]["title"],
                     "url": processed_resources[0]["url"],
                     "authors": processed_resources[0]["authors"],
-                    "publication_date": processed_resources[0][
-                        "parsed_publication_date"
-                    ],
+                    "publication_date": processed_resources[0]["parsed_publication_date"],
                 }
             ],
             "limitations": [{"description": desc} for desc in processed_limitations],
         }
 
         # Create through service
-        technique = self.technique_service.create_technique(
-            validated_data, request_data
-        )
+        technique = self.technique_service.create_technique(validated_data, request_data)
 
         # Verify integration worked
         self.assertEqual(technique.name, "Extracted Technique")
@@ -574,9 +558,7 @@ class CrossComponentDataFlowTests(TransactionTestCase):
                     "url": "https://lifecycle.com",
                 }
             ],
-            "example_use_cases": [
-                {"description": "Lifecycle use case", "assurance_goal": goal.id}
-            ],
+            "example_use_cases": [{"description": "Lifecycle use case", "assurance_goal": goal.id}],
             "limitations": ["Lifecycle limitation"],
         }
 
@@ -606,9 +588,7 @@ class CrossComponentDataFlowTests(TransactionTestCase):
             ]
         }
 
-        updated_technique = service.update_technique(
-            technique, update_data, update_request_data
-        )
+        updated_technique = service.update_technique(technique, update_data, update_request_data)
 
         # Verify update
         self.assertEqual(updated_technique.name, "Updated Lifecycle Technique")

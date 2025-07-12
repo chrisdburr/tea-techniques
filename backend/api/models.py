@@ -78,35 +78,23 @@ class Technique(models.Model):
     relationships to goals, categories, and other classification systems.
     """
 
-    slug: models.SlugField = models.SlugField(
-        max_length=100, unique=True, primary_key=True
-    )
+    slug: models.SlugField = models.SlugField(max_length=100, unique=True, primary_key=True)
     name: models.CharField = models.CharField(max_length=255, unique=True)
     acronym: models.CharField = models.CharField(max_length=20, blank=True, null=True)
     description: models.TextField = models.TextField()
-    complexity_rating: models.PositiveSmallIntegerField = (
-        models.PositiveSmallIntegerField(
-            null=True,
-            blank=True,
-            validators=[MinValueValidator(1), MaxValueValidator(5)],
-        )
+    complexity_rating: models.PositiveSmallIntegerField = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
     )
-    computational_cost_rating: models.PositiveSmallIntegerField = (
-        models.PositiveSmallIntegerField(
-            null=True,
-            blank=True,
-            validators=[MinValueValidator(1), MaxValueValidator(5)],
-        )
+    computational_cost_rating: models.PositiveSmallIntegerField = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
     )
-    assurance_goals: models.ManyToManyField = models.ManyToManyField(
-        AssuranceGoal, related_name="techniques"
-    )
-    tags: models.ManyToManyField = models.ManyToManyField(
-        Tag, related_name="techniques", blank=True
-    )
-    related_techniques: models.ManyToManyField = models.ManyToManyField(
-        "self", blank=True, symmetrical=False
-    )
+    assurance_goals: models.ManyToManyField = models.ManyToManyField(AssuranceGoal, related_name="techniques")
+    tags: models.ManyToManyField = models.ManyToManyField(Tag, related_name="techniques", blank=True)
+    related_techniques: models.ManyToManyField = models.ManyToManyField("self", blank=True, symmetrical=False)
 
     class Meta:
         db_table = "technique"
@@ -130,20 +118,14 @@ class TechniqueResource(models.Model):
     provide additional information, implementations, or examples of the technique.
     """
 
-    technique: models.ForeignKey = models.ForeignKey(
-        Technique, on_delete=models.CASCADE, related_name="resources"
-    )
-    resource_type: models.ForeignKey = models.ForeignKey(
-        ResourceType, on_delete=models.PROTECT
-    )
+    technique: models.ForeignKey = models.ForeignKey(Technique, on_delete=models.CASCADE, related_name="resources")
+    resource_type: models.ForeignKey = models.ForeignKey(ResourceType, on_delete=models.PROTECT)
     title: models.CharField = models.CharField(max_length=255)
     url: models.URLField = models.URLField()
     description: models.TextField = models.TextField(blank=True)
     authors: models.CharField = models.CharField(max_length=500, blank=True, null=True)
     publication_date: models.DateField = models.DateField(blank=True, null=True)
-    source_type: models.CharField = models.CharField(
-        max_length=100, blank=True, null=True
-    )
+    source_type: models.CharField = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         db_table = "technique_resource"
@@ -192,9 +174,7 @@ class TechniqueLimitation(models.Model):
     drawbacks of each technique, enabling more informed decisions about when to apply it.
     """
 
-    technique: models.ForeignKey = models.ForeignKey(
-        Technique, on_delete=models.CASCADE, related_name="limitations"
-    )
+    technique: models.ForeignKey = models.ForeignKey(Technique, on_delete=models.CASCADE, related_name="limitations")
     description: models.TextField = models.TextField()
 
     class Meta:

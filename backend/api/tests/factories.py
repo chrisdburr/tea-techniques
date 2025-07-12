@@ -1,14 +1,19 @@
 import datetime
 import re
-from typing import List, Optional
 
 import factory
 from django.utils.text import slugify
 from faker import Faker
 
-from api.models import (AssuranceGoal, ResourceType, Tag, Technique,
-                        TechniqueExampleUseCase, TechniqueLimitation,
-                        TechniqueResource)
+from api.models import (
+    AssuranceGoal,
+    ResourceType,
+    Tag,
+    Technique,
+    TechniqueExampleUseCase,
+    TechniqueLimitation,
+    TechniqueResource,
+)
 
 fake = Faker()
 
@@ -80,7 +85,7 @@ TECHNIQUE_DOMAINS = [
 
 
 # Helper functions for technique factories
-def extract_acronym_from_name(name: str) -> Optional[str]:
+def extract_acronym_from_name(name: str) -> str | None:
     """Extract acronym from technique name if it contains one in parentheses."""
     match = re.search(r"\(([A-Z]{2,})\)", name)
     if match:
@@ -116,9 +121,7 @@ class TagFactory(factory.django.DjangoModelFactory):
         model = Tag
         django_get_or_create = ("name",)
 
-    name = factory.LazyFunction(
-        lambda: f"{fake.random_element(TECHNIQUE_CATEGORIES)}-{fake.word().lower()}"
-    )
+    name = factory.LazyFunction(lambda: f"{fake.random_element(TECHNIQUE_CATEGORIES)}-{fake.word().lower()}")
 
 
 class ResourceTypeFactory(factory.django.DjangoModelFactory):
@@ -127,9 +130,7 @@ class ResourceTypeFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ("name",)
 
     name = factory.LazyFunction(lambda: fake.random_element(RESOURCE_TYPES))
-    icon = factory.LazyAttribute(
-        lambda obj: obj.name.lower().replace(" ", "_").replace("/", "_")
-    )
+    icon = factory.LazyAttribute(lambda obj: obj.name.lower().replace(" ", "_").replace("/", "_"))
 
 
 class TechniqueFactory(factory.django.DjangoModelFactory):
@@ -153,9 +154,7 @@ class TechniqueFactory(factory.django.DjangoModelFactory):
     )
 
     complexity_rating = factory.LazyFunction(lambda: fake.random_int(min=1, max=5))
-    computational_cost_rating = factory.LazyFunction(
-        lambda: fake.random_int(min=1, max=5)
-    )
+    computational_cost_rating = factory.LazyFunction(lambda: fake.random_int(min=1, max=5))
 
     @factory.post_generation
     def assurance_goals(self, create, extracted, **kwargs):
@@ -204,9 +203,7 @@ class TechniqueResourceFactory(factory.django.DjangoModelFactory):
     technique = factory.SubFactory(TechniqueFactory)
     resource_type = factory.SubFactory(ResourceTypeFactory)
 
-    title = factory.LazyFunction(
-        lambda: f"{fake.catch_phrase()}: {fake.sentence(nb_words=6)}"
-    )
+    title = factory.LazyFunction(lambda: f"{fake.catch_phrase()}: {fake.sentence(nb_words=6)}")
 
     url = factory.LazyFunction(lambda: f"{fake.url()}/{fake.uuid4()[:8]}")
 
@@ -215,14 +212,10 @@ class TechniqueResourceFactory(factory.django.DjangoModelFactory):
         f"It covers {fake.words(nb=4)} and includes {fake.sentence(nb_words=8)}"
     )
 
-    authors = factory.LazyFunction(
-        lambda: ", ".join([fake.name() for _ in range(fake.random_int(min=1, max=4))])
-    )
+    authors = factory.LazyFunction(lambda: ", ".join([fake.name() for _ in range(fake.random_int(min=1, max=4))]))
 
     publication_date = factory.LazyFunction(
-        lambda: fake.date_between(
-            start_date=datetime.date(2020, 1, 1), end_date=datetime.date.today()
-        )
+        lambda: fake.date_between(start_date=datetime.date(2020, 1, 1), end_date=datetime.date.today())
     )
 
     source_type = factory.LazyAttribute(lambda obj: obj.resource_type.name)
@@ -312,37 +305,31 @@ class IsolatedTechniqueFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Technique
 
-    name = factory.LazyFunction(
-        lambda: f"Isolated Technique {fake.word()} ({fake.uuid4()[:8]})"
-    )
+    name = factory.LazyFunction(lambda: f"Isolated Technique {fake.word()} ({fake.uuid4()[:8]})")
 
     slug = factory.LazyAttribute(lambda obj: generate_slug_from_name(obj.name))
     acronym = factory.LazyAttribute(lambda obj: extract_acronym_from_name(obj.name))
 
-    description = factory.LazyFunction(
-        lambda: f"Test technique for isolated testing. {fake.sentence(nb_words=10)}"
-    )
+    description = factory.LazyFunction(lambda: f"Test technique for isolated testing. {fake.sentence(nb_words=10)}")
 
     complexity_rating = factory.LazyFunction(lambda: fake.random_int(min=1, max=5))
-    computational_cost_rating = factory.LazyFunction(
-        lambda: fake.random_int(min=1, max=5)
-    )
+    computational_cost_rating = factory.LazyFunction(lambda: fake.random_int(min=1, max=5))
 
 
 # Test data utility functions
 
 
-def create_test_assurance_goals() -> List[AssuranceGoal]:
+def create_test_assurance_goals() -> list[AssuranceGoal]:
     """Create all standard assurance goals for testing"""
     return [AssuranceGoalFactory(name=goal) for goal in ASSURANCE_GOALS]
 
 
-def create_test_resource_types() -> List[ResourceType]:
+def create_test_resource_types() -> list[ResourceType]:
     """Create all standard resource types for testing"""
     return [ResourceTypeFactory(name=res_type) for res_type in RESOURCE_TYPES]
 
 
-def create_realistic_technique_dataset(count: int = 10) -> List[Technique]:
+def create_realistic_technique_dataset(count: int = 10) -> list[Technique]:
     """Create a realistic dataset of techniques for integration testing"""
     techniques = []
 
@@ -357,7 +344,7 @@ def create_realistic_technique_dataset(count: int = 10) -> List[Technique]:
     return techniques
 
 
-def create_edge_case_techniques() -> List[Technique]:
+def create_edge_case_techniques() -> list[Technique]:
     """Create techniques with edge case data for testing robustness"""
     edge_cases = []
 

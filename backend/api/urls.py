@@ -9,11 +9,16 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.routers import DefaultRouter
 
-from .views.api_views import (AssuranceGoalsViewSet, ResourceTypesViewSet,
-                              TagsViewSet, TechniquesViewSet, debug_echo,
-                              health_check, health_check_detailed)
-from .views.auth_views import (auth_status_view, get_csrf, login_view,
-                               logout_view, user_view)
+from .views.api_views import (
+    AssuranceGoalsViewSet,
+    ResourceTypesViewSet,
+    TagsViewSet,
+    TechniquesViewSet,
+    debug_echo,
+    health_check,
+    health_check_detailed,
+)
+from .views.auth_views import auth_status_view, get_csrf, login_view, logout_view, user_view
 
 
 @api_view(["GET"])
@@ -23,14 +28,10 @@ def api_root(request, format=None):
     """
     return Response(
         {
-            "assurance_goals": reverse(
-                "assurancegoal-list", request=request, format=format
-            ),
+            "assurance_goals": reverse("assurancegoal-list", request=request, format=format),
             "tags": reverse("tag-list", request=request, format=format),
             "techniques": reverse("technique-list", request=request, format=format),
-            "resource_types": reverse(
-                "resourcetype-list", request=request, format=format
-            ),
+            "resource_types": reverse("resourcetype-list", request=request, format=format),
             "health": reverse("health-check", request=request, format=format),
             "debug_info": reverse("debug-info", request=request, format=format),
             "debug_echo": reverse("debug-echo", request=request, format=format),
@@ -91,9 +92,7 @@ urlpatterns = [
         schema_view.with_ui("swagger", cache_timeout=0),
         name="schema-swagger-ui-slash",
     ),
-    re_path(
-        r"^redoc$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
-    ),
+    re_path(r"^redoc$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     re_path(
         r"^redoc/$",
         schema_view.with_ui("redoc", cache_timeout=0),

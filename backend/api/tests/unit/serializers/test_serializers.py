@@ -6,26 +6,32 @@ Tests cover field validation, data transformation, nested relationships,
 and integration with the service layer for complex operations.
 """
 
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import Mock, patch
 
-import pytest
 from django.test import TestCase
 from rest_framework.exceptions import ValidationError
 from rest_framework.test import APIRequestFactory
 
-from api.models import (AssuranceGoal, ResourceType, Tag, Technique,
-                        TechniqueExampleUseCase, TechniqueLimitation,
-                        TechniqueResource)
-from api.serializers import (AssuranceGoalSerializer, ResourceTypeSerializer,
-                             TagSerializer, TechniqueExampleUseCaseSerializer,
-                             TechniqueLimitationSerializer,
-                             TechniqueResourceSerializer, TechniqueSerializer)
+from api.serializers import (
+    AssuranceGoalSerializer,
+    ResourceTypeSerializer,
+    TagSerializer,
+    TechniqueExampleUseCaseSerializer,
+    TechniqueLimitationSerializer,
+    TechniqueResourceSerializer,
+    TechniqueSerializer,
+)
 from api.services import TechniqueOperationError
-from api.tests.factories import (AssuranceGoalFactory,
-                                 IsolatedTechniqueFactory, ResourceTypeFactory,
-                                 TagFactory, TechniqueExampleUseCaseFactory,
-                                 TechniqueFactory, TechniqueLimitationFactory,
-                                 TechniqueResourceFactory)
+from api.tests.factories import (
+    AssuranceGoalFactory,
+    IsolatedTechniqueFactory,
+    ResourceTypeFactory,
+    TagFactory,
+    TechniqueExampleUseCaseFactory,
+    TechniqueFactory,
+    TechniqueLimitationFactory,
+    TechniqueResourceFactory,
+)
 
 
 class AssuranceGoalSerializerTests(TestCase):
@@ -42,9 +48,7 @@ class AssuranceGoalSerializerTests(TestCase):
         data = serializer.data
 
         self.assertEqual(data["name"], "Explainability")
-        self.assertEqual(
-            data["description"], "Techniques for making AI decisions interpretable"
-        )
+        self.assertEqual(data["description"], "Techniques for making AI decisions interpretable")
         self.assertIn("id", data)
 
     def test_deserialize_valid_assurance_goal(self):
@@ -136,9 +140,7 @@ class ResourceTypeSerializerTests(TestCase):
 
     def test_serialize_resource_type(self):
         """Test serializing a resource type to JSON."""
-        resource_type = ResourceTypeFactory(
-            name="Technical Paper", icon="technical_paper"
-        )
+        resource_type = ResourceTypeFactory(name="Technical Paper", icon="technical_paper")
 
         serializer = ResourceTypeSerializer(resource_type)
         data = serializer.data
@@ -168,9 +170,7 @@ class ResourceTypeSerializerTests(TestCase):
         # Valid cases that should pass
         valid_data_sets = [
             {"name": "Valid Name", "icon": ""},  # Empty icon is allowed
-            {
-                "name": "missing_icon"
-            },  # Missing icon is allowed (defaults to empty string)
+            {"name": "missing_icon"},  # Missing icon is allowed (defaults to empty string)
         ]
 
         for invalid_data in invalid_data_sets:
@@ -364,9 +364,7 @@ class TechniqueExampleUseCaseSerializerTests(TestCase):
         serializer = TechniqueExampleUseCaseSerializer()
 
         # Test with goal
-        use_case_with_goal = TechniqueExampleUseCaseFactory(
-            assurance_goal=self.assurance_goal
-        )
+        use_case_with_goal = TechniqueExampleUseCaseFactory(assurance_goal=self.assurance_goal)
         goal_name = serializer.get_assurance_goal_name(use_case_with_goal)
         self.assertEqual(goal_name, "Explainability")
 
@@ -381,16 +379,12 @@ class TechniqueLimitationSerializerTests(TestCase):
 
     def test_serialize_limitation(self):
         """Test serializing a technique limitation."""
-        limitation = TechniqueLimitationFactory(
-            description="Computational limitations with large datasets"
-        )
+        limitation = TechniqueLimitationFactory(description="Computational limitations with large datasets")
 
         serializer = TechniqueLimitationSerializer(limitation)
         data = serializer.data
 
-        self.assertEqual(
-            data["description"], "Computational limitations with large datasets"
-        )
+        self.assertEqual(data["description"], "Computational limitations with large datasets")
         self.assertIn("id", data)
         # Technique field should not be included
         self.assertNotIn("technique", data)
@@ -519,9 +513,7 @@ class TechniqueSerializerTests(TestCase):
         # Setup mock to raise error
         mock_service = Mock()
         mock_service_class.return_value = mock_service
-        mock_service.create_technique.side_effect = TechniqueOperationError(
-            "Service error"
-        )
+        mock_service.create_technique.side_effect = TechniqueOperationError("Service error")
 
         # Prepare data
         data = {
@@ -563,9 +555,7 @@ class TechniqueSerializerTests(TestCase):
         context = {"request": request}
 
         # Test update
-        serializer = TechniqueSerializer(
-            technique, data=update_data, context=context, partial=True
-        )
+        serializer = TechniqueSerializer(technique, data=update_data, context=context, partial=True)
         self.assertTrue(serializer.is_valid())
 
         result = serializer.save()
@@ -580,9 +570,7 @@ class TechniqueSerializerTests(TestCase):
         # Setup mock to raise error
         mock_service = Mock()
         mock_service_class.return_value = mock_service
-        mock_service.update_technique.side_effect = TechniqueOperationError(
-            "Update error"
-        )
+        mock_service.update_technique.side_effect = TechniqueOperationError("Update error")
 
         technique = TechniqueFactory()
         update_data = {"name": "Updated Technique"}
@@ -592,9 +580,7 @@ class TechniqueSerializerTests(TestCase):
         context = {"request": request}
 
         # Test update with error
-        serializer = TechniqueSerializer(
-            technique, data=update_data, context=context, partial=True
-        )
+        serializer = TechniqueSerializer(technique, data=update_data, context=context, partial=True)
         self.assertTrue(serializer.is_valid())
 
         with self.assertRaises(ValidationError) as context_manager:
@@ -648,13 +634,9 @@ class TechniqueSerializerTests(TestCase):
         serializer = TechniqueSerializer()
 
         # Check source mappings
-        self.assertEqual(
-            serializer.fields["assurance_goal_ids"].source, "assurance_goals"
-        )
+        self.assertEqual(serializer.fields["assurance_goal_ids"].source, "assurance_goals")
         self.assertEqual(serializer.fields["tag_ids"].source, "tags")
-        self.assertEqual(
-            serializer.fields["related_technique_slugs"].source, "related_techniques"
-        )
+        self.assertEqual(serializer.fields["related_technique_slugs"].source, "related_techniques")
 
     def test_technique_serialization_includes_slug_and_acronym(self):
         """Test that technique serialization includes slug and acronym fields."""
@@ -717,9 +699,7 @@ class SerializerIntegrationTests(TestCase):
         technique.tags.add(tag)
 
         resource = TechniqueResourceFactory(technique=technique)
-        use_case = TechniqueExampleUseCaseFactory(
-            technique=technique, assurance_goal=assurance_goal
-        )
+        use_case = TechniqueExampleUseCaseFactory(technique=technique, assurance_goal=assurance_goal)
         limitation = TechniqueLimitationFactory(technique=technique)
 
         # Serialize the technique
@@ -737,9 +717,7 @@ class SerializerIntegrationTests(TestCase):
         self.assertEqual(technique_data["assurance_goals"][0], goal_serializer.data)
         self.assertEqual(technique_data["tags"][0], tag_serializer.data)
         self.assertEqual(technique_data["resources"][0], resource_serializer.data)
-        self.assertEqual(
-            technique_data["example_use_cases"][0], use_case_serializer.data
-        )
+        self.assertEqual(technique_data["example_use_cases"][0], use_case_serializer.data)
         self.assertEqual(technique_data["limitations"][0], limitation_serializer.data)
 
     def test_serializer_performance_with_large_datasets(self):

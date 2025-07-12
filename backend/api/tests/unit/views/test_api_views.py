@@ -3,26 +3,29 @@
 Unit tests for API views to increase coverage.
 """
 
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import Mock, patch
 
-import pytest
-from django.contrib.auth.models import AnonymousUser, User
-from django.db import connection
+from django.contrib.auth.models import User
 from django.test import TestCase, override_settings
 from rest_framework import status
 from rest_framework.request import Request
-from rest_framework.test import (APIRequestFactory, APITestCase,
-                                 force_authenticate)
+from rest_framework.test import APIRequestFactory, APITestCase, force_authenticate
 
-from api.models import AssuranceGoal, ResourceType, Tag, Technique
-from api.tests.factories import (AssuranceGoalFactory, ResourceTypeFactory,
-                                 TagFactory, TechniqueFactory)
-from api.views.api_views import (AssuranceGoalsViewSet, ResourceTypesViewSet,
-                                 TagsViewSet, TechniquesViewSet,
-                                 _format_request_info, _get_api_endpoints,
-                                 _get_database_info, _get_model_counts,
-                                 _sanitize_settings, debug_echo, health_check,
-                                 health_check_detailed)
+from api.tests.factories import AssuranceGoalFactory, ResourceTypeFactory, TagFactory, TechniqueFactory
+from api.views.api_views import (
+    AssuranceGoalsViewSet,
+    ResourceTypesViewSet,
+    TagsViewSet,
+    TechniquesViewSet,
+    _format_request_info,
+    _get_api_endpoints,
+    _get_database_info,
+    _get_model_counts,
+    _sanitize_settings,
+    debug_echo,
+    health_check,
+    health_check_detailed,
+)
 
 
 class ViewSetPermissionTests(APITestCase):
@@ -33,9 +36,7 @@ class ViewSetPermissionTests(APITestCase):
         self.factory = APIRequestFactory()
         from api.tests.conftest import TEST_USER_PASSWORD
 
-        self.user = User.objects.create_user(
-            username="testuser", password=TEST_USER_PASSWORD
-        )
+        self.user = User.objects.create_user(username="testuser", password=TEST_USER_PASSWORD)
         self.assurance_goal = AssuranceGoalFactory()
         self.tag = TagFactory()
         self.technique = TechniqueFactory()
@@ -118,9 +119,7 @@ class TechniquesViewSetTests(APITestCase):
         self.factory = APIRequestFactory()
         from api.tests.conftest import TEST_USER_PASSWORD
 
-        self.user = User.objects.create_user(
-            username="testuser", password=TEST_USER_PASSWORD
-        )
+        self.user = User.objects.create_user(username="testuser", password=TEST_USER_PASSWORD)
         self.technique = TechniqueFactory()
 
     def test_get_serializer_class(self):
@@ -169,9 +168,7 @@ class TechniquesViewSetTests(APITestCase):
             "name": "Test Technique",
             "description": "Test description",
         }
-        django_request = self.factory.post(
-            "/api/techniques/", request_data, format="json"
-        )
+        django_request = self.factory.post("/api/techniques/", request_data, format="json")
         force_authenticate(django_request, user=self.user)
         request = Request(django_request, parsers=viewset.get_parsers())
 
@@ -194,9 +191,7 @@ class TechniquesViewSetTests(APITestCase):
             "name": self.technique.name,
             "description": "Updated description",
         }
-        django_request = self.factory.put(
-            f"/api/techniques/{self.technique.slug}/", request_data, format="json"
-        )
+        django_request = self.factory.put(f"/api/techniques/{self.technique.slug}/", request_data, format="json")
         force_authenticate(django_request, user=self.user)
         request = Request(django_request, parsers=viewset.get_parsers())
 
@@ -205,10 +200,10 @@ class TechniquesViewSetTests(APITestCase):
         mock_serializer.is_valid.return_value = True
         mock_serializer.data = request_data
 
-        with patch.object(
-            viewset, "get_object", return_value=self.technique
-        ), patch.object(viewset, "get_serializer", return_value=mock_serializer):
-
+        with (
+            patch.object(viewset, "get_object", return_value=self.technique),
+            patch.object(viewset, "get_serializer", return_value=mock_serializer),
+        ):
             response = viewset.update(request)
 
             mock_serializer.is_valid.assert_called_once_with(raise_exception=True)
@@ -415,9 +410,7 @@ class ViewSetConfigurationTests(TestCase):
         viewset = AssuranceGoalsViewSet()
 
         self.assertEqual(viewset.serializer_class.__name__, "AssuranceGoalSerializer")
-        self.assertIn(
-            "DjangoFilterBackend", [b.__name__ for b in viewset.filter_backends]
-        )
+        self.assertIn("DjangoFilterBackend", [b.__name__ for b in viewset.filter_backends])
         self.assertIn("SearchFilter", [b.__name__ for b in viewset.filter_backends])
         self.assertIn("OrderingFilter", [b.__name__ for b in viewset.filter_backends])
 
@@ -486,9 +479,7 @@ class ViewSetErrorHandlingTests(APITestCase):
         self.factory = APIRequestFactory()
         from api.tests.conftest import TEST_USER_PASSWORD
 
-        self.user = User.objects.create_user(
-            username="testuser", password=TEST_USER_PASSWORD
-        )
+        self.user = User.objects.create_user(username="testuser", password=TEST_USER_PASSWORD)
         self.technique = TechniqueFactory()
 
     def test_techniques_create_with_invalid_serializer(self):
@@ -509,9 +500,7 @@ class ViewSetErrorHandlingTests(APITestCase):
     def test_techniques_update_with_invalid_serializer(self):
         """Test update method with invalid serializer data."""
         viewset = TechniquesViewSet()
-        django_request = self.factory.put(
-            f"/api/techniques/{self.technique.slug}/", {}, format="json"
-        )
+        django_request = self.factory.put(f"/api/techniques/{self.technique.slug}/", {}, format="json")
         force_authenticate(django_request, user=self.user)
         request = Request(django_request)
 
@@ -519,10 +508,10 @@ class ViewSetErrorHandlingTests(APITestCase):
         mock_serializer = Mock()
         mock_serializer.is_valid.side_effect = Exception("Validation failed")
 
-        with patch.object(
-            viewset, "get_object", return_value=self.technique
-        ), patch.object(viewset, "get_serializer", return_value=mock_serializer):
-
+        with (
+            patch.object(viewset, "get_object", return_value=self.technique),
+            patch.object(viewset, "get_serializer", return_value=mock_serializer),
+        ):
             with self.assertRaises(Exception):
                 viewset.update(request, partial=False)
 

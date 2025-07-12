@@ -6,24 +6,32 @@ Tests cover business logic, transaction handling, error conditions,
 and integration between different service components.
 """
 
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import patch
 
-import pytest
-from django.core.exceptions import ValidationError
-from django.db import IntegrityError, transaction
 from django.test import TestCase, TransactionTestCase
 
-from api.models import (AssuranceGoal, ResourceType, Tag, Technique,
-                        TechniqueExampleUseCase, TechniqueLimitation,
-                        TechniqueResource)
-from api.services import (TechniqueLimitationService, TechniqueOperationError,
-                          TechniqueResourceService, TechniqueService,
-                          TechniqueUseCaseService)
-from api.tests.factories import (AssuranceGoalFactory,
-                                 IsolatedTechniqueFactory, ResourceTypeFactory,
-                                 TagFactory, TechniqueExampleUseCaseFactory,
-                                 TechniqueFactory, TechniqueLimitationFactory,
-                                 TechniqueResourceFactory)
+from api.models import (
+    Technique,
+    TechniqueLimitation,
+    TechniqueResource,
+)
+from api.services import (
+    TechniqueLimitationService,
+    TechniqueOperationError,
+    TechniqueResourceService,
+    TechniqueService,
+    TechniqueUseCaseService,
+)
+from api.tests.factories import (
+    AssuranceGoalFactory,
+    IsolatedTechniqueFactory,
+    ResourceTypeFactory,
+    TagFactory,
+    TechniqueExampleUseCaseFactory,
+    TechniqueFactory,
+    TechniqueLimitationFactory,
+    TechniqueResourceFactory,
+)
 
 
 class TechniqueServiceTests(TransactionTestCase):
@@ -45,9 +53,7 @@ class TechniqueServiceTests(TransactionTestCase):
         # Verify correct types
         self.assertIsInstance(self.service.resource_service, TechniqueResourceService)
         self.assertIsInstance(self.service.use_case_service, TechniqueUseCaseService)
-        self.assertIsInstance(
-            self.service.limitation_service, TechniqueLimitationService
-        )
+        self.assertIsInstance(self.service.limitation_service, TechniqueLimitationService)
 
     def _generate_slug(self, name: str) -> str:
         """Helper to generate slug from name like the model does."""
@@ -168,9 +174,7 @@ class TechniqueServiceTests(TransactionTestCase):
         }
         request_data = {}
 
-        updated_technique = self.service.update_technique(
-            technique, validated_data, request_data
-        )
+        updated_technique = self.service.update_technique(technique, validated_data, request_data)
 
         self.assertEqual(updated_technique.name, "Updated Name")
         self.assertEqual(updated_technique.description, "Updated description")
@@ -189,9 +193,7 @@ class TechniqueServiceTests(TransactionTestCase):
         }
         request_data = {}
 
-        updated_technique = self.service.update_technique(
-            technique, validated_data, request_data
-        )
+        updated_technique = self.service.update_technique(technique, validated_data, request_data)
 
         # Verify relationships were updated
         self.assertEqual(updated_technique.assurance_goals.count(), 1)
@@ -224,9 +226,7 @@ class TechniqueServiceTests(TransactionTestCase):
             "limitations": [{"description": "New limitation"}],
         }
 
-        updated_technique = self.service.update_technique(
-            technique, validated_data, request_data
-        )
+        updated_technique = self.service.update_technique(technique, validated_data, request_data)
 
         # Verify old objects were replaced
         self.assertEqual(updated_technique.resources.count(), 1)
@@ -254,9 +254,7 @@ class TechniqueServiceTests(TransactionTestCase):
         technique = TechniqueFactory()
 
         # Mock the _update_basic_fields method to raise an error
-        with patch.object(
-            self.service, "_update_basic_fields", side_effect=Exception("Update error")
-        ):
+        with patch.object(self.service, "_update_basic_fields", side_effect=Exception("Update error")):
             validated_data = {"name": "New Name"}
             request_data = {}
 
@@ -303,9 +301,7 @@ class TechniqueServiceTests(TransactionTestCase):
         nested_data = self.service._extract_nested_data(request_data)
 
         self.assertEqual(nested_data["resources"], [{"title": "Resource"}])
-        self.assertEqual(
-            nested_data["example_use_cases"], [{"description": "Use case"}]
-        )
+        self.assertEqual(nested_data["example_use_cases"], [{"description": "Use case"}])
         self.assertIsNone(nested_data["limitations"])
 
     def test_set_m2m_relationships(self):
@@ -369,9 +365,7 @@ class TechniqueServiceTests(TransactionTestCase):
         original_goal_ids = set(technique.assurance_goals.values_list("id", flat=True))
 
         # Mock the basic field update to fail after M2M relationships are set
-        with patch.object(
-            self.service, "_update_basic_fields", side_effect=Exception("Update error")
-        ):
+        with patch.object(self.service, "_update_basic_fields", side_effect=Exception("Update error")):
             validated_data = {
                 "name": "Should Not Be Saved",
                 "assurance_goals": [self.assurance_goal],
@@ -385,9 +379,7 @@ class TechniqueServiceTests(TransactionTestCase):
             technique.refresh_from_db()
             self.assertEqual(technique.name, original_name)
             self.assertEqual(technique.assurance_goals.count(), original_goal_count)
-            current_goal_ids = set(
-                technique.assurance_goals.values_list("id", flat=True)
-            )
+            current_goal_ids = set(technique.assurance_goals.values_list("id", flat=True))
             self.assertEqual(current_goal_ids, original_goal_ids)
 
 
@@ -432,12 +424,8 @@ class TechniqueResourceServiceTests(TestCase):
     def test_replace_resources(self):
         """Test replacing existing resources."""
         # Create existing resources
-        existing1 = TechniqueResourceFactory(
-            technique=self.technique, title="Existing 1"
-        )
-        existing2 = TechniqueResourceFactory(
-            technique=self.technique, title="Existing 2"
-        )
+        existing1 = TechniqueResourceFactory(technique=self.technique, title="Existing 1")
+        existing2 = TechniqueResourceFactory(technique=self.technique, title="Existing 2")
 
         # Store IDs to verify deletion
         existing1_id = existing1.id
@@ -509,9 +497,7 @@ class TechniqueResourceServiceTests(TestCase):
             self.service._create_single_resource(self.technique, resource_data)
 
         # Verify the error message
-        self.assertIn(
-            "ResourceType with ID 99999 does not exist", str(context.exception)
-        )
+        self.assertIn("ResourceType with ID 99999 does not exist", str(context.exception))
 
         # Verify no resource was created
         self.assertEqual(self.technique.resources.count(), 0)
@@ -553,9 +539,7 @@ class TechniqueUseCaseServiceTests(TestCase):
         existing2_id = existing2.id
 
         # New use cases data
-        new_use_cases_data = [
-            {"description": "New use case", "assurance_goal": self.assurance_goal.id}
-        ]
+        new_use_cases_data = [{"description": "New use case", "assurance_goal": self.assurance_goal.id}]
 
         self.service.replace_use_cases(self.technique, new_use_cases_data)
 
@@ -631,9 +615,7 @@ class TechniqueLimitationServiceTests(TestCase):
 
         self.assertEqual(self.technique.limitations.count(), 2)
 
-        descriptions = list(
-            self.technique.limitations.values_list("description", flat=True)
-        )
+        descriptions = list(self.technique.limitations.values_list("description", flat=True))
         self.assertIn("Limitation 1", descriptions)
         self.assertIn("Limitation 2", descriptions)
 
@@ -645,9 +627,7 @@ class TechniqueLimitationServiceTests(TestCase):
 
         self.assertEqual(self.technique.limitations.count(), 2)
 
-        descriptions = list(
-            self.technique.limitations.values_list("description", flat=True)
-        )
+        descriptions = list(self.technique.limitations.values_list("description", flat=True))
         self.assertIn("String limitation 1", descriptions)
         self.assertIn("String limitation 2", descriptions)
 
@@ -659,9 +639,7 @@ class TechniqueLimitationServiceTests(TestCase):
 
         self.assertEqual(self.technique.limitations.count(), 2)
 
-        descriptions = list(
-            self.technique.limitations.values_list("description", flat=True)
-        )
+        descriptions = list(self.technique.limitations.values_list("description", flat=True))
         self.assertIn("String limitation", descriptions)
         self.assertIn("Dict limitation", descriptions)
 
@@ -682,18 +660,12 @@ class TechniqueLimitationServiceTests(TestCase):
         # Verify replacement
         self.assertEqual(self.technique.limitations.count(), 2)
 
-        descriptions = list(
-            self.technique.limitations.values_list("description", flat=True)
-        )
+        descriptions = list(self.technique.limitations.values_list("description", flat=True))
         self.assertIn("New limitation 1", descriptions)
         self.assertIn("New limitation 2", descriptions)
 
         # Verify old limitations are gone
-        self.assertFalse(
-            TechniqueLimitation.objects.filter(
-                id__in=[existing1_id, existing2_id]
-            ).exists()
-        )
+        self.assertFalse(TechniqueLimitation.objects.filter(id__in=[existing1_id, existing2_id]).exists())
 
     def test_create_single_limitation_string(self):
         """Test creating a single limitation from string."""
@@ -762,9 +734,7 @@ class ServiceIntegrationTests(TransactionTestCase):
             "limitations": ["String limitation", {"description": "Dict limitation"}],
         }
 
-        technique = self.technique_service.create_technique(
-            validated_data, request_data
-        )
+        technique = self.technique_service.create_technique(validated_data, request_data)
 
         # Verify all aspects were created correctly
         self.assertEqual(technique.name, "Complete Technique")
@@ -805,9 +775,7 @@ class ServiceIntegrationTests(TransactionTestCase):
 
         # Add some initial nested objects
         TechniqueResourceFactory(technique=technique, title="Original Resource")
-        TechniqueLimitationFactory(
-            technique=technique, description="Original limitation"
-        )
+        TechniqueLimitationFactory(technique=technique, description="Original limitation")
 
         # Update data
         new_goal = AssuranceGoalFactory(name="New Goal")
@@ -828,9 +796,7 @@ class ServiceIntegrationTests(TransactionTestCase):
             "limitations": ["Updated limitation"],
         }
 
-        updated_technique = self.technique_service.update_technique(
-            technique, validated_data, request_data
-        )
+        updated_technique = self.technique_service.update_technique(technique, validated_data, request_data)
 
         # Verify updates
         self.assertEqual(updated_technique.name, "Updated Technique")
@@ -867,9 +833,7 @@ class ServiceIntegrationTests(TransactionTestCase):
 
         # Invalid use case data
         with self.assertRaises(Exception):
-            use_case_service.create_use_cases(
-                technique, [{"description": ""}]
-            )  # Empty description
+            use_case_service.create_use_cases(technique, [{"description": ""}])  # Empty description
 
         # Services should handle errors gracefully without breaking the database state
         self.assertEqual(technique.resources.count(), 0)
@@ -914,21 +878,15 @@ class TechniqueSlugUpdateTests(TransactionTestCase):
         validated_data = {"slug": "updated-technique-slug"}
         request_data = {}
 
-        updated_technique = self.service.update_technique(
-            self.technique, validated_data, request_data
-        )
+        updated_technique = self.service.update_technique(self.technique, validated_data, request_data)
 
         # Verify the slug changed
         self.assertEqual(updated_technique.slug, "updated-technique-slug")
 
         # Verify FK relationships were preserved
         self.assertEqual(updated_technique.resources.count(), original_resource_count)
-        self.assertEqual(
-            updated_technique.example_use_cases.count(), original_use_case_count
-        )
-        self.assertEqual(
-            updated_technique.limitations.count(), original_limitation_count
-        )
+        self.assertEqual(updated_technique.example_use_cases.count(), original_use_case_count)
+        self.assertEqual(updated_technique.limitations.count(), original_limitation_count)
 
         # Verify the same objects are still connected (by their IDs)
         preserved_resource = updated_technique.resources.first()
@@ -950,9 +908,7 @@ class TechniqueSlugUpdateTests(TransactionTestCase):
         validated_data = {"slug": "slug-with-m2m-preservation"}
         request_data = {}
 
-        updated_technique = self.service.update_technique(
-            self.technique, validated_data, request_data
-        )
+        updated_technique = self.service.update_technique(self.technique, validated_data, request_data)
 
         # Verify M2M relationships were preserved
         self.assertEqual(updated_technique.assurance_goals.count(), 1)
@@ -961,9 +917,7 @@ class TechniqueSlugUpdateTests(TransactionTestCase):
 
         self.assertIn(self.assurance_goal, updated_technique.assurance_goals.all())
         self.assertIn(self.tag, updated_technique.tags.all())
-        self.assertIn(
-            self.related_technique, updated_technique.related_techniques.all()
-        )
+        self.assertIn(self.related_technique, updated_technique.related_techniques.all())
 
     def test_update_technique_slug_with_multiple_fk_objects(self):
         """Test slug update with multiple FK objects of each type."""
@@ -981,9 +935,7 @@ class TechniqueSlugUpdateTests(TransactionTestCase):
         validated_data = {"slug": "multiple-fk-objects-slug"}
         request_data = {}
 
-        updated_technique = self.service.update_technique(
-            self.technique, validated_data, request_data
-        )
+        updated_technique = self.service.update_technique(self.technique, validated_data, request_data)
 
         # Verify all FK objects are preserved
         self.assertEqual(updated_technique.resources.count(), 2)
@@ -991,15 +943,9 @@ class TechniqueSlugUpdateTests(TransactionTestCase):
         self.assertEqual(updated_technique.limitations.count(), 2)
 
         # Verify all specific objects are still connected
-        preserved_resource_ids = list(
-            updated_technique.resources.values_list("id", flat=True)
-        )
-        preserved_use_case_ids = list(
-            updated_technique.example_use_cases.values_list("id", flat=True)
-        )
-        preserved_limitation_ids = list(
-            updated_technique.limitations.values_list("id", flat=True)
-        )
+        preserved_resource_ids = list(updated_technique.resources.values_list("id", flat=True))
+        preserved_use_case_ids = list(updated_technique.example_use_cases.values_list("id", flat=True))
+        preserved_limitation_ids = list(updated_technique.limitations.values_list("id", flat=True))
 
         self.assertEqual(set(preserved_resource_ids), set(resource_ids))
         self.assertEqual(set(preserved_use_case_ids), set(use_case_ids))
@@ -1035,9 +981,7 @@ class TechniqueSlugUpdateTests(TransactionTestCase):
 
             # Verify related objects are still intact (transaction rollback preserved them)
             self.assertEqual(technique.resources.count(), original_resource_count)
-            self.assertEqual(
-                technique.example_use_cases.count(), original_use_case_count
-            )
+            self.assertEqual(technique.example_use_cases.count(), original_use_case_count)
             self.assertEqual(technique.limitations.count(), original_limitation_count)
 
     def test_update_technique_without_slug_change_skips_fk_preservation(self):
@@ -1048,9 +992,7 @@ class TechniqueSlugUpdateTests(TransactionTestCase):
 
         # Mock the _update_technique_slug method to verify it's not called
         with patch.object(self.service, "_update_technique_slug") as mock_slug_update:
-            updated_technique = self.service.update_technique(
-                self.technique, validated_data, request_data
-            )
+            updated_technique = self.service.update_technique(self.technique, validated_data, request_data)
 
             # Verify slug update method was not called
             mock_slug_update.assert_not_called()

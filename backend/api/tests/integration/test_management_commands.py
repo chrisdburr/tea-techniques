@@ -12,19 +12,23 @@ import tempfile
 from io import StringIO
 from unittest.mock import Mock, patch
 
-import pytest
 from django.core.management import call_command
 from django.core.management.base import CommandError
-from django.db import IntegrityError
 from django.test import TransactionTestCase
 
-from api.models import (AssuranceGoal, ResourceType, Tag, Technique,
-                        TechniqueExampleUseCase, TechniqueLimitation,
-                        TechniqueResource)
-from api.tests.factories import (AssuranceGoalFactory, ResourceTypeFactory,
-                                 TagFactory, TechniqueFactory,
-                                 create_test_assurance_goals,
-                                 create_test_resource_types)
+from api.models import (
+    AssuranceGoal,
+    ResourceType,
+    Technique,
+    TechniqueExampleUseCase,
+    TechniqueLimitation,
+    TechniqueResource,
+)
+from api.tests.factories import (
+    TechniqueFactory,
+    create_test_assurance_goals,
+    create_test_resource_types,
+)
 
 
 class ImportTechniquesCommandTests(TransactionTestCase):
@@ -47,9 +51,7 @@ class ImportTechniquesCommandTests(TransactionTestCase):
 
     def create_temp_technique_file(self, techniques_data):
         """Create a temporary JSON file with technique data."""
-        self.temp_file = tempfile.NamedTemporaryFile(
-            mode="w", suffix=".json", delete=False
-        )
+        self.temp_file = tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False)
         json.dump(techniques_data, self.temp_file)
         self.temp_file.close()
         self.temp_file_path = self.temp_file.name
@@ -75,9 +77,7 @@ class ImportTechniquesCommandTests(TransactionTestCase):
                         "publication_date": "2023-01-01",
                     }
                 ],
-                "example_use_cases": [
-                    {"description": "Import test use case", "goal": "Explainability"}
-                ],
+                "example_use_cases": [{"description": "Import test use case", "goal": "Explainability"}],
                 "limitations": [
                     "Import test limitation",
                     {"description": "Complex import limitation"},
@@ -121,9 +121,7 @@ class ImportTechniquesCommandTests(TransactionTestCase):
         self.assertEqual(use_case.description, "Import test use case")
 
         self.assertEqual(technique.limitations.count(), 2)
-        limitation_descriptions = set(
-            technique.limitations.values_list("description", flat=True)
-        )
+        limitation_descriptions = set(technique.limitations.values_list("description", flat=True))
         expected_limitations = {"Import test limitation", "Complex import limitation"}
         self.assertEqual(limitation_descriptions, expected_limitations)
 
@@ -308,9 +306,7 @@ class ImportTechniquesCommandTests(TransactionTestCase):
 
         # The import command uses a fallback ResourceType (Paper) for unknown types
         resource = technique.resources.first()
-        self.assertEqual(
-            resource.resource_type.name, "Paper"
-        )  # Fallback to default type
+        self.assertEqual(resource.resource_type.name, "Paper")  # Fallback to default type
 
     def test_import_techniques_force_flag(self):
         """Test import command with force flag."""
@@ -370,9 +366,7 @@ class ResetAndImportTechniquesCommandTests(TransactionTestCase):
         self.resource_types = create_test_resource_types()
 
         # Create some existing techniques
-        self.existing_techniques = [
-            TechniqueFactory(name=f"Existing Technique {i}") for i in range(3)
-        ]
+        self.existing_techniques = [TechniqueFactory(name=f"Existing Technique {i}") for i in range(3)]
 
         self.temp_file_path = None
 
@@ -410,9 +404,7 @@ class ResetAndImportTechniquesCommandTests(TransactionTestCase):
         out = StringIO()
 
         # Run reset and import command
-        call_command(
-            "reset_and_import_techniques", "--file", file_path, "--force", stdout=out
-        )
+        call_command("reset_and_import_techniques", "--file", file_path, "--force", stdout=out)
 
         # Verify reset occurred - only new technique exists
         self.assertEqual(Technique.objects.count(), 1)
@@ -474,9 +466,11 @@ class ResetAndImportTechniquesCommandTests(TransactionTestCase):
     def test_reset_and_import_clears_all_technique_data(self):
         """Test that reset clears all technique-related data."""
         # Create techniques with all types of related data
-        from api.tests.factories import (TechniqueExampleUseCaseFactory,
-                                         TechniqueLimitationFactory,
-                                         TechniqueResourceFactory)
+        from api.tests.factories import (
+            TechniqueExampleUseCaseFactory,
+            TechniqueLimitationFactory,
+            TechniqueResourceFactory,
+        )
 
         technique = TechniqueFactory()
 
@@ -594,9 +588,7 @@ class ResetAndImportTechniquesCommandTests(TransactionTestCase):
 
         out = StringIO()
 
-        call_command(
-            "reset_and_import_techniques", "--file", file_path, "--force", stdout=out
-        )
+        call_command("reset_and_import_techniques", "--file", file_path, "--force", stdout=out)
 
         # Verify reset occurred
         self.assertEqual(len(self.existing_techniques), 3)  # Original count
@@ -641,9 +633,7 @@ class ManagementCommandIntegrationTests(TransactionTestCase):
                         "publication_date": "2023-06-15",
                     }
                 ],
-                "example_use_cases": [
-                    {"description": "Round trip use case", "goal": "Explainability"}
-                ],
+                "example_use_cases": [{"description": "Round trip use case", "goal": "Explainability"}],
                 "limitations": ["Round trip limitation"],
             }
         ]
@@ -676,9 +666,7 @@ class ManagementCommandIntegrationTests(TransactionTestCase):
         resource_id = technique.resources.first().id
 
         # Reset and import again
-        call_command(
-            "reset_and_import_techniques", "--file", self.temp_file_path, "--force"
-        )
+        call_command("reset_and_import_techniques", "--file", self.temp_file_path, "--force")
 
         # Verify consistency after reset
         self.assertEqual(Technique.objects.count(), 1)
@@ -767,9 +755,7 @@ class ManagementCommandIntegrationTests(TransactionTestCase):
             call_command("import_techniques", "--file", self.temp_file_path)
 
         with self.assertRaises(CommandError):
-            call_command(
-                "reset_and_import_techniques", "--file", self.temp_file_path, "--force"
-            )
+            call_command("reset_and_import_techniques", "--file", self.temp_file_path, "--force")
 
         # Verify no changes to database
         self.assertEqual(Technique.objects.count(), 0)

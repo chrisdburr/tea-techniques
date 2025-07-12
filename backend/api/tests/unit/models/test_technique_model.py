@@ -11,13 +11,16 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 from django.test import TestCase
 
-from api.models import AssuranceGoal, ResourceType, Tag, Technique
-from api.tests.factories import (AssuranceGoalFactory,
-                                 IsolatedTechniqueFactory,
-                                 MinimalTechniqueFactory, ResourceTypeFactory,
-                                 TagFactory, TechniqueExampleUseCaseFactory,
-                                 TechniqueFactory, TechniqueLimitationFactory,
-                                 TechniqueResourceFactory)
+from api.models import Technique
+from api.tests.factories import (
+    AssuranceGoalFactory,
+    IsolatedTechniqueFactory,
+    TagFactory,
+    TechniqueExampleUseCaseFactory,
+    TechniqueFactory,
+    TechniqueLimitationFactory,
+    TechniqueResourceFactory,
+)
 
 
 class TechniqueModelBasicTests(TestCase):
@@ -64,17 +67,13 @@ class TechniqueModelBasicTests(TestCase):
     def test_technique_name_cannot_be_empty(self):
         """Test that technique name cannot be empty."""
         with self.assertRaises(ValidationError):
-            technique = Technique(
-                slug="test-slug", name="", description="Valid description"
-            )
+            technique = Technique(slug="test-slug", name="", description="Valid description")
             technique.full_clean()
 
     def test_technique_name_cannot_be_null(self):
         """Test that technique name cannot be null."""
         with self.assertRaises(IntegrityError):
-            Technique.objects.create(
-                slug="test-slug", name=None, description="Valid description"
-            )
+            Technique.objects.create(slug="test-slug", name=None, description="Valid description")
 
     def test_technique_description_cannot_be_empty(self):
         """Test that technique description cannot be empty."""
@@ -85,9 +84,7 @@ class TechniqueModelBasicTests(TestCase):
     def test_technique_description_cannot_be_null(self):
         """Test that technique description cannot be null."""
         with self.assertRaises(IntegrityError):
-            Technique.objects.create(
-                slug="test-slug", name="Valid Name", description=None
-            )
+            Technique.objects.create(slug="test-slug", name="Valid Name", description=None)
 
     def test_technique_name_uniqueness(self):
         """Test that technique names must be unique."""
@@ -172,9 +169,7 @@ class TechniqueModelBasicTests(TestCase):
 
     def test_slug_field_uniqueness(self):
         """Test that slug field must be unique."""
-        Technique.objects.create(
-            slug="unique-slug", name="First Technique", description="First description"
-        )
+        Technique.objects.create(slug="unique-slug", name="First Technique", description="First description")
 
         with self.assertRaises(IntegrityError):
             Technique.objects.create(
@@ -248,9 +243,7 @@ class TechniqueModelBasicTests(TestCase):
 
     def test_str_method_with_acronym(self):
         """Test string representation with acronym."""
-        technique = TechniqueFactory(
-            name="SHapley Additive exPlanations", acronym="SHAP"
-        )
+        technique = TechniqueFactory(name="SHapley Additive exPlanations", acronym="SHAP")
         self.assertEqual(str(technique), "SHapley Additive exPlanations (SHAP)")
 
     def test_str_method_with_empty_acronym(self):
@@ -400,8 +393,7 @@ class TechniqueModelCascadeTests(TestCase):
         technique.delete()
 
         # Verify related objects are deleted
-        from api.models import (TechniqueExampleUseCase, TechniqueLimitation,
-                                TechniqueResource)
+        from api.models import TechniqueExampleUseCase, TechniqueLimitation, TechniqueResource
 
         with self.assertRaises(TechniqueResource.DoesNotExist):
             TechniqueResource.objects.get(id=resource_id)
@@ -420,18 +412,14 @@ class TechniqueModelEdgeCaseTests(TestCase):
         """Test technique with maximum length name."""
         # Assuming max_length=255 for name field
         long_name = "A" * 255
-        technique = Technique.objects.create(
-            name=long_name, description="Test description"
-        )
+        technique = Technique.objects.create(name=long_name, description="Test description")
         self.assertEqual(technique.name, long_name)
 
     def test_technique_with_very_long_description(self):
         """Test technique with very long description."""
         # Test with 10,000 character description
         long_description = "A" * 10000
-        technique = Technique.objects.create(
-            name="Test Technique", description=long_description
-        )
+        technique = Technique.objects.create(name="Test Technique", description=long_description)
         self.assertEqual(technique.description, long_description)
 
     def test_technique_with_special_characters(self):
@@ -439,9 +427,7 @@ class TechniqueModelEdgeCaseTests(TestCase):
         special_name = "Test Technique: αβγδε & $@#% 🤖🔬📊"
         special_description = "Description with unicode: αβγδε and emojis: 🤖🔬📊"
 
-        technique = Technique.objects.create(
-            name=special_name, description=special_description
-        )
+        technique = Technique.objects.create(name=special_name, description=special_description)
 
         self.assertEqual(technique.name, special_name)
         self.assertEqual(technique.description, special_description)
@@ -449,7 +435,8 @@ class TechniqueModelEdgeCaseTests(TestCase):
     def test_technique_with_minimal_content(self):
         """Test technique with minimal valid content."""
         technique = Technique.objects.create(
-            name="A", description="B"  # Single character  # Single character
+            name="A",
+            description="B",  # Single character  # Single character
         )
 
         self.assertEqual(technique.name, "A")
@@ -497,9 +484,7 @@ class TechniqueModelEdgeCaseTests(TestCase):
         technique_c = IsolatedTechniqueFactory(name="C Technique")
 
         # Get the techniques we just created
-        created_techniques = Technique.objects.filter(
-            slug__in=[technique_a.slug, technique_b.slug, technique_c.slug]
-        )
+        created_techniques = Technique.objects.filter(slug__in=[technique_a.slug, technique_b.slug, technique_c.slug])
 
         # Verify we get all our techniques
         self.assertEqual(created_techniques.count(), 3)

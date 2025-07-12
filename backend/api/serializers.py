@@ -11,14 +11,19 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import Optional
 
 from django.utils.text import slugify
 from rest_framework import serializers
 
-from .models import (AssuranceGoal, ResourceType, Tag, Technique,
-                     TechniqueExampleUseCase, TechniqueLimitation,
-                     TechniqueResource)
+from .models import (
+    AssuranceGoal,
+    ResourceType,
+    Tag,
+    Technique,
+    TechniqueExampleUseCase,
+    TechniqueLimitation,
+    TechniqueResource,
+)
 from .services import TechniqueOperationError, TechniqueService
 
 # Set up logger
@@ -69,9 +74,7 @@ class TechniqueResourceSerializer(serializers.ModelSerializer):
     """
 
     resource_type_name = serializers.ReadOnlyField(source="resource_type.name")
-    technique = serializers.SlugRelatedField(
-        queryset=Technique.objects.all(), slug_field="slug", write_only=True
-    )
+    technique = serializers.SlugRelatedField(queryset=Technique.objects.all(), slug_field="slug", write_only=True)
 
     class Meta:
         model = TechniqueResource
@@ -115,9 +118,7 @@ class TechniqueExampleUseCaseSerializer(serializers.ModelSerializer):
     """
 
     assurance_goal_name = serializers.SerializerMethodField()
-    technique = serializers.SlugRelatedField(
-        queryset=Technique.objects.all(), slug_field="slug", write_only=True
-    )
+    technique = serializers.SlugRelatedField(queryset=Technique.objects.all(), slug_field="slug", write_only=True)
 
     class Meta:
         model = TechniqueExampleUseCase
@@ -129,7 +130,7 @@ class TechniqueExampleUseCaseSerializer(serializers.ModelSerializer):
             "assurance_goal_name",
         ]
 
-    def get_assurance_goal_name(self, obj: TechniqueExampleUseCase) -> Optional[str]:
+    def get_assurance_goal_name(self, obj: TechniqueExampleUseCase) -> str | None:
         """Return the name of the associated assurance goal, or None if not set."""
         if obj.assurance_goal:
             return obj.assurance_goal.name
@@ -143,9 +144,7 @@ class TechniqueLimitationSerializer(serializers.ModelSerializer):
     Includes id and description fields for output, and accepts technique for input.
     """
 
-    technique = serializers.SlugRelatedField(
-        queryset=Technique.objects.all(), slug_field="slug", write_only=True
-    )
+    technique = serializers.SlugRelatedField(queryset=Technique.objects.all(), slug_field="slug", write_only=True)
 
     class Meta:
         model = TechniqueLimitation
@@ -166,9 +165,7 @@ class TechniqueSerializer(serializers.ModelSerializer):
     # Read-only relationship fields (for output)
     assurance_goals = AssuranceGoalSerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)
-    related_techniques = serializers.SlugRelatedField(
-        many=True, read_only=True, slug_field="slug"
-    )
+    related_techniques = serializers.SlugRelatedField(many=True, read_only=True, slug_field="slug")
 
     # Writable ID fields (for input)
     assurance_goal_ids = serializers.PrimaryKeyRelatedField(
@@ -224,12 +221,10 @@ class TechniqueSerializer(serializers.ModelSerializer):
         ]
         extra_kwargs = {
             "slug": {"required": False},  # Slug will be auto-generated if not provided
-            "acronym": {
-                "required": False
-            },  # Acronym will be auto-generated if not provided
+            "acronym": {"required": False},  # Acronym will be auto-generated if not provided
         }
 
-    def _extract_acronym_from_name(self, name: str) -> Optional[str]:
+    def _extract_acronym_from_name(self, name: str) -> str | None:
         """Extract acronym from technique name if it contains one in parentheses."""
         match = re.search(r"\(([A-Z]{2,})\)", name)
         if match:
@@ -259,9 +254,7 @@ class TechniqueSerializer(serializers.ModelSerializer):
                 if "name" in attrs:
                     attrs["slug"] = self._generate_slug_from_name(attrs["name"])
                 else:
-                    raise serializers.ValidationError(
-                        {"name": "Name is required to generate slug."}
-                    )
+                    raise serializers.ValidationError({"name": "Name is required to generate slug."})
 
             # Auto-generate acronym if not provided
             if "acronym" not in attrs and "name" in attrs:
@@ -276,17 +269,13 @@ class TechniqueSerializer(serializers.ModelSerializer):
     def validate_complexity_rating(self, value):
         """Validate complexity rating is between 1 and 5."""
         if value is not None and (value < 1 or value > 5):
-            raise serializers.ValidationError(
-                "Complexity rating must be between 1 and 5."
-            )
+            raise serializers.ValidationError("Complexity rating must be between 1 and 5.")
         return value
 
     def validate_computational_cost_rating(self, value):
         """Validate computational cost rating is between 1 and 5."""
         if value is not None and (value < 1 or value > 5):
-            raise serializers.ValidationError(
-                "Computational cost rating must be between 1 and 5."
-            )
+            raise serializers.ValidationError("Computational cost rating must be between 1 and 5.")
         return value
 
     def create(self, validated_data):
@@ -302,7 +291,7 @@ class TechniqueSerializer(serializers.ModelSerializer):
             return self.technique_service.create_technique(validated_data, request_data)
         except TechniqueOperationError as e:
             logger.error("Technique creation failed: %s", str(e))
-            raise serializers.ValidationError(f"Failed to create technique: {str(e)}")
+            raise serializers.ValidationError(f"Failed to create technique: {e!s}")
 
     def update(self, instance, validated_data):
         """
@@ -314,9 +303,7 @@ class TechniqueSerializer(serializers.ModelSerializer):
         try:
             request = self.context.get("request", {})
             request_data = getattr(request, "data", {}) or {}
-            return self.technique_service.update_technique(
-                instance, validated_data, request_data
-            )
+            return self.technique_service.update_technique(instance, validated_data, request_data)
         except TechniqueOperationError as e:
             logger.error("Technique update failed: %s", str(e))
-            raise serializers.ValidationError(f"Failed to update technique: {str(e)}")
+            raise serializers.ValidationError(f"Failed to update technique: {e!s}")

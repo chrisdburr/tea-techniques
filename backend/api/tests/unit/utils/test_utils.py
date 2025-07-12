@@ -7,18 +7,20 @@ used throughout the application for data processing.
 """
 
 import datetime
-import json
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import Mock, patch
 
-import pytest
 from django.test import TestCase
 from rest_framework.exceptions import ValidationError as DRFValidationError
 from rest_framework.response import Response
 
-from api.utils import (DataValidationError, DateParsingError,
-                       DateParsingUtility, JSONDataParser,
-                       TechniqueDataExtractor, TechniqueDataValidator,
-                       custom_exception_handler)
+from api.utils import (
+    DataValidationError,
+    DateParsingUtility,
+    JSONDataParser,
+    TechniqueDataExtractor,
+    TechniqueDataValidator,
+    custom_exception_handler,
+)
 
 
 class DateParsingUtilityTests(TestCase):
@@ -119,9 +121,7 @@ class DateParsingUtilityTests(TestCase):
 
         self.assertIsNone(result)
         mock_logger.warning.assert_called_once()
-        self.assertIn(
-            "Could not parse date string", mock_logger.warning.call_args[0][0]
-        )
+        self.assertIn("Could not parse date string", mock_logger.warning.call_args[0][0])
 
     def test_parse_date_edge_cases(self):
         """Test edge cases for date parsing."""
@@ -392,9 +392,7 @@ class TechniqueDataValidatorTests(TestCase):
         self.assertFalse(result)
         mock_logger.warning.assert_called_once()
         # Check that logger.warning was called with the format string and 'url' field
-        self.assertEqual(
-            mock_logger.warning.call_args[0][0], "Resource missing required field: %s"
-        )
+        self.assertEqual(mock_logger.warning.call_args[0][0], "Resource missing required field: %s")
         self.assertEqual(mock_logger.warning.call_args[0][1], "url")
 
     @patch("api.utils.logger")
@@ -597,9 +595,7 @@ class TechniqueDataExtractorTests(TestCase):
         """Test processing use case data with default goal."""
         use_case_data = {"description": "Test use case"}
 
-        result = self.extractor.process_use_case_data(
-            use_case_data, default_goal="Fairness"
-        )
+        result = self.extractor.process_use_case_data(use_case_data, default_goal="Fairness")
 
         expected = {
             "description": "Test use case",
@@ -658,9 +654,7 @@ class CustomExceptionHandlerTests(TestCase):
 
     @patch("api.utils.exception_handler")
     @patch("api.utils.logger")
-    def test_custom_exception_handler_with_response(
-        self, mock_logger, mock_exception_handler
-    ):
+    def test_custom_exception_handler_with_response(self, mock_logger, mock_exception_handler):
         """Test custom exception handler when DRF handler returns a response."""
         # Setup mock response
         mock_response = Response({"detail": "Test error"}, status=400)
@@ -693,16 +687,12 @@ class CustomExceptionHandlerTests(TestCase):
         # Verify response structure
         self.assertEqual(result.status_code, 400)
         self.assertTrue(result.data["error"])
-        self.assertEqual(
-            result.data["message"], "An error occurred while processing your request."
-        )
+        self.assertEqual(result.data["message"], "An error occurred while processing your request.")
         self.assertEqual(result.data["details"], {"detail": "Test error"})
 
     @patch("api.utils.exception_handler")
     @patch("api.utils.logger")
-    def test_custom_exception_handler_no_response(
-        self, mock_logger, mock_exception_handler
-    ):
+    def test_custom_exception_handler_no_response(self, mock_logger, mock_exception_handler):
         """Test custom exception handler when DRF handler returns None."""
         # Setup mock to return None (no response)
         mock_exception_handler.return_value = None
@@ -723,9 +713,7 @@ class CustomExceptionHandlerTests(TestCase):
 
     @patch("api.utils.exception_handler")
     @patch("api.utils.logger")
-    def test_custom_exception_handler_missing_context(
-        self, mock_logger, mock_exception_handler
-    ):
+    def test_custom_exception_handler_missing_context(self, mock_logger, mock_exception_handler):
         """Test custom exception handler with missing context information."""
         # Setup mock response
         mock_response = Response({"detail": "Test error"}, status=500)
@@ -751,9 +739,7 @@ class CustomExceptionHandlerTests(TestCase):
 
     @patch("api.utils.exception_handler")
     @patch("api.utils.logger")
-    def test_custom_exception_handler_request_without_path(
-        self, mock_logger, mock_exception_handler
-    ):
+    def test_custom_exception_handler_request_without_path(self, mock_logger, mock_exception_handler):
         """Test custom exception handler with request missing path attribute."""
         # Setup mock response
         mock_response = Response({"detail": "Test error"}, status=400)
@@ -818,9 +804,7 @@ class UtilityIntegrationTests(TestCase):
         # Verify resource processing
         self.assertEqual(processed_resource["title"], "Test Paper")
         self.assertEqual(processed_resource["authors"], "Author 1, Author 2")
-        self.assertEqual(
-            processed_resource["parsed_publication_date"], datetime.date(2023, 1, 15)
-        )
+        self.assertEqual(processed_resource["parsed_publication_date"], datetime.date(2023, 1, 15))
 
         # Verify limitation processing
         self.assertEqual(len(processed_limitations), 2)
@@ -849,7 +833,5 @@ class UtilityIntegrationTests(TestCase):
         self.assertEqual(basic_data["name"], "")
 
         # Invalid nested data should be filtered out
-        limitations = extractor.process_limitation_data(
-            [None, "", {}, {"description": ""}]
-        )
+        limitations = extractor.process_limitation_data([None, "", {}, {"description": ""}])
         self.assertEqual(limitations, [])

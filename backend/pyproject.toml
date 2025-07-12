@@ -41,13 +41,9 @@ django-stubs = "^4.2.7"
 djangorestframework-stubs = "^3.14.5"
 types-requests = "^2.32.0.20240420"
 types-markdown = "^3.5.0.20240412"
-pylint = "^3.3.6"
-black = "^25.1.0"
 bandit = "^1.8.6"
-pydocstyle = "^6.3.0"
-radon = "^6.0.1"
-vulture = "^2.14"
 safety = "^3.6.0"
+ruff = "^0.12.3"
 
 [tool.mypy]
 python_version = "3.12"
@@ -129,34 +125,48 @@ directory = "coverage_html"
 [tool.coverage.xml]
 output = "coverage.xml"
 
-[tool.pylint.main]
-load-plugins = ["pylint_django"]
-django-settings-module = "config.settings.development"
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+extend-include = ["*.pyi?"]
 
-[tool.pylint.format]
-max-line-length = 120
-
-[tool.pylint.messages_control]
-disable = [
-    "missing-docstring",
-    "too-few-public-methods",
-    "import-error",
-    "no-member",
-    "fixme",
-    "unused-argument",
+[tool.ruff.lint]
+select = [
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "F",     # pyflakes
+    "I",     # isort
+    "B",     # flake8-bugbear
+    "C4",    # flake8-comprehensions
+    "UP",    # pyupgrade
+    "ARG",   # flake8-unused-arguments
+    "SIM",   # flake8-simplify
+    "PTH",   # flake8-use-pathlib
+    "DJ",    # flake8-django
+    "RUF",   # Ruff-specific rules
+]
+ignore = [
+    "E501",  # line too long (handled by formatter)
+    "B008",  # do not perform function calls in argument defaults
+    "B904",  # raise from exception
+    "SIM108", # ternary operator
 ]
 
-[tool.pylint.design]
-max-args = 8
-max-locals = 20
-max-returns = 8
-max-branches = 15
-max-statements = 60
+[tool.ruff.lint.per-file-ignores]
+"*/migrations/*" = ["E501", "ARG001"]
+"*/tests/*" = ["ARG001", "ARG002"]
+"manage.py" = ["ARG001"]
+"*/settings/*" = ["F401", "F403", "F405"]
 
-[tool.pylint.similarities]
-min-similarity-lines = 6
-ignore-comments = true
-ignore-docstrings = true
+[tool.ruff.lint.isort]
+known-third-party = ["django", "rest_framework"]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
 
 [build-system]
 requires = ["poetry-core"]

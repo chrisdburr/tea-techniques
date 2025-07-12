@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = []
@@ -74,9 +73,7 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "slug",
-                    models.SlugField(
-                        max_length=100, primary_key=True, serialize=False, unique=True
-                    ),
+                    models.SlugField(max_length=100, primary_key=True, serialize=False, unique=True),
                 ),
                 ("name", models.CharField(max_length=255, unique=True)),
                 ("acronym", models.CharField(blank=True, max_length=20, null=True)),
@@ -105,9 +102,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "assurance_goals",
-                    models.ManyToManyField(
-                        related_name="techniques", to="api.assurancegoal"
-                    ),
+                    models.ManyToManyField(related_name="techniques", to="api.assurancegoal"),
                 ),
                 (
                     "related_techniques",
@@ -115,9 +110,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "tags",
-                    models.ManyToManyField(
-                        blank=True, related_name="techniques", to="api.tag"
-                    ),
+                    models.ManyToManyField(blank=True, related_name="techniques", to="api.tag"),
                 ),
             ],
             options={

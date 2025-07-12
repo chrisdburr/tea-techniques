@@ -7,19 +7,15 @@ import json
 import os
 import tempfile
 from io import StringIO
-from pathlib import Path
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import Mock, patch
 
-import pytest
 from django.core.management import call_command
 from django.core.management.base import CommandError
-from django.db import transaction
 from django.test import TestCase, TransactionTestCase
 
 from api.management.commands.import_techniques import Command
-from api.models import AssuranceGoal, ResourceType, Tag, Technique
-from api.tests.factories import (AssuranceGoalFactory, ResourceTypeFactory,
-                                 TagFactory)
+from api.models import Technique
+from api.tests.factories import AssuranceGoalFactory, ResourceTypeFactory, TagFactory
 
 
 class ImportTechniquesCommandUnitTests(TestCase):
@@ -90,9 +86,7 @@ class ImportTechniquesCommandUnitTests(TestCase):
     def test_handle_with_invalid_json_file(self):
         """Test command execution with invalid JSON file."""
         # Create file with invalid JSON
-        invalid_json_file = self.create_temp_json_file(
-            "invalid json content", "invalid.json"
-        )
+        invalid_json_file = self.create_temp_json_file("invalid json content", "invalid.json")
         # Overwrite with invalid JSON string
         with open(invalid_json_file, "w") as f:
             f.write("{ invalid json }")
@@ -101,9 +95,7 @@ class ImportTechniquesCommandUnitTests(TestCase):
         err = StringIO()
 
         with self.assertRaises(CommandError) as context:
-            call_command(
-                "import_techniques", "--file", invalid_json_file, stdout=out, stderr=err
-            )
+            call_command("import_techniques", "--file", invalid_json_file, stdout=out, stderr=err)
 
         self.assertIn("Invalid JSON", str(context.exception))
 
@@ -123,9 +115,7 @@ class ImportTechniquesCommandUnitTests(TestCase):
         """Test command execution with validation errors."""
         # Mock validator to raise validation error
         mock_validator_instance = Mock()
-        mock_validator_instance.validate_required_fields.side_effect = Exception(
-            "Validation failed"
-        )
+        mock_validator_instance.validate_required_fields.side_effect = Exception("Validation failed")
         mock_validator.return_value = mock_validator_instance
 
         techniques_data = [{"name": "Test Technique", "description": "Test"}]
@@ -135,9 +125,7 @@ class ImportTechniquesCommandUnitTests(TestCase):
         err = StringIO()
 
         with self.assertRaises(CommandError) as context:
-            call_command(
-                "import_techniques", "--file", file_path, stdout=out, stderr=err
-            )
+            call_command("import_techniques", "--file", file_path, stdout=out, stderr=err)
 
         self.assertIn("Validation failed", str(context.exception))
 
@@ -162,9 +150,7 @@ class ImportTechniquesCommandUnitTests(TestCase):
         """Test command execution with data extraction errors."""
         # Mock extractor to raise error
         mock_extractor_instance = Mock()
-        mock_extractor_instance.extract_basic_data.side_effect = Exception(
-            "Extraction failed"
-        )
+        mock_extractor_instance.extract_basic_data.side_effect = Exception("Extraction failed")
         mock_extractor.return_value = mock_extractor_instance
 
         techniques_data = [{"name": "Test Technique", "description": "Test"}]
@@ -174,9 +160,7 @@ class ImportTechniquesCommandUnitTests(TestCase):
         err = StringIO()
 
         with self.assertRaises(CommandError) as context:
-            call_command(
-                "import_techniques", "--file", file_path, stdout=out, stderr=err
-            )
+            call_command("import_techniques", "--file", file_path, stdout=out, stderr=err)
 
         self.assertIn("Extraction failed", str(context.exception))
 
@@ -202,17 +186,13 @@ class ImportTechniquesCommandUnitTests(TestCase):
     @patch("api.management.commands.import_techniques.logger")
     def test_logging_on_errors(self, mock_command_logger, mock_utils_logger):
         """Test that errors are properly logged."""
-        techniques_data = [
-            {"name": "", "description": "Test"}
-        ]  # Empty name will cause validation error
+        techniques_data = [{"name": "", "description": "Test"}]  # Empty name will cause validation error
         file_path = self.create_temp_json_file(techniques_data)
 
         out = StringIO()
 
         try:
-            call_command(
-                "import_techniques", "--file", file_path, "--force", stdout=out
-            )
+            call_command("import_techniques", "--file", file_path, "--force", stdout=out)
         except:
             pass
 
@@ -236,9 +216,7 @@ class ImportTechniquesCommandUnitTests(TestCase):
         # Test with no extension
         no_ext_file = self.create_temp_json_file(techniques_data, "test")
         out = StringIO()
-        call_command(
-            "import_techniques", "--file", no_ext_file, "--dry-run", stdout=out
-        )
+        call_command("import_techniques", "--file", no_ext_file, "--dry-run", stdout=out)
 
     def test_file_permission_error(self):
         """Test handling of file permission errors."""
@@ -253,9 +231,7 @@ class ImportTechniquesCommandUnitTests(TestCase):
 
             # Currently the command doesn't catch file permission errors
             with self.assertRaises(PermissionError):
-                call_command(
-                    "import_techniques", "--file", file_path, stdout=out, stderr=err
-                )
+                call_command("import_techniques", "--file", file_path, stdout=out, stderr=err)
 
 
 class ImportTechniquesCommandDatabaseTests(TransactionTestCase):
@@ -291,18 +267,14 @@ class ImportTechniquesCommandDatabaseTests(TransactionTestCase):
         # Mock technique creation to raise a database error
         mock_update_or_create.side_effect = Exception("Database error")
 
-        techniques_data = [
-            {"slug": "test-technique", "name": "Test Technique", "description": "Test"}
-        ]
+        techniques_data = [{"slug": "test-technique", "name": "Test Technique", "description": "Test"}]
         file_path = self.create_temp_json_file(techniques_data)
 
         out = StringIO()
         err = StringIO()
 
         with self.assertRaises(CommandError):
-            call_command(
-                "import_techniques", "--file", file_path, stdout=out, stderr=err
-            )
+            call_command("import_techniques", "--file", file_path, stdout=out, stderr=err)
 
         # Verify the mock was called
         self.assertTrue(mock_update_or_create.called)
@@ -362,9 +334,7 @@ class ImportTechniquesCommandUtilityTests(TestCase):
         err = StringIO()
 
         with self.assertRaises(CommandError) as context:
-            call_command(
-                "import_techniques", "--file", "/fake/path.json", stdout=out, stderr=err
-            )
+            call_command("import_techniques", "--file", "/fake/path.json", stdout=out, stderr=err)
 
         self.assertIn("File not found", str(context.exception))
 
@@ -384,9 +354,7 @@ class ImportTechniquesCommandUtilityTests(TestCase):
                 json.dump(techniques_data, f, ensure_ascii=False)
 
             out = StringIO()
-            call_command(
-                "import_techniques", "--file", file_path, "--dry-run", stdout=out
-            )
+            call_command("import_techniques", "--file", file_path, "--dry-run", stdout=out)
 
             output = out.getvalue()
             self.assertIn("Dry run:", output)
@@ -403,8 +371,7 @@ class ImportTechniquesCommandUtilityTests(TestCase):
             techniques_data.append(
                 {
                     "name": f"Technique {i}",
-                    "description": f"Description for technique {i}"
-                    * 10,  # Make it longer
+                    "description": f"Description for technique {i}" * 10,  # Make it longer
                 }
             )
 
@@ -415,9 +382,7 @@ class ImportTechniquesCommandUtilityTests(TestCase):
                 json.dump(techniques_data, f)
 
             out = StringIO()
-            call_command(
-                "import_techniques", "--file", file_path, "--dry-run", stdout=out
-            )
+            call_command("import_techniques", "--file", file_path, "--dry-run", stdout=out)
 
             output = out.getvalue()
             self.assertIn("validated 100", output)
@@ -435,9 +400,7 @@ class ImportTechniquesCommandUtilityTests(TestCase):
         err = StringIO()
 
         with self.assertRaises(OSError) as context:
-            call_command(
-                "import_techniques", "--file", "/some/path.json", stdout=out, stderr=err
-            )
+            call_command("import_techniques", "--file", "/some/path.json", stdout=out, stderr=err)
 
         self.assertIn("Path error", str(context.exception))
 
@@ -453,9 +416,7 @@ class ImportTechniquesCommandUtilityTests(TestCase):
             err = StringIO()
 
             with self.assertRaises(CommandError) as context:
-                call_command(
-                    "import_techniques", "--file", file_path, stdout=out, stderr=err
-                )
+                call_command("import_techniques", "--file", file_path, stdout=out, stderr=err)
 
             self.assertIn("Invalid JSON", str(context.exception))
         finally:
@@ -490,9 +451,7 @@ class ImportTechniquesCommandUtilityTests(TestCase):
                 json.dump(techniques_data, f)
 
             out = StringIO()
-            call_command(
-                "import_techniques", "--file", file_path, "--dry-run", stdout=out
-            )
+            call_command("import_techniques", "--file", file_path, "--dry-run", stdout=out)
 
             output = out.getvalue()
             self.assertIn("Dry run:", output)
@@ -583,31 +542,21 @@ class ImportTechniquesCommandErrorRecoveryTests(TestCase):
         out = StringIO()
 
         try:
-            call_command(
-                "import_techniques", "--file", file_path, "--force", stdout=out
-            )
+            call_command("import_techniques", "--file", file_path, "--force", stdout=out)
         except:
             pass
 
         # Verify that appropriate logging methods were called
-        logged_calls = (
-            mock_logger.error.call_count
-            + mock_logger.warning.call_count
-            + mock_logger.info.call_count
-        )
+        logged_calls = mock_logger.error.call_count + mock_logger.warning.call_count + mock_logger.info.call_count
         self.assertGreater(logged_calls, 0)
 
     def test_graceful_shutdown_on_keyboard_interrupt(self):
         """Test graceful handling of keyboard interrupts."""
-        techniques_data = [
-            {"slug": "test-technique", "name": "Test", "description": "Test"}
-        ]
+        techniques_data = [{"slug": "test-technique", "name": "Test", "description": "Test"}]
         file_path = self.create_temp_json_file(techniques_data)
 
         # Mock to simulate KeyboardInterrupt during processing
-        with patch(
-            "api.management.commands.import_techniques.TechniqueDataExtractor"
-        ) as mock_extractor:
+        with patch("api.management.commands.import_techniques.TechniqueDataExtractor") as mock_extractor:
             mock_extractor_instance = Mock()
             # Make extract_basic_data raise KeyboardInterrupt
             mock_extractor_instance.extract_basic_data.side_effect = KeyboardInterrupt()
@@ -617,9 +566,7 @@ class ImportTechniquesCommandErrorRecoveryTests(TestCase):
             err = StringIO()
 
             with self.assertRaises(CommandError) as context:
-                call_command(
-                    "import_techniques", "--file", file_path, stdout=out, stderr=err
-                )
+                call_command("import_techniques", "--file", file_path, stdout=out, stderr=err)
 
             # Should handle KeyboardInterrupt gracefully
             self.assertIn("interrupted", str(context.exception).lower())
@@ -639,9 +586,7 @@ class ImportTechniquesCommandArgumentTests(TestCase):
 
             # Test --file only
             out = StringIO()
-            call_command(
-                "import_techniques", "--file", file_path, "--dry-run", stdout=out
-            )
+            call_command("import_techniques", "--file", file_path, "--dry-run", stdout=out)
 
             # Test --file with --force
             out = StringIO()
@@ -656,9 +601,7 @@ class ImportTechniquesCommandArgumentTests(TestCase):
 
             # Test --file with --dry-run
             out = StringIO()
-            call_command(
-                "import_techniques", "--file", file_path, "--dry-run", stdout=out
-            )
+            call_command("import_techniques", "--file", file_path, "--dry-run", stdout=out)
 
             # Test all flags together
             out = StringIO()

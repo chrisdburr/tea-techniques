@@ -13,8 +13,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from api.tests.factories import (TechniqueFactory, create_test_assurance_goals,
-                                 create_test_resource_types)
+from api.tests.factories import TechniqueFactory, create_test_assurance_goals, create_test_resource_types
 
 
 class ValidationErrorTests(APITestCase):
@@ -24,9 +23,7 @@ class ValidationErrorTests(APITestCase):
         """Set up test data."""
         from api.tests.conftest import TEST_USER_PASSWORD
 
-        self.user = User.objects.create_user(
-            username="testuser", password=TEST_USER_PASSWORD
-        )
+        self.user = User.objects.create_user(username="testuser", password=TEST_USER_PASSWORD)
         self.client.force_authenticate(user=self.user)
 
         self.assurance_goals = create_test_assurance_goals()
@@ -135,9 +132,7 @@ class ValidationErrorTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         # The error is now in the general validation error, not field-specific
-        self.assertIn(
-            "ResourceType with ID 99999 does not exist", str(response.data["details"])
-        )
+        self.assertIn("ResourceType with ID 99999 does not exist", str(response.data["details"]))
 
         # Invalid use case data
         data["resources"] = []
@@ -152,9 +147,7 @@ class ValidationErrorTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         # The error is now in the general validation error, not field-specific
-        self.assertIn(
-            "Use case description cannot be empty", str(response.data["details"])
-        )
+        self.assertIn("Use case description cannot be empty", str(response.data["details"]))
 
     def test_technique_empty_string_validation(self):
         """Test validation of empty strings."""
@@ -272,9 +265,7 @@ class HTTPErrorTests(APITestCase):
         """Set up test data."""
         from api.tests.conftest import TEST_USER_PASSWORD
 
-        self.user = User.objects.create_user(
-            username="testuser", password=TEST_USER_PASSWORD
-        )
+        self.user = User.objects.create_user(username="testuser", password=TEST_USER_PASSWORD)
         self.client.force_authenticate(user=self.user)
 
         self.technique = TechniqueFactory()
@@ -337,9 +328,7 @@ class HTTPErrorTests(APITestCase):
         response = self.client.post(url, invalid_json_data, format="json")
 
         # Should handle invalid fields gracefully
-        self.assertIn(
-            response.status_code, [status.HTTP_400_BAD_REQUEST, status.HTTP_201_CREATED]
-        )
+        self.assertIn(response.status_code, [status.HTTP_400_BAD_REQUEST, status.HTTP_201_CREATED])
 
     def test_500_server_error_handling(self):
         """Test 500 server error handling with mocked exceptions."""
@@ -355,9 +344,7 @@ class HTTPErrorTests(APITestCase):
             try:
                 response = self.client.get(url)
                 # If response is returned, it should be a 500 error
-                self.assertEqual(
-                    response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR
-                )
+                self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
             except Exception as e:
                 # If exception is raised, it should be our simulated error
                 self.assertEqual(str(e), "Simulated server error")
@@ -399,9 +386,7 @@ class ValidationDetailTests(APITestCase):
         """Set up test data."""
         from api.tests.conftest import TEST_USER_PASSWORD
 
-        self.user = User.objects.create_user(
-            username="testuser", password=TEST_USER_PASSWORD
-        )
+        self.user = User.objects.create_user(username="testuser", password=TEST_USER_PASSWORD)
         self.client.force_authenticate(user=self.user)
 
         self.assurance_goals = create_test_assurance_goals()
@@ -555,13 +540,8 @@ class ValidationDetailTests(APITestCase):
                 # Check that error message mentions the date issue
                 error_message = str(response.data["details"]).lower()
                 # Should mention either date format or invalid date
-                date_error_present = any(
-                    term in error_message
-                    for term in ["date format", "invalid date", "date"]
-                )
-                self.assertTrue(
-                    date_error_present, f"Date error not found in: {error_message}"
-                )
+                date_error_present = any(term in error_message for term in ["date format", "invalid date", "date"])
+                self.assertTrue(date_error_present, f"Date error not found in: {error_message}")
 
     def test_string_length_validation(self):
         """Test string length validation."""
@@ -582,10 +562,7 @@ class ValidationDetailTests(APITestCase):
         # Might be valid or might exceed length limits
         if response.status_code == status.HTTP_400_BAD_REQUEST:
             # Should indicate which field(s) are too long
-            self.assertTrue(
-                "name" in response.data["details"]
-                or "description" in response.data["details"]
-            )
+            self.assertTrue("name" in response.data["details"] or "description" in response.data["details"])
 
 
 class CustomExceptionHandlerTests(APITestCase):
@@ -595,9 +572,7 @@ class CustomExceptionHandlerTests(APITestCase):
         """Set up test data."""
         from api.tests.conftest import TEST_USER_PASSWORD
 
-        self.user = User.objects.create_user(
-            username="testuser", password=TEST_USER_PASSWORD
-        )
+        self.user = User.objects.create_user(username="testuser", password=TEST_USER_PASSWORD)
         self.client.force_authenticate(user=self.user)
 
     def test_exception_handler_response_format(self):
@@ -640,9 +615,7 @@ class CustomExceptionHandlerTests(APITestCase):
 
             # Should mention ValidationError in the arguments
             exception_logged = any("ValidationError" in str(call) for call in calls)
-            self.assertTrue(
-                exception_logged, f"ValidationError not found in calls: {calls}"
-            )
+            self.assertTrue(exception_logged, f"ValidationError not found in calls: {calls}")
 
     def test_exception_handler_preserves_original_details(self):
         """Test that exception handler preserves original error details."""

@@ -6,16 +6,13 @@ from pathlib import Path
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
-from django.db import connections
 
 
 class Command(BaseCommand):
     help = "Reset the database and recreate migrations"
 
     def add_arguments(self, parser):
-        parser.add_argument(
-            "--force", action="store_true", help="Skip confirmation prompt"
-        )
+        parser.add_argument("--force", action="store_true", help="Skip confirmation prompt")
         parser.add_argument(
             "--create-admin",
             action="store_true",
@@ -32,9 +29,7 @@ class Command(BaseCommand):
 
         # Check if user wants to proceed with reset
         if not force:
-            response = input(
-                "This will COMPLETELY RESET your database. Are you sure? (y/n): "
-            )
+            response = input("This will COMPLETELY RESET your database. Are you sure? (y/n): ")
             if response.lower() != "y":
                 self.stdout.write("Operation cancelled.")
                 return

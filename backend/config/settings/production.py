@@ -5,7 +5,7 @@ Extends the base settings with production-specific settings.
 
 import os
 
-from .base import *  # noqa
+from .base import *
 
 # Disable DEBUG in production
 DEBUG = False
@@ -15,9 +15,7 @@ if not DEBUG:
     required_env_vars = ["SECRET_KEY", "ALLOWED_HOSTS"]
     missing_vars = [var for var in required_env_vars if not os.getenv(var)]
     if missing_vars:
-        raise Exception(
-            f"Missing required environment variables: {', '.join(missing_vars)}"
-        )
+        raise Exception(f"Missing required environment variables: {', '.join(missing_vars)}")
 
 # Security middleware settings
 SECURE_HSTS_SECONDS = 31536000  # 1 year

@@ -57,17 +57,13 @@ jobs:
         working-directory: backend
         run: poetry install --no-interaction --no-ansi
 
-      - name: Run Black formatter check
+      - name: Run Ruff formatter check
         working-directory: backend
-        run: poetry run black --check --diff .
+        run: poetry run ruff format --check --diff .
 
-      - name: Run isort import sorting check
+      - name: Run Ruff linter
         working-directory: backend
-        run: poetry run isort --check-only --diff .
-
-      - name: Run Pylint
-        working-directory: backend
-        run: poetry run pylint api/ --output-format=github
+        run: poetry run ruff check . --output-format=github
 
       - name: Run MyPy type checking
         working-directory: backend

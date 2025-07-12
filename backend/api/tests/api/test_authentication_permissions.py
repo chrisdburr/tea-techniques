@@ -6,16 +6,13 @@ Tests cover login/logout, CSRF protection, session management, and
 permission-based access control for all API endpoints.
 """
 
-import pytest
 from django.contrib.auth.models import User
-from django.middleware.csrf import get_token
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from api.models import AssuranceGoal, ResourceType, Tag, Technique
-from api.tests.factories import (AssuranceGoalFactory, ResourceTypeFactory,
-                                 TagFactory, TechniqueFactory)
+from api.models import Technique
+from api.tests.factories import AssuranceGoalFactory, ResourceTypeFactory, TagFactory, TechniqueFactory
 
 
 class AuthenticationTests(APITestCase):
@@ -25,9 +22,7 @@ class AuthenticationTests(APITestCase):
         """Set up test data."""
         from api.tests.conftest import TEST_ADMIN_PASSWORD, TEST_USER_PASSWORD
 
-        self.user = User.objects.create_user(
-            username="testuser", password=TEST_USER_PASSWORD, email="test@example.com"
-        )
+        self.user = User.objects.create_user(username="testuser", password=TEST_USER_PASSWORD, email="test@example.com")
 
         self.admin_user = User.objects.create_superuser(
             username="admin", password=TEST_ADMIN_PASSWORD, email="admin@example.com"
@@ -173,17 +168,11 @@ class PermissionTests(APITestCase):
         """Set up test data."""
         from api.tests.conftest import TEST_ADMIN_PASSWORD, TEST_USER_PASSWORD
 
-        self.regular_user = User.objects.create_user(
-            username="regular", password=TEST_USER_PASSWORD
-        )
+        self.regular_user = User.objects.create_user(username="regular", password=TEST_USER_PASSWORD)
 
-        self.staff_user = User.objects.create_user(
-            username="staff", password=TEST_USER_PASSWORD, is_staff=True
-        )
+        self.staff_user = User.objects.create_user(username="staff", password=TEST_USER_PASSWORD, is_staff=True)
 
-        self.admin_user = User.objects.create_superuser(
-            username="admin", password=TEST_ADMIN_PASSWORD
-        )
+        self.admin_user = User.objects.create_superuser(username="admin", password=TEST_ADMIN_PASSWORD)
 
         # Create test data
         self.technique = TechniqueFactory(name="Permission Test Technique")
@@ -229,9 +218,7 @@ class PermissionTests(APITestCase):
 
         # Check if creation is allowed (depends on permission configuration)
         # Either 201 (allowed) or 403 (forbidden)
-        self.assertIn(
-            response.status_code, [status.HTTP_201_CREATED, status.HTTP_403_FORBIDDEN]
-        )
+        self.assertIn(response.status_code, [status.HTTP_201_CREATED, status.HTTP_403_FORBIDDEN])
 
     def test_write_permissions_staff_user(self):
         """Test write permissions for staff users."""
@@ -248,9 +235,7 @@ class PermissionTests(APITestCase):
         response = self.client.post(url, data, format="json")
 
         # Staff users should typically have write access
-        self.assertIn(
-            response.status_code, [status.HTTP_201_CREATED, status.HTTP_403_FORBIDDEN]
-        )
+        self.assertIn(response.status_code, [status.HTTP_201_CREATED, status.HTTP_403_FORBIDDEN])
 
     def test_write_permissions_admin_user(self):
         """Test write permissions for admin users."""
@@ -335,9 +320,7 @@ class CSRFProtectionTests(APITestCase):
         """Set up test data."""
         from api.tests.conftest import TEST_USER_PASSWORD
 
-        self.user = User.objects.create_user(
-            username="csrfuser", password=TEST_USER_PASSWORD
-        )
+        self.user = User.objects.create_user(username="csrfuser", password=TEST_USER_PASSWORD)
         self.assurance_goal = AssuranceGoalFactory()
 
     def test_csrf_required_for_unsafe_methods(self):
@@ -396,9 +379,7 @@ class SessionManagementTests(APITestCase):
         """Set up test data."""
         from api.tests.conftest import TEST_USER_PASSWORD
 
-        self.user = User.objects.create_user(
-            username="sessionuser", password=TEST_USER_PASSWORD
-        )
+        self.user = User.objects.create_user(username="sessionuser", password=TEST_USER_PASSWORD)
 
     def test_session_creation_on_login(self):
         """Test that session is created on login."""
@@ -483,9 +464,7 @@ class APISecurityTests(APITestCase):
         """Set up test data."""
         from api.tests.conftest import TEST_USER_PASSWORD
 
-        self.user = User.objects.create_user(
-            username="securityuser", password=TEST_USER_PASSWORD
-        )
+        self.user = User.objects.create_user(username="securityuser", password=TEST_USER_PASSWORD)
         self.technique = TechniqueFactory()
 
     def test_sql_injection_protection(self):
@@ -535,9 +514,7 @@ class APISecurityTests(APITestCase):
             if create_response.status_code == status.HTTP_201_CREATED:
                 # Retrieve it
                 technique_slug = create_response.data["slug"]
-                retrieve_url = reverse(
-                    "technique-detail", kwargs={"slug": technique_slug}
-                )
+                retrieve_url = reverse("technique-detail", kwargs={"slug": technique_slug})
                 retrieve_response = self.client.get(retrieve_url)
 
                 # Verify content is stored as-is (not sanitized in API)

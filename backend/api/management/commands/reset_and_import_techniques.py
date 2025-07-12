@@ -11,9 +11,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument("--file", type=str, help="Path to the data file")
-        parser.add_argument(
-            "--force", action="store_true", help="Skip confirmation prompt"
-        )
+        parser.add_argument("--force", action="store_true", help="Skip confirmation prompt")
         parser.add_argument(
             "--format",
             type=str,
@@ -37,18 +35,14 @@ class Command(BaseCommand):
             deleted_count = Technique.objects.count()
             Technique.objects.all().delete()
             if deleted_count > 0:
-                self.stdout.write(
-                    self.style.WARNING(f"Deleted {deleted_count} existing techniques")
-                )
+                self.stdout.write(self.style.WARNING(f"Deleted {deleted_count} existing techniques"))
 
         # Then import techniques
         import_options = {"stdout": self.stdout, "stderr": self.stderr, "force": force}
         if file_path:
             import_options["file"] = file_path
 
-        self.stdout.write(
-            self.style.NOTICE(f"Step 2: Importing techniques from {file_format} file")
-        )
+        self.stdout.write(self.style.NOTICE(f"Step 2: Importing techniques from {file_format} file"))
 
         if file_format == "csv":
             # Use the original CSV import command—no longer used
@@ -60,6 +54,4 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("✅ Reset and import complete!"))
 
         # Add server startup instructions at the end
-        self.stdout.write(
-            self.style.SUCCESS("➡️ Run 'python manage.py runserver' to start the server")
-        )
+        self.stdout.write(self.style.SUCCESS("➡️ Run 'python manage.py runserver' to start the server"))

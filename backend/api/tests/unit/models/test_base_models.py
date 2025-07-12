@@ -6,14 +6,12 @@ Tests cover basic functionality, validation, constraints, and relationships
 for the foundational models that support techniques.
 """
 
-import pytest
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.test import TestCase
 
 from api.models import AssuranceGoal, ResourceType, Tag, Technique
-from api.tests.factories import (AssuranceGoalFactory, ResourceTypeFactory,
-                                 TagFactory, TechniqueFactory)
+from api.tests.factories import AssuranceGoalFactory, ResourceTypeFactory, TagFactory, TechniqueFactory
 
 
 class AssuranceGoalModelTests(TestCase):
@@ -27,9 +25,7 @@ class AssuranceGoalModelTests(TestCase):
         )
 
         self.assertEqual(goal.name, "Explainability")
-        self.assertEqual(
-            goal.description, "Techniques for making AI decisions interpretable"
-        )
+        self.assertEqual(goal.description, "Techniques for making AI decisions interpretable")
         self.assertTrue(goal.id)
 
     def test_assurance_goal_string_representation(self):
@@ -61,14 +57,10 @@ class AssuranceGoalModelTests(TestCase):
 
     def test_assurance_goal_name_uniqueness(self):
         """Test that assurance goal names must be unique."""
-        AssuranceGoal.objects.create(
-            name="Transparency", description="Test description"
-        )
+        AssuranceGoal.objects.create(name="Transparency", description="Test description")
 
         with self.assertRaises(IntegrityError):
-            AssuranceGoal.objects.create(
-                name="Transparency", description="Another description"
-            )
+            AssuranceGoal.objects.create(name="Transparency", description="Another description")
 
     def test_assurance_goal_relationship_with_techniques(self):
         """Test the many-to-many relationship with techniques."""
@@ -252,9 +244,7 @@ class ResourceTypeModelTests(TestCase):
 
     def test_resource_type_creation(self):
         """Test creating a resource type with valid data."""
-        resource_type = ResourceType.objects.create(
-            name="Technical Paper", icon="technical_paper"
-        )
+        resource_type = ResourceType.objects.create(name="Technical Paper", icon="technical_paper")
 
         self.assertEqual(resource_type.name, "Technical Paper")
         self.assertEqual(resource_type.icon, "technical_paper")
@@ -310,9 +300,7 @@ class ResourceTypeModelTests(TestCase):
 
         for i, icon in enumerate(icon_formats):
             with self.subTest(icon=icon):
-                resource_type = ResourceType.objects.create(
-                    name=f"Test Resource {i}", icon=icon
-                )
+                resource_type = ResourceType.objects.create(name=f"Test Resource {i}", icon=icon)
                 self.assertEqual(resource_type.icon, icon)
 
     def test_resource_type_with_resources(self):
@@ -374,9 +362,7 @@ class ResourceTypeModelTests(TestCase):
 
     def test_resource_type_with_special_characters(self):
         """Test resource type with special characters."""
-        resource_type = ResourceType.objects.create(
-            name="Law/Policy Document", icon="law_policy"
-        )
+        resource_type = ResourceType.objects.create(name="Law/Policy Document", icon="law_policy")
 
         self.assertEqual(resource_type.name, "Law/Policy Document")
         self.assertEqual(resource_type.icon, "law_policy")
@@ -448,10 +434,7 @@ class BaseModelsIntegrationTests(TestCase):
         """Test bulk operations with base models."""
         # Bulk create assurance goals
         goal_names = ["Goal1", "Goal2", "Goal3"]
-        goals = [
-            AssuranceGoal(name=name, description=f"Description for {name}")
-            for name in goal_names
-        ]
+        goals = [AssuranceGoal(name=name, description=f"Description for {name}") for name in goal_names]
         AssuranceGoal.objects.bulk_create(goals)
 
         # Bulk create tags

@@ -6,7 +6,6 @@ Tests cover admin site registration, custom display methods,
 and inline configurations.
 """
 
-import pytest
 from django.contrib import admin
 from django.contrib.admin.sites import AdminSite
 from django.test import TestCase
@@ -14,16 +13,27 @@ from faker import Faker
 
 fake = Faker()
 
-from api.admin import (TagAdmin, TechniqueAdmin, TechniqueExampleUseCaseInline,
-                       TechniqueLimitationInline, TechniqueResourceInline)
-from api.models import (AssuranceGoal, ResourceType, Tag, Technique,
-                        TechniqueExampleUseCase, TechniqueLimitation,
-                        TechniqueResource)
-from api.tests.factories import (AssuranceGoalFactory,
-                                 IsolatedTechniqueFactory, TagFactory,
-                                 TechniqueExampleUseCaseFactory,
-                                 TechniqueFactory, TechniqueLimitationFactory,
-                                 TechniqueResourceFactory)
+from api.admin import (
+    TagAdmin,
+    TechniqueAdmin,
+    TechniqueExampleUseCaseInline,
+    TechniqueLimitationInline,
+    TechniqueResourceInline,
+)
+from api.models import (
+    AssuranceGoal,
+    ResourceType,
+    Tag,
+    Technique,
+    TechniqueExampleUseCase,
+    TechniqueLimitation,
+    TechniqueResource,
+)
+from api.tests.factories import (
+    AssuranceGoalFactory,
+    IsolatedTechniqueFactory,
+    TagFactory,
+)
 
 
 class AdminRegistrationTests(TestCase):
@@ -70,9 +80,7 @@ class AdminRegistrationTests(TestCase):
 
         # Check filter_horizontal
         expected_filter_horizontal = ["assurance_goals", "tags", "related_techniques"]
-        self.assertEqual(
-            list(admin_instance.filter_horizontal), expected_filter_horizontal
-        )
+        self.assertEqual(list(admin_instance.filter_horizontal), expected_filter_horizontal)
 
     def test_tag_admin_configuration(self):
         """Test TagAdmin configuration."""
@@ -177,16 +185,12 @@ class TagAdminTests(TestCase):
 
         # Test with tag without techniques
         tag_no_techniques = TagFactory()
-        result_no_techniques = self.admin_instance.get_techniques_count(
-            tag_no_techniques
-        )
+        result_no_techniques = self.admin_instance.get_techniques_count(tag_no_techniques)
         self.assertEqual(result_no_techniques, 0)
 
     def test_get_techniques_count_short_description(self):
         """Test that custom method has proper short description."""
-        self.assertEqual(
-            self.admin_instance.get_techniques_count.short_description, "Techniques"
-        )
+        self.assertEqual(self.admin_instance.get_techniques_count.short_description, "Techniques")
 
 
 class AdminInlineTests(TestCase):

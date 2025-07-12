@@ -6,22 +6,25 @@ Tests cover transaction boundaries, rollback scenarios, and data consistency
 during complex operations that span multiple database operations.
 """
 
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
-import pytest
-from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 from django.test import TransactionTestCase
 
-from api.models import (AssuranceGoal, ResourceType, Tag, Technique,
-                        TechniqueExampleUseCase, TechniqueLimitation,
-                        TechniqueResource)
-from api.services import (TechniqueLimitationService, TechniqueOperationError,
-                          TechniqueResourceService, TechniqueService,
-                          TechniqueUseCaseService)
-from api.tests.factories import (AssuranceGoalFactory,
-                                 IsolatedTechniqueFactory, ResourceTypeFactory,
-                                 TagFactory)
+from api.models import (
+    Technique,
+    TechniqueExampleUseCase,
+    TechniqueLimitation,
+    TechniqueResource,
+)
+from api.services import (
+    TechniqueLimitationService,
+    TechniqueOperationError,
+    TechniqueResourceService,
+    TechniqueService,
+    TechniqueUseCaseService,
+)
+from api.tests.factories import AssuranceGoalFactory, IsolatedTechniqueFactory, ResourceTypeFactory, TagFactory
 
 
 class DatabaseTransactionTests(TransactionTestCase):
@@ -74,9 +77,7 @@ class DatabaseTransactionTests(TransactionTestCase):
         }
 
         # Mock resource service to fail
-        with patch.object(
-            self.technique_service.resource_service, "create_resources"
-        ) as mock_create:
+        with patch.object(self.technique_service.resource_service, "create_resources") as mock_create:
             mock_create.side_effect = Exception("Resource creation failed")
 
             # Verify initial state
@@ -92,9 +93,7 @@ class DatabaseTransactionTests(TransactionTestCase):
             self.assertEqual(TechniqueResource.objects.count(), initial_resource_count)
 
             # Verify no partial data exists
-            self.assertFalse(
-                Technique.objects.filter(name="Transaction Test Technique").exists()
-            )
+            self.assertFalse(Technique.objects.filter(name="Transaction Test Technique").exists())
 
     def test_technique_creation_transaction_rollback_on_use_case_error(self):
         """Test that technique creation rolls back when use case creation fails."""
@@ -115,9 +114,7 @@ class DatabaseTransactionTests(TransactionTestCase):
         }
 
         # Mock use case service to fail
-        with patch.object(
-            self.technique_service.use_case_service, "create_use_cases"
-        ) as mock_create:
+        with patch.object(self.technique_service.use_case_service, "create_use_cases") as mock_create:
             mock_create.side_effect = Exception("Use case creation failed")
 
             initial_technique_count = Technique.objects.count()
@@ -128,9 +125,7 @@ class DatabaseTransactionTests(TransactionTestCase):
 
             # Verify rollback
             self.assertEqual(Technique.objects.count(), initial_technique_count)
-            self.assertEqual(
-                TechniqueExampleUseCase.objects.count(), initial_use_case_count
-            )
+            self.assertEqual(TechniqueExampleUseCase.objects.count(), initial_use_case_count)
 
     def test_technique_creation_transaction_rollback_on_limitation_error(self):
         """Test that technique creation rolls back when limitation creation fails."""
@@ -141,14 +136,10 @@ class DatabaseTransactionTests(TransactionTestCase):
             "assurance_goals": [self.assurance_goal],
         }
 
-        request_data = {
-            "limitations": ["Test limitation", {"description": "Complex limitation"}]
-        }
+        request_data = {"limitations": ["Test limitation", {"description": "Complex limitation"}]}
 
         # Mock limitation service to fail
-        with patch.object(
-            self.technique_service.limitation_service, "create_limitations"
-        ) as mock_create:
+        with patch.object(self.technique_service.limitation_service, "create_limitations") as mock_create:
             mock_create.side_effect = Exception("Limitation creation failed")
 
             initial_technique_count = Technique.objects.count()
@@ -159,9 +150,7 @@ class DatabaseTransactionTests(TransactionTestCase):
 
             # Verify rollback
             self.assertEqual(Technique.objects.count(), initial_technique_count)
-            self.assertEqual(
-                TechniqueLimitation.objects.count(), initial_limitation_count
-            )
+            self.assertEqual(TechniqueLimitation.objects.count(), initial_limitation_count)
 
     def test_technique_update_transaction_rollback_on_nested_error(self):
         """Test that technique update rolls back when nested object update fails."""
@@ -197,9 +186,7 @@ class DatabaseTransactionTests(TransactionTestCase):
         }
 
         # Mock resource service to fail during update
-        with patch.object(
-            self.technique_service.resource_service, "replace_resources"
-        ) as mock_replace:
+        with patch.object(self.technique_service.resource_service, "replace_resources") as mock_replace:
             mock_replace.side_effect = Exception("Resource replacement failed")
 
             # Store original state
@@ -208,9 +195,7 @@ class DatabaseTransactionTests(TransactionTestCase):
             original_resource_count = technique.resources.count()
 
             with self.assertRaises(TechniqueOperationError):
-                self.technique_service.update_technique(
-                    technique, validated_data, request_data
-                )
+                self.technique_service.update_technique(technique, validated_data, request_data)
 
             # Verify rollback - technique should be unchanged
             technique.refresh_from_db()
@@ -252,9 +237,7 @@ class DatabaseTransactionTests(TransactionTestCase):
         request_data = {}  # No nested updates
 
         # This should succeed and commit only the basic field changes
-        updated_technique = self.technique_service.update_technique(
-            technique, validated_data, request_data
-        )
+        updated_technique = self.technique_service.update_technique(technique, validated_data, request_data)
 
         # Verify basic fields were updated
         self.assertEqual(updated_technique.name, unique_name)
@@ -278,9 +261,7 @@ class DatabaseTransactionTests(TransactionTestCase):
 
         # First update
         validated_data1 = {"assurance_goals": [goal1]}
-        updated1 = self.technique_service.update_technique(
-            technique, validated_data1, {}
-        )
+        updated1 = self.technique_service.update_technique(technique, validated_data1, {})
 
         # Verify first update
         self.assertEqual(updated1.assurance_goals.count(), 1)
@@ -288,9 +269,7 @@ class DatabaseTransactionTests(TransactionTestCase):
 
         # Second update (should overwrite first)
         validated_data2 = {"assurance_goals": [goal2]}
-        updated2 = self.technique_service.update_technique(
-            technique, validated_data2, {}
-        )
+        updated2 = self.technique_service.update_technique(technique, validated_data2, {})
 
         # Verify second update overwrote first
         self.assertEqual(updated2.assurance_goals.count(), 1)
@@ -324,12 +303,10 @@ class DatabaseTransactionTests(TransactionTestCase):
         }
 
         # Mock multiple services to fail
-        with patch.object(
-            self.technique_service.resource_service, "create_resources"
-        ) as mock_resources, patch.object(
-            self.technique_service.use_case_service, "create_use_cases"
-        ) as mock_use_cases:
-
+        with (
+            patch.object(self.technique_service.resource_service, "create_resources") as mock_resources,
+            patch.object(self.technique_service.use_case_service, "create_use_cases") as mock_use_cases,
+        ):
             # Both should be called and both should fail
             mock_resources.side_effect = Exception("Resource creation failed")
             mock_use_cases.side_effect = Exception("Use case creation failed")
@@ -346,15 +323,9 @@ class DatabaseTransactionTests(TransactionTestCase):
 
             # Verify complete rollback
             self.assertEqual(Technique.objects.count(), initial_counts["techniques"])
-            self.assertEqual(
-                TechniqueResource.objects.count(), initial_counts["resources"]
-            )
-            self.assertEqual(
-                TechniqueExampleUseCase.objects.count(), initial_counts["use_cases"]
-            )
-            self.assertEqual(
-                TechniqueLimitation.objects.count(), initial_counts["limitations"]
-            )
+            self.assertEqual(TechniqueResource.objects.count(), initial_counts["resources"])
+            self.assertEqual(TechniqueExampleUseCase.objects.count(), initial_counts["use_cases"])
+            self.assertEqual(TechniqueLimitation.objects.count(), initial_counts["limitations"])
 
     def test_database_integrity_error_rollback(self):
         """Test rollback on database integrity constraint violations."""
@@ -494,16 +465,12 @@ class ServiceLayerTransactionTests(TransactionTestCase):
 
         initial_use_case_count = TechniqueExampleUseCase.objects.count()
 
-        with patch.object(
-            TechniqueExampleUseCase.objects, "create", side_effect=mock_create
-        ):
+        with patch.object(TechniqueExampleUseCase.objects, "create", side_effect=mock_create):
             with self.assertRaises(Exception):
                 self.use_case_service.create_use_cases(self.technique, use_case_data)
 
         # Verify rollback
-        self.assertEqual(
-            TechniqueExampleUseCase.objects.count(), initial_use_case_count
-        )
+        self.assertEqual(TechniqueExampleUseCase.objects.count(), initial_use_case_count)
 
     def test_limitation_service_transaction_rollback(self):
         """Test transaction rollback in limitation service operations."""
@@ -526,13 +493,9 @@ class ServiceLayerTransactionTests(TransactionTestCase):
 
         initial_limitation_count = TechniqueLimitation.objects.count()
 
-        with patch.object(
-            TechniqueLimitation.objects, "create", side_effect=mock_create
-        ):
+        with patch.object(TechniqueLimitation.objects, "create", side_effect=mock_create):
             with self.assertRaises(Exception):
-                self.limitation_service.create_limitations(
-                    self.technique, limitation_data
-                )
+                self.limitation_service.create_limitations(self.technique, limitation_data)
 
         # Verify rollback
         self.assertEqual(TechniqueLimitation.objects.count(), initial_limitation_count)
@@ -568,9 +531,7 @@ class ServiceLayerTransactionTests(TransactionTestCase):
             mock_create.side_effect = Exception("New resource creation failed")
 
             with self.assertRaises(Exception):
-                self.resource_service.replace_resources(
-                    self.technique, new_resource_data
-                )
+                self.resource_service.replace_resources(self.technique, new_resource_data)
 
         # Verify original resources still exist (rollback occurred)
         self.assertEqual(self.technique.resources.count(), 3)
@@ -631,9 +592,7 @@ class CrossServiceTransactionTests(TransactionTestCase):
 
         # This should succeed and create all objects atomically
         with transaction.atomic():
-            technique = self.technique_service.create_technique(
-                validated_data, request_data
-            )
+            technique = self.technique_service.create_technique(validated_data, request_data)
 
         # Verify all objects were created
         self.assertEqual(technique.name, "Complete Transaction Test")
@@ -667,9 +626,7 @@ class CrossServiceTransactionTests(TransactionTestCase):
             url="https://initial.com",
         )
 
-        initial_limitation = TechniqueLimitation.objects.create(
-            technique=technique, description="Initial limitation"
-        )
+        initial_limitation = TechniqueLimitation.objects.create(technique=technique, description="Initial limitation")
 
         # Prepare replacement data
         from faker import Faker
@@ -694,9 +651,7 @@ class CrossServiceTransactionTests(TransactionTestCase):
 
         # Perform atomic update
         with transaction.atomic():
-            updated_technique = self.technique_service.update_technique(
-                technique, validated_data, request_data
-            )
+            updated_technique = self.technique_service.update_technique(technique, validated_data, request_data)
 
         # Verify all replacements occurred atomically
         self.assertEqual(updated_technique.name, unique_atomic_name)

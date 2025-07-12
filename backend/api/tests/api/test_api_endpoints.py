@@ -6,19 +6,23 @@ Tests cover CRUD operations, filtering, searching, pagination, and proper
 HTTP status codes for all API endpoints.
 """
 
-import pytest
 from django.contrib.auth.models import User
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from api.models import AssuranceGoal, Tag, Technique
-from api.tests.factories import (AssuranceGoalFactory, ResourceTypeFactory,
-                                 TagFactory, TechniqueExampleUseCaseFactory,
-                                 TechniqueFactory, TechniqueLimitationFactory,
-                                 TechniqueResourceFactory,
-                                 create_test_assurance_goals,
-                                 create_test_resource_types)
+from api.tests.factories import (
+    AssuranceGoalFactory,
+    ResourceTypeFactory,
+    TagFactory,
+    TechniqueExampleUseCaseFactory,
+    TechniqueFactory,
+    TechniqueLimitationFactory,
+    TechniqueResourceFactory,
+    create_test_assurance_goals,
+    create_test_resource_types,
+)
 
 
 class BaseAPITestCase(APITestCase):
@@ -29,9 +33,7 @@ class BaseAPITestCase(APITestCase):
         # Create test user
         from api.tests.conftest import TEST_USER_PASSWORD
 
-        self.user = User.objects.create_user(
-            username="testuser", password=TEST_USER_PASSWORD, email="test@example.com"
-        )
+        self.user = User.objects.create_user(username="testuser", password=TEST_USER_PASSWORD, email="test@example.com")
 
         # Create foundational data
         self.assurance_goals = create_test_assurance_goals()
@@ -105,9 +107,7 @@ class AssuranceGoalAPITests(BaseAPITestCase):
 
     def test_partial_update_assurance_goal(self):
         """Test partial update of an assurance goal."""
-        goal = AssuranceGoalFactory(
-            name="Original Goal", description="Original description"
-        )
+        goal = AssuranceGoalFactory(name="Original Goal", description="Original description")
         url = reverse("assurancegoal-detail", kwargs={"pk": goal.id})
         data = {"name": "Partially Updated Goal"}
 
@@ -137,9 +137,7 @@ class AssuranceGoalAPITests(BaseAPITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data["results"]), 1)
-        self.assertEqual(
-            response.data["results"][0]["name"], "UniqueFilterGoalForTesting"
-        )
+        self.assertEqual(response.data["results"][0]["name"], "UniqueFilterGoalForTesting")
 
     def test_assurance_goal_not_found(self):
         """Test retrieving non-existent assurance goal."""
@@ -265,13 +263,9 @@ class TechniqueAPITests(BaseAPITestCase):
         # Create test techniques
         self.techniques = []
         for i in range(5):
-            technique = TechniqueFactory(
-                name=f"Test Technique {i}", complexity_rating=(i % 5) + 1
-            )
+            technique = TechniqueFactory(name=f"Test Technique {i}", complexity_rating=(i % 5) + 1)
             # Add relationships
-            technique.assurance_goals.add(
-                self.assurance_goals[i % len(self.assurance_goals)]
-            )
+            technique.assurance_goals.add(self.assurance_goals[i % len(self.assurance_goals)])
             technique.tags.add(self.tags[i % len(self.tags)])
             self.techniques.append(technique)
 
@@ -298,12 +292,8 @@ class TechniqueAPITests(BaseAPITestCase):
         technique = self.techniques[0]
 
         # Add nested objects
-        resource = TechniqueResourceFactory(
-            technique=technique, resource_type=self.resource_types[0]
-        )
-        use_case = TechniqueExampleUseCaseFactory(
-            technique=technique, assurance_goal=self.assurance_goals[0]
-        )
+        resource = TechniqueResourceFactory(technique=technique, resource_type=self.resource_types[0])
+        use_case = TechniqueExampleUseCaseFactory(technique=technique, assurance_goal=self.assurance_goals[0])
         limitation = TechniqueLimitationFactory(technique=technique)
 
         url = reverse("technique-detail", kwargs={"slug": technique.slug})
@@ -317,14 +307,10 @@ class TechniqueAPITests(BaseAPITestCase):
         self.assertEqual(response.data["resources"][0]["title"], resource.title)
 
         self.assertEqual(len(response.data["example_use_cases"]), 1)
-        self.assertEqual(
-            response.data["example_use_cases"][0]["description"], use_case.description
-        )
+        self.assertEqual(response.data["example_use_cases"][0]["description"], use_case.description)
 
         self.assertEqual(len(response.data["limitations"]), 1)
-        self.assertEqual(
-            response.data["limitations"][0]["description"], limitation.description
-        )
+        self.assertEqual(response.data["limitations"][0]["description"], limitation.description)
 
     def test_create_technique_minimal(self):
         """Test creating a technique with minimal data."""
@@ -477,9 +463,7 @@ class TechniqueAPITests(BaseAPITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data["results"]), 1)
-        self.assertEqual(
-            response.data["results"][0]["name"], "Searchable Unique Technique"
-        )
+        self.assertEqual(response.data["results"][0]["name"], "Searchable Unique Technique")
 
     def test_technique_ordering(self):
         """Test ordering techniques."""
@@ -579,14 +563,10 @@ class TechniqueAPITests(BaseAPITestCase):
         self.assertEqual(technique.resources.first().title, "Replacement Resource")
 
         self.assertEqual(technique.example_use_cases.count(), 1)
-        self.assertEqual(
-            technique.example_use_cases.first().description, "Replacement use case"
-        )
+        self.assertEqual(technique.example_use_cases.first().description, "Replacement use case")
 
         self.assertEqual(technique.limitations.count(), 1)
-        self.assertEqual(
-            technique.limitations.first().description, "Single replacement limitation"
-        )
+        self.assertEqual(technique.limitations.first().description, "Single replacement limitation")
 
     def test_technique_acronym_in_response(self):
         """Test that acronym field is included in API responses."""
@@ -842,12 +822,8 @@ class APIFilteringTests(BaseAPITestCase):
         super().setUp()
 
         # Create techniques with specific attributes
-        self.high_complexity = TechniqueFactory(
-            name="High Complexity Technique", complexity_rating=5
-        )
-        self.low_complexity = TechniqueFactory(
-            name="Low Complexity Technique", complexity_rating=1
-        )
+        self.high_complexity = TechniqueFactory(name="High Complexity Technique", complexity_rating=5)
+        self.low_complexity = TechniqueFactory(name="Low Complexity Technique", complexity_rating=1)
 
         # Add specific goals and tags
         specific_goal = AssuranceGoalFactory(name="Filtering Goal")
@@ -874,18 +850,14 @@ class APIFilteringTests(BaseAPITestCase):
         url = reverse("technique-list")
 
         # Create technique matching multiple criteria
-        multi_match = TechniqueFactory(
-            name="Multi Match Technique", complexity_rating=3
-        )
+        multi_match = TechniqueFactory(name="Multi Match Technique", complexity_rating=3)
         goal = AssuranceGoalFactory(name="Multi Filter Goal")
         tag = TagFactory(name="multi-filter-tag")
         multi_match.assurance_goals.add(goal)
         multi_match.tags.add(tag)
 
         # Apply multiple filters
-        response = self.client.get(
-            url, {"complexity_rating": 3, "assurance_goals": goal.id, "tags": tag.id}
-        )
+        response = self.client.get(url, {"complexity_rating": 3, "assurance_goals": goal.id, "tags": tag.id})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

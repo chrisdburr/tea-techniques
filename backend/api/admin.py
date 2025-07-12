@@ -1,8 +1,14 @@
 from django.contrib import admin
 
-from .models import (AssuranceGoal, ResourceType, Tag, Technique,
-                     TechniqueExampleUseCase, TechniqueLimitation,
-                     TechniqueResource)
+from .models import (
+    AssuranceGoal,
+    ResourceType,
+    Tag,
+    Technique,
+    TechniqueExampleUseCase,
+    TechniqueLimitation,
+    TechniqueResource,
+)
 
 
 class TechniqueResourceInline(admin.TabularInline):

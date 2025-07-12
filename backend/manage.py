@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
+
 import os
 import sys
 
@@ -7,9 +8,7 @@ import sys
 def main():
     """Run administrative tasks."""
     # Default to the development settings, but allow override via environment variable
-    settings_module = os.environ.get(
-        "DJANGO_SETTINGS_MODULE", "config.settings.development"
-    )
+    settings_module = os.environ.get("DJANGO_SETTINGS_MODULE", "config.settings.development")
 
     # Check for test command to use test settings
     if len(sys.argv) > 1 and sys.argv[1] in ["test", "pytest"]:

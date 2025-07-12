@@ -28,10 +28,10 @@ This document establishes non-negotiable quality gates and coverage requirements
 #### Coverage Configuration
 ```bash
 # Run tests with coverage
-pytest --cov=api --cov-report=term-missing --cov-report=html
+uv run pytest --cov=api --cov-report=term-missing --cov-report=html
 
 # Coverage fails if below 90%
-pytest --cov-fail-under=90
+uv run pytest --cov-fail-under=90
 ```
 
 #### Exemptions from Coverage
@@ -51,29 +51,28 @@ pytest --cov-fail-under=90
 
 ```bash
 # Run type checking
-mypy api/
+uv run mypy api/
 ```
 
-#### Linting (pylint)
-- **Minimum Score**: 8.0/10.0
+#### Linting (Ruff)
+- **Modern Tool**: Rust-based linter for speed and accuracy
 - **Line Length**: Maximum 120 characters
 - **Complexity**: Maximum 15 branches per function
-- **Configuration**: Django-aware linting with pylint-django
+- **Configuration**: Django-aware rules in pyproject.toml
 
 ```bash
 # Run linting
-pylint api/
+uv run ruff check api/
 ```
 
 #### Code Formatting
-- **Tool**: Black (automatic formatting)
-- **Line Length**: 120 characters (consistent with pylint)
-- **Import Sorting**: isort for consistent import organization
+- **Tool**: Ruff (automatic formatting and import sorting)
+- **Line Length**: 120 characters (consistent with linting)
+- **Import Sorting**: Built into Ruff for consistent organization
 
 ```bash
 # Format code
-black api/
-isort api/
+uv run ruff format api/
 ```
 
 ### Testing Standards
@@ -251,20 +250,19 @@ Every commit must pass these checks locally:
 #### Backend Pre-Commit
 ```bash
 # Type checking
-mypy api/
+uv run mypy api/
 
 # Linting
-pylint api/
+uv run ruff check api/
 
 # Code formatting
-black --check api/
-isort --check-only api/
+uv run ruff format --check api/
 
 # Security scanning
-bandit -r api/
+uv run bandit -r api/
 
 # Tests with coverage
-pytest --cov=api --cov-fail-under=90
+uv run pytest --cov=api --cov-fail-under=90
 ```
 
 #### Frontend Pre-Commit
@@ -285,8 +283,8 @@ pnpm build
 ### CI Pipeline Quality Gates
 
 #### Stage 1: Static Analysis (< 2 minutes)
-- **Code Formatting**: Black, Prettier verification
-- **Linting**: pylint, ESLint with zero warnings
+- **Code Formatting**: Ruff, Prettier verification
+- **Linting**: Ruff, ESLint with zero warnings
 - **Type Checking**: mypy, TypeScript strict mode
 - **Security Scanning**: bandit, npm audit
 - **Dependency Vulnerability**: Check for known vulnerabilities
@@ -394,7 +392,7 @@ pre-commit install
 #### Automated Quality Checks
 - **Coverage Enforcement**: PRs fail if coverage decreases
 - **Performance Regression**: Alert on significant performance changes
-- **Security Scanning**: Block PRs with security vulnerabilities
+- **Security Scanning**: Block PRs with security vulnerabilities using Safety
 - **Accessibility Compliance**: Require a11y tests for UI changes
 
 ### Manual Quality Reviews
@@ -428,13 +426,13 @@ A feature is not complete until:
 #### Backend Quality Tools
 ```bash
 # Install quality tools
-poetry install --with dev
+uv sync
 
 # Set up pre-commit hooks
 pre-commit install
 
 # Run all quality checks
-make quality-check  # Custom command to run all checks
+uv run ruff check api/ && uv run ruff format --check api/ && uv run mypy api/ && uv run pytest --cov=api --cov-fail-under=90
 ```
 
 #### Frontend Quality Tools

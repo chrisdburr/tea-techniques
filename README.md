@@ -6,7 +6,23 @@
 
 An interactive database for exploring techniques for evidencing claims about responsible AI design, development, and deployment. This repository has been designed to work in conjunction with the [Trustworthy and Ethical Assurance (TEA) platform](https://assuranceplatform.azurewebsites.net/) as a core plugin to enable practitioners to identify and implement appropriate assurance methods.
 
+## 🔧 Technology Stack
+
+- **Backend**: Django 5.x with Django REST Framework
+- **Frontend**: Next.js 14 with TypeScript and Tailwind CSS
+- **Database**: PostgreSQL (production) / SQLite (development)
+- **Package Management**: [uv](https://docs.astral.sh/uv/) for Python, pnpm for Node.js
+- **Development**: Docker Compose for full-stack development
+- **Testing**: pytest (backend), Vitest (frontend), Playwright (E2E)
+- **Code Quality**: Ruff (linting/formatting), mypy (type checking)
+
 ## 🛠️ Development Setup
+
+This project supports two development approaches:
+1. **Docker-based development** (recommended for full-stack development)
+2. **Local development** (faster for backend-only development)
+
+### Option 1: Docker Development
 
 > [!WARNING]
 > These instructions assume you are using Docker and Docker Compose. They have been tested on MacOS and Linux. If you are using Windows, you may need to adjust some commands.
@@ -47,6 +63,81 @@ An interactive database for exploring techniques for evidencing claims about res
     # Follow logs in real-time
     docker-compose -f docker-compose.development.yml logs -f backend
     ```
+
+### Option 2: Local Development (Backend)
+
+For faster backend development, you can run the Django backend locally using [uv](https://docs.astral.sh/uv/), a modern Python package manager.
+
+1. **Prerequisites:**
+   - Python 3.12+
+   - [uv](https://docs.astral.sh/uv/getting-started/installation/) installed
+   - PostgreSQL (optional, SQLite is used by default for local development)
+
+2. **Clone and setup:**
+   ```bash
+   git clone https://github.com/chrisdburr/tea-techniques.git
+   cd tea-techniques/backend
+   ```
+
+3. **Install dependencies:**
+   ```bash
+   # Install all dependencies including dev tools
+   uv sync
+   ```
+
+4. **Setup environment:**
+   ```bash
+   # Create environment file
+   cp .env.example .env
+   
+   # Edit .env if needed (defaults work for local SQLite development)
+   ```
+
+5. **Initialize database:**
+   ```bash
+   # Run migrations
+   uv run python manage.py migrate
+   
+   # Import sample data
+   uv run python manage.py reset_and_import_techniques
+   
+   # Create superuser (optional)
+   uv run python manage.py createsuperuser
+   ```
+
+6. **Run development server:**
+   ```bash
+   uv run python manage.py runserver
+   ```
+   
+   The API will be available at http://localhost:8000/api/
+
+7. **Run tests:**
+   ```bash
+   # Run all tests with coverage
+   uv run pytest --cov=api
+   
+   # Run specific test file
+   uv run pytest api/tests/test_models.py
+   
+   # Run linting
+   uv run ruff check api/
+   
+   # Run type checking
+   uv run mypy api/
+   ```
+
+### Frontend Development
+
+For frontend development, use pnpm:
+
+```bash
+cd frontend
+pnpm install
+pnpm dev
+```
+
+The frontend will be available at http://localhost:3000
 
 ## 🤝 Contributing
 

@@ -1,49 +1,35 @@
-[tool.poetry]
+[project]
 name = "tea-techniques"
 version = "0.1.0"
-description = ""
-authors = ["Christopher Burr <chrisdburr@gmail.com>"]
-readme = "README.md"
-package-mode=false
+description = "A repository for a web app and dataset of techniques for assuring ML/AI systems and projects."
+authors = [
+    {name = "Christopher Burr", email = "chrisdburr@gmail.com"}
+]
+requires-python = ">=3.12"
+dependencies = [
+    "django>=5.1.1",
+    "pandas>=2.2.3",
+    "sqlalchemy>=2.0.35",
+    "python-dotenv>=1.0.1",
+    "markdown>=3.7",
+    "beautifulsoup4>=4.12.3",
+    "lxml>=5.3.0",
+    "html5lib>=1.1",
+    "djangorestframework>=3.15.2",
+    "django-filter>=24.3",
+    "django-extensions>=3.2.3",
+    "django-tailwind>=3.8.0",
+    "django-browser-reload>=1.15.0",
+    "psycopg>=3.2.5",
+    "django-cors-headers>=4.7.0",
+    "drf-yasg>=1.21.9",
+    "whitenoise>=6.6.0",
+    "bs4>=0.0.2",
+    "requests>=2.32.3",
+    "jsonschema>=4.23.0",
+    "django-debug-toolbar>=5.1.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.12"
-django = "^5.1.1"
-pandas = "^2.2.3"
-sqlalchemy = "^2.0.35"
-python-dotenv = "^1.0.1"
-markdown = "^3.7"
-beautifulsoup4 = "^4.12.3"
-lxml = "^5.3.0"
-html5lib = "^1.1"
-djangorestframework = "^3.15.2"
-django-filter = "^24.3"
-django-extensions = "^3.2.3"
-django-tailwind = "^3.8.0"
-django-browser-reload = "^1.15.0"
-psycopg = "^3.2.5"
-django-cors-headers = "^4.7.0"
-drf-yasg = "^1.21.9"
-whitenoise = "^6.6.0"
-bs4 = "^0.0.2"
-requests = "^2.32.3"
-jsonschema = "^4.23.0"
-django-debug-toolbar = "^5.1.0"
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.0.2"
-pytest-django = "^4.8.0"
-pytest-cov = "^4.1.0"
-factory-boy = "^3.3.0"
-faker = "^23.1.0"
-mypy = "^1.9.0"
-django-stubs = "^4.2.7"
-djangorestframework-stubs = "^3.14.5"
-types-requests = "^2.32.0.20240420"
-types-markdown = "^3.5.0.20240412"
-bandit = "^1.8.6"
-safety = "^3.6.0"
-ruff = "^0.12.3"
 
 [tool.mypy]
 python_version = "3.12"
@@ -128,37 +114,57 @@ output = "coverage.xml"
 [tool.ruff]
 target-version = "py312"
 line-length = 120
-extend-include = ["*.pyi?"]
+indent-width = 4
+
+exclude = [
+    ".git",
+    ".venv",
+    "build",
+    "dist",
+    "migrations",
+    "__pycache__",
+    "staticfiles",
+]
 
 [tool.ruff.lint]
 select = [
-    "E",     # pycodestyle errors
-    "W",     # pycodestyle warnings
-    "F",     # pyflakes
-    "I",     # isort
-    "B",     # flake8-bugbear
-    "C4",    # flake8-comprehensions
-    "UP",    # pyupgrade
-    "ARG",   # flake8-unused-arguments
-    "SIM",   # flake8-simplify
-    "PTH",   # flake8-use-pathlib
-    "DJ",    # flake8-django
-    "RUF",   # Ruff-specific rules
+    "E4", "E7", "E9",  # pycodestyle errors
+    "F",              # pyflakes
+    "B",              # flake8-bugbear
+    "I",              # isort
+    "C4",             # flake8-comprehensions
+    "UP",             # pyupgrade
+    "DJ",             # flake8-django
+    "S",              # flake8-bandit (security)
+    "ARG",            # flake8-unused-arguments
+    "SIM",            # flake8-simplify
+    "PTH",            # flake8-use-pathlib
+    "RUF",            # Ruff-specific rules
 ]
+
 ignore = [
-    "E501",  # line too long (handled by formatter)
-    "B008",  # do not perform function calls in argument defaults
-    "B904",  # raise from exception
-    "SIM108", # ternary operator
+    "E501",   # line too long (handled by formatter)
+    "S101",   # use of assert (common in Django/tests)
+    "S105",   # hardcoded password (often false positives)
+    "S106",   # hardcoded password (often false positives)
+    "B008",   # do not perform function calls in argument defaults
+    "ARG001", # unused function argument (common in Django views)
+    "ARG002", # unused method argument (common in Django methods)
+    "RUF012", # mutable class attributes (common in Django admin)
 ]
+
+fixable = ["ALL"]
+unfixable = []
 
 [tool.ruff.lint.per-file-ignores]
-"*/migrations/*" = ["E501", "ARG001"]
-"*/tests/*" = ["ARG001", "ARG002"]
+"*/migrations/*" = ["ALL"]
+"*/tests/*" = ["S101", "ARG001", "ARG002", "PLR2004"]
 "manage.py" = ["ARG001"]
 "*/settings/*" = ["F401", "F403", "F405"]
+"conftest.py" = ["ARG001"]
 
 [tool.ruff.lint.isort]
+known-first-party = ["api", "config"]
 known-third-party = ["django", "rest_framework"]
 section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
 
@@ -169,5 +175,25 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.1",
+    "pytest-django>=4.8.0",
+    "pytest-cov>=4.1.0",
+    "factory-boy>=3.3.0",
+    "faker>=23.1.0",
+    "mypy>=1.16.1",
+    "django-stubs>=4.2.7",
+    "djangorestframework-stubs>=3.14.5",
+    "types-requests>=2.32.0.20240420",
+    "types-markdown>=3.5.0.20240412",
+    "safety>=3.6.0",
+    "ruff>=0.12.3",
+    "bandit>=1.8.0",
+]
+
+[tool.setuptools]
+packages = []

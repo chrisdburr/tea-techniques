@@ -22,13 +22,13 @@ For local development, you can use SQLite which doesn't require Docker:
 3. **Set up the backend**
    ```bash
    cd backend
-   poetry install
-   USE_SQLITE=True python manage.py reset_and_import_techniques
+   uv sync
+   USE_SQLITE=True uv run python manage.py reset_and_import_techniques
    ```
 
 4. **Run the backend with SQLite**
    ```bash
-   USE_SQLITE=True poetry run python manage.py runserver
+   USE_SQLITE=True uv run python manage.py runserver
    ```
 
 5. **In a new terminal, set up and run the frontend**
@@ -82,8 +82,8 @@ If you want to use the full Docker setup with PostgreSQL:
    When changing models, create and apply migrations:
    ```bash
    cd backend
-   USE_SQLITE=True poetry run python manage.py makemigrations
-   USE_SQLITE=True poetry run python manage.py migrate
+   USE_SQLITE=True uv run python manage.py makemigrations
+   USE_SQLITE=True uv run python manage.py migrate
    ```
 
 ## Testing
@@ -97,7 +97,7 @@ npm test
 Run backend tests:
 ```bash
 cd backend
-poetry run pytest
+uv run pytest
 ```
 
 ## Key Features

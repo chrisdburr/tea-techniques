@@ -80,7 +80,7 @@ All code changes should include appropriate tests:
 
 ```bash
 cd backend
-poetry run pytest
+uv run pytest
 ```
 
 #### Frontend Tests

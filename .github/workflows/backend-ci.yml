@@ -16,7 +16,6 @@ on:
 
 env:
   PYTHON_VERSION: '3.12'
-  POETRY_VERSION: '1.8.0'
   POSTGRES_DB: tea_techniques_test
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
@@ -36,38 +35,34 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: ${{ env.POETRY_VERSION }}
-          virtualenvs-create: true
-          virtualenvs-in-project: true
+      - name: Install uv
+        run: pip install uv
 
       - name: Load cached venv
-        id: cached-poetry-dependencies
+        id: cached-uv-dependencies
         uses: actions/cache@v4
         with:
           path: backend/.venv
-          key: venv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-${{ hashFiles('backend/poetry.lock') }}
+          key: venv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-${{ hashFiles('backend/uv.lock') }}
           restore-keys: |
             venv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-
 
       - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        if: steps.cached-uv-dependencies.outputs.cache-hit != 'true'
         working-directory: backend
-        run: poetry install --no-interaction --no-ansi
-
-      - name: Run Ruff formatter check
-        working-directory: backend
-        run: poetry run ruff format --check --diff .
+        run: uv sync --frozen --no-editable
 
       - name: Run Ruff linter
         working-directory: backend
-        run: poetry run ruff check . --output-format=github
+        run: uv run ruff check . --output-format=github
+
+      - name: Run Ruff formatter check
+        working-directory: backend
+        run: uv run ruff format --check --diff .
 
       - name: Run MyPy type checking
         working-directory: backend
-        run: poetry run mypy api/
+        run: uv run mypy api/
 
   test:
     runs-on: ubuntu-latest
@@ -96,26 +91,22 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: ${{ env.POETRY_VERSION }}
-          virtualenvs-create: true
-          virtualenvs-in-project: true
+      - name: Install uv
+        run: pip install uv
 
       - name: Load cached venv
-        id: cached-poetry-dependencies
+        id: cached-uv-dependencies
         uses: actions/cache@v4
         with:
           path: backend/.venv
-          key: venv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-${{ hashFiles('backend/poetry.lock') }}
+          key: venv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-${{ hashFiles('backend/uv.lock') }}
           restore-keys: |
             venv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-
 
       - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        if: steps.cached-uv-dependencies.outputs.cache-hit != 'true'
         working-directory: backend
-        run: poetry install --no-interaction --no-ansi
+        run: uv sync --frozen --no-editable
 
       - name: Wait for PostgreSQL
         run: |
@@ -129,7 +120,7 @@ jobs:
           DJANGO_SETTINGS_MODULE: config.settings.test
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/tea_techniques_test
         working-directory: backend
-        run: poetry run python manage.py migrate
+        run: uv run python manage.py migrate
 
       - name: Run tests with coverage
         env:
@@ -137,7 +128,7 @@ jobs:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/tea_techniques_test
           USE_POSTGRES_FOR_TESTS: 'True'
         working-directory: backend
-        run: poetry run pytest --cov=api --cov-report=xml --cov-report=html --cov-report=term-missing --junitxml=test-results.xml
+        run: uv run pytest --cov=api --cov-report=xml --cov-report=html --cov-report=term-missing --junitxml=test-results.xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
@@ -159,7 +150,7 @@ jobs:
 
       - name: Check test coverage threshold
         working-directory: backend
-        run: poetry run coverage report --fail-under=80
+        run: uv run coverage report --fail-under=80
 
   security-scan:
     runs-on: ubuntu-latest
@@ -173,26 +164,22 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: ${{ env.POETRY_VERSION }}
-          virtualenvs-create: true
-          virtualenvs-in-project: true
+      - name: Install uv
+        run: pip install uv
 
       - name: Install dependencies
         working-directory: backend
-        run: poetry install --no-interaction --no-ansi
+        run: uv sync --frozen --no-editable
 
       - name: Run Safety check for known vulnerabilities
         working-directory: backend
-        run: poetry run safety check
+        run: uv run safety check
 
       - name: Run Bandit security linter
         working-directory: backend
         run: |
-          poetry run bandit -r api/ -f json -o bandit-report.json || true
-          poetry run bandit -r api/ -f txt
+          uv run bandit -r api/ -f json -o bandit-report.json || true
+          uv run bandit -r api/ -f txt
 
       - name: Upload security scan results
         uses: actions/upload-artifact@v4
@@ -242,7 +229,7 @@ jobs:
 
       - name: Run integration tests
         run: |
-          docker-compose -f docker-compose.development.yml exec -T backend poetry run pytest api/tests/integration/ -v
+          docker-compose -f docker-compose.development.yml exec -T backend uv run pytest api/tests/integration/ -v
 
       - name: Cleanup
         if: always()

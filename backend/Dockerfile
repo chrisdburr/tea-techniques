@@ -11,10 +11,9 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-COPY pyproject.toml poetry.lock ./
-RUN pip install poetry && \
-    poetry config virtualenvs.create false && \
-    poetry install --no-interaction --no-ansi && \
+COPY pyproject.toml uv.lock ./
+RUN pip install uv && \
+    uv sync --frozen --no-editable && \
     pip install gunicorn && \
     pip install whitenoise
 

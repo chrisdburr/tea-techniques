@@ -93,7 +93,7 @@ export const aboutTabs: TabConfig[] = [
 								Prerequisites
 							</h3>
 							<p className="text-muted-foreground mb-2">
-								This project uses Poetry for Python dependency management. If you don&apos;t have Poetry installed, follow the installation instructions.
+								This project uses uv for Python dependency management. If you don&apos;t have uv installed, follow the installation instructions.
 							</p>
 						</div>
 
@@ -126,7 +126,7 @@ export const aboutTabs: TabConfig[] = [
 									<div>
 										<strong className="text-primary">Set up the backend</strong>
 										<p className="text-sm text-muted-foreground mt-1">
-											cd backend && poetry install && USE_SQLITE=True python manage.py reset_and_import_techniques
+											cd backend && uv sync && USE_SQLITE=True uv run python manage.py reset_and_import_techniques
 										</p>
 									</div>
 								</li>
@@ -135,7 +135,7 @@ export const aboutTabs: TabConfig[] = [
 									<div>
 										<strong className="text-primary">Run the backend</strong>
 										<p className="text-sm text-muted-foreground mt-1">
-											USE_SQLITE=True poetry run python manage.py runserver
+											USE_SQLITE=True uv run python manage.py runserver
 										</p>
 									</div>
 								</li>

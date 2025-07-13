@@ -36,7 +36,10 @@ interface TechniqueFormProps {
   isEditMode?: boolean;
 }
 
-export default function TechniqueFormRefactored({ id, isEditMode = false }: TechniqueFormProps) {
+export default function TechniqueFormRefactored({
+  id,
+  isEditMode = false,
+}: TechniqueFormProps) {
   const router = useRouter();
   const { handleError } = useApiError();
 
@@ -50,7 +53,7 @@ export default function TechniqueFormRefactored({ id, isEditMode = false }: Tech
   } = useForm<TechniqueFormData>({
     resolver: zodResolver(techniqueSchema),
     defaultValues: initialFormData,
-    mode: "onBlur"
+    mode: "onBlur",
   });
 
   // Dynamic arrays management
@@ -73,11 +76,15 @@ export default function TechniqueFormRefactored({ id, isEditMode = false }: Tech
   } = useDynamicArrays();
 
   // API hooks
-  const { data: techniqueData, isLoading: isLoadingTechnique } = useTechniqueDetail(id || "");
-  const { data: assuranceGoalsData, isLoading: isLoadingGoals } = useAssuranceGoals();
+  const { data: techniqueData, isLoading: isLoadingTechnique } =
+    useTechniqueDetail(id || "");
+  const { data: assuranceGoalsData, isLoading: isLoadingGoals } =
+    useAssuranceGoals();
   const { data: tagsData, isLoading: isLoadingTags } = useTags();
-  const { data: resourceTypesData, isLoading: isLoadingResourceTypes } = useResourceTypes();
-  const { data: techniquesData, isLoading: isLoadingTechniques } = useTechniques();
+  const { data: resourceTypesData, isLoading: isLoadingResourceTypes } =
+    useResourceTypes();
+  const { data: techniquesData, isLoading: isLoadingTechniques } =
+    useTechniques();
 
   // Mutations
   const createMutation = useCreateTechnique();
@@ -98,35 +105,40 @@ export default function TechniqueFormRefactored({ id, isEditMode = false }: Tech
   useEffect(() => {
     if (isEditMode && techniqueData) {
       // Extract IDs from relationships
-      const assurance_goal_ids = techniqueData.assurance_goals.map(goal => goal.id);
-      const tag_ids = techniqueData.tags.map(tag => tag.id);
+      const assurance_goal_ids = techniqueData.assurance_goals.map(
+        (goal) => goal.id,
+      );
+      const tag_ids = techniqueData.tags.map((tag) => tag.id);
       const related_technique_slugs = techniqueData.related_techniques || [];
 
       // Set dynamic arrays
-      setUseCases(techniqueData.example_use_cases.length > 0
-        ? techniqueData.example_use_cases.map(uc => ({
-          description: uc.description,
-          assurance_goal: uc.assurance_goal
-        }))
-        : [{ description: "" }]
+      setUseCases(
+        techniqueData.example_use_cases.length > 0
+          ? techniqueData.example_use_cases.map((uc) => ({
+              description: uc.description,
+              assurance_goal: uc.assurance_goal,
+            }))
+          : [{ description: "" }],
       );
 
-      setLimitations(techniqueData.limitations.length > 0
-        ? techniqueData.limitations.map(lim => lim.description)
-        : [""]
+      setLimitations(
+        techniqueData.limitations.length > 0
+          ? techniqueData.limitations.map((lim) => lim.description)
+          : [""],
       );
 
-      setResources(techniqueData.resources.length > 0
-        ? techniqueData.resources.map(res => ({
-          resource_type: res.resource_type,
-          title: res.title,
-          url: res.url,
-          description: res.description,
-          authors: res.authors || "",
-          publication_date: res.publication_date || "",
-          source_type: res.source_type || ""
-        }))
-        : [{ resource_type: 0, title: "", url: "", description: "" }]
+      setResources(
+        techniqueData.resources.length > 0
+          ? techniqueData.resources.map((res) => ({
+              resource_type: res.resource_type,
+              title: res.title,
+              url: res.url,
+              description: res.description,
+              authors: res.authors || "",
+              publication_date: res.publication_date || "",
+              source_type: res.source_type || "",
+            }))
+          : [{ resource_type: 0, title: "", url: "", description: "" }],
       );
 
       // Update form values
@@ -143,14 +155,25 @@ export default function TechniqueFormRefactored({ id, isEditMode = false }: Tech
         limitations: [],
       });
     }
-  }, [isEditMode, techniqueData, reset, setUseCases, setLimitations, setResources]);
+  }, [
+    isEditMode,
+    techniqueData,
+    reset,
+    setUseCases,
+    setLimitations,
+    setResources,
+  ]);
 
   // Form submission
   const onSubmit: SubmitHandler<TechniqueFormData> = async (data) => {
     // Filter out empty entries
-    const filteredUseCases = useCases.filter(uc => uc.description.trim() !== "");
-    const filteredLimitations = limitations.filter(lim => lim.trim() !== "");
-    const filteredResources = resources.filter(res => res.title.trim() !== "" && res.url.trim() !== "");
+    const filteredUseCases = useCases.filter(
+      (uc) => uc.description.trim() !== "",
+    );
+    const filteredLimitations = limitations.filter((lim) => lim.trim() !== "");
+    const filteredResources = resources.filter(
+      (res) => res.title.trim() !== "" && res.url.trim() !== "",
+    );
 
     const finalFormData: TechniqueFormData = {
       ...data,
@@ -179,27 +202,31 @@ export default function TechniqueFormRefactored({ id, isEditMode = false }: Tech
   };
 
   // Prepare options for select fields
-  const assuranceGoalOptions = assuranceGoalsData?.results?.map(goal => ({
-    value: goal.id.toString(),
-    label: goal.name,
-  })) || [];
-
-  const tagOptions = tagsData?.results?.map(tag => ({
-    value: tag.id.toString(),
-    label: tag.name,
-  })) || [];
-
-  const relatedTechniqueOptions = (techniquesData as any)?.results
-    ?.filter((t: Technique) => t.slug !== id)
-    ?.map((technique: Technique) => ({
-      value: technique.slug,
-      label: technique.name,
+  const assuranceGoalOptions =
+    assuranceGoalsData?.results?.map((goal) => ({
+      value: goal.id.toString(),
+      label: goal.name,
     })) || [];
 
-  const resourceTypeOptions = resourceTypesData?.results?.map(rt => ({
-    value: rt.id.toString(),
-    label: rt.name,
-  })) || [];
+  const tagOptions =
+    tagsData?.results?.map((tag) => ({
+      value: tag.id.toString(),
+      label: tag.name,
+    })) || [];
+
+  const relatedTechniqueOptions =
+    (techniquesData as any)?.results
+      ?.filter((t: Technique) => t.slug !== id)
+      ?.map((technique: Technique) => ({
+        value: technique.slug,
+        label: technique.name,
+      })) || [];
+
+  const resourceTypeOptions =
+    resourceTypesData?.results?.map((rt) => ({
+      value: rt.id.toString(),
+      label: rt.name,
+    })) || [];
 
   return (
     <div className="space-y-6 py-6">
@@ -280,11 +307,7 @@ export default function TechniqueFormRefactored({ id, isEditMode = false }: Tech
         </Tabs>
 
         <div className="mt-6 flex justify-end">
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="min-w-[120px]"
-          >
+          <Button type="submit" disabled={isLoading} className="min-w-[120px]">
             {isLoading ? (
               <span className="flex items-center gap-2">
                 <span className="animate-spin">↻</span>

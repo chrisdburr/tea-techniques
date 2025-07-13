@@ -1,7 +1,13 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { apiClient } from '@/lib/api/client';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { apiClient } from "@/lib/api/client";
 
 // Define the user type
 interface User {
@@ -45,15 +51,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Function to check if the user is already authenticated
   const checkAuthStatus = async () => {
     setIsLoading(true);
-    
+
     try {
       // We'll check by trying to fetch the current user info
-      const response = await apiClient.get('/api/auth/user');
+      const response = await apiClient.get("/api/auth/user");
       setUser(response.data);
       setIsLoading(false);
     } catch {
       // No need to use the error variable
-      console.log('Not authenticated or could not verify authentication status');
+      console.log(
+        "Not authenticated or could not verify authentication status",
+      );
       setUser(null);
       setIsLoading(false);
     }
@@ -62,21 +70,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Function to log in
   const login = async (username: string, password: string) => {
     setIsLoading(true);
-    
+
     try {
       // First, get CSRF token if needed
-      await apiClient.get('/api/auth/csrf');
-      
+      await apiClient.get("/api/auth/csrf");
+
       // Then login
-      const response = await apiClient.post('/api/auth/login', {
+      const response = await apiClient.post("/api/auth/login", {
         username,
         password,
       });
-      
+
       setUser(response.data);
       setIsLoading(false);
     } catch (error: unknown) {
-      console.error('Login error:', error);
+      console.error("Login error:", error);
       setIsLoading(false);
       throw error;
     }
@@ -85,12 +93,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Function to log out
   const logout = async () => {
     setIsLoading(true);
-    
+
     try {
-      await apiClient.post('/api/auth/logout');
+      await apiClient.post("/api/auth/logout");
       setUser(null);
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     } finally {
       setIsLoading(false);
     }

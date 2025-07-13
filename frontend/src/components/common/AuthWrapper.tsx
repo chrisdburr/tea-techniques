@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import { useAuth } from '@/lib/context/auth-context';
-import { Button } from '@/components/ui/button';
+import { useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { useAuth } from "@/lib/context/auth-context";
+import { Button } from "@/components/ui/button";
 
 interface AuthWrapperProps {
   children: React.ReactNode;
@@ -11,10 +11,10 @@ interface AuthWrapperProps {
   adminOnly?: boolean;
 }
 
-export default function AuthWrapper({ 
-  children, 
+export default function AuthWrapper({
+  children,
   authRequired = false,
-  adminOnly = false
+  adminOnly = false,
 }: AuthWrapperProps) {
   const { isAuthenticated, isLoading, user } = useAuth();
   const router = useRouter();
@@ -28,10 +28,18 @@ export default function AuthWrapper({
         router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
       } else if (adminOnly && (!isAuthenticated || !user?.isStaff)) {
         // If admin is required but user is not admin
-        router.push('/');
+        router.push("/");
       }
     }
-  }, [isAuthenticated, isLoading, authRequired, adminOnly, router, pathname, user]);
+  }, [
+    isAuthenticated,
+    isLoading,
+    authRequired,
+    adminOnly,
+    router,
+    pathname,
+    user,
+  ]);
 
   // Show loading state
   if (isLoading && (authRequired || adminOnly)) {
@@ -52,18 +60,21 @@ export default function AuthWrapper({
         <div className="text-center max-w-md">
           <h1 className="text-2xl font-bold mb-4">Authentication Required</h1>
           <p className="text-muted-foreground mb-6">
-            You need to be signed in to access this page. Please log in with your credentials.
+            You need to be signed in to access this page. Please log in with
+            your credentials.
           </p>
           <div className="flex flex-col space-y-3">
-            <Button 
-              onClick={() => router.push(`/login?redirect=${encodeURIComponent(pathname)}`)}
+            <Button
+              onClick={() =>
+                router.push(`/login?redirect=${encodeURIComponent(pathname)}`)
+              }
               className="w-full"
             >
               Log in
             </Button>
-            <Button 
-              variant="outline" 
-              onClick={() => window.location.href = '/admin'}
+            <Button
+              variant="outline"
+              onClick={() => (window.location.href = "/admin")}
               className="w-full"
             >
               Go to Admin Login
@@ -83,7 +94,7 @@ export default function AuthWrapper({
           <p className="text-muted-foreground mb-6">
             This page is only accessible to administrators.
           </p>
-          <Button variant="outline" onClick={() => router.push('/')}>
+          <Button variant="outline" onClick={() => router.push("/")}>
             Return to Home
           </Button>
         </div>

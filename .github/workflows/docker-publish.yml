@@ -203,17 +203,17 @@ jobs:
           # Use the generated docker-compose file to test the full stack
           docker-compose -f docker-compose.ghcr.yml pull
           docker-compose -f docker-compose.ghcr.yml up -d
-          
+
           # Wait for services to be healthy
           echo "Waiting for services to start..."
           sleep 60
-          
+
           # Test backend health
           curl -f http://localhost:8000/api/techniques/ || (echo "Backend health check failed" && exit 1)
-          
+
           # Test frontend accessibility
           curl -f http://localhost:3000 || (echo "Frontend health check failed" && exit 1)
-          
+
           echo "✅ Full stack deployment test successful!"
 
       - name: Cleanup test deployment

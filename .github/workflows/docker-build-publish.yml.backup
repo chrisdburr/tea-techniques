@@ -151,7 +151,7 @@ jobs:
         run: |
           cat > docker-compose.production.yml << 'EOF'
           version: '3.8'
-          
+
           services:
             backend:
               image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}:${{ github.ref_name == 'main' && 'latest' || github.ref_name }}
@@ -169,7 +169,7 @@ jobs:
                 - media_volume:/app/media
               networks:
                 - tea-network
-          
+
             frontend:
               image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}:${{ github.ref_name == 'main' && 'latest' || github.ref_name }}
               environment:
@@ -179,7 +179,7 @@ jobs:
                 - backend
               networks:
                 - tea-network
-          
+
             db:
               image: postgres:15-alpine
               environment:
@@ -190,7 +190,7 @@ jobs:
                 - postgres_data:/var/lib/postgresql/data
               networks:
                 - tea-network
-          
+
             nginx:
               image: nginx:alpine
               ports:
@@ -206,13 +206,13 @@ jobs:
                 - frontend
               networks:
                 - tea-network
-          
+
           volumes:
             postgres_data:
             static_volume:
             media_volume:
             certbot_certs:
-          
+
           networks:
             tea-network:
               driver: bridge
@@ -225,20 +225,20 @@ jobs:
           events {
               worker_connections 1024;
           }
-          
+
           http {
               upstream backend {
                   server backend:8000;
               }
-          
+
               upstream frontend {
                   server frontend:3000;
               }
-          
+
               server {
                   listen 80;
                   server_name _;
-          
+
                   location /api/ {
                       proxy_pass http://backend;
                       proxy_set_header Host $host;
@@ -246,7 +246,7 @@ jobs:
                       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
                       proxy_set_header X-Forwarded-Proto $scheme;
                   }
-          
+
                   location /admin/ {
                       proxy_pass http://backend;
                       proxy_set_header Host $host;
@@ -254,19 +254,19 @@ jobs:
                       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
                       proxy_set_header X-Forwarded-Proto $scheme;
                   }
-          
+
                   location /static/ {
                       alias /app/staticfiles/;
                       expires 1y;
                       add_header Cache-Control "public, immutable";
                   }
-          
+
                   location /media/ {
                       alias /app/media/;
                       expires 1y;
                       add_header Cache-Control "public";
                   }
-          
+
                   location / {
                       proxy_pass http://frontend;
                       proxy_set_header Host $host;
@@ -282,63 +282,63 @@ jobs:
         run: |
           cat > DEPLOYMENT.md << 'EOF'
           # TEA Techniques Deployment
-          
+
           This repository provides Docker images for the TEA Techniques application.
-          
+
           ## Quick Start
-          
+
           1. Pull the latest images:
              ```bash
              docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}:latest
              docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}:latest
              ```
-          
+
           2. Use the provided docker-compose.production.yml:
              ```bash
              wget https://raw.githubusercontent.com/${{ github.repository }}/main/docker-compose.production.yml
              docker-compose -f docker-compose.production.yml up -d
              ```
-          
+
           ## Environment Variables
-          
+
           ### Backend
           - `SECRET_KEY` (required): Django secret key
           - `DATABASE_URL` (optional): PostgreSQL connection string
           - `ALLOWED_HOSTS` (optional): Comma-separated list of allowed hosts
           - `CORS_ALLOWED_ORIGINS` (optional): Frontend URLs for CORS
-          
+
           ### Frontend
           - `NEXT_PUBLIC_API_URL` (optional): Backend API URL
-          
+
           ### Database
           - `POSTGRES_DB`: Database name
           - `POSTGRES_USER`: Database user
           - `POSTGRES_PASSWORD`: Database password
-          
+
           ## Available Images
-          
+
           - **Backend**: `${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}`
           - **Frontend**: `${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}`
-          
+
           ## Tags
-          
+
           - `latest`: Latest stable release from main branch
           - `v*`: Semantic version releases
           - `main`: Latest development build
           - `pr-*`: Pull request builds (for testing)
-          
+
           ## Health Checks
-          
+
           - Backend: `GET /api/techniques/` should return 200
           - Frontend: `GET /` should return the main page
-          
+
           ## Architecture
-          
+
           - **Backend**: Django + PostgreSQL
           - **Frontend**: Next.js (static files)
           - **Reverse Proxy**: Nginx
           - **Database**: PostgreSQL 15
-          
+
           For more information, see the [main repository](https://github.com/${{ github.repository }}).
           EOF
 

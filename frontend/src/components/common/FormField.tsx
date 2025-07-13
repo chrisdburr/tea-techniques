@@ -9,7 +9,9 @@ interface FormFieldProps {
   label: string;
   type?: "text" | "textarea";
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => void;
   error?: string;
   placeholder?: string;
   required?: boolean;
@@ -32,7 +34,7 @@ export const FormField: React.FC<FormFieldProps> = ({
       <Label htmlFor={id} className="text-base">
         {label} {required && <span className="text-red-500">*</span>}
       </Label>
-      
+
       {type === "text" ? (
         <Input
           id={id}
@@ -53,7 +55,7 @@ export const FormField: React.FC<FormFieldProps> = ({
           className={error ? "border-red-500" : ""}
         />
       )}
-      
+
       {error && <p className="text-sm text-red-500">{error}</p>}
     </div>
   );

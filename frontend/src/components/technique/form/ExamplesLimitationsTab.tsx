@@ -25,7 +25,11 @@ interface ExamplesLimitationsTabProps {
   isLoading: boolean;
   assuranceGoalOptions: Option[];
   addUseCase: () => void;
-  updateUseCase: (index: number, field: keyof UseCase, value: string | number | undefined) => void;
+  updateUseCase: (
+    index: number,
+    field: keyof UseCase,
+    value: string | number | undefined,
+  ) => void;
   removeUseCase: (index: number) => void;
   addLimitation: () => void;
   updateLimitation: (index: number, value: string) => void;
@@ -56,7 +60,7 @@ export function ExamplesLimitationsTab({
         {/* Example Use Cases Section */}
         <div className="space-y-4">
           <h3 className="text-lg font-medium">Example Use Cases</h3>
-          
+
           {useCases.map((useCase, index) => (
             <div key={index} className="border p-4 rounded-lg space-y-4">
               <div className="flex items-center justify-between">
@@ -73,11 +77,15 @@ export function ExamplesLimitationsTab({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor={`usecase-description-${index}`}>Description</Label>
+                <Label htmlFor={`usecase-description-${index}`}>
+                  Description
+                </Label>
                 <Textarea
                   id={`usecase-description-${index}`}
                   value={useCase.description}
-                  onChange={(e) => updateUseCase(index, "description", e.target.value)}
+                  onChange={(e) =>
+                    updateUseCase(index, "description", e.target.value)
+                  }
                   placeholder="Describe how this technique can be used"
                   rows={3}
                   disabled={isLoading}
@@ -85,16 +93,24 @@ export function ExamplesLimitationsTab({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor={`usecase-goal-${index}`}>Assurance Goal (Optional)</Label>
+                <Label htmlFor={`usecase-goal-${index}`}>
+                  Assurance Goal (Optional)
+                </Label>
                 <select
                   id={`usecase-goal-${index}`}
                   value={useCase.assurance_goal?.toString() || ""}
-                  onChange={(e) => updateUseCase(index, "assurance_goal", e.target.value ? parseInt(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateUseCase(
+                      index,
+                      "assurance_goal",
+                      e.target.value ? parseInt(e.target.value) : undefined,
+                    )
+                  }
                   className="w-full px-3 py-2 border rounded-md"
                   disabled={isLoading}
                 >
                   <option value="">Select a goal</option>
-                  {assuranceGoalOptions.map(option => (
+                  {assuranceGoalOptions.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -118,11 +134,13 @@ export function ExamplesLimitationsTab({
         {/* Limitations Section */}
         <div className="space-y-4">
           <h3 className="text-lg font-medium">Limitations</h3>
-          
+
           {limitations.map((limitation, index) => (
             <div key={index} className="flex gap-2 items-start">
               <div className="flex-1 space-y-2">
-                <Label htmlFor={`limitation-${index}`}>Limitation {index + 1}</Label>
+                <Label htmlFor={`limitation-${index}`}>
+                  Limitation {index + 1}
+                </Label>
                 <Textarea
                   id={`limitation-${index}`}
                   value={limitation}

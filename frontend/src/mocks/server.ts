@@ -10,7 +10,7 @@
 
 // Temporary placeholder to avoid import errors
 export const server = {
-  listen: () => console.log('Mock server would start'),
-  resetHandlers: () => console.log('Mock handlers would reset'),
-  close: () => console.log('Mock server would close')
+  listen: () => console.log("Mock server would start"),
+  resetHandlers: () => console.log("Mock handlers would reset"),
+  close: () => console.log("Mock server would close"),
 };

@@ -2,8 +2,18 @@
 import React from "react";
 import { CheckIcon, ChevronDownIcon, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -38,18 +48,24 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
   disabled = false,
 }) => {
   // Memoize handlers to prevent unnecessary re-renders
-  const handleSelect = React.useCallback((value: string) => {
-    if (values.includes(value)) {
-      onChange(values.filter((v) => v !== value));
-    } else {
-      onChange([...values, value]);
-    }
-  }, [values, onChange]);
+  const handleSelect = React.useCallback(
+    (value: string) => {
+      if (values.includes(value)) {
+        onChange(values.filter((v) => v !== value));
+      } else {
+        onChange([...values, value]);
+      }
+    },
+    [values, onChange],
+  );
 
   // Handle removal of a selected option
-  const handleRemove = React.useCallback((value: string) => {
-    onChange(values.filter((v) => v !== value));
-  }, [values, onChange]);
+  const handleRemove = React.useCallback(
+    (value: string) => {
+      onChange(values.filter((v) => v !== value));
+    },
+    [values, onChange],
+  );
 
   // Clear all selected options
   const handleClear = React.useCallback(() => {
@@ -57,9 +73,14 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
   }, [onChange]);
 
   // Memoize the selected labels
-  const selectedLabels = React.useMemo(() => values.map(
-    (value) => options.find((option) => option.value === value)?.label || value
-  ), [values, options]);
+  const selectedLabels = React.useMemo(
+    () =>
+      values.map(
+        (value) =>
+          options.find((option) => option.value === value)?.label || value,
+      ),
+    [values, options],
+  );
 
   return (
     <div className="space-y-2">
@@ -80,7 +101,7 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
           </Button>
         )}
       </div>
-      
+
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -90,12 +111,10 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
             disabled={disabled}
             className={cn(
               "w-full justify-between",
-              !values.length && "text-muted-foreground"
+              !values.length && "text-muted-foreground",
             )}
           >
-            {values.length > 0
-              ? `${values.length} selected`
-              : placeholder}
+            {values.length > 0 ? `${values.length} selected` : placeholder}
             <ChevronDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -116,7 +135,7 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
                         "flex h-4 w-4 items-center justify-center rounded-sm border",
                         values.includes(option.value)
                           ? "border-primary bg-primary text-primary-foreground"
-                          : "opacity-50 border-input"
+                          : "opacity-50 border-input",
                       )}
                     >
                       {values.includes(option.value) && (
@@ -131,13 +150,13 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
           </Command>
         </PopoverContent>
       </Popover>
-      
+
       {values.length > 0 && (
         <div className="flex flex-wrap gap-1 mt-2">
           {selectedLabels.map((label, i) => (
-            <Badge 
-              key={i} 
-              variant="secondary" 
+            <Badge
+              key={i}
+              variant="secondary"
               className="px-2 py-1 text-xs flex items-center gap-1"
             >
               {label}
@@ -153,14 +172,12 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
           ))}
         </div>
       )}
-      
+
       {description && (
         <p className="text-xs text-muted-foreground">{description}</p>
       )}
-      
-      {error && (
-        <p className="text-xs text-destructive">{error}</p>
-      )}
+
+      {error && <p className="text-xs text-destructive">{error}</p>}
     </div>
   );
 };

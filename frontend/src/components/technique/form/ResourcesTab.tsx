@@ -25,7 +25,11 @@ interface ResourcesTabProps {
   isLoading: boolean;
   resourceTypeOptions: Option[];
   addResource: () => void;
-  updateResource: (index: number, field: keyof Resource, value: string | number) => void;
+  updateResource: (
+    index: number,
+    field: keyof Resource,
+    value: string | number,
+  ) => void;
   removeResource: (index: number) => void;
 }
 
@@ -67,12 +71,18 @@ export function ResourcesTab({
                 <select
                   id={`resource-type-${index}`}
                   value={resource.resource_type.toString()}
-                  onChange={(e) => updateResource(index, "resource_type", parseInt(e.target.value))}
+                  onChange={(e) =>
+                    updateResource(
+                      index,
+                      "resource_type",
+                      parseInt(e.target.value),
+                    )
+                  }
                   className="w-full px-3 py-2 border rounded-md"
                   disabled={isLoading}
                 >
                   <option value="0">Select resource type</option>
-                  {resourceTypeOptions.map(option => (
+                  {resourceTypeOptions.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -85,7 +95,9 @@ export function ResourcesTab({
                 <Input
                   id={`resource-title-${index}`}
                   value={resource.title}
-                  onChange={(e) => updateResource(index, "title", e.target.value)}
+                  onChange={(e) =>
+                    updateResource(index, "title", e.target.value)
+                  }
                   placeholder="Enter resource title"
                   disabled={isLoading}
                 />
@@ -104,11 +116,15 @@ export function ResourcesTab({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor={`resource-description-${index}`}>Description (Optional)</Label>
+                <Label htmlFor={`resource-description-${index}`}>
+                  Description (Optional)
+                </Label>
                 <Textarea
                   id={`resource-description-${index}`}
                   value={resource.description}
-                  onChange={(e) => updateResource(index, "description", e.target.value)}
+                  onChange={(e) =>
+                    updateResource(index, "description", e.target.value)
+                  }
                   placeholder="Enter resource description"
                   rows={2}
                   disabled={isLoading}
@@ -117,22 +133,30 @@ export function ResourcesTab({
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor={`resource-authors-${index}`}>Authors (Optional)</Label>
+                  <Label htmlFor={`resource-authors-${index}`}>
+                    Authors (Optional)
+                  </Label>
                   <Input
                     id={`resource-authors-${index}`}
                     value={resource.authors || ""}
-                    onChange={(e) => updateResource(index, "authors", e.target.value)}
+                    onChange={(e) =>
+                      updateResource(index, "authors", e.target.value)
+                    }
                     placeholder="Enter authors"
                     disabled={isLoading}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor={`resource-publication-date-${index}`}>Publication Date (Optional)</Label>
+                  <Label htmlFor={`resource-publication-date-${index}`}>
+                    Publication Date (Optional)
+                  </Label>
                   <Input
                     id={`resource-publication-date-${index}`}
                     value={resource.publication_date || ""}
-                    onChange={(e) => updateResource(index, "publication_date", e.target.value)}
+                    onChange={(e) =>
+                      updateResource(index, "publication_date", e.target.value)
+                    }
                     placeholder="e.g., 2023-01-15"
                     disabled={isLoading}
                   />
@@ -140,11 +164,15 @@ export function ResourcesTab({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor={`resource-source-type-${index}`}>Source Type (Optional)</Label>
+                <Label htmlFor={`resource-source-type-${index}`}>
+                  Source Type (Optional)
+                </Label>
                 <Input
                   id={`resource-source-type-${index}`}
                   value={resource.source_type || ""}
-                  onChange={(e) => updateResource(index, "source_type", e.target.value)}
+                  onChange={(e) =>
+                    updateResource(index, "source_type", e.target.value)
+                  }
                   placeholder="e.g., technical_paper, tutorial, etc."
                   disabled={isLoading}
                 />

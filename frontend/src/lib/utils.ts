@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { Tag } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
-	return twMerge(clsx(inputs));
+  return twMerge(clsx(inputs));
 }
 
 /**
@@ -13,7 +13,7 @@ export function cn(...inputs: ClassValue[]) {
  * @returns Array of tags matching the prefix
  */
 export function parseTagsByPrefix(tags: Tag[], prefix: string): Tag[] {
-	return tags.filter(tag => tag.name.startsWith(`${prefix}/`));
+  return tags.filter((tag) => tag.name.startsWith(`${prefix}/`));
 }
 
 /**
@@ -22,8 +22,8 @@ export function parseTagsByPrefix(tags: Tag[], prefix: string): Tag[] {
  * @returns The value part (e.g., "tabular")
  */
 export function getTagValue(tagName: string): string {
-	const parts = tagName.split('/');
-	return parts[parts.length - 1];
+  const parts = tagName.split("/");
+  return parts[parts.length - 1];
 }
 
 /**
@@ -32,14 +32,14 @@ export function getTagValue(tagName: string): string {
  * @returns Array of unique prefixes
  */
 export function getTagPrefixes(tags: Tag[]): string[] {
-	const prefixes = new Set<string>();
-	tags.forEach(tag => {
-		const prefix = tag.name.split('/')[0];
-		if (prefix) {
-			prefixes.add(prefix);
-		}
-	});
-	return Array.from(prefixes);
+  const prefixes = new Set<string>();
+  tags.forEach((tag) => {
+    const prefix = tag.name.split("/")[0];
+    if (prefix) {
+      prefixes.add(prefix);
+    }
+  });
+  return Array.from(prefixes);
 }
 
 /**
@@ -48,16 +48,16 @@ export function getTagPrefixes(tags: Tag[]): string[] {
  * @returns Object with parsed components
  */
 export function parseHierarchicalTag(tagName: string): {
-	prefix: string;
-	categories: string[];
-	fullPath: string;
+  prefix: string;
+  categories: string[];
+  fullPath: string;
 } {
-	const parts = tagName.split('/');
-	return {
-		prefix: parts[0] || '',
-		categories: parts.slice(1),
-		fullPath: tagName
-	};
+  const parts = tagName.split("/");
+  return {
+    prefix: parts[0] || "",
+    categories: parts.slice(1),
+    fullPath: tagName,
+  };
 }
 
 /**
@@ -66,8 +66,9 @@ export function parseHierarchicalTag(tagName: string): {
  * @returns Array of applicable model types
  */
 export function getApplicableModels(tags: Tag[]): string[] {
-	return parseTagsByPrefix(tags, 'applicable-models')
-		.map(tag => getTagValue(tag.name));
+  return parseTagsByPrefix(tags, "applicable-models").map((tag) =>
+    getTagValue(tag.name),
+  );
 }
 
 /**
@@ -76,8 +77,9 @@ export function getApplicableModels(tags: Tag[]): string[] {
  * @returns Array of lifecycle stages
  */
 export function getLifecycleStages(tags: Tag[]): string[] {
-	return parseTagsByPrefix(tags, 'lifecycle-stage')
-		.map(tag => getTagValue(tag.name));
+  return parseTagsByPrefix(tags, "lifecycle-stage").map((tag) =>
+    getTagValue(tag.name),
+  );
 }
 
 /**
@@ -86,8 +88,9 @@ export function getLifecycleStages(tags: Tag[]): string[] {
  * @returns Array of data types
  */
 export function getDataTypes(tags: Tag[]): string[] {
-	return parseTagsByPrefix(tags, 'data-type')
-		.map(tag => getTagValue(tag.name));
+  return parseTagsByPrefix(tags, "data-type").map((tag) =>
+    getTagValue(tag.name),
+  );
 }
 
 /**
@@ -96,19 +99,18 @@ export function getDataTypes(tags: Tag[]): string[] {
  * @returns Array of structured category information
  */
 export function getAssuranceGoalCategories(tags: Tag[]): Array<{
-	goal: string;
-	category?: string;
-	subcategory?: string;
+  goal: string;
+  category?: string;
+  subcategory?: string;
 }> {
-	return parseTagsByPrefix(tags, 'assurance-goal-category')
-		.map(tag => {
-			const parsed = parseHierarchicalTag(tag.name);
-			return {
-				goal: parsed.categories[0] || '',
-				category: parsed.categories[1],
-				subcategory: parsed.categories[2]
-			};
-		});
+  return parseTagsByPrefix(tags, "assurance-goal-category").map((tag) => {
+    const parsed = parseHierarchicalTag(tag.name);
+    return {
+      goal: parsed.categories[0] || "",
+      category: parsed.categories[1],
+      subcategory: parsed.categories[2],
+    };
+  });
 }
 
 /**
@@ -117,17 +119,17 @@ export function getAssuranceGoalCategories(tags: Tag[]): Array<{
  * @returns Object with tags grouped by prefix
  */
 export function groupTagsByPrefix(tags: Tag[]): Record<string, Tag[]> {
-	const grouped: Record<string, Tag[]> = {};
-	
-	tags.forEach(tag => {
-		const prefix = tag.name.split('/')[0];
-		if (!grouped[prefix]) {
-			grouped[prefix] = [];
-		}
-		grouped[prefix].push(tag);
-	});
-	
-	return grouped;
+  const grouped: Record<string, Tag[]> = {};
+
+  tags.forEach((tag) => {
+    const prefix = tag.name.split("/")[0];
+    if (!grouped[prefix]) {
+      grouped[prefix] = [];
+    }
+    grouped[prefix].push(tag);
+  });
+
+  return grouped;
 }
 
 /**
@@ -136,17 +138,25 @@ export function groupTagsByPrefix(tags: Tag[]): Record<string, Tag[]> {
  * @param includePrefix - Whether to include the prefix in the display
  * @returns Formatted tag name
  */
-export function formatTagDisplay(tagName: string, includePrefix: boolean = false): string {
-	if (includePrefix) {
-		return tagName.split('/').map(part => 
-			part.split('-').map(word => 
-				word.charAt(0).toUpperCase() + word.slice(1)
-			).join(' ')
-		).join(' / ');
-	}
-	
-	const value = getTagValue(tagName);
-	return value.split('-').map(word => 
-		word.charAt(0).toUpperCase() + word.slice(1)
-	).join(' ');
+export function formatTagDisplay(
+  tagName: string,
+  includePrefix: boolean = false,
+): string {
+  if (includePrefix) {
+    return tagName
+      .split("/")
+      .map((part) =>
+        part
+          .split("-")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" "),
+      )
+      .join(" / ");
+  }
+
+  const value = getTagValue(tagName);
+  return value
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }

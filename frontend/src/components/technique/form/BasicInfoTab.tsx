@@ -21,7 +21,11 @@ interface BasicInfoTabProps {
   isLoading: boolean;
 }
 
-export function BasicInfoTab({ control, errors, isLoading }: BasicInfoTabProps) {
+export function BasicInfoTab({
+  control,
+  errors,
+  isLoading,
+}: BasicInfoTabProps) {
   return (
     <Card>
       <CardHeader>
@@ -70,15 +74,15 @@ export function BasicInfoTab({ control, errors, isLoading }: BasicInfoTabProps) 
             )}
           />
           {errors?.description && (
-            <p className="text-sm text-destructive">{errors.description.message}</p>
+            <p className="text-sm text-destructive">
+              {errors.description.message}
+            </p>
           )}
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="complexity_rating">
-              Complexity Rating
-            </Label>
+            <Label htmlFor="complexity_rating">Complexity Rating</Label>
             <Controller
               name="complexity_rating"
               control={control}
@@ -88,10 +92,14 @@ export function BasicInfoTab({ control, errors, isLoading }: BasicInfoTabProps) 
                   className="w-full px-3 py-2 border rounded-md"
                   disabled={isLoading}
                   {...field}
-                  onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    field.onChange(
+                      e.target.value ? parseInt(e.target.value) : undefined,
+                    )
+                  }
                   value={field.value?.toString() || ""}
                 >
-                  {ratingOptions.map(option => (
+                  {ratingOptions.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -114,10 +122,14 @@ export function BasicInfoTab({ control, errors, isLoading }: BasicInfoTabProps) 
                   className="w-full px-3 py-2 border rounded-md"
                   disabled={isLoading}
                   {...field}
-                  onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    field.onChange(
+                      e.target.value ? parseInt(e.target.value) : undefined,
+                    )
+                  }
                   value={field.value?.toString() || ""}
                 >
-                  {ratingOptions.map(option => (
+                  {ratingOptions.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>

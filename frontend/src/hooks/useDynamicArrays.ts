@@ -20,7 +20,15 @@ export function useDynamicArrays() {
   const [useCases, setUseCases] = useState<UseCase[]>([{ description: "" }]);
   const [limitations, setLimitations] = useState<string[]>([""]);
   const [resources, setResources] = useState<Resource[]>([
-    { resource_type: 0, title: "", url: "", description: "", authors: "", publication_date: "", source_type: "" }
+    {
+      resource_type: 0,
+      title: "",
+      url: "",
+      description: "",
+      authors: "",
+      publication_date: "",
+      source_type: "",
+    },
   ]);
 
   // Use case management
@@ -28,7 +36,11 @@ export function useDynamicArrays() {
     setUseCases([...useCases, { description: "" }]);
   };
 
-  const updateUseCase = (index: number, field: keyof UseCase, value: string | number | undefined) => {
+  const updateUseCase = (
+    index: number,
+    field: keyof UseCase,
+    value: string | number | undefined,
+  ) => {
     const updated = [...useCases];
     updated[index] = { ...updated[index], [field]: value };
     setUseCases(updated);
@@ -63,18 +75,25 @@ export function useDynamicArrays() {
 
   // Resource management
   const addResource = () => {
-    setResources([...resources, { 
-      resource_type: 0, 
-      title: "", 
-      url: "", 
-      description: "", 
-      authors: "", 
-      publication_date: "", 
-      source_type: "" 
-    }]);
+    setResources([
+      ...resources,
+      {
+        resource_type: 0,
+        title: "",
+        url: "",
+        description: "",
+        authors: "",
+        publication_date: "",
+        source_type: "",
+      },
+    ]);
   };
 
-  const updateResource = (index: number, field: keyof Resource, value: string | number) => {
+  const updateResource = (
+    index: number,
+    field: keyof Resource,
+    value: string | number,
+  ) => {
     const updated = [...resources];
     updated[index] = { ...updated[index], [field]: value };
     setResources(updated);
@@ -84,7 +103,17 @@ export function useDynamicArrays() {
     if (resources.length > 1) {
       setResources(resources.filter((_, i) => i !== index));
     } else {
-      setResources([{ resource_type: 0, title: "", url: "", description: "", authors: "", publication_date: "", source_type: "" }]);
+      setResources([
+        {
+          resource_type: 0,
+          title: "",
+          url: "",
+          description: "",
+          authors: "",
+          publication_date: "",
+          source_type: "",
+        },
+      ]);
     }
   };
 
@@ -93,22 +122,22 @@ export function useDynamicArrays() {
     useCases,
     limitations,
     resources,
-    
+
     // State setters for initialization
     setUseCases,
     setLimitations,
     setResources,
-    
+
     // Use case functions
     addUseCase,
     updateUseCase,
     removeUseCase,
-    
+
     // Limitation functions
     addLimitation,
     updateLimitation,
     removeLimitation,
-    
+
     // Resource functions
     addResource,
     updateResource,

@@ -6,11 +6,11 @@ A well-designed test suite for the TEA Techniques web application should systema
 
 I've designed a comprehensive testing strategy for the TEA Techniques web application that systematically tests all frontend components. The test suite provides thorough coverage across different levels of testing to ensure the application functions correctly.
 
-### Key Testing Areas:
+### Key Testing Areas
 
 1. **Unit Tests** - Testing individual components in isolation
 2. **Integration Tests** - Testing interactions between connected components
-3. **API Integration Tests** - Verifying correct data fetching and error handling  
+3. **API Integration Tests** - Verifying correct data fetching and error handling
 4. **Page Component Tests** - Testing complete page layouts and functionality
 5. **End-to-End Tests** - Testing complete user flows (using Cypress/Playwright)
 
@@ -68,11 +68,13 @@ For end-to-end tests, the strategy includes using Cypress or Playwright to test 
 ## Implementation Notes
 
 1. The test suite includes comprehensive mocking of:
+
    - Next.js hooks (`useRouter`, `useParams`)
    - API responses
    - Browser APIs (localStorage, matchMedia)
 
 2. All tests follow best practices for React Testing Library:
+
    - Testing user-visible behavior, not implementation details
    - Using semantic queries (getByRole, getByText)
    - Simulating real user interactions
@@ -87,16 +89,19 @@ For end-to-end tests, the strategy includes using Cypress or Playwright to test 
 To run the tests, you would:
 
 1. Install testing dependencies if not already included:
+
    ```bash
    npm install --save-dev @testing-library/react @testing-library/user-event @testing-library/jest-dom jest
    ```
 
 2. Run the tests:
+
    ```bash
    npm test
    ```
 
 3. For end-to-end tests with Cypress (after installation):
+
    ```bash
    npm run cypress:open
    ```

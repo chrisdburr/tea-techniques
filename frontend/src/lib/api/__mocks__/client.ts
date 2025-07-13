@@ -1,5 +1,5 @@
 // Mock API client for tests
-import { vi } from 'vitest';
+import { vi } from "vitest";
 
 const mockApiClient = {
   get: vi.fn(),
@@ -16,19 +16,19 @@ const mockApiClient = {
       head: {},
       post: {},
       put: {},
-      patch: {}
-    }
+      patch: {},
+    },
   },
   interceptors: {
     request: {
       use: vi.fn(),
-      eject: vi.fn()
+      eject: vi.fn(),
     },
     response: {
       use: vi.fn(),
-      eject: vi.fn()
-    }
-  }
+      eject: vi.fn(),
+    },
+  },
 };
 
 export const apiClient = mockApiClient;

@@ -40,27 +40,30 @@ export function usePagination({
   }, [searchParams, totalPages]);
 
   // Function to handle page change
-  const handlePageChange = useCallback((page: number) => {
-    // Safety check to prevent accessing non-existent pages
-    if (page < 1 || page > totalPages) {
-      console.warn(
-        `Attempted to access invalid page ${page}. Total pages: ${totalPages}`
-      );
-      return;
-    }
+  const handlePageChange = useCallback(
+    (page: number) => {
+      // Safety check to prevent accessing non-existent pages
+      if (page < 1 || page > totalPages) {
+        console.warn(
+          `Attempted to access invalid page ${page}. Total pages: ${totalPages}`,
+        );
+        return;
+      }
 
-    // Update URL with the new page
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
-    router.push(`${pathname}?${params.toString()}`);
+      // Update URL with the new page
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("page", page.toString());
+      router.push(`${pathname}?${params.toString()}`);
 
-    // Call the onPageChange callback if provided
-    if (onPageChange) {
-      onPageChange(page);
-    }
+      // Call the onPageChange callback if provided
+      if (onPageChange) {
+        onPageChange(page);
+      }
 
-    setCurrentPage(page);
-  }, [searchParams, router, pathname, totalPages, onPageChange]);
+      setCurrentPage(page);
+    },
+    [searchParams, router, pathname, totalPages, onPageChange],
+  );
 
   return {
     currentPage,

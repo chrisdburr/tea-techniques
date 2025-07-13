@@ -34,7 +34,7 @@ describe('Button Component', () => {
   test('renders different variants correctly', () => {
     const { rerender } = render(<Button variant="outline">Outline</Button>)
     expect(screen.getByRole('button', { name: /outline/i })).toHaveClass('border')
-    
+
     rerender(<Button variant="destructive">Destructive</Button>)
     expect(screen.getByRole('button', { name: /destructive/i })).toHaveClass('bg-destructive')
   })
@@ -61,7 +61,7 @@ describe('Card Components', () => {
         <CardFooter>Footer</CardFooter>
       </Card>
     )
-    
+
     expect(screen.getByText('Card Title')).toBeInTheDocument()
     expect(screen.getByText('Card Description')).toBeInTheDocument()
     expect(screen.getByText('Content')).toBeInTheDocument()
@@ -91,20 +91,20 @@ describe('Header Component', () => {
         <Header />
       </DarkModeProvider>
     )
-    
+
     expect(screen.getByText('TEA Techniques')).toBeInTheDocument()
     expect(screen.getByText('Categories')).toBeInTheDocument()
     expect(screen.getByText('Browse Techniques')).toBeInTheDocument()
     expect(screen.getByText('About')).toBeInTheDocument()
   })
-  
+
   test('renders dark mode toggle', () => {
     render(
       <DarkModeProvider>
         <Header />
       </DarkModeProvider>
     )
-    
+
     // Look for the button that controls dark mode
     const darkModeButton = screen.getByRole('button', { name: /Switch to Dark Mode|Switch to Light Mode/i })
     expect(darkModeButton).toBeInTheDocument()
@@ -114,17 +114,17 @@ describe('Header Component', () => {
     // First, mock window.innerWidth to simulate mobile view
     Object.defineProperty(window, 'innerWidth', { value: 500, writable: true })
     window.dispatchEvent(new Event('resize'))
-    
+
     render(
       <DarkModeProvider>
         <Header />
       </DarkModeProvider>
     )
-    
+
     // Find and click the mobile menu button
     const menuButton = screen.getByRole('button', { name: /toggle menu/i })
     await userEvent.click(menuButton)
-    
+
     // Check if mobile menu is shown
     expect(screen.getByText('Browse Techniques')).toBeVisible()
   })
@@ -137,7 +137,7 @@ import Footer from '@/components/layout/Footer'
 describe('Footer Component', () => {
   test('renders app title and links', () => {
     render(<Footer />)
-    
+
     expect(screen.getByText('TEA Techniques Database')).toBeInTheDocument()
     expect(screen.getByText('Categories')).toBeInTheDocument()
     expect(screen.getByText('Browse Techniques')).toBeInTheDocument()
@@ -145,10 +145,10 @@ describe('Footer Component', () => {
     expect(screen.getByText('API Documentation')).toBeInTheDocument()
     expect(screen.getByText('GitHub Repository')).toBeInTheDocument()
   })
-  
+
   test('renders copyright info with current year', () => {
     render(<Footer />)
-    
+
     const currentYear = new Date().getFullYear().toString()
     expect(screen.getByText(new RegExp(`© ${currentYear} TEA Techniques Database`, 'i'))).toBeInTheDocument()
   })
@@ -161,26 +161,26 @@ import { StarRating } from '@/components/ui/star-rating'
 describe('StarRating Component', () => {
   test('renders correct number of filled stars', () => {
     render(<StarRating rating={3} maxRating={5} />)
-    
+
     // This test is somewhat tricky because of how the stars are rendered
     // Check for filled stars vs empty stars
     const stars = screen.getAllByRole('img', { hidden: true }) // SVG icons are often hidden from screen readers
-    
+
     // You might need to adjust this based on your actual DOM structure
     const filledStars = stars.filter(star => star.className.includes('fill-yellow'))
     const emptyStars = stars.filter(star => !star.className.includes('fill-yellow'))
-    
+
     expect(filledStars).toHaveLength(3)
     expect(emptyStars).toHaveLength(2)
   })
-  
+
   test('handles edge cases for ratings', () => {
     const { rerender } = render(<StarRating rating={0} maxRating={5} />)
     expect(screen.queryAllByTestId('filled-star')).toHaveLength(0)
-    
+
     rerender(<StarRating rating={-1} maxRating={5} />)
     expect(screen.queryAllByTestId('filled-star')).toHaveLength(0)
-    
+
     rerender(<StarRating rating={6} maxRating={5} />)
     expect(screen.queryAllByTestId('filled-star')).toHaveLength(5)
   })
@@ -215,7 +215,7 @@ describe('TechniquesList Component', () => {
         },
       },
     })
-    
+
     // Mock the hook results
     jest.spyOn(hooks, 'useTechniques').mockReturnValue({
       data: {
@@ -254,7 +254,7 @@ describe('TechniquesList Component', () => {
       isLoading: false,
       error: null,
     } as any)
-    
+
     jest.spyOn(hooks, 'useAssuranceGoals').mockReturnValue({
       data: {
         results: [
@@ -265,7 +265,7 @@ describe('TechniquesList Component', () => {
       isLoading: false,
       error: null,
     } as any)
-    
+
     jest.spyOn(hooks, 'useCategories').mockReturnValue({
       data: {
         results: [
@@ -284,54 +284,54 @@ describe('TechniquesList Component', () => {
         <TechniquesList />
       </QueryClientProvider>
     )
-    
+
     await waitFor(() => {
       expect(screen.getByText('Test Technique 1')).toBeInTheDocument()
       expect(screen.getByText('Test Technique 2')).toBeInTheDocument()
     })
   })
-  
+
   test('shows loading state', async () => {
     jest.spyOn(hooks, 'useTechniques').mockReturnValueOnce({
       isLoading: true,
       error: null,
     } as any)
-    
+
     render(
       <QueryClientProvider client={queryClient}>
         <TechniquesList />
       </QueryClientProvider>
     )
-    
+
     expect(screen.getByText(/loading/i)).toBeInTheDocument()
   })
-  
+
   test('shows error state', async () => {
     jest.spyOn(hooks, 'useTechniques').mockReturnValueOnce({
       isLoading: false,
       error: new Error('Failed to fetch techniques'),
     } as any)
-    
+
     render(
       <QueryClientProvider client={queryClient}>
         <TechniquesList />
       </QueryClientProvider>
     )
-    
+
     expect(screen.getByText(/error loading techniques/i)).toBeInTheDocument()
   })
-  
+
   test('filters work correctly', async () => {
     render(
       <QueryClientProvider client={queryClient}>
         <TechniquesList />
       </QueryClientProvider>
     )
-    
+
     // Find and click a filter
     const explainabilityFilter = screen.getByText('Explainability')
     await userEvent.click(explainabilityFilter)
-    
+
     // The useTechniques mock should be called with updated filters
     expect(hooks.useTechniques).toHaveBeenCalledWith(
       expect.objectContaining({ assurance_goals: ['1'] }),
@@ -353,17 +353,17 @@ describe('TechniquesSidebar Component', () => {
     complexity_max: 5,
     computational_cost_max: 5,
   }
-  
+
   const mockGoals = [
     { id: 1, name: 'Explainability', description: 'Desc' },
     { id: 2, name: 'Fairness', description: 'Desc' },
   ]
-  
+
   const mockCategories = [
     { id: 1, name: 'Category 1', description: 'Desc', assurance_goal: 1, assurance_goal_name: 'Explainability' },
     { id: 2, name: 'Category 2', description: 'Desc', assurance_goal: 2, assurance_goal_name: 'Fairness' },
   ]
-  
+
   const mockSetFilters = jest.fn()
   const mockApplyFilters = jest.fn()
   const mockResetFilters = jest.fn()
@@ -383,14 +383,14 @@ describe('TechniquesSidebar Component', () => {
         setIsMobileOpen={mockSetIsMobileOpen}
       />
     )
-    
+
     expect(screen.getByText('Filters')).toBeInTheDocument()
     expect(screen.getByText('Assurance Goals')).toBeInTheDocument()
     expect(screen.getByText('Categories')).toBeInTheDocument()
     expect(screen.getByText('Model Dependency')).toBeInTheDocument()
     expect(screen.getByText('Ratings')).toBeInTheDocument()
   })
-  
+
   test('reset button calls resetFilters', async () => {
     render(
       <TechniquesSidebar
@@ -405,13 +405,13 @@ describe('TechniquesSidebar Component', () => {
         setIsMobileOpen={mockSetIsMobileOpen}
       />
     )
-    
+
     const resetButton = screen.getByText('Reset')
     await userEvent.click(resetButton)
-    
+
     expect(mockResetFilters).toHaveBeenCalledTimes(1)
   })
-  
+
   test('filter checkboxes update filter state', async () => {
     render(
       <TechniquesSidebar
@@ -426,11 +426,11 @@ describe('TechniquesSidebar Component', () => {
         setIsMobileOpen={mockSetIsMobileOpen}
       />
     )
-    
+
     // Find a goal checkbox
     const explainabilityCheckbox = screen.getByLabelText('Explainability')
     await userEvent.click(explainabilityCheckbox)
-    
+
     // toggleArrayFilter should have been called with the appropriate arguments
     expect(mockApplyFilters).toHaveBeenCalled()
   })
@@ -443,20 +443,20 @@ import GoalIcon from '@/components/technique/GoalIcon'
 describe('GoalIcon Component', () => {
   test('renders the correct icon for each goal', () => {
     const goals = ['Explainability', 'Fairness', 'Security', 'Safety', 'Reliability', 'Transparency', 'Privacy']
-    
+
     goals.forEach(goal => {
       const { rerender } = render(<GoalIcon goalName={goal} />)
-      
+
       // Since icons are SVGs, check the presence of an SVG element
       expect(screen.getByRole('img', { hidden: true })).toBeInTheDocument()
-      
+
       rerender(<></>)
     })
   })
-  
+
   test('renders a default icon for unknown goals', () => {
     render(<GoalIcon goalName="Unknown Goal" />)
-    
+
     // Should render the default HelpCircle icon
     expect(screen.getByRole('img', { hidden: true })).toBeInTheDocument()
   })
@@ -469,11 +469,11 @@ describe('GoalIcon Component', () => {
 // src/__tests__/lib/api/hooks.test.tsx
 import { renderHook, waitFor } from '@testing-library/react'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
-import { 
-  useTechniques, 
+import {
+  useTechniques,
   useTechniqueDetail,
   useAssuranceGoals,
-  useCategories 
+  useCategories
 } from '@/lib/api/hooks'
 import { apiClient } from '@/lib/api/client'
 
@@ -490,7 +490,7 @@ jest.mock('@/lib/api/client', () => ({
 describe('API Hooks', () => {
   let queryClient: QueryClient
   let wrapper: React.FC<{ children: React.ReactNode }>
-  
+
   beforeEach(() => {
     queryClient = new QueryClient({
       defaultOptions: {
@@ -499,16 +499,16 @@ describe('API Hooks', () => {
         },
       },
     })
-    
+
     wrapper = ({ children }) => (
       <QueryClientProvider client={queryClient}>
         {children}
       </QueryClientProvider>
     )
-    
+
     jest.clearAllMocks()
   })
-  
+
   test('useTechniques fetches techniques successfully', async () => {
     const mockData = {
       count: 2,
@@ -517,25 +517,25 @@ describe('API Hooks', () => {
         { id: 2, name: 'Technique 2' },
       ],
     }
-    
+
     // Mock the API response
     jest.spyOn(apiClient, 'get').mockResolvedValue({ data: mockData })
-    
+
     const { result } = renderHook(() => useTechniques(), { wrapper })
-    
+
     // Initially loading
     expect(result.current.isLoading).toBe(true)
-    
+
     // Wait for data to resolve
     await waitFor(() => expect(result.current.isLoading).toBe(false))
-    
+
     // Check data is returned correctly
     expect(result.current.data).toEqual(mockData)
-    
+
     // Verify API called with correct parameters
     expect(apiClient.get).toHaveBeenCalled()
   })
-  
+
   test('useTechniqueDetail fetches technique details', async () => {
     const mockTechnique = {
       id: 1,
@@ -543,24 +543,24 @@ describe('API Hooks', () => {
       description: 'Description 1',
       // ... other technique properties
     }
-    
+
     jest.spyOn(apiClient, 'get').mockResolvedValue({ data: mockTechnique })
-    
+
     const { result } = renderHook(() => useTechniqueDetail(1), { wrapper })
-    
+
     await waitFor(() => expect(result.current.isLoading).toBe(false))
-    
+
     expect(result.current.data).toEqual(mockTechnique)
     expect(apiClient.get).toHaveBeenCalledWith('/api/techniques/1')
   })
-  
+
   test('useTechniqueDetail handles errors correctly', async () => {
     jest.spyOn(apiClient, 'get').mockRejectedValue(new Error('Network error'))
-    
+
     const { result } = renderHook(() => useTechniqueDetail(1), { wrapper })
-    
+
     await waitFor(() => expect(result.current.isLoading).toBe(false))
-    
+
     expect(result.current.error).toBeTruthy()
     expect(apiClient.get).toHaveBeenCalledWith('/api/techniques/1')
   })
@@ -587,24 +587,24 @@ jest.mock('next/navigation', () => ({
 describe('Home Page', () => {
   test('renders hero section', () => {
     render(<HomePage />)
-    
+
     expect(screen.getByText('TEA Techniques Database')).toBeInTheDocument()
     expect(screen.getByText(/A platform for exploring techniques/i)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Explore Techniques/i })).toBeInTheDocument()
   })
-  
+
   test('renders feature section', () => {
     render(<HomePage />)
-    
+
     expect(screen.getByText('Key Features')).toBeInTheDocument()
     expect(screen.getByText('Structured Documentation')).toBeInTheDocument()
     expect(screen.getByText('Searchable Database')).toBeInTheDocument()
     expect(screen.getByText('Open Platform')).toBeInTheDocument()
   })
-  
+
   test('renders call to action section', () => {
     render(<HomePage />)
-    
+
     expect(screen.getByText('Ready to get started?')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Explore Techniques/i })).toBeInTheDocument()
   })
@@ -635,7 +635,7 @@ describe('Technique Detail Page', () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
-  
+
   test('renders technique details correctly', async () => {
     const mockTechnique = {
       id: 1,
@@ -652,41 +652,41 @@ describe('Technique Detail Page', () => {
       example_use_cases: [],
       limitations: [],
     }
-    
+
     jest.spyOn(hooks, 'useTechniqueDetail').mockReturnValue({
       data: mockTechnique,
       isLoading: false,
       error: null,
     } as any)
-    
+
     render(<TechniqueDetailPage />)
-    
+
     expect(screen.getByText('Test Technique')).toBeInTheDocument()
     expect(screen.getByText('This is a test technique description')).toBeInTheDocument()
     expect(screen.getByText('Model-Agnostic')).toBeInTheDocument()
     expect(screen.getByText('Explainability')).toBeInTheDocument()
   })
-  
+
   test('shows loading state', async () => {
     jest.spyOn(hooks, 'useTechniqueDetail').mockReturnValue({
       isLoading: true,
       error: null,
     } as any)
-    
+
     render(<TechniqueDetailPage />)
-    
+
     expect(screen.getByText(/loading technique details/i)).toBeInTheDocument()
   })
-  
+
   test('shows error state', async () => {
     jest.spyOn(hooks, 'useTechniqueDetail').mockReturnValue({
       isLoading: false,
       error: new Error('Failed to fetch technique'),
       data: null,
     } as any)
-    
+
     render(<TechniqueDetailPage />)
-    
+
     expect(screen.getByText(/Error Loading Technique/i)).toBeInTheDocument()
   })
 })
@@ -698,15 +698,15 @@ describe('Technique Detail Page', () => {
 /**
  * For end-to-end tests, consider using Cypress or Playwright
  * to test full user flows in a real browser environment.
- * 
+ *
  * Example E2E tests might include:
- * 
+ *
  * 1. Navigating from home to techniques page
  * 2. Applying filters and seeing filtered results
  * 3. Viewing technique details and navigating back
  * 4. Using pagination to browse techniques
  * 5. Testing dark mode toggle functionality
- * 
+ *
  * Below is a Cypress test example (you would need to install Cypress first)
  */
 
@@ -716,31 +716,31 @@ describe('Browse Techniques', () => {
   it('should navigate to techniques page and apply filters', () => {
     // Visit the home page
     cy.visit('/')
-    
+
     // Click on "Explore Techniques" button
     cy.contains('Explore Techniques').click()
-    
+
     // Verify we're on the techniques page
     cy.url().should('include', '/techniques')
-    
+
     // Open the filter sidebar if needed
     cy.get('[aria-label="Show filters"]').click()
-    
+
     // Apply a filter (e.g., select "Explainability")
     cy.contains('Explainability').click()
-    
+
     // Verify URL contains the filter
     cy.url().should('include', 'assurance_goals=')
-    
+
     // Verify filtered results
     cy.get('[data-testid="technique-card"]').should('exist')
-    
+
     // Click on a technique to view details
     cy.get('[data-testid="technique-card"]').first().click()
-    
+
     // Verify we're on the detail page
     cy.url().should('match', /\/techniques\/\d+/)
-    
+
     // Verify technique details are displayed
     cy.contains('Technique Attributes').should('be.visible')
   })
@@ -773,7 +773,7 @@ describe('Dark Mode Context', () => {
       },
       writable: true,
     })
-    
+
     // Mock matchMedia
     Object.defineProperty(window, 'matchMedia', {
       value: jest.fn().mockImplementation(query => ({
@@ -788,7 +788,7 @@ describe('Dark Mode Context', () => {
       })),
       writable: true,
     })
-    
+
     // Mock document.documentElement
     Object.defineProperty(document, 'documentElement', {
       value: {
@@ -800,50 +800,50 @@ describe('Dark Mode Context', () => {
       writable: true,
     })
   })
-  
+
   test('provides dark mode context to children', async () => {
     render(
       <DarkModeProvider>
         <TestComponent />
       </DarkModeProvider>
     )
-    
+
     // Initially dark mode should be off (default)
     expect(screen.getByText('Dark Mode: Off')).toBeInTheDocument()
-    
+
     // Toggle dark mode
     await userEvent.click(screen.getByText('Toggle'))
-    
+
     // Now dark mode should be on
     expect(screen.getByText('Dark Mode: On')).toBeInTheDocument()
-    
+
     // Check if localStorage was called with the correct values
     expect(localStorage.setItem).toHaveBeenCalledWith('darkMode', 'true')
-    
+
     // Check if the class was added to the document element
     expect(document.documentElement.classList.add).toHaveBeenCalledWith('dark')
   })
-  
+
   test('DarkModeToggle component works correctly', async () => {
     render(
       <DarkModeProvider>
         <DarkModeToggle />
       </DarkModeProvider>
     )
-    
+
     // Find the toggle button
     const toggleButton = screen.getByRole('button')
     expect(toggleButton).toBeInTheDocument()
-    
+
     // Initially should show the moon icon (for light mode)
     expect(toggleButton.querySelector('svg')).toBeInTheDocument()
-    
+
     // Click the toggle
     await userEvent.click(toggleButton)
-    
+
     // Now should show the sun icon (for dark mode)
     expect(toggleButton.querySelector('svg')).toBeInTheDocument()
-    
+
     // Check if the class was added to the document element
     expect(document.documentElement.classList.add).toHaveBeenCalledWith('dark')
   })

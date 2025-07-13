@@ -8,7 +8,9 @@ export const techniqueSchema = z.object({
   description: z.string().min(1, { message: "Description is required" }),
   complexity_rating: z.number().min(1).max(5).optional(),
   computational_cost_rating: z.number().min(1).max(5).optional(),
-  assurance_goal_ids: z.array(z.number()).min(1, { message: "At least one assurance goal is required" }),
+  assurance_goal_ids: z
+    .array(z.number())
+    .min(1, { message: "At least one assurance goal is required" }),
   tag_ids: z.array(z.number()),
   related_technique_slugs: z.array(z.string()),
   resources: z.array(
@@ -20,13 +22,13 @@ export const techniqueSchema = z.object({
       authors: z.string().optional(),
       publication_date: z.string().optional(),
       source_type: z.string().optional(),
-    })
+    }),
   ),
   example_use_cases: z.array(
     z.object({
       description: z.string(),
       assurance_goal: z.number().optional(),
-    })
+    }),
   ),
   limitations: z.array(z.string()),
 });

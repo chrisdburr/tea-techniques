@@ -394,9 +394,15 @@ class TechniqueLimitationService:
 
     def _create_single_limitation(self, technique: Technique, limitation_data: Any) -> None:
         """Create a single limitation for a technique."""
-        if isinstance(limitation_data, str):
-            # Handle simple string format
-            TechniqueLimitation.objects.create(technique=technique, description=limitation_data)
-        else:
-            # Handle dict format
-            TechniqueLimitation.objects.create(technique=technique, **limitation_data)
+        try:
+            if isinstance(limitation_data, str):
+                # Handle simple string format
+                TechniqueLimitation.objects.create(technique=technique, description=limitation_data)
+            else:
+                # Handle dict format
+                TechniqueLimitation.objects.create(technique=technique, **limitation_data)
+        except Exception as e:
+            if not isinstance(e, TechniqueOperationError):
+                logger.error("Failed to create limitation: %s", str(e))
+                raise TechniqueOperationError(f"Failed to create limitation: {e!s}") from e
+            raise

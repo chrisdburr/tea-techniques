@@ -5,10 +5,10 @@
  */
 
 import {
-	useTechniques,
-	useCreateTechnique,
-	useUpdateTechnique,
-	useDeleteTechnique,
+  useTechniques,
+  useCreateTechnique,
+  useUpdateTechnique,
+  useDeleteTechnique,
 } from "./hooks";
 import type { Technique } from "@/lib/types";
 

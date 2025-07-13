@@ -1,6 +1,11 @@
 // src/components/technique/form/ClassificationTab.tsx
 import React from "react";
-import { Control, Controller, FieldErrors, UseFormSetValue } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  FieldErrors,
+  UseFormSetValue,
+} from "react-hook-form";
 import { TechniqueFormData } from "@/lib/types";
 
 import {
@@ -26,18 +31,18 @@ interface ClassificationTabProps {
   relatedTechniqueOptions: Option[];
 }
 
-export function ClassificationTab({ 
-  control, 
-  errors, 
-  setValue, 
+export function ClassificationTab({
+  control,
+  errors,
+  setValue,
   isLoading,
   assuranceGoalOptions,
   tagOptions,
-  relatedTechniqueOptions 
+  relatedTechniqueOptions,
 }: ClassificationTabProps) {
   const handleGoalChange = (values: string[]) => {
     try {
-      const goalIds = values.map(v => parseInt(v));
+      const goalIds = values.map((v) => parseInt(v));
       setValue("assurance_goal_ids", goalIds, { shouldValidate: true });
     } catch (error) {
       console.error("Error in handleGoalChange:", error);
@@ -67,14 +72,16 @@ export function ClassificationTab({
                   multiple
                   className="w-full px-3 py-2 border rounded-md"
                   onChange={(e) => {
-                    const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
+                    const selectedOptions = Array.from(
+                      e.target.selectedOptions,
+                    ).map((opt) => opt.value);
                     handleGoalChange(selectedOptions);
                   }}
                   disabled={isLoading}
                   size={4}
-                  value={field.value.map(id => id.toString())}
+                  value={field.value.map((id) => id.toString())}
                 >
-                  {assuranceGoalOptions.map(option => (
+                  {assuranceGoalOptions.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -86,7 +93,9 @@ export function ClassificationTab({
               Hold Ctrl (or Cmd) to select multiple options
             </p>
             {errors?.assurance_goal_ids && (
-              <p className="text-sm text-destructive">{errors.assurance_goal_ids.message}</p>
+              <p className="text-sm text-destructive">
+                {errors.assurance_goal_ids.message}
+              </p>
             )}
           </div>
 
@@ -103,15 +112,17 @@ export function ClassificationTab({
                   multiple
                   className="w-full px-3 py-2 border rounded-md"
                   onChange={(e) => {
-                    const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
-                    const tagIds = selectedOptions.map(v => parseInt(v));
+                    const selectedOptions = Array.from(
+                      e.target.selectedOptions,
+                    ).map((opt) => opt.value);
+                    const tagIds = selectedOptions.map((v) => parseInt(v));
                     setValue("tag_ids", tagIds);
                   }}
                   disabled={isLoading}
                   size={8}
-                  value={field.value.map(id => id.toString())}
+                  value={field.value.map((id) => id.toString())}
                 >
-                  {tagOptions.map(option => (
+                  {tagOptions.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -120,12 +131,16 @@ export function ClassificationTab({
               )}
             />
             <p className="text-xs text-muted-foreground">
-              Hold Ctrl (or Cmd) to select multiple tags. Tags help categorize and filter techniques.
+              Hold Ctrl (or Cmd) to select multiple tags. Tags help categorize
+              and filter techniques.
             </p>
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="related_technique_ids" className="block font-medium">
+            <label
+              htmlFor="related_technique_ids"
+              className="block font-medium"
+            >
               Related Techniques
             </label>
             <Controller
@@ -137,14 +152,16 @@ export function ClassificationTab({
                   multiple
                   className="w-full px-3 py-2 border rounded-md"
                   onChange={(e) => {
-                    const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
+                    const selectedOptions = Array.from(
+                      e.target.selectedOptions,
+                    ).map((opt) => opt.value);
                     setValue("related_technique_slugs", selectedOptions);
                   }}
                   disabled={isLoading}
                   size={6}
                   value={field.value || []}
                 >
-                  {relatedTechniqueOptions.map(option => (
+                  {relatedTechniqueOptions.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -153,7 +170,8 @@ export function ClassificationTab({
               )}
             />
             <p className="text-xs text-muted-foreground">
-              Hold Ctrl (or Cmd) to select multiple techniques that are related to this one.
+              Hold Ctrl (or Cmd) to select multiple techniques that are related
+              to this one.
             </p>
           </div>
         </div>

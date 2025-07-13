@@ -166,14 +166,14 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 	if (!resources || resources.length === 0) {
 		return <p className="text-muted-foreground">No resources available.</p>;
 	}
-	
+
 	// Debug: Log resources to see what we're actually getting from the API
 	console.log("Resources from API:", JSON.stringify(resources, null, 2));
 
 	// Function to get the appropriate icon for source type
 	const getResourceIcon = (resource: TechniqueResource) => {
 		const sourceType = (resource.source_type || "unknown").toLowerCase();
-		
+
 		switch (sourceType) {
 			case "documentation":
 				return <FileText className="h-5 w-5" aria-hidden="true" />;
@@ -200,7 +200,7 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 	// Format source type for display
 	const formatSourceType = (sourceType: string): string => {
 		if (!sourceType) return "Unknown";
-		
+
 		// Convert snake_case to Title Case
 		return sourceType
 			.split(/_|\s/)
@@ -219,7 +219,7 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 						<div className="flex-shrink-0 mr-3 mt-1">
 							{getResourceIcon(resource)}
 						</div>
-						
+
 						<div className="flex-grow">
 							<div className="flex items-center justify-between">
 								<h3 className="font-medium">
@@ -248,7 +248,7 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 										Source Type: {formatSourceType(resource.source_type)}
 									</div>
 								)}
-								
+
 								{resource.authors && (
 									<div>
 										Authors: {resource.authors}

@@ -10,7 +10,7 @@ import { ArrowLeft } from "lucide-react";
 
 export default function AddTechniquePage() {
   const router = useRouter();
-  
+
   return (
     <MainLayout>
       <AuthWrapper authRequired>
@@ -22,11 +22,14 @@ export default function AddTechniquePage() {
                 Create a new technique for the collection
               </p>
             </div>
-            <Button onClick={() => router.push('/techniques')} variant="outline">
+            <Button
+              onClick={() => router.push("/techniques")}
+              variant="outline"
+            >
               <ArrowLeft className="mr-2 h-4 w-4" /> Back to Techniques
             </Button>
           </div>
-          
+
           <TechniqueForm />
         </div>
       </AuthWrapper>

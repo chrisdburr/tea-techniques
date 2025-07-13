@@ -13,13 +13,13 @@ export default function EditTechniquePage() {
   const params = useParams();
   const router = useRouter();
   const slug = params.slug as string;
-  
+
   const { data: technique, isLoading, error } = useTechniqueDetail(slug);
-  
+
   const goBack = () => {
     router.push(`/techniques/${slug}`);
   };
-  
+
   return (
     <MainLayout>
       <AuthWrapper authRequired>
@@ -35,13 +35,15 @@ export default function EditTechniquePage() {
               <ArrowLeft className="mr-2 h-4 w-4" /> Back to Details
             </Button>
           </div>
-          
+
           {isLoading ? (
             <div className="text-center py-8">Loading technique details...</div>
           ) : error ? (
             <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-md">
               <p>There was an error loading this technique.</p>
-              <p className="text-sm mt-2">{(error as Error)?.message || "Unknown error"}</p>
+              <p className="text-sm mt-2">
+                {(error as Error)?.message || "Unknown error"}
+              </p>
             </div>
           ) : technique ? (
             <TechniqueForm slug={slug} isEditMode={true} />

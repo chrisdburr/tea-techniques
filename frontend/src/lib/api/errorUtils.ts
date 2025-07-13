@@ -16,7 +16,7 @@ interface ErrorLogDetails {
 }
 
 /**
- * Enhanced error logger for API errors that provides structured logging 
+ * Enhanced error logger for API errors that provides structured logging
  * and detailed information about the error context.
  */
 export function logApiError(hookName: string, error: unknown): void {
@@ -24,39 +24,42 @@ export function logApiError(hookName: string, error: unknown): void {
   const errorLog: ErrorLogDetails = {
     hookName,
     type: "UnknownError",
-    message: "Unknown error occurred"
+    message: "Unknown error occurred",
   };
-  
+
   // Process Axios errors
   if (axios.isAxiosError(error)) {
     const axiosError = error as AxiosError;
-    
+
     // Update error type and message
     errorLog.type = "AxiosError";
     errorLog.message = axiosError.message;
-    
+
     // Add request details if available
     if (axiosError.config) {
       errorLog.requestInfo = {
         method: axiosError.config.method?.toUpperCase(),
         url: axiosError.config.url,
         params: axiosError.config.params,
-        data: axiosError.config.data
+        data: axiosError.config.data,
       };
     }
-    
+
     // Add response details if available
     if (axiosError.response) {
       errorLog.statusCode = axiosError.response.status;
       errorLog.responseData = axiosError.response.data;
-      
+
       // Improve error type based on status code
-      if (axiosError.response.status >= 400 && axiosError.response.status < 500) {
+      if (
+        axiosError.response.status >= 400 &&
+        axiosError.response.status < 500
+      ) {
         errorLog.type = "ClientError";
       } else if (axiosError.response.status >= 500) {
         errorLog.type = "ServerError";
       }
-      
+
       // Try to extract standardized error type if available
       if (
         axiosError.response.data &&
@@ -79,22 +82,28 @@ export function logApiError(hookName: string, error: unknown): void {
     // Handle non-standard error objects
     errorLog.message = String(error);
   }
-  
+
   // Log the structured error details
-  console.error(`[API Error][${errorLog.hookName}] ${errorLog.type}: ${errorLog.message}`, {
-    details: errorLog,
-    originalError: error
-  });
-  
+  console.error(
+    `[API Error][${errorLog.hookName}] ${errorLog.type}: ${errorLog.message}`,
+    {
+      details: errorLog,
+      originalError: error,
+    },
+  );
+
   // Add extra logging for unexpected error formats to help with debugging
   if (
-    errorLog.responseData && 
-    typeof errorLog.responseData === "object" && 
+    errorLog.responseData &&
+    typeof errorLog.responseData === "object" &&
     errorLog.responseData !== null &&
-    !("detail" in errorLog.responseData) && 
+    !("detail" in errorLog.responseData) &&
     !("error_type" in errorLog.responseData) &&
     !("errors" in errorLog.responseData)
   ) {
-    console.warn(`[API Error][${errorLog.hookName}] Unexpected error format detected:`, errorLog.responseData);
+    console.warn(
+      `[API Error][${errorLog.hookName}] Unexpected error format detected:`,
+      errorLog.responseData,
+    );
   }
 }

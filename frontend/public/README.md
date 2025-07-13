@@ -9,17 +9,20 @@ An interactive database for exploring techniques for evidencing claims about res
 For local development, you can use SQLite which doesn't require Docker:
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/chrisdburr/tea-techniques.git
    cd tea-techniques
    ```
 
 2. **Setup environment variable**
+
    ```bash
    cp .env.example .env
    ```
 
 3. **Set up the backend**
+
    ```bash
    cd backend
    uv sync
@@ -27,11 +30,13 @@ For local development, you can use SQLite which doesn't require Docker:
    ```
 
 4. **Run the backend with SQLite**
+
    ```bash
    USE_SQLITE=True uv run python manage.py runserver
    ```
 
 5. **In a new terminal, set up and run the frontend**
+
    ```bash
    cd frontend
    npm install
@@ -39,31 +44,34 @@ For local development, you can use SQLite which doesn't require Docker:
    ```
 
 6. **Access the application**
-   - Frontend: http://localhost:3000
-   - API: http://localhost:8000/api/
-   - Django Admin: http://localhost:8000/admin/
+   - Frontend: <http://localhost:3000>
+   - API: <http://localhost:8000/api/>
+   - Django Admin: <http://localhost:8000/admin/>
 
 ### Using Docker (for production-like environment)
 
 If you want to use the full Docker setup with PostgreSQL:
 
 1. **Setup environment variable**
+
    ```bash
    cp .env.example .env
    ```
 
 2. **Start the application**
+
    ```bash
    docker compose up -d
    ```
 
 3. **Access the application**
-   - Frontend: http://localhost:3000
-   - API: http://localhost:8000/api/
+   - Frontend: <http://localhost:3000>
+   - API: <http://localhost:8000/api/>
 
 ## Project Structure
 
 - **Backend**: Django with Django REST Framework
+
   - `backend/api`: Main Django app
   - `backend/config`: Django project settings
   - `backend/data`: CSV file with technique data
@@ -76,10 +84,11 @@ If you want to use the full Docker setup with PostgreSQL:
 ## Development Tips
 
 1. **API Documentation**
-   Access the API documentation at http://localhost:8000/swagger/ when the backend is running.
+   Access the API documentation at <http://localhost:8000/swagger/> when the backend is running.
 
 2. **Database Migrations**
    When changing models, create and apply migrations:
+
    ```bash
    cd backend
    USE_SQLITE=True uv run python manage.py makemigrations
@@ -89,12 +98,14 @@ If you want to use the full Docker setup with PostgreSQL:
 ## Testing
 
 Run frontend tests:
+
 ```bash
 cd frontend
 npm test
 ```
 
 Run backend tests:
+
 ```bash
 cd backend
 uv run pytest

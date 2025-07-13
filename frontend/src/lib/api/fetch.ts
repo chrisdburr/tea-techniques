@@ -1,13 +1,13 @@
 // src/lib/api/fetch.ts
 
 // Define the possible API environments
-type ApiEnvironment = 'client' | 'server';
+type ApiEnvironment = "client" | "server";
 
 /**
  * Determine the current environment (client or server)
  */
 function getEnvironment(): ApiEnvironment {
-  return typeof window === 'undefined' ? 'server' : 'client';
+  return typeof window === "undefined" ? "server" : "client";
 }
 
 /**
@@ -15,25 +15,29 @@ function getEnvironment(): ApiEnvironment {
  */
 function getBaseUrl(): string {
   const environment = getEnvironment();
-  
-  if (environment === 'server') {
+
+  if (environment === "server") {
     // When running on the server
-    if (process.env.DOCKER_ENV === 'true') {
+    if (process.env.DOCKER_ENV === "true") {
       // Use direct backend URL when running on the server in Docker
-      const backendUrl = process.env.BACKEND_URL || 'http://backend:8000';
-      console.log(`[fetchApi] Server-side request in Docker using: ${backendUrl}`);
+      const backendUrl = process.env.BACKEND_URL || "http://backend:8000";
+      console.log(
+        `[fetchApi] Server-side request in Docker using: ${backendUrl}`,
+      );
       return backendUrl;
     } else {
       // Use localhost when running locally
-      const backendUrl = process.env.BACKEND_URL || 'http://localhost:8000';
-      console.log(`[fetchApi] Server-side request locally using: ${backendUrl}`);
+      const backendUrl = process.env.BACKEND_URL || "http://localhost:8000";
+      console.log(
+        `[fetchApi] Server-side request locally using: ${backendUrl}`,
+      );
       return backendUrl;
     }
   }
-  
+
   // In the browser, use relative URLs that will be handled by Next.js rewrites
-  console.log('[fetchApi] Client-side request using relative URL');
-  return '';
+  console.log("[fetchApi] Client-side request using relative URL");
+  return "";
 }
 
 /**
@@ -42,10 +46,12 @@ function getBaseUrl(): string {
 export async function fetchApi(endpoint: string, options: RequestInit = {}) {
   const baseUrl = getBaseUrl();
   // Ensure no double slashes and include the base URL if we're on the server
-  const url = `${baseUrl}/api/${endpoint.replace(/^\/+/, '')}`;
-  
-  console.log(`[fetchApi] Environment: ${getEnvironment()}, Requesting: ${url}`);
-  
+  const url = `${baseUrl}/api/${endpoint.replace(/^\/+/, "")}`;
+
+  console.log(
+    `[fetchApi] Environment: ${getEnvironment()}, Requesting: ${url}`,
+  );
+
   try {
     const response = await fetch(url, {
       ...options,
@@ -55,23 +61,29 @@ export async function fetchApi(endpoint: string, options: RequestInit = {}) {
         ...options.headers,
       },
     });
-    
+
     // Log status for debugging
-    console.log(`[fetchApi] Response status: ${response.status} ${response.statusText}`);
-    
+    console.log(
+      `[fetchApi] Response status: ${response.status} ${response.statusText}`,
+    );
+
     if (!response.ok) {
       // Try to get more detailed error information
-      let errorText = '';
+      let errorText = "";
       try {
         errorText = await response.text();
-        console.error(`[fetchApi] Error details: ${errorText.substring(0, 500)}${errorText.length > 500 ? '...' : ''}`);
+        console.error(
+          `[fetchApi] Error details: ${errorText.substring(0, 500)}${
+            errorText.length > 500 ? "..." : ""
+          }`,
+        );
       } catch (e) {
         console.error(`[fetchApi] Could not read error details: ${e}`);
       }
-      
+
       throw new Error(`API error: ${response.status} ${response.statusText}`);
     }
-    
+
     return response.json();
   } catch (error) {
     console.error(`[fetchApi] Request failed:`, error);

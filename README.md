@@ -27,19 +27,21 @@ The fastest way to get started is using our pre-built Docker images from GitHub 
 1. **Prerequisites:** [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
 
 2. **Download the deployment file:**
+
    ```bash
    curl -O https://raw.githubusercontent.com/chrisdburr/tea-techniques/main/docker-compose.ghcr.yml
    ```
 
 3. **Start the application:**
+
    ```bash
    docker-compose -f docker-compose.ghcr.yml up -d
    ```
 
 4. **Access the application:**
-   - **Frontend:** http://localhost:3000
-   - **Backend API:** http://localhost:8000/api/
-   - **API Documentation:** http://localhost:8000/swagger/
+   - **Frontend:** <http://localhost:3000>
+   - **Backend API:** <http://localhost:8000/api/>
+   - **API Documentation:** <http://localhost:8000/swagger/>
 
 The application includes a pre-populated database with techniques data and is ready to use immediately.
 
@@ -48,26 +50,29 @@ The application includes a pre-populated database with techniques data and is re
 For development or customization, build the application from source:
 
 1. **Clone and setup:**
+
    ```bash
    git clone https://github.com/chrisdburr/tea-techniques.git
    cd tea-techniques
    ```
 
 2. **Start with automatic setup:**
+
    ```bash
    docker-compose -f docker-compose.development.yml up -d --build
    ```
 
 This automatically:
+
 - ✅ Builds all services from source
 - ✅ Sets up the database with migrations
 - ✅ Imports techniques data
 - ✅ Starts all services
 
 3. **Access the application:**
-   - **Frontend:** http://localhost:3000  
-   - **Backend API:** http://localhost:8000/api/
-   - **Django Admin:** http://localhost:8000/admin/ (admin/admin)
+   - **Frontend:** <http://localhost:3000>  
+   - **Backend API:** <http://localhost:8000/api/>
+   - **Django Admin:** <http://localhost:8000/admin/> (admin/admin)
 
 ### 📋 Management Commands
 
@@ -97,55 +102,61 @@ For faster backend development, you can run the Django backend locally using [uv
    - PostgreSQL (optional, SQLite is used by default for local development)
 
 2. **Clone and setup:**
+
    ```bash
    git clone https://github.com/chrisdburr/tea-techniques.git
    cd tea-techniques/backend
    ```
 
 3. **Install dependencies:**
+
    ```bash
    # Install all dependencies including dev tools
    uv sync
    ```
 
 4. **Setup environment:**
+
    ```bash
    # Create environment file
    cp .env.example .env
-   
+
    # Edit .env if needed (defaults work for local SQLite development)
    ```
 
 5. **Initialize database:**
+
    ```bash
    # Run migrations
    uv run python manage.py migrate
-   
+
    # Import sample data
    uv run python manage.py reset_and_import_techniques
-   
+
    # Create superuser (optional)
    uv run python manage.py createsuperuser
    ```
 
 6. **Run development server:**
+
    ```bash
    uv run python manage.py runserver
    ```
-   
-   The API will be available at http://localhost:8000/api/
+
+   The API will be available at <http://localhost:8000/api/>
 
 7. **Run tests:**
+
    ```bash
    # Run all tests with coverage
    uv run pytest --cov=api
-   
+
    # Run specific test file
    uv run pytest api/tests/test_models.py
-   
+
    # Run linting
    uv run ruff check api/
-   
+
    # Run type checking
    uv run mypy api/
    ```
@@ -160,7 +171,7 @@ pnpm install
 pnpm dev
 ```
 
-The frontend will be available at http://localhost:3000
+The frontend will be available at <http://localhost:3000>
 
 ## 🤝 Contributing
 

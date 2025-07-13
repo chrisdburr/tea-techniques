@@ -10,10 +10,7 @@ import {
   useTechniqueDetail,
   useTechniques,
 } from "@/lib/api/hooks";
-import {
-  TechniqueFormData,
-  Technique
-} from "@/lib/types";
+import { TechniqueFormData, Technique } from "@/lib/types";
 import { useApiError } from "@/lib/hooks/useApiError";
 import { SelectField } from "@/components/common/SelectField";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
@@ -54,7 +51,9 @@ const techniqueSchema = z.object({
   description: z.string().min(1, { message: "Description is required" }),
   complexity_rating: z.number().min(1).max(5).optional(),
   computational_cost_rating: z.number().min(1).max(5).optional(),
-  assurance_goal_ids: z.array(z.number()).min(1, { message: "At least one assurance goal is required" }),
+  assurance_goal_ids: z
+    .array(z.number())
+    .min(1, { message: "At least one assurance goal is required" }),
   tag_ids: z.array(z.number()),
   related_technique_slugs: z.array(z.string()),
   resources: z.array(
@@ -66,13 +65,13 @@ const techniqueSchema = z.object({
       authors: z.string().optional(),
       publication_date: z.string().optional(),
       source_type: z.string().optional(),
-    })
+    }),
   ),
   example_use_cases: z.array(
     z.object({
       description: z.string(),
       assurance_goal: z.number().optional(),
-    })
+    }),
   ),
   limitations: z.array(z.string()),
 });
@@ -82,7 +81,10 @@ interface TechniqueFormProps {
   isEditMode?: boolean;
 }
 
-export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFormProps) {
+export default function TechniqueForm({
+  slug,
+  isEditMode = false,
+}: TechniqueFormProps) {
   const router = useRouter();
 
   // Form state management with react-hook-form
@@ -91,11 +93,11 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
     handleSubmit: hookFormSubmit,
     formState: { errors, isSubmitting },
     setValue,
-    reset
+    reset,
   } = useForm<TechniqueFormData>({
     resolver: zodResolver(techniqueSchema),
     defaultValues: initialFormData,
-    mode: "onBlur"
+    mode: "onBlur",
   });
 
   // Watch relevant fields for dependent selections
@@ -105,22 +107,46 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
   const { handleError } = useApiError();
 
   // State for dynamic arrays
-  const [useCases, setUseCases] = useState<Array<{ description: string; assurance_goal?: number }>>([{ description: "" }]);
+  const [useCases, setUseCases] = useState<
+    Array<{ description: string; assurance_goal?: number }>
+  >([{ description: "" }]);
   const [limitations, setLimitations] = useState<string[]>([""]);
-  const [resources, setResources] = useState<Array<{ resource_type: number; title: string; url: string; description: string; authors?: string; publication_date?: string; source_type?: string }>>([
-    { resource_type: 0, title: "", url: "", description: "", authors: "", publication_date: "", source_type: "" }
+  const [resources, setResources] = useState<
+    Array<{
+      resource_type: number;
+      title: string;
+      url: string;
+      description: string;
+      authors?: string;
+      publication_date?: string;
+      source_type?: string;
+    }>
+  >([
+    {
+      resource_type: 0,
+      title: "",
+      url: "",
+      description: "",
+      authors: "",
+      publication_date: "",
+      source_type: "",
+    },
   ]);
 
   // Fetch technique details if in edit mode
-  const { data: techniqueData, isLoading: isLoadingTechnique } = useTechniqueDetail(slug || "");
+  const { data: techniqueData, isLoading: isLoadingTechnique } =
+    useTechniqueDetail(slug || "");
 
   // Fetch reference data
-  const { data: assuranceGoalsData, isLoading: isLoadingGoals } = useAssuranceGoals();
+  const { data: assuranceGoalsData, isLoading: isLoadingGoals } =
+    useAssuranceGoals();
   const { data: tagsData, isLoading: isLoadingTags } = useTags();
-  const { data: resourceTypesData, isLoading: isLoadingResourceTypes } = useResourceTypes();
+  const { data: resourceTypesData, isLoading: isLoadingResourceTypes } =
+    useResourceTypes();
 
   // Fetch all techniques for related techniques selection
-  const { data: techniquesData, isLoading: isLoadingTechniques } = useTechniques();
+  const { data: techniquesData, isLoading: isLoadingTechniques } =
+    useTechniques();
 
   // Mutations for create/update
   const createMutation = useCreateTechnique();
@@ -142,36 +168,40 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
   useEffect(() => {
     if (isEditMode && techniqueData) {
       // Extract IDs from relationships
-      const assurance_goal_ids = techniqueData.assurance_goals.map(goal => goal.id);
-      const tag_ids = techniqueData.tags.map(tag => tag.id);
+      const assurance_goal_ids = techniqueData.assurance_goals.map(
+        (goal) => goal.id,
+      );
+      const tag_ids = techniqueData.tags.map((tag) => tag.id);
       const related_technique_slugs = techniqueData.related_techniques || [];
 
-
       // Set state for dynamic arrays
-      setUseCases(techniqueData.example_use_cases.length > 0
-        ? techniqueData.example_use_cases.map(uc => ({
-          description: uc.description,
-          assurance_goal: uc.assurance_goal
-        }))
-        : [{ description: "" }]
+      setUseCases(
+        techniqueData.example_use_cases.length > 0
+          ? techniqueData.example_use_cases.map((uc) => ({
+              description: uc.description,
+              assurance_goal: uc.assurance_goal,
+            }))
+          : [{ description: "" }],
       );
 
-      setLimitations(techniqueData.limitations.length > 0
-        ? techniqueData.limitations.map(lim => lim.description)
-        : [""]
+      setLimitations(
+        techniqueData.limitations.length > 0
+          ? techniqueData.limitations.map((lim) => lim.description)
+          : [""],
       );
 
-      setResources(techniqueData.resources.length > 0
-        ? techniqueData.resources.map(res => ({
-          resource_type: res.resource_type,
-          title: res.title,
-          url: res.url,
-          description: res.description,
-          authors: res.authors || "",
-          publication_date: res.publication_date || "",
-          source_type: res.source_type || ""
-        }))
-        : [{ resource_type: 0, title: "", url: "", description: "" }]
+      setResources(
+        techniqueData.resources.length > 0
+          ? techniqueData.resources.map((res) => ({
+              resource_type: res.resource_type,
+              title: res.title,
+              url: res.url,
+              description: res.description,
+              authors: res.authors || "",
+              publication_date: res.publication_date || "",
+              source_type: res.source_type || "",
+            }))
+          : [{ resource_type: 0, title: "", url: "", description: "" }],
       );
 
       // Update form values using react-hook-form's reset
@@ -193,9 +223,13 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
   // Handle form submission using react-hook-form
   const onSubmit: SubmitHandler<TechniqueFormData> = async (data) => {
     // Filter out empty entries from dynamic arrays
-    const filteredUseCases = useCases.filter(uc => uc.description.trim() !== "");
-    const filteredLimitations = limitations.filter(lim => lim.trim() !== "");
-    const filteredResources = resources.filter(res => res.title.trim() !== "" && res.url.trim() !== "");
+    const filteredUseCases = useCases.filter(
+      (uc) => uc.description.trim() !== "",
+    );
+    const filteredLimitations = limitations.filter((lim) => lim.trim() !== "");
+    const filteredResources = resources.filter(
+      (res) => res.title.trim() !== "" && res.url.trim() !== "",
+    );
 
     // Create final form data
     const finalFormData: TechniqueFormData = {
@@ -232,7 +266,7 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
   const handleGoalChange = (values: string[]) => {
     try {
       // Use setValue from react-hook-form
-      const goalIds = values.map(v => parseInt(v));
+      const goalIds = values.map((v) => parseInt(v));
       setValue("assurance_goal_ids", goalIds, { shouldValidate: true });
     } catch (error) {
       console.error("Error in handleGoalChange:", error);
@@ -244,7 +278,11 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
     setUseCases([...useCases, { description: "" }]);
   };
 
-  const updateUseCase = (index: number, field: keyof typeof useCases[0], value: string | number | undefined) => {
+  const updateUseCase = (
+    index: number,
+    field: keyof (typeof useCases)[0],
+    value: string | number | undefined,
+  ) => {
     const updated = [...useCases];
     updated[index] = { ...updated[index], [field]: value };
     setUseCases(updated);
@@ -277,10 +315,25 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
   };
 
   const addResource = () => {
-    setResources([...resources, { resource_type: 0, title: "", url: "", description: "", authors: "", publication_date: "", source_type: "" }]);
+    setResources([
+      ...resources,
+      {
+        resource_type: 0,
+        title: "",
+        url: "",
+        description: "",
+        authors: "",
+        publication_date: "",
+        source_type: "",
+      },
+    ]);
   };
 
-  const updateResource = (index: number, field: keyof typeof resources[0], value: string | number) => {
+  const updateResource = (
+    index: number,
+    field: keyof (typeof resources)[0],
+    value: string | number,
+  ) => {
     const updated = [...resources];
     updated[index] = { ...updated[index], [field]: value };
     setResources(updated);
@@ -290,32 +343,46 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
     if (resources.length > 1) {
       setResources(resources.filter((_, i) => i !== index));
     } else {
-      setResources([{ resource_type: 0, title: "", url: "", description: "", authors: "", publication_date: "", source_type: "" }]);
+      setResources([
+        {
+          resource_type: 0,
+          title: "",
+          url: "",
+          description: "",
+          authors: "",
+          publication_date: "",
+          source_type: "",
+        },
+      ]);
     }
   };
 
   // Prepare options for select fields
-  const assuranceGoalOptions = assuranceGoalsData?.results?.map(goal => ({
-    value: goal.id.toString(),
-    label: goal.name,
-  })) || [];
-
-  const tagOptions = tagsData?.results?.map(tag => ({
-    value: tag.id.toString(),
-    label: tag.name,
-  })) || [];
-
-  const relatedTechniqueOptions = (techniquesData as any)?.results
-    ?.filter((t: Technique) => t.slug !== slug) // Don't show current technique as option
-    ?.map((technique: Technique) => ({
-      value: technique.slug,
-      label: technique.name,
+  const assuranceGoalOptions =
+    assuranceGoalsData?.results?.map((goal) => ({
+      value: goal.id.toString(),
+      label: goal.name,
     })) || [];
 
-  const resourceTypeOptions = resourceTypesData?.results?.map(rt => ({
-    value: rt.id.toString(),
-    label: rt.name,
-  })) || [];
+  const tagOptions =
+    tagsData?.results?.map((tag) => ({
+      value: tag.id.toString(),
+      label: tag.name,
+    })) || [];
+
+  const relatedTechniqueOptions =
+    (techniquesData as any)?.results
+      ?.filter((t: Technique) => t.slug !== slug) // Don't show current technique as option
+      ?.map((technique: Technique) => ({
+        value: technique.slug,
+        label: technique.name,
+      })) || [];
+
+  const resourceTypeOptions =
+    resourceTypesData?.results?.map((rt) => ({
+      value: rt.id.toString(),
+      label: rt.name,
+    })) || [];
 
   return (
     <div className="space-y-6 py-6">
@@ -375,7 +442,9 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                     )}
                   />
                   {errors?.name && (
-                    <p className="text-sm text-destructive">{errors.name.message}</p>
+                    <p className="text-sm text-destructive">
+                      {errors.name.message}
+                    </p>
                   )}
                 </div>
 
@@ -397,15 +466,15 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                     )}
                   />
                   {errors?.description && (
-                    <p className="text-sm text-destructive">{errors.description.message}</p>
+                    <p className="text-sm text-destructive">
+                      {errors.description.message}
+                    </p>
                   )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="complexity_rating">
-                      Complexity Rating
-                    </Label>
+                    <Label htmlFor="complexity_rating">Complexity Rating</Label>
                     <Controller
                       name="complexity_rating"
                       control={control}
@@ -415,7 +484,13 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                           className="w-full px-3 py-2 border rounded-md"
                           disabled={isLoading}
                           {...field}
-                          onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                          onChange={(e) =>
+                            field.onChange(
+                              e.target.value
+                                ? parseInt(e.target.value)
+                                : undefined,
+                            )
+                          }
                           value={field.value?.toString() || ""}
                         >
                           <option value="">Select rating</option>
@@ -442,7 +517,13 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                           className="w-full px-3 py-2 border rounded-md"
                           disabled={isLoading}
                           {...field}
-                          onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                          onChange={(e) =>
+                            field.onChange(
+                              e.target.value
+                                ? parseInt(e.target.value)
+                                : undefined,
+                            )
+                          }
                           value={field.value?.toString() || ""}
                         >
                           <option value="">Select rating</option>
@@ -472,8 +553,12 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
               <CardContent className="space-y-6">
                 <div className="space-y-6">
                   <div className="space-y-2">
-                    <label htmlFor="assurance_goal_ids" className="block font-medium">
-                      Assurance Goals <span className="text-destructive">*</span>
+                    <label
+                      htmlFor="assurance_goal_ids"
+                      className="block font-medium"
+                    >
+                      Assurance Goals{" "}
+                      <span className="text-destructive">*</span>
                     </label>
                     <Controller
                       name="assurance_goal_ids"
@@ -484,14 +569,16 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                           multiple
                           className="w-full px-3 py-2 border rounded-md"
                           onChange={(e) => {
-                            const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
+                            const selectedOptions = Array.from(
+                              e.target.selectedOptions,
+                            ).map((opt) => opt.value);
                             handleGoalChange(selectedOptions);
                           }}
                           disabled={isLoading}
                           size={4}
-                          value={field.value.map(id => id.toString())}
+                          value={field.value.map((id) => id.toString())}
                         >
-                          {assuranceGoalOptions.map(option => (
+                          {assuranceGoalOptions.map((option) => (
                             <option key={option.value} value={option.value}>
                               {option.label}
                             </option>
@@ -503,10 +590,11 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                       Hold Ctrl (or Cmd) to select multiple options
                     </p>
                     {errors?.assurance_goal_ids && (
-                      <p className="text-sm text-destructive">{errors.assurance_goal_ids.message}</p>
+                      <p className="text-sm text-destructive">
+                        {errors.assurance_goal_ids.message}
+                      </p>
                     )}
                   </div>
-
 
                   <div className="space-y-2">
                     <label htmlFor="tag_ids" className="block font-medium">
@@ -521,15 +609,19 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                           multiple
                           className="w-full px-3 py-2 border rounded-md"
                           onChange={(e) => {
-                            const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
-                            const tagIds = selectedOptions.map(v => parseInt(v));
+                            const selectedOptions = Array.from(
+                              e.target.selectedOptions,
+                            ).map((opt) => opt.value);
+                            const tagIds = selectedOptions.map((v) =>
+                              parseInt(v),
+                            );
                             setValue("tag_ids", tagIds);
                           }}
                           disabled={isLoading}
                           size={8}
-                          value={field.value.map(id => id.toString())}
+                          value={field.value.map((id) => id.toString())}
                         >
-                          {tagOptions.map(option => (
+                          {tagOptions.map((option) => (
                             <option key={option.value} value={option.value}>
                               {option.label}
                             </option>
@@ -538,12 +630,16 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                       )}
                     />
                     <p className="text-xs text-muted-foreground">
-                      Hold Ctrl (or Cmd) to select multiple tags. Tags help categorize and filter techniques.
+                      Hold Ctrl (or Cmd) to select multiple tags. Tags help
+                      categorize and filter techniques.
                     </p>
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="related_technique_slugs" className="block font-medium">
+                    <label
+                      htmlFor="related_technique_slugs"
+                      className="block font-medium"
+                    >
                       Related Techniques
                     </label>
                     <Controller
@@ -555,8 +651,13 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                           multiple
                           className="w-full px-3 py-2 border rounded-md"
                           onChange={(e) => {
-                            const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
-                            setValue("related_technique_slugs", selectedOptions);
+                            const selectedOptions = Array.from(
+                              e.target.selectedOptions,
+                            ).map((opt) => opt.value);
+                            setValue(
+                              "related_technique_slugs",
+                              selectedOptions,
+                            );
                           }}
                           disabled={isLoading}
                           size={6}
@@ -571,7 +672,8 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                       )}
                     />
                     <p className="text-xs text-muted-foreground">
-                      Select techniques that are related or complementary to this one.
+                      Select techniques that are related or complementary to
+                      this one.
                     </p>
                   </div>
                 </div>
@@ -591,9 +693,14 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
               <CardContent>
                 <div className="space-y-4">
                   {useCases.map((useCase, index) => (
-                    <div key={index} className="border rounded-md p-4 space-y-4">
+                    <div
+                      key={index}
+                      className="border rounded-md p-4 space-y-4"
+                    >
                       <div className="flex justify-between items-center">
-                        <h3 className="text-sm font-medium">Example {index + 1}</h3>
+                        <h3 className="text-sm font-medium">
+                          Example {index + 1}
+                        </h3>
                         <Button
                           type="button"
                           variant="ghost"
@@ -606,11 +713,15 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor={`useCase-description-${index}`}>Description</Label>
+                        <Label htmlFor={`useCase-description-${index}`}>
+                          Description
+                        </Label>
                         <Textarea
                           id={`useCase-description-${index}`}
                           value={useCase.description}
-                          onChange={(e) => updateUseCase(index, "description", e.target.value)}
+                          onChange={(e) =>
+                            updateUseCase(index, "description", e.target.value)
+                          }
                           placeholder="Describe an example use case"
                           rows={3}
                           disabled={isLoading}
@@ -618,13 +729,24 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor={`useCase-goal-${index}`}>Related Assurance Goal (Optional)</Label>
+                        <Label htmlFor={`useCase-goal-${index}`}>
+                          Related Assurance Goal (Optional)
+                        </Label>
                         <SelectField
                           id={`useCase-goal-${index}`}
                           label=""
                           value={useCase.assurance_goal?.toString() || "0"}
-                          onChange={(value) => updateUseCase(index, "assurance_goal", value === "0" ? undefined : parseInt(value))}
-                          options={[{ value: "0", label: "None" }, ...assuranceGoalOptions]}
+                          onChange={(value) =>
+                            updateUseCase(
+                              index,
+                              "assurance_goal",
+                              value === "0" ? undefined : parseInt(value),
+                            )
+                          }
+                          options={[
+                            { value: "0", label: "None" },
+                            ...assuranceGoalOptions,
+                          ]}
                           placeholder="Select related goal (optional)"
                           disabled={isLoading}
                         />
@@ -655,9 +777,14 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
               <CardContent>
                 <div className="space-y-4">
                   {limitations.map((limitation, index) => (
-                    <div key={index} className="border rounded-md p-4 space-y-4">
+                    <div
+                      key={index}
+                      className="border rounded-md p-4 space-y-4"
+                    >
                       <div className="flex justify-between items-center">
-                        <h3 className="text-sm font-medium">Limitation {index + 1}</h3>
+                        <h3 className="text-sm font-medium">
+                          Limitation {index + 1}
+                        </h3>
                         <Button
                           type="button"
                           variant="ghost"
@@ -670,11 +797,15 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor={`limitation-${index}`}>Description</Label>
+                        <Label htmlFor={`limitation-${index}`}>
+                          Description
+                        </Label>
                         <Textarea
                           id={`limitation-${index}`}
                           value={limitation}
-                          onChange={(e) => updateLimitation(index, e.target.value)}
+                          onChange={(e) =>
+                            updateLimitation(index, e.target.value)
+                          }
                           placeholder="Describe a limitation of this technique"
                           rows={3}
                           disabled={isLoading}
@@ -703,15 +834,21 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
               <CardHeader>
                 <CardTitle>Resources</CardTitle>
                 <CardDescription>
-                  Add links to papers, code repositories, documentation, or other related resources
+                  Add links to papers, code repositories, documentation, or
+                  other related resources
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {resources.map((resource, index) => (
-                    <div key={index} className="border rounded-md p-4 space-y-4">
+                    <div
+                      key={index}
+                      className="border rounded-md p-4 space-y-4"
+                    >
                       <div className="flex justify-between items-center">
-                        <h3 className="text-sm font-medium">Resource {index + 1}</h3>
+                        <h3 className="text-sm font-medium">
+                          Resource {index + 1}
+                        </h3>
                         <Button
                           type="button"
                           variant="ghost"
@@ -724,13 +861,28 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor={`resource-type-${index}`}>Resource Type</Label>
+                        <Label htmlFor={`resource-type-${index}`}>
+                          Resource Type
+                        </Label>
                         <SelectField
                           id={`resource-type-${index}`}
                           label=""
-                          value={resource.resource_type ? resource.resource_type.toString() : ""}
-                          onChange={(value) => updateResource(index, "resource_type", parseInt(value))}
-                          options={[{ value: "", label: "Select resource type" }, ...resourceTypeOptions]}
+                          value={
+                            resource.resource_type
+                              ? resource.resource_type.toString()
+                              : ""
+                          }
+                          onChange={(value) =>
+                            updateResource(
+                              index,
+                              "resource_type",
+                              parseInt(value),
+                            )
+                          }
+                          options={[
+                            { value: "", label: "Select resource type" },
+                            ...resourceTypeOptions,
+                          ]}
                           placeholder="Select resource type"
                           disabled={isLoading}
                         />
@@ -741,7 +893,9 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                         <Input
                           id={`resource-title-${index}`}
                           value={resource.title}
-                          onChange={(e) => updateResource(index, "title", e.target.value)}
+                          onChange={(e) =>
+                            updateResource(index, "title", e.target.value)
+                          }
                           placeholder="Enter resource title"
                           disabled={isLoading}
                         />
@@ -752,7 +906,9 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                         <Input
                           id={`resource-url-${index}`}
                           value={resource.url}
-                          onChange={(e) => updateResource(index, "url", e.target.value)}
+                          onChange={(e) =>
+                            updateResource(index, "url", e.target.value)
+                          }
                           placeholder="Enter resource URL"
                           type="url"
                           disabled={isLoading}
@@ -760,11 +916,15 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor={`resource-description-${index}`}>Description (Optional)</Label>
+                        <Label htmlFor={`resource-description-${index}`}>
+                          Description (Optional)
+                        </Label>
                         <Textarea
                           id={`resource-description-${index}`}
                           value={resource.description}
-                          onChange={(e) => updateResource(index, "description", e.target.value)}
+                          onChange={(e) =>
+                            updateResource(index, "description", e.target.value)
+                          }
                           placeholder="Enter resource description"
                           rows={2}
                           disabled={isLoading}
@@ -773,22 +933,34 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
 
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <Label htmlFor={`resource-authors-${index}`}>Authors (Optional)</Label>
+                          <Label htmlFor={`resource-authors-${index}`}>
+                            Authors (Optional)
+                          </Label>
                           <Input
                             id={`resource-authors-${index}`}
                             value={resource.authors || ""}
-                            onChange={(e) => updateResource(index, "authors", e.target.value)}
+                            onChange={(e) =>
+                              updateResource(index, "authors", e.target.value)
+                            }
                             placeholder="Enter authors"
                             disabled={isLoading}
                           />
                         </div>
 
                         <div className="space-y-2">
-                          <Label htmlFor={`resource-publication-date-${index}`}>Publication Date (Optional)</Label>
+                          <Label htmlFor={`resource-publication-date-${index}`}>
+                            Publication Date (Optional)
+                          </Label>
                           <Input
                             id={`resource-publication-date-${index}`}
                             value={resource.publication_date || ""}
-                            onChange={(e) => updateResource(index, "publication_date", e.target.value)}
+                            onChange={(e) =>
+                              updateResource(
+                                index,
+                                "publication_date",
+                                e.target.value,
+                              )
+                            }
                             placeholder="e.g., 2023-01-15"
                             disabled={isLoading}
                           />
@@ -796,11 +968,15 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor={`resource-source-type-${index}`}>Source Type (Optional)</Label>
+                        <Label htmlFor={`resource-source-type-${index}`}>
+                          Source Type (Optional)
+                        </Label>
                         <Input
                           id={`resource-source-type-${index}`}
                           value={resource.source_type || ""}
-                          onChange={(e) => updateResource(index, "source_type", e.target.value)}
+                          onChange={(e) =>
+                            updateResource(index, "source_type", e.target.value)
+                          }
                           placeholder="e.g., technical_paper, tutorial, etc."
                           disabled={isLoading}
                         />
@@ -824,11 +1000,7 @@ export default function TechniqueForm({ slug, isEditMode = false }: TechniqueFor
         </Tabs>
 
         <div className="mt-6 flex justify-end">
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="min-w-[120px]"
-          >
+          <Button type="submit" disabled={isLoading} className="min-w-[120px]">
             {isLoading ? (
               <span className="flex items-center gap-2">
                 <span className="animate-spin">↻</span>

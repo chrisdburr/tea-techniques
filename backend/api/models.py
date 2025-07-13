@@ -104,9 +104,11 @@ class Technique(models.Model):
 
         If acronym exists, returns 'Name (ACRONYM)', otherwise just 'Name'.
         """
+        name: str = str(self.name)
         if self.acronym:
-            return f"{self.name} ({self.acronym})"
-        return self.name
+            acronym: str = str(self.acronym)
+            return f"{name} ({acronym})"
+        return name
 
 
 class TechniqueResource(models.Model):
@@ -136,7 +138,9 @@ class TechniqueResource(models.Model):
 
         Format: 'ResourceType: Title'
         """
-        return f"{self.resource_type.name}: {self.title}"
+        resource_type_name: str = str(self.resource_type.name)  # type: ignore[attr-defined]
+        title: str = str(self.title)
+        return f"{resource_type_name}: {title}"
 
 
 class TechniqueExampleUseCase(models.Model):
@@ -162,7 +166,8 @@ class TechniqueExampleUseCase(models.Model):
 
     def __str__(self) -> str:
         """Return the string representation of the TechniqueExampleUseCase."""
-        return f"Use case for {self.technique.name}"
+        technique_name: str = str(self.technique.name)  # type: ignore[attr-defined]
+        return f"Use case for {technique_name}"
 
 
 class TechniqueLimitation(models.Model):
@@ -182,4 +187,5 @@ class TechniqueLimitation(models.Model):
 
     def __str__(self) -> str:
         """Return the string representation of the TechniqueLimitation."""
-        return f"Limitation for {self.technique.name}"
+        technique_name: str = str(self.technique.name)  # type: ignore[attr-defined]
+        return f"Limitation for {technique_name}"

@@ -135,7 +135,7 @@ class JSONDataParser:
                 if isinstance(item, dict) and "description" in item:
                     desc = item["description"].strip()
                     if desc:
-                        return desc
+                        return str(desc)
                 elif isinstance(item, str) and item.strip():
                     return item.strip()
 
@@ -157,7 +157,8 @@ class JSONDataParser:
         if isinstance(authors_data, str):
             return authors_data.strip()
 
-        return str(authors_data).strip()
+        # Fallback for unexpected types
+        return str(authors_data).strip()  # type: ignore[unreachable]
 
 
 class TechniqueDataValidator:

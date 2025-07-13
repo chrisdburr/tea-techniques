@@ -133,7 +133,7 @@ class TechniqueExampleUseCaseSerializer(serializers.ModelSerializer):
     def get_assurance_goal_name(self, obj: TechniqueExampleUseCase) -> str | None:
         """Return the name of the associated assurance goal, or None if not set."""
         if obj.assurance_goal:
-            return obj.assurance_goal.name
+            return str(obj.assurance_goal.name)  # type: ignore[attr-defined]
         return None
 
 
@@ -165,7 +165,9 @@ class TechniqueSerializer(serializers.ModelSerializer):
     # Read-only relationship fields (for output)
     assurance_goals = AssuranceGoalSerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)
-    related_techniques = serializers.SlugRelatedField(many=True, read_only=True, slug_field="slug")
+    related_techniques: serializers.SlugRelatedField = serializers.SlugRelatedField(
+        many=True, read_only=True, slug_field="slug"
+    )
 
     # Writable ID fields (for input)
     assurance_goal_ids = serializers.PrimaryKeyRelatedField(

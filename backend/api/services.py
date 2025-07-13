@@ -289,7 +289,7 @@ class TechniqueResourceService:
     def replace_resources(self, technique: Technique, resources_data: list[dict[str, Any]]) -> None:
         """Replace all existing resources with new ones."""
         # Delete existing resources
-        technique.resources.all().delete()
+        technique.resources.all().delete()  # type: ignore[attr-defined]
         # Create new resources
         self.create_resources(technique, resources_data)
 
@@ -342,7 +342,7 @@ class TechniqueUseCaseService:
     def replace_use_cases(self, technique: Technique, use_cases_data: list[dict[str, Any]]) -> None:
         """Replace all existing use cases with new ones."""
         # Delete existing use cases
-        technique.example_use_cases.all().delete()
+        technique.example_use_cases.all().delete()  # type: ignore[attr-defined]
         # Create new use cases
         self.create_use_cases(technique, use_cases_data)
 
@@ -388,7 +388,7 @@ class TechniqueLimitationService:
     def replace_limitations(self, technique: Technique, limitations_data: list[Any]) -> None:
         """Replace all existing limitations with new ones."""
         # Delete existing limitations
-        technique.limitations.all().delete()
+        technique.limitations.all().delete()  # type: ignore[attr-defined]
         # Create new limitations
         self.create_limitations(technique, limitations_data)
 

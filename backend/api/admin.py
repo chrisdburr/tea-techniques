@@ -76,17 +76,15 @@ class TechniqueAdmin(admin.ModelAdmin):
         ),
     )
 
+    @admin.display(description="Tags")
     def get_tags_count(self, obj):
         """Return the number of tags associated with the technique."""
         return obj.tags.count()
 
-    get_tags_count.short_description = "Tags"
-
+    @admin.display(description="Goals")
     def get_goals_count(self, obj):
         """Return the number of assurance goals associated with the technique."""
         return obj.assurance_goals.count()
-
-    get_goals_count.short_description = "Goals"
 
 
 @admin.register(Tag)
@@ -96,11 +94,10 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ["name", "get_techniques_count"]
     search_fields = ["name"]
 
+    @admin.display(description="Techniques")
     def get_techniques_count(self, obj):
         """Return the number of techniques associated with the tag."""
         return obj.techniques.count()
-
-    get_techniques_count.short_description = "Techniques"
 
 
 # Register other models

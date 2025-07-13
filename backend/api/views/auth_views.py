@@ -1,8 +1,10 @@
 # api/views/auth_views.py
 import json
 import logging
+from typing import cast
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.middleware.csrf import get_token
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import status
@@ -47,13 +49,15 @@ def login_view(request):
 
     if user is not None:
         login(request, user)
+        # Cast to User for MyPy - authenticate returns AbstractBaseUser but we know it's User
+        user_cast = cast(User, user)
         return Response(
             {
                 "user": {
-                    "id": user.id,
-                    "username": user.username,
-                    "email": user.email,
-                    "isStaff": user.is_staff,
+                    "id": user_cast.id,  # type: ignore[attr-defined]
+                    "username": user_cast.username,
+                    "email": user_cast.email,
+                    "isStaff": user_cast.is_staff,
                 }
             }
         )

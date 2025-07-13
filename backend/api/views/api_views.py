@@ -6,7 +6,7 @@ import logging
 from typing import Any
 
 from django.db import connection
-from django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend  # type: ignore[import-untyped]
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated

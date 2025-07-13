@@ -52,7 +52,7 @@ class Command(BaseCommand):
             BASE_DIR = Path(settings.BASE_DIR)
             file_path = BASE_DIR / "data" / "techniques.json"
         else:
-            file_path = Path(file_path_option)
+            file_path = Path(str(file_path_option))
 
         if not file_path.exists():
             error_msg = f"File not found: {file_path}"
@@ -103,7 +103,7 @@ class Command(BaseCommand):
                 # Use a transaction to ensure data consistency
                 with transaction.atomic():
                     count = 0
-                    self._related_techniques_to_process = {}
+                    self._related_techniques_to_process: dict[str, list[str]] = {}
 
                     # First pass: import all techniques
                     for technique_data in techniques_data:
@@ -197,7 +197,7 @@ class Command(BaseCommand):
         """Process a single technique from JSON data using refactored approach."""
         try:
             # Validate required fields
-            if not self.validator.validate_required_fields(data, force=self.force):
+            if not self.validator.validate_required_fields(data, force=bool(self.force)):
                 return None
 
             # Extract data using utility classes
@@ -253,7 +253,7 @@ class Command(BaseCommand):
         """Validate a technique without saving to database (for dry run mode)."""
         try:
             # Validate required fields
-            if not self.validator.validate_required_fields(data, force=self.force):
+            if not self.validator.validate_required_fields(data, force=bool(self.force)):
                 return False
 
             # Extract data using utility classes
@@ -284,7 +284,7 @@ class Command(BaseCommand):
             logger.warning(error_msg)
             if not self.force:
                 return False
-            return self.force
+            return bool(self.force)
         except Exception as e:
             error_msg = f"Error validating technique {data.get('name', 'Unknown')}: {e!s}"
             logger.error(error_msg)
@@ -307,7 +307,7 @@ class Command(BaseCommand):
         )
 
         # Store creation status for logging
-        technique._created = created
+        technique._created = created  # type: ignore[attr-defined]
 
         # If updating, clear existing relationships
         if not created:

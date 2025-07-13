@@ -176,62 +176,105 @@ class TechniqueService:
         technique.save()
 
     def _update_technique_slug(self, technique: Technique, new_slug: str) -> None:
-        """Update technique slug (primary key) while preserving all relationships."""
-        from django.db import connection
+        """Update technique slug (primary key) while preserving all relationships using Django ORM."""
+        from .models import TechniqueExampleUseCase, TechniqueLimitation, TechniqueResource
 
-        old_slug = technique.slug
+        # Store all the technique data we need to preserve
+        technique_data = {
+            "name": technique.name,
+            "acronym": technique.acronym,
+            "description": technique.description,
+            "complexity_rating": technique.complexity_rating,
+            "computational_cost_rating": technique.computational_cost_rating,
+        }
 
-        # Temporarily disable foreign key checks for SQLite to allow primary key updates
-        with connection.cursor() as cursor:
-            # Disable foreign key constraints
-            cursor.execute("PRAGMA foreign_keys = OFF")
+        # Store related data before making changes
+        assurance_goals = list(technique.assurance_goals.all())
+        tags = list(technique.tags.all())
+        related_techniques_from = list(technique.related_techniques.all())
+        related_techniques_to = list(technique.technique_set.all())  # type: ignore[attr-defined]
 
-            try:
-                # Update the slug in the technique table directly
-                cursor.execute(
-                    "UPDATE technique SET slug = %s WHERE slug = %s",
-                    [new_slug, old_slug],
-                )
+        # Store related objects data with their IDs to preserve them
+        resources_data = []
+        for resource in technique.resources.all():  # type: ignore[attr-defined]
+            resources_data.append(
+                {
+                    "id": resource.id,
+                    "resource_type": resource.resource_type,
+                    "title": resource.title,
+                    "url": resource.url,
+                    "description": resource.description,
+                    "authors": resource.authors,
+                    "publication_date": resource.publication_date,
+                    "source_type": resource.source_type,
+                }
+            )
 
-                # Update foreign key references in related tables
-                cursor.execute(
-                    "UPDATE technique_resource SET technique_id = %s WHERE technique_id = %s",
-                    [new_slug, old_slug],
-                )
-                cursor.execute(
-                    "UPDATE technique_example_use_case SET technique_id = %s WHERE technique_id = %s",
-                    [new_slug, old_slug],
-                )
-                cursor.execute(
-                    "UPDATE technique_limitation SET technique_id = %s WHERE technique_id = %s",
-                    [new_slug, old_slug],
-                )
+        use_cases_data = []
+        for use_case in technique.example_use_cases.all():  # type: ignore[attr-defined]
+            use_cases_data.append(
+                {
+                    "id": use_case.id,
+                    "description": use_case.description,
+                    "assurance_goal": use_case.assurance_goal,
+                }
+            )
 
-                # Update M2M relationship tables
-                cursor.execute(
-                    "UPDATE technique_assurance_goals SET technique_id = %s WHERE technique_id = %s",
-                    [new_slug, old_slug],
-                )
-                cursor.execute(
-                    "UPDATE technique_tags SET technique_id = %s WHERE technique_id = %s",
-                    [new_slug, old_slug],
-                )
-                cursor.execute(
-                    "UPDATE technique_related_techniques SET from_technique_id = %s WHERE from_technique_id = %s",
-                    [new_slug, old_slug],
-                )
-                cursor.execute(
-                    "UPDATE technique_related_techniques SET to_technique_id = %s WHERE to_technique_id = %s",
-                    [new_slug, old_slug],
-                )
+        limitations_data = []
+        for limitation in technique.limitations.all():  # type: ignore[attr-defined]
+            limitations_data.append(
+                {
+                    "id": limitation.id,
+                    "description": limitation.description,
+                }
+            )
 
-            finally:
-                # Re-enable foreign key constraints
-                cursor.execute("PRAGMA foreign_keys = ON")
+        # Use a nested transaction to ensure atomicity
+        with transaction.atomic():
+            # Temporarily clear M2M relationships to avoid constraint issues
+            technique.assurance_goals.clear()
+            technique.tags.clear()
+            technique.related_techniques.clear()
 
-        # Update the technique object to reflect the new slug
-        technique.slug = new_slug
-        technique.refresh_from_db()
+            # Clear reverse M2M relationships
+            for related_tech in related_techniques_to:
+                related_tech.related_techniques.remove(technique)
+
+            # Delete the old technique first to free up constraints
+            technique.delete()
+
+            # Create new technique with new slug
+            new_technique = Technique.objects.create(slug=new_slug, **technique_data)
+
+            # Restore M2M relationships
+            new_technique.assurance_goals.set(assurance_goals)
+            new_technique.tags.set(tags)
+            new_technique.related_techniques.set(related_techniques_from)
+            for related_tech in related_techniques_to:
+                related_tech.related_techniques.add(new_technique)
+
+            # Recreate related objects with preserved IDs
+            for resource_data in resources_data:
+                resource_id = resource_data.pop("id")
+                new_resource = TechniqueResource(id=resource_id, technique=new_technique, **resource_data)
+                new_resource.save()
+
+            for use_case_data in use_cases_data:
+                use_case_id = use_case_data.pop("id")
+                new_use_case = TechniqueExampleUseCase(id=use_case_id, technique=new_technique, **use_case_data)
+                new_use_case.save()
+
+            for limitation_data in limitations_data:
+                limitation_id = limitation_data.pop("id")
+                new_limitation = TechniqueLimitation(id=limitation_id, technique=new_technique, **limitation_data)
+                new_limitation.save()
+
+        # Update the original technique reference to point to the new one
+        technique.pk = new_technique.pk
+        technique.slug = new_technique.slug
+        # Copy all the new technique's attributes to the original object
+        for attr, value in technique_data.items():
+            setattr(technique, attr, value)
 
     def _create_nested_objects(self, technique: Technique, nested_data: dict[str, Any]) -> None:
         """Create all nested objects for the technique."""

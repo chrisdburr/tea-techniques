@@ -53,7 +53,8 @@ if settings.DEBUG:
 
         urlpatterns = [
             path("__debug__/", include(debug_toolbar.urls)),
-        ] + urlpatterns
+            *urlpatterns,
+        ]
     except ImportError:
         # Handle case where debug_toolbar is not installed
         pass

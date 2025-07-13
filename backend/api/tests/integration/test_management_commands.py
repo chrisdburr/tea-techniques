@@ -6,10 +6,11 @@ Tests the import_techniques and reset_and_import_techniques commands
 to ensure they work correctly with the database and service layers.
 """
 
+import contextlib
 import json
-import os
 import tempfile
 from io import StringIO
+from pathlib import Path
 from unittest.mock import Mock, patch
 
 from django.core.management import call_command
@@ -46,15 +47,14 @@ class ImportTechniquesCommandTests(TransactionTestCase):
 
     def tearDown(self):
         """Clean up temporary files."""
-        if self.temp_file_path and os.path.exists(self.temp_file_path):
-            os.unlink(self.temp_file_path)
+        if self.temp_file_path and Path(self.temp_file_path).exists():
+            Path(self.temp_file_path).unlink()
 
     def create_temp_technique_file(self, techniques_data):
         """Create a temporary JSON file with technique data."""
-        self.temp_file = tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False)
-        json.dump(techniques_data, self.temp_file)
-        self.temp_file.close()
-        self.temp_file_path = self.temp_file.name
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as temp_file:
+            json.dump(techniques_data, temp_file)
+            self.temp_file_path = temp_file.name
         return self.temp_file_path
 
     def test_import_techniques_basic_functionality(self):
@@ -210,17 +210,17 @@ class ImportTechniquesCommandTests(TransactionTestCase):
     def test_import_techniques_invalid_json(self):
         """Test import command with invalid JSON file."""
         # Create file with invalid JSON
-        temp_file = tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False)
-        temp_file.write("{ invalid json }")
-        temp_file.close()
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as temp_file:
+            temp_file.write("{ invalid json }")
+            temp_file_name = temp_file.name
 
         try:
             with self.assertRaises(CommandError) as context:
-                call_command("import_techniques", "--file", temp_file.name)
+                call_command("import_techniques", "--file", temp_file_name)
 
             self.assertIn("Invalid JSON", str(context.exception))
         finally:
-            os.unlink(temp_file.name)
+            Path(temp_file_name).unlink()
 
     def test_import_techniques_missing_required_fields(self):
         """Test import with techniques missing required fields."""
@@ -372,15 +372,14 @@ class ResetAndImportTechniquesCommandTests(TransactionTestCase):
 
     def tearDown(self):
         """Clean up temporary files."""
-        if self.temp_file_path and os.path.exists(self.temp_file_path):
-            os.unlink(self.temp_file_path)
+        if self.temp_file_path and Path(self.temp_file_path).exists():
+            Path(self.temp_file_path).unlink()
 
     def create_temp_technique_file(self, techniques_data):
         """Create a temporary JSON file with technique data."""
-        temp_file = tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False)
-        json.dump(techniques_data, temp_file)
-        temp_file.close()
-        self.temp_file_path = temp_file.name
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as temp_file:
+            json.dump(techniques_data, temp_file)
+            self.temp_file_path = temp_file.name
         return self.temp_file_path
 
     def test_reset_and_import_techniques_basic_functionality(self):
@@ -609,8 +608,8 @@ class ManagementCommandIntegrationTests(TransactionTestCase):
 
     def tearDown(self):
         """Clean up temporary files."""
-        if self.temp_file_path and os.path.exists(self.temp_file_path):
-            os.unlink(self.temp_file_path)
+        if self.temp_file_path and Path(self.temp_file_path).exists():
+            Path(self.temp_file_path).unlink()
 
     def test_round_trip_import_export_consistency(self):
         """Test importing, modifying, and re-importing techniques."""
@@ -639,10 +638,9 @@ class ManagementCommandIntegrationTests(TransactionTestCase):
         ]
 
         # Create temporary file
-        temp_file = tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False)
-        json.dump(techniques_data, temp_file)
-        temp_file.close()
-        self.temp_file_path = temp_file.name
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as temp_file:
+            json.dump(techniques_data, temp_file)
+            self.temp_file_path = temp_file.name
 
         # First import
         call_command("import_techniques", "--file", self.temp_file_path)
@@ -712,10 +710,9 @@ class ManagementCommandIntegrationTests(TransactionTestCase):
             )
 
         # Create temporary file
-        temp_file = tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False)
-        json.dump(techniques_data, temp_file)
-        temp_file.close()
-        self.temp_file_path = temp_file.name
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as temp_file:
+            json.dump(techniques_data, temp_file)
+            self.temp_file_path = temp_file.name
 
         # Import and measure (basic timing)
         import time
@@ -745,10 +742,9 @@ class ManagementCommandIntegrationTests(TransactionTestCase):
         # Test with completely malformed data
         malformed_data = {"not": "a list", "invalid": "structure"}
 
-        temp_file = tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False)
-        json.dump(malformed_data, temp_file)
-        temp_file.close()
-        self.temp_file_path = temp_file.name
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as temp_file:
+            json.dump(malformed_data, temp_file)
+            self.temp_file_path = temp_file.name
 
         # Both commands should handle this gracefully
         with self.assertRaises(CommandError):
@@ -776,10 +772,9 @@ class ManagementCommandIntegrationTests(TransactionTestCase):
             }
         ]
 
-        temp_file = tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False)
-        json.dump(techniques_data, temp_file)
-        temp_file.close()
-        self.temp_file_path = temp_file.name
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as temp_file:
+            json.dump(techniques_data, temp_file)
+            self.temp_file_path = temp_file.name
 
         # Command should handle service errors gracefully
         out = StringIO()
@@ -787,7 +782,7 @@ class ManagementCommandIntegrationTests(TransactionTestCase):
 
         # The command may raise an exception due to the mocked error
         # but should handle it gracefully
-        try:
+        with contextlib.suppress(Exception):
             call_command(
                 "import_techniques",
                 "--file",
@@ -795,9 +790,6 @@ class ManagementCommandIntegrationTests(TransactionTestCase):
                 stdout=out,
                 stderr=err,
             )
-        except Exception:
-            # Expected due to mocked error - command handles this gracefully
-            pass
 
         # Verify extractor was called
         mock_extractor_class.assert_called()

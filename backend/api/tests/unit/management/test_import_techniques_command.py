@@ -6,9 +6,9 @@ Unit tests for import_techniques management command to increase coverage.
 import builtins
 import contextlib
 import json
-import os
 import tempfile
 from io import StringIO
+from pathlib import Path
 from unittest.mock import Mock, patch
 
 from django.core.management import call_command
@@ -37,8 +37,8 @@ class ImportTechniquesCommandUnitTests(TestCase):
 
     def create_temp_json_file(self, data, filename="test_techniques.json"):
         """Helper to create temporary JSON file."""
-        file_path = os.path.join(self.temp_dir, filename)
-        with open(file_path, "w") as f:
+        file_path = Path(self.temp_dir) / filename
+        with Path(file_path).open("w") as f:
             json.dump(data, f)
         return file_path
 
@@ -88,7 +88,7 @@ class ImportTechniquesCommandUnitTests(TestCase):
         # Create file with invalid JSON
         invalid_json_file = self.create_temp_json_file("invalid json content", "invalid.json")
         # Overwrite with invalid JSON string
-        with open(invalid_json_file, "w") as f:
+        with Path(invalid_json_file).open("w") as f:
             f.write("{ invalid json }")
 
         out = StringIO()
@@ -252,8 +252,8 @@ class ImportTechniquesCommandDatabaseTests(TransactionTestCase):
 
     def create_temp_json_file(self, data, filename="test_techniques.json"):
         """Helper to create temporary JSON file."""
-        file_path = os.path.join(self.temp_dir, filename)
-        with open(file_path, "w") as f:
+        file_path = Path(self.temp_dir) / filename
+        with Path(file_path).open("w") as f:
             json.dump(data, f)
         return file_path
 
@@ -345,8 +345,8 @@ class ImportTechniquesCommandUtilityTests(TestCase):
 
         temp_dir = tempfile.mkdtemp()
         try:
-            file_path = os.path.join(temp_dir, "unicode_test.json")
-            with open(file_path, "w", encoding="utf-8") as f:
+            file_path = Path(temp_dir) / "unicode_test.json"
+            with Path(file_path).open("w", encoding="utf-8") as f:
                 json.dump(techniques_data, f, ensure_ascii=False)
 
             out = StringIO()
@@ -373,8 +373,8 @@ class ImportTechniquesCommandUtilityTests(TestCase):
 
         temp_dir = tempfile.mkdtemp()
         try:
-            file_path = os.path.join(temp_dir, "large_test.json")
-            with open(file_path, "w") as f:
+            file_path = Path(temp_dir) / "large_test.json"
+            with Path(file_path).open("w") as f:
                 json.dump(techniques_data, f)
 
             out = StringIO()
@@ -404,8 +404,8 @@ class ImportTechniquesCommandUtilityTests(TestCase):
         """Test specific JSON decode error messages."""
         temp_dir = tempfile.mkdtemp()
         try:
-            file_path = os.path.join(temp_dir, "bad_json.json")
-            with open(file_path, "w") as f:
+            file_path = Path(temp_dir) / "bad_json.json"
+            with Path(file_path).open("w") as f:
                 f.write('{"incomplete": json object')  # Malformed JSON
 
             out = StringIO()
@@ -442,8 +442,8 @@ class ImportTechniquesCommandUtilityTests(TestCase):
 
         temp_dir = tempfile.mkdtemp()
         try:
-            file_path = os.path.join(temp_dir, "complex_test.json")
-            with open(file_path, "w") as f:
+            file_path = Path(temp_dir) / "complex_test.json"
+            with Path(file_path).open("w") as f:
                 json.dump(techniques_data, f)
 
             out = StringIO()
@@ -474,8 +474,8 @@ class ImportTechniquesCommandErrorRecoveryTests(TestCase):
 
     def create_temp_json_file(self, data, filename="test_techniques.json"):
         """Helper to create temporary JSON file."""
-        file_path = os.path.join(self.temp_dir, filename)
-        with open(file_path, "w") as f:
+        file_path = Path(self.temp_dir) / filename
+        with Path(file_path).open("w") as f:
             json.dump(data, f)
         return file_path
 
@@ -572,8 +572,8 @@ class ImportTechniquesCommandArgumentTests(TestCase):
         temp_dir = tempfile.mkdtemp()
         try:
             techniques_data = [{"name": "Test", "description": "Test"}]
-            file_path = os.path.join(temp_dir, "test.json")
-            with open(file_path, "w") as f:
+            file_path = Path(temp_dir) / "test.json"
+            with Path(file_path).open("w") as f:
                 json.dump(techniques_data, f)
 
             # Test --file only

@@ -762,7 +762,7 @@ class ServiceIntegrationTests(TransactionTestCase):
         self.assertEqual(use_case.assurance_goal, self.assurance_goal)
 
         limitations = technique.limitations.all()
-        descriptions = [l.description for l in limitations]
+        descriptions = [limitation.description for limitation in limitations]
         self.assertIn("String limitation", descriptions)
         self.assertIn("Dict limitation", descriptions)
 
@@ -828,11 +828,11 @@ class ServiceIntegrationTests(TransactionTestCase):
         TechniqueLimitationService()
 
         # Invalid resource data (missing required fields)
-        with self.assertRaises(Exception):
+        with self.assertRaises(TechniqueOperationError):
             resource_service.create_resources(technique, [{"title": ""}])  # Missing URL
 
         # Invalid use case data
-        with self.assertRaises(Exception):
+        with self.assertRaises(TechniqueOperationError):
             use_case_service.create_use_cases(technique, [{"description": ""}])  # Empty description
 
         # Services should handle errors gracefully without breaking the database state

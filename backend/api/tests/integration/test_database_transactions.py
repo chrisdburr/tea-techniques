@@ -438,9 +438,11 @@ class ServiceLayerTransactionTests(TransactionTestCase):
 
         initial_resource_count = TechniqueResource.objects.count()
 
-        with patch.object(TechniqueResource.objects, "create", side_effect=mock_create):
-            with self.assertRaises(Exception):
-                self.resource_service.create_resources(self.technique, resource_data)
+        with (
+            patch.object(TechniqueResource.objects, "create", side_effect=mock_create),
+            self.assertRaises(TechniqueOperationError),
+        ):
+            self.resource_service.create_resources(self.technique, resource_data)
 
         # Verify rollback - no resources should be created
         self.assertEqual(TechniqueResource.objects.count(), initial_resource_count)
@@ -465,9 +467,11 @@ class ServiceLayerTransactionTests(TransactionTestCase):
 
         initial_use_case_count = TechniqueExampleUseCase.objects.count()
 
-        with patch.object(TechniqueExampleUseCase.objects, "create", side_effect=mock_create):
-            with self.assertRaises(Exception):
-                self.use_case_service.create_use_cases(self.technique, use_case_data)
+        with (
+            patch.object(TechniqueExampleUseCase.objects, "create", side_effect=mock_create),
+            self.assertRaises(TechniqueOperationError),
+        ):
+            self.use_case_service.create_use_cases(self.technique, use_case_data)
 
         # Verify rollback
         self.assertEqual(TechniqueExampleUseCase.objects.count(), initial_use_case_count)
@@ -493,9 +497,11 @@ class ServiceLayerTransactionTests(TransactionTestCase):
 
         initial_limitation_count = TechniqueLimitation.objects.count()
 
-        with patch.object(TechniqueLimitation.objects, "create", side_effect=mock_create):
-            with self.assertRaises(Exception):
-                self.limitation_service.create_limitations(self.technique, limitation_data)
+        with (
+            patch.object(TechniqueLimitation.objects, "create", side_effect=mock_create),
+            self.assertRaises(TechniqueOperationError),
+        ):
+            self.limitation_service.create_limitations(self.technique, limitation_data)
 
         # Verify rollback
         self.assertEqual(TechniqueLimitation.objects.count(), initial_limitation_count)
@@ -530,7 +536,7 @@ class ServiceLayerTransactionTests(TransactionTestCase):
         with patch.object(TechniqueResource.objects, "create") as mock_create:
             mock_create.side_effect = Exception("New resource creation failed")
 
-            with self.assertRaises(Exception):
+            with self.assertRaises(TechniqueOperationError):
                 self.resource_service.replace_resources(self.technique, new_resource_data)
 
         # Verify original resources still exist (rollback occurred)

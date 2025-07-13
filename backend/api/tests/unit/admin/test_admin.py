@@ -11,8 +11,6 @@ from django.contrib.admin.sites import AdminSite
 from django.test import TestCase
 from faker import Faker
 
-fake = Faker()
-
 from api.admin import (
     TagAdmin,
     TechniqueAdmin,
@@ -34,6 +32,8 @@ from api.tests.factories import (
     IsolatedTechniqueFactory,
     TagFactory,
 )
+
+fake = Faker()
 
 
 class AdminRegistrationTests(TestCase):

@@ -8,6 +8,7 @@ from unittest.mock import Mock, patch
 from django.contrib.auth.models import User
 from django.test import TestCase, override_settings
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.test import APIRequestFactory, APITestCase, force_authenticate
 
@@ -491,11 +492,13 @@ class ViewSetErrorHandlingTests(APITestCase):
 
         # Mock get_serializer to return a serializer that raises validation error
         mock_serializer = Mock()
-        mock_serializer.is_valid.side_effect = Exception("Validation failed")
+        mock_serializer.is_valid.side_effect = ValidationError("Validation failed")
 
-        with patch.object(viewset, "get_serializer", return_value=mock_serializer):
-            with self.assertRaises(Exception):
-                viewset.create(request)
+        with (
+            patch.object(viewset, "get_serializer", return_value=mock_serializer),
+            self.assertRaises(ValidationError),
+        ):
+            viewset.create(request)
 
     def test_techniques_update_with_invalid_serializer(self):
         """Test update method with invalid serializer data."""
@@ -506,11 +509,12 @@ class ViewSetErrorHandlingTests(APITestCase):
 
         # Mock get_object and get_serializer
         mock_serializer = Mock()
-        mock_serializer.is_valid.side_effect = Exception("Validation failed")
+        mock_serializer.is_valid.side_effect = ValidationError("Validation failed")
 
         with (
             patch.object(viewset, "get_object", return_value=self.technique),
-            patch.object(viewset, "get_serializer", return_value=mock_serializer),self.assertRaises(Exception)
+            patch.object(viewset, "get_serializer", return_value=mock_serializer),
+            self.assertRaises(ValidationError),
         ):
             viewset.update(request, partial=False)
 

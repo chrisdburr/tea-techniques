@@ -484,7 +484,7 @@ class UtilsServiceIntegrationTests(TransactionTestCase):
 
         # Verify processed limitations
         self.assertEqual(technique.limitations.count(), 2)
-        limitation_descriptions = [l.description for l in technique.limitations.all()]
+        limitation_descriptions = [limitation.description for limitation in technique.limitations.all()]
         self.assertIn("Extracted limitation", limitation_descriptions)
         self.assertIn("Complex extracted limitation", limitation_descriptions)
 

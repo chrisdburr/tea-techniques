@@ -31,10 +31,7 @@ def login_view(request):
     Log in a user
     """
     # Handle both JSON and form data
-    if request.content_type == "application/json":
-        data = json.loads(request.body)
-    else:
-        data = request.data
+    data = json.loads(request.body) if request.content_type == "application/json" else request.data
 
     username = data.get("username")
     password = data.get("password")

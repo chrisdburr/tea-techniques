@@ -208,10 +208,9 @@ class TechniqueDataValidator:
             ("complexity_rating", complexity_rating),
             ("computational_cost_rating", computational_cost_rating),
         ]:
-            if rating_value is not None:
-                if not isinstance(rating_value, int) or not 1 <= rating_value <= 5:
-                    logger.warning("Invalid %s: %s", rating_name, rating_value)
-                    return False
+            if rating_value is not None and (not isinstance(rating_value, int) or not 1 <= rating_value <= 5):
+                logger.warning("Invalid %s: %s", rating_name, rating_value)
+                return False
 
         return True
 

@@ -192,6 +192,7 @@ def temp_json_file():
     def cleanup():
         import contextlib
         from pathlib import Path
+
         for file_path in files_created:
             with contextlib.suppress(FileNotFoundError):
                 Path(file_path).unlink()

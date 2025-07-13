@@ -212,9 +212,9 @@ class TechniqueResourceModelTests(TestCase):
 
     def test_technique_resource_with_long_content(self):
         """Test technique resource with long content."""
-        long_title = "A" * 500
-        long_description = "B" * 2000
-        long_authors = "C" * 1000
+        long_title = "A" * 255  # Max length for title field
+        long_description = "B" * 2000  # TextField has no max_length
+        long_authors = "C" * 500  # Max length for authors field
 
         resource = TechniqueResource.objects.create(
             technique=self.technique,

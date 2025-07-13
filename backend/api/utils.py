@@ -341,9 +341,7 @@ class TechniqueDataExtractor:
 
         return processed
 
-    def process_use_case_data(
-        self, use_case_data: dict[str, Any], default_goal: str | None = None
-    ) -> dict[str, Any]:
+    def process_use_case_data(self, use_case_data: dict[str, Any], default_goal: str | None = None) -> dict[str, Any]:
         """
         Process and clean use case data.
 

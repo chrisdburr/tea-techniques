@@ -486,9 +486,9 @@ class ViewSetErrorHandlingTests(APITestCase):
     def test_techniques_create_with_invalid_serializer(self):
         """Test create method with invalid serializer data."""
         viewset = TechniquesViewSet()
-        django_request = self.factory.post("/api/techniques/", {}, format="json")
+        django_request = self.factory.post("/api/techniques/", {})
         force_authenticate(django_request, user=self.user)
-        request = Request(django_request)
+        request = Request(django_request, parsers=viewset.get_parsers())
 
         # Mock get_serializer to return a serializer that raises validation error
         mock_serializer = Mock()
@@ -503,9 +503,9 @@ class ViewSetErrorHandlingTests(APITestCase):
     def test_techniques_update_with_invalid_serializer(self):
         """Test update method with invalid serializer data."""
         viewset = TechniquesViewSet()
-        django_request = self.factory.put(f"/api/techniques/{self.technique.slug}/", {}, format="json")
+        django_request = self.factory.put(f"/api/techniques/{self.technique.slug}/", {})
         force_authenticate(django_request, user=self.user)
-        request = Request(django_request)
+        request = Request(django_request, parsers=viewset.get_parsers())
 
         # Mock get_object and get_serializer
         mock_serializer = Mock()

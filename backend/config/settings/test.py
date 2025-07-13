@@ -23,11 +23,12 @@ if "DATABASE_URL" in os.environ:
         database_url = os.environ["DATABASE_URL"]
         if database_url.startswith("postgresql://"):
             from urllib.parse import urlparse
+
             parsed = urlparse(database_url)
             DATABASES = {
                 "default": {
                     "ENGINE": "django.db.backends.postgresql",
-                    "NAME": parsed.path.lstrip('/'),
+                    "NAME": parsed.path.lstrip("/"),
                     "USER": parsed.username,
                     "PASSWORD": parsed.password,
                     "HOST": parsed.hostname,

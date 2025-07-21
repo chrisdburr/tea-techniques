@@ -1,9 +1,11 @@
 // frontend/next.config.ts
 import type { NextConfig } from "next";
+import { getDataConfig } from "./src/lib/config/dataConfig";
 
 // Import bundle analyzer conditionally
 let withBundleAnalyzer = (config: NextConfig) => config;
 if (process.env.ANALYZE === "true") {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const bundleAnalyzer = require("@next/bundle-analyzer");
   withBundleAnalyzer = bundleAnalyzer({
     enabled: true,
@@ -29,8 +31,16 @@ console.log(`Backend URL for API proxy: ${BACKEND_URL}`);
 const nextConfig: NextConfig = {
   reactStrictMode: true,
 
-  // Add rewrites to proxy API requests to the backend
+  // Add rewrites to proxy API requests to the backend (only in API mode)
   async rewrites() {
+    const config = getDataConfig();
+
+    // In static mode, don't proxy API requests - they'll be served from public/api/
+    if (config.dataSource === "static" || config.dataSource === "mock") {
+      return [];
+    }
+
+    // In API mode, proxy to backend
     return [
       {
         source: "/api",
@@ -51,8 +61,16 @@ const nextConfig: NextConfig = {
     ];
   },
 
-  // Add this output configuration for standalone mode
-  output: "standalone",
+  // Conditional output configuration based on data source mode
+  output: (() => {
+    const config = getDataConfig();
+    // In static mode, use export for GitHub Pages compatibility
+    if (config.dataSource === "static" || config.dataSource === "mock") {
+      return "export";
+    }
+    // In API mode, use standalone for Docker deployment
+    return "standalone";
+  })(),
 };
 
 export default withBundleAnalyzer(nextConfig);

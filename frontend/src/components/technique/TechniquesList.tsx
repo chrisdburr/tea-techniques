@@ -23,15 +23,19 @@ import TechniqueCard from "@/components/technique/TechniqueCard";
 
 import { Pagination } from "@/components/ui/pagination";
 import { Loader2, Filter } from "lucide-react";
-import type { Technique } from "@/lib/types";
+import type { Technique, APIResponse, AssuranceGoal, Tag } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 // Number of items per page - must match backend setting (20)
 const PAGE_SIZE = 20;
 
-// Default filter values structure
-// Used for reference when resetting filters
+// Props interface for optional initial data (for SSG support)
+interface TechniquesListProps {
+  initialData?: APIResponse<Technique>;
+  initialAssuranceGoals?: APIResponse<AssuranceGoal>;
+  initialTags?: APIResponse<Tag>;
+}
 
 // Define EmptyStateComponent
 const EmptyStateComponent = (): JSX.Element => {
@@ -49,7 +53,11 @@ const EmptyStateComponent = (): JSX.Element => {
   );
 };
 
-export default function TechniquesList() {
+export default function TechniquesList({
+  initialData,
+  initialAssuranceGoals,
+  initialTags,
+}: TechniquesListProps = {}) {
   // State for sidebar visibility (used for both mobile and desktop)
   const [isSidebarOpen, setSidebarOpen] = useState(true);
 
@@ -161,22 +169,32 @@ export default function TechniquesList() {
     };
   }, [appliedFilters]);
 
-  // Fetch data from API
+  // Fetch data from API or use initial data
   const {
     data: techniquesData,
     isLoading,
     error,
   } = useTechniques(apiFilters, currentPage);
 
-  // Fetch tags and assurance goals for sidebar
+  // Use initial data if provided, otherwise fetch from API
   const { data: tagsData, isLoading: isLoadingTags } = useTags();
   const { data: assuranceGoalsData, isLoading: isLoadingGoals } =
     useAssuranceGoals();
 
+  // Override with initial data when available (for SSG)
+  const finalTechniquesData = initialData || techniquesData;
+  const finalTagsData = initialTags || tagsData;
+  const finalAssuranceGoalsData = initialAssuranceGoals || assuranceGoalsData;
+
+  // Adjust loading states when initial data is provided
+  const isActuallyLoading = initialData ? false : isLoading;
+  const isActuallyLoadingTags = initialTags ? false : isLoadingTags;
+  const isActuallyLoadingGoals = initialAssuranceGoals ? false : isLoadingGoals;
+
   // Update the techniques memo to include client-side filtering for complexity and computational cost
   const techniques = useMemo(() => {
     // Type assertion to ensure TypeScript knows the structure
-    const data = techniquesData as { results?: Technique[] } | undefined;
+    const data = finalTechniquesData as { results?: Technique[] } | undefined;
     const results = data?.results || [];
 
     // Apply client-side filtering for results using appliedFilters
@@ -212,7 +230,7 @@ export default function TechniquesList() {
       return true;
     });
   }, [
-    techniquesData,
+    finalTechniquesData,
     appliedFilters.search,
     appliedFilters.complexity_max,
     appliedFilters.computational_cost_max,
@@ -220,7 +238,7 @@ export default function TechniquesList() {
 
   // Calculate pagination information using the total count from the API response
   // Get the total count from the API response
-  const apiTotalCount = (techniquesData as { count?: number })?.count || 0;
+  const apiTotalCount = (finalTechniquesData as { count?: number })?.count || 0;
   const totalPages = calculateTotalPages(apiTotalCount, PAGE_SIZE);
 
   // Apply filters function
@@ -385,9 +403,9 @@ export default function TechniquesList() {
               setFilters={setFilters}
               applyFilters={applyFilters}
               resetFilters={resetFilters}
-              assuranceGoals={assuranceGoalsData?.results}
-              tags={tagsData?.results}
-              isDataLoading={isLoadingGoals || isLoadingTags}
+              assuranceGoals={finalAssuranceGoalsData?.results}
+              tags={finalTagsData?.results}
+              isDataLoading={isActuallyLoadingGoals || isActuallyLoadingTags}
               isMobileOpen={isSidebarOpen}
               setIsMobileOpen={setSidebarOpen}
               allowToggle={true} /* Pass flag to show toggle button in header */
@@ -426,7 +444,7 @@ export default function TechniquesList() {
 
         {/* Techniques list */}
         <div className="flex-1">
-          {isLoading ? (
+          {isActuallyLoading ? (
             <div className="flex justify-center items-center py-8">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
               <span className="ml-2">Loading techniques...</span>

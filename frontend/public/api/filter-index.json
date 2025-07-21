@@ -1,0 +1,959 @@
+{
+  "tags": {
+    "applicable-models/agnostic": {
+      "name": "applicable-models/agnostic",
+      "category": "applicable-models",
+      "description": "Agnostic",
+      "techniqueCount": 63
+    },
+    "applicable-models/cnn": {
+      "name": "applicable-models/cnn",
+      "category": "applicable-models",
+      "description": "Cnn",
+      "techniqueCount": 5
+    },
+    "applicable-models/ensemble": {
+      "name": "applicable-models/ensemble",
+      "category": "applicable-models",
+      "description": "Ensemble",
+      "techniqueCount": 1
+    },
+    "applicable-models/gam": {
+      "name": "applicable-models/gam",
+      "category": "applicable-models",
+      "description": "Gam",
+      "techniqueCount": 1
+    },
+    "applicable-models/gan": {
+      "name": "applicable-models/gan",
+      "category": "applicable-models",
+      "description": "Gan",
+      "techniqueCount": 2
+    },
+    "applicable-models/gaussian-process": {
+      "name": "applicable-models/gaussian-process",
+      "category": "applicable-models",
+      "description": "Gaussian Process",
+      "techniqueCount": 1
+    },
+    "applicable-models/linear": {
+      "name": "applicable-models/linear",
+      "category": "applicable-models",
+      "description": "Linear",
+      "techniqueCount": 1
+    },
+    "applicable-models/linear-model": {
+      "name": "applicable-models/linear-model",
+      "category": "applicable-models",
+      "description": "Linear Model",
+      "techniqueCount": 2
+    },
+    "applicable-models/llm": {
+      "name": "applicable-models/llm",
+      "category": "applicable-models",
+      "description": "Llm",
+      "techniqueCount": 4
+    },
+    "applicable-models/logistic-regression": {
+      "name": "applicable-models/logistic-regression",
+      "category": "applicable-models",
+      "description": "Logistic Regression",
+      "techniqueCount": 1
+    },
+    "applicable-models/neural-network": {
+      "name": "applicable-models/neural-network",
+      "category": "applicable-models",
+      "description": "Neural Network",
+      "techniqueCount": 15
+    },
+    "applicable-models/probabilistic": {
+      "name": "applicable-models/probabilistic",
+      "category": "applicable-models",
+      "description": "Probabilistic",
+      "techniqueCount": 1
+    },
+    "applicable-models/recurrent-neural-network": {
+      "name": "applicable-models/recurrent-neural-network",
+      "category": "applicable-models",
+      "description": "Recurrent Neural Network",
+      "techniqueCount": 1
+    },
+    "applicable-models/rnn": {
+      "name": "applicable-models/rnn",
+      "category": "applicable-models",
+      "description": "Rnn",
+      "techniqueCount": 1
+    },
+    "applicable-models/transformer": {
+      "name": "applicable-models/transformer",
+      "category": "applicable-models",
+      "description": "Transformer",
+      "techniqueCount": 5
+    },
+    "applicable-models/tree-based": {
+      "name": "applicable-models/tree-based",
+      "category": "applicable-models",
+      "description": "Tree Based",
+      "techniqueCount": 3
+    },
+    "assurance-goal-category/explainability": {
+      "name": "assurance-goal-category/explainability",
+      "category": "assurance-goal-category",
+      "description": "Explainability",
+      "techniqueCount": 39
+    },
+    "assurance-goal-category/explainability/feature-analysis": {
+      "name": "assurance-goal-category/explainability/feature-analysis",
+      "category": "assurance-goal-category",
+      "description": "Feature Analysis",
+      "techniqueCount": 4
+    },
+    "assurance-goal-category/explainability/feature-analysis/importance-and-attribution": {
+      "name": "assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
+      "category": "assurance-goal-category",
+      "description": "Importance And Attribution",
+      "techniqueCount": 4
+    },
+    "assurance-goal-category/fairness": {
+      "name": "assurance-goal-category/fairness",
+      "category": "assurance-goal-category",
+      "description": "Fairness",
+      "techniqueCount": 53
+    },
+    "assurance-goal-category/fairness/causal": {
+      "name": "assurance-goal-category/fairness/causal",
+      "category": "assurance-goal-category",
+      "description": "Causal",
+      "techniqueCount": 1
+    },
+    "assurance-goal-category/fairness/group": {
+      "name": "assurance-goal-category/fairness/group",
+      "category": "assurance-goal-category",
+      "description": "Group",
+      "techniqueCount": 14
+    },
+    "assurance-goal-category/fairness/group/statistical-parity": {
+      "name": "assurance-goal-category/fairness/group/statistical-parity",
+      "category": "assurance-goal-category",
+      "description": "Statistical Parity",
+      "techniqueCount": 1
+    },
+    "assurance-goal-category/privacy": {
+      "name": "assurance-goal-category/privacy",
+      "category": "assurance-goal-category",
+      "description": "Privacy",
+      "techniqueCount": 7
+    },
+    "assurance-goal-category/privacy/formal-guarantee": {
+      "name": "assurance-goal-category/privacy/formal-guarantee",
+      "category": "assurance-goal-category",
+      "description": "Formal Guarantee",
+      "techniqueCount": 1
+    },
+    "assurance-goal-category/privacy/formal-guarantee/differential-privacy": {
+      "name": "assurance-goal-category/privacy/formal-guarantee/differential-privacy",
+      "category": "assurance-goal-category",
+      "description": "Differential Privacy",
+      "techniqueCount": 1
+    },
+    "assurance-goal-category/reliability": {
+      "name": "assurance-goal-category/reliability",
+      "category": "assurance-goal-category",
+      "description": "Reliability",
+      "techniqueCount": 52
+    },
+    "assurance-goal-category/reliability/uncertainty-quantification": {
+      "name": "assurance-goal-category/reliability/uncertainty-quantification",
+      "category": "assurance-goal-category",
+      "description": "Uncertainty Quantification",
+      "techniqueCount": 6
+    },
+    "assurance-goal-category/safety": {
+      "name": "assurance-goal-category/safety",
+      "category": "assurance-goal-category",
+      "description": "Safety",
+      "techniqueCount": 19
+    },
+    "assurance-goal-category/safety/monitoring/anomaly-detection": {
+      "name": "assurance-goal-category/safety/monitoring/anomaly-detection",
+      "category": "assurance-goal-category",
+      "description": "Anomaly Detection",
+      "techniqueCount": 2
+    },
+    "assurance-goal-category/transparency": {
+      "name": "assurance-goal-category/transparency",
+      "category": "assurance-goal-category",
+      "description": "Transparency",
+      "techniqueCount": 52
+    },
+    "assurance-goal-category/transparency/documentation": {
+      "name": "assurance-goal-category/transparency/documentation",
+      "category": "assurance-goal-category",
+      "description": "Documentation",
+      "techniqueCount": 1
+    },
+    "assurance-goal-category/transparency/documentation/model-card": {
+      "name": "assurance-goal-category/transparency/documentation/model-card",
+      "category": "assurance-goal-category",
+      "description": "Model Card",
+      "techniqueCount": 1
+    },
+    "data-requirements/access-to-model-internals": {
+      "name": "data-requirements/access-to-model-internals",
+      "category": "data-requirements",
+      "description": "Access To Model Internals",
+      "techniqueCount": 13
+    },
+    "data-requirements/access-to-training-data": {
+      "name": "data-requirements/access-to-training-data",
+      "category": "data-requirements",
+      "description": "Access To Training Data",
+      "techniqueCount": 7
+    },
+    "data-requirements/calibration-set": {
+      "name": "data-requirements/calibration-set",
+      "category": "data-requirements",
+      "description": "Calibration Set",
+      "techniqueCount": 4
+    },
+    "data-requirements/causal-graph": {
+      "name": "data-requirements/causal-graph",
+      "category": "data-requirements",
+      "description": "Causal Graph",
+      "techniqueCount": 1
+    },
+    "data-requirements/labelled-data": {
+      "name": "data-requirements/labelled-data",
+      "category": "data-requirements",
+      "description": "Labelled Data",
+      "techniqueCount": 16
+    },
+    "data-requirements/no-special-requirements": {
+      "name": "data-requirements/no-special-requirements",
+      "category": "data-requirements",
+      "description": "No Special Requirements",
+      "techniqueCount": 43
+    },
+    "data-requirements/pre-trained-model": {
+      "name": "data-requirements/pre-trained-model",
+      "category": "data-requirements",
+      "description": "Pre Trained Model",
+      "techniqueCount": 1
+    },
+    "data-requirements/prediction-probabilities": {
+      "name": "data-requirements/prediction-probabilities",
+      "category": "data-requirements",
+      "description": "Prediction Probabilities",
+      "techniqueCount": 1
+    },
+    "data-requirements/reference-dataset": {
+      "name": "data-requirements/reference-dataset",
+      "category": "data-requirements",
+      "description": "Reference Dataset",
+      "techniqueCount": 2
+    },
+    "data-requirements/sensitive-attributes": {
+      "name": "data-requirements/sensitive-attributes",
+      "category": "data-requirements",
+      "description": "Sensitive Attributes",
+      "techniqueCount": 26
+    },
+    "data-requirements/test-scenarios": {
+      "name": "data-requirements/test-scenarios",
+      "category": "data-requirements",
+      "description": "Test Scenarios",
+      "techniqueCount": 1
+    },
+    "data-requirements/validation-set": {
+      "name": "data-requirements/validation-set",
+      "category": "data-requirements",
+      "description": "Validation Set",
+      "techniqueCount": 1
+    },
+    "data-type/any": {
+      "name": "data-type/any",
+      "category": "data-type",
+      "description": "Any",
+      "techniqueCount": 75
+    },
+    "data-type/image": {
+      "name": "data-type/image",
+      "category": "data-type",
+      "description": "Image",
+      "techniqueCount": 4
+    },
+    "data-type/tabular": {
+      "name": "data-type/tabular",
+      "category": "data-type",
+      "description": "Tabular",
+      "techniqueCount": 8
+    },
+    "data-type/text": {
+      "name": "data-type/text",
+      "category": "data-type",
+      "description": "Text",
+      "techniqueCount": 6
+    },
+    "evidence-type/boundary-analysis": {
+      "name": "evidence-type/boundary-analysis",
+      "category": "evidence-type",
+      "description": "Boundary Analysis",
+      "techniqueCount": 1
+    },
+    "evidence-type/causal-analysis": {
+      "name": "evidence-type/causal-analysis",
+      "category": "evidence-type",
+      "description": "Causal Analysis",
+      "techniqueCount": 2
+    },
+    "evidence-type/dataset-analysis": {
+      "name": "evidence-type/dataset-analysis",
+      "category": "evidence-type",
+      "description": "Dataset Analysis",
+      "techniqueCount": 2
+    },
+    "evidence-type/documentation": {
+      "name": "evidence-type/documentation",
+      "category": "evidence-type",
+      "description": "Documentation",
+      "techniqueCount": 5
+    },
+    "evidence-type/fairness-metric": {
+      "name": "evidence-type/fairness-metric",
+      "category": "evidence-type",
+      "description": "Fairness Metric",
+      "techniqueCount": 13
+    },
+    "evidence-type/governance-framework": {
+      "name": "evidence-type/governance-framework",
+      "category": "evidence-type",
+      "description": "Governance Framework",
+      "techniqueCount": 1
+    },
+    "evidence-type/prediction-interval": {
+      "name": "evidence-type/prediction-interval",
+      "category": "evidence-type",
+      "description": "Prediction Interval",
+      "techniqueCount": 5
+    },
+    "evidence-type/privacy-guarantee": {
+      "name": "evidence-type/privacy-guarantee",
+      "category": "evidence-type",
+      "description": "Privacy Guarantee",
+      "techniqueCount": 2
+    },
+    "evidence-type/qualitative-report": {
+      "name": "evidence-type/qualitative-report",
+      "category": "evidence-type",
+      "description": "Qualitative Report",
+      "techniqueCount": 4
+    },
+    "evidence-type/quantitative-metric": {
+      "name": "evidence-type/quantitative-metric",
+      "category": "evidence-type",
+      "description": "Quantitative Metric",
+      "techniqueCount": 70
+    },
+    "evidence-type/structured-output": {
+      "name": "evidence-type/structured-output",
+      "category": "evidence-type",
+      "description": "Structured Output",
+      "techniqueCount": 5
+    },
+    "evidence-type/synthetic-data": {
+      "name": "evidence-type/synthetic-data",
+      "category": "evidence-type",
+      "description": "Synthetic Data",
+      "techniqueCount": 1
+    },
+    "evidence-type/visualisation": {
+      "name": "evidence-type/visualisation",
+      "category": "evidence-type",
+      "description": "Visualisation",
+      "techniqueCount": 3
+    },
+    "evidence-type/visualization": {
+      "name": "evidence-type/visualization",
+      "category": "evidence-type",
+      "description": "Visualization",
+      "techniqueCount": 11
+    },
+    "expertise-needed/causal-inference": {
+      "name": "expertise-needed/causal-inference",
+      "category": "expertise-needed",
+      "description": "Causal Inference",
+      "techniqueCount": 3
+    },
+    "expertise-needed/cryptography": {
+      "name": "expertise-needed/cryptography",
+      "category": "expertise-needed",
+      "description": "Cryptography",
+      "techniqueCount": 3
+    },
+    "expertise-needed/domain-expertise": {
+      "name": "expertise-needed/domain-expertise",
+      "category": "expertise-needed",
+      "description": "Domain Expertise",
+      "techniqueCount": 2
+    },
+    "expertise-needed/domain-knowledge": {
+      "name": "expertise-needed/domain-knowledge",
+      "category": "expertise-needed",
+      "description": "Domain Knowledge",
+      "techniqueCount": 5
+    },
+    "expertise-needed/ethics": {
+      "name": "expertise-needed/ethics",
+      "category": "expertise-needed",
+      "description": "Ethics",
+      "techniqueCount": 1
+    },
+    "expertise-needed/experimental-design": {
+      "name": "expertise-needed/experimental-design",
+      "category": "expertise-needed",
+      "description": "Experimental Design",
+      "techniqueCount": 1
+    },
+    "expertise-needed/legal": {
+      "name": "expertise-needed/legal",
+      "category": "expertise-needed",
+      "description": "Legal",
+      "techniqueCount": 1
+    },
+    "expertise-needed/linguistics": {
+      "name": "expertise-needed/linguistics",
+      "category": "expertise-needed",
+      "description": "Linguistics",
+      "techniqueCount": 1
+    },
+    "expertise-needed/low": {
+      "name": "expertise-needed/low",
+      "category": "expertise-needed",
+      "description": "Low",
+      "techniqueCount": 8
+    },
+    "expertise-needed/ml-engineering": {
+      "name": "expertise-needed/ml-engineering",
+      "category": "expertise-needed",
+      "description": "Ml Engineering",
+      "techniqueCount": 57
+    },
+    "expertise-needed/regulatory-compliance": {
+      "name": "expertise-needed/regulatory-compliance",
+      "category": "expertise-needed",
+      "description": "Regulatory Compliance",
+      "techniqueCount": 2
+    },
+    "expertise-needed/safety-engineering": {
+      "name": "expertise-needed/safety-engineering",
+      "category": "expertise-needed",
+      "description": "Safety Engineering",
+      "techniqueCount": 1
+    },
+    "expertise-needed/security": {
+      "name": "expertise-needed/security",
+      "category": "expertise-needed",
+      "description": "Security",
+      "techniqueCount": 1
+    },
+    "expertise-needed/software-engineering": {
+      "name": "expertise-needed/software-engineering",
+      "category": "expertise-needed",
+      "description": "Software Engineering",
+      "techniqueCount": 5
+    },
+    "expertise-needed/stakeholder-engagement": {
+      "name": "expertise-needed/stakeholder-engagement",
+      "category": "expertise-needed",
+      "description": "Stakeholder Engagement",
+      "techniqueCount": 1
+    },
+    "expertise-needed/statistics": {
+      "name": "expertise-needed/statistics",
+      "category": "expertise-needed",
+      "description": "Statistics",
+      "techniqueCount": 49
+    },
+    "explanatory-scope/global": {
+      "name": "explanatory-scope/global",
+      "category": "explanatory-scope",
+      "description": "Global",
+      "techniqueCount": 25
+    },
+    "explanatory-scope/local": {
+      "name": "explanatory-scope/local",
+      "category": "explanatory-scope",
+      "description": "Local",
+      "techniqueCount": 20
+    },
+    "fairness-approach/causal": {
+      "name": "fairness-approach/causal",
+      "category": "fairness-approach",
+      "description": "Causal",
+      "techniqueCount": 2
+    },
+    "fairness-approach/group": {
+      "name": "fairness-approach/group",
+      "category": "fairness-approach",
+      "description": "Group",
+      "techniqueCount": 23
+    },
+    "lifecycle-stage/data-collection": {
+      "name": "lifecycle-stage/data-collection",
+      "category": "lifecycle-stage",
+      "description": "Data Collection",
+      "techniqueCount": 3
+    },
+    "lifecycle-stage/data-collection/data-augmentation": {
+      "name": "lifecycle-stage/data-collection/data-augmentation",
+      "category": "lifecycle-stage",
+      "description": "Data Augmentation",
+      "techniqueCount": 1
+    },
+    "lifecycle-stage/data-collection/data-preprocessing": {
+      "name": "lifecycle-stage/data-collection/data-preprocessing",
+      "category": "lifecycle-stage",
+      "description": "Data Preprocessing",
+      "techniqueCount": 2
+    },
+    "lifecycle-stage/data-handling": {
+      "name": "lifecycle-stage/data-handling",
+      "category": "lifecycle-stage",
+      "description": "Data Handling",
+      "techniqueCount": 4
+    },
+    "lifecycle-stage/data-handling/collection": {
+      "name": "lifecycle-stage/data-handling/collection",
+      "category": "lifecycle-stage",
+      "description": "Collection",
+      "techniqueCount": 1
+    },
+    "lifecycle-stage/data-handling/preparation": {
+      "name": "lifecycle-stage/data-handling/preparation",
+      "category": "lifecycle-stage",
+      "description": "Preparation",
+      "techniqueCount": 1
+    },
+    "lifecycle-stage/data-handling/preprocessing": {
+      "name": "lifecycle-stage/data-handling/preprocessing",
+      "category": "lifecycle-stage",
+      "description": "Preprocessing",
+      "techniqueCount": 1
+    },
+    "lifecycle-stage/deployment": {
+      "name": "lifecycle-stage/deployment",
+      "category": "lifecycle-stage",
+      "description": "Deployment",
+      "techniqueCount": 2
+    },
+    "lifecycle-stage/model-development": {
+      "name": "lifecycle-stage/model-development",
+      "category": "lifecycle-stage",
+      "description": "Model Development",
+      "techniqueCount": 83
+    },
+    "lifecycle-stage/model-development/fine-tuning": {
+      "name": "lifecycle-stage/model-development/fine-tuning",
+      "category": "lifecycle-stage",
+      "description": "Fine Tuning",
+      "techniqueCount": 1
+    },
+    "lifecycle-stage/model-development/testing": {
+      "name": "lifecycle-stage/model-development/testing",
+      "category": "lifecycle-stage",
+      "description": "Testing",
+      "techniqueCount": 3
+    },
+    "lifecycle-stage/model-development/training": {
+      "name": "lifecycle-stage/model-development/training",
+      "category": "lifecycle-stage",
+      "description": "Training",
+      "techniqueCount": 6
+    },
+    "lifecycle-stage/model-evaluation": {
+      "name": "lifecycle-stage/model-evaluation",
+      "category": "lifecycle-stage",
+      "description": "Model Evaluation",
+      "techniqueCount": 2
+    },
+    "lifecycle-stage/model-optimization": {
+      "name": "lifecycle-stage/model-optimization",
+      "category": "lifecycle-stage",
+      "description": "Model Optimization",
+      "techniqueCount": 2
+    },
+    "lifecycle-stage/monitoring": {
+      "name": "lifecycle-stage/monitoring",
+      "category": "lifecycle-stage",
+      "description": "Monitoring",
+      "techniqueCount": 1
+    },
+    "lifecycle-stage/post-deployment": {
+      "name": "lifecycle-stage/post-deployment",
+      "category": "lifecycle-stage",
+      "description": "Post Deployment",
+      "techniqueCount": 1
+    },
+    "lifecycle-stage/post-processing": {
+      "name": "lifecycle-stage/post-processing",
+      "category": "lifecycle-stage",
+      "description": "Post Processing",
+      "techniqueCount": 2
+    },
+    "lifecycle-stage/project-design": {
+      "name": "lifecycle-stage/project-design",
+      "category": "lifecycle-stage",
+      "description": "Project Design",
+      "techniqueCount": 3
+    },
+    "lifecycle-stage/project-planning": {
+      "name": "lifecycle-stage/project-planning",
+      "category": "lifecycle-stage",
+      "description": "Project Planning",
+      "techniqueCount": 1
+    },
+    "lifecycle-stage/system-deployment-and-use": {
+      "name": "lifecycle-stage/system-deployment-and-use",
+      "category": "lifecycle-stage",
+      "description": "System Deployment And Use",
+      "techniqueCount": 28
+    },
+    "lifecycle-stage/system-deployment-and-use/auditing": {
+      "name": "lifecycle-stage/system-deployment-and-use/auditing",
+      "category": "lifecycle-stage",
+      "description": "Auditing",
+      "techniqueCount": 1
+    },
+    "lifecycle-stage/system-deployment-and-use/monitoring": {
+      "name": "lifecycle-stage/system-deployment-and-use/monitoring",
+      "category": "lifecycle-stage",
+      "description": "Monitoring",
+      "techniqueCount": 4
+    },
+    "lifecycle-stage/testing": {
+      "name": "lifecycle-stage/testing",
+      "category": "lifecycle-stage",
+      "description": "Testing",
+      "techniqueCount": 4
+    },
+    "technique-type/algorithmic": {
+      "name": "technique-type/algorithmic",
+      "category": "technique-type",
+      "description": "Algorithmic",
+      "techniqueCount": 72
+    },
+    "technique-type/documentation": {
+      "name": "technique-type/documentation",
+      "category": "technique-type",
+      "description": "Documentation",
+      "techniqueCount": 2
+    },
+    "technique-type/experimental": {
+      "name": "technique-type/experimental",
+      "category": "technique-type",
+      "description": "Experimental",
+      "techniqueCount": 1
+    },
+    "technique-type/gradient-based": {
+      "name": "technique-type/gradient-based",
+      "category": "technique-type",
+      "description": "Gradient Based",
+      "techniqueCount": 1
+    },
+    "technique-type/mechanistic-interpretability": {
+      "name": "technique-type/mechanistic-interpretability",
+      "category": "technique-type",
+      "description": "Mechanistic Interpretability",
+      "techniqueCount": 1
+    },
+    "technique-type/metric": {
+      "name": "technique-type/metric",
+      "category": "technique-type",
+      "description": "Metric",
+      "techniqueCount": 4
+    },
+    "technique-type/procedural": {
+      "name": "technique-type/procedural",
+      "category": "technique-type",
+      "description": "Procedural",
+      "techniqueCount": 3
+    },
+    "technique-type/process": {
+      "name": "technique-type/process",
+      "category": "technique-type",
+      "description": "Process",
+      "techniqueCount": 4
+    },
+    "technique-type/testing": {
+      "name": "technique-type/testing",
+      "category": "technique-type",
+      "description": "Testing",
+      "techniqueCount": 1
+    },
+    "technique-type/visualization": {
+      "name": "technique-type/visualization",
+      "category": "technique-type",
+      "description": "Visualization",
+      "techniqueCount": 3
+    }
+  },
+  "assuranceGoals": {
+    "Explainability": {
+      "name": "Explainability",
+      "description": "Making AI systems understandable to humans",
+      "techniqueCount": 39
+    },
+    "Fairness": {
+      "name": "Fairness",
+      "description": "Ensuring AI systems treat all individuals and groups equitably",
+      "techniqueCount": 53
+    },
+    "Reliability": {
+      "name": "Reliability",
+      "description": "Ensuring AI systems perform consistently and predictably",
+      "techniqueCount": 52
+    },
+    "Security": {
+      "name": "Security",
+      "description": "Protecting AI systems from malicious attacks and misuse",
+      "techniqueCount": 0
+    },
+    "Privacy": {
+      "name": "Privacy",
+      "description": "Protecting individual data and ensuring appropriate use",
+      "techniqueCount": 7
+    },
+    "Transparency": {
+      "name": "Transparency",
+      "description": "Ensuring AI systems and their decision-making processes are open and understandable",
+      "techniqueCount": 52
+    },
+    "Safety": {
+      "name": "Safety",
+      "description": "Ensuring AI systems operate safely and do not cause harm",
+      "techniqueCount": 19
+    }
+  },
+  "tagCategories": {
+    "applicable-models": {
+      "name": "applicable-models",
+      "tags": [
+        "applicable-models/agnostic",
+        "applicable-models/cnn",
+        "applicable-models/ensemble",
+        "applicable-models/gam",
+        "applicable-models/gan",
+        "applicable-models/gaussian-process",
+        "applicable-models/linear",
+        "applicable-models/linear-model",
+        "applicable-models/llm",
+        "applicable-models/logistic-regression",
+        "applicable-models/neural-network",
+        "applicable-models/probabilistic",
+        "applicable-models/recurrent-neural-network",
+        "applicable-models/rnn",
+        "applicable-models/transformer",
+        "applicable-models/tree-based"
+      ],
+      "totalTechniques": 92
+    },
+    "assurance-goal-category": {
+      "name": "assurance-goal-category",
+      "tags": [
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/feature-analysis",
+        "assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/causal",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/fairness/group/statistical-parity",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
+        "assurance-goal-category/privacy/formal-guarantee/differential-privacy",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring/anomaly-detection",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/documentation",
+        "assurance-goal-category/transparency/documentation/model-card"
+      ],
+      "totalTechniques": 92
+    },
+    "data-requirements": {
+      "name": "data-requirements",
+      "tags": [
+        "data-requirements/access-to-model-internals",
+        "data-requirements/access-to-training-data",
+        "data-requirements/calibration-set",
+        "data-requirements/causal-graph",
+        "data-requirements/labelled-data",
+        "data-requirements/no-special-requirements",
+        "data-requirements/pre-trained-model",
+        "data-requirements/prediction-probabilities",
+        "data-requirements/reference-dataset",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/test-scenarios",
+        "data-requirements/validation-set"
+      ],
+      "totalTechniques": 92
+    },
+    "data-type": {
+      "name": "data-type",
+      "tags": [
+        "data-type/any",
+        "data-type/image",
+        "data-type/tabular",
+        "data-type/text"
+      ],
+      "totalTechniques": 92
+    },
+    "evidence-type": {
+      "name": "evidence-type",
+      "tags": [
+        "evidence-type/boundary-analysis",
+        "evidence-type/causal-analysis",
+        "evidence-type/dataset-analysis",
+        "evidence-type/documentation",
+        "evidence-type/fairness-metric",
+        "evidence-type/governance-framework",
+        "evidence-type/prediction-interval",
+        "evidence-type/privacy-guarantee",
+        "evidence-type/qualitative-report",
+        "evidence-type/quantitative-metric",
+        "evidence-type/structured-output",
+        "evidence-type/synthetic-data",
+        "evidence-type/visualisation",
+        "evidence-type/visualization"
+      ],
+      "totalTechniques": 92
+    },
+    "expertise-needed": {
+      "name": "expertise-needed",
+      "tags": [
+        "expertise-needed/causal-inference",
+        "expertise-needed/cryptography",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/domain-knowledge",
+        "expertise-needed/ethics",
+        "expertise-needed/experimental-design",
+        "expertise-needed/legal",
+        "expertise-needed/linguistics",
+        "expertise-needed/low",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/regulatory-compliance",
+        "expertise-needed/safety-engineering",
+        "expertise-needed/security",
+        "expertise-needed/software-engineering",
+        "expertise-needed/stakeholder-engagement",
+        "expertise-needed/statistics"
+      ],
+      "totalTechniques": 92
+    },
+    "explanatory-scope": {
+      "name": "explanatory-scope",
+      "tags": ["explanatory-scope/global", "explanatory-scope/local"],
+      "totalTechniques": 40
+    },
+    "fairness-approach": {
+      "name": "fairness-approach",
+      "tags": ["fairness-approach/causal", "fairness-approach/group"],
+      "totalTechniques": 25
+    },
+    "lifecycle-stage": {
+      "name": "lifecycle-stage",
+      "tags": [
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-augmentation",
+        "lifecycle-stage/data-collection/data-preprocessing",
+        "lifecycle-stage/data-handling",
+        "lifecycle-stage/data-handling/collection",
+        "lifecycle-stage/data-handling/preparation",
+        "lifecycle-stage/data-handling/preprocessing",
+        "lifecycle-stage/deployment",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/fine-tuning",
+        "lifecycle-stage/model-development/testing",
+        "lifecycle-stage/model-development/training",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/model-optimization",
+        "lifecycle-stage/monitoring",
+        "lifecycle-stage/post-deployment",
+        "lifecycle-stage/post-processing",
+        "lifecycle-stage/project-design",
+        "lifecycle-stage/project-planning",
+        "lifecycle-stage/system-deployment-and-use",
+        "lifecycle-stage/system-deployment-and-use/auditing",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "lifecycle-stage/testing"
+      ],
+      "totalTechniques": 92
+    },
+    "technique-type": {
+      "name": "technique-type",
+      "tags": [
+        "technique-type/algorithmic",
+        "technique-type/documentation",
+        "technique-type/experimental",
+        "technique-type/gradient-based",
+        "technique-type/mechanistic-interpretability",
+        "technique-type/metric",
+        "technique-type/procedural",
+        "technique-type/process",
+        "technique-type/testing",
+        "technique-type/visualization"
+      ],
+      "totalTechniques": 92
+    }
+  },
+  "complexityDistribution": [
+    {
+      "rating": 1,
+      "count": 4
+    },
+    {
+      "rating": 2,
+      "count": 22
+    },
+    {
+      "rating": 3,
+      "count": 32
+    },
+    {
+      "rating": 4,
+      "count": 17
+    },
+    {
+      "rating": 5,
+      "count": 17
+    }
+  ],
+  "costDistribution": [
+    {
+      "rating": 1,
+      "count": 15
+    },
+    {
+      "rating": 2,
+      "count": 26
+    },
+    {
+      "rating": 3,
+      "count": 26
+    },
+    {
+      "rating": 4,
+      "count": 18
+    },
+    {
+      "rating": 5,
+      "count": 7
+    }
+  ],
+  "metadata": {
+    "totalTechniques": 92,
+    "totalTags": 116,
+    "totalGoals": 7,
+    "generatedAt": "2025-07-21T11:09:54.575Z"
+  }
+}

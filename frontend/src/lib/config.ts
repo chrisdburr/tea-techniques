@@ -1,10 +1,13 @@
 // frontend/src/lib/config.ts
 
+import { getDataConfig, isStaticMode } from "./config/dataConfig";
+
 interface Config {
   apiBaseUrl: string;
   internalApiUrl: string;
   swaggerUrl: string;
   isProduction: boolean;
+  dataConfig: ReturnType<typeof getDataConfig>;
 }
 
 /**
@@ -22,6 +25,11 @@ const getApiBaseUrl = (): string => {
  * Used for container-to-container communication
  */
 const getInternalApiUrl = (): string => {
+  // In static mode, there's no backend to connect to
+  if (isStaticMode()) {
+    return "";
+  }
+
   // First priority: explicit environment variable
   if (process.env.INTERNAL_API_URL) {
     return process.env.INTERNAL_API_URL;
@@ -40,6 +48,11 @@ const getInternalApiUrl = (): string => {
  * Get Swagger documentation URL
  */
 const getSwaggerUrl = (): string => {
+  // No Swagger in static mode
+  if (isStaticMode()) {
+    return "";
+  }
+
   if (process.env.NEXT_PUBLIC_SWAGGER_URL) {
     return process.env.NEXT_PUBLIC_SWAGGER_URL;
   }
@@ -53,4 +66,5 @@ export const config: Config = {
   internalApiUrl: getInternalApiUrl(),
   swaggerUrl: getSwaggerUrl(),
   isProduction: process.env.NODE_ENV === "production",
+  dataConfig: getDataConfig(),
 };

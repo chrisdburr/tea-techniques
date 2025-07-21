@@ -8,6 +8,7 @@ import React, {
   ReactNode,
 } from "react";
 import { apiClient } from "@/lib/api/client";
+import { getFeatureFlags } from "@/lib/config/dataConfig";
 
 // Define the user type
 interface User {
@@ -41,15 +42,28 @@ const AuthContext = createContext<AuthContextType>({
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  // State is managed internally, not exposed in context
+  const featureFlags = getFeatureFlags();
 
-  // Check auth status automatically on mount
+  // Check auth status automatically on mount - only in API mode
   useEffect(() => {
-    checkAuthStatus();
-  }, []);
+    if (featureFlags.enableAuth) {
+      checkAuthStatus();
+    } else {
+      // In static mode, immediately set loading to false with no user
+      setIsLoading(false);
+      setUser(null);
+    }
+  }, [featureFlags.enableAuth]);
 
   // Function to check if the user is already authenticated
   const checkAuthStatus = async () => {
+    // Skip auth check in static mode
+    if (!featureFlags.enableAuth) {
+      setIsLoading(false);
+      setUser(null);
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -69,6 +83,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Function to log in
   const login = async (username: string, password: string) => {
+    // Prevent login in static mode
+    if (!featureFlags.enableAuth) {
+      throw new Error("Authentication is disabled in static mode");
+    }
+
     setIsLoading(true);
 
     try {
@@ -92,6 +111,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Function to log out
   const logout = async () => {
+    // Handle logout in static mode (just clear user state)
+    if (!featureFlags.enableAuth) {
+      setUser(null);
+      setIsLoading(false);
+      return;
+    }
+
     setIsLoading(true);
 
     try {

@@ -5,22 +5,75 @@
   "description": "Monte Carlo Dropout estimates prediction uncertainty by applying dropout (randomly setting neural network weights to zero) during inference rather than just training. It performs multiple forward passes through the network with different random dropout patterns and collects the resulting predictions to form a distribution. Low variance across predictions indicates epistemic certainty (the model is confident), while high variance suggests epistemic uncertainty (the model is unsure). This technique transforms any dropout-trained neural network into a Bayesian approximation for uncertainty quantification.",
   "complexity_rating": 3,
   "computational_cost_rating": 3,
-  "assurance_goals": ["Explainability", "Reliability"],
+  "assurance_goals": [
+    {
+      "id": 1,
+      "name": "Explainability"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    }
+  ],
   "tags": [
-    "applicable-models/neural-network",
-    "assurance-goal-category/explainability",
-    "assurance-goal-category/reliability",
-    "data-requirements/no-special-requirements",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "expertise-needed/ml-engineering",
-    "expertise-needed/statistics",
-    "explanatory-scope/global",
-    "lifecycle-stage/model-development",
-    "lifecycle-stage/system-deployment-and-use",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/neural-network",
+      "id": 11
+    },
+    {
+      "name": "assurance-goal-category/explainability",
+      "id": 17
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "data-requirements/no-special-requirements",
+      "id": 39
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "expertise-needed/statistics",
+      "id": 79
+    },
+    {
+      "name": "explanatory-scope/global",
+      "id": 80
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "lifecycle-stage/system-deployment-and-use",
+      "id": 103
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": [
+    "prediction-intervals",
+    "quantile-regression",
+    "conformal-prediction",
+    "deep-ensembles",
+    "bootstrapping",
+    "jackknife-resampling"
+  ],
+  "related_technique_slugs": [
     "prediction-intervals",
     "quantile-regression",
     "conformal-prediction",

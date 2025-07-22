@@ -25,9 +25,36 @@ export class StaticDataService extends BaseDataService {
     }
 
     try {
-      const response = await fetch(`${this.config.staticDataPath}${path}`);
+      // During build time, read directly from file system
+      if (typeof window === "undefined") {
+        const fs = await import("fs/promises");
+        const nodePath = await import("path");
+        const filePath = nodePath.join(
+          process.cwd(),
+          "public/api",
+          path.startsWith("/") ? path.slice(1) : path,
+        );
+        const fileContent = await fs.readFile(filePath, "utf-8");
+        const data = JSON.parse(fileContent) as T;
+        this.cache.set(cacheKey, data);
+        return data;
+      }
+
+      // In browser, use fetch with the configured path
+      // Ensure proper path construction - avoid double slashes
+      const cleanPath = path.startsWith("/") ? path : `/${path}`;
+      const fullUrl = `${this.config.staticDataPath}${cleanPath}`;
+
+      console.log(`Fetching static data from: ${fullUrl}`);
+
+      const response = await fetch(fullUrl);
       if (!response.ok) {
-        throw new Error(`Failed to fetch static data: ${response.statusText}`);
+        console.error(
+          `Failed to fetch from ${fullUrl}: ${response.status} ${response.statusText}`,
+        );
+        throw new Error(
+          `Failed to fetch static data from ${fullUrl}: ${response.statusText}`,
+        );
       }
 
       const data = await response.json();
@@ -43,6 +70,22 @@ export class StaticDataService extends BaseDataService {
     params?: Record<string, string | string[]>,
     page: number = 1,
   ): Promise<APIResponse<Technique>> {
+    console.log("🔍 staticDataService.getTechniques called with:", {
+      params,
+      page,
+      pageType: typeof page,
+    });
+
+    // Extra debug for assurance_goals parameter
+    if (params?.assurance_goals) {
+      console.log("🔍 staticDataService: assurance_goals parameter details:", {
+        type: typeof params.assurance_goals,
+        value: params.assurance_goals,
+        isArray: Array.isArray(params.assurance_goals),
+        stringified: JSON.stringify(params.assurance_goals),
+      });
+    }
+
     // Fetch the main techniques list
     const allData = await this.fetchStatic<APIResponse<Technique>>(
       "/techniques.json",
@@ -68,25 +111,43 @@ export class StaticDataService extends BaseDataService {
 
       // Assurance goals filtering
       if (params.assurance_goals) {
-        const goalNames = Array.isArray(params.assurance_goals)
+        const goalIds = Array.isArray(params.assurance_goals)
           ? params.assurance_goals
           : [params.assurance_goals];
 
-        filteredResults = filteredResults.filter((technique) =>
-          technique.assurance_goals.some((goal) =>
-            goalNames.includes(goal.name),
-          ),
+        console.log("🔍 staticDataService: Filtering by goal IDs:", goalIds);
+        console.log(
+          "🔍 staticDataService: Before filtering, total techniques:",
+          filteredResults.length,
+        );
+
+        filteredResults = filteredResults.filter((technique) => {
+          const hasMatchingGoal = technique.assurance_goals.some((goal) =>
+            goalIds.includes(goal.id?.toString()),
+          );
+          if (hasMatchingGoal) {
+            console.log(
+              `🔍 staticDataService: ${technique.name} matches goals:`,
+              technique.assurance_goals.map((g) => `${g.id}:${g.name}`),
+            );
+          }
+          return hasMatchingGoal;
+        });
+
+        console.log(
+          "🔍 staticDataService: After filtering, Privacy techniques found:",
+          filteredResults.length,
         );
       }
 
       // Tags filtering
       if (params.tags) {
-        const tagNames = Array.isArray(params.tags)
-          ? params.tags
-          : [params.tags];
+        const tagIds = Array.isArray(params.tags) ? params.tags : [params.tags];
 
         filteredResults = filteredResults.filter((technique) =>
-          technique.tags.some((tag) => tagNames.includes(tag.name)),
+          technique.tags.some((tag) =>
+            tagIds.includes(tag.id?.toString() || ""),
+          ),
         );
       }
 
@@ -135,7 +196,25 @@ export class StaticDataService extends BaseDataService {
     const pageSize = 20;
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
+
+    console.log("🔍 staticDataService pagination:", {
+      page,
+      pageSize,
+      startIndex,
+      endIndex,
+      filteredResultsLength: filteredResults.length,
+      firstItemBeforeSlice: filteredResults[0]?.name,
+      lastItemBeforeSlice: filteredResults[filteredResults.length - 1]?.name,
+    });
+
     const paginatedResults = filteredResults.slice(startIndex, endIndex);
+
+    console.log("🔍 staticDataService paginated results:", {
+      paginatedResultsLength: paginatedResults.length,
+      firstItem: paginatedResults[0]?.name,
+      lastItem: paginatedResults[paginatedResults.length - 1]?.name,
+      expectedFirstForPage2: page === 2 ? "Should be t-SNE" : null,
+    });
 
     return {
       count: filteredResults.length,

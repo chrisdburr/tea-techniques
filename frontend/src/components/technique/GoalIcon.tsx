@@ -34,8 +34,9 @@ export const GoalIcon: React.FC<GoalIconProps> = ({
   size = 20,
 }) => {
   // Format goal name to match our mapping (capitalize first letter)
-  const formattedGoalName =
-    goalName.charAt(0).toUpperCase() + goalName.slice(1).toLowerCase();
+  const formattedGoalName = goalName
+    ? goalName.charAt(0).toUpperCase() + goalName.slice(1).toLowerCase()
+    : "";
 
   // Get the icon component from our mapping, or use the default
   const IconComponent =

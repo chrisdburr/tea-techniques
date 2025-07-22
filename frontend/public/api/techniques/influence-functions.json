@@ -5,21 +5,71 @@
   "description": "Influence functions quantify how much each training example influenced a model's predictions by computing the change in prediction that would occur if that training example were removed and the model retrained. Using calculus and the implicit function theorem, they approximate this 'leave-one-out' effect without actually retraining the model by computing gradients and Hessian information. This mathematical approach reveals which specific training examples were most responsible for pushing the model toward or away from particular predictions, enabling practitioners to trace problematic outputs back to their root causes in the training data.",
   "complexity_rating": 5,
   "computational_cost_rating": 5,
-  "assurance_goals": ["Explainability", "Fairness", "Privacy"],
+  "assurance_goals": [
+    {
+      "id": 1,
+      "name": "Explainability"
+    },
+    {
+      "id": 2,
+      "name": "Fairness"
+    },
+    {
+      "id": 5,
+      "name": "Privacy"
+    }
+  ],
   "tags": [
-    "applicable-models/agnostic",
-    "assurance-goal-category/explainability",
-    "assurance-goal-category/fairness",
-    "assurance-goal-category/privacy",
-    "data-requirements/access-to-training-data",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "expertise-needed/ml-engineering",
-    "explanatory-scope/local",
-    "lifecycle-stage/model-development",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/agnostic",
+      "id": 1
+    },
+    {
+      "name": "assurance-goal-category/explainability",
+      "id": 17
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "assurance-goal-category/privacy",
+      "id": 24
+    },
+    {
+      "name": "data-requirements/access-to-training-data",
+      "id": 35
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "explanatory-scope/local",
+      "id": 81
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": ["contextual-decomposition", "taylor-decomposition"],
+  "related_technique_slugs": [
+    "contextual-decomposition",
+    "taylor-decomposition"
+  ],
   "resources": [
     {
       "title": "Understanding Black-box Predictions via Influence Functions",

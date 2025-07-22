@@ -136,9 +136,9 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
 
   return (
     <>
-      {resources.map((resource) => (
+      {resources.map((resource, index) => (
         <div
-          key={resource.id}
+          key={`${resource.url}-${index}`}
           className="border rounded-md p-4 mb-4 hover:border-primary transition-colors"
         >
           <div className="flex">
@@ -174,7 +174,14 @@ function TechniqueResources({ resources }: { resources: TechniqueResource[] }) {
                   </div>
                 )}
 
-                {resource.authors && <div>Authors: {resource.authors}</div>}
+                {resource.authors && (
+                  <div>
+                    Authors:{" "}
+                    {Array.isArray(resource.authors)
+                      ? resource.authors.join(", ")
+                      : resource.authors}
+                  </div>
+                )}
                 {resource.publication_date && (
                   <div>Published: {resource.publication_date}</div>
                 )}
@@ -240,8 +247,8 @@ function TechniqueExampleUseCases({
             <h3 className="font-medium">{goalName}</h3>
           </div>
           <div className="space-y-4 pl-7">
-            {cases.map((useCase) => (
-              <div key={useCase.id} className="space-y-1">
+            {cases.map((useCase, index) => (
+              <div key={`${goalName}-${index}`} className="space-y-1">
                 <p className="whitespace-pre-line">{useCase.description}</p>
               </div>
             ))}
@@ -264,10 +271,13 @@ function TechniqueLimitations({
 
   return (
     <div className="space-y-4">
-      {limitations.map((limitation) => {
+      {limitations.map((limitation, index) => {
         // No need to parse JSON anymore as the backend now handles it properly
         return (
-          <div key={limitation.id} className="flex items-start gap-2 py-1">
+          <div
+            key={limitation.id || `limitation-${index}`}
+            className="flex items-start gap-2 py-1"
+          >
             <ArrowRight
               className="h-4 w-4 text-primary mt-1 flex-shrink-0"
               aria-hidden="true"

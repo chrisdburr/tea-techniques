@@ -5,20 +5,60 @@
   "description": "Grad-CAM creates visual heatmaps showing which regions of an image a convolutional neural network focuses on when making a specific classification. Unlike pixel-level techniques, Grad-CAM produces coarser region-based explanations by using gradients from the predicted class to weight the CNN's final feature maps, then projecting these weighted activations back to create an overlay on the original image. This provides intuitive visual explanations of where the model is 'looking' for evidence of different classes.",
   "complexity_rating": 3,
   "computational_cost_rating": 2,
-  "assurance_goals": ["Explainability", "Fairness"],
+  "assurance_goals": [
+    {
+      "id": 1,
+      "name": "Explainability"
+    },
+    {
+      "id": 2,
+      "name": "Fairness"
+    }
+  ],
   "tags": [
-    "applicable-models/cnn",
-    "assurance-goal-category/explainability",
-    "assurance-goal-category/fairness",
-    "data-requirements/access-to-model-internals",
-    "data-type/image",
-    "evidence-type/visualization",
-    "expertise-needed/ml-engineering",
-    "explanatory-scope/local",
-    "lifecycle-stage/model-development",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/cnn",
+      "id": 2
+    },
+    {
+      "name": "assurance-goal-category/explainability",
+      "id": 17
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "data-requirements/access-to-model-internals",
+      "id": 34
+    },
+    {
+      "name": "data-type/image",
+      "id": 47
+    },
+    {
+      "name": "evidence-type/visualization",
+      "id": 63
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "explanatory-scope/local",
+      "id": 81
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": ["saliency-maps", "occlusion-sensitivity"],
+  "related_technique_slugs": ["saliency-maps", "occlusion-sensitivity"],
   "resources": [
     {
       "title": "jacobgil/pytorch-grad-cam",

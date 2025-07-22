@@ -5,20 +5,63 @@
   "description": "Saliency maps are visual explanations for image classification models that highlight which pixels in an image most strongly influence the model's prediction. Computed by calculating gradients of the model's output with respect to input pixels, saliency maps produce heatmaps where brighter regions indicate pixels that, when changed, would most significantly affect the prediction. This technique helps users understand which parts of an image the model is 'looking at' when making decisions.",
   "complexity_rating": 3,
   "computational_cost_rating": 2,
-  "assurance_goals": ["Explainability", "Fairness"],
+  "assurance_goals": [
+    {
+      "id": 1,
+      "name": "Explainability"
+    },
+    {
+      "id": 2,
+      "name": "Fairness"
+    }
+  ],
   "tags": [
-    "applicable-models/neural-network",
-    "assurance-goal-category/explainability",
-    "assurance-goal-category/fairness",
-    "data-requirements/access-to-model-internals",
-    "data-type/image",
-    "evidence-type/visualization",
-    "expertise-needed/ml-engineering",
-    "explanatory-scope/local",
-    "lifecycle-stage/model-development",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/neural-network",
+      "id": 11
+    },
+    {
+      "name": "assurance-goal-category/explainability",
+      "id": 17
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "data-requirements/access-to-model-internals",
+      "id": 34
+    },
+    {
+      "name": "data-type/image",
+      "id": 47
+    },
+    {
+      "name": "evidence-type/visualization",
+      "id": 63
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "explanatory-scope/local",
+      "id": 81
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": [
+    "gradient-weighted-class-activation-mapping",
+    "occlusion-sensitivity"
+  ],
+  "related_technique_slugs": [
     "gradient-weighted-class-activation-mapping",
     "occlusion-sensitivity"
   ],

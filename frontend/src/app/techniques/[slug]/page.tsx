@@ -5,10 +5,11 @@ import MainLayout from "@/components/layout/MainLayout";
 import { getDataService } from "@/lib/services/dataServiceFactory";
 import { isStaticMode } from "@/lib/config/dataConfig";
 import TechniqueDetailClient from "./TechniqueDetailClient";
+import ErrorBoundary from "@/components/common/ErrorBoundary";
 import { Loader2 } from "lucide-react";
 
 interface PageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 // Generate static params for all techniques when in static mode
@@ -45,7 +46,7 @@ function LoadingState() {
 
 // Server component for static generation
 async function TechniqueDetailServer({ params }: PageProps) {
-  const { slug } = params;
+  const { slug } = await params;
 
   // Only use server-side data fetching in static mode
   if (isStaticMode()) {
@@ -55,7 +56,9 @@ async function TechniqueDetailServer({ params }: PageProps) {
 
       return (
         <MainLayout>
-          <TechniqueDetailClient initialTechnique={technique} slug={slug} />
+          <ErrorBoundary>
+            <TechniqueDetailClient initialTechnique={technique} slug={slug} />
+          </ErrorBoundary>
         </MainLayout>
       );
     } catch (error) {
@@ -67,9 +70,11 @@ async function TechniqueDetailServer({ params }: PageProps) {
   // In API mode, use client-side data fetching
   return (
     <MainLayout>
-      <Suspense fallback={<LoadingState />}>
-        <TechniqueDetailClient slug={slug} />
-      </Suspense>
+      <ErrorBoundary>
+        <Suspense fallback={<LoadingState />}>
+          <TechniqueDetailClient slug={slug} />
+        </Suspense>
+      </ErrorBoundary>
     </MainLayout>
   );
 }

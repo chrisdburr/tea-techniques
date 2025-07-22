@@ -5,28 +5,100 @@
   "description": "A preprocessing fairness technique that modifies class labels in training data to achieve equal positive outcome rates across protected groups. Also known as 'data massaging', this method identifies instances that contribute to discriminatory patterns and flips their labels (from positive to negative or vice versa) to balance the proportion of positive outcomes between demographic groups. The technique aims to remove historical bias from training data whilst preserving the overall class distribution, enabling standard classifiers to learn from discrimination-free datasets.",
   "complexity_rating": 3,
   "computational_cost_rating": 2,
-  "assurance_goals": ["Fairness", "Transparency", "Reliability"],
+  "assurance_goals": [
+    {
+      "id": 2,
+      "name": "Fairness"
+    },
+    {
+      "id": 6,
+      "name": "Transparency"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    }
+  ],
   "tags": [
-    "applicable-models/agnostic",
-    "assurance-goal-category/fairness",
-    "assurance-goal-category/fairness/group",
-    "assurance-goal-category/transparency",
-    "assurance-goal-category/reliability",
-    "data-requirements/access-to-training-data",
-    "data-requirements/sensitive-attributes",
-    "data-requirements/labelled-data",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "evidence-type/dataset-analysis",
-    "expertise-needed/statistics",
-    "expertise-needed/domain-knowledge",
-    "fairness-approach/group",
-    "lifecycle-stage/data-collection",
-    "lifecycle-stage/data-collection/data-preprocessing",
-    "lifecycle-stage/model-development",
-    "technique-type/procedural"
+    {
+      "name": "applicable-models/agnostic",
+      "id": 1
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "assurance-goal-category/fairness/group",
+      "id": 22
+    },
+    {
+      "name": "assurance-goal-category/transparency",
+      "id": 31
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "data-requirements/access-to-training-data",
+      "id": 35
+    },
+    {
+      "name": "data-requirements/sensitive-attributes",
+      "id": 43
+    },
+    {
+      "name": "data-requirements/labelled-data",
+      "id": 38
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "evidence-type/dataset-analysis",
+      "id": 52
+    },
+    {
+      "name": "expertise-needed/statistics",
+      "id": 79
+    },
+    {
+      "name": "expertise-needed/domain-knowledge",
+      "id": 67
+    },
+    {
+      "name": "fairness-approach/group",
+      "id": 83
+    },
+    {
+      "name": "lifecycle-stage/data-collection",
+      "id": 84
+    },
+    {
+      "name": "lifecycle-stage/data-collection/data-preprocessing",
+      "id": 86
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "technique-type/procedural",
+      "id": 113
+    }
   ],
   "related_techniques": [
+    "reweighing",
+    "disparate-impact-remover",
+    "preferential-sampling"
+  ],
+  "related_technique_slugs": [
     "reweighing",
     "disparate-impact-remover",
     "preferential-sampling"

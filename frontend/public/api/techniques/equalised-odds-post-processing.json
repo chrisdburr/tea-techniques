@@ -5,27 +5,96 @@
   "description": "A post-processing fairness technique based on Hardt et al.'s seminal work that adjusts classification thresholds after model training to achieve equal true positive rates and false positive rates across demographic groups. The method uses group-specific decision thresholds, potentially with randomisation, to satisfy the equalised odds constraint whilst preserving model utility. This approach enables fairness mitigation without retraining, making it applicable to existing deployed models or when training data access is restricted.",
   "complexity_rating": 3,
   "computational_cost_rating": 2,
-  "assurance_goals": ["Fairness", "Transparency", "Reliability"],
+  "assurance_goals": [
+    {
+      "id": 2,
+      "name": "Fairness"
+    },
+    {
+      "id": 6,
+      "name": "Transparency"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    }
+  ],
   "tags": [
-    "applicable-models/agnostic",
-    "assurance-goal-category/fairness",
-    "assurance-goal-category/fairness/group",
-    "assurance-goal-category/transparency",
-    "assurance-goal-category/reliability",
-    "data-requirements/labelled-data",
-    "data-requirements/sensitive-attributes",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "evidence-type/fairness-metric",
-    "expertise-needed/statistics",
-    "expertise-needed/ml-engineering",
-    "fairness-approach/group",
-    "lifecycle-stage/model-development",
-    "lifecycle-stage/model-development/testing",
-    "lifecycle-stage/system-deployment-and-use/monitoring",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/agnostic",
+      "id": 1
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "assurance-goal-category/fairness/group",
+      "id": 22
+    },
+    {
+      "name": "assurance-goal-category/transparency",
+      "id": 31
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "data-requirements/labelled-data",
+      "id": 38
+    },
+    {
+      "name": "data-requirements/sensitive-attributes",
+      "id": 43
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "evidence-type/fairness-metric",
+      "id": 54
+    },
+    {
+      "name": "expertise-needed/statistics",
+      "id": 79
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "fairness-approach/group",
+      "id": 83
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "lifecycle-stage/model-development/testing",
+      "id": 94
+    },
+    {
+      "name": "lifecycle-stage/system-deployment-and-use/monitoring",
+      "id": 105
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": [
+    "threshold-optimiser",
+    "reject-option-classification",
+    "calibration-with-equality-of-opportunity"
+  ],
+  "related_technique_slugs": [
     "threshold-optimiser",
     "reject-option-classification",
     "calibration-with-equality-of-opportunity"

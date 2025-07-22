@@ -5,23 +5,76 @@
   "description": "Temperature scaling adjusts a model's confidence by applying a single parameter (temperature) to its predictions. When a model is too confident in its wrong answers, temperature scaling can fix this by making the predictions more realistic. It works by dividing the model's outputs by the temperature value before converting them to probabilities. Higher temperatures make the model less confident, whilst lower temperatures increase confidence. The technique maintains the model's accuracy whilst ensuring that when it says it's 90% confident, it's actually right about 90% of the time.",
   "complexity_rating": 1,
   "computational_cost_rating": 1,
-  "assurance_goals": ["Reliability", "Transparency", "Fairness"],
+  "assurance_goals": [
+    {
+      "id": 3,
+      "name": "Reliability"
+    },
+    {
+      "id": 6,
+      "name": "Transparency"
+    },
+    {
+      "id": 2,
+      "name": "Fairness"
+    }
+  ],
   "tags": [
-    "applicable-models/neural-network",
-    "assurance-goal-category/reliability",
-    "assurance-goal-category/transparency",
-    "assurance-goal-category/fairness",
-    "data-requirements/access-to-model-internals",
-    "data-requirements/calibration-set",
-    "data-requirements/validation-set",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "explanatory-scope/global",
-    "expertise-needed/statistics",
-    "lifecycle-stage/model-development",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/neural-network",
+      "id": 11
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "assurance-goal-category/transparency",
+      "id": 31
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "data-requirements/access-to-model-internals",
+      "id": 34
+    },
+    {
+      "name": "data-requirements/calibration-set",
+      "id": 36
+    },
+    {
+      "name": "data-requirements/validation-set",
+      "id": 45
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "explanatory-scope/global",
+      "id": 80
+    },
+    {
+      "name": "expertise-needed/statistics",
+      "id": 79
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": ["empirical-calibration"],
+  "related_technique_slugs": ["empirical-calibration"],
   "resources": [
     {
       "title": "gpleiss/temperature_scaling",

@@ -5,20 +5,64 @@
   "description": "Attribute Removal (Fairness Through Unawareness) ensures fairness by completely excluding protected attributes such as race, gender, or age from the model's input features. While this approach prevents direct discrimination, it may not eliminate bias if other features are correlated with protected attributes (proxy discrimination). This technique represents the most basic fairness intervention but often needs to be combined with other approaches to address indirect bias through seemingly neutral features.",
   "complexity_rating": 1,
   "computational_cost_rating": 1,
-  "assurance_goals": ["Fairness", "Transparency"],
+  "assurance_goals": [
+    {
+      "id": 2,
+      "name": "Fairness"
+    },
+    {
+      "id": 6,
+      "name": "Transparency"
+    }
+  ],
   "tags": [
-    "applicable-models/agnostic",
-    "assurance-goal-category/fairness",
-    "assurance-goal-category/transparency",
-    "data-requirements/sensitive-attributes",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "expertise-needed/low",
-    "fairness-approach/group",
-    "lifecycle-stage/model-development",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/agnostic",
+      "id": 1
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "assurance-goal-category/transparency",
+      "id": 31
+    },
+    {
+      "name": "data-requirements/sensitive-attributes",
+      "id": 43
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "expertise-needed/low",
+      "id": 72
+    },
+    {
+      "name": "fairness-approach/group",
+      "id": 83
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": [
+    "sensitivity-analysis-for-fairness",
+    "fairness-gan",
+    "bayesian-fairness-regularization"
+  ],
+  "related_technique_slugs": [
     "sensitivity-analysis-for-fairness",
     "fairness-gan",
     "bayesian-fairness-regularization"

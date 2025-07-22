@@ -5,22 +5,77 @@
   "description": "Confidence thresholding creates decision boundaries based on model uncertainty scores, routing predictions into different handling workflows depending on their confidence levels. High-confidence predictions (e.g., above 95%) proceed automatically, whilst medium-confidence cases (e.g., 70-95%) may trigger additional validation or human review, and low-confidence predictions (below 70%) receive extensive oversight or default to conservative fallback actions. This technique enables organisations to maintain automated efficiency for clear-cut cases whilst ensuring appropriate human intervention for uncertain decisions, balancing operational speed with risk management across safety-critical applications.",
   "complexity_rating": 2,
   "computational_cost_rating": 1,
-  "assurance_goals": ["Safety", "Reliability", "Transparency"],
+  "assurance_goals": [
+    {
+      "id": 7,
+      "name": "Safety"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    },
+    {
+      "id": 6,
+      "name": "Transparency"
+    }
+  ],
   "tags": [
-    "applicable-models/agnostic",
-    "assurance-goal-category/safety",
-    "assurance-goal-category/reliability",
-    "assurance-goal-category/reliability/uncertainty-quantification",
-    "assurance-goal-category/transparency",
-    "data-requirements/no-special-requirements",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "expertise-needed/statistics",
-    "expertise-needed/ml-engineering",
-    "lifecycle-stage/system-deployment-and-use",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/agnostic",
+      "id": 1
+    },
+    {
+      "name": "assurance-goal-category/safety",
+      "id": 29
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "assurance-goal-category/reliability/uncertainty-quantification",
+      "id": 28
+    },
+    {
+      "name": "assurance-goal-category/transparency",
+      "id": 31
+    },
+    {
+      "name": "data-requirements/no-special-requirements",
+      "id": 39
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "expertise-needed/statistics",
+      "id": 79
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "lifecycle-stage/system-deployment-and-use",
+      "id": 103
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": [
+    "internal-review-boards",
+    "red-teaming",
+    "human-in-the-loop-safeguards",
+    "runtime-monitoring-and-circuit-breakers"
+  ],
+  "related_technique_slugs": [
     "internal-review-boards",
     "red-teaming",
     "human-in-the-loop-safeguards",

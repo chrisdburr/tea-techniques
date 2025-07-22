@@ -5,21 +5,72 @@
   "description": "Adaptive Sensitive Reweighting dynamically adjusts the importance of training examples during model training based on real-time performance across different demographic groups. Unlike traditional static reweighting that fixes weights at the start, this technique continuously monitors fairness metrics and automatically increases the weight of examples from underperforming groups whilst decreasing weights for overrepresented groups. The adaptive mechanism prevents models from perpetuating historical biases by ensuring balanced learning across all demographics throughout the training process.",
   "complexity_rating": 4,
   "computational_cost_rating": 3,
-  "assurance_goals": ["Fairness", "Reliability"],
+  "assurance_goals": [
+    {
+      "id": 2,
+      "name": "Fairness"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    }
+  ],
   "tags": [
-    "applicable-models/agnostic",
-    "assurance-goal-category/fairness",
-    "assurance-goal-category/reliability",
-    "data-requirements/access-to-model-internals",
-    "data-requirements/sensitive-attributes",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "expertise-needed/ml-engineering",
-    "fairness-approach/group",
-    "lifecycle-stage/model-development",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/agnostic",
+      "id": 1
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "data-requirements/access-to-model-internals",
+      "id": 34
+    },
+    {
+      "name": "data-requirements/sensitive-attributes",
+      "id": 43
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "fairness-approach/group",
+      "id": 83
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": [
+    "adversarial-debiasing",
+    "fair-adversarial-networks",
+    "prejudice-remover-regulariser",
+    "meta-fair-classifier",
+    "exponentiated-gradient-reduction",
+    "fair-transfer-learning",
+    "multi-accuracy-boosting"
+  ],
+  "related_technique_slugs": [
     "adversarial-debiasing",
     "fair-adversarial-networks",
     "prejudice-remover-regulariser",

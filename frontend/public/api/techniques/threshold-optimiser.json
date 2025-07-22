@@ -5,19 +5,56 @@
   "description": "Threshold Optimiser adjusts decision thresholds for different demographic groups after model training to satisfy specific fairness constraints. This post-processing technique optimises group-specific thresholds by analysing the probability distribution of model outputs, allowing practitioners to achieve fairness goals like demographic parity or equalised opportunity without modifying the underlying model. The optimiser finds optimal threshold values for each group that balance fairness requirements with overall model performance, making it particularly useful when fairness considerations arise after model deployment.",
   "complexity_rating": 2,
   "computational_cost_rating": 1,
-  "assurance_goals": ["Fairness"],
+  "assurance_goals": [
+    {
+      "id": 2,
+      "name": "Fairness"
+    }
+  ],
   "tags": [
-    "applicable-models/agnostic",
-    "assurance-goal-category/fairness",
-    "data-requirements/sensitive-attributes",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "expertise-needed/statistics",
-    "fairness-approach/group",
-    "lifecycle-stage/post-processing",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/agnostic",
+      "id": 1
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "data-requirements/sensitive-attributes",
+      "id": 43
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "expertise-needed/statistics",
+      "id": 79
+    },
+    {
+      "name": "fairness-approach/group",
+      "id": 83
+    },
+    {
+      "name": "lifecycle-stage/post-processing",
+      "id": 100
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": [
+    "equalised-odds-post-processing",
+    "reject-option-classification",
+    "calibration-with-equality-of-opportunity"
+  ],
+  "related_technique_slugs": [
     "equalised-odds-post-processing",
     "reject-option-classification",
     "calibration-with-equality-of-opportunity"

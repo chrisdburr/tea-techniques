@@ -5,27 +5,96 @@
   "description": "A post-processing fairness technique that adjusts model predictions to achieve equal true positive rates across protected groups whilst maintaining calibration within each group. The method addresses fairness by ensuring that qualified individuals from different demographic groups have equal chances of receiving positive predictions, whilst preserving the meaning of probability scores within each group. This technique attempts to balance the competing objectives of group fairness and accurate probability estimation.",
   "complexity_rating": 4,
   "computational_cost_rating": 2,
-  "assurance_goals": ["Fairness", "Transparency", "Reliability"],
+  "assurance_goals": [
+    {
+      "id": 2,
+      "name": "Fairness"
+    },
+    {
+      "id": 6,
+      "name": "Transparency"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    }
+  ],
   "tags": [
-    "applicable-models/agnostic",
-    "assurance-goal-category/fairness",
-    "assurance-goal-category/fairness/group",
-    "assurance-goal-category/transparency",
-    "assurance-goal-category/reliability",
-    "data-requirements/calibration-set",
-    "data-requirements/sensitive-attributes",
-    "data-requirements/labelled-data",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "evidence-type/fairness-metric",
-    "expertise-needed/ml-engineering",
-    "expertise-needed/statistics",
-    "fairness-approach/group",
-    "lifecycle-stage/model-development",
-    "lifecycle-stage/model-development/testing",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/agnostic",
+      "id": 1
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "assurance-goal-category/fairness/group",
+      "id": 22
+    },
+    {
+      "name": "assurance-goal-category/transparency",
+      "id": 31
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "data-requirements/calibration-set",
+      "id": 36
+    },
+    {
+      "name": "data-requirements/sensitive-attributes",
+      "id": 43
+    },
+    {
+      "name": "data-requirements/labelled-data",
+      "id": 38
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "evidence-type/fairness-metric",
+      "id": 54
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "expertise-needed/statistics",
+      "id": 79
+    },
+    {
+      "name": "fairness-approach/group",
+      "id": 83
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "lifecycle-stage/model-development/testing",
+      "id": 94
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": [
+    "equalised-odds-post-processing",
+    "threshold-optimiser",
+    "reject-option-classification"
+  ],
+  "related_technique_slugs": [
     "equalised-odds-post-processing",
     "threshold-optimiser",
     "reject-option-classification"

@@ -100,8 +100,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run tests with coverage
-        run: pnpm test:ci
+      - name: Run tests with coverage (all modes)
+        run: |
+          # Test API mode
+          NEXT_PUBLIC_DATA_SOURCE=api pnpm test:ci
+          mv coverage coverage-api
+
+          # Test static mode
+          NEXT_PUBLIC_DATA_SOURCE=static pnpm test:ci
+          mv coverage coverage-static
+
+          # Test mock mode
+          NEXT_PUBLIC_DATA_SOURCE=mock pnpm test:ci
+          mv coverage coverage-mock
+
+          # Merge coverage reports
+          mkdir -p coverage
+          cp coverage-api/coverage-final.json coverage/
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
@@ -158,17 +173,74 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build application
-        run: pnpm build
+      - name: Generate static data for build test
+        run: |
+          pnpm sync-data
+          pnpm generate-api
+
+      - name: Build application (dynamic mode)
+        run: pnpm build:dynamic
         env:
           NEXT_PUBLIC_API_URL: http://localhost:8000
+          NEXT_PUBLIC_DATA_SOURCE: api
+
+      - name: Build application (static mode)
+        run: pnpm build:static
+        env:
+          NEXT_PUBLIC_DATA_SOURCE: static
+
+      - name: Validate builds
+        run: |
+          # Validate dynamic build
+          NEXT_PUBLIC_DATA_SOURCE=api pnpm validate:post-build
+
+          # Validate static build
+          NEXT_PUBLIC_DATA_SOURCE=static pnpm validate:post-build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: frontend-build
-          path: frontend/.next/
+          path: |
+            frontend/.next/
+            frontend/out/
           retention-days: 7
+
+  api-mock-validation:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate and validate API mocks
+        run: |
+          pnpm sync-data
+          pnpm generate-api
+          pnpm validate-api
+
+      - name: Check compatibility
+        run: |
+          if [ -f "scripts/compatibilityCheck.js" ]; then
+            node scripts/compatibilityCheck.js || true
+          fi
 
   security-scan:
     runs-on: ubuntu-latest

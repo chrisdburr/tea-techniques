@@ -5,22 +5,79 @@
   "description": "Bootstrapping estimates uncertainty by repeatedly resampling the original dataset with replacement to create many new training sets, training a model on each sample, and analysing the variation in predictions. This approach provides confidence intervals and stability measures without making strong statistical assumptions. By showing how predictions change with different random samples of the data, it reveals how sensitive the model is to the specific training examples and provides robust uncertainty estimates.",
   "complexity_rating": 3,
   "computational_cost_rating": 4,
-  "assurance_goals": ["Reliability", "Transparency", "Fairness"],
+  "assurance_goals": [
+    {
+      "id": 3,
+      "name": "Reliability"
+    },
+    {
+      "id": 6,
+      "name": "Transparency"
+    },
+    {
+      "id": 2,
+      "name": "Fairness"
+    }
+  ],
   "tags": [
-    "applicable-models/agnostic",
-    "assurance-goal-category/reliability",
-    "assurance-goal-category/transparency",
-    "assurance-goal-category/fairness",
-    "data-requirements/access-to-training-data",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "explanatory-scope/global",
-    "expertise-needed/ml-engineering",
-    "expertise-needed/statistics",
-    "lifecycle-stage/model-development",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/agnostic",
+      "id": 1
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "assurance-goal-category/transparency",
+      "id": 31
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "data-requirements/access-to-training-data",
+      "id": 35
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "explanatory-scope/global",
+      "id": 80
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "expertise-needed/statistics",
+      "id": 79
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": [
+    "monte-carlo-dropout",
+    "prediction-intervals",
+    "quantile-regression",
+    "conformal-prediction",
+    "deep-ensembles",
+    "jackknife-resampling"
+  ],
+  "related_technique_slugs": [
     "monte-carlo-dropout",
     "prediction-intervals",
     "quantile-regression",

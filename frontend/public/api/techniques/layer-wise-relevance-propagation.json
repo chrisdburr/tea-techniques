@@ -5,21 +5,71 @@
   "description": "Layer-wise Relevance Propagation (LRP) explains neural network predictions by working backwards through the network to show how much each input feature contributed to the final decision. It follows a simple conservation rule: the total contribution scores always add up to the original prediction. Starting from the output, LRP distributes 'relevance' backwards through each layer using different rules depending on the layer type. This creates a detailed breakdown showing which input features helped or hindered the prediction, making it easier to understand why the network made a particular decision.",
   "complexity_rating": 5,
   "computational_cost_rating": 3,
-  "assurance_goals": ["Explainability", "Transparency"],
+  "assurance_goals": [
+    {
+      "id": 1,
+      "name": "Explainability"
+    },
+    {
+      "id": 6,
+      "name": "Transparency"
+    }
+  ],
   "tags": [
-    "applicable-models/neural-network",
-    "assurance-goal-category/explainability",
-    "assurance-goal-category/transparency",
-    "data-requirements/access-to-model-internals",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "expertise-needed/ml-engineering",
-    "explanatory-scope/local",
-    "lifecycle-stage/model-development",
-    "lifecycle-stage/system-deployment-and-use",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/neural-network",
+      "id": 11
+    },
+    {
+      "name": "assurance-goal-category/explainability",
+      "id": 17
+    },
+    {
+      "name": "assurance-goal-category/transparency",
+      "id": 31
+    },
+    {
+      "name": "data-requirements/access-to-model-internals",
+      "id": 34
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "explanatory-scope/local",
+      "id": 81
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "lifecycle-stage/system-deployment-and-use",
+      "id": 103
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": [
+    "shapley-additive-explanations",
+    "integrated-gradients",
+    "deeplift",
+    "local-interpretable-model-agnostic-explanations",
+    "contrastive-explanation-method",
+    "anchor"
+  ],
+  "related_technique_slugs": [
     "shapley-additive-explanations",
     "integrated-gradients",
     "deeplift",

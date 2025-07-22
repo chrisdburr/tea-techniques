@@ -5,22 +5,72 @@
   "description": "ODIN (Out-of-Distribution Detector for Neural Networks) identifies when a neural network encounters inputs significantly different from its training distribution. It enhances detection by applying temperature scaling to soften the model's output distribution and adding small, carefully calibrated perturbations to the input that push in-distribution samples towards higher confidence predictions. By measuring the maximum softmax probability after these adjustments, ODIN can effectively distinguish between in-distribution and out-of-distribution inputs, flagging potentially unreliable predictions before they cause downstream errors.",
   "complexity_rating": 4,
   "computational_cost_rating": 3,
-  "assurance_goals": ["Explainability", "Reliability", "Safety"],
+  "assurance_goals": [
+    {
+      "id": 1,
+      "name": "Explainability"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    },
+    {
+      "id": 7,
+      "name": "Safety"
+    }
+  ],
   "tags": [
-    "applicable-models/neural-network",
-    "assurance-goal-category/explainability",
-    "assurance-goal-category/reliability",
-    "assurance-goal-category/safety",
-    "data-requirements/no-special-requirements",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "expertise-needed/ml-engineering",
-    "expertise-needed/statistics",
-    "explanatory-scope/global",
-    "lifecycle-stage/model-development",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/neural-network",
+      "id": 11
+    },
+    {
+      "name": "assurance-goal-category/explainability",
+      "id": 17
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "assurance-goal-category/safety",
+      "id": 29
+    },
+    {
+      "name": "data-requirements/no-special-requirements",
+      "id": 39
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "expertise-needed/statistics",
+      "id": 79
+    },
+    {
+      "name": "explanatory-scope/global",
+      "id": 80
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": ["anomaly-detection"],
+  "related_technique_slugs": ["anomaly-detection"],
   "resources": [
     {
       "title": "Enhancing The Reliability of Out-of-distribution Image Detection in Neural Networks",

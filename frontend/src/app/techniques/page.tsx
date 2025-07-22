@@ -1,18 +1,8 @@
 // src/app/techniques/page.tsx
-import { Suspense } from "react";
 import MainLayout from "@/components/layout/MainLayout";
-import TechniquesList from "@/components/technique/TechniquesList";
+import TechniquesListWrapper from "@/components/technique/TechniquesListWrapper";
 import { getDataService } from "@/lib/services/dataServiceFactory";
 import { isStaticMode } from "@/lib/config/dataConfig";
-
-// Loading component
-function LoadingState() {
-  return (
-    <div className="flex justify-center items-center min-h-[400px]">
-      <p className="text-lg text-muted-foreground">Loading techniques...</p>
-    </div>
-  );
-}
 
 // Server component for static generation
 async function TechniquesPageServer() {
@@ -26,7 +16,7 @@ async function TechniquesPageServer() {
 
       return (
         <MainLayout>
-          <TechniquesList
+          <TechniquesListWrapper
             initialData={initialData}
             initialAssuranceGoals={assuranceGoals}
             initialTags={tags}
@@ -38,9 +28,7 @@ async function TechniquesPageServer() {
       // Fallback to client-side loading
       return (
         <MainLayout>
-          <Suspense fallback={<LoadingState />}>
-            <TechniquesList />
-          </Suspense>
+          <TechniquesListWrapper />
         </MainLayout>
       );
     }
@@ -49,9 +37,7 @@ async function TechniquesPageServer() {
   // In API mode, use client-side data fetching
   return (
     <MainLayout>
-      <Suspense fallback={<LoadingState />}>
-        <TechniquesList />
-      </Suspense>
+      <TechniquesListWrapper />
     </MainLayout>
   );
 }

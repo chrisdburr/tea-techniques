@@ -5,21 +5,68 @@
   "description": "Model pruning systematically removes less important weights, neurons, or entire layers from neural networks to create smaller, more efficient models whilst maintaining performance. This process involves iterative removal based on importance criteria (weight magnitudes, gradient information, activation patterns) followed by fine-tuning. Pruning can be structured (removing entire neurons/channels) or unstructured (removing individual weights), with structured pruning providing greater computational benefits and interpretability through simplified architectures.",
   "complexity_rating": 3,
   "computational_cost_rating": 2,
-  "assurance_goals": ["Explainability", "Reliability", "Safety"],
+  "assurance_goals": [
+    {
+      "id": 1,
+      "name": "Explainability"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    },
+    {
+      "id": 7,
+      "name": "Safety"
+    }
+  ],
   "tags": [
-    "applicable-models/neural-network",
-    "assurance-goal-category/explainability",
-    "assurance-goal-category/reliability",
-    "assurance-goal-category/safety",
-    "data-requirements/access-to-model-internals",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "expertise-needed/ml-engineering",
-    "lifecycle-stage/model-development",
-    "lifecycle-stage/model-optimization",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/neural-network",
+      "id": 11
+    },
+    {
+      "name": "assurance-goal-category/explainability",
+      "id": 17
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "assurance-goal-category/safety",
+      "id": 29
+    },
+    {
+      "name": "data-requirements/access-to-model-internals",
+      "id": 34
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "lifecycle-stage/model-optimization",
+      "id": 97
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": ["model-distillation"],
+  "related_technique_slugs": ["model-distillation"],
   "resources": [
     {
       "title": "horseee/LLM-Pruner",

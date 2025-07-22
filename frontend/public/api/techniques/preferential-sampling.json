@@ -5,26 +5,92 @@
   "description": "A preprocessing fairness technique developed by Kamiran and Calders that addresses dataset imbalances by re-sampling training data with preference for underrepresented groups to achieve discrimination-free classification. This method modifies the training distribution by prioritising borderline objects (instances near decision boundaries) from underrepresented groups for duplication whilst potentially removing instances from overrepresented groups. Unlike relabelling approaches, preferential sampling maintains original class labels whilst creating a more balanced dataset that prevents models from learning biased patterns due to skewed group representation.",
   "complexity_rating": 2,
   "computational_cost_rating": 2,
-  "assurance_goals": ["Fairness", "Reliability", "Transparency"],
+  "assurance_goals": [
+    {
+      "id": 2,
+      "name": "Fairness"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    },
+    {
+      "id": 6,
+      "name": "Transparency"
+    }
+  ],
   "tags": [
-    "applicable-models/agnostic",
-    "assurance-goal-category/fairness",
-    "assurance-goal-category/fairness/group",
-    "assurance-goal-category/reliability",
-    "assurance-goal-category/transparency",
-    "data-requirements/sensitive-attributes",
-    "data-requirements/labelled-data",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "evidence-type/dataset-analysis",
-    "expertise-needed/low",
-    "fairness-approach/group",
-    "lifecycle-stage/data-collection",
-    "lifecycle-stage/data-collection/data-preprocessing",
-    "lifecycle-stage/model-development",
-    "technique-type/procedural"
+    {
+      "name": "applicable-models/agnostic",
+      "id": 1
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "assurance-goal-category/fairness/group",
+      "id": 22
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "assurance-goal-category/transparency",
+      "id": 31
+    },
+    {
+      "name": "data-requirements/sensitive-attributes",
+      "id": 43
+    },
+    {
+      "name": "data-requirements/labelled-data",
+      "id": 38
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "evidence-type/dataset-analysis",
+      "id": 52
+    },
+    {
+      "name": "expertise-needed/low",
+      "id": 72
+    },
+    {
+      "name": "fairness-approach/group",
+      "id": 83
+    },
+    {
+      "name": "lifecycle-stage/data-collection",
+      "id": 84
+    },
+    {
+      "name": "lifecycle-stage/data-collection/data-preprocessing",
+      "id": 86
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "technique-type/procedural",
+      "id": 113
+    }
   ],
   "related_techniques": [
+    "reweighing",
+    "disparate-impact-remover",
+    "relabelling"
+  ],
+  "related_technique_slugs": [
     "reweighing",
     "disparate-impact-remover",
     "relabelling"

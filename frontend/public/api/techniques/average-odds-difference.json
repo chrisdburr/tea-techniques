@@ -5,21 +5,67 @@
   "description": "Average Odds Difference measures fairness by calculating the average difference in both false positive rates and true positive rates between different demographic groups. This metric captures how consistently a model performs across groups for both positive and negative predictions. A value of 0 indicates perfect fairness under the equalized odds criterion, while larger absolute values indicate greater disparities in model performance between groups.",
   "complexity_rating": 2,
   "computational_cost_rating": 1,
-  "assurance_goals": ["Fairness", "Reliability"],
+  "assurance_goals": [
+    {
+      "id": 2,
+      "name": "Fairness"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    }
+  ],
   "tags": [
-    "applicable-models/agnostic",
-    "assurance-goal-category/fairness",
-    "assurance-goal-category/reliability",
-    "data-requirements/sensitive-attributes",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "expertise-needed/low",
-    "fairness-approach/group",
-    "lifecycle-stage/model-development",
-    "lifecycle-stage/testing",
-    "technique-type/metric"
+    {
+      "name": "applicable-models/agnostic",
+      "id": 1
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "data-requirements/sensitive-attributes",
+      "id": 43
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "expertise-needed/low",
+      "id": 72
+    },
+    {
+      "name": "fairness-approach/group",
+      "id": 83
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "lifecycle-stage/testing",
+      "id": 106
+    },
+    {
+      "name": "technique-type/metric",
+      "id": 112
+    }
   ],
   "related_techniques": [
+    "demographic-parity-assessment",
+    "equal-opportunity-difference"
+  ],
+  "related_technique_slugs": [
     "demographic-parity-assessment",
     "equal-opportunity-difference"
   ],

@@ -5,28 +5,104 @@
   "description": "An in-processing fairness technique that employs adversarial training with dual neural networks to learn fair representations. The method consists of a predictor network that learns the main task whilst an adversarial discriminator network simultaneously attempts to predict sensitive attributes from the predictor's hidden representations. Through this adversarial min-max game, the predictor is incentivised to learn features that are informative for the task but statistically independent of protected attributes, effectively removing bias at the representation level in deep learning models.",
   "complexity_rating": 5,
   "computational_cost_rating": 4,
-  "assurance_goals": ["Fairness", "Transparency", "Reliability"],
+  "assurance_goals": [
+    {
+      "id": 2,
+      "name": "Fairness"
+    },
+    {
+      "id": 6,
+      "name": "Transparency"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    }
+  ],
   "tags": [
-    "applicable-models/neural-network",
-    "applicable-models/cnn",
-    "applicable-models/gan",
-    "assurance-goal-category/fairness",
-    "assurance-goal-category/fairness/group",
-    "assurance-goal-category/transparency",
-    "assurance-goal-category/reliability",
-    "data-requirements/sensitive-attributes",
-    "data-requirements/labelled-data",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "evidence-type/fairness-metric",
-    "expertise-needed/ml-engineering",
-    "expertise-needed/statistics",
-    "fairness-approach/group",
-    "lifecycle-stage/model-development",
-    "lifecycle-stage/model-development/training",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/neural-network",
+      "id": 11
+    },
+    {
+      "name": "applicable-models/cnn",
+      "id": 2
+    },
+    {
+      "name": "applicable-models/gan",
+      "id": 5
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "assurance-goal-category/fairness/group",
+      "id": 22
+    },
+    {
+      "name": "assurance-goal-category/transparency",
+      "id": 31
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "data-requirements/sensitive-attributes",
+      "id": 43
+    },
+    {
+      "name": "data-requirements/labelled-data",
+      "id": 38
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "evidence-type/fairness-metric",
+      "id": 54
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "expertise-needed/statistics",
+      "id": 79
+    },
+    {
+      "name": "fairness-approach/group",
+      "id": 83
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "lifecycle-stage/model-development/training",
+      "id": 95
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": [
+    "adversarial-debiasing",
+    "prejudice-remover-regulariser",
+    "meta-fair-classifier",
+    "exponentiated-gradient-reduction",
+    "fair-transfer-learning",
+    "adaptive-sensitive-reweighting",
+    "multi-accuracy-boosting"
+  ],
+  "related_technique_slugs": [
     "adversarial-debiasing",
     "prejudice-remover-regulariser",
     "meta-fair-classifier",

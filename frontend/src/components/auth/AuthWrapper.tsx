@@ -1,21 +1,9 @@
 // src/components/auth/AuthWrapper.tsx
 "use client";
 
-import React, { Suspense } from "react";
-import dynamic from "next/dynamic";
+import React from "react";
 import { getFeatureFlags } from "@/lib/config/dataConfig";
-
-// Dynamically import the AuthProvider to reduce bundle size in static mode
-const AuthProvider = dynamic(
-  () =>
-    import("@/lib/context/auth-context").then((mod) => ({
-      default: mod.AuthProvider,
-    })),
-  {
-    ssr: false,
-    loading: () => <div>Loading auth...</div>,
-  },
-);
+import { AuthProvider } from "@/lib/context/auth-context";
 
 interface AuthWrapperProps {
   children: React.ReactNode;
@@ -33,9 +21,5 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
     return <>{children}</>;
   }
 
-  return (
-    <Suspense fallback={<div>Loading auth...</div>}>
-      <AuthProvider>{children}</AuthProvider>
-    </Suspense>
-  );
+  return <AuthProvider>{children}</AuthProvider>;
 }

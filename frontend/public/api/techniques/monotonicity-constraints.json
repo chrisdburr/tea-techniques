@@ -5,21 +5,67 @@
   "description": "Monotonicity constraints enforce consistent directional relationships between input features and model predictions, ensuring that increasing a feature value either always increases, always decreases, or has no effect on the output. These constraints integrate domain knowledge into model training, preventing counterintuitive relationships that may arise from spurious correlations in data. By maintaining logical feature relationships (e.g., experience always positively influences salary), monotonicity constraints enhance model trustworthiness, interpretability, and alignment with business logic whilst often improving generalisation to new data.",
   "complexity_rating": 3,
   "computational_cost_rating": 2,
-  "assurance_goals": ["Transparency", "Reliability"],
+  "assurance_goals": [
+    {
+      "id": 6,
+      "name": "Transparency"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    }
+  ],
   "tags": [
-    "applicable-models/tree-based",
-    "applicable-models/gaussian-process",
-    "assurance-goal-category/transparency",
-    "assurance-goal-category/reliability",
-    "data-requirements/labelled-data",
-    "data-type/tabular",
-    "evidence-type/quantitative-metric",
-    "expertise-needed/statistics",
-    "expertise-needed/domain-knowledge",
-    "lifecycle-stage/model-development",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/tree-based",
+      "id": 16
+    },
+    {
+      "name": "applicable-models/gaussian-process",
+      "id": 6
+    },
+    {
+      "name": "assurance-goal-category/transparency",
+      "id": 31
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "data-requirements/labelled-data",
+      "id": 38
+    },
+    {
+      "name": "data-type/tabular",
+      "id": 48
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "expertise-needed/statistics",
+      "id": 79
+    },
+    {
+      "name": "expertise-needed/domain-knowledge",
+      "id": 67
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": [
+    "intrinsically-interpretable-models",
+    "generalized-additive-models"
+  ],
+  "related_technique_slugs": [
     "intrinsically-interpretable-models",
     "generalized-additive-models"
   ],

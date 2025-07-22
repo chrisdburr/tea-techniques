@@ -5,26 +5,95 @@
   "description": "Attention Visualisation in Transformers analyses the multi-head self-attention mechanisms that enable transformers to process sequences by attending to different positions simultaneously. The technique visualises attention weights as heatmaps showing how strongly each token attends to every other token across different heads and layers. By examining these attention patterns, practitioners can understand how models like BERT, GPT, and T5 build contextual representations, identify which tokens influence predictions most strongly, and detect potential biases in how the model processes different types of input. This provides insights into positional encoding effects, head specialisation patterns, and the evolution of attention from local to global context across layers.",
   "complexity_rating": 3,
   "computational_cost_rating": 2,
-  "assurance_goals": ["Explainability", "Fairness", "Transparency"],
+  "assurance_goals": [
+    {
+      "id": 1,
+      "name": "Explainability"
+    },
+    {
+      "id": 2,
+      "name": "Fairness"
+    },
+    {
+      "id": 6,
+      "name": "Transparency"
+    }
+  ],
   "tags": [
-    "applicable-models/transformer",
-    "assurance-goal-category/explainability",
-    "assurance-goal-category/explainability/feature-analysis",
-    "assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
-    "assurance-goal-category/fairness",
-    "assurance-goal-category/transparency",
-    "data-requirements/access-to-model-internals",
-    "data-type/text",
-    "data-type/image",
-    "evidence-type/visualization",
-    "expertise-needed/ml-engineering",
-    "explanatory-scope/local",
-    "explanatory-scope/global",
-    "lifecycle-stage/model-development",
-    "lifecycle-stage/testing",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/transformer",
+      "id": 15
+    },
+    {
+      "name": "assurance-goal-category/explainability",
+      "id": 17
+    },
+    {
+      "name": "assurance-goal-category/explainability/feature-analysis",
+      "id": 18
+    },
+    {
+      "name": "assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
+      "id": 19
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "assurance-goal-category/transparency",
+      "id": 31
+    },
+    {
+      "name": "data-requirements/access-to-model-internals",
+      "id": 34
+    },
+    {
+      "name": "data-type/text",
+      "id": 49
+    },
+    {
+      "name": "data-type/image",
+      "id": 47
+    },
+    {
+      "name": "evidence-type/visualization",
+      "id": 63
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "explanatory-scope/local",
+      "id": 81
+    },
+    {
+      "name": "explanatory-scope/global",
+      "id": 80
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "lifecycle-stage/testing",
+      "id": 106
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": [
+    "integrated-gradients",
+    "layer-wise-relevance-propagation",
+    "saliency-maps",
+    "gradient-weighted-class-activation-mapping",
+    "classical-attention-analysis-in-neural-networks",
+    "contrastive-explanation-method"
+  ],
+  "related_technique_slugs": [
     "integrated-gradients",
     "layer-wise-relevance-propagation",
     "saliency-maps",

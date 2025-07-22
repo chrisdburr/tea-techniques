@@ -5,22 +5,71 @@
   "description": "Integrated Gradients is an attribution technique that explains a model's prediction by quantifying the contribution of each input feature. It works by accumulating gradients along a straight path from a user-defined baseline input (e.g., a black image or an all-zero vector) to the actual input. This path integral ensures that the attributions satisfy fundamental axioms like completeness (attributions sum up to the difference between the prediction and the baseline prediction) and sensitivity (non-zero attributions for features that change the prediction). The output is a set of importance scores, often visualised as heatmaps, indicating which parts of the input were most influential for the model's decision.",
   "complexity_rating": 4,
   "computational_cost_rating": 3,
-  "assurance_goals": ["Explainability"],
+  "assurance_goals": [
+    {
+      "id": 1,
+      "name": "Explainability"
+    }
+  ],
   "tags": [
-    "applicable-models/neural-network",
-    "assurance-goal-category/explainability",
-    "data-requirements/labelled-data",
-    "data-requirements/reference-dataset",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "evidence-type/visualization",
-    "expertise-needed/ml-engineering",
-    "expertise-needed/statistics",
-    "explanatory-scope/local",
-    "lifecycle-stage/model-development",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/neural-network",
+      "id": 11
+    },
+    {
+      "name": "assurance-goal-category/explainability",
+      "id": 17
+    },
+    {
+      "name": "data-requirements/labelled-data",
+      "id": 38
+    },
+    {
+      "name": "data-requirements/reference-dataset",
+      "id": 42
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "evidence-type/visualization",
+      "id": 63
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "expertise-needed/statistics",
+      "id": 79
+    },
+    {
+      "name": "explanatory-scope/local",
+      "id": 81
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": [
+    "shapley-additive-explanations",
+    "deeplift",
+    "layer-wise-relevance-propagation",
+    "local-interpretable-model-agnostic-explanations",
+    "contrastive-explanation-method",
+    "anchor"
+  ],
+  "related_technique_slugs": [
     "shapley-additive-explanations",
     "deeplift",
     "layer-wise-relevance-propagation",

@@ -1,0 +1,254 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - static-site-migration  # Temporary: for testing the static site deployment
+  workflow_dispatch:
+    inputs:
+      deploy_mode:
+        description: 'Deployment mode'
+        required: true
+        type: choice
+        options:
+          - static
+          - mock
+        default: static
+  workflow_call:
+    inputs:
+      deploy_mode:
+        description: 'Deployment mode'
+        required: false
+        type: string
+        default: static
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: '18'
+  PNPM_VERSION: '10.6.5'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: Determine deployment mode
+        id: mode
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "mode=${{ github.event.inputs.deploy_mode }}" >> $GITHUB_OUTPUT
+          elif [ "${{ inputs.deploy_mode }}" != "" ]; then
+            echo "mode=${{ inputs.deploy_mode }}" >> $GITHUB_OUTPUT
+          else
+            echo "mode=static" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set build environment
+        run: |
+          echo "NEXT_PUBLIC_DATA_SOURCE=${{ steps.mode.outputs.mode }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_BASE_PATH=/tea-techniques" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_ASSET_PREFIX=/tea-techniques" >> $GITHUB_ENV
+
+      - name: Generate static data
+        working-directory: frontend
+        run: |
+          pnpm sync-data
+          pnpm generate-api
+          pnpm validate-api
+
+      - name: Build static site
+        working-directory: frontend
+        run: |
+          if [ "${{ steps.mode.outputs.mode }}" == "static" ]; then
+            pnpm build:static
+          else
+            pnpm build:mock
+          fi
+
+      - name: Validate build output
+        working-directory: frontend
+        run: pnpm validate:post-build
+
+      - name: Create .nojekyll file
+        run: touch frontend/out/.nojekyll
+
+      - name: Add CNAME if custom domain configured
+        if: vars.CUSTOM_DOMAIN != ''
+        run: echo "${{ vars.CUSTOM_DOMAIN }}" > frontend/out/CNAME
+
+      - name: Generate deployment metadata
+        run: |
+          cat > frontend/out/deployment.json << EOF
+          {
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "mode": "${{ steps.mode.outputs.mode }}",
+            "commit": "${{ github.sha }}",
+            "branch": "${{ github.ref_name }}",
+            "workflow_run": "${{ github.run_id }}"
+          }
+          EOF
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/out
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  validate-deployment:
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Wait for deployment
+        run: sleep 30
+
+      - name: Get deployment URL
+        id: url
+        run: |
+          if [ "${{ vars.CUSTOM_DOMAIN }}" != "" ]; then
+            echo "url=https://${{ vars.CUSTOM_DOMAIN }}" >> $GITHUB_OUTPUT
+          else
+            echo "url=https://${{ github.repository_owner }}.github.io/tea-techniques" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Test deployment
+        run: |
+          url="${{ steps.url.outputs.url }}"
+          echo "Testing deployment at $url"
+
+          # Test homepage
+          if ! curl -f -s "$url" > /dev/null; then
+            echo "::error::Homepage not accessible"
+            exit 1
+          fi
+          echo "✅ Homepage accessible"
+
+          # Test API endpoints
+          if ! curl -f -s "$url/api/techniques.json" > /dev/null; then
+            echo "::error::API endpoint not accessible"
+            exit 1
+          fi
+          echo "✅ API endpoints accessible"
+
+          # Test deployment metadata
+          if curl -f -s "$url/deployment.json" > deployment.json; then
+            echo "Deployment metadata:"
+            jq . deployment.json
+          fi
+
+      - name: Run Lighthouse audit
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            ${{ steps.url.outputs.url }}
+            ${{ steps.url.outputs.url }}/techniques
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          runs: 3
+
+  notify-deployment:
+    runs-on: ubuntu-latest
+    needs: [deploy, validate-deployment]
+    if: always()
+    steps:
+      - name: Get deployment URL
+        id: url
+        run: |
+          if [ "${{ vars.CUSTOM_DOMAIN }}" != "" ]; then
+            echo "url=https://${{ vars.CUSTOM_DOMAIN }}" >> $GITHUB_OUTPUT
+          else
+            echo "url=https://${{ github.repository_owner }}.github.io/tea-techniques" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create deployment summary
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY << EOF
+          # GitHub Pages Deployment Summary
+
+          ## Deployment Details
+          - **Status**: ${{ needs.validate-deployment.result == 'success' && '✅ Success' || '❌ Failed' }}
+          - **URL**: [${{ steps.url.outputs.url }}](${{ steps.url.outputs.url }})
+          - **Mode**: ${{ env.NEXT_PUBLIC_DATA_SOURCE }}
+          - **Time**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+
+          ## Available Endpoints
+          - Homepage: [${{ steps.url.outputs.url }}](${{ steps.url.outputs.url }})
+          - Techniques: [${{ steps.url.outputs.url }}/techniques](${{ steps.url.outputs.url }}/techniques)
+          - API Mock: [${{ steps.url.outputs.url }}/api/techniques.json](${{ steps.url.outputs.url }}/api/techniques.json)
+
+          ## Integration Information
+          Mock API endpoints are available for integration testing:
+          - List techniques: \`GET /api/techniques.json\`
+          - Get technique: \`GET /api/techniques/{slug}.json\`
+
+          EOF
+
+      - name: Notify integration partners
+        if: needs.validate-deployment.result == 'success'
+        run: |
+          echo "::notice::Deployment successful. Integration partners can test against: ${{ steps.url.outputs.url }}/api/"
+
+          # Add webhook notifications here when configured
+          # Example:
+          # curl -X POST https://partner-webhook.com/tea-techniques-deployed \
+          #   -H "Content-Type: application/json" \
+          #   -d '{
+          #     "event": "deployment_complete",
+          #     "environment": "github-pages",
+          #     "url": "${{ steps.url.outputs.url }}",
+          #     "api_base": "${{ steps.url.outputs.url }}/api",
+          #     "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          #   }'

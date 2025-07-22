@@ -5,20 +5,64 @@
   "description": "Mean Decrease Impurity (MDI) quantifies a feature's importance in tree-based models (e.g., Random Forests, Gradient Boosting Machines) by measuring the total reduction in impurity (e.g., Gini impurity, entropy) across all splits where the feature is used. Features that lead to larger, more consistent reductions in impurity are considered more important, indicating their effectiveness in creating homogeneous child nodes and improving predictive accuracy.",
   "complexity_rating": 2,
   "computational_cost_rating": 1,
-  "assurance_goals": ["Explainability", "Reliability"],
+  "assurance_goals": [
+    {
+      "id": 1,
+      "name": "Explainability"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    }
+  ],
   "tags": [
-    "applicable-models/tree-based",
-    "assurance-goal-category/explainability",
-    "assurance-goal-category/reliability",
-    "data-requirements/no-special-requirements",
-    "data-type/tabular",
-    "evidence-type/quantitative-metric",
-    "expertise-needed/statistics",
-    "explanatory-scope/global",
-    "lifecycle-stage/model-development",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/tree-based",
+      "id": 16
+    },
+    {
+      "name": "assurance-goal-category/explainability",
+      "id": 17
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "data-requirements/no-special-requirements",
+      "id": 39
+    },
+    {
+      "name": "data-type/tabular",
+      "id": 48
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "expertise-needed/statistics",
+      "id": 79
+    },
+    {
+      "name": "explanatory-scope/global",
+      "id": 80
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": [
+    "permutation-importance",
+    "coefficient-magnitudes-in-linear-models",
+    "sobol-indices"
+  ],
+  "related_technique_slugs": [
     "permutation-importance",
     "coefficient-magnitudes-in-linear-models",
     "sobol-indices"

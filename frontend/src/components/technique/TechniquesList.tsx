@@ -26,6 +26,7 @@ import { Loader2, Filter } from "lucide-react";
 import type { Technique, APIResponse, AssuranceGoal, Tag } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { getDataConfig } from "@/lib/config/dataConfig";
 
 // Number of items per page - must match backend setting (20)
 const PAGE_SIZE = 20;
@@ -85,12 +86,21 @@ export default function TechniquesList({
   const pathname = usePathname();
   const [, startTransition] = useTransition();
 
-  // Still use the hook for currentPage - it provides other useful functionality
-  const { currentPage } = useFilterParams({
+  // In static mode, manage page state directly
+  const [staticCurrentPage, setStaticCurrentPage] = useState(1);
+  const { currentPage: urlCurrentPage } = useFilterParams({
     search: "",
     assurance_goal: "all",
     tags: "",
+    page: "1",
   });
+
+  // Use static page in static mode, URL page otherwise
+  const config = getDataConfig();
+  const currentPage =
+    config.dataSource === "static" || config.dataSource === "mock"
+      ? staticCurrentPage
+      : urlCurrentPage;
 
   // Parse filters from URL with useCallback to prevent recreating on each render
   const getInitialFilters = useCallback(() => {
@@ -126,14 +136,33 @@ export default function TechniquesList({
     // Get rating filters
     const complexityParam = searchParams.get("complexity_max");
     if (complexityParam) {
-      initialFilters.complexity_max = parseInt(complexityParam, 10);
+      const parsedComplexity = parseInt(complexityParam, 10);
+      console.log(
+        "🔍 DEBUG: Parsing complexity_max:",
+        complexityParam,
+        "→",
+        parsedComplexity,
+        "isNaN?",
+        isNaN(parsedComplexity),
+      );
+      initialFilters.complexity_max = parsedComplexity;
     }
 
     const compCostParam = searchParams.get("computational_cost_max");
     if (compCostParam) {
-      initialFilters.computational_cost_max = parseInt(compCostParam, 10);
+      const parsedCompCost = parseInt(compCostParam, 10);
+      console.log(
+        "🔍 DEBUG: Parsing computational_cost_max:",
+        compCostParam,
+        "→",
+        parsedCompCost,
+        "isNaN?",
+        isNaN(parsedCompCost),
+      );
+      initialFilters.computational_cost_max = parsedCompCost;
     }
 
+    console.log("🔍 DEBUG: Final initialFilters:", initialFilters);
     console.log("Initialized filters from URL:", initialFilters);
     return initialFilters;
   }, [searchParams]);
@@ -155,86 +184,129 @@ export default function TechniquesList({
 
   // Convert back to URL format for API calls - but using appliedFilters not filters
   const apiFilters = useMemo(() => {
-    return {
-      search: appliedFilters.search,
-      search_fields: "name",
-      // Pass all assurance goals, not just the first one
-      assurance_goals:
-        appliedFilters.assurance_goals.length > 0
-          ? appliedFilters.assurance_goals
-          : undefined,
-      tags: appliedFilters.tags.length > 0 ? appliedFilters.tags : undefined,
-      complexity_max: appliedFilters.complexity_max?.toString(),
-      computational_cost_max: appliedFilters.computational_cost_max?.toString(),
-    };
+    console.log(
+      "🔍 DEBUG: Computing apiFilters with appliedFilters:",
+      appliedFilters,
+    );
+    console.log(
+      "🔍 DEBUG: complexity_max value:",
+      appliedFilters.complexity_max,
+      "type:",
+      typeof appliedFilters.complexity_max,
+    );
+    console.log(
+      "🔍 DEBUG: computational_cost_max value:",
+      appliedFilters.computational_cost_max,
+      "type:",
+      typeof appliedFilters.computational_cost_max,
+    );
+
+    try {
+      const result = {
+        search: appliedFilters.search,
+        search_fields: "name",
+        // Pass all assurance goals, not just the first one
+        assurance_goals:
+          appliedFilters.assurance_goals.length > 0
+            ? appliedFilters.assurance_goals
+            : undefined,
+        tags: appliedFilters.tags.length > 0 ? appliedFilters.tags : undefined,
+        complexity_max: appliedFilters.complexity_max?.toString(),
+        computational_cost_max:
+          appliedFilters.computational_cost_max?.toString(),
+      };
+      console.log("🔍 DEBUG: apiFilters computed successfully:", result);
+      return result;
+    } catch (error) {
+      console.error("🚨 ERROR in apiFilters computation:", error);
+      throw error;
+    }
   }, [appliedFilters]);
 
   // Fetch data from API or use initial data
+  console.log(
+    "🔍 DEBUG: About to call useTechniques with:",
+    apiFilters,
+    "page:",
+    currentPage,
+    "staticCurrentPage:",
+    staticCurrentPage,
+  );
   const {
     data: techniquesData,
     isLoading,
     error,
   } = useTechniques(apiFilters, currentPage);
+  console.log("🔍 DEBUG: useTechniques returned:", {
+    techniquesData,
+    isLoading,
+    error,
+  });
 
   // Use initial data if provided, otherwise fetch from API
+  console.log("🔍 DEBUG: About to call useTags and useAssuranceGoals");
   const { data: tagsData, isLoading: isLoadingTags } = useTags();
   const { data: assuranceGoalsData, isLoading: isLoadingGoals } =
     useAssuranceGoals();
+  console.log(
+    "🔍 DEBUG: Hooks completed - tags:",
+    tagsData,
+    "goals:",
+    assuranceGoalsData,
+  );
 
   // Override with initial data when available (for SSG)
-  const finalTechniquesData = initialData || techniquesData;
+  // BUT: In static mode with client-side pagination, we need to use the fetched data
+  // after the first render to get the correct page of results
+  const dataConfig = getDataConfig();
+  const isStaticMode =
+    dataConfig.dataSource === "static" || dataConfig.dataSource === "mock";
+  const shouldUseInitialData =
+    initialData && currentPage === 1 && !isStaticMode;
+
+  const finalTechniquesData = shouldUseInitialData
+    ? initialData
+    : techniquesData;
   const finalTagsData = initialTags || tagsData;
   const finalAssuranceGoalsData = initialAssuranceGoals || assuranceGoalsData;
 
   // Adjust loading states when initial data is provided
-  const isActuallyLoading = initialData ? false : isLoading;
+  console.log(
+    "🔍 DEBUG: Loading states - initialData:",
+    !!initialData,
+    "isLoading:",
+    isLoading,
+    "finalTechniquesData:",
+    !!finalTechniquesData,
+  );
+
+  // Only use initial data if finalTechniquesData is undefined/null
+  // This prevents showing wrong loading state when data is still loading
+  const isActuallyLoading = finalTechniquesData ? false : isLoading;
   const isActuallyLoadingTags = initialTags ? false : isLoadingTags;
   const isActuallyLoadingGoals = initialAssuranceGoals ? false : isLoadingGoals;
 
-  // Update the techniques memo to include client-side filtering for complexity and computational cost
+  // Get techniques directly from API response - no client-side filtering needed
+  // The StaticDataService already handles all filtering based on the parameters
   const techniques = useMemo(() => {
+    console.log("🔍 DEBUG: finalTechniquesData:", finalTechniquesData);
+    console.log(
+      "🔍 DEBUG: finalTechniquesData type:",
+      typeof finalTechniquesData,
+    );
+    console.log(
+      "🔍 DEBUG: finalTechniquesData keys:",
+      finalTechniquesData ? Object.keys(finalTechniquesData) : "undefined",
+    );
+
     // Type assertion to ensure TypeScript knows the structure
     const data = finalTechniquesData as { results?: Technique[] } | undefined;
     const results = data?.results || [];
+    console.log("🔍 DEBUG: extracted results length:", results.length);
+    console.log("🔍 DEBUG: first technique:", results[0]?.name);
 
-    // Apply client-side filtering for results using appliedFilters
-    return results.filter((technique: Technique) => {
-      // Filter by search term if needed
-      if (appliedFilters.search && appliedFilters.search.trim() !== "") {
-        const searchTerm = appliedFilters.search.toLowerCase().trim();
-        if (!technique.name.toLowerCase().includes(searchTerm)) {
-          return false;
-        }
-      }
-
-      // Apply complexity_max filter
-      if (
-        appliedFilters.complexity_max !== undefined &&
-        technique.complexity_rating !== undefined &&
-        technique.complexity_rating > appliedFilters.complexity_max
-      ) {
-        return false;
-      }
-
-      // Apply computational_cost_max filter
-      if (
-        appliedFilters.computational_cost_max !== undefined &&
-        technique.computational_cost_rating !== undefined &&
-        technique.computational_cost_rating >
-          appliedFilters.computational_cost_max
-      ) {
-        return false;
-      }
-
-      // If it passed all filters, include it
-      return true;
-    });
-  }, [
-    finalTechniquesData,
-    appliedFilters.search,
-    appliedFilters.complexity_max,
-    appliedFilters.computational_cost_max,
-  ]);
+    return results;
+  }, [finalTechniquesData]);
 
   // Calculate pagination information using the total count from the API response
   // Get the total count from the API response
@@ -243,9 +315,8 @@ export default function TechniquesList({
 
   // Apply filters function
   const applyFilters = useCallback(
-    (explicitFilters?: FilterState) => {
-      // Use explicitly passed filters or current state
-      const filtersToApply = explicitFilters || filters;
+    (filtersToApply: FilterState) => {
+      // Now requires explicit filters to be passed
       console.log("🔍 ApplyFilters EXPLICITLY called with:", filtersToApply);
 
       // Update appliedFilters state first - this triggers API refresh
@@ -283,19 +354,58 @@ export default function TechniquesList({
       // Add complexity and computational cost
       if (
         filtersToApply.complexity_max !== undefined &&
+        filtersToApply.complexity_max !== null &&
+        typeof filtersToApply.complexity_max === "number" &&
         filtersToApply.complexity_max < 5
       ) {
-        params.set("complexity_max", filtersToApply.complexity_max.toString());
+        try {
+          console.log(
+            "🔍 DEBUG: About to call toString() on complexity_max:",
+            filtersToApply.complexity_max,
+          );
+          params.set(
+            "complexity_max",
+            filtersToApply.complexity_max.toString(),
+          );
+          console.log("🔍 DEBUG: Successfully set complexity_max parameter");
+        } catch (error) {
+          console.error(
+            "🚨 ERROR calling toString() on complexity_max:",
+            error,
+            "Value:",
+            filtersToApply.complexity_max,
+          );
+          throw error;
+        }
       }
 
       if (
         filtersToApply.computational_cost_max !== undefined &&
+        filtersToApply.computational_cost_max !== null &&
+        typeof filtersToApply.computational_cost_max === "number" &&
         filtersToApply.computational_cost_max < 5
       ) {
-        params.set(
-          "computational_cost_max",
-          filtersToApply.computational_cost_max.toString(),
-        );
+        try {
+          console.log(
+            "🔍 DEBUG: About to call toString() on computational_cost_max:",
+            filtersToApply.computational_cost_max,
+          );
+          params.set(
+            "computational_cost_max",
+            filtersToApply.computational_cost_max.toString(),
+          );
+          console.log(
+            "🔍 DEBUG: Successfully set computational_cost_max parameter",
+          );
+        } catch (error) {
+          console.error(
+            "🚨 ERROR calling toString() on computational_cost_max:",
+            error,
+            "Value:",
+            filtersToApply.computational_cost_max,
+          );
+          throw error;
+        }
       }
 
       // Always set page to 1 when applying filters
@@ -310,12 +420,18 @@ export default function TechniquesList({
         router.push(`${pathname}?${urlString}`);
       });
     },
-    [filters, router, pathname, startTransition],
+    [router, pathname, startTransition],
   );
 
   // Reset filters function
   const resetFilters = useCallback(() => {
-    const defaultFilters = getInitialFilters();
+    const defaultFilters: FilterState = {
+      search: "",
+      assurance_goals: [],
+      tags: [],
+      complexity_max: 5,
+      computational_cost_max: 5,
+    };
     setFilters(defaultFilters);
     setAppliedFilters(defaultFilters);
     console.log("Resetting filters with URL:", `/techniques?page=1`);
@@ -324,11 +440,20 @@ export default function TechniquesList({
     startTransition(() => {
       router.push(`${pathname}?page=1`);
     });
-  }, [getInitialFilters, router, pathname, startTransition]);
+  }, [router, pathname, startTransition]);
 
   // Page change handler function
   const handlePageChange = useCallback(
     (newPage: number) => {
+      const config = getDataConfig();
+
+      // In static mode, just update the local state
+      if (config.dataSource === "static" || config.dataSource === "mock") {
+        setStaticCurrentPage(newPage);
+        return;
+      }
+
+      // In API mode, use URL-based pagination
       // Build URL with applied filters and new page
       const params = new URLSearchParams();
 
@@ -353,33 +478,116 @@ export default function TechniquesList({
       }
 
       // Add max complexity if not at default
-      if (appliedFilters.complexity_max && appliedFilters.complexity_max < 5) {
-        params.set("complexity_max", appliedFilters.complexity_max.toString());
+      if (
+        appliedFilters.complexity_max !== undefined &&
+        appliedFilters.complexity_max !== null &&
+        typeof appliedFilters.complexity_max === "number" &&
+        appliedFilters.complexity_max < 5
+      ) {
+        try {
+          console.log(
+            "🔍 DEBUG: handlePageChange - About to call toString() on complexity_max:",
+            appliedFilters.complexity_max,
+          );
+          params.set(
+            "complexity_max",
+            appliedFilters.complexity_max.toString(),
+          );
+          console.log(
+            "🔍 DEBUG: handlePageChange - Successfully set complexity_max parameter",
+          );
+        } catch (error) {
+          console.error(
+            "🚨 ERROR handlePageChange calling toString() on complexity_max:",
+            error,
+            "Value:",
+            appliedFilters.complexity_max,
+          );
+          throw error;
+        }
       }
 
       // Add max computational cost if not at default
       if (
-        appliedFilters.computational_cost_max &&
+        appliedFilters.computational_cost_max !== undefined &&
+        appliedFilters.computational_cost_max !== null &&
+        typeof appliedFilters.computational_cost_max === "number" &&
         appliedFilters.computational_cost_max < 5
       ) {
-        params.set(
-          "computational_cost_max",
-          appliedFilters.computational_cost_max.toString(),
-        );
+        try {
+          console.log(
+            "🔍 DEBUG: handlePageChange - About to call toString() on computational_cost_max:",
+            appliedFilters.computational_cost_max,
+          );
+          params.set(
+            "computational_cost_max",
+            appliedFilters.computational_cost_max.toString(),
+          );
+          console.log(
+            "🔍 DEBUG: handlePageChange - Successfully set computational_cost_max parameter",
+          );
+        } catch (error) {
+          console.error(
+            "🚨 ERROR handlePageChange calling toString() on computational_cost_max:",
+            error,
+            "Value:",
+            appliedFilters.computational_cost_max,
+          );
+          throw error;
+        }
       }
 
       // Set the new page parameter
-      params.set("page", newPage.toString());
+      try {
+        console.log(
+          "🔍 DEBUG: handlePageChange - About to call toString() on newPage:",
+          newPage,
+          "type:",
+          typeof newPage,
+        );
+        params.set("page", newPage.toString());
+        console.log(
+          "🔍 DEBUG: handlePageChange - Successfully set page parameter",
+        );
+      } catch (error) {
+        console.error(
+          "🚨 ERROR handlePageChange calling toString() on newPage:",
+          error,
+          "Value:",
+          newPage,
+          "Type:",
+          typeof newPage,
+        );
+        throw error;
+      }
 
       // Navigate to new page using Next.js router
-      const queryString = params.toString();
+      let queryString: string;
+      try {
+        console.log(
+          "🔍 DEBUG: handlePageChange - About to call toString() on URLSearchParams",
+        );
+        queryString = params.toString();
+        console.log(
+          "🔍 DEBUG: handlePageChange - Successfully converted params to string:",
+          queryString,
+        );
+      } catch (error) {
+        console.error(
+          "🚨 ERROR handlePageChange calling toString() on URLSearchParams:",
+          error,
+          "Params:",
+          params,
+        );
+        throw error;
+      }
       console.log("Changing page with URL:", `/techniques?${queryString}`);
 
       startTransition(() => {
         router.push(`${pathname}?${queryString}`);
       });
     },
-    [appliedFilters, router, pathname, startTransition],
+    [appliedFilters, router, pathname, startTransition, setStaticCurrentPage],
   );
 
   return (

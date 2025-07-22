@@ -214,17 +214,30 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
     page,
   ];
 
+  console.log("🔍 DEBUG: useTechniques queryKey:", queryKey);
+
   return useQuery({
     queryKey: queryKey,
     queryFn: async () => {
       try {
         const dataService = getDataService();
+        console.log(
+          "🔍 DEBUG: useTechniques queryFn called with page:",
+          page,
+          "serviceParams:",
+          serviceParams,
+        );
         return await dataService.getTechniques(serviceParams, page);
       } catch (error: unknown) {
         logApiError("useTechniques", error);
         throw error;
       }
     },
+    // Ensure query refetches when dependencies change, especially in static mode
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    staleTime: 0, // Always consider data stale in static mode to ensure refetch
+    gcTime: 0, // Don't keep cached data in garbage collection
   });
 };
 
@@ -261,13 +274,16 @@ export const useTechniqueDetail = (slug: string) => {
  * @returns Array of query objects with technique basic details
  */
 export const useMultipleTechniqueNames = (slugs: string[]) => {
+  const config = getDataConfig();
+
   const queries = useQueries({
     queries: slugs.map((slug) => ({
-      queryKey: ["technique-name", slug],
+      queryKey: ["technique-name", slug, config.dataSource],
       queryFn: async () => {
         try {
-          // Fetch full technique but only use slug and name for performance
-          const data = await fetchAPI<Technique>(`/api/techniques/${slug}`);
+          // Use data service instead of direct API fetch for hybrid static/dynamic support
+          const dataService = getDataService();
+          const data = await dataService.getTechnique(slug);
 
           // Return only the data we need for related techniques display
           return {
@@ -276,8 +292,12 @@ export const useMultipleTechniqueNames = (slugs: string[]) => {
             acronym: data.acronym,
           };
         } catch (error: unknown) {
-          logApiError("useMultipleTechniqueNames", error);
-          throw error;
+          console.warn(
+            `Failed to fetch technique name for slug "${slug}":`,
+            error,
+          );
+          // Return null for failed fetches instead of throwing - this prevents the whole component from failing
+          return null;
         }
       },
       enabled: !!slug, // Only run if slug is provided
@@ -285,9 +305,11 @@ export const useMultipleTechniqueNames = (slugs: string[]) => {
     })),
   });
 
-  // Combine the results into a more usable format
+  // Combine the results into a more usable format, filtering out null results
   return {
-    techniques: queries.map((query) => query.data).filter(Boolean),
+    techniques: queries
+      .map((query) => query.data)
+      .filter((data): data is NonNullable<typeof data> => data !== null),
     isLoading: queries.some((query) => query.isLoading),
     isError: queries.some((query) => query.isError),
     errors: queries.filter((query) => query.error).map((query) => query.error),

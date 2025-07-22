@@ -5,20 +5,64 @@
   "description": "Adversarial debiasing reduces bias by training models using a competitive adversarial setup, similar to Generative Adversarial Networks (GANs). The technique involves two neural networks: a predictor that learns to make accurate predictions on the main task, and an adversary (bias detector) that attempts to predict protected attributes (such as race, gender, or age) from the predictor's internal representations. Through adversarial training, the predictor learns to produce representations that retain predictive power for the main task whilst being uninformative about protected characteristics, thereby reducing discriminatory bias.",
   "complexity_rating": 4,
   "computational_cost_rating": 3,
-  "assurance_goals": ["Fairness"],
+  "assurance_goals": [
+    {
+      "id": 2,
+      "name": "Fairness"
+    }
+  ],
   "tags": [
-    "applicable-models/neural-network",
-    "assurance-goal-category/fairness",
-    "assurance-goal-category/fairness/group",
-    "data-requirements/sensitive-attributes",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "expertise-needed/ml-engineering",
-    "fairness-approach/group",
-    "lifecycle-stage/model-development",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/neural-network",
+      "id": 11
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "assurance-goal-category/fairness/group",
+      "id": 22
+    },
+    {
+      "name": "data-requirements/sensitive-attributes",
+      "id": 43
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "fairness-approach/group",
+      "id": 83
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": [
+    "fair-adversarial-networks",
+    "prejudice-remover-regulariser",
+    "meta-fair-classifier",
+    "exponentiated-gradient-reduction",
+    "fair-transfer-learning",
+    "adaptive-sensitive-reweighting",
+    "multi-accuracy-boosting"
+  ],
+  "related_technique_slugs": [
     "fair-adversarial-networks",
     "prejudice-remover-regulariser",
     "meta-fair-classifier",

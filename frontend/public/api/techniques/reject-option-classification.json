@@ -5,26 +5,92 @@
   "description": "A post-processing fairness technique that modifies predictions in regions of high uncertainty to favour disadvantaged groups and achieve fairness objectives. The method identifies a 'rejection region' where the model's confidence is low (typically near the decision boundary) and reassigns predictions within this region to benefit underrepresented groups. By leveraging model uncertainty, this approach can improve fairness metrics like demographic parity or equalised odds whilst minimising changes to confident predictions, thus preserving overall accuracy for cases where the model is certain.",
   "complexity_rating": 3,
   "computational_cost_rating": 2,
-  "assurance_goals": ["Fairness", "Reliability", "Transparency"],
+  "assurance_goals": [
+    {
+      "id": 2,
+      "name": "Fairness"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    },
+    {
+      "id": 6,
+      "name": "Transparency"
+    }
+  ],
   "tags": [
-    "applicable-models/agnostic",
-    "assurance-goal-category/fairness",
-    "assurance-goal-category/fairness/group",
-    "assurance-goal-category/reliability",
-    "assurance-goal-category/transparency",
-    "data-requirements/sensitive-attributes",
-    "data-requirements/labelled-data",
-    "data-requirements/prediction-probabilities",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "evidence-type/fairness-metric",
-    "expertise-needed/statistics",
-    "expertise-needed/ml-engineering",
-    "fairness-approach/group",
-    "lifecycle-stage/post-processing",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/agnostic",
+      "id": 1
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "assurance-goal-category/fairness/group",
+      "id": 22
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "assurance-goal-category/transparency",
+      "id": 31
+    },
+    {
+      "name": "data-requirements/sensitive-attributes",
+      "id": 43
+    },
+    {
+      "name": "data-requirements/labelled-data",
+      "id": 38
+    },
+    {
+      "name": "data-requirements/prediction-probabilities",
+      "id": 41
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "evidence-type/fairness-metric",
+      "id": 54
+    },
+    {
+      "name": "expertise-needed/statistics",
+      "id": 79
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "fairness-approach/group",
+      "id": 83
+    },
+    {
+      "name": "lifecycle-stage/post-processing",
+      "id": 100
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": [
+    "equalised-odds-post-processing",
+    "threshold-optimiser",
+    "calibration-with-equality-of-opportunity"
+  ],
+  "related_technique_slugs": [
     "equalised-odds-post-processing",
     "threshold-optimiser",
     "calibration-with-equality-of-opportunity"

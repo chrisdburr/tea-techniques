@@ -1,25 +1,14 @@
 // src/components/common/DataSourceIndicatorWrapper.tsx
 "use client";
 
-import React, { Suspense } from "react";
-import dynamic from "next/dynamic";
+import React from "react";
 import { getUiConfig } from "@/lib/config/dataConfig";
-
-// Dynamically import the DataSourceIndicator to reduce bundle size in production
-const DataSourceIndicator = dynamic(
-  () =>
-    import("./DataSourceIndicator").then((mod) => ({
-      default: mod.DataSourceIndicator,
-    })),
-  {
-    ssr: false,
-    loading: () => null,
-  },
-);
+import { DataSourceIndicator } from "./DataSourceIndicator";
+import { DeveloperToolbar } from "./DeveloperToolbar";
 
 /**
- * Wrapper component that conditionally loads the DataSourceIndicator
- * Only includes it in the bundle when needed
+ * Wrapper component that conditionally loads the appropriate developer UI
+ * Shows enhanced toolbar in development, simple indicator in production
  */
 export function DataSourceIndicatorWrapper() {
   const uiConfig = getUiConfig();
@@ -29,9 +18,8 @@ export function DataSourceIndicatorWrapper() {
     return null;
   }
 
-  return (
-    <Suspense fallback={null}>
-      <DataSourceIndicator />
-    </Suspense>
-  );
+  // In development, show the full toolbar
+  const isDevelopment = process.env.NODE_ENV === "development";
+
+  return isDevelopment ? <DeveloperToolbar /> : <DataSourceIndicator />;
 }

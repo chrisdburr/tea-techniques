@@ -78,20 +78,29 @@ function generateAllTags(techniques) {
 
   return Array.from(uniqueTags)
     .sort()
-    .map((tag) => generateTag(tag));
+    .map((tag, index) => ({
+      ...generateTag(tag),
+      id: index + 1, // Add sequential id field starting from 1
+    }));
 }
 
 // Convert source technique to API format
-function convertTechnique(source, index, allTags) {
-  const tagMap = new Map(allTags.map((t) => [t.name, t]));
-
-  // Convert assurance goals - just names, no IDs
+function convertTechnique(source, allTags) {
+  // Convert assurance goals to objects with id and name
+  // Use consistent IDs based on the order in ASSURANCE_GOALS object
+  const assuranceGoalKeys = Object.keys(ASSURANCE_GOALS);
   const assuranceGoals = source.assurance_goals
     .filter((g) => ASSURANCE_GOALS[g])
-    .map((g) => ASSURANCE_GOALS[g].name);
+    .map((g) => ({
+      id: assuranceGoalKeys.indexOf(g) + 1, // Use consistent global ID
+      name: ASSURANCE_GOALS[g].name,
+    }));
 
-  // Convert tags - just the tag strings
-  const tags = source.tags;
+  // Convert tags to objects with name and id properties to match API structure
+  const tags = source.tags.map((tagName) => {
+    const foundTag = allTags.find((tag) => tag.name === tagName);
+    return foundTag ? { name: tagName, id: foundTag.id } : { name: tagName };
+  });
 
   // Convert resources - keep original structure without IDs
   const resources = (source.resources || []).map((r) => ({
@@ -123,6 +132,7 @@ function convertTechnique(source, index, allTags) {
     assurance_goals: assuranceGoals,
     tags: tags,
     related_techniques: source.related_techniques || [],
+    related_technique_slugs: source.related_techniques || [],
     resources: resources,
     example_use_cases: exampleUseCases,
     limitations: limitations,
@@ -143,8 +153,8 @@ async function generateStaticApi() {
   console.log(`🏷️  Generated ${allTags.length} unique tags`);
 
   // Convert techniques
-  const techniques = sourceData.map((source, index) =>
-    convertTechnique(source, index + 1, allTags),
+  const techniques = sourceData.map((source) =>
+    convertTechnique(source, allTags),
   );
 
   // Create output directory
@@ -177,12 +187,20 @@ async function generateStaticApi() {
   });
   console.log(`✅ Generated ${techniques.length} individual technique files`);
 
-  // Write assurance goals
+  // Write assurance goals with IDs
+  const assuranceGoalsArray = Object.entries(ASSURANCE_GOALS).map(
+    ([, goal], index) => ({
+      id: index + 1,
+      name: goal.name,
+      description: goal.description,
+    }),
+  );
+
   const assuranceGoalsList = {
-    count: Object.keys(ASSURANCE_GOALS).length,
+    count: assuranceGoalsArray.length,
     next: null,
     previous: null,
-    results: Object.values(ASSURANCE_GOALS),
+    results: assuranceGoalsArray,
   };
 
   fs.writeFileSync(
@@ -230,11 +248,7 @@ async function generateStaticApi() {
 
   // Generate filter index
   console.log("\n📊 Generating filter index...");
-  const filterIndex = generateFilterIndex(
-    techniques,
-    allTags,
-    Object.values(ASSURANCE_GOALS),
-  );
+  const filterIndex = generateFilterIndex(techniques, allTags);
   fs.writeFileSync(
     path.join(outputDir, "filter-index.json"),
     JSON.stringify(filterIndex, null, 2),
@@ -291,14 +305,15 @@ function generateSearchIndex(techniques) {
 }
 
 // Generate filter index with pre-computed aggregations
-function generateFilterIndex(techniques, tags, assuranceGoals) {
+function generateFilterIndex(techniques, tags) {
   // Count techniques per tag (using tag names as keys)
   const tagCounts = {};
   tags.forEach((tag) => {
     tagCounts[tag.name] = {
       ...tag,
-      techniqueCount: techniques.filter((t) => t.tags.includes(tag.name))
-        .length,
+      techniqueCount: techniques.filter((t) =>
+        t.tags.some((tag_obj) => tag_obj.name === tag.name),
+      ).length,
     };
   });
 
@@ -309,7 +324,7 @@ function generateFilterIndex(techniques, tags, assuranceGoals) {
       name: goal.name,
       description: goal.description,
       techniqueCount: techniques.filter((t) =>
-        t.assurance_goals.includes(goal.name),
+        t.assurance_goals.some((goal_obj) => goal_obj.name === goal.name),
       ).length,
     };
   });
@@ -343,7 +358,7 @@ function generateFilterIndex(techniques, tags, assuranceGoals) {
   Object.values(tagCategories).forEach((category) => {
     const techniquesInCategory = new Set();
     techniques.forEach((technique) => {
-      if (technique.tags.some((t) => category.tags.includes(t))) {
+      if (technique.tags.some((t) => category.tags.includes(t.name))) {
         techniquesInCategory.add(technique.slug);
       }
     });

@@ -5,20 +5,63 @@
   "description": "RuleFit is a method that creates an interpretable model by combining linear terms with decision rules. It first extracts potential rules from ensemble trees, then builds a sparse linear model where those rules (binary conditions) and original features are used as predictors, with regularization to keep the model simple. The final model is a linear combination of a small set of rules and original features, balancing interpretability with predictive power.",
   "complexity_rating": 3,
   "computational_cost_rating": 3,
-  "assurance_goals": ["Explainability", "Transparency"],
+  "assurance_goals": [
+    {
+      "id": 1,
+      "name": "Explainability"
+    },
+    {
+      "id": 6,
+      "name": "Transparency"
+    }
+  ],
   "tags": [
-    "applicable-models/agnostic",
-    "assurance-goal-category/explainability",
-    "assurance-goal-category/transparency",
-    "data-requirements/no-special-requirements",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "expertise-needed/statistics",
-    "explanatory-scope/global",
-    "lifecycle-stage/model-development",
-    "technique-type/algorithmic"
+    {
+      "name": "applicable-models/agnostic",
+      "id": 1
+    },
+    {
+      "name": "assurance-goal-category/explainability",
+      "id": 17
+    },
+    {
+      "name": "assurance-goal-category/transparency",
+      "id": 31
+    },
+    {
+      "name": "data-requirements/no-special-requirements",
+      "id": 39
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "expertise-needed/statistics",
+      "id": 79
+    },
+    {
+      "name": "explanatory-scope/global",
+      "id": 80
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
   ],
   "related_techniques": ["ridge-regression-surrogates", "model-distillation"],
+  "related_technique_slugs": [
+    "ridge-regression-surrogates",
+    "model-distillation"
+  ],
   "resources": [
     {
       "title": "christophM/rulefit",

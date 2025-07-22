@@ -5,22 +5,73 @@
   "description": "Safety envelope testing systematically evaluates AI system performance at the boundaries of its intended operational domain to identify potential failure modes before deployment. The technique involves defining the system's operational design domain (ODD), creating test scenarios that approach or exceed these boundaries, and measuring performance degradation as conditions become more challenging. By testing edge cases, environmental extremes, and boundary conditions, it reveals where the system transitions from safe to unsafe operation, enabling the establishment of clear operational limits and safety margins for deployment.",
   "complexity_rating": 4,
   "computational_cost_rating": 4,
-  "assurance_goals": ["Safety", "Reliability"],
+  "assurance_goals": [
+    {
+      "id": 7,
+      "name": "Safety"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    }
+  ],
   "tags": [
-    "applicable-models/agnostic",
-    "assurance-goal-category/safety",
-    "assurance-goal-category/reliability",
-    "data-requirements/test-scenarios",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "evidence-type/boundary-analysis",
-    "expertise-needed/domain-expertise",
-    "expertise-needed/safety-engineering",
-    "lifecycle-stage/model-development",
-    "lifecycle-stage/system-deployment-and-use",
-    "technique-type/testing"
+    {
+      "name": "applicable-models/agnostic",
+      "id": 1
+    },
+    {
+      "name": "assurance-goal-category/safety",
+      "id": 29
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "data-requirements/test-scenarios",
+      "id": 44
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "evidence-type/boundary-analysis",
+      "id": 50
+    },
+    {
+      "name": "expertise-needed/domain-expertise",
+      "id": 66
+    },
+    {
+      "name": "expertise-needed/safety-engineering",
+      "id": 75
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "lifecycle-stage/system-deployment-and-use",
+      "id": 103
+    },
+    {
+      "name": "technique-type/testing",
+      "id": 115
+    }
   ],
   "related_techniques": [
+    "permutation-tests",
+    "cross-validation",
+    "area-under-precision-recall-curve",
+    "red-teaming"
+  ],
+  "related_technique_slugs": [
     "permutation-tests",
     "cross-validation",
     "area-under-precision-recall-curve",

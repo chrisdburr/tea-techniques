@@ -5,21 +5,73 @@
   "description": "Red teaming involves systematic adversarial testing of AI/ML systems by dedicated specialists who attempt to identify flaws, vulnerabilities, harmful outputs, and ways to circumvent safety measures. Drawing from cybersecurity practices, red teams employ diverse attack vectors including prompt injection, adversarial examples, edge case exploitation, social engineering scenarios, and goal misalignment probes. Unlike standard testing that validates expected behaviour, red teaming specifically seeks to break systems through creative and adversarial approaches, revealing non-obvious risks and failure modes that could be exploited maliciously or cause harm in deployment.",
   "complexity_rating": 4,
   "computational_cost_rating": 3,
-  "assurance_goals": ["Safety", "Reliability", "Fairness"],
+  "assurance_goals": [
+    {
+      "id": 7,
+      "name": "Safety"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    },
+    {
+      "id": 2,
+      "name": "Fairness"
+    }
+  ],
   "tags": [
-    "applicable-models/agnostic",
-    "assurance-goal-category/safety",
-    "assurance-goal-category/reliability",
-    "assurance-goal-category/fairness",
-    "data-requirements/no-special-requirements",
-    "data-type/any",
-    "evidence-type/qualitative-report",
-    "expertise-needed/security",
-    "expertise-needed/ml-engineering",
-    "lifecycle-stage/system-deployment-and-use",
-    "technique-type/procedural"
+    {
+      "name": "applicable-models/agnostic",
+      "id": 1
+    },
+    {
+      "name": "assurance-goal-category/safety",
+      "id": 29
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "data-requirements/no-special-requirements",
+      "id": 39
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/qualitative-report",
+      "id": 58
+    },
+    {
+      "name": "expertise-needed/security",
+      "id": 76
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "lifecycle-stage/system-deployment-and-use",
+      "id": 103
+    },
+    {
+      "name": "technique-type/procedural",
+      "id": 113
+    }
   ],
   "related_techniques": [
+    "internal-review-boards",
+    "human-in-the-loop-safeguards",
+    "confidence-thresholding",
+    "runtime-monitoring-and-circuit-breakers"
+  ],
+  "related_technique_slugs": [
     "internal-review-boards",
     "human-in-the-loop-safeguards",
     "confidence-thresholding",

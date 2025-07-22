@@ -31,6 +31,31 @@ console.log(`Backend URL for API proxy: ${BACKEND_URL}`);
 const nextConfig: NextConfig = {
   reactStrictMode: true,
 
+  // Disable ESLint during build when NEXT_DISABLE_LINT is set
+  eslint: {
+    ignoreDuringBuilds: process.env.NEXT_DISABLE_LINT === "true",
+  },
+
+  // Disable TypeScript checking during build when NEXT_DISABLE_TYPE_CHECK is set
+  typescript: {
+    ignoreBuildErrors: process.env.NEXT_DISABLE_TYPE_CHECK === "true",
+  },
+
+  // Configure base path for GitHub Pages deployment
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || "",
+
+  // Configure asset prefix for GitHub Pages
+  assetPrefix: process.env.NEXT_PUBLIC_ASSET_PREFIX || "",
+
+  // Configure image optimization for static export
+  images: {
+    unoptimized: (() => {
+      const config = getDataConfig();
+      // Disable image optimization in static mode
+      return config.dataSource === "static" || config.dataSource === "mock";
+    })(),
+  },
+
   // Add rewrites to proxy API requests to the backend (only in API mode)
   async rewrites() {
     const config = getDataConfig();
@@ -71,6 +96,38 @@ const nextConfig: NextConfig = {
     // In API mode, use standalone for Docker deployment
     return "standalone";
   })(),
+
+  // Trailing slash configuration for GitHub Pages
+  trailingSlash: (() => {
+    const config = getDataConfig();
+    // Enable trailing slash in static mode for better GitHub Pages compatibility
+    return config.dataSource === "static" || config.dataSource === "mock";
+  })(),
+
+  // Experimental configuration for static export
+  experimental: {
+    // Disable worker threads to fix chunk loading in static export
+    workerThreads: false,
+  },
+
+  // Webpack configuration to disable code splitting in static mode
+  webpack: (config, { isServer }) => {
+    const dataConfig = getDataConfig();
+
+    // In static mode, disable code splitting for client-side bundles
+    if (
+      (dataConfig.dataSource === "static" ||
+        dataConfig.dataSource === "mock") &&
+      !isServer
+    ) {
+      // Disable splitChunks for static builds
+      config.optimization.splitChunks = false;
+      // Ensure runtime chunk is inline
+      config.optimization.runtimeChunk = false;
+    }
+
+    return config;
+  },
 };
 
 export default withBundleAnalyzer(nextConfig);

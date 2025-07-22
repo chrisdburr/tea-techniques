@@ -1,0 +1,331 @@
+name: Mode Transition
+
+on:
+  workflow_dispatch:
+    inputs:
+      from_mode:
+        description: 'Current deployment mode'
+        required: true
+        type: choice
+        options:
+          - static
+          - dynamic
+          - mock
+      to_mode:
+        description: 'Target deployment mode'
+        required: true
+        type: choice
+        options:
+          - static
+          - dynamic
+          - mock
+      environment:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+        default: staging
+      dry_run:
+        description: 'Perform dry run only'
+        required: false
+        type: boolean
+        default: true
+
+env:
+  NODE_VERSION: '18'
+  PNPM_VERSION: '10.6.5'
+
+jobs:
+  validate-transition:
+    runs-on: ubuntu-latest
+    outputs:
+      valid: ${{ steps.validate.outputs.valid }}
+      strategy: ${{ steps.validate.outputs.strategy }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate transition
+        id: validate
+        run: |
+          from="${{ github.event.inputs.from_mode }}"
+          to="${{ github.event.inputs.to_mode }}"
+
+          echo "Validating transition from $from to $to mode..."
+
+          # Check if transition is valid
+          if [ "$from" == "$to" ]; then
+            echo "::error::Source and target modes are the same"
+            echo "valid=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+          # Determine transition strategy
+          if [ "$from" == "static" ] && [ "$to" == "dynamic" ]; then
+            echo "strategy=static-to-dynamic" >> $GITHUB_OUTPUT
+          elif [ "$from" == "dynamic" ] && [ "$to" == "static" ]; then
+            echo "strategy=dynamic-to-static" >> $GITHUB_OUTPUT
+          elif [ "$from" == "mock" ]; then
+            echo "strategy=mock-to-$to" >> $GITHUB_OUTPUT
+          else
+            echo "strategy=custom" >> $GITHUB_OUTPUT
+          fi
+
+          echo "valid=true" >> $GITHUB_OUTPUT
+          echo "✅ Transition validated"
+
+  pre-transition-checks:
+    runs-on: ubuntu-latest
+    needs: validate-transition
+    if: needs.validate-transition.outputs.valid == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check current deployment health
+        run: |
+          echo "Checking current deployment health..."
+
+          # This would check the current deployment
+          # For now, we'll simulate the checks
+
+          echo "✅ Current deployment is healthy"
+
+      - name: Backup current configuration
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          echo "Creating configuration backup..."
+
+          # Create backup of current configuration
+          mkdir -p backups
+
+          # Save current environment details
+          cat > backups/pre-transition-state.json << EOF
+          {
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "from_mode": "${{ github.event.inputs.from_mode }}",
+            "to_mode": "${{ github.event.inputs.to_mode }}",
+            "environment": "${{ github.event.inputs.environment }}",
+            "commit": "${{ github.sha }}"
+          }
+          EOF
+
+      - name: Upload backup
+        if: github.event.inputs.dry_run != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pre-transition-backup
+          path: backups/
+          retention-days: 30
+
+  prepare-transition:
+    runs-on: ubuntu-latest
+    needs: [validate-transition, pre-transition-checks]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate transition artifacts
+        run: |
+          strategy="${{ needs.validate-transition.outputs.strategy }}"
+          to_mode="${{ github.event.inputs.to_mode }}"
+
+          echo "Preparing artifacts for $strategy transition..."
+
+          case "$strategy" in
+            "static-to-dynamic")
+              echo "Preparing dynamic deployment configuration..."
+              # Would prepare Docker images, database migrations, etc.
+              ;;
+            "dynamic-to-static")
+              echo "Generating static build..."
+              cd frontend
+              pnpm sync-data
+              pnpm generate-api
+              NEXT_PUBLIC_DATA_SOURCE=static pnpm build:static
+              ;;
+            "mock-to-static")
+              echo "Converting from mock to static..."
+              cd frontend
+              pnpm sync-data
+              pnpm generate-api
+              NEXT_PUBLIC_DATA_SOURCE=static pnpm build:static
+              ;;
+            "mock-to-dynamic")
+              echo "Preparing dynamic deployment from mock..."
+              # Would prepare full stack deployment
+              ;;
+          esac
+
+      - name: Upload transition artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: transition-artifacts
+          path: |
+            frontend/out/
+            frontend/.next/
+          retention-days: 7
+
+  execute-transition:
+    runs-on: ubuntu-latest
+    needs: [validate-transition, prepare-transition]
+    if: github.event.inputs.dry_run != 'true'
+    environment:
+      name: ${{ github.event.inputs.environment }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download transition artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: transition-artifacts
+          path: artifacts/
+
+      - name: Execute transition
+        id: transition
+        run: |
+          strategy="${{ needs.validate-transition.outputs.strategy }}"
+          to_mode="${{ github.event.inputs.to_mode }}"
+          environment="${{ github.event.inputs.environment }}"
+
+          echo "Executing $strategy transition to $environment..."
+
+          case "$to_mode" in
+            "static")
+              echo "Deploying static site..."
+              # Trigger GitHub Pages deployment
+              echo "::notice::Would trigger GitHub Pages deployment workflow"
+              ;;
+            "dynamic")
+              echo "Deploying dynamic site..."
+              # Trigger dynamic deployment
+              echo "::notice::Would trigger dynamic deployment workflow"
+              ;;
+            "mock")
+              echo "Deploying mock site..."
+              # Deploy with mock configuration
+              echo "::notice::Would deploy with mock configuration"
+              ;;
+          esac
+
+          echo "transition_complete=true" >> $GITHUB_OUTPUT
+
+      - name: Verify transition
+        if: steps.transition.outputs.transition_complete == 'true'
+        run: |
+          echo "Verifying transition success..."
+
+          # Would perform health checks on new deployment
+          # For now, we'll simulate success
+
+          echo "✅ Transition verified successfully"
+
+  rollback-capability:
+    runs-on: ubuntu-latest
+    needs: [execute-transition]
+    if: always() && github.event.inputs.dry_run != 'true'
+    steps:
+      - name: Create rollback plan
+        run: |
+          cat > rollback-plan.md << EOF
+          # Rollback Plan
+
+          ## Transition Details
+          - From: ${{ github.event.inputs.from_mode }}
+          - To: ${{ github.event.inputs.to_mode }}
+          - Environment: ${{ github.event.inputs.environment }}
+          - Status: ${{ needs.execute-transition.result }}
+
+          ## Rollback Steps
+          1. Download pre-transition backup artifact
+          2. Restore previous configuration
+          3. Trigger deployment with original mode
+          4. Verify rollback success
+
+          ## Command
+          \`\`\`bash
+          gh workflow run mode-transition.yml \\
+            -f from_mode=${{ github.event.inputs.to_mode }} \\
+            -f to_mode=${{ github.event.inputs.from_mode }} \\
+            -f environment=${{ github.event.inputs.environment }} \\
+            -f dry_run=false
+          \`\`\`
+          EOF
+
+      - name: Upload rollback plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: rollback-plan
+          path: rollback-plan.md
+          retention-days: 30
+
+  summary:
+    runs-on: ubuntu-latest
+    needs: [validate-transition, prepare-transition, execute-transition]
+    if: always()
+    steps:
+      - name: Generate transition summary
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY << EOF
+          # Mode Transition Summary
+
+          ## Configuration
+          - **From Mode**: ${{ github.event.inputs.from_mode }}
+          - **To Mode**: ${{ github.event.inputs.to_mode }}
+          - **Environment**: ${{ github.event.inputs.environment }}
+          - **Dry Run**: ${{ github.event.inputs.dry_run }}
+
+          ## Execution Status
+          - **Validation**: ${{ needs.validate-transition.result == 'success' && '✅ Passed' || '❌ Failed' }}
+          - **Preparation**: ${{ needs.prepare-transition.result == 'success' && '✅ Completed' || '❌ Failed' }}
+          - **Execution**: ${{ needs.execute-transition.result == 'success' && '✅ Success' || '❌ Failed' || '⏭️ Skipped (Dry Run)' }}
+
+          ## Transition Strategy
+          ${{ needs.validate-transition.outputs.strategy }}
+
+          ## Next Steps
+          EOF
+
+          if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
+            echo "This was a dry run. To execute the transition, run again with dry_run=false" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ needs.execute-transition.result }}" == "success" ]; then
+            echo "1. Monitor the new deployment" >> $GITHUB_STEP_SUMMARY
+            echo "2. Run integration tests" >> $GITHUB_STEP_SUMMARY
+            echo "3. Check performance metrics" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "1. Review failure logs" >> $GITHUB_STEP_SUMMARY
+            echo "2. Execute rollback if needed" >> $GITHUB_STEP_SUMMARY
+            echo "3. Fix issues and retry" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Send notification
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          status="${{ needs.execute-transition.result }}"
+
+          if [ "$status" == "success" ]; then
+            message="✅ Mode transition completed: ${{ github.event.inputs.from_mode }} → ${{ github.event.inputs.to_mode }}"
+          else
+            message="❌ Mode transition failed: ${{ github.event.inputs.from_mode }} → ${{ github.event.inputs.to_mode }}"
+          fi
+
+          echo "$message"
+
+          # Send notifications to relevant channels

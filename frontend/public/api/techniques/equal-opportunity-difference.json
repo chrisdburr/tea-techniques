@@ -5,26 +5,91 @@
   "description": "A fairness metric that quantifies discrimination by measuring the difference in true positive rates (recall) between protected and privileged groups. Based on Hardt et al.'s equality of opportunity framework, this metric computes the maximum difference in TPR across demographic groups, with a value of 0 indicating perfect fairness. The technique provides a mathematical measure of whether qualified individuals from different groups have equal chances of receiving positive predictions.",
   "complexity_rating": 2,
   "computational_cost_rating": 1,
-  "assurance_goals": ["Fairness", "Transparency", "Reliability"],
+  "assurance_goals": [
+    {
+      "id": 2,
+      "name": "Fairness"
+    },
+    {
+      "id": 6,
+      "name": "Transparency"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    }
+  ],
   "tags": [
-    "applicable-models/agnostic",
-    "assurance-goal-category/fairness",
-    "assurance-goal-category/fairness/group",
-    "assurance-goal-category/transparency",
-    "assurance-goal-category/reliability",
-    "data-requirements/sensitive-attributes",
-    "data-requirements/labelled-data",
-    "data-type/any",
-    "evidence-type/quantitative-metric",
-    "evidence-type/fairness-metric",
-    "expertise-needed/low",
-    "fairness-approach/group",
-    "lifecycle-stage/model-development",
-    "lifecycle-stage/model-development/testing",
-    "lifecycle-stage/system-deployment-and-use/monitoring",
-    "technique-type/metric"
+    {
+      "name": "applicable-models/agnostic",
+      "id": 1
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "assurance-goal-category/fairness/group",
+      "id": 22
+    },
+    {
+      "name": "assurance-goal-category/transparency",
+      "id": 31
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "data-requirements/sensitive-attributes",
+      "id": 43
+    },
+    {
+      "name": "data-requirements/labelled-data",
+      "id": 38
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "evidence-type/fairness-metric",
+      "id": 54
+    },
+    {
+      "name": "expertise-needed/low",
+      "id": 72
+    },
+    {
+      "name": "fairness-approach/group",
+      "id": 83
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "lifecycle-stage/model-development/testing",
+      "id": 94
+    },
+    {
+      "name": "lifecycle-stage/system-deployment-and-use/monitoring",
+      "id": 105
+    },
+    {
+      "name": "technique-type/metric",
+      "id": 112
+    }
   ],
   "related_techniques": [
+    "demographic-parity-assessment",
+    "average-odds-difference"
+  ],
+  "related_technique_slugs": [
     "demographic-parity-assessment",
     "average-odds-difference"
   ],

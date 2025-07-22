@@ -20,11 +20,27 @@ export async function generateStaticParams() {
 
   try {
     const dataService = getDataService();
-    const techniques = await dataService.getTechniques();
+    // For static generation, we need ALL techniques, not just the first page
+    // Fetch with a very high page size to get all techniques at once
+    const allTechniques = await dataService.getTechniques({}, 1);
 
-    return techniques.results.map((technique) => ({
-      slug: technique.slug,
-    }));
+    // If we have more than 20 techniques, we need to fetch all pages
+    const allSlugs = [];
+    let currentPage = 1;
+    let hasMore = true;
+
+    while (hasMore) {
+      const response = await dataService.getTechniques({}, currentPage);
+      allSlugs.push(
+        ...response.results.map((technique) => ({ slug: technique.slug })),
+      );
+
+      hasMore = response.next !== null;
+      currentPage++;
+    }
+
+    console.log(`Generating static params for ${allSlugs.length} techniques`);
+    return allSlugs;
   } catch (error) {
     console.error("Error generating static params for techniques:", error);
     return [];

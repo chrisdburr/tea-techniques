@@ -115,13 +115,15 @@ jobs:
 
       - name: Generate deployment metadata
         run: |
-          echo '{' > frontend/out/deployment.json
-          echo "  \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"," >> frontend/out/deployment.json
-          echo "  \"mode\": \"${{ steps.mode.outputs.mode }}\"," >> frontend/out/deployment.json
-          echo "  \"commit\": \"${{ github.sha }}\"," >> frontend/out/deployment.json
-          echo "  \"branch\": \"${{ github.ref_name }}\"," >> frontend/out/deployment.json
-          echo "  \"workflow_run\": \"${{ github.run_id }}\"" >> frontend/out/deployment.json
-          echo '}' >> frontend/out/deployment.json
+          cat > frontend/out/deployment.json <<EOF
+          {
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "mode": "${{ steps.mode.outputs.mode }}",
+            "commit": "${{ github.sha }}",
+            "branch": "${{ github.ref_name }}",
+            "workflow_run": "${{ github.run_id }}"
+          }
+          EOF
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -180,7 +182,7 @@ jobs:
           # Test deployment metadata
           if curl -f -s "$url/deployment.json" > deployment.json; then
             echo "Deployment metadata:"
-            jq . deployment.json
+            jq . deployment.json || echo "Note: deployment.json exists but could not be parsed as JSON"
           fi
 
       - name: Run Lighthouse audit

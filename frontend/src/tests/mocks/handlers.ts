@@ -124,13 +124,11 @@ export const handlers = [
       );
     }
 
-    // Generate slug from name if not provided
-    const slug =
-      data.slug ||
-      data.name
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9-]/g, "");
+    // Generate slug from name
+    const slug = data.name
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "");
 
     // Extract acronym from name if present
     const acronymMatch = data.name.match(/\(([A-Z]{2,})\)/);
@@ -175,11 +173,11 @@ export const handlers = [
       ...data,
       assurance_goals: data.assurance_goal_ids
         ? mockAssuranceGoals.filter((goal) =>
-            data.assurance_goal_ids.includes(goal.id),
+            data.assurance_goal_ids!.includes(goal.id),
           )
         : technique.assurance_goals,
       tags: data.tag_ids
-        ? mockTags.filter((tag) => data.tag_ids.includes(tag.id))
+        ? mockTags.filter((tag) => data.tag_ids!.includes(tag.id))
         : technique.tags,
       related_techniques:
         data.related_technique_slugs || technique.related_techniques,

@@ -8,12 +8,27 @@ export function cn(...inputs: ClassValue[]) {
 
 /**
  * Parse tags by a specific prefix
- * @param tags - Array of tags
+ * @param tags - Array of tags (can be Tag objects or strings)
  * @param prefix - The prefix to filter by (e.g., "applicable-models")
  * @returns Array of tags matching the prefix
  */
-export function parseTagsByPrefix(tags: Tag[], prefix: string): Tag[] {
-  return tags.filter((tag) => tag.name.startsWith(`${prefix}/`));
+export function parseTagsByPrefix(
+  tags: Tag[] | string[],
+  prefix: string,
+): Tag[] {
+  if (!tags || !Array.isArray(tags)) {
+    return [];
+  }
+
+  // Handle both string arrays and Tag objects
+  return tags
+    .map((tag, index) => {
+      if (typeof tag === "string") {
+        return { id: index, name: tag };
+      }
+      return tag;
+    })
+    .filter((tag) => tag && tag.name && tag.name.startsWith(`${prefix}/`));
 }
 
 /**
@@ -28,13 +43,20 @@ export function getTagValue(tagName: string): string {
 
 /**
  * Get all unique tag prefixes from a list of tags
- * @param tags - Array of tags
+ * @param tags - Array of tags (can be Tag objects or strings)
  * @returns Array of unique prefixes
  */
-export function getTagPrefixes(tags: Tag[]): string[] {
+export function getTagPrefixes(tags: Tag[] | string[]): string[] {
   const prefixes = new Set<string>();
+  if (!tags || !Array.isArray(tags)) {
+    return [];
+  }
   tags.forEach((tag) => {
-    const prefix = tag.name.split("/")[0];
+    const tagName = typeof tag === "string" ? tag : tag?.name;
+    if (!tagName) {
+      return;
+    }
+    const prefix = tagName.split("/")[0];
     if (prefix) {
       prefixes.add(prefix);
     }
@@ -62,10 +84,10 @@ export function parseHierarchicalTag(tagName: string): {
 
 /**
  * Get applicable models from tags
- * @param tags - Array of tags
+ * @param tags - Array of tags (can be Tag objects or strings)
  * @returns Array of applicable model types
  */
-export function getApplicableModels(tags: Tag[]): string[] {
+export function getApplicableModels(tags: Tag[] | string[]): string[] {
   return parseTagsByPrefix(tags, "applicable-models").map((tag) =>
     getTagValue(tag.name),
   );
@@ -73,10 +95,10 @@ export function getApplicableModels(tags: Tag[]): string[] {
 
 /**
  * Get lifecycle stages from tags
- * @param tags - Array of tags
+ * @param tags - Array of tags (can be Tag objects or strings)
  * @returns Array of lifecycle stages
  */
-export function getLifecycleStages(tags: Tag[]): string[] {
+export function getLifecycleStages(tags: Tag[] | string[]): string[] {
   return parseTagsByPrefix(tags, "lifecycle-stage").map((tag) =>
     getTagValue(tag.name),
   );
@@ -84,10 +106,10 @@ export function getLifecycleStages(tags: Tag[]): string[] {
 
 /**
  * Get data types from tags
- * @param tags - Array of tags
+ * @param tags - Array of tags (can be Tag objects or strings)
  * @returns Array of data types
  */
-export function getDataTypes(tags: Tag[]): string[] {
+export function getDataTypes(tags: Tag[] | string[]): string[] {
   return parseTagsByPrefix(tags, "data-type").map((tag) =>
     getTagValue(tag.name),
   );
@@ -95,10 +117,10 @@ export function getDataTypes(tags: Tag[]): string[] {
 
 /**
  * Get assurance goal categories from tags
- * @param tags - Array of tags
+ * @param tags - Array of tags (can be Tag objects or strings)
  * @returns Array of structured category information
  */
-export function getAssuranceGoalCategories(tags: Tag[]): Array<{
+export function getAssuranceGoalCategories(tags: Tag[] | string[]): Array<{
   goal: string;
   category?: string;
   subcategory?: string;
@@ -115,18 +137,30 @@ export function getAssuranceGoalCategories(tags: Tag[]): Array<{
 
 /**
  * Group tags by their prefix
- * @param tags - Array of tags
+ * @param tags - Array of tags (can be Tag objects or strings)
  * @returns Object with tags grouped by prefix
  */
-export function groupTagsByPrefix(tags: Tag[]): Record<string, Tag[]> {
+export function groupTagsByPrefix(
+  tags: Tag[] | string[],
+): Record<string, Tag[]> {
   const grouped: Record<string, Tag[]> = {};
 
-  tags.forEach((tag) => {
-    const prefix = tag.name.split("/")[0];
+  if (!tags || !Array.isArray(tags)) {
+    return grouped;
+  }
+
+  tags.forEach((tag, index) => {
+    // Convert string to Tag object if needed
+    const tagObj = typeof tag === "string" ? { id: index, name: tag } : tag;
+
+    if (!tagObj || !tagObj.name) {
+      return;
+    }
+    const prefix = tagObj.name.split("/")[0];
     if (!grouped[prefix]) {
       grouped[prefix] = [];
     }
-    grouped[prefix].push(tag);
+    grouped[prefix].push(tagObj);
   });
 
   return grouped;
@@ -142,13 +176,19 @@ export function formatTagDisplay(
   tagName: string,
   includePrefix: boolean = false,
 ): string {
+  if (!tagName) {
+    return "";
+  }
+
   if (includePrefix) {
     return tagName
       .split("/")
       .map((part) =>
         part
           .split("-")
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .map((word) =>
+            word ? word.charAt(0).toUpperCase() + word.slice(1) : "",
+          )
           .join(" "),
       )
       .join(" / ");
@@ -157,6 +197,6 @@ export function formatTagDisplay(
   const value = getTagValue(tagName);
   return value
     .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word) => (word ? word.charAt(0).toUpperCase() + word.slice(1) : ""))
     .join(" ");
 }

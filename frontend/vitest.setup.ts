@@ -11,7 +11,7 @@ configure({
 });
 
 // Set up global act for React 18+ compatibility
-global.IS_REACT_ACT_ENVIRONMENT = true;
+(globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
 
 // Extend Vitest's expect with jest-dom matchers
 expect.extend({});
@@ -211,7 +211,7 @@ vi.mock("@/lib/config", () => ({
 
 // Mock the API client to work properly in tests
 vi.mock("@/lib/api/client", async () => {
-  const axios = await vi.importActual("axios");
+  const axios = (await vi.importActual("axios")) as any;
   const mockClient = axios.default.create({
     baseURL: "http://localhost:8000",
     timeout: 15000,

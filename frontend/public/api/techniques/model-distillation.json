@@ -1,0 +1,147 @@
+{
+  "slug": "model-distillation",
+  "name": "Model Distillation",
+  "acronym": null,
+  "description": "Model distillation transfers knowledge from a large, complex model (teacher) to a smaller, more efficient model (student) by training the student to mimic the teacher's behaviour. The student learns from the teacher's soft predictions and intermediate representations rather than just hard labels, capturing nuanced decision boundaries and uncertainty. This produces models that are faster, require less memory, and are often more interpretable whilst maintaining much of the original performance. Beyond compression, distillation can improve model reliability by regularising training and enable deployment in resource-constrained environments.",
+  "complexity_rating": 3,
+  "computational_cost_rating": 4,
+  "assurance_goals": [
+    {
+      "id": 1,
+      "name": "Explainability"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    },
+    {
+      "id": 7,
+      "name": "Safety"
+    }
+  ],
+  "tags": [
+    {
+      "name": "applicable-models/neural-network",
+      "id": 11
+    },
+    {
+      "name": "assurance-goal-category/explainability",
+      "id": 17
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "assurance-goal-category/safety",
+      "id": 29
+    },
+    {
+      "name": "data-requirements/access-to-training-data",
+      "id": 35
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "lifecycle-stage/deployment",
+      "id": 91
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
+  ],
+  "related_techniques": [
+    "ridge-regression-surrogates",
+    "rulefit",
+    "model-pruning"
+  ],
+  "related_technique_slugs": [
+    "ridge-regression-surrogates",
+    "rulefit",
+    "model-pruning"
+  ],
+  "resources": [
+    {
+      "title": "airaria/TextBrewer",
+      "url": "https://github.com/airaria/TextBrewer",
+      "description": "PyTorch-based knowledge distillation toolkit for natural language processing with support for transformer models, flexible distillation strategies, and multi-teacher approaches.",
+      "authors": "",
+      "publication_date": null,
+      "source_type": "software_package",
+      "resource_type": "documentation"
+    },
+    {
+      "title": "Main features — TextBrewer 0.2.1.post1 documentation",
+      "url": "https://textbrewer.readthedocs.io/",
+      "description": "Comprehensive documentation for TextBrewer including tutorials, API reference, configuration guides, and experimental results for knowledge distillation in NLP tasks.",
+      "authors": "",
+      "publication_date": null,
+      "source_type": "documentation",
+      "resource_type": "documentation"
+    },
+    {
+      "title": "A Generic Approach for Reproducible Model Distillation",
+      "url": "http://arxiv.org/abs/2211.12631",
+      "description": "Research paper presenting a framework for reproducible knowledge distillation with standardised evaluation protocols and benchmarking across different model architectures and distillation techniques.",
+      "authors": ["Hooker, Giles", "Xu, Peiru", "Zhou, Yunzhe"],
+      "publication_date": "2023-04-27T01:00:00",
+      "source_type": "technical_paper",
+      "resource_type": "documentation"
+    },
+    {
+      "title": "dkozlov/awesome-knowledge-distillation",
+      "url": "https://github.com/dkozlov/awesome-knowledge-distillation",
+      "description": "Curated collection of knowledge distillation resources including academic papers, implementation code across multiple frameworks (PyTorch, TensorFlow, Keras), and educational videos.",
+      "authors": "",
+      "publication_date": null,
+      "source_type": "software_package",
+      "resource_type": "documentation"
+    }
+  ],
+  "example_use_cases": [
+    {
+      "description": "Compressing a large medical diagnosis model into a smaller student model that can run on edge devices in resource-limited clinics, making the decision process more transparent for healthcare professionals whilst maintaining diagnostic accuracy for critical patient care.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Creating a compressed fraud detection model from a complex ensemble teacher that maintains detection performance whilst being more robust to adversarial attacks and data drift, ensuring consistent protection of financial transactions across varying conditions.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Distilling a large autonomous vehicle perception model into a smaller student model that can run with guaranteed inference times and lower computational requirements, ensuring predictable safety-critical decision-making under real-time constraints.",
+      "goal": "Safety"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Student models typically achieve 90-95% of teacher performance, creating a trade-off between model efficiency and predictive accuracy that may be unacceptable for high-stakes applications requiring maximum precision."
+    },
+    {
+      "description": "Distillation process can be computationally expensive, requiring extensive teacher model inference during training and careful hyperparameter tuning to balance knowledge transfer with student model capacity."
+    },
+    {
+      "description": "Knowledge transfer quality depends heavily on teacher-student architecture compatibility and the chosen distillation objectives, with mismatched designs potentially leading to ineffective learning or mode collapse."
+    },
+    {
+      "description": "Student models may inherit teacher model biases and vulnerabilities whilst potentially introducing new failure modes, requiring separate validation for fairness, robustness, and safety properties."
+    },
+    {
+      "description": "Compressed models may lack the teacher's capability to handle edge cases or out-of-distribution inputs, potentially creating safety risks when deployed in environments different from the training distribution."
+    }
+  ]
+}

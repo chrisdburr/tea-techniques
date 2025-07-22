@@ -1,0 +1,153 @@
+{
+  "slug": "feature-attribution-with-integrated-gradients-in-nlp",
+  "name": "Feature Attribution with Integrated Gradients in NLP",
+  "acronym": null,
+  "description": "Applies Integrated Gradients to natural language processing models to attribute prediction importance to individual input tokens, words, or subword units. This technique computes gradients along a straight-line path from a baseline input (typically all-zeros, padding tokens, or neutral text) to the actual input, integrating these gradients to obtain attribution scores. Unlike vanilla gradient methods, Integrated Gradients satisfies axioms of sensitivity and implementation invariance, making it particularly valuable for understanding transformer-based language models where token interactions are complex.",
+  "complexity_rating": 4,
+  "computational_cost_rating": 3,
+  "assurance_goals": [
+    {
+      "id": 1,
+      "name": "Explainability"
+    },
+    {
+      "id": 2,
+      "name": "Fairness"
+    },
+    {
+      "id": 7,
+      "name": "Safety"
+    }
+  ],
+  "tags": [
+    {
+      "name": "applicable-models/transformer",
+      "id": 15
+    },
+    {
+      "name": "applicable-models/llm",
+      "id": 9
+    },
+    {
+      "name": "assurance-goal-category/explainability",
+      "id": 17
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "assurance-goal-category/safety",
+      "id": 29
+    },
+    {
+      "name": "data-requirements/no-special-requirements",
+      "id": 39
+    },
+    {
+      "name": "data-type/text",
+      "id": 49
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "evidence-type/visualisation",
+      "id": 62
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "lifecycle-stage/testing",
+      "id": 106
+    },
+    {
+      "name": "technique-type/gradient-based",
+      "id": 110
+    }
+  ],
+  "related_techniques": [
+    "prompt-sensitivity-analysis",
+    "causal-mediation-analysis-in-language-models"
+  ],
+  "related_technique_slugs": [
+    "prompt-sensitivity-analysis",
+    "causal-mediation-analysis-in-language-models"
+  ],
+  "resources": [
+    {
+      "title": "Captum: Model Interpretability for PyTorch",
+      "url": "https://captum.ai/",
+      "description": "Open-source PyTorch library implementing Integrated Gradients with multi-modal support including text, featuring easy integration with transformer models and comprehensive NLP tutorials (BERT SQUAD, IMDB classification, Llama2 attribution).",
+      "authors": "",
+      "publication_date": null,
+      "source_type": "software_package",
+      "resource_type": "documentation"
+    },
+    {
+      "title": "Axiomatic Attribution for Deep Networks",
+      "url": "https://arxiv.org/abs/1703.01365",
+      "description": "Original paper introducing Integrated Gradients method with fundamental axioms of sensitivity and implementation invariance, demonstrating applications across text models and providing theoretical foundations for attribution methods.",
+      "authors": ["Mukund Sundararajan", "Ankur Taly", "Qiqi Yan"],
+      "publication_date": "2017-03-19",
+      "source_type": "technical_paper",
+      "resource_type": "documentation"
+    },
+    {
+      "title": "The Building Blocks of Interpretability",
+      "url": "https://distill.pub/2020/attribution-baselines/",
+      "description": "Interactive Distill article providing comprehensive guidance on baseline selection for Integrated Gradients, exploring different baseline types and their impact on feature attribution quality with transferable principles for NLP applications.",
+      "authors": "",
+      "publication_date": null,
+      "source_type": "tutorial",
+      "resource_type": "documentation"
+    },
+    {
+      "title": "transformers-interpret",
+      "url": "https://github.com/cdpierse/transformers-interpret",
+      "description": "Model explainability library designed for Hugging Face transformers, enabling transformer model explanation in two lines of code with HTML visualisations and support for sequence classification, multi-label classification, and computer vision models.",
+      "authors": "",
+      "publication_date": null,
+      "source_type": "software_package",
+      "resource_type": "documentation"
+    }
+  ],
+  "example_use_cases": [
+    {
+      "description": "In a clinical decision support system processing doctor's notes to predict patient risk, Integrated Gradients identifies which medical terms, symptoms, or phrases most strongly influence risk predictions, enabling clinicians to verify that the model focuses on clinically relevant information rather than spurious correlations and supporting regulatory compliance in healthcare AI.",
+      "goal": "Safety"
+    },
+    {
+      "description": "For automated loan approval systems processing free-text application descriptions, Integrated Gradients reveals which words or phrases drive acceptance decisions, supporting fairness audits by highlighting whether protected characteristics inadvertently influence decisions and enabling transparent explanations to customers about application outcomes.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "In content moderation systems flagging potentially harmful posts, Integrated Gradients identifies which specific words or linguistic patterns trigger safety classifications, enabling platform teams to debug false positives and validate that models focus on genuinely problematic language rather than demographic markers.",
+      "goal": "Explainability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Computational overhead scales significantly with document length as processing requires computing gradients across many integration steps (typically 20-300), making real-time applications or large-scale document processing challenging."
+    },
+    {
+      "description": "Choice of baseline input (zero embeddings, padding tokens, neutral text, or average embeddings) substantially affects attribution results, but optimal baseline selection remains domain-specific and often requires extensive experimentation."
+    },
+    {
+      "description": "In transformer models with attention mechanisms, importance often spreads across many tokens, making it difficult to identify clear, actionable insights, especially for complex reasoning tasks where multiple tokens contribute collectively."
+    },
+    {
+      "description": "Modern NLP models use subword tokenisation (BPE, WordPiece), making attribution results difficult to interpret at the word level, as single words may split across multiple tokens with varying attribution scores."
+    },
+    {
+      "description": "While Integrated Gradients identifies correlative relationships between tokens and predictions, it cannot establish causal relationships or distinguish between spurious correlations and meaningful semantic dependencies in the input text."
+    }
+  ]
+}

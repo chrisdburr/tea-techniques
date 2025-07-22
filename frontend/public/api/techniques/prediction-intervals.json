@@ -1,0 +1,152 @@
+{
+  "slug": "prediction-intervals",
+  "name": "Prediction Intervals",
+  "acronym": null,
+  "description": "Prediction intervals provide a range of plausible values around a model's prediction, expressing uncertainty as 'the true value will likely fall between X and Y with Z% confidence'. For example, instead of predicting 'house price: £300,000', a prediction interval might say 'house price: £280,000 to £320,000 with 95% confidence'. This technique works by calculating upper and lower bounds that account for both model uncertainty (how confident the model is) and inherent randomness in the data. Prediction intervals are crucial for informed decision-making, as they help users understand the reliability and precision of predictions, enabling better risk assessment and planning.",
+  "complexity_rating": 3,
+  "computational_cost_rating": 3,
+  "assurance_goals": [
+    {
+      "id": 3,
+      "name": "Reliability"
+    },
+    {
+      "id": 6,
+      "name": "Transparency"
+    },
+    {
+      "id": 2,
+      "name": "Fairness"
+    }
+  ],
+  "tags": [
+    {
+      "name": "applicable-models/agnostic",
+      "id": 1
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "assurance-goal-category/reliability/uncertainty-quantification",
+      "id": 28
+    },
+    {
+      "name": "assurance-goal-category/transparency",
+      "id": 31
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "data-requirements/no-special-requirements",
+      "id": 39
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "evidence-type/prediction-interval",
+      "id": 56
+    },
+    {
+      "name": "expertise-needed/statistics",
+      "id": 79
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "lifecycle-stage/system-deployment-and-use",
+      "id": 103
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
+  ],
+  "related_techniques": [
+    "monte-carlo-dropout",
+    "quantile-regression",
+    "conformal-prediction",
+    "deep-ensembles",
+    "bootstrapping",
+    "jackknife-resampling"
+  ],
+  "related_technique_slugs": [
+    "monte-carlo-dropout",
+    "quantile-regression",
+    "conformal-prediction",
+    "deep-ensembles",
+    "bootstrapping",
+    "jackknife-resampling"
+  ],
+  "resources": [
+    {
+      "title": "scikit-learn-contrib/MAPIE",
+      "url": "https://github.com/scikit-learn-contrib/MAPIE",
+      "description": "Open-source Python library for quantifying uncertainties using conformal prediction techniques, compatible with scikit-learn, TensorFlow, and PyTorch",
+      "authors": "",
+      "publication_date": null,
+      "source_type": "software_package",
+      "resource_type": "documentation"
+    },
+    {
+      "title": "MAPIE - Model Agnostic Prediction Interval Estimator",
+      "url": "https://mapie.readthedocs.io/",
+      "description": "Official documentation for MAPIE library implementing distribution-free uncertainty estimates for regression and classification tasks",
+      "authors": "",
+      "publication_date": null,
+      "source_type": "documentation",
+      "resource_type": "documentation"
+    },
+    {
+      "title": "valeman/awesome-conformal-prediction",
+      "url": "https://github.com/valeman/awesome-conformal-prediction",
+      "description": "Curated collection of conformal prediction resources including videos, tutorials, books, papers, and open-source libraries",
+      "authors": "",
+      "publication_date": null,
+      "source_type": "software_package",
+      "resource_type": "documentation"
+    }
+  ],
+  "example_use_cases": [
+    {
+      "description": "Providing realistic ranges for medical diagnosis predictions, such as 'patient survival time: 8-14 months with 90% confidence', enabling doctors to make informed treatment decisions and communicate uncertainty to patients and families.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Communicating uncertainty in automated loan approval systems by showing 'credit score prediction: 650-720 with 95% confidence' rather than a single score, helping loan officers understand prediction reliability and make transparent decisions.",
+      "goal": "Transparency"
+    },
+    {
+      "description": "Ensuring consistent prediction uncertainty across demographic groups in hiring algorithms, verifying that prediction intervals have similar widths for different protected groups to avoid unfair confidence disparities.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Relies on assumptions about the error distribution (often normality) which may not hold in practice, leading to inaccurate interval coverage when data exhibits heavy tails, skewness, or other non-standard patterns."
+    },
+    {
+      "description": "Can be overconfident if the underlying model is poorly calibrated, producing intervals that are too narrow and fail to capture the true prediction uncertainty."
+    },
+    {
+      "description": "Vulnerable to distribution shift between training and deployment data, where intervals calculated on historical data may not reflect uncertainty in new, unseen conditions."
+    },
+    {
+      "description": "May require careful hyperparameter tuning and validation to achieve desired coverage rates, particularly when using advanced methods like conformal prediction or quantile regression."
+    },
+    {
+      "description": "Computational overhead increases when generating intervals for large datasets or complex models, especially when using resampling-based methods like bootstrapping."
+    }
+  ]
+}

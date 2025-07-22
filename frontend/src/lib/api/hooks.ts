@@ -7,14 +7,10 @@ import {
 } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/client";
 import { logApiError } from "@/lib/api/errorUtils";
-import type {
-  Technique,
-  TechniqueFormData,
-  AssuranceGoal,
-  APIResponse,
-  Tag,
-  ResourceType,
-} from "@/lib/types";
+import { getDataService } from "@/lib/services/dataServiceFactory";
+import { getDataConfig } from "@/lib/config/dataConfig";
+import { getSearchService } from "@/lib/services/searchService";
+import type { Technique, TechniqueFormData } from "@/lib/types";
 
 interface QueryParams {
   search?: string;
@@ -85,17 +81,19 @@ const fetchAPI = async <T>(
 
 /**
  * Hook for fetching assurance goals
+ * Uses the data service layer for hybrid static/dynamic support
  *
  * @returns Query object with assurance goals data
  */
 export const useAssuranceGoals = () => {
+  const config = getDataConfig();
+
   return useQuery({
-    queryKey: ["assurance-goals"],
+    queryKey: ["assurance-goals", config.dataSource],
     queryFn: async () => {
       try {
-        return await fetchAPI<APIResponse<AssuranceGoal>>(
-          "/api/assurance-goals",
-        );
+        const dataService = getDataService();
+        return await dataService.getAssuranceGoals();
       } catch (error: unknown) {
         logApiError("useAssuranceGoals", error);
         throw error;
@@ -106,15 +104,19 @@ export const useAssuranceGoals = () => {
 
 /**
  * Hook for fetching all tags
+ * Uses the data service layer for hybrid static/dynamic support
  *
  * @returns Query object with tags data
  */
 export const useTags = () => {
+  const config = getDataConfig();
+
   return useQuery({
-    queryKey: ["tags"],
+    queryKey: ["tags", config.dataSource],
     queryFn: async () => {
       try {
-        return await fetchAPI<APIResponse<Tag>>("/api/tags");
+        const dataService = getDataService();
+        return await dataService.getTags();
       } catch (error: unknown) {
         logApiError("useTags", error);
         throw error;
@@ -125,11 +127,14 @@ export const useTags = () => {
 
 // New hooks for the resource system
 export const useResourceTypes = () => {
+  const config = getDataConfig();
+
   return useQuery({
-    queryKey: ["resource-types"],
+    queryKey: ["resource-types", config.dataSource],
     queryFn: async () => {
       try {
-        return await fetchAPI<APIResponse<ResourceType>>("/api/resource-types");
+        const dataService = getDataService();
+        return await dataService.getResourceTypes();
       } catch (error: unknown) {
         logApiError("useResourceTypes", error);
         throw error;
@@ -140,19 +145,20 @@ export const useResourceTypes = () => {
 
 /**
  * Hook for fetching techniques with filtering, searching, and pagination
+ * Uses the data service layer for hybrid static/dynamic support
  *
  * @param params - Query parameters for filtering and searching techniques
  * @param page - Page number for pagination (defaults to 1)
  * @returns Query object with techniques data
  */
 export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
-  // Filter parameters
-  const apiParams: Record<string, string | number | string[]> = { page };
+  const config = getDataConfig();
+
+  // Prepare filter parameters for the data service
+  const serviceParams: Record<string, string | string[]> = {};
 
   if (params.search) {
-    apiParams.search = params.search;
-    // Django REST Framework format for specifying search fields
-    apiParams.search_fields = "name"; // Only search in name field
+    serviceParams.search = params.search;
   }
 
   // Handle assurance_goals as an array
@@ -161,53 +167,45 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
     Array.isArray(params.assurance_goals) &&
     params.assurance_goals.length > 0
   ) {
-    // For axios, we need to format this correctly for the backend
-    apiParams.assurance_goals = params.assurance_goals;
+    serviceParams.assurance_goals = params.assurance_goals;
   } else if (params.assurance_goals && params.assurance_goals !== "all") {
-    // Single goal
-    apiParams.assurance_goals = params.assurance_goals;
+    serviceParams.assurance_goals = params.assurance_goals;
   }
 
   // Handle tags as an array
   if (params.tags && Array.isArray(params.tags) && params.tags.length > 0) {
-    apiParams.tags = params.tags;
+    serviceParams.tags = params.tags;
   } else if (params.tags && params.tags !== "all") {
-    // Single tag
-    apiParams.tags = params.tags;
+    serviceParams.tags = params.tags;
   }
 
   // Add rating parameters
   if (params.complexity_min) {
-    apiParams.complexity_min = params.complexity_min;
+    serviceParams.complexity_min = params.complexity_min;
   }
   if (params.complexity_max) {
-    apiParams.complexity_max = params.complexity_max;
+    serviceParams.complexity_max = params.complexity_max;
   }
   if (params.computational_cost_min) {
-    apiParams.computational_cost_min = params.computational_cost_min;
+    serviceParams.computational_cost_min = params.computational_cost_min;
   }
   if (params.computational_cost_max) {
-    apiParams.computational_cost_max = params.computational_cost_max;
+    serviceParams.computational_cost_max = params.computational_cost_max;
   }
 
-  // Create query string
-  const queryParams = new URLSearchParams();
-  Object.entries(apiParams).forEach(([key, value]) => {
-    queryParams.append(key, String(value));
-  });
-
-  // Create a more comprehensive query key that captures all filter parameters
+  // Create a comprehensive query key that captures all filter parameters and data source
   const queryKey = [
     "techniques",
+    config.dataSource,
     params.search || "",
     // Include all assurance_goals values
-    Array.isArray(apiParams.assurance_goals)
-      ? apiParams.assurance_goals.join(",")
-      : apiParams.assurance_goals || "all",
+    Array.isArray(serviceParams.assurance_goals)
+      ? serviceParams.assurance_goals.join(",")
+      : serviceParams.assurance_goals || "all",
     // Include all tags values
-    Array.isArray(apiParams.tags)
-      ? apiParams.tags.join(",")
-      : apiParams.tags || "all",
+    Array.isArray(serviceParams.tags)
+      ? serviceParams.tags.join(",")
+      : serviceParams.tags || "all",
     // Include rating filters
     params.complexity_min || "1",
     params.complexity_max || "5",
@@ -216,31 +214,46 @@ export const useTechniques = (params: QueryParams = {}, page: number = 1) => {
     page,
   ];
 
+  console.log("🔍 DEBUG: useTechniques queryKey:", queryKey);
+
   return useQuery({
     queryKey: queryKey,
     queryFn: async () => {
       try {
-        // Use the apiClient configured with proper baseUrl
-        return await fetchAPI("/api/techniques", apiParams);
+        const dataService = getDataService();
+        console.log(
+          "🔍 DEBUG: useTechniques queryFn called with page:",
+          page,
+          "serviceParams:",
+          serviceParams,
+        );
+        return await dataService.getTechniques(serviceParams, page);
       } catch (error: unknown) {
         logApiError("useTechniques", error);
         throw error;
       }
     },
+    // Ensure query refetches when dependencies change, especially in static mode
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    staleTime: 0, // Always consider data stale in static mode to ensure refetch
+    gcTime: 0, // Don't keep cached data in garbage collection
   });
 };
 
 export const useTechniqueDetail = (slug: string) => {
+  const config = getDataConfig();
+
   return useQuery({
-    queryKey: ["technique", slug],
+    queryKey: ["technique", slug, config.dataSource],
     queryFn: async () => {
       try {
-        // Use fetchAPI to handle URL normalization consistently
-        const data = await fetchAPI<Technique>(`/api/techniques/${slug}`);
+        const dataService = getDataService();
+        const data = await dataService.getTechnique(slug);
 
         // Validate the response
         if (!data.slug || !data.name) {
-          throw new Error(`API returned malformed data`);
+          throw new Error(`Data service returned malformed data`);
         }
 
         return data;
@@ -261,13 +274,16 @@ export const useTechniqueDetail = (slug: string) => {
  * @returns Array of query objects with technique basic details
  */
 export const useMultipleTechniqueNames = (slugs: string[]) => {
+  const config = getDataConfig();
+
   const queries = useQueries({
     queries: slugs.map((slug) => ({
-      queryKey: ["technique-name", slug],
+      queryKey: ["technique-name", slug, config.dataSource],
       queryFn: async () => {
         try {
-          // Fetch full technique but only use slug and name for performance
-          const data = await fetchAPI<Technique>(`/api/techniques/${slug}`);
+          // Use data service instead of direct API fetch for hybrid static/dynamic support
+          const dataService = getDataService();
+          const data = await dataService.getTechnique(slug);
 
           // Return only the data we need for related techniques display
           return {
@@ -276,8 +292,12 @@ export const useMultipleTechniqueNames = (slugs: string[]) => {
             acronym: data.acronym,
           };
         } catch (error: unknown) {
-          logApiError("useMultipleTechniqueNames", error);
-          throw error;
+          console.warn(
+            `Failed to fetch technique name for slug "${slug}":`,
+            error,
+          );
+          // Return null for failed fetches instead of throwing - this prevents the whole component from failing
+          return null;
         }
       },
       enabled: !!slug, // Only run if slug is provided
@@ -285,9 +305,11 @@ export const useMultipleTechniqueNames = (slugs: string[]) => {
     })),
   });
 
-  // Combine the results into a more usable format
+  // Combine the results into a more usable format, filtering out null results
   return {
-    techniques: queries.map((query) => query.data).filter(Boolean),
+    techniques: queries
+      .map((query) => query.data)
+      .filter((data): data is NonNullable<typeof data> => data !== null),
     isLoading: queries.some((query) => query.isLoading),
     isError: queries.some((query) => query.isError),
     errors: queries.filter((query) => query.error).map((query) => query.error),
@@ -311,9 +333,15 @@ const normalizePath = (path: string): string => {
 
 export const useCreateTechnique = () => {
   const queryClient = useQueryClient();
+  const config = getDataConfig();
 
   return useMutation({
     mutationFn: async (data: TechniqueFormData) => {
+      // Only allow creation in API mode
+      if (config.dataSource !== "api") {
+        throw new Error("Technique creation is only available in API mode");
+      }
+
       try {
         // Normalize the path to ensure proper routing
         const path = normalizePath("/api/techniques");
@@ -336,9 +364,15 @@ export const useCreateTechnique = () => {
 
 export const useUpdateTechnique = (slug: string) => {
   const queryClient = useQueryClient();
+  const config = getDataConfig();
 
   return useMutation({
     mutationFn: async (data: TechniqueFormData) => {
+      // Only allow updates in API mode
+      if (config.dataSource !== "api") {
+        throw new Error("Technique updates are only available in API mode");
+      }
+
       try {
         // Normalize the path to ensure proper routing
         const path = normalizePath(`/api/techniques/${slug}`);
@@ -362,9 +396,15 @@ export const useUpdateTechnique = (slug: string) => {
 
 export const useDeleteTechnique = () => {
   const queryClient = useQueryClient();
+  const config = getDataConfig();
 
   return useMutation({
     mutationFn: async (slug: string) => {
+      // Only allow deletion in API mode
+      if (config.dataSource !== "api") {
+        throw new Error("Technique deletion is only available in API mode");
+      }
+
       try {
         // Normalize the path to ensure proper routing
         const path = normalizePath(`/api/techniques/${slug}`);
@@ -386,6 +426,27 @@ export const useDeleteTechnique = () => {
 };
 
 // Removed the unused useTechniqueRelationships hook as it references a non-existent endpoint
+
+/**
+ * Hook for performing hybrid search across techniques using either static or API search
+ */
+export const useSearch = (query: string, enabled: boolean = true) => {
+  const config = getDataConfig();
+
+  return useQuery({
+    queryKey: ["search", config.dataSource, query],
+    queryFn: async () => {
+      if (!query.trim()) {
+        return [];
+      }
+
+      const searchService = getSearchService();
+      return searchService.search(query);
+    },
+    enabled: enabled && !!query.trim(),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+};
 
 // Export the utility functions for use in components
 export { calculateTotalPages };

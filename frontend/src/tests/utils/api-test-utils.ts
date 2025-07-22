@@ -300,29 +300,29 @@ export const createTestQueryClient = () => {
         retry: false,
       },
     },
-    logger: {
-      log: () => {},
-      warn: () => {},
-      error: () => {},
-    },
   });
 };
 
 // Utility for waiting for queries to settle
 export const waitForQueriesToSettle = async (queryClient: QueryClient) => {
-  await queryClient
-    .getQueryCache()
-    .findAll()
-    .forEach((query) => {
+  const queries = queryClient.getQueryCache().findAll();
+
+  await Promise.all(
+    queries.map(async (query) => {
       if (query.state.fetchStatus === "fetching") {
-        return new Promise((resolve) => {
-          const unsubscribe = query.subscribe(() => {
+        // Wait for the query to settle
+        await new Promise<void>((resolve) => {
+          const checkStatus = () => {
             if (query.state.fetchStatus !== "fetching") {
-              unsubscribe();
-              resolve(undefined);
+              resolve();
+            } else {
+              // Check again after a short delay
+              setTimeout(checkStatus, 10);
             }
-          });
+          };
+          checkStatus();
         });
       }
-    });
+    }),
+  );
 };

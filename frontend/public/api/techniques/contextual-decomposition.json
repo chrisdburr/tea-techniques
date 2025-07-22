@@ -1,0 +1,150 @@
+{
+  "slug": "contextual-decomposition",
+  "name": "Contextual Decomposition",
+  "acronym": null,
+  "description": "Contextual Decomposition explains LSTM and RNN predictions by decomposing the final hidden state into contributions from individual inputs and their interactions. Unlike simpler attribution methods, it separates the direct contribution of specific words or phrases from the contextual effects of surrounding words. This is particularly useful for understanding how sequential models process language, as it can identify whether a word's influence comes from its individual meaning or from its interaction with nearby words in the sequence.",
+  "complexity_rating": 5,
+  "computational_cost_rating": 3,
+  "assurance_goals": [
+    {
+      "id": 1,
+      "name": "Explainability"
+    },
+    {
+      "id": 6,
+      "name": "Transparency"
+    }
+  ],
+  "tags": [
+    {
+      "name": "applicable-models/recurrent-neural-network",
+      "id": 13
+    },
+    {
+      "name": "assurance-goal-category/explainability",
+      "id": 17
+    },
+    {
+      "name": "assurance-goal-category/transparency",
+      "id": 31
+    },
+    {
+      "name": "data-requirements/no-special-requirements",
+      "id": 39
+    },
+    {
+      "name": "data-type/text",
+      "id": 49
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "expertise-needed/ml-engineering",
+      "id": 73
+    },
+    {
+      "name": "explanatory-scope/local",
+      "id": 81
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "lifecycle-stage/system-deployment-and-use",
+      "id": 103
+    },
+    {
+      "name": "technique-type/algorithmic",
+      "id": 107
+    }
+  ],
+  "related_techniques": ["taylor-decomposition", "influence-functions"],
+  "related_technique_slugs": ["taylor-decomposition", "influence-functions"],
+  "resources": [
+    {
+      "title": "Beyond Word Importance: Contextual Decomposition to Extract Interactions from LSTMs",
+      "url": "http://arxiv.org/pdf/1801.05453v2",
+      "authors": ["W. James Murdoch", "Peter J. Liu", "Bin Yu"],
+      "publication_date": "2018-01-16",
+      "source_type": "technical_paper",
+      "resource_type": "documentation"
+    },
+    {
+      "title": "FredericGodin/ContextualDecomposition-NLP",
+      "url": "https://github.com/FredericGodin/ContextualDecomposition-NLP",
+      "authors": "",
+      "publication_date": null,
+      "source_type": "software_package",
+      "resource_type": "documentation"
+    },
+    {
+      "title": "Interpreting patient-Specific risk prediction using contextual decomposition of BiLSTMs: Application to children with asthma",
+      "url": "https://core.ac.uk/download/294758884.pdf",
+      "authors": ["Alsaad R.", "Boughorbel S.", "Janahi I.", "Malluhi Q."],
+      "publication_date": "2019-01-01T00:00:00",
+      "source_type": "technical_paper",
+      "resource_type": "documentation"
+    },
+    {
+      "title": "Towards Hierarchical Importance Attribution: Explaining Compositional Semantics for Neural Sequence Models",
+      "url": "http://arxiv.org/pdf/1911.06194v2",
+      "authors": [
+        "Xisen Jin",
+        "Zhongyu Wei",
+        "Junyi Du",
+        "Xiangyang Xue",
+        "Xiang Ren"
+      ],
+      "publication_date": "2019-11-08",
+      "source_type": "technical_paper",
+      "resource_type": "documentation"
+    },
+    {
+      "title": "Efficient Automated Circuit Discovery in Transformers using Contextual Decomposition",
+      "url": "http://arxiv.org/pdf/2407.00886v3",
+      "authors": [
+        "Aliyah R. Hsu",
+        "Georgia Zhou",
+        "Yeshwanth Cherapanamjeri",
+        "Yaxuan Huang",
+        "Anobel Y. Odisho",
+        "Peter R. Carroll",
+        "Bin Yu"
+      ],
+      "publication_date": "2024-07-01",
+      "source_type": "technical_paper",
+      "resource_type": "documentation"
+    }
+  ],
+  "example_use_cases": [
+    {
+      "description": "Analysing why an LSTM-based spam filter flagged an email by decomposing contributions from individual words ('free', 'urgent') versus their contextual interactions ('free trial' together).",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Understanding how a medical text classifier diagnoses conditions from clinical notes by separating direct symptom mentions from contextual medical reasoning patterns.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Providing transparent explanations for automated content moderation decisions by showing which words and phrase interactions contributed to toxicity detection.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Primarily designed for LSTM and simple RNN architectures, not suitable for modern transformers or attention-based models."
+    },
+    {
+      "description": "Not widely implemented in standard machine learning libraries, often requiring custom implementation."
+    },
+    {
+      "description": "Computational overhead increases significantly with sequence length and model depth."
+    },
+    {
+      "description": "May not scale well to very complex models or capture all types of feature interactions in deep networks."
+    }
+  ]
+}

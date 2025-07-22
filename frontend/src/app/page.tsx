@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import MainLayout from "@/components/layout/MainLayout";
@@ -50,6 +48,7 @@ export default function HomePage() {
                 width={800}
                 height={500}
                 className="w-full object-cover"
+                priority
               />
             </div>
           </div>

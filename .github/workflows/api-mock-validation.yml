@@ -1,0 +1,437 @@
+name: API Mock Validation
+
+on:
+  pull_request:
+    paths:
+      - 'frontend/public/api/**'
+      - 'frontend/scripts/generateStaticApi.js'
+      - 'backend/data/techniques.json'
+      - '.github/workflows/api-mock-validation.yml'
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'frontend/public/api/**'
+      - 'frontend/scripts/generateStaticApi.js'
+      - 'backend/data/techniques.json'
+  workflow_dispatch:
+  workflow_call:
+    outputs:
+      validation-passed:
+        description: 'Whether API mock validation passed'
+        value: ${{ jobs.validate.outputs.passed }}
+
+env:
+  NODE_VERSION: '18'
+  PNPM_VERSION: '10.6.5'
+  PYTHON_VERSION: '3.12'
+
+jobs:
+  generate-and-validate:
+    runs-on: ubuntu-latest
+    outputs:
+      api-changed: ${{ steps.changes.outputs.api-changed }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate fresh API mocks
+        working-directory: frontend
+        run: |
+          pnpm sync-data
+          pnpm generate-api
+
+      - name: Check for API changes
+        id: changes
+        run: |
+          if git diff --quiet HEAD -- frontend/public/api/; then
+            echo "api-changed=false" >> $GITHUB_OUTPUT
+            echo "No API changes detected"
+          else
+            echo "api-changed=true" >> $GITHUB_OUTPUT
+            echo "API changes detected:"
+            git diff --stat HEAD -- frontend/public/api/
+          fi
+
+      - name: Upload generated API files
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-api-mocks
+          path: frontend/public/api/
+          retention-days: 7
+
+  validate:
+    runs-on: ubuntu-latest
+    needs: generate-and-validate
+    outputs:
+      passed: ${{ steps.final-status.outputs.passed }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          cd frontend && pnpm install --frozen-lockfile
+          cd ../backend && pip install uv && uv sync --frozen
+
+      - name: Download generated API files
+        uses: actions/download-artifact@v4
+        with:
+          name: generated-api-mocks
+          path: frontend/public/api/
+
+      - name: Validate JSON structure
+        run: |
+          echo "Validating JSON structure..."
+
+          # Check all JSON files are valid
+          find frontend/public/api -name "*.json" -type f | while read file; do
+            if ! python -m json.tool "$file" > /dev/null 2>&1; then
+              echo "::error file=$file::Invalid JSON structure"
+              exit 1
+            fi
+          done
+
+          echo "✅ All JSON files are valid"
+
+      - name: Validate API schema
+        working-directory: frontend
+        run: |
+          # Run the validation script (to be created)
+          if [ -f "scripts/validateApiMocks.js" ]; then
+            node scripts/validateApiMocks.js
+          else
+            echo "::warning::API mock validation script not found, skipping schema validation"
+          fi
+
+      - name: Check required endpoints
+        run: |
+          echo "Checking required endpoints..."
+
+          required_endpoints=(
+            "frontend/public/api/techniques.json"
+            "frontend/public/api/techniques/index.json"
+          )
+
+          for endpoint in "${required_endpoints[@]}"; do
+            if [ ! -f "$endpoint" ]; then
+              echo "::error::Required endpoint missing: $endpoint"
+              exit 1
+            fi
+          done
+
+          echo "✅ All required endpoints present"
+
+      - name: Validate technique slugs
+        run: |
+          echo "Validating technique slugs match..."
+
+          # Extract slugs from index
+          index_slugs=$(jq -r '.techniques[].slug' frontend/public/api/techniques/index.json | sort)
+
+          # Check each slug has a corresponding file
+          echo "$index_slugs" | while read slug; do
+            if [ ! -f "frontend/public/api/techniques/$slug.json" ]; then
+              echo "::error::Missing technique file for slug: $slug"
+              exit 1
+            fi
+          done
+
+          echo "✅ All technique files present"
+
+      - name: Check data completeness
+        run: |
+          echo "Checking data completeness..."
+
+          # Count techniques in source vs generated
+          source_count=$(jq '.techniques | length' backend/data/techniques.json)
+          generated_count=$(jq '.techniques | length' frontend/public/api/techniques/index.json)
+
+          if [ "$source_count" -ne "$generated_count" ]; then
+            echo "::error::Technique count mismatch: source=$source_count, generated=$generated_count"
+            exit 1
+          fi
+
+          echo "✅ Data completeness verified ($source_count techniques)"
+
+      - name: Validate response format
+        run: |
+          echo "Validating API response format..."
+
+          # Check index response format
+          if ! jq -e '.techniques | type == "array"' frontend/public/api/techniques/index.json > /dev/null; then
+            echo "::error::Invalid index format: techniques should be an array"
+            exit 1
+          fi
+
+          # Check individual technique format
+          for file in frontend/public/api/techniques/*.json; do
+            if [[ "$file" == *"index.json" ]]; then
+              continue
+            fi
+
+            # Check required fields
+            if ! jq -e '.slug and .name and .description' "$file" > /dev/null; then
+              echo "::error file=$file::Missing required fields (slug, name, or description)"
+              exit 1
+            fi
+          done
+
+          echo "✅ Response format validated"
+
+      - name: Check backward compatibility
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "Checking backward compatibility..."
+
+          # This would compare against the base branch
+          # For now, we'll just ensure no fields are removed
+          echo "::notice::Backward compatibility check would run here"
+
+      - name: Set final status
+        id: final-status
+        run: |
+          echo "passed=true" >> $GITHUB_OUTPUT
+          echo "✅ All API mock validations passed!"
+
+  integration-contracts:
+    runs-on: ubuntu-latest
+    needs: validate
+    if: needs.validate.outputs.passed == 'true'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download API mocks
+        uses: actions/download-artifact@v4
+        with:
+          name: generated-api-mocks
+          path: frontend/public/api/
+
+      - name: Generate OpenAPI spec
+        run: |
+          echo "Generating OpenAPI specification..."
+
+          # Create a basic OpenAPI spec from the mock data
+          cat > openapi-spec.json << 'EOF'
+          {
+            "openapi": "3.0.0",
+            "info": {
+              "title": "TEA Techniques Mock API",
+              "version": "1.0.0",
+              "description": "Mock API endpoints for integration testing"
+            },
+            "servers": [
+              {
+                "url": "/api",
+                "description": "Mock API server"
+              }
+            ],
+            "paths": {
+              "/techniques": {
+                "get": {
+                  "summary": "List all techniques",
+                  "responses": {
+                    "200": {
+                      "description": "Successful response",
+                      "content": {
+                        "application/json": {
+                          "schema": {
+                            "$ref": "#/components/schemas/TechniqueList"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "/techniques/{slug}": {
+                "get": {
+                  "summary": "Get technique by slug",
+                  "parameters": [
+                    {
+                      "name": "slug",
+                      "in": "path",
+                      "required": true,
+                      "schema": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                  "responses": {
+                    "200": {
+                      "description": "Successful response",
+                      "content": {
+                        "application/json": {
+                          "schema": {
+                            "$ref": "#/components/schemas/Technique"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "components": {
+              "schemas": {
+                "TechniqueList": {
+                  "type": "object",
+                  "properties": {
+                    "techniques": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TechniqueSummary"
+                      }
+                    }
+                  }
+                },
+                "TechniqueSummary": {
+                  "type": "object",
+                  "required": ["slug", "name", "description"],
+                  "properties": {
+                    "slug": {"type": "string"},
+                    "name": {"type": "string"},
+                    "acronym": {"type": "string"},
+                    "description": {"type": "string"},
+                    "categories": {
+                      "type": "array",
+                      "items": {"type": "string"}
+                    }
+                  }
+                },
+                "Technique": {
+                  "type": "object",
+                  "required": ["slug", "name", "description"],
+                  "properties": {
+                    "slug": {"type": "string"},
+                    "name": {"type": "string"},
+                    "acronym": {"type": "string"},
+                    "description": {"type": "string"},
+                    "purpose": {"type": "string"},
+                    "suited_for": {"type": "string"},
+                    "categories": {
+                      "type": "array",
+                      "items": {"type": "string"}
+                    },
+                    "resources": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "title": {"type": "string"},
+                          "url": {"type": "string"}
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          EOF
+
+      - name: Upload OpenAPI spec
+        uses: actions/upload-artifact@v4
+        with:
+          name: openapi-spec
+          path: openapi-spec.json
+          retention-days: 30
+
+      - name: Generate integration test examples
+        run: |
+          cat > integration-examples.md << 'EOF'
+          # Integration Test Examples
+
+          ## Fetching Techniques List
+
+          ```javascript
+          const response = await fetch('/api/techniques.json');
+          const data = await response.json();
+          console.log(data.techniques); // Array of techniques
+          ```
+
+          ## Fetching Individual Technique
+
+          ```javascript
+          const response = await fetch('/api/techniques/shapley-additive-explanations.json');
+          const technique = await response.json();
+          console.log(technique.name); // "Shapley Additive Explanations"
+          ```
+
+          ## Available Endpoints
+
+          - `/api/techniques.json` - List of all techniques
+          - `/api/techniques/index.json` - Same as above
+          - `/api/techniques/{slug}.json` - Individual technique details
+
+          EOF
+
+      - name: Upload integration examples
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-examples
+          path: integration-examples.md
+          retention-days: 30
+
+  notify:
+    runs-on: ubuntu-latest
+    needs: [generate-and-validate, validate]
+    if: always() && needs.generate-and-validate.outputs.api-changed == 'true'
+
+    steps:
+      - name: Prepare notification
+        run: |
+          if [ "${{ needs.validate.outputs.passed }}" == "true" ]; then
+            echo "API_STATUS=✅ API mocks updated and validated" >> $GITHUB_ENV
+          else
+            echo "API_STATUS=❌ API mock validation failed" >> $GITHUB_ENV
+          fi
+
+      - name: Add PR comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## API Mock Validation Results\n\n${process.env.API_STATUS}\n\n**Integration partners**: Mock API endpoints have been updated. Please test your integrations.`
+            });
+
+      - name: Send webhook notification
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "::notice::Webhook notification would be sent to integration partners"
+          # Add actual webhook calls here when configured

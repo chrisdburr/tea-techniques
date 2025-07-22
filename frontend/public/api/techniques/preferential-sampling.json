@@ -1,0 +1,161 @@
+{
+  "slug": "preferential-sampling",
+  "name": "Preferential Sampling",
+  "acronym": null,
+  "description": "A preprocessing fairness technique developed by Kamiran and Calders that addresses dataset imbalances by re-sampling training data with preference for underrepresented groups to achieve discrimination-free classification. This method modifies the training distribution by prioritising borderline objects (instances near decision boundaries) from underrepresented groups for duplication whilst potentially removing instances from overrepresented groups. Unlike relabelling approaches, preferential sampling maintains original class labels whilst creating a more balanced dataset that prevents models from learning biased patterns due to skewed group representation.",
+  "complexity_rating": 2,
+  "computational_cost_rating": 2,
+  "assurance_goals": [
+    {
+      "id": 2,
+      "name": "Fairness"
+    },
+    {
+      "id": 3,
+      "name": "Reliability"
+    },
+    {
+      "id": 6,
+      "name": "Transparency"
+    }
+  ],
+  "tags": [
+    {
+      "name": "applicable-models/agnostic",
+      "id": 1
+    },
+    {
+      "name": "assurance-goal-category/fairness",
+      "id": 20
+    },
+    {
+      "name": "assurance-goal-category/fairness/group",
+      "id": 22
+    },
+    {
+      "name": "assurance-goal-category/reliability",
+      "id": 27
+    },
+    {
+      "name": "assurance-goal-category/transparency",
+      "id": 31
+    },
+    {
+      "name": "data-requirements/sensitive-attributes",
+      "id": 43
+    },
+    {
+      "name": "data-requirements/labelled-data",
+      "id": 38
+    },
+    {
+      "name": "data-type/any",
+      "id": 46
+    },
+    {
+      "name": "evidence-type/quantitative-metric",
+      "id": 59
+    },
+    {
+      "name": "evidence-type/dataset-analysis",
+      "id": 52
+    },
+    {
+      "name": "expertise-needed/low",
+      "id": 72
+    },
+    {
+      "name": "fairness-approach/group",
+      "id": 83
+    },
+    {
+      "name": "lifecycle-stage/data-collection",
+      "id": 84
+    },
+    {
+      "name": "lifecycle-stage/data-collection/data-preprocessing",
+      "id": 86
+    },
+    {
+      "name": "lifecycle-stage/model-development",
+      "id": 92
+    },
+    {
+      "name": "technique-type/procedural",
+      "id": 113
+    }
+  ],
+  "related_techniques": [
+    "reweighing",
+    "disparate-impact-remover",
+    "relabelling"
+  ],
+  "related_technique_slugs": [
+    "reweighing",
+    "disparate-impact-remover",
+    "relabelling"
+  ],
+  "resources": [
+    {
+      "title": "Data preprocessing techniques for classification without discrimination",
+      "url": "https://link.springer.com/article/10.1007/s10115-011-0463-8",
+      "authors": ["Faisal Kamiran", "Toon Calders"],
+      "publication_date": "2012-06-01",
+      "source_type": "technical_paper",
+      "resource_type": "documentation"
+    },
+    {
+      "title": "Classification with no discrimination by preferential sampling",
+      "url": "https://research.tue.nl/en/publications/classification-with-no-discrimination-by-preferential-sampling",
+      "authors": ["Faisal Kamiran", "Toon Calders"],
+      "publication_date": "2010-05-27",
+      "source_type": "technical_paper",
+      "resource_type": "documentation"
+    },
+    {
+      "title": "A Survey on Bias and Fairness in Machine Learning",
+      "url": "https://arxiv.org/abs/1908.09635",
+      "authors": [
+        "Ninareh Mehrabi",
+        "Fred Morstatter",
+        "Nripsuta Saxena",
+        "Kristina Lerman",
+        "Aram Galstyan"
+      ],
+      "publication_date": "2019-08-25",
+      "source_type": "review_paper",
+      "resource_type": "documentation"
+    }
+  ],
+  "example_use_cases": [
+    {
+      "description": "Preprocessing hiring datasets by preferentially sampling candidates from underrepresented gender and ethnic groups, particularly focusing on borderline cases near decision boundaries, to ensure fair representation whilst maintaining original qualifications and labels for unbiased recruitment model training.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Balancing medical training datasets by oversampling patients from underrepresented demographic groups to ensure reliable diagnostic performance across all populations, preventing models from exhibiting reduced accuracy for minority patient groups due to insufficient training examples.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Creating transparent credit scoring datasets by documenting and adjusting the sampling process to ensure equal representation across demographic groups, providing clear evidence to regulators that training data imbalances have been addressed without altering original creditworthiness labels.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Oversampling minority groups can cause overfitting to duplicated examples, particularly when borderline instances are repeatedly sampled, potentially reducing model generalisation."
+    },
+    {
+      "description": "Undersampling majority groups may remove important examples that contain valuable information, potentially degrading overall model performance."
+    },
+    {
+      "description": "Does not address inherent algorithmic bias in the learning process itself, only correcting for representation imbalances in the training data."
+    },
+    {
+      "description": "Selection of borderline objects requires careful threshold tuning and may be sensitive to the choice of distance metrics or similarity measures used."
+    },
+    {
+      "description": "May not address intersectional fairness issues when multiple protected attributes create complex group combinations that require nuanced sampling strategies."
+    }
+  ]
+}

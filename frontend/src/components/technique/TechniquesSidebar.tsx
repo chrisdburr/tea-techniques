@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
@@ -30,7 +30,7 @@ interface TechniquesSidebarProps {
   // Filter state
   filters: FilterState;
   setFilters: (filters: FilterState) => void;
-  applyFilters: (filters?: FilterState) => void; // Updated to accept optional filters
+  applyFilters: (filters: FilterState) => void; // Now requires filters to be passed explicitly
   resetFilters: () => void;
 
   // Data for populating filters
@@ -89,6 +89,11 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
       `${key} filter updated, but not applied - waiting for Apply button`,
     );
   };
+
+  // Memoize tag grouping to prevent re-renders and double checkboxes
+  const tagGroups = useMemo(() => {
+    return groupTagsByPrefix(tags);
+  }, [tags]);
 
   return (
     <div
@@ -197,21 +202,24 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
                 ) : (
                   <div className="space-y-3">
                     {assuranceGoals?.map((goal) => (
-                      <div key={goal.id} className="flex items-start space-x-2">
+                      <div
+                        key={goal.id || "unknown"}
+                        className="flex items-start space-x-2"
+                      >
                         <Checkbox
-                          id={`goal-${goal.id}`}
+                          id={`goal-${goal.id || "unknown"}`}
                           checked={filters.assurance_goals.includes(
-                            goal.id.toString(),
+                            goal.id?.toString() || "",
                           )}
                           onCheckedChange={() =>
                             toggleArrayFilter(
                               "assurance_goals",
-                              goal.id.toString(),
+                              goal.id?.toString() || "",
                             )
                           }
                         />
                         <Label
-                          htmlFor={`goal-${goal.id}`}
+                          htmlFor={`goal-${goal.id || "unknown"}`}
                           className="flex items-center gap-2 cursor-pointer text-sm font-normal"
                         >
                           <GoalIcon goalName={goal.name} size={16} />
@@ -225,46 +233,48 @@ export const TechniquesSidebar: React.FC<TechniquesSidebarProps> = ({
             </AccordionItem>
 
             {/* Tag-based Filters */}
-            {(() => {
-              const tagGroups = groupTagsByPrefix(tags);
-              return Object.entries(tagGroups).map(([prefix, groupTags]) => (
-                <AccordionItem key={prefix} value={`tags-${prefix}`}>
-                  <AccordionTrigger className="px-4">
-                    {formatTagDisplay(prefix)}
-                  </AccordionTrigger>
-                  <AccordionContent className="px-4">
-                    {isDataLoading ? (
-                      <div className="text-sm text-muted-foreground py-2">
-                        Loading...
-                      </div>
-                    ) : (
-                      <div className="space-y-3">
-                        {groupTags.map((tag) => (
-                          <div
-                            key={tag.id}
-                            className="flex items-start space-x-2"
+            {Object.entries(tagGroups).map(([prefix, groupTags]) => (
+              <AccordionItem key={prefix} value={`tags-${prefix}`}>
+                <AccordionTrigger className="px-4">
+                  {formatTagDisplay(prefix)}
+                </AccordionTrigger>
+                <AccordionContent className="px-4">
+                  {isDataLoading ? (
+                    <div className="text-sm text-muted-foreground py-2">
+                      Loading...
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {groupTags.map((tag) => (
+                        <div
+                          key={tag.id || "unknown"}
+                          className="flex items-start space-x-2"
+                        >
+                          <Checkbox
+                            id={`tag-${tag.id || "unknown"}`}
+                            checked={filters.tags.includes(
+                              tag.id?.toString() || "",
+                            )}
+                            onCheckedChange={() =>
+                              toggleArrayFilter(
+                                "tags",
+                                tag.id?.toString() || "",
+                              )
+                            }
+                          />
+                          <Label
+                            htmlFor={`tag-${tag.id || "unknown"}`}
+                            className="cursor-pointer text-sm font-normal"
                           >
-                            <Checkbox
-                              id={`tag-${tag.id}`}
-                              checked={filters.tags.includes(tag.id.toString())}
-                              onCheckedChange={() =>
-                                toggleArrayFilter("tags", tag.id.toString())
-                              }
-                            />
-                            <Label
-                              htmlFor={`tag-${tag.id}`}
-                              className="cursor-pointer text-sm font-normal"
-                            >
-                              {formatTagDisplay(tag.name)}
-                            </Label>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </AccordionContent>
-                </AccordionItem>
-              ));
-            })()}
+                            {formatTagDisplay(tag.name)}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
 
             {/* Ratings Filter */}
             <AccordionItem value="ratings">

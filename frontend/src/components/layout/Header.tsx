@@ -7,12 +7,14 @@ import { useAuth } from "@/lib/context/auth-context";
 import { DarkModeToggle } from "@/lib/context/dark-mode";
 import { Button } from "@/components/ui/button";
 import { config } from "@/lib/config";
+import { getFeatureFlags } from "@/lib/config/dataConfig";
 import { Menu, X, LogIn, LogOut, Plus, LayoutDashboard } from "lucide-react";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthenticated, isLoading, user, logout } = useAuth();
   const router = useRouter();
+  const featureFlags = getFeatureFlags();
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -65,64 +67,74 @@ const Header = () => {
         <div className="flex items-center gap-4">
           <DarkModeToggle />
 
-          {/* Auth-aware buttons - hidden on mobile */}
-          <div className="hidden md:flex gap-2">
-            {!isLoading && (
-              <>
-                {isAuthenticated ? (
-                  <>
-                    <Button asChild variant="default" size="sm">
-                      <Link href="/techniques/add">
-                        <Plus size={16} className="mr-1" />
-                        Add Technique
+          {/* Auth-aware buttons - hidden on mobile and in static mode */}
+          {featureFlags.enableAuth && (
+            <div className="hidden md:flex gap-2">
+              {!isLoading && (
+                <>
+                  {isAuthenticated ? (
+                    <>
+                      {featureFlags.enableSubmission && (
+                        <Button asChild variant="default" size="sm">
+                          <Link href="/techniques/add">
+                            <Plus size={16} className="mr-1" />
+                            Add Technique
+                          </Link>
+                        </Button>
+                      )}
+
+                      {user?.isStaff && (
+                        <Button asChild variant="outline" size="sm">
+                          <a
+                            href="/admin"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <LayoutDashboard size={16} className="mr-1" />
+                            Admin
+                          </a>
+                        </Button>
+                      )}
+
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleLogout}
+                      >
+                        <LogOut size={16} className="mr-1" />
+                        Logout
+                      </Button>
+                    </>
+                  ) : (
+                    <Button asChild variant="outline" size="sm">
+                      <Link href="/login">
+                        <LogIn size={16} className="mr-1" />
+                        Login
                       </Link>
                     </Button>
+                  )}
+                </>
+              )}
+            </div>
+          )}
 
-                    {user?.isStaff && (
-                      <Button asChild variant="outline" size="sm">
-                        <a
-                          href="/admin"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <LayoutDashboard size={16} className="mr-1" />
-                          Admin
-                        </a>
-                      </Button>
-                    )}
-
-                    <Button variant="outline" size="sm" onClick={handleLogout}>
-                      <LogOut size={16} className="mr-1" />
-                      Logout
-                    </Button>
-                  </>
-                ) : (
-                  <Button asChild variant="outline" size="sm">
-                    <Link href="/login">
-                      <LogIn size={16} className="mr-1" />
-                      Login
-                    </Link>
-                  </Button>
-                )}
-              </>
-            )}
-          </div>
-
-          {/* API button - hidden on mobile */}
-          <Button
-            asChild
-            variant="outline"
-            size="sm"
-            className="hidden md:flex"
-          >
-            <a
-              href={config.swaggerUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+          {/* API button - hidden on mobile and in static mode */}
+          {featureFlags.enableAuth && config.swaggerUrl && (
+            <Button
+              asChild
+              variant="outline"
+              size="sm"
+              className="hidden md:flex"
             >
-              API Documentation
-            </a>
-          </Button>
+              <a
+                href={config.swaggerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                API Documentation
+              </a>
+            </Button>
+          )}
 
           {/* Mobile menu button - only visible on mobile */}
           <Button
@@ -169,32 +181,37 @@ const Header = () => {
                   About
                 </Link>
               </li>
-              <li>
-                <a
-                  href={config.swaggerUrl}
-                  className="block px-4 py-3 text-muted-foreground hover:bg-muted hover:text-foreground"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  API Documentation
-                </a>
-              </li>
+              {/* API Documentation - only in API mode */}
+              {featureFlags.enableAuth && config.swaggerUrl && (
+                <li>
+                  <a
+                    href={config.swaggerUrl}
+                    className="block px-4 py-3 text-muted-foreground hover:bg-muted hover:text-foreground"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    API Documentation
+                  </a>
+                </li>
+              )}
 
-              {/* Auth links for mobile */}
-              {!isLoading && (
+              {/* Auth links for mobile - only in API mode */}
+              {featureFlags.enableAuth && !isLoading && (
                 <>
                   {isAuthenticated ? (
                     <>
-                      <li>
-                        <Link
-                          href="/techniques/add"
-                          className="block px-4 py-3 text-muted-foreground hover:bg-muted hover:text-foreground"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          Add Technique
-                        </Link>
-                      </li>
+                      {featureFlags.enableSubmission && (
+                        <li>
+                          <Link
+                            href="/techniques/add"
+                            className="block px-4 py-3 text-muted-foreground hover:bg-muted hover:text-foreground"
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            Add Technique
+                          </Link>
+                        </li>
+                      )}
                       {user?.isStaff && (
                         <li>
                           <a

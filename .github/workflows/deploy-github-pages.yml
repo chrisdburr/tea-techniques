@@ -100,11 +100,7 @@ jobs:
       - name: Build static site
         working-directory: frontend
         run: |
-          if [ "${{ steps.mode.outputs.mode }}" == "static" ]; then
-            pnpm build:static
-          else
-            pnpm build:mock
-          fi
+          pnpm build
 
       - name: Validate build output
         working-directory: frontend

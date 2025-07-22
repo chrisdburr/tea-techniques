@@ -150,9 +150,11 @@ function validateAssuranceGoalReferences(techniques, assuranceGoals) {
   const goalNames = new Set(assuranceGoals.map((g) => g.name));
 
   techniques.forEach((technique) => {
-    // Check assurance goals (now just strings)
+    // Check assurance goals (can be objects with {id, name} or just strings)
     if (Array.isArray(technique.assurance_goals)) {
-      technique.assurance_goals.forEach((goalName) => {
+      technique.assurance_goals.forEach((goal) => {
+        // Handle both object format {id, name} and string format
+        const goalName = typeof goal === "object" ? goal.name : goal;
         if (!goalNames.has(goalName)) {
           errors.push(
             `Technique '${technique.slug}' references non-existent assurance goal '${goalName}'`,

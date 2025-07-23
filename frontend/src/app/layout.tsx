@@ -1,22 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { DarkModeProvider } from "@/lib/context/dark-mode";
+import { Montserrat, Fira_Code } from "next/font/google";
+import { ThemeProvider } from "@/lib/providers/theme-provider";
 import { AuthWrapper } from "@/components/auth/AuthWrapper";
 import { QueryProvider } from "@/lib/providers/query-provider";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import DismissibleBanner from "@/components/ui/DismissibleBanner";
-import { DataSourceIndicatorWrapper } from "@/components/common/DataSourceIndicatorWrapper";
+import { ConditionalLayout } from "@/components/layout/conditional-layout";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const firaCode = Fira_Code({
+  variable: "--font-fira-code",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -33,19 +32,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex min-h-screen flex-col`}
+        className={`${montserrat.variable} ${firaCode.variable} font-sans antialiased`}
       >
         <QueryProvider>
           <AuthWrapper>
-            <DarkModeProvider>
-              <DismissibleBanner message="This application is in active development and should not be shared publicly. Features are still being worked on and some content exists as a placeholder only." />
-              <Header />
-              <main className="flex-1 container mx-auto py-8 px-4">
-                {children}
-              </main>
-              <Footer />
-              <DataSourceIndicatorWrapper />
-            </DarkModeProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <ConditionalLayout>{children}</ConditionalLayout>
+            </ThemeProvider>
           </AuthWrapper>
         </QueryProvider>
       </body>

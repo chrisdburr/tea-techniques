@@ -1,0 +1,47 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+import { FilterProvider } from "@/lib/context/filter-context";
+import DismissibleBanner from "@/components/ui/DismissibleBanner";
+import { DataSourceIndicatorWrapper } from "@/components/common/DataSourceIndicatorWrapper";
+import { AppSidebar } from "@/components/app/app-sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
+import { HomepageHeader } from "./homepage-header";
+
+export function ConditionalLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isHomepage = pathname === "/";
+
+  if (isHomepage) {
+    return (
+      <div className="min-h-screen">
+        <HomepageHeader />
+        <main>{children}</main>
+      </div>
+    );
+  }
+
+  return (
+    <FilterProvider>
+      <SidebarProvider>
+        <AppSidebar />
+        <SidebarInset>
+          <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+            <div className="flex items-center gap-2 px-4">
+              <SidebarTrigger className="-ml-1" />
+              <Separator orientation="vertical" className="mr-2 h-4" />
+              <DismissibleBanner message="This application is in active development and should not be shared publicly. Features are still being worked on and some content exists as a placeholder only." />
+            </div>
+          </header>
+          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
+          <DataSourceIndicatorWrapper />
+        </SidebarInset>
+      </SidebarProvider>
+    </FilterProvider>
+  );
+}

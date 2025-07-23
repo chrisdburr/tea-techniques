@@ -1,5 +1,4 @@
 // src/app/techniques/page.tsx
-import MainLayout from "@/components/layout/MainLayout";
 import TechniquesListWrapper from "@/components/technique/TechniquesListWrapper";
 import { getDataService } from "@/lib/services/dataServiceFactory";
 import { isStaticMode } from "@/lib/config/dataConfig";
@@ -15,31 +14,21 @@ async function TechniquesPageServer() {
       const tags = await dataService.getTags();
 
       return (
-        <MainLayout>
-          <TechniquesListWrapper
-            initialData={initialData}
-            initialAssuranceGoals={assuranceGoals}
-            initialTags={tags}
-          />
-        </MainLayout>
+        <TechniquesListWrapper
+          initialData={initialData}
+          initialAssuranceGoals={assuranceGoals}
+          initialTags={tags}
+        />
       );
     } catch (error) {
       console.error("Error fetching techniques for SSG:", error);
       // Fallback to client-side loading
-      return (
-        <MainLayout>
-          <TechniquesListWrapper />
-        </MainLayout>
-      );
+      return <TechniquesListWrapper />;
     }
   }
 
   // In API mode, use client-side data fetching
-  return (
-    <MainLayout>
-      <TechniquesListWrapper />
-    </MainLayout>
-  );
+  return <TechniquesListWrapper />;
 }
 
 export default TechniquesPageServer;

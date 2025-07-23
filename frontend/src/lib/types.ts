@@ -10,6 +10,8 @@ export interface AssuranceGoal {
 export interface Tag {
   id: number;
   name: string;
+  description?: string;
+  category?: string;
 }
 
 // Resource Management

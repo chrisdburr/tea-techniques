@@ -1,7 +1,6 @@
 // src/app/techniques/[slug]/page.tsx
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import MainLayout from "@/components/layout/MainLayout";
 import { getDataService } from "@/lib/services/dataServiceFactory";
 import { isStaticMode } from "@/lib/config/dataConfig";
 import TechniqueDetailClient from "./TechniqueDetailClient";
@@ -71,11 +70,9 @@ async function TechniqueDetailServer({ params }: PageProps) {
       const technique = await dataService.getTechnique(slug);
 
       return (
-        <MainLayout>
-          <ErrorBoundary>
-            <TechniqueDetailClient initialTechnique={technique} slug={slug} />
-          </ErrorBoundary>
-        </MainLayout>
+        <ErrorBoundary>
+          <TechniqueDetailClient initialTechnique={technique} slug={slug} />
+        </ErrorBoundary>
       );
     } catch (error) {
       console.error(`Error fetching technique ${slug} for SSG:`, error);
@@ -85,13 +82,11 @@ async function TechniqueDetailServer({ params }: PageProps) {
 
   // In API mode, use client-side data fetching
   return (
-    <MainLayout>
-      <ErrorBoundary>
-        <Suspense fallback={<LoadingState />}>
-          <TechniqueDetailClient slug={slug} />
-        </Suspense>
-      </ErrorBoundary>
-    </MainLayout>
+    <ErrorBoundary>
+      <Suspense fallback={<LoadingState />}>
+        <TechniqueDetailClient slug={slug} />
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 

@@ -2,7 +2,7 @@
 "use client";
 
 import { Suspense } from "react";
-import TechniquesList from "./TechniquesList";
+import TechniquesListSimple from "./TechniquesListSimple";
 import type { Technique, APIResponse, AssuranceGoal, Tag } from "@/lib/types";
 
 interface TechniquesListWrapperProps {
@@ -25,7 +25,7 @@ export default function TechniquesListWrapper(
 ) {
   return (
     <Suspense fallback={<LoadingState />}>
-      <TechniquesList {...props} />
+      <TechniquesListSimple {...props} />
     </Suspense>
   );
 }

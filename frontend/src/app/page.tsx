@@ -43,7 +43,7 @@ export default function HomePage() {
             {/* Right side: Image showcase with shadow and border */}
             <div className="relative rounded-lg overflow-hidden shadow-xl border border-muted">
               <Image
-                src="/hero_alt.png"
+                src="hero_alt.png"
                 alt="TEA Techniques platform interface"
                 width={800}
                 height={500}

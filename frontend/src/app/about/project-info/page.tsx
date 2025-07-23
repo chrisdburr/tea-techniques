@@ -4,11 +4,12 @@ export default function ProjectInfoPage() {
   return (
     <div className="space-y-8 py-4">
       <section>
+        <h1 className="text-3xl font-bold mb-4">Project Information</h1>
         <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
           <BookOpen className="h-6 w-6 text-primary" />
           Project Overview
         </h2>
-        <div className="prose max-w-none bg-card rounded-lg p-6 border shadow-sm">
+        <div className="prose max-w-none">
           <p>
             The TEA Techniques Database is an interactive repository designed to
             work in conjunction with the

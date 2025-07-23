@@ -2,7 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import { FilterProvider } from "@/lib/context/filter-context";
-import DismissibleBanner from "@/components/ui/DismissibleBanner";
 import { DataSourceIndicatorWrapper } from "@/components/common/DataSourceIndicatorWrapper";
 import { AppSidebar } from "@/components/app/app-sidebar";
 import {
@@ -35,7 +34,6 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
             <div className="flex items-center gap-2 px-4">
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mr-2 h-4" />
-              <DismissibleBanner message="This application is in active development and should not be shared publicly. Features are still being worked on and some content exists as a placeholder only." />
             </div>
           </header>
           <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>

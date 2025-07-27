@@ -1,0 +1,474 @@
+{
+  "tag": {
+    "name": "expertise-needed/software-engineering",
+    "slug": "expertise-needed-software-engineering",
+    "count": 5,
+    "category": "expertise-needed"
+  },
+  "techniques": [
+    {
+      "slug": "federated-learning",
+      "name": "Federated Learning",
+      "description": "Federated learning enables collaborative model training across multiple distributed parties (devices, organisations, or data centres) without requiring centralised data sharing. Participants train models locally on their private datasets and only share model updates (gradients, weights, or aggregated statistics) with a central coordinator. This distributed approach serves multiple purposes: preserving data privacy and sovereignty, reducing communication costs, enabling learning from diverse data sources, improving model robustness through heterogeneous training, and facilitating compliance with data protection regulations whilst maintaining model performance comparable to centralised training.",
+      "assurance_goals": [
+        "Privacy",
+        "Reliability",
+        "Safety",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/software-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Developing a smartphone keyboard prediction model by learning from users' typing patterns without their text ever leaving their devices, enabling personalised predictions whilst maintaining complete data privacy.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Training a medical diagnosis model across multiple hospitals without sharing patient records, ensuring model robustness by learning from diverse patient populations and clinical practices across different institutions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Creating a cybersecurity threat detection model by federating learning across financial institutions without exposing sensitive transaction data, reducing systemic risk whilst maintaining competitive confidentiality.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Building a fair credit scoring model by training across multiple regions and demographics without centralising sensitive financial data, ensuring representation from diverse populations whilst respecting local data sovereignty laws.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Communication overhead can be substantial, especially with frequent model updates and large models, potentially limiting scalability and increasing training time compared to centralised approaches."
+        },
+        {
+          "description": "Statistical heterogeneity across participants (non-IID data distributions) can lead to training instability, slower convergence, and reduced model performance compared to centralised training on pooled data."
+        },
+        {
+          "description": "System heterogeneity in computational capabilities, network connectivity, and availability of participating devices can create bottlenecks and introduce bias towards more capable participants."
+        },
+        {
+          "description": "Privacy vulnerabilities remain through gradient leakage attacks, model inversion, and membership inference attacks that can potentially reconstruct sensitive information from shared model updates."
+        },
+        {
+          "description": "Coordination complexity increases with the number of participants, requiring sophisticated aggregation protocols, fault tolerance mechanisms, and secure communication infrastructure."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Open Federated Learning (OpenFL) Documentation",
+          "url": "https://openfl.readthedocs.io/en/stable/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Federated Learning - DeepLearning.AI",
+          "url": "https://www.deeplearning.ai/short-courses/intro-to-federated-learning/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "A Survey on Federated Learning Systems: Vision, Hype and Reality for Data Privacy and Protection",
+          "url": "http://arxiv.org/pdf/1907.09693v7",
+          "source_type": "documentation",
+          "authors": [
+            "Qinbin Li",
+            "Zeyi Wen",
+            "Zhaomin Wu",
+            "Sixu Hu",
+            "Naibo Wang",
+            "Yuan Li",
+            "Xu Liu",
+            "Bingsheng He"
+          ],
+          "publication_date": "2019-07-23"
+        },
+        {
+          "title": "Federated learning with hybrid differential privacy for secure and reliable cross-IoT platform knowledge sharing",
+          "url": "https://core.ac.uk/download/603345619.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Algburi, S.",
+            "Algburi, S.",
+            "Anupallavi, S.",
+            "Anupallavi, S.",
+            "Ashokkumar, S. R.",
+            "Ashokkumar, S. R.",
+            "Elmedany, W.",
+            "Elmedany, W.",
+            "Khalaf, O. I.",
+            "Khalaf, O. I.",
+            "Selvaraj, D.",
+            "Selvaraj, D.",
+            "Sharif, M. S.",
+            "Sharif, M. S."
+          ],
+          "publication_date": "2024-01-01"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "synthetic-data-generation",
+        "differential-privacy",
+        "homomorphic-encryption"
+      ]
+    },
+    {
+      "slug": "runtime-monitoring-and-circuit-breakers",
+      "name": "Runtime Monitoring and Circuit Breakers",
+      "description": "Runtime monitoring and circuit breakers establish continuous surveillance of AI/ML systems in production, tracking critical metrics such as prediction accuracy, response times, input characteristics, output distributions, and system resource usage. When monitored parameters exceed predefined safety thresholds or exhibit anomalous patterns, automated circuit breakers immediately trigger protective actions including request throttling, service degradation, system shutdown, or failover to backup mechanisms. This approach provides real-time defensive capabilities that prevent cascading failures, ensure consistent service reliability, and maintain transparent operation status for stakeholders monitoring system health.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring/anomaly-detection",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/software-engineering",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/system-deployment-and-use",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Implementing circuit breakers in a medical AI system that automatically halt diagnosis recommendations if prediction confidence drops below 85%, error rates exceed 2%, or response times increase beyond acceptable limits, preventing potentially harmful misdiagnoses during system degradation.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Deploying runtime monitoring for a recommendation engine that tracks recommendation diversity, click-through rates, and user engagement patterns, automatically switching to simpler algorithms when complex models show signs of performance degradation or unusual behaviour patterns.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Establishing transparent monitoring dashboards for a loan approval system that display real-time metrics on approval rates across demographic groups, processing times, and model confidence levels, enabling stakeholders to verify consistent and fair operation.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Threshold calibration requires extensive domain expertise and historical data analysis, as overly sensitive settings trigger excessive false alarms whilst conservative thresholds may miss genuine system failures."
+        },
+        {
+          "description": "False positive alerts can unnecessarily disrupt service availability and user experience, potentially causing more harm than the issues they aim to prevent, especially in time-sensitive applications."
+        },
+        {
+          "description": "Sophisticated attacks or gradual performance degradation may operate within normal metric ranges, evading detection by staying below established thresholds whilst still causing cumulative damage."
+        },
+        {
+          "description": "Monitoring infrastructure introduces additional complexity and potential failure points, requiring robust implementation to avoid situations where the monitoring system itself becomes a source of system instability."
+        },
+        {
+          "description": "High-frequency monitoring and circuit breaker mechanisms can add computational overhead and latency to system operations, potentially impacting performance in resource-constrained environments."
+        }
+      ],
+      "resources": [
+        {
+          "title": "aiobreaker: Python Circuit Breaker for Asyncio",
+          "url": "https://github.com/arlyon/aiobreaker",
+          "source_type": "software_package",
+          "description": "Python library implementing the Circuit Breaker design pattern for asyncio applications, preventing system-wide failures by protecting integration points with configurable failure thresholds and reset timeouts"
+        },
+        {
+          "title": "Improving Alignment and Robustness with Circuit Breakers",
+          "url": "https://arxiv.org/html/2406.04313v4",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andy Zou"
+          ],
+          "description": "Research paper introducing circuit breakers for AI safety that directly interrupt harmful model representations during generation, significantly reducing attack success rates while maintaining model capabilities"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "internal-review-boards",
+        "red-teaming",
+        "human-in-the-loop-safeguards",
+        "confidence-thresholding"
+      ]
+    },
+    {
+      "slug": "mlflow-experiment-tracking",
+      "name": "MLflow Experiment Tracking",
+      "description": "MLflow is an open-source platform that tracks machine learning experiments by automatically logging parameters, metrics, models, and artifacts throughout the ML lifecycle. It provides a centralised repository for comparing different experimental runs, reproducing results, and managing model versions. Teams can track hyperparameters, evaluation metrics, model files, and execution environment details, creating a comprehensive audit trail that supports collaboration, reproducibility, and regulatory compliance across the entire machine learning development process.",
+      "assurance_goals": [
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/documentation",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/software-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/process"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Tracking medical diagnosis model experiments across different hospitals, logging hyperparameters, performance metrics, and model artifacts to ensure reproducible research and enable regulatory audits of model development processes.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Managing fraud detection model versions in production, tracking which specific model configuration and training data version is deployed, enabling quick rollback and performance comparison when system reliability issues arise.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Documenting loan approval model experiments with complete parameter tracking and performance logging across demographic groups, supporting fair lending compliance by providing transparent records of model development and validation processes.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires teams to adopt disciplined logging practices and may introduce overhead to development workflows if not properly integrated into existing processes."
+        },
+        {
+          "description": "Storage costs can grow substantially with extensive artifact logging, especially for large models or high-frequency experimentation."
+        },
+        {
+          "description": "Tracking quality depends on developers consistently logging relevant information, with incomplete logging leading to gaps in experimental records."
+        },
+        {
+          "description": "Complex multi-stage pipelines may require custom instrumentation to capture dependencies and data flow relationships effectively."
+        },
+        {
+          "description": "Security and access control configurations require careful setup to protect sensitive model information and experimental data in shared environments."
+        }
+      ],
+      "resources": [
+        {
+          "title": "MLflow Documentation",
+          "url": "https://mlflow.org/docs/latest/index.html",
+          "source_type": "documentation",
+          "description": "Comprehensive official documentation covering MLflow setup, tracking APIs, model management, and deployment workflows with examples and best practices"
+        },
+        {
+          "title": "mlflow/mlflow",
+          "url": "https://github.com/mlflow/mlflow",
+          "source_type": "software_package",
+          "description": "Official MLflow open-source repository containing the complete platform for ML experiment tracking, model management, and deployment"
+        },
+        {
+          "title": "An MLOps Framework for Explainable Network Intrusion Detection with MLflow",
+          "url": "https://ieeexplore.ieee.org/abstract/document/10733700",
+          "source_type": "technical_paper",
+          "authors": [
+            "Vincenzo Spadari",
+            "Francesco Cerasuolo",
+            "Giampaolo Bovenzi",
+            "Antonio Pescapè"
+          ],
+          "publication_date": "2024-06-26",
+          "description": "Research paper demonstrating MLflow framework application for managing machine learning pipelines in network intrusion detection, covering experiment tracking, model deployment, and monitoring across security datasets"
+        },
+        {
+          "title": "MLflow Tutorial - Machine Learning Lifecycle Management",
+          "url": "https://www.mlflow.org/docs/latest/tutorials-and-examples/tutorial.html",
+          "source_type": "tutorial",
+          "description": "Step-by-step tutorial demonstrating MLflow experiment tracking, model packaging, and deployment using real machine learning examples"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "model-cards",
+        "datasheets-for-datasets",
+        "data-version-control",
+        "automated-documentation-generation"
+      ]
+    },
+    {
+      "slug": "data-version-control",
+      "name": "Data Version Control",
+      "description": "Data Version Control (DVC) is a Git-like version control system specifically designed for machine learning data, models, and experiments. It tracks changes to large data files, maintains reproducible ML pipelines, and creates a complete audit trail of data transformations, model training, and evaluation processes. DVC works alongside Git to provide end-to-end lineage tracking from raw data through preprocessing, training, and deployment, enabling teams to reproduce any model version and understand exactly how datasets evolved throughout the ML lifecycle.",
+      "assurance_goals": [
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/documentation",
+        "expertise-needed/software-engineering",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/data-handling",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/process"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Tracking medical imaging dataset versions and model training pipelines to ensure reproducible research results, enabling hospitals to verify which specific data version and preprocessing steps were used for regulatory submissions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Managing credit scoring model data pipelines with complete version control of training datasets, feature engineering steps, and model artifacts, ensuring reliable model reproduction and rollback capabilities when performance issues arise.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Maintaining pharmaceutical drug discovery data lineage across multiple research teams, tracking compound datasets, feature extraction processes, and model versions to support FDA submissions with complete experimental provenance.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires learning Git-like workflows and CLI commands, which may have a steep learning curve for teams unfamiliar with version control systems."
+        },
+        {
+          "description": "Storage costs can be substantial for large datasets with frequent changes, especially when maintaining multiple versions and branches of data."
+        },
+        {
+          "description": "Complex data pipelines with many interdependencies may require significant setup time and careful configuration to track properly."
+        },
+        {
+          "description": "Performance can degrade with very large files or datasets due to checksumming and synchronisation overhead during operations."
+        },
+        {
+          "description": "Team coordination becomes essential as improper branch management or merge conflicts can disrupt collaborative workflows."
+        }
+      ],
+      "resources": [
+        {
+          "title": "DVC Documentation",
+          "url": "https://dvc.org/doc",
+          "source_type": "documentation",
+          "description": "Comprehensive official documentation covering DVC installation, data versioning, pipeline creation, and collaborative workflows with tutorials and best practices"
+        },
+        {
+          "title": "iterative/dvc",
+          "url": "https://github.com/iterative/dvc",
+          "source_type": "software_package",
+          "description": "Official DVC open-source repository containing the complete data version control system for machine learning with Git integration"
+        },
+        {
+          "title": "DVC Tutorial - Data Version Control for Machine Learning",
+          "url": "https://dvc.org/doc/start",
+          "source_type": "tutorial",
+          "description": "Step-by-step getting started guide demonstrating DVC basics including data tracking, pipeline creation, and experiment management"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "acronym": "DVC",
+      "related_techniques": [
+        "model-cards",
+        "datasheets-for-datasets",
+        "mlflow-experiment-tracking",
+        "automated-documentation-generation"
+      ]
+    },
+    {
+      "slug": "automated-documentation-generation",
+      "name": "Automated Documentation Generation",
+      "description": "Automated documentation generation creates and maintains up-to-date documentation using various methods including programmatic scripts, large language models (LLMs), and extraction tools. These approaches can capture model architectures, data schemas, feature importance, performance metrics, API specifications, and lineage information without manual writing. Methods range from traditional code parsing and template-based generation to modern AI-assisted documentation that can understand context and generate human-readable explanations.",
+      "assurance_goals": [
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/documentation",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/documentation",
+        "expertise-needed/software-engineering",
+        "lifecycle-stage/project-design",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/deployment",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Automatically generating comprehensive model cards for a healthcare AI system each time a new version is deployed, including updated performance metrics across demographic groups, data lineage information, and bias evaluation results for regulatory compliance documentation.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Using LLM-powered tools to automatically document complex financial risk models by analysing code, extracting business logic, and generating human-readable explanations of model behaviour for audit trails and stakeholder communication.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Implementing automated API documentation generation for a machine learning platform that extracts endpoint specifications, parameter definitions, and usage examples, ensuring documentation stays synchronised with code changes and reducing deployment errors from outdated documentation.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "AI-generated documentation may miss critical domain context and business logic that human experts would include, potentially leading to incomplete or misleading explanations of model behaviour."
+        },
+        {
+          "description": "Template-based approaches often struggle with unstructured information and complex relationships between code components, limiting their ability to capture nuanced system interactions."
+        },
+        {
+          "description": "Quality heavily depends on code quality and instrumentation comprehensiveness; poorly commented or documented source code will result in inadequate generated documentation."
+        },
+        {
+          "description": "Maintenance overhead can be significant as automated systems require configuration updates when code structures change, and generated content may need human review for accuracy and completeness."
+        },
+        {
+          "description": "LLM-based approaches may introduce hallucinations or inaccuracies, particularly when documenting complex technical details or domain-specific terminology without proper validation mechanisms."
+        }
+      ],
+      "resources": [
+        {
+          "title": "daynin/fundoc",
+          "url": "https://github.com/daynin/fundoc",
+          "source_type": "software_package",
+          "description": "Language-agnostic documentation generator written in Rust that enables keeping documentation synchronised with code across multiple file types and programming languages."
+        },
+        {
+          "title": "Generative AI for Software Development - DeepLearning.AI",
+          "url": "https://www.deeplearning.ai/courses/generative-ai-for-software-development/",
+          "source_type": "tutorial",
+          "description": "Comprehensive course covering AI-powered documentation techniques including LLM-assisted documentation generation, formatting for automated tools, and improving code documentation quality."
+        },
+        {
+          "title": "Documentation Generator Analysis — Wiser Documentation",
+          "url": "https://chiplicity.readthedocs.io/en/latest/On_Software/DocumentationGenerator.html",
+          "source_type": "documentation",
+          "description": "Detailed analysis and comparison of documentation generator tools including Sphinx, Doxygen, and other approaches for automated documentation workflows."
+        },
+        {
+          "title": "pyTooling/sphinx-reports",
+          "url": "https://github.com/pyTooling/sphinx-reports",
+          "source_type": "software_package",
+          "description": "Sphinx extension that automatically integrates software development reports (unit tests, coverage, documentation coverage) into documentation as appendix pages."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "model-cards",
+        "datasheets-for-datasets",
+        "data-version-control"
+      ]
+    }
+  ],
+  "count": 5
+}

@@ -1,0 +1,697 @@
+{
+  "tag": {
+    "name": "data-requirements/access-to-training-data",
+    "slug": "data-requirements-access-to-training-data",
+    "count": 7,
+    "category": "data-requirements"
+  },
+  "techniques": [
+    {
+      "slug": "influence-functions",
+      "name": "Influence Functions",
+      "description": "Influence functions quantify how much each training example influenced a model's predictions by computing the change in prediction that would occur if that training example were removed and the model retrained. Using calculus and the implicit function theorem, they approximate this 'leave-one-out' effect without actually retraining the model by computing gradients and Hessian information. This mathematical approach reveals which specific training examples were most responsible for pushing the model toward or away from particular predictions, enabling practitioners to trace problematic outputs back to their root causes in the training data.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Privacy"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/privacy",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Investigating why a medical diagnosis model misclassified a patient by identifying which specific training cases most influenced the incorrect prediction, revealing potential mislabelled examples or problematic patterns in the training data.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Analysing a spam detection system that falsely flagged legitimate emails by tracing the prediction back to influential training examples, discovering that certain training emails contained misleading patterns that caused the model to overfit.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Auditing a loan approval model for discriminatory patterns by identifying which training examples most influenced rejections of minority applicants, revealing whether biased historical decisions are driving current unfair outcomes.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Assessing membership inference risks in a medical model by identifying whether certain patient records have disproportionate influence on predictions, indicating potential data leakage vulnerabilities.",
+          "goal": "Privacy"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally intensive, requiring Hessian matrix computations that become intractable for very large models with millions of parameters."
+        },
+        {
+          "description": "Requires access to the complete training dataset and training process, making it impossible to apply to pre-trained models without access to original training data."
+        },
+        {
+          "description": "Accuracy degrades for highly non-convex models where the linear approximation underlying influence functions breaks down."
+        },
+        {
+          "description": "Results can be sensitive to hyperparameter choices and may not generalise well across different model architectures or training procedures."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Understanding Black-box Predictions via Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/08ad8fad21f6ec4cda4d56be1ca5e146b7c913a1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Pang Wei Koh",
+            "Percy Liang"
+          ]
+        },
+        {
+          "title": "nimarb/pytorch_influence_functions",
+          "url": "https://github.com/nimarb/pytorch_influence_functions",
+          "source_type": "software_package"
+        },
+        {
+          "title": "What is Your Data Worth to GPT? LLM-Scale Data Valuation with Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/f33f3dece9f34c1ec5417dccf9e0acf592d8e8cb",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sang Keun Choe",
+            "Hwijeen Ahn",
+            "Juhan Bae",
+            "Kewen Zhao",
+            "Minsoo Kang",
+            "Youngseog Chung",
+            "Adithya Pratapa",
+            "W. Neiswanger",
+            "Emma Strubell",
+            "Teruko Mitamura",
+            "Jeff G. Schneider",
+            "Eduard H. Hovy",
+            "Roger B. Grosse",
+            "Eric P. Xing"
+          ]
+        },
+        {
+          "title": "Scaling Up Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/ef2a773c3c7848a6cc16b18164be5f8876a310af",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andrea Schioppa",
+            "Polina Zablotskaia",
+            "David Vilar",
+            "Artem Sokolov"
+          ]
+        },
+        {
+          "title": "Welcome to torch-influence's API Reference! — torch-influence 0.1.0 ...",
+          "url": "https://torch-influence.readthedocs.io/",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "contextual-decomposition",
+        "taylor-decomposition"
+      ]
+    },
+    {
+      "slug": "bootstrapping",
+      "name": "Bootstrapping",
+      "description": "Bootstrapping estimates uncertainty by repeatedly resampling the original dataset with replacement to create many new training sets, training a model on each sample, and analysing the variation in predictions. This approach provides confidence intervals and stability measures without making strong statistical assumptions. By showing how predictions change with different random samples of the data, it reveals how sensitive the model is to the specific training examples and provides robust uncertainty estimates.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "explanatory-scope/global",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Estimating uncertainty in financial risk models by resampling historical data to understand how predictions might vary under different historical scenarios.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing confidence intervals for medical diagnosis predictions to help doctors understand the reliability of AI recommendations and make more informed treatment decisions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Assessing whether prediction uncertainty is consistent across different demographic groups in hiring algorithms, identifying if the model is systematically more uncertain for certain populations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive as it requires training multiple models on resampled datasets."
+        },
+        {
+          "description": "Does not account for uncertainty in model structure or architecture choices."
+        },
+        {
+          "description": "Cannot detect systematically missing data patterns or biases present in the original dataset."
+        },
+        {
+          "description": "Assumes that the original dataset is representative of the population of interest."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Deterministic bootstrapping for a class of bootstrap methods",
+          "url": "http://arxiv.org/pdf/1903.10816v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Thomas Pitschel"
+          ],
+          "publication_date": "2019-03-26"
+        },
+        {
+          "title": "A Gentle Introduction to the Bootstrap Method ...",
+          "url": "https://www.machinelearningmastery.com/a-gentle-introduction-to-the-bootstrap-method/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "scipy.stats.bootstrap",
+          "url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Bootstrapping and bagging — modAL documentation",
+          "url": "https://modal-python.readthedocs.io/en/latest/content/examples/bootstrapping_and_bagging.html",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Machine Learning: What is Bootstrapping? - KDnuggets",
+          "url": "https://www.kdnuggets.com/2023/03/bootstrapping.html",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "monte-carlo-dropout",
+        "prediction-intervals",
+        "quantile-regression",
+        "conformal-prediction",
+        "deep-ensembles",
+        "jackknife-resampling"
+      ]
+    },
+    {
+      "slug": "jackknife-resampling",
+      "name": "Jackknife Resampling",
+      "description": "Jackknife resampling (also called leave-one-out resampling) assesses model stability and uncertainty by systematically removing one data point at a time and retraining the model on the remaining data. Unlike bootstrapping which samples with replacement, jackknife creates n different models by excluding each of the n data points once. This systematic approach reveals how individual points influence results, provides robust estimates of prediction variance, and identifies unusually influential observations that may be outliers or leverage points affecting model reliability.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/prediction-interval",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating how removing individual countries from a global climate model affects predictions, identifying which regions have outsized influence and providing robust uncertainty estimates for climate projections used in policy decisions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing transparent uncertainty estimates in medical risk prediction by showing how individual patient records influence model predictions, enabling clinicians to understand prediction stability and confidence intervals for treatment decisions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring fair model evaluation in hiring algorithms by systematically testing how removing candidates from different demographic groups affects model performance, revealing whether certain populations disproportionately influence the model's behaviour.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Extremely computationally intensive for large datasets, requiring training of n separate models for n data points, making it impractical for datasets with thousands or millions of observations."
+        },
+        {
+          "description": "May underestimate uncertainty compared to bootstrapping or other resampling methods, as it provides only n different samples rather than a broader exploration of the data distribution."
+        },
+        {
+          "description": "Assumes that removing single data points provides meaningful insights into model stability, which may not hold when multiple correlated observations drive model behaviour."
+        },
+        {
+          "description": "Can be sensitive to the choice of performance metric used for evaluation, as different metrics may show different patterns of sensitivity to individual data points."
+        },
+        {
+          "description": "Provides limited insight into model behaviour on truly novel data, as each jackknife sample is only minimally different from the full training set."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn model_selection.LeaveOneOut",
+          "url": "https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.LeaveOneOut.html",
+          "source_type": "documentation",
+          "description": "Scikit-learn implementation of leave-one-out cross-validation for jackknife resampling"
+        },
+        {
+          "title": "Cross-validation: evaluating estimator performance",
+          "url": "https://scikit-learn.org/stable/modules/cross_validation.html",
+          "source_type": "documentation",
+          "description": "Comprehensive guide to cross-validation methods including leave-one-out in scikit-learn"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "monte-carlo-dropout",
+        "prediction-intervals",
+        "quantile-regression",
+        "conformal-prediction",
+        "deep-ensembles",
+        "bootstrapping"
+      ]
+    },
+    {
+      "slug": "model-cards",
+      "name": "Model Cards",
+      "description": "Model cards are standardised documentation frameworks that systematically document machine learning models through structured templates. The templates cover intended use cases, performance metrics across different demographic groups and operating conditions, training data characteristics, evaluation procedures, limitations, and ethical considerations. They serve as comprehensive technical specifications that enable informed model selection, prevent inappropriate deployment, support regulatory compliance, and facilitate fair assessment by providing transparent reporting of model capabilities and constraints across diverse populations and scenarios.",
+      "assurance_goals": [
+        "Transparency",
+        "Fairness",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/documentation/model-card",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-training-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/documentation",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/regulatory-compliance",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/documentation"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Documenting a medical diagnosis AI with detailed performance metrics across different patient demographics, age groups, and clinical conditions, enabling healthcare providers to understand when the model should be trusted and when additional expert consultation is needed for patient safety.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Creating comprehensive model cards for hiring algorithms that transparently report performance differences across demographic groups, helping HR departments identify potential bias issues and ensure equitable candidate evaluation processes.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Publishing detailed model documentation for a credit scoring API that clearly describes training data sources, evaluation methodologies, and performance limitations, enabling financial institutions to make informed decisions about model deployment and regulatory compliance.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Creating comprehensive model cards requires substantial time, expertise, and resources to gather performance data across diverse conditions and demographic groups, potentially delaying model deployment timelines."
+        },
+        {
+          "description": "Information can become outdated quickly as models are retrained, updated, or deployed in new contexts, requiring ongoing maintenance and version control to remain accurate and useful."
+        },
+        {
+          "description": "Organisations may provide incomplete or superficial documentation to avoid revealing competitive advantages or potential liabilities, undermining the transparency goals of model cards."
+        },
+        {
+          "description": "Lack of standardised formats and enforcement mechanisms means model card quality and completeness vary significantly across different organisations and use cases."
+        },
+        {
+          "description": "Technical complexity of documenting model behaviour across all relevant dimensions may exceed the expertise of some development teams, leading to gaps in critical information."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Model Cards for Model Reporting",
+          "url": "http://arxiv.org/pdf/1810.03993v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Margaret Mitchell",
+            "Simone Wu",
+            "Andrew Zaldivar",
+            "Parker Barnes",
+            "Lucy Vasserman",
+            "Ben Hutchinson",
+            "Elena Spitzer",
+            "Inioluwa Deborah Raji",
+            "Timnit Gebru"
+          ],
+          "publication_date": "2018-10-05",
+          "description": "Foundational paper introducing model cards as a framework for transparent model reporting and responsible AI documentation"
+        },
+        {
+          "title": "Model Card Guidebook",
+          "url": "https://huggingface.co/docs/hub/en/model-card-guidebook",
+          "source_type": "tutorial",
+          "description": "Comprehensive guide providing updated model card templates, creator tools, and practical insights for implementing model documentation across diverse stakeholder needs"
+        },
+        {
+          "title": "scikit-learn model cards documentation",
+          "url": "https://skops.readthedocs.io/en/stable/auto_examples/plot_model_card.html",
+          "source_type": "tutorial",
+          "description": "Practical tutorial demonstrating how to create comprehensive model cards for scikit-learn models using the skops library with metrics, visualisations, and metadata"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "datasheets-for-datasets",
+        "data-version-control",
+        "automated-documentation-generation"
+      ]
+    },
+    {
+      "slug": "model-distillation",
+      "name": "Model Distillation",
+      "description": "Model distillation transfers knowledge from a large, complex model (teacher) to a smaller, more efficient model (student) by training the student to mimic the teacher's behaviour. The student learns from the teacher's soft predictions and intermediate representations rather than just hard labels, capturing nuanced decision boundaries and uncertainty. This produces models that are faster, require less memory, and are often more interpretable whilst maintaining much of the original performance. Beyond compression, distillation can improve model reliability by regularising training and enable deployment in resource-constrained environments.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/deployment",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Compressing a large medical diagnosis model into a smaller student model that can run on edge devices in resource-limited clinics, making the decision process more transparent for healthcare professionals whilst maintaining diagnostic accuracy for critical patient care.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating a compressed fraud detection model from a complex ensemble teacher that maintains detection performance whilst being more robust to adversarial attacks and data drift, ensuring consistent protection of financial transactions across varying conditions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Distilling a large autonomous vehicle perception model into a smaller student model that can run with guaranteed inference times and lower computational requirements, ensuring predictable safety-critical decision-making under real-time constraints.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Student models typically achieve 90-95% of teacher performance, creating a trade-off between model efficiency and predictive accuracy that may be unacceptable for high-stakes applications requiring maximum precision."
+        },
+        {
+          "description": "Distillation process can be computationally expensive, requiring extensive teacher model inference during training and careful hyperparameter tuning to balance knowledge transfer with student model capacity."
+        },
+        {
+          "description": "Knowledge transfer quality depends heavily on teacher-student architecture compatibility and the chosen distillation objectives, with mismatched designs potentially leading to ineffective learning or mode collapse."
+        },
+        {
+          "description": "Student models may inherit teacher model biases and vulnerabilities whilst potentially introducing new failure modes, requiring separate validation for fairness, robustness, and safety properties."
+        },
+        {
+          "description": "Compressed models may lack the teacher's capability to handle edge cases or out-of-distribution inputs, potentially creating safety risks when deployed in environments different from the training distribution."
+        }
+      ],
+      "resources": [
+        {
+          "title": "airaria/TextBrewer",
+          "url": "https://github.com/airaria/TextBrewer",
+          "source_type": "software_package",
+          "description": "PyTorch-based knowledge distillation toolkit for natural language processing with support for transformer models, flexible distillation strategies, and multi-teacher approaches."
+        },
+        {
+          "title": "Main features — TextBrewer 0.2.1.post1 documentation",
+          "url": "https://textbrewer.readthedocs.io/",
+          "source_type": "documentation",
+          "description": "Comprehensive documentation for TextBrewer including tutorials, API reference, configuration guides, and experimental results for knowledge distillation in NLP tasks."
+        },
+        {
+          "title": "A Generic Approach for Reproducible Model Distillation",
+          "url": "http://arxiv.org/abs/2211.12631",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hooker, Giles",
+            "Xu, Peiru",
+            "Zhou, Yunzhe"
+          ],
+          "publication_date": "2023-04-27",
+          "description": "Research paper presenting a framework for reproducible knowledge distillation with standardised evaluation protocols and benchmarking across different model architectures and distillation techniques."
+        },
+        {
+          "title": "dkozlov/awesome-knowledge-distillation",
+          "url": "https://github.com/dkozlov/awesome-knowledge-distillation",
+          "source_type": "software_package",
+          "description": "Curated collection of knowledge distillation resources including academic papers, implementation code across multiple frameworks (PyTorch, TensorFlow, Keras), and educational videos."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "ridge-regression-surrogates",
+        "rulefit",
+        "model-pruning"
+      ]
+    },
+    {
+      "slug": "reweighing",
+      "name": "Reweighing",
+      "description": "Reweighing is a pre-processing technique that mitigates bias by assigning different weights to training examples based on their group membership and class label. The weights are calculated to ensure that privileged and unprivileged groups have equal influence on the model's training process, effectively balancing the dataset without altering the feature values themselves. This helps to train fairer models by correcting for historical imbalances in how different groups are represented in the data.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group/statistical-parity",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/access-to-training-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "expertise-needed/low",
+        "fairness-approach/group",
+        "lifecycle-stage/data-handling/preprocessing",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "In a loan application system, if historical data shows that a higher proportion of applicants from a minority group were denied loans (negative outcome), reweighing would assign higher weights to these instances. This forces the model to pay more attention to correctly classifying the underrepresented group, aiming to correct for historical bias and improve fairness metrics like equal opportunity.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "When developing a hiring model, if the training data contains fewer female applicants for senior roles, reweighing can be applied to increase the importance of these instances. This helps to prevent the model from learning a spurious correlation between gender and seniority, ensuring that female candidates are evaluated more equitably during the screening process.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "In a medical diagnosis system, reweighing provides transparency by explicitly showing which demographic groups required adjustment for balanced representation. The computed weights serve as documentation of historical bias patterns in medical data, helping clinicians understand potential disparities and ensuring the model's decisions are based on medical evidence rather than demographic correlations.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "For a credit scoring model deployed across different regions, reweighing improves reliability by ensuring consistent performance across demographic groups. By balancing the training data representation, the model maintains stable accuracy metrics across different population segments, reducing the risk of performance degradation when deployed in areas with different demographic compositions.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "The technique only adjusts the overall influence of demographic groups and does not address biases that may be encoded within the features themselves."
+        },
+        {
+          "description": "Assigning very high weights to a small number of instances from an underrepresented group can increase the model's variance and make it sensitive to outliers, potentially harming generalisation."
+        },
+        {
+          "description": "The effectiveness of reweighing depends on the assumption that the labels in the training data are accurate; it cannot correct for label bias where outcomes were themselves the result of historical discrimination."
+        },
+        {
+          "description": "It may not be effective if the feature distributions for different groups are fundamentally different, as it cannot change the underlying data relationships."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Achieving Fairness at No Utility Cost via Data Reweighing with Influence",
+          "url": "http://arxiv.org/pdf/2202.00787v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Peizhao Li",
+            "Hongfu Liu"
+          ],
+          "publication_date": "2022-02-01",
+          "description": "Presents a novel reweighing approach that computes individual sample weights based on influence functions to achieve fairness without sacrificing model utility"
+        },
+        {
+          "title": "aif360.sklearn.preprocessing.Reweighing — aif360 0.6.1 ...",
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.preprocessing.Reweighing.html",
+          "source_type": "documentation",
+          "description": "Documentation for scikit-learn compatible implementation of the reweighing preprocessing technique in the AI Fairness 360 library"
+        },
+        {
+          "title": "brandeis-machine-learning/influence-fairness",
+          "url": "https://github.com/brandeis-machine-learning/influence-fairness",
+          "source_type": "software_package",
+          "description": "Python implementation of influence-based data reweighing for achieving cost-free fairness with experiments on tabular datasets"
+        },
+        {
+          "title": "Boosting Fair Classifier Generalization through Adaptive Priority Reweighing",
+          "url": "http://arxiv.org/pdf/2309.08375v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Zhihao Hu",
+            "Yiran Xu",
+            "Mengnan Du",
+            "Jindong Gu",
+            "Xinmei Tian",
+            "Fengxiang He"
+          ],
+          "publication_date": "2023-09-15",
+          "description": "Advanced reweighing technique that adaptively prioritises samples near decision boundaries to improve fairness generalisation across different demographic groups"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "disparate-impact-remover",
+        "relabelling",
+        "preferential-sampling"
+      ]
+    },
+    {
+      "slug": "relabelling",
+      "name": "Relabelling",
+      "description": "A preprocessing fairness technique that modifies class labels in training data to achieve equal positive outcome rates across protected groups. Also known as 'data massaging', this method identifies instances that contribute to discriminatory patterns and flips their labels (from positive to negative or vice versa) to balance the proportion of positive outcomes between demographic groups. The technique aims to remove historical bias from training data whilst preserving the overall class distribution, enabling standard classifiers to learn from discrimination-free datasets.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/access-to-training-data",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/dataset-analysis",
+        "expertise-needed/statistics",
+        "expertise-needed/domain-knowledge",
+        "fairness-approach/group",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-preprocessing",
+        "lifecycle-stage/model-development",
+        "technique-type/procedural"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Preprocessing historical hiring datasets by relabelling borderline cases to ensure equal hiring rates across gender and ethnicity groups, correcting for past discriminatory practices whilst maintaining overall qualification standards for fair recruitment model training.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Creating transparent credit scoring datasets by documenting which loan applications had labels modified to address historical lending discrimination, providing clear audit trails showing how training data bias was systematically corrected before model development.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Improving reliability of medical diagnosis training data by relabelling cases where demographic bias may have influenced historical diagnoses, ensuring models learn from corrected labels that reflect true medical conditions rather than biased historical treatment patterns.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Altering training labels risks introducing new biases or artificial patterns that may not reflect genuine relationships in the data."
+        },
+        {
+          "description": "Deciding which instances to relabel requires careful selection criteria and domain expertise to avoid inappropriate label changes."
+        },
+        {
+          "description": "May reduce prediction accuracy if too many labels are changed, particularly when the modifications conflict with genuine patterns in the data."
+        },
+        {
+          "description": "Requires access to ground truth or expert knowledge to determine whether original labels reflect genuine outcomes or discriminatory bias."
+        },
+        {
+          "description": "Effectiveness depends on accurate identification of discriminatory instances, which can be challenging when bias patterns are subtle or complex."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Data preprocessing techniques for classification without discrimination",
+          "url": "https://link.springer.com/article/10.1007/s10115-011-0463-8",
+          "source_type": "technical_paper",
+          "authors": [
+            "Faisal Kamiran",
+            "Toon Calders"
+          ],
+          "publication_date": "2012-06-01"
+        },
+        {
+          "title": "Classifying without discriminating",
+          "url": "https://www.researchgate.net/publication/224440330_Classifying_without_discriminating",
+          "source_type": "technical_paper",
+          "authors": [
+            "Toon Calders",
+            "Sicco Verwer"
+          ],
+          "publication_date": "2010-02-01"
+        },
+        {
+          "title": "Data Pre-Processing for Discrimination Prevention",
+          "url": "https://krvarshney.github.io/pubs/CalmonWVRV_jstsp2018.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Flavio Calmon",
+            "Dennis Wei",
+            "Bhanukiran Vinzamuri",
+            "Karthikeyan Natesan Ramamurthy",
+            "Kush R. Varshney"
+          ],
+          "publication_date": "2018-01-01"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "reweighing",
+        "disparate-impact-remover",
+        "preferential-sampling"
+      ]
+    }
+  ],
+  "count": 7
+}

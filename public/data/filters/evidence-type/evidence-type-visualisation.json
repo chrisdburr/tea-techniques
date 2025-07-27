@@ -1,0 +1,322 @@
+{
+  "tag": {
+    "name": "evidence-type/visualisation",
+    "slug": "evidence-type-visualisation",
+    "count": 3,
+    "category": "evidence-type"
+  },
+  "techniques": [
+    {
+      "slug": "generalized-additive-models",
+      "name": "Generalized Additive Models",
+      "description": "An intrinsically interpretable modelling technique that extends linear models by allowing flexible, nonlinear relationships between individual features and the target whilst maintaining the additive structure that preserves transparency. Each feature's effect is modelled separately as a smooth function, visualised as a curve showing how the feature influences predictions across its range. GAMs achieve this through spline functions or other smoothing techniques that capture complex patterns in individual variables without interactions, making them particularly valuable for domains requiring both predictive accuracy and model interpretability.",
+      "assurance_goals": [
+        "Transparency",
+        "Explainability",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/gam",
+        "applicable-models/linear-model",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/feature-analysis",
+        "assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
+        "assurance-goal-category/reliability",
+        "data-requirements/labelled-data",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualisation",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/project-design",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Predicting hospital readmission risk with a GAM that provides transparent, auditable risk assessments by showing how readmission probability varies nonlinearly with patient age, blood pressure, and medication adherence, enabling clinicians to understand and trust the model's reasoning for regulatory compliance.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Building a credit scoring model that explains loan decisions to applicants by visualising how income, credit history, and debt-to-income ratio individually affect approval likelihood, providing clear feature attributions that satisfy fair lending requirements and regulatory explainability mandates.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Developing an environmental monitoring system that reliably predicts air quality using GAMs to model the smooth, nonlinear relationships between weather variables, ensuring stable predictions across seasonal variations whilst maintaining interpretable relationships that environmental scientists can validate.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Cannot capture complex interactions between features unless explicitly modelled, limiting their ability to represent relationships where variables influence each other."
+        },
+        {
+          "description": "Setup requires domain expertise to decide which features need nonlinear treatment and appropriate smoothing parameters, making model specification more challenging than linear models."
+        },
+        {
+          "description": "Fitting process is computationally more expensive than linear models, particularly for large datasets with many features requiring smoothing."
+        },
+        {
+          "description": "Risk of overfitting individual feature relationships if smoothing parameters are not properly regularised, potentially reducing generalisation performance."
+        },
+        {
+          "description": "Interpretation complexity increases with the number of nonlinear features, as understanding multiple smooth curves simultaneously becomes cognitively demanding."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Generalized Additive Models",
+          "url": "https://hastie.su.domains/Papers/gam.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Trevor Hastie",
+            "Robert Tibshirani"
+          ],
+          "publication_date": "1986-01-01"
+        },
+        {
+          "title": "pyGAM: Generalized Additive Models in Python",
+          "url": "https://github.com/dswah/pyGAM",
+          "source_type": "software_package"
+        },
+        {
+          "title": "mgcv: Mixed GAM Computation Vehicle with Automatic Smoothness Estimation",
+          "url": "https://cran.r-project.org/web/packages/mgcv/index.html",
+          "source_type": "software_package"
+        },
+        {
+          "title": "A Tour of pyGAM — pyGAM documentation",
+          "url": "https://pygam.readthedocs.io/en/latest/notebooks/tour_of_pygam.html",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "acronym": "GAMs",
+      "related_techniques": [
+        "monotonicity-constraints",
+        "intrinsically-interpretable-models"
+      ]
+    },
+    {
+      "slug": "neuron-activation-analysis",
+      "name": "Neuron Activation Analysis",
+      "description": "Neuron activation analysis examines the firing patterns of individual neurons in neural networks by probing them with diverse inputs and analysing their activation responses. This technique helps understand what concepts, features, or patterns different neurons have learned to recognise, providing insights into the model's internal representations. For large language models, this can reveal neurons specialised for linguistic concepts, semantic categories, or even potentially harmful patterns, enabling targeted interventions and deeper model understanding.",
+      "assurance_goals": [
+        "Explainability",
+        "Safety",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "applicable-models/llm",
+        "applicable-models/transformer",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/fairness",
+        "data-requirements/access-to-model-internals",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualisation",
+        "explanatory-scope/local",
+        "explanatory-scope/global",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/testing",
+        "lifecycle-stage/monitoring",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing GPT-based models to identify specific neurons that activate on toxic or harmful content, enabling targeted interventions to reduce model toxicity whilst preserving general language capabilities for safer AI deployment.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Examining activation patterns in multilingual language models to detect neurons that exhibit systematic biases when processing text from different linguistic communities, revealing implicit representation inequalities that could affect downstream applications.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Investigating individual neurons in medical language models to understand which clinical concepts and medical knowledge representations drive diagnostic suggestions, enabling healthcare professionals to validate the model's medical reasoning pathways.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Many neurons exhibit polysemantic behaviour, representing multiple unrelated concepts simultaneously, making it difficult to assign clear interpretable meanings to individual neural units."
+        },
+        {
+          "description": "Important model behaviours are often distributed across many neurons rather than localised in single units, requiring analysis of neural circuits and interactions that can be exponentially complex."
+        },
+        {
+          "description": "Computational costs scale dramatically with modern large language models containing billions of parameters, making comprehensive neuron-by-neuron analysis prohibitively expensive for complete model understanding."
+        },
+        {
+          "description": "Neuron activation patterns are highly context-dependent, with the same neuron potentially serving different roles based on surrounding input context, complicating consistent interpretation across diverse scenarios."
+        },
+        {
+          "description": "Interpretation of activation patterns often relies on subjective human analysis without rigorous validation methods, potentially leading to confirmation bias or misattribution of neural functions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "jalammar/ecco",
+          "url": "https://github.com/jalammar/ecco",
+          "source_type": "software_package"
+        },
+        {
+          "title": "NeuRel-Attack: Neuron Relearning for Safety Disalignment in Large Language Models",
+          "url": "http://arxiv.org/pdf/2504.21053v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yi Zhou",
+            "Wenpeng Xing",
+            "Dezhang Kong",
+            "Changting Lin",
+            "Meng Han"
+          ],
+          "publication_date": "2025-04-29"
+        },
+        {
+          "title": "On the Value of Labeled Data and Symbolic Methods for Hidden Neuron Activation Analysis",
+          "url": "http://arxiv.org/pdf/2404.13567v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Abhilekha Dalal",
+            "Rushrukh Rayan",
+            "Adrita Barua",
+            "Eugene Y. Vasserman",
+            "Md Kamruzzaman Sarker",
+            "Pascal Hitzler"
+          ],
+          "publication_date": "2024-04-21"
+        },
+        {
+          "title": "On the Value of Labeled Data and Symbolic Methods for Hidden Neuron\n  Activation Analysis",
+          "url": "http://arxiv.org/abs/2404.13567",
+          "source_type": "technical_paper",
+          "authors": [
+            "Barua, Adrita",
+            "Dalal, Abhilekha",
+            "Hitzler, Pascal",
+            "Rayan, Rushrukh",
+            "Sarker, Md Kamruzzaman",
+            "Vasserman, Eugene Y."
+          ],
+          "publication_date": "2024-04-21"
+        },
+        {
+          "title": "Ecco",
+          "url": "https://ecco.readthedocs.io/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Tracing the Thoughts in Language Models",
+          "url": "https://www.anthropic.com/news/tracing-thoughts-language-model",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "prototype-and-criticism-models",
+        "concept-activation-vectors"
+      ]
+    },
+    {
+      "slug": "feature-attribution-with-integrated-gradients-in-nlp",
+      "name": "Feature Attribution with Integrated Gradients in NLP",
+      "description": "Applies Integrated Gradients to natural language processing models to attribute prediction importance to individual input tokens, words, or subword units. This technique computes gradients along a straight-line path from a baseline input (typically all-zeros, padding tokens, or neutral text) to the actual input, integrating these gradients to obtain attribution scores. Unlike vanilla gradient methods, Integrated Gradients satisfies axioms of sensitivity and implementation invariance, making it particularly valuable for understanding transformer-based language models where token interactions are complex.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/transformer",
+        "applicable-models/llm",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualisation",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/testing",
+        "technique-type/gradient-based"
+      ],
+      "example_use_cases": [
+        {
+          "description": "In a clinical decision support system processing doctor's notes to predict patient risk, Integrated Gradients identifies which medical terms, symptoms, or phrases most strongly influence risk predictions, enabling clinicians to verify that the model focuses on clinically relevant information rather than spurious correlations and supporting regulatory compliance in healthcare AI.",
+          "goal": "Safety"
+        },
+        {
+          "description": "For automated loan approval systems processing free-text application descriptions, Integrated Gradients reveals which words or phrases drive acceptance decisions, supporting fairness audits by highlighting whether protected characteristics inadvertently influence decisions and enabling transparent explanations to customers about application outcomes.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "In content moderation systems flagging potentially harmful posts, Integrated Gradients identifies which specific words or linguistic patterns trigger safety classifications, enabling platform teams to debug false positives and validate that models focus on genuinely problematic language rather than demographic markers.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computational overhead scales significantly with document length as processing requires computing gradients across many integration steps (typically 20-300), making real-time applications or large-scale document processing challenging."
+        },
+        {
+          "description": "Choice of baseline input (zero embeddings, padding tokens, neutral text, or average embeddings) substantially affects attribution results, but optimal baseline selection remains domain-specific and often requires extensive experimentation."
+        },
+        {
+          "description": "In transformer models with attention mechanisms, importance often spreads across many tokens, making it difficult to identify clear, actionable insights, especially for complex reasoning tasks where multiple tokens contribute collectively."
+        },
+        {
+          "description": "Modern NLP models use subword tokenisation (BPE, WordPiece), making attribution results difficult to interpret at the word level, as single words may split across multiple tokens with varying attribution scores."
+        },
+        {
+          "description": "While Integrated Gradients identifies correlative relationships between tokens and predictions, it cannot establish causal relationships or distinguish between spurious correlations and meaningful semantic dependencies in the input text."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Captum: Model Interpretability for PyTorch",
+          "url": "https://captum.ai/",
+          "source_type": "software_package",
+          "description": "Open-source PyTorch library implementing Integrated Gradients with multi-modal support including text, featuring easy integration with transformer models and comprehensive NLP tutorials (BERT SQUAD, IMDB classification, Llama2 attribution)."
+        },
+        {
+          "title": "Axiomatic Attribution for Deep Networks",
+          "url": "https://arxiv.org/abs/1703.01365",
+          "source_type": "technical_paper",
+          "authors": [
+            "Mukund Sundararajan",
+            "Ankur Taly",
+            "Qiqi Yan"
+          ],
+          "publication_date": "2017-03-19",
+          "description": "Original paper introducing Integrated Gradients method with fundamental axioms of sensitivity and implementation invariance, demonstrating applications across text models and providing theoretical foundations for attribution methods."
+        },
+        {
+          "title": "The Building Blocks of Interpretability",
+          "url": "https://distill.pub/2020/attribution-baselines/",
+          "source_type": "tutorial",
+          "description": "Interactive Distill article providing comprehensive guidance on baseline selection for Integrated Gradients, exploring different baseline types and their impact on feature attribution quality with transferable principles for NLP applications."
+        },
+        {
+          "title": "transformers-interpret",
+          "url": "https://github.com/cdpierse/transformers-interpret",
+          "source_type": "software_package",
+          "description": "Model explainability library designed for Hugging Face transformers, enabling transformer model explanation in two lines of code with HTML visualisations and support for sequence classification, multi-label classification, and computer vision models."
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "prompt-sensitivity-analysis",
+        "causal-mediation-analysis-in-language-models"
+      ]
+    }
+  ],
+  "count": 3
+}

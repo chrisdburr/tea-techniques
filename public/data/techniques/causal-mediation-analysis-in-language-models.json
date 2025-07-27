@@ -1,0 +1,63 @@
+{
+  "slug": "causal-mediation-analysis-in-language-models",
+  "name": "Causal Mediation Analysis in Language Models",
+  "description": "Causal mediation analysis in language models is a mechanistic interpretability technique that systematically investigates how specific internal components (neurons, attention heads, or layers) causally contribute to model outputs. By performing controlled interventions—such as activating, deactivating, or modifying specific components—researchers can trace the causal pathways through which information flows and transforms within the model. This approach goes beyond correlation to establish causal relationships, enabling researchers to understand not just what features influence outputs, but how and why they do so through specific computational pathways.",
+  "assurance_goals": [
+    "Explainability",
+    "Reliability",
+    "Safety"
+  ],
+  "tags": [
+    "applicable-models/llm",
+    "applicable-models/transformer",
+    "assurance-goal-category/explainability",
+    "assurance-goal-category/reliability",
+    "assurance-goal-category/safety",
+    "data-requirements/access-to-model-internals",
+    "data-type/text",
+    "evidence-type/causal-analysis",
+    "expertise-needed/causal-inference",
+    "expertise-needed/ml-engineering",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/post-deployment",
+    "technique-type/mechanistic-interpretability"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Investigating causal pathways in content moderation models to understand how specific attention mechanisms contribute to flagging potentially harmful content, enabling verification that safety decisions rely on appropriate features rather than spurious correlations and ensuring robust content filtering.",
+      "goal": "Safety"
+    },
+    {
+      "description": "Identifying specific neurons or attention heads that causally contribute to biased outputs in hiring or lending language models, enabling targeted interventions to reduce discriminatory behaviour whilst preserving model performance on legitimate tasks and ensuring fair treatment across demographics.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Tracing causal pathways in large language models performing mathematical reasoning tasks to understand how intermediate steps are computed and stored, revealing which components are responsible for different aspects of logical inference and enabling validation of reasoning processes.",
+      "goal": "Explainability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Requires sophisticated understanding of model architecture to design meaningful interventions, as poorly chosen intervention points may yield misleading causal conclusions or fail to capture relevant computational pathways."
+    },
+    {
+      "description": "Results are highly dependent on the validity of underlying causal assumptions, which can be difficult to verify in complex, high-dimensional neural network spaces where multiple causal pathways may interact."
+    },
+    {
+      "description": "Comprehensive causal analysis requires extensive computational resources, particularly for large models, as each intervention requires separate forward passes and multiple intervention combinations for robust conclusions."
+    },
+    {
+      "description": "Distinguishing between direct causal effects and indirect effects mediated through other components can be challenging, potentially leading to oversimplified causal narratives that miss important intermediate processes."
+    },
+    {
+      "description": "Causal relationships identified in specific contexts or datasets may not generalise to different domains, tasks, or model versions, requiring careful validation across diverse scenarios to ensure robust findings."
+    }
+  ],
+  "resources": [],
+  "complexity_rating": 5,
+  "computational_cost_rating": 4,
+  "related_techniques": [
+    "prompt-sensitivity-analysis",
+    "feature-attribution-with-integrated-gradients-in-nlp"
+  ]
+}

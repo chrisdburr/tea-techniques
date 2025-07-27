@@ -1,0 +1,105 @@
+{
+  "slug": "equalised-odds-post-processing",
+  "name": "Equalised Odds Post-Processing",
+  "description": "A post-processing fairness technique based on Hardt et al.'s seminal work that adjusts classification thresholds after model training to achieve equal true positive rates and false positive rates across demographic groups. The method uses group-specific decision thresholds, potentially with randomisation, to satisfy the equalised odds constraint whilst preserving model utility. This approach enables fairness mitigation without retraining, making it applicable to existing deployed models or when training data access is restricted.",
+  "assurance_goals": [
+    "Fairness",
+    "Transparency",
+    "Reliability"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/fairness",
+    "assurance-goal-category/fairness/group",
+    "assurance-goal-category/transparency",
+    "assurance-goal-category/reliability",
+    "data-requirements/labelled-data",
+    "data-requirements/sensitive-attributes",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "evidence-type/fairness-metric",
+    "expertise-needed/statistics",
+    "expertise-needed/ml-engineering",
+    "fairness-approach/group",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/model-development/testing",
+    "lifecycle-stage/system-deployment-and-use/monitoring",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Post-processing a criminal recidivism risk assessment model to ensure equal error rates across racial groups, using group-specific thresholds to achieve equal TPR and FPR whilst maintaining predictive accuracy for judicial decision support.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Adjusting a hiring algorithm's decision thresholds to ensure equal opportunities for qualified candidates across gender groups, providing transparent evidence that the screening process treats all demographics equitably.",
+      "goal": "Transparency"
+    },
+    {
+      "description": "Calibrating a medical diagnosis model's outputs to maintain equal detection rates across age groups, ensuring reliable performance monitoring and consistent healthcare delivery regardless of patient demographics.",
+      "goal": "Reliability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "May require randomisation in decision-making, leading to inconsistent outcomes for similar individuals to achieve group-level fairness constraints."
+    },
+    {
+      "description": "Post-processing can reduce overall model accuracy or confidence scores, particularly when group-specific ROC curves do not intersect favourably."
+    },
+    {
+      "description": "Violates calibration properties of the original model, creating a trade-off between equalised odds and predictive rate parity."
+    },
+    {
+      "description": "Limited to combinations of error rates that lie on the intersection of group-specific ROC curves, which may represent poor trade-offs."
+    },
+    {
+      "description": "Requires access to sensitive attributes during deployment, which may not be available or legally permissible in all contexts."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Equality of Opportunity in Supervised Learning",
+      "url": "https://arxiv.org/abs/1610.02413",
+      "source_type": "technical_paper",
+      "description": "Foundational paper by Hardt et al. introducing the equalised odds post-processing algorithm and mathematical framework for fairness constraints.",
+      "authors": [
+        "Moritz Hardt",
+        "Eric Price",
+        "Nathan Srebro"
+      ],
+      "publication_date": "2016-10-07"
+    },
+    {
+      "title": "Equalized odds postprocessing under imperfect group information",
+      "url": "https://arxiv.org/abs/1906.03284",
+      "source_type": "technical_paper",
+      "description": "Extension of Hardt et al.'s method examining robustness when protected attribute information is imperfect or noisy.",
+      "authors": [
+        "Pranjal Awasthi",
+        "Matthäus Kleindessner",
+        "Jamie Morgenstern"
+      ],
+      "publication_date": "2019-06-07"
+    },
+    {
+      "title": "Fairlearn: ThresholdOptimizer",
+      "url": "https://fairlearn.org/v0.10/api_reference/generated/fairlearn.postprocessing.ThresholdOptimizer.html",
+      "source_type": "documentation",
+      "description": "Microsoft's Fairlearn implementation of the Hardt et al. algorithm with API documentation and usage examples for equalised odds constraints."
+    },
+    {
+      "title": "IBM AIF360",
+      "url": "https://github.com/Trusted-AI/AIF360",
+      "source_type": "software_package",
+      "description": "Comprehensive fairness toolkit including EqualizedOddsPostprocessing implementation based on Hardt et al.'s original algorithm."
+    }
+  ],
+  "complexity_rating": 3,
+  "computational_cost_rating": 2,
+  "related_techniques": [
+    "threshold-optimiser",
+    "reject-option-classification",
+    "calibration-with-equality-of-opportunity"
+  ]
+}

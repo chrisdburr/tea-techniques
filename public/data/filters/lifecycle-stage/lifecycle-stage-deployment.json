@@ -1,0 +1,191 @@
+{
+  "tag": {
+    "name": "lifecycle-stage/deployment",
+    "slug": "lifecycle-stage-deployment",
+    "count": 2,
+    "category": "lifecycle-stage"
+  },
+  "techniques": [
+    {
+      "slug": "automated-documentation-generation",
+      "name": "Automated Documentation Generation",
+      "description": "Automated documentation generation creates and maintains up-to-date documentation using various methods including programmatic scripts, large language models (LLMs), and extraction tools. These approaches can capture model architectures, data schemas, feature importance, performance metrics, API specifications, and lineage information without manual writing. Methods range from traditional code parsing and template-based generation to modern AI-assisted documentation that can understand context and generate human-readable explanations.",
+      "assurance_goals": [
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/documentation",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/documentation",
+        "expertise-needed/software-engineering",
+        "lifecycle-stage/project-design",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/deployment",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Automatically generating comprehensive model cards for a healthcare AI system each time a new version is deployed, including updated performance metrics across demographic groups, data lineage information, and bias evaluation results for regulatory compliance documentation.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Using LLM-powered tools to automatically document complex financial risk models by analysing code, extracting business logic, and generating human-readable explanations of model behaviour for audit trails and stakeholder communication.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Implementing automated API documentation generation for a machine learning platform that extracts endpoint specifications, parameter definitions, and usage examples, ensuring documentation stays synchronised with code changes and reducing deployment errors from outdated documentation.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "AI-generated documentation may miss critical domain context and business logic that human experts would include, potentially leading to incomplete or misleading explanations of model behaviour."
+        },
+        {
+          "description": "Template-based approaches often struggle with unstructured information and complex relationships between code components, limiting their ability to capture nuanced system interactions."
+        },
+        {
+          "description": "Quality heavily depends on code quality and instrumentation comprehensiveness; poorly commented or documented source code will result in inadequate generated documentation."
+        },
+        {
+          "description": "Maintenance overhead can be significant as automated systems require configuration updates when code structures change, and generated content may need human review for accuracy and completeness."
+        },
+        {
+          "description": "LLM-based approaches may introduce hallucinations or inaccuracies, particularly when documenting complex technical details or domain-specific terminology without proper validation mechanisms."
+        }
+      ],
+      "resources": [
+        {
+          "title": "daynin/fundoc",
+          "url": "https://github.com/daynin/fundoc",
+          "source_type": "software_package",
+          "description": "Language-agnostic documentation generator written in Rust that enables keeping documentation synchronised with code across multiple file types and programming languages."
+        },
+        {
+          "title": "Generative AI for Software Development - DeepLearning.AI",
+          "url": "https://www.deeplearning.ai/courses/generative-ai-for-software-development/",
+          "source_type": "tutorial",
+          "description": "Comprehensive course covering AI-powered documentation techniques including LLM-assisted documentation generation, formatting for automated tools, and improving code documentation quality."
+        },
+        {
+          "title": "Documentation Generator Analysis — Wiser Documentation",
+          "url": "https://chiplicity.readthedocs.io/en/latest/On_Software/DocumentationGenerator.html",
+          "source_type": "documentation",
+          "description": "Detailed analysis and comparison of documentation generator tools including Sphinx, Doxygen, and other approaches for automated documentation workflows."
+        },
+        {
+          "title": "pyTooling/sphinx-reports",
+          "url": "https://github.com/pyTooling/sphinx-reports",
+          "source_type": "software_package",
+          "description": "Sphinx extension that automatically integrates software development reports (unit tests, coverage, documentation coverage) into documentation as appendix pages."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "model-cards",
+        "datasheets-for-datasets",
+        "data-version-control"
+      ]
+    },
+    {
+      "slug": "model-distillation",
+      "name": "Model Distillation",
+      "description": "Model distillation transfers knowledge from a large, complex model (teacher) to a smaller, more efficient model (student) by training the student to mimic the teacher's behaviour. The student learns from the teacher's soft predictions and intermediate representations rather than just hard labels, capturing nuanced decision boundaries and uncertainty. This produces models that are faster, require less memory, and are often more interpretable whilst maintaining much of the original performance. Beyond compression, distillation can improve model reliability by regularising training and enable deployment in resource-constrained environments.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/deployment",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Compressing a large medical diagnosis model into a smaller student model that can run on edge devices in resource-limited clinics, making the decision process more transparent for healthcare professionals whilst maintaining diagnostic accuracy for critical patient care.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating a compressed fraud detection model from a complex ensemble teacher that maintains detection performance whilst being more robust to adversarial attacks and data drift, ensuring consistent protection of financial transactions across varying conditions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Distilling a large autonomous vehicle perception model into a smaller student model that can run with guaranteed inference times and lower computational requirements, ensuring predictable safety-critical decision-making under real-time constraints.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Student models typically achieve 90-95% of teacher performance, creating a trade-off between model efficiency and predictive accuracy that may be unacceptable for high-stakes applications requiring maximum precision."
+        },
+        {
+          "description": "Distillation process can be computationally expensive, requiring extensive teacher model inference during training and careful hyperparameter tuning to balance knowledge transfer with student model capacity."
+        },
+        {
+          "description": "Knowledge transfer quality depends heavily on teacher-student architecture compatibility and the chosen distillation objectives, with mismatched designs potentially leading to ineffective learning or mode collapse."
+        },
+        {
+          "description": "Student models may inherit teacher model biases and vulnerabilities whilst potentially introducing new failure modes, requiring separate validation for fairness, robustness, and safety properties."
+        },
+        {
+          "description": "Compressed models may lack the teacher's capability to handle edge cases or out-of-distribution inputs, potentially creating safety risks when deployed in environments different from the training distribution."
+        }
+      ],
+      "resources": [
+        {
+          "title": "airaria/TextBrewer",
+          "url": "https://github.com/airaria/TextBrewer",
+          "source_type": "software_package",
+          "description": "PyTorch-based knowledge distillation toolkit for natural language processing with support for transformer models, flexible distillation strategies, and multi-teacher approaches."
+        },
+        {
+          "title": "Main features — TextBrewer 0.2.1.post1 documentation",
+          "url": "https://textbrewer.readthedocs.io/",
+          "source_type": "documentation",
+          "description": "Comprehensive documentation for TextBrewer including tutorials, API reference, configuration guides, and experimental results for knowledge distillation in NLP tasks."
+        },
+        {
+          "title": "A Generic Approach for Reproducible Model Distillation",
+          "url": "http://arxiv.org/abs/2211.12631",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hooker, Giles",
+            "Xu, Peiru",
+            "Zhou, Yunzhe"
+          ],
+          "publication_date": "2023-04-27",
+          "description": "Research paper presenting a framework for reproducible knowledge distillation with standardised evaluation protocols and benchmarking across different model architectures and distillation techniques."
+        },
+        {
+          "title": "dkozlov/awesome-knowledge-distillation",
+          "url": "https://github.com/dkozlov/awesome-knowledge-distillation",
+          "source_type": "software_package",
+          "description": "Curated collection of knowledge distillation resources including academic papers, implementation code across multiple frameworks (PyTorch, TensorFlow, Keras), and educational videos."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "ridge-regression-surrogates",
+        "rulefit",
+        "model-pruning"
+      ]
+    }
+  ],
+  "count": 2
+}

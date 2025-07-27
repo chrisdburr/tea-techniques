@@ -1,0 +1,97 @@
+{
+  "slug": "cross-validation",
+  "name": "Cross-validation",
+  "description": "Cross-validation evaluates model performance and robustness by systematically partitioning data into multiple subsets (folds) and training/testing repeatedly on different combinations. Common approaches include k-fold (splitting into k equal parts), stratified (preserving class distributions), and leave-one-out variants. By testing on multiple independent holdout sets, it reveals how performance varies across different data subsamples, provides robust estimates of generalisation ability, and helps detect overfitting or model instability that single train-test splits might miss.",
+  "assurance_goals": [
+    "Reliability",
+    "Transparency",
+    "Fairness"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/reliability",
+    "assurance-goal-category/transparency",
+    "assurance-goal-category/fairness",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/ml-engineering",
+    "expertise-needed/statistics",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/system-deployment-and-use",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Using 10-fold cross-validation to estimate a healthcare prediction model's true accuracy and detect overfitting, ensuring robust performance estimates that generalise beyond the specific training sample to new patient populations.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Providing transparent model evaluation in regulatory submissions by showing consistent performance across multiple validation folds, demonstrating to auditors that model performance claims are not cherry-picked from a single favourable test set.",
+      "goal": "Transparency"
+    },
+    {
+      "description": "Ensuring fair model evaluation across demographic groups by using stratified cross-validation that maintains representative proportions of protected classes in each fold, revealing whether performance is consistent across different population segments.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Computationally expensive for large datasets or complex models, requiring multiple training runs that scale linearly with the number of folds."
+    },
+    {
+      "description": "Can provide overly optimistic performance estimates when data has dependencies or structure (e.g., time series, grouped observations) that violate independence assumptions."
+    },
+    {
+      "description": "May not reflect real-world performance if the training data distribution differs significantly from future deployment conditions or population shifts."
+    },
+    {
+      "description": "Choice of fold number (k) involves a bias-variance trade-off: fewer folds reduce computational cost but increase variance in estimates, whilst more folds increase computation but may introduce bias."
+    },
+    {
+      "description": "Standard cross-validation doesn't account for temporal ordering in sequential data, potentially leading to data leakage where future information influences past predictions."
+    }
+  ],
+  "resources": [
+    {
+      "title": "scikit-learn Cross-validation User Guide",
+      "url": "https://scikit-learn.org/stable/modules/cross_validation.html",
+      "source_type": "documentation",
+      "description": "Comprehensive guide to cross-validation methods and implementations in scikit-learn"
+    },
+    {
+      "title": "Cross-validation: what does it estimate and how well does it do it?",
+      "url": "http://arxiv.org/pdf/2104.00673v4",
+      "source_type": "technical_paper",
+      "authors": [
+        "Stephen Bates",
+        "Trevor Hastie",
+        "Robert Tibshirani"
+      ],
+      "publication_date": "2021-04-01",
+      "description": "Theoretical analysis of what cross-validation estimates and its accuracy in practice"
+    },
+    {
+      "title": "A Study of Cross-Validation and Bootstrap for Accuracy Estimation and Model Selection",
+      "url": "https://www.ijcai.org/Proceedings/95-2/Papers/016.pdf",
+      "source_type": "technical_paper",
+      "authors": [
+        "Ron Kohavi"
+      ],
+      "publication_date": "1995-01-01",
+      "description": "Classic paper comparing cross-validation with bootstrap for model evaluation and selection"
+    },
+    {
+      "title": "Cross-Validation in Machine Learning: How to Do It Right",
+      "url": "https://neptune.ai/blog/cross-validation-in-machine-learning-how-to-do-it-right",
+      "source_type": "tutorial",
+      "description": "Practical guide covering different cross-validation strategies and common pitfalls to avoid"
+    }
+  ],
+  "complexity_rating": 2,
+  "computational_cost_rating": 3,
+  "related_techniques": [
+    "permutation-tests",
+    "area-under-precision-recall-curve"
+  ]
+}

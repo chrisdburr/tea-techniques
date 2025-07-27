@@ -1,0 +1,108 @@
+{
+  "slug": "fair-transfer-learning",
+  "name": "Fair Transfer Learning",
+  "description": "An in-processing fairness technique that adapts pre-trained models from one domain to another whilst explicitly preserving fairness constraints across different contexts or populations. The method addresses the challenge that fairness properties may not transfer when adapting models to new domains with different demographic compositions or data distributions. Fair transfer learning typically involves constraint-aware fine-tuning, domain adaptation techniques, or adversarial training that maintains equitable performance across groups in the target domain, ensuring that bias mitigation efforts carry over from source to target domains.",
+  "assurance_goals": [
+    "Fairness",
+    "Transparency",
+    "Reliability"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/fairness",
+    "assurance-goal-category/fairness/group",
+    "assurance-goal-category/transparency",
+    "assurance-goal-category/reliability",
+    "data-requirements/sensitive-attributes",
+    "data-requirements/pre-trained-model",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "evidence-type/fairness-metric",
+    "expertise-needed/ml-engineering",
+    "expertise-needed/statistics",
+    "fairness-approach/group",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/model-development/training",
+    "lifecycle-stage/model-development/fine-tuning",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Adapting a hiring algorithm trained on one country's recruitment data to another region whilst maintaining fairness across gender and ethnicity groups, ensuring equitable candidate evaluation despite different local demographic distributions and cultural contexts.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Transferring a medical diagnosis model from urban hospital data to rural clinics whilst providing transparent evidence that fairness constraints are preserved across age, gender, and socioeconomic groups despite different patient populations and healthcare infrastructure.",
+      "goal": "Transparency"
+    },
+    {
+      "description": "Adapting a fraud detection system from one financial market to another whilst ensuring reliable performance across customer demographics, maintaining consistent accuracy and fairness even when transaction patterns and customer characteristics differ between markets.",
+      "goal": "Reliability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Fairness properties achieved in the source domain may not translate directly to the target domain if demographic distributions or data characteristics differ significantly."
+    },
+    {
+      "description": "Requires careful hyperparameter tuning and constraint specification to balance fairness preservation with model performance in the new domain."
+    },
+    {
+      "description": "Implementation complexity is high, requiring expertise in both transfer learning techniques and fairness constraint optimisation methods."
+    },
+    {
+      "description": "May suffer from negative transfer effects where fairness constraints that worked well in the source domain actually harm performance in the target domain."
+    },
+    {
+      "description": "Evaluation challenges arise from needing to validate fairness across multiple domains and demographic groups simultaneously."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Segmenting across places: The need for fair transfer learning with satellite imagery",
+      "url": "http://arxiv.org/pdf/2204.04358v3",
+      "source_type": "technical_paper",
+      "authors": [
+        "Miao Zhang",
+        "Harvineet Singh",
+        "Lazarus Chok",
+        "Rumi Chunara"
+      ],
+      "publication_date": "2022-04-09"
+    },
+    {
+      "title": "Trustworthy Transfer Learning: A Survey",
+      "url": "https://www.semanticscholar.org/paper/7ee5c5b58ed0b4e585e0c30790c206bea07faacf",
+      "source_type": "documentation",
+      "authors": [
+        "Jun Wu",
+        "Jingrui He"
+      ],
+      "publication_date": "2024-12-18"
+    },
+    {
+      "title": "Cross-Institutional Transfer Learning for Educational Models: Implications for Model Performance, Fairness, and Equity",
+      "url": "https://arxiv.org/abs/2305.00927",
+      "source_type": "technical_paper",
+      "authors": [
+        "Josh Gardner",
+        "Renzhe Yu",
+        "Quan Nguyen",
+        "Christopher Brooks",
+        "Rene Kizilcec"
+      ],
+      "publication_date": "2023-05-01"
+    }
+  ],
+  "complexity_rating": 5,
+  "computational_cost_rating": 4,
+  "related_techniques": [
+    "adversarial-debiasing",
+    "fair-adversarial-networks",
+    "prejudice-remover-regulariser",
+    "meta-fair-classifier",
+    "exponentiated-gradient-reduction",
+    "adaptive-sensitive-reweighting",
+    "multi-accuracy-boosting"
+  ]
+}

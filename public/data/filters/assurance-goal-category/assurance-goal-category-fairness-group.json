@@ -1,0 +1,1459 @@
+{
+  "tag": {
+    "name": "assurance-goal-category/fairness/group",
+    "slug": "assurance-goal-category-fairness-group",
+    "count": 14,
+    "category": "assurance-goal-category"
+  },
+  "techniques": [
+    {
+      "slug": "adversarial-debiasing",
+      "name": "Adversarial Debiasing",
+      "description": "Adversarial debiasing reduces bias by training models using a competitive adversarial setup, similar to Generative Adversarial Networks (GANs). The technique involves two neural networks: a predictor that learns to make accurate predictions on the main task, and an adversary (bias detector) that attempts to predict protected attributes (such as race, gender, or age) from the predictor's internal representations. Through adversarial training, the predictor learns to produce representations that retain predictive power for the main task whilst being uninformative about protected characteristics, thereby reducing discriminatory bias.",
+      "assurance_goals": [
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training a resume screening model for a technology company that evaluates candidates based on skills and experience whilst preventing the internal representations from encoding gender or ethnicity information, ensuring hiring decisions cannot be influenced by protected characteristics even indirectly through correlated features.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Developing a credit scoring model for loan approvals that accurately predicts default risk whilst ensuring the model's internal features cannot be used to infer applicants' race or age, thereby preventing discriminatory lending practices whilst maintaining predictive accuracy.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Creating a medical diagnosis model that makes accurate predictions about patient conditions whilst ensuring that the learned representations cannot reveal sensitive demographic information like gender or ethnicity, protecting patient privacy whilst maintaining clinical effectiveness.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Significantly more complex to implement than standard models, requiring expertise in adversarial training techniques and careful architecture design for both predictor and adversary networks."
+        },
+        {
+          "description": "Requires careful hyperparameter tuning to balance the competing objectives of task performance and bias mitigation, as overly strong adversarial training can harm predictive accuracy."
+        },
+        {
+          "description": "Effectiveness heavily depends on the quality and design of the adversary network - a weak adversary may fail to detect subtle biases, whilst an overly strong adversary may eliminate useful information."
+        },
+        {
+          "description": "Training can be unstable and may suffer from convergence issues common to adversarial training, requiring careful learning rate scheduling and regularisation techniques."
+        },
+        {
+          "description": "Provides no formal guarantees about bias elimination and may not prevent all forms of discrimination, particularly when protected attributes can be inferred from other available features."
+        }
+      ],
+      "resources": [
+        {
+          "title": "AI Fairness 360 (AIF360)",
+          "url": "https://github.com/Trusted-AI/AIF360",
+          "source_type": "software_package",
+          "description": "Comprehensive toolkit for bias detection and mitigation including adversarial debiasing implementations"
+        },
+        {
+          "title": "On the Fairness ROAD: Robust Optimization for Adversarial Debiasing",
+          "url": "https://www.semanticscholar.org/paper/0c887592d781538a1b5c2168eae541b563c0ba9a",
+          "source_type": "technical_paper",
+          "authors": [
+            "Vincent Grari",
+            "Thibault Laugel",
+            "Tatsunori B. Hashimoto",
+            "S. Lamprier",
+            "Marcin Detyniecki"
+          ]
+        },
+        {
+          "title": "aif360.sklearn.inprocessing.AdversarialDebiasing — aif360 0.6.1 ...",
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.inprocessing.AdversarialDebiasing.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Towards Learning an Unbiased Classifier from Biased Data via Conditional Adversarial Debiasing",
+          "url": "http://arxiv.org/pdf/2103.06179v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Christian Reimers",
+            "Paul Bodesheim",
+            "Jakob Runge",
+            "Joachim Denzler"
+          ],
+          "publication_date": "2021-03-10"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "fair-adversarial-networks",
+        "prejudice-remover-regulariser",
+        "meta-fair-classifier",
+        "exponentiated-gradient-reduction",
+        "fair-transfer-learning",
+        "adaptive-sensitive-reweighting",
+        "multi-accuracy-boosting"
+      ]
+    },
+    {
+      "slug": "fairness-gan",
+      "name": "Fairness GAN",
+      "description": "A data generation technique that employs Generative Adversarial Networks (GANs) to create fair synthetic datasets by learning to generate data representations that preserve utility whilst obfuscating protected attributes. Unlike traditional GANs, Fairness GANs incorporate fairness constraints into the training objective, ensuring that the generated data maintains statistical parity across demographic groups. The technique can be used for data augmentation to balance underrepresented groups or to create privacy-preserving synthetic datasets that remove demographic bias from training data.",
+      "assurance_goals": [
+        "Fairness",
+        "Privacy",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/gan",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/reliability",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "evidence-type/synthetic-data",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-augmentation",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Generating balanced synthetic datasets for medical research by creating additional samples from underrepresented demographic groups, ensuring equal representation across ethnicity and gender whilst maintaining the statistical properties needed for robust model training.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Creating privacy-preserving synthetic datasets for financial services that remove demographic identifiers whilst preserving the underlying patterns needed for credit risk assessment, allowing secure data sharing between institutions without exposing sensitive customer information.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Augmenting recruitment datasets by generating synthetic candidate profiles that balance gender and ethnicity representation, ensuring reliable model performance across all demographic groups when real-world data exhibits significant imbalances.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "GAN training is notoriously difficult to stabilise, with potential for mode collapse or failure to converge, especially when additional fairness constraints are imposed."
+        },
+        {
+          "description": "Ensuring fairness in generated data may come at the cost of data utility, potentially reducing the quality or realism of synthetic samples."
+        },
+        {
+          "description": "Requires large datasets to train both generator and discriminator networks effectively, limiting applicability in data-scarce domains."
+        },
+        {
+          "description": "Evaluation complexity is high, as it requires assessing both the quality of generated data and the preservation of fairness properties across demographic groups."
+        },
+        {
+          "description": "May inadvertently introduce new biases if the fairness constraints are not properly specified or if the training data itself contains subtle biases."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Fairness GAN",
+          "url": "http://arxiv.org/pdf/1805.09910v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Prasanna Sattigeri",
+            "Samuel C. Hoffman",
+            "Vijil Chenthamarakshan",
+            "Kush R. Varshney"
+          ],
+          "publication_date": "2018-05-24"
+        },
+        {
+          "title": "Fair GANs through model rebalancing for extremely imbalanced class distributions",
+          "url": "http://arxiv.org/pdf/2308.08638v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Anubhav Jain",
+            "Nasir Memon",
+            "Julian Togelius"
+          ],
+          "publication_date": "2023-08-16"
+        },
+        {
+          "title": "Inclusive GAN: Improving Data and Minority Coverage in Generative Models",
+          "url": "http://arxiv.org/abs/2004.03355",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ning Yu",
+            "Ke Li",
+            "Peng Zhou",
+            "Jitendra Malik",
+            "Larry Davis",
+            "Mario Fritz"
+          ],
+          "publication_date": "2020-04-07"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "sensitivity-analysis-for-fairness",
+        "attribute-removal-fairness-through-unawareness",
+        "bayesian-fairness-regularization"
+      ]
+    },
+    {
+      "slug": "relabelling",
+      "name": "Relabelling",
+      "description": "A preprocessing fairness technique that modifies class labels in training data to achieve equal positive outcome rates across protected groups. Also known as 'data massaging', this method identifies instances that contribute to discriminatory patterns and flips their labels (from positive to negative or vice versa) to balance the proportion of positive outcomes between demographic groups. The technique aims to remove historical bias from training data whilst preserving the overall class distribution, enabling standard classifiers to learn from discrimination-free datasets.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/access-to-training-data",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/dataset-analysis",
+        "expertise-needed/statistics",
+        "expertise-needed/domain-knowledge",
+        "fairness-approach/group",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-preprocessing",
+        "lifecycle-stage/model-development",
+        "technique-type/procedural"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Preprocessing historical hiring datasets by relabelling borderline cases to ensure equal hiring rates across gender and ethnicity groups, correcting for past discriminatory practices whilst maintaining overall qualification standards for fair recruitment model training.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Creating transparent credit scoring datasets by documenting which loan applications had labels modified to address historical lending discrimination, providing clear audit trails showing how training data bias was systematically corrected before model development.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Improving reliability of medical diagnosis training data by relabelling cases where demographic bias may have influenced historical diagnoses, ensuring models learn from corrected labels that reflect true medical conditions rather than biased historical treatment patterns.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Altering training labels risks introducing new biases or artificial patterns that may not reflect genuine relationships in the data."
+        },
+        {
+          "description": "Deciding which instances to relabel requires careful selection criteria and domain expertise to avoid inappropriate label changes."
+        },
+        {
+          "description": "May reduce prediction accuracy if too many labels are changed, particularly when the modifications conflict with genuine patterns in the data."
+        },
+        {
+          "description": "Requires access to ground truth or expert knowledge to determine whether original labels reflect genuine outcomes or discriminatory bias."
+        },
+        {
+          "description": "Effectiveness depends on accurate identification of discriminatory instances, which can be challenging when bias patterns are subtle or complex."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Data preprocessing techniques for classification without discrimination",
+          "url": "https://link.springer.com/article/10.1007/s10115-011-0463-8",
+          "source_type": "technical_paper",
+          "authors": [
+            "Faisal Kamiran",
+            "Toon Calders"
+          ],
+          "publication_date": "2012-06-01"
+        },
+        {
+          "title": "Classifying without discriminating",
+          "url": "https://www.researchgate.net/publication/224440330_Classifying_without_discriminating",
+          "source_type": "technical_paper",
+          "authors": [
+            "Toon Calders",
+            "Sicco Verwer"
+          ],
+          "publication_date": "2010-02-01"
+        },
+        {
+          "title": "Data Pre-Processing for Discrimination Prevention",
+          "url": "https://krvarshney.github.io/pubs/CalmonWVRV_jstsp2018.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Flavio Calmon",
+            "Dennis Wei",
+            "Bhanukiran Vinzamuri",
+            "Karthikeyan Natesan Ramamurthy",
+            "Kush R. Varshney"
+          ],
+          "publication_date": "2018-01-01"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "reweighing",
+        "disparate-impact-remover",
+        "preferential-sampling"
+      ]
+    },
+    {
+      "slug": "preferential-sampling",
+      "name": "Preferential Sampling",
+      "description": "A preprocessing fairness technique developed by Kamiran and Calders that addresses dataset imbalances by re-sampling training data with preference for underrepresented groups to achieve discrimination-free classification. This method modifies the training distribution by prioritising borderline objects (instances near decision boundaries) from underrepresented groups for duplication whilst potentially removing instances from overrepresented groups. Unlike relabelling approaches, preferential sampling maintains original class labels whilst creating a more balanced dataset that prevents models from learning biased patterns due to skewed group representation.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/dataset-analysis",
+        "expertise-needed/low",
+        "fairness-approach/group",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-preprocessing",
+        "lifecycle-stage/model-development",
+        "technique-type/procedural"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Preprocessing hiring datasets by preferentially sampling candidates from underrepresented gender and ethnic groups, particularly focusing on borderline cases near decision boundaries, to ensure fair representation whilst maintaining original qualifications and labels for unbiased recruitment model training.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Balancing medical training datasets by oversampling patients from underrepresented demographic groups to ensure reliable diagnostic performance across all populations, preventing models from exhibiting reduced accuracy for minority patient groups due to insufficient training examples.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Creating transparent credit scoring datasets by documenting and adjusting the sampling process to ensure equal representation across demographic groups, providing clear evidence to regulators that training data imbalances have been addressed without altering original creditworthiness labels.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Oversampling minority groups can cause overfitting to duplicated examples, particularly when borderline instances are repeatedly sampled, potentially reducing model generalisation."
+        },
+        {
+          "description": "Undersampling majority groups may remove important examples that contain valuable information, potentially degrading overall model performance."
+        },
+        {
+          "description": "Does not address inherent algorithmic bias in the learning process itself, only correcting for representation imbalances in the training data."
+        },
+        {
+          "description": "Selection of borderline objects requires careful threshold tuning and may be sensitive to the choice of distance metrics or similarity measures used."
+        },
+        {
+          "description": "May not address intersectional fairness issues when multiple protected attributes create complex group combinations that require nuanced sampling strategies."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Data preprocessing techniques for classification without discrimination",
+          "url": "https://link.springer.com/article/10.1007/s10115-011-0463-8",
+          "source_type": "technical_paper",
+          "authors": [
+            "Faisal Kamiran",
+            "Toon Calders"
+          ],
+          "publication_date": "2012-06-01"
+        },
+        {
+          "title": "Classification with no discrimination by preferential sampling",
+          "url": "https://research.tue.nl/en/publications/classification-with-no-discrimination-by-preferential-sampling",
+          "source_type": "technical_paper",
+          "authors": [
+            "Faisal Kamiran",
+            "Toon Calders"
+          ],
+          "publication_date": "2010-05-27"
+        },
+        {
+          "title": "A Survey on Bias and Fairness in Machine Learning",
+          "url": "https://arxiv.org/abs/1908.09635",
+          "source_type": "documentation",
+          "authors": [
+            "Ninareh Mehrabi",
+            "Fred Morstatter",
+            "Nripsuta Saxena",
+            "Kristina Lerman",
+            "Aram Galstyan"
+          ],
+          "publication_date": "2019-08-25"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "reweighing",
+        "disparate-impact-remover",
+        "relabelling"
+      ]
+    },
+    {
+      "slug": "fair-adversarial-networks",
+      "name": "Fair Adversarial Networks",
+      "description": "An in-processing fairness technique that employs adversarial training with dual neural networks to learn fair representations. The method consists of a predictor network that learns the main task whilst an adversarial discriminator network simultaneously attempts to predict sensitive attributes from the predictor's hidden representations. Through this adversarial min-max game, the predictor is incentivised to learn features that are informative for the task but statistically independent of protected attributes, effectively removing bias at the representation level in deep learning models.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "applicable-models/cnn",
+        "applicable-models/gan",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training a facial recognition system that maintains high accuracy for person identification whilst ensuring equal performance across different ethnic groups, using adversarial training to remove race-related features from learned representations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Developing a resume screening neural network that provides transparent evidence of bias mitigation by demonstrating that learned features cannot predict gender, whilst maintaining predictive performance for job suitability assessment.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Creating a medical image analysis model that achieves reliable diagnostic performance across patient demographics by using adversarial debiasing to ensure age and gender information cannot be extracted from diagnostic features.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Implementation complexity is high, requiring careful design of adversarial loss functions and balancing multiple competing objectives during training."
+        },
+        {
+          "description": "Sensitive to hyperparameter choices, particularly the trade-off weights between prediction accuracy and adversarial loss, which require extensive tuning."
+        },
+        {
+          "description": "Adversarial training can be unstable, with potential for mode collapse or failure to converge, especially in complex deep learning architectures."
+        },
+        {
+          "description": "Interpretability of fairness improvements can be limited, as it may be difficult to verify that sensitive attributes are truly removed from learned representations."
+        },
+        {
+          "description": "Computational overhead is significant due to training two networks simultaneously, increasing both training time and resource requirements."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Fair Adversarial Networks",
+          "url": "http://arxiv.org/pdf/2002.12144v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "George Cevora"
+          ],
+          "publication_date": "2020-02-23"
+        },
+        {
+          "title": "Demonstrating Rosa: the fairness solution for any Data Analytic pipeline",
+          "url": "http://arxiv.org/pdf/2003.00899v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Kate Wilkinson",
+            "George Cevora"
+          ],
+          "publication_date": "2020-02-28"
+        },
+        {
+          "title": "Triangular Trade-off between Robustness, Accuracy, and Fairness in Deep Neural Networks: A Survey",
+          "url": "https://www.semanticscholar.org/paper/13b0444d079bea1c8c57a6082200b67ab5f4616e",
+          "source_type": "documentation",
+          "authors": [
+            "Jingyang Li",
+            "Guoqiang Li"
+          ],
+          "publication_date": "2025-02-10"
+        },
+        {
+          "title": "Bt-GAN: Generating Fair Synthetic Healthdata via Bias-transforming Generative Adversarial Networks",
+          "url": "https://www.semanticscholar.org/paper/6995779ac582c5f2436cfb82a3c8cf5ca72bae2f",
+          "source_type": "technical_paper",
+          "authors": [
+            "Resmi Ramachandranpillai",
+            "Md Fahim Sikder",
+            "David Bergström",
+            "Fredrik Heintz"
+          ],
+          "publication_date": "2023-12-14"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "adversarial-debiasing",
+        "prejudice-remover-regulariser",
+        "meta-fair-classifier",
+        "exponentiated-gradient-reduction",
+        "fair-transfer-learning",
+        "adaptive-sensitive-reweighting",
+        "multi-accuracy-boosting"
+      ]
+    },
+    {
+      "slug": "prejudice-remover-regulariser",
+      "name": "Prejudice Remover Regulariser",
+      "description": "An in-processing fairness technique that adds a fairness penalty to machine learning models to reduce bias against protected groups. The method works by minimising 'mutual information' - essentially reducing how much the model's predictions reveal about sensitive attributes like race or gender. By adding this penalty term to the learning objective (typically in logistic regression), the technique ensures predictions become less dependent on protected features. This addresses not only direct discrimination but also indirect bias through correlated features. Practitioners can adjust a tuning parameter to balance between maintaining accuracy and removing prejudice from the model.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/logistic-regression",
+        "applicable-models/probabilistic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training credit scoring models with prejudice remover regularisation to ensure loan approval decisions are not influenced by gender or ethnicity, minimising mutual information between predictions and protected attributes whilst maintaining accurate risk assessment.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Developing transparent university admission models that provide clear evidence of bias mitigation by demonstrating reduced statistical dependence between acceptance decisions and protected characteristics, enabling regulatory compliance reporting.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Building reliable recruitment screening models that maintain consistent performance across demographic groups by regularising against indirect prejudice through correlated features like school names or postal codes that might proxy for protected attributes.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires careful tuning of the fairness penalty hyperparameter, where too high values severely degrade accuracy whilst too low values provide insufficient bias mitigation."
+        },
+        {
+          "description": "Primarily applicable to probabilistic discriminative models like logistic regression, limiting its use with other model architectures such as deep neural networks or tree-based methods."
+        },
+        {
+          "description": "Computational complexity increases with the calculation of mutual information between predictions and sensitive attributes, particularly for high-dimensional data."
+        },
+        {
+          "description": "May not fully eliminate all forms of discrimination, particularly when complex interactions between multiple sensitive attributes create intersectional biases."
+        },
+        {
+          "description": "Effectiveness depends on accurate identification and inclusion of all sensitive attributes, potentially missing hidden biases from unobserved protected characteristics."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Fairness-Aware Classifier with Prejudice Remover Regularizer",
+          "url": "https://link.springer.com/chapter/10.1007/978-3-642-33486-3_3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Toshihiro Kamishima",
+            "Shotaro Akaho",
+            "Hideki Asoh",
+            "Jun Sakuma"
+          ],
+          "publication_date": "2012-09-24"
+        },
+        {
+          "title": "Fairness-Aware Machine Learning and Data Mining",
+          "url": "https://www.kamishima.net/faml/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Fairness-aware Classifier (faclass)",
+          "url": "https://www.kamishima.net/faclass/",
+          "source_type": "software_package"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "adversarial-debiasing",
+        "fair-adversarial-networks",
+        "meta-fair-classifier",
+        "exponentiated-gradient-reduction",
+        "fair-transfer-learning",
+        "adaptive-sensitive-reweighting",
+        "multi-accuracy-boosting"
+      ]
+    },
+    {
+      "slug": "meta-fair-classifier",
+      "name": "Meta Fair Classifier",
+      "description": "An in-processing fairness technique that employs meta-learning to modify any existing classifier for optimising fairness metrics whilst maintaining predictive performance. The method learns how to adjust model parameters or decision boundaries to satisfy fairness constraints such as demographic parity or equalised odds through iterative optimisation. This approach is particularly valuable when retrofitting fairness to pre-trained models that perform well but exhibit bias, as it can incorporate fairness without requiring complete retraining from scratch.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "lifecycle-stage/model-optimization",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Retrofitting an existing hiring algorithm to achieve demographic parity across gender and ethnicity groups by using meta-learning to adjust decision boundaries, ensuring equitable candidate selection whilst maintaining the model's ability to identify qualified applicants.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Modifying a pre-trained credit scoring model to provide transparent fairness guarantees by learning optimal parameter adjustments that satisfy equalised odds constraints, enabling clear reporting on fair lending compliance to regulatory authorities.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Adapting a medical diagnosis model to ensure reliable performance across patient demographics by meta-learning fairness-aware adjustments that maintain diagnostic accuracy whilst reducing disparities in treatment recommendations across age and socioeconomic groups.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Meta-learning approach can be complex to implement, requiring expertise in both the underlying classifier and meta-optimisation techniques."
+        },
+        {
+          "description": "Requires extensive hyperparameter tuning to balance fairness constraints with predictive performance, making optimisation challenging."
+        },
+        {
+          "description": "May result in longer training times compared to simpler fairness techniques due to the iterative meta-learning process."
+        },
+        {
+          "description": "Performance depends heavily on the quality and characteristics of the base classifier being modified, limiting effectiveness with poorly-performing models."
+        },
+        {
+          "description": "Theoretical guarantees about fairness-accuracy trade-offs may not hold in practice due to finite sample effects and optimisation challenges."
+        }
+      ],
+      "resources": [
+        {
+          "title": "ρ-Fair Method — holisticai documentation",
+          "url": "https://holisticai.readthedocs.io/en/latest/getting_started/bias/mitigation/inprocessing/bc_meta_fair_classifier_rho_fair.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "aif360.algorithms.inprocessing — aif360 0.1.0 documentation",
+          "url": "https://aif360.readthedocs.io/en/v0.2.3/modules/inprocessing.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Welcome to AI Fairness 360's documentation! — aif360 0.1.0 ...",
+          "url": "https://aif360.readthedocs.io/en/v0.2.3/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Algorithmic decision making methods for fair credit scoring",
+          "url": "http://arxiv.org/abs/2209.07912",
+          "source_type": "technical_paper",
+          "authors": [
+            "Moldovan, Darie"
+          ],
+          "publication_date": "2022-09-16"
+        },
+        {
+          "title": "The Importance of Modeling Data Missingness in Algorithmic Fairness: A\n  Causal Perspective",
+          "url": "http://arxiv.org/abs/2012.11448",
+          "source_type": "technical_paper",
+          "authors": [
+            "Amayuelas, Alfonso",
+            "Deshpande, Amit",
+            "Goel, Naman",
+            "Sharma, Amit"
+          ],
+          "publication_date": "2020-12-21"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "adversarial-debiasing",
+        "fair-adversarial-networks",
+        "prejudice-remover-regulariser",
+        "exponentiated-gradient-reduction",
+        "fair-transfer-learning",
+        "adaptive-sensitive-reweighting",
+        "multi-accuracy-boosting"
+      ]
+    },
+    {
+      "slug": "exponentiated-gradient-reduction",
+      "name": "Exponentiated Gradient Reduction",
+      "description": "An in-processing fairness technique based on Agarwal et al.'s reductions approach that transforms fair classification into a sequence of cost-sensitive classification problems. The method uses an exponentiated gradient algorithm to iteratively reweight training data, returning a randomised classifier that achieves the lowest empirical error whilst satisfying fairness constraints. This reduction-based framework provides theoretical guarantees about both accuracy and constraint violation, making it suitable for various fairness criteria including demographic parity and equalised odds.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training a hiring algorithm with demographic parity constraints to ensure equal selection rates across gender groups, using iterative reweighting to balance fairness and predictive accuracy whilst maintaining legal compliance.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Developing a loan approval model with equalised odds constraints, providing transparent documentation of the theoretical guarantees about both error rates and fairness constraint violations achieved by the reduction approach.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Creating a medical diagnosis classifier that maintains reliable performance across demographic groups by using randomised prediction averaging, ensuring consistent healthcare delivery whilst monitoring constraint satisfaction over time.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires convex base learners for theoretical guarantees about convergence and optimality, limiting the choice of underlying models."
+        },
+        {
+          "description": "Produces randomised classifiers that may give different predictions for identical inputs, which can be problematic in applications requiring consistent decisions."
+        },
+        {
+          "description": "Convergence can be slow and sensitive to hyperparameter choices, particularly the learning rate and tolerance settings."
+        },
+        {
+          "description": "Involves iterative retraining with adjusted weights, which can be computationally expensive for large datasets or complex models."
+        },
+        {
+          "description": "Fairness constraints may significantly reduce model accuracy, and the trade-off between fairness and performance is not always transparent to practitioners."
+        }
+      ],
+      "resources": [
+        {
+          "title": "A Reductions Approach to Fair Classification",
+          "url": "https://arxiv.org/abs/1803.02453",
+          "source_type": "technical_paper",
+          "description": "Foundational paper by Agarwal et al. introducing the exponentiated gradient reduction approach for fair classification with theoretical guarantees.",
+          "authors": [
+            "Alekh Agarwal",
+            "Alina Beygelzimer",
+            "Miroslav Dudík",
+            "John Langford",
+            "Hanna Wallach"
+          ],
+          "publication_date": "2018-03-06"
+        },
+        {
+          "title": "Fairlearn: ExponentiatedGradient",
+          "url": "https://fairlearn.org/v0.10/api_reference/generated/fairlearn.reductions.ExponentiatedGradient.html",
+          "source_type": "documentation",
+          "description": "Microsoft's Fairlearn implementation of the Agarwal et al. algorithm with comprehensive API documentation and examples."
+        },
+        {
+          "title": "IBM AIF360: ExponentiatedGradientReduction",
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.inprocessing.ExponentiatedGradientReduction.html",
+          "source_type": "documentation",
+          "description": "IBM's AIF360 implementation with scikit-learn compatible API for in-processing fairness constraints during model training."
+        },
+        {
+          "title": "Fairlearn Reductions Guide",
+          "url": "https://fairlearn.org/main/user_guide/mitigation/reductions.html",
+          "source_type": "tutorial",
+          "description": "Comprehensive guide to using reduction-based approaches for fairness, including practical examples of exponentiated gradient methods and fairness constraints."
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "adversarial-debiasing",
+        "fair-adversarial-networks",
+        "prejudice-remover-regulariser",
+        "meta-fair-classifier",
+        "fair-transfer-learning",
+        "adaptive-sensitive-reweighting",
+        "multi-accuracy-boosting"
+      ]
+    },
+    {
+      "slug": "fair-transfer-learning",
+      "name": "Fair Transfer Learning",
+      "description": "An in-processing fairness technique that adapts pre-trained models from one domain to another whilst explicitly preserving fairness constraints across different contexts or populations. The method addresses the challenge that fairness properties may not transfer when adapting models to new domains with different demographic compositions or data distributions. Fair transfer learning typically involves constraint-aware fine-tuning, domain adaptation techniques, or adversarial training that maintains equitable performance across groups in the target domain, ensuring that bias mitigation efforts carry over from source to target domains.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/pre-trained-model",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "lifecycle-stage/model-development/fine-tuning",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adapting a hiring algorithm trained on one country's recruitment data to another region whilst maintaining fairness across gender and ethnicity groups, ensuring equitable candidate evaluation despite different local demographic distributions and cultural contexts.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Transferring a medical diagnosis model from urban hospital data to rural clinics whilst providing transparent evidence that fairness constraints are preserved across age, gender, and socioeconomic groups despite different patient populations and healthcare infrastructure.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Adapting a fraud detection system from one financial market to another whilst ensuring reliable performance across customer demographics, maintaining consistent accuracy and fairness even when transaction patterns and customer characteristics differ between markets.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Fairness properties achieved in the source domain may not translate directly to the target domain if demographic distributions or data characteristics differ significantly."
+        },
+        {
+          "description": "Requires careful hyperparameter tuning and constraint specification to balance fairness preservation with model performance in the new domain."
+        },
+        {
+          "description": "Implementation complexity is high, requiring expertise in both transfer learning techniques and fairness constraint optimisation methods."
+        },
+        {
+          "description": "May suffer from negative transfer effects where fairness constraints that worked well in the source domain actually harm performance in the target domain."
+        },
+        {
+          "description": "Evaluation challenges arise from needing to validate fairness across multiple domains and demographic groups simultaneously."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Segmenting across places: The need for fair transfer learning with satellite imagery",
+          "url": "http://arxiv.org/pdf/2204.04358v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Miao Zhang",
+            "Harvineet Singh",
+            "Lazarus Chok",
+            "Rumi Chunara"
+          ],
+          "publication_date": "2022-04-09"
+        },
+        {
+          "title": "Trustworthy Transfer Learning: A Survey",
+          "url": "https://www.semanticscholar.org/paper/7ee5c5b58ed0b4e585e0c30790c206bea07faacf",
+          "source_type": "documentation",
+          "authors": [
+            "Jun Wu",
+            "Jingrui He"
+          ],
+          "publication_date": "2024-12-18"
+        },
+        {
+          "title": "Cross-Institutional Transfer Learning for Educational Models: Implications for Model Performance, Fairness, and Equity",
+          "url": "https://arxiv.org/abs/2305.00927",
+          "source_type": "technical_paper",
+          "authors": [
+            "Josh Gardner",
+            "Renzhe Yu",
+            "Quan Nguyen",
+            "Christopher Brooks",
+            "Rene Kizilcec"
+          ],
+          "publication_date": "2023-05-01"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "adversarial-debiasing",
+        "fair-adversarial-networks",
+        "prejudice-remover-regulariser",
+        "meta-fair-classifier",
+        "exponentiated-gradient-reduction",
+        "adaptive-sensitive-reweighting",
+        "multi-accuracy-boosting"
+      ]
+    },
+    {
+      "slug": "multi-accuracy-boosting",
+      "name": "Multi-Accuracy Boosting",
+      "description": "An in-processing fairness technique that employs boosting algorithms to improve accuracy uniformly across demographic groups by iteratively correcting errors where the model performs poorly for certain subgroups. The method uses a multi-calibration approach that trains weak learners to focus on prediction errors for underperforming groups, ensuring that no group experiences systematically worse accuracy. This iterative boosting process continues until accuracy parity is achieved across all groups whilst maintaining overall model performance.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "applicable-models/ensemble",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training a medical diagnosis model that achieves equal accuracy across age, gender, and ethnicity groups by using boosting to specifically target prediction errors for underrepresented patient demographics, ensuring equitable healthcare outcomes for all populations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Building a robust fraud detection system that maintains consistent accuracy across different customer segments by iteratively correcting errors where the model performs poorly for specific demographic or geographic groups, ensuring reliable fraud prevention across all user types.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Developing a transparent hiring algorithm that provides clear evidence of equal performance across candidate demographics by using multi-accuracy boosting to systematically address group-specific prediction errors, enabling auditable fair recruitment processes.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires identifying and defining relevant subgroups or error regions, which may be challenging when group boundaries are unclear or overlapping."
+        },
+        {
+          "description": "Could increase model complexity significantly as the boosting process adds multiple weak learners, potentially affecting interpretability and computational efficiency."
+        },
+        {
+          "description": "May overfit to training data if very granular corrections are made, particularly when subgroups are small or the boosting process continues for too many iterations."
+        },
+        {
+          "description": "Performance depends on the quality of subgroup identification, and may fail to achieve fairness if important demographic intersections are not properly captured."
+        },
+        {
+          "description": "Convergence to equal accuracy across groups is not guaranteed, especially when there are fundamental differences in data distributions between groups."
+        }
+      ],
+      "resources": [
+        {
+          "title": "mcboost: Multi-Calibration Boosting for R",
+          "url": "https://joss.theoj.org/papers/10.21105/joss.03453",
+          "source_type": "technical_paper",
+          "authors": [
+            "Bernd Bischl",
+            "Susanne Dandl",
+            "Christoph Kern",
+            "Michael P. Kim",
+            "Florian Pfisterer",
+            "Matthew Sun"
+          ],
+          "publication_date": "2021-08-24"
+        },
+        {
+          "title": "mlr-org/mcboost",
+          "url": "https://github.com/mlr-org/mcboost",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Multigroup Robustness",
+          "url": "http://arxiv.org/abs/2405.00614",
+          "source_type": "technical_paper",
+          "authors": [
+            "Lunjia Hu",
+            "Charlotte Peale",
+            "Judy Hanwen Shen"
+          ],
+          "publication_date": "2024-05-01"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "adversarial-debiasing",
+        "fair-adversarial-networks",
+        "prejudice-remover-regulariser",
+        "meta-fair-classifier",
+        "exponentiated-gradient-reduction",
+        "fair-transfer-learning",
+        "adaptive-sensitive-reweighting"
+      ]
+    },
+    {
+      "slug": "equalised-odds-post-processing",
+      "name": "Equalised Odds Post-Processing",
+      "description": "A post-processing fairness technique based on Hardt et al.'s seminal work that adjusts classification thresholds after model training to achieve equal true positive rates and false positive rates across demographic groups. The method uses group-specific decision thresholds, potentially with randomisation, to satisfy the equalised odds constraint whilst preserving model utility. This approach enables fairness mitigation without retraining, making it applicable to existing deployed models or when training data access is restricted.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/testing",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Post-processing a criminal recidivism risk assessment model to ensure equal error rates across racial groups, using group-specific thresholds to achieve equal TPR and FPR whilst maintaining predictive accuracy for judicial decision support.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Adjusting a hiring algorithm's decision thresholds to ensure equal opportunities for qualified candidates across gender groups, providing transparent evidence that the screening process treats all demographics equitably.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Calibrating a medical diagnosis model's outputs to maintain equal detection rates across age groups, ensuring reliable performance monitoring and consistent healthcare delivery regardless of patient demographics.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "May require randomisation in decision-making, leading to inconsistent outcomes for similar individuals to achieve group-level fairness constraints."
+        },
+        {
+          "description": "Post-processing can reduce overall model accuracy or confidence scores, particularly when group-specific ROC curves do not intersect favourably."
+        },
+        {
+          "description": "Violates calibration properties of the original model, creating a trade-off between equalised odds and predictive rate parity."
+        },
+        {
+          "description": "Limited to combinations of error rates that lie on the intersection of group-specific ROC curves, which may represent poor trade-offs."
+        },
+        {
+          "description": "Requires access to sensitive attributes during deployment, which may not be available or legally permissible in all contexts."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Equality of Opportunity in Supervised Learning",
+          "url": "https://arxiv.org/abs/1610.02413",
+          "source_type": "technical_paper",
+          "description": "Foundational paper by Hardt et al. introducing the equalised odds post-processing algorithm and mathematical framework for fairness constraints.",
+          "authors": [
+            "Moritz Hardt",
+            "Eric Price",
+            "Nathan Srebro"
+          ],
+          "publication_date": "2016-10-07"
+        },
+        {
+          "title": "Equalized odds postprocessing under imperfect group information",
+          "url": "https://arxiv.org/abs/1906.03284",
+          "source_type": "technical_paper",
+          "description": "Extension of Hardt et al.'s method examining robustness when protected attribute information is imperfect or noisy.",
+          "authors": [
+            "Pranjal Awasthi",
+            "Matthäus Kleindessner",
+            "Jamie Morgenstern"
+          ],
+          "publication_date": "2019-06-07"
+        },
+        {
+          "title": "Fairlearn: ThresholdOptimizer",
+          "url": "https://fairlearn.org/v0.10/api_reference/generated/fairlearn.postprocessing.ThresholdOptimizer.html",
+          "source_type": "documentation",
+          "description": "Microsoft's Fairlearn implementation of the Hardt et al. algorithm with API documentation and usage examples for equalised odds constraints."
+        },
+        {
+          "title": "IBM AIF360",
+          "url": "https://github.com/Trusted-AI/AIF360",
+          "source_type": "software_package",
+          "description": "Comprehensive fairness toolkit including EqualizedOddsPostprocessing implementation based on Hardt et al.'s original algorithm."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "threshold-optimiser",
+        "reject-option-classification",
+        "calibration-with-equality-of-opportunity"
+      ]
+    },
+    {
+      "slug": "reject-option-classification",
+      "name": "Reject Option Classification",
+      "description": "A post-processing fairness technique that modifies predictions in regions of high uncertainty to favour disadvantaged groups and achieve fairness objectives. The method identifies a 'rejection region' where the model's confidence is low (typically near the decision boundary) and reassigns predictions within this region to benefit underrepresented groups. By leveraging model uncertainty, this approach can improve fairness metrics like demographic parity or equalised odds whilst minimising changes to confident predictions, thus preserving overall accuracy for cases where the model is certain.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-requirements/prediction-probabilities",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "fairness-approach/group",
+        "lifecycle-stage/post-processing",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting hiring algorithm predictions in the uncertainty region where candidate scores are close to the threshold, reassigning borderline cases to ensure equal selection rates across gender and ethnicity groups whilst maintaining decisions for clearly qualified or unqualified candidates.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Improving reliability of loan approval systems by identifying applications where the model is uncertain and adjusting these edge cases to ensure consistent approval rates across demographic groups, reducing the risk of systematic discrimination in borderline creditworthiness assessments.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Creating transparent bail decision systems that clearly document which predictions fall within the rejection region and how adjustments are made, providing courts with explainable fairness interventions that show exactly when and why decisions were modified for equity.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires models that provide reliable uncertainty estimates or probability scores, limiting applicability to deterministic classifiers without confidence outputs."
+        },
+        {
+          "description": "Selection of the rejection region threshold is subjective and requires careful tuning to balance fairness improvements with accuracy preservation."
+        },
+        {
+          "description": "May reject too many instances if tuned conservatively, potentially affecting a large portion of predictions and reducing the model's practical utility."
+        },
+        {
+          "description": "Cannot address bias in confident predictions outside the rejection region, limiting effectiveness when discrimination occurs in high-certainty cases."
+        },
+        {
+          "description": "Performance depends on the quality of uncertainty estimates, which may be poorly calibrated in some models, leading to inappropriate rejection regions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Machine Learning with a Reject Option: A survey",
+          "url": "https://www.semanticscholar.org/paper/24864a7f899718477c04ede9c0bea906c5dc2667",
+          "source_type": "documentation",
+          "authors": [
+            "Kilian Hendrickx",
+            "Lorenzo Perini",
+            "Dries Van der Plas",
+            "Wannes Meert",
+            "Jesse Davis"
+          ]
+        },
+        {
+          "title": "aif360.algorithms.postprocessing.RejectOptionClassification ...",
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.algorithms.postprocessing.RejectOptionClassification.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Survey on Leveraging Uncertainty Estimation Towards Trustworthy Deep Neural Networks: The Case of Reject Option and Post-training Processing",
+          "url": "https://www.semanticscholar.org/paper/e939c6ac58e08b539ae8a7dc54216bceb775b085",
+          "source_type": "documentation",
+          "authors": [
+            "M. Hasan",
+            "Moloud Abdar",
+            "A. Khosravi",
+            "U. Aickelin",
+            "Pietro Lio'",
+            "Ibrahim Hossain",
+            "Ashikur Rahman",
+            "Saeid Nahavandi"
+          ]
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "equalised-odds-post-processing",
+        "threshold-optimiser",
+        "calibration-with-equality-of-opportunity"
+      ]
+    },
+    {
+      "slug": "calibration-with-equality-of-opportunity",
+      "name": "Calibration with Equality of Opportunity",
+      "description": "A post-processing fairness technique that adjusts model predictions to achieve equal true positive rates across protected groups whilst maintaining calibration within each group. The method addresses fairness by ensuring that qualified individuals from different demographic groups have equal chances of receiving positive predictions, whilst preserving the meaning of probability scores within each group. This technique attempts to balance the competing objectives of group fairness and accurate probability estimation.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/calibration-set",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/testing",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting a loan approval model to ensure that qualified applicants from different ethnic backgrounds have equal approval rates, whilst maintaining that a 70% predicted repayment probability means the same thing for each ethnic group in practice.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Post-processing a university admissions algorithm to equalise acceptance rates for qualified students across gender groups, whilst ensuring the predicted success scores remain well-calibrated within each gender to support transparent decision-making.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Calibrating a medical diagnosis model to maintain equal detection rates for a disease across different age groups whilst preserving the reliability of risk scores, ensuring that a 30% risk prediction accurately reflects actual disease occurrence within each age group.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Fundamental mathematical incompatibility exists between perfect calibration and exact equality of opportunity, except in highly constrained special cases."
+        },
+        {
+          "description": "May reduce overall model accuracy or calibration when forcing equal true positive rates across groups with genuinely different base rates."
+        },
+        {
+          "description": "Requires access to sensitive attributes during post-processing, which may not be available or legally permissible in all contexts."
+        },
+        {
+          "description": "The technique only addresses one aspect of fairness (true positive rates) and may allow disparities in false positive rates between groups."
+        },
+        {
+          "description": "Post-processing approaches cannot address biases inherent in the training data or model architecture, only adjust final predictions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "On Fairness and Calibration",
+          "url": "https://arxiv.org/abs/1709.02012",
+          "source_type": "technical_paper",
+          "description": "Foundational paper demonstrating the mathematical tension between calibration and equalised odds fairness constraints.",
+          "authors": [
+            "Geoff Pleiss",
+            "Manish Raghavan",
+            "Felix Wu",
+            "Jon Kleinberg",
+            "Kilian Q. Weinberger"
+          ],
+          "publication_date": "2017-09-06"
+        },
+        {
+          "title": "equalized_odds_and_calibration",
+          "url": "https://github.com/gpleiss/equalized_odds_and_calibration",
+          "source_type": "software_package",
+          "description": "Python implementation of post-processing methods for achieving calibration with equality of opportunity constraints."
+        },
+        {
+          "title": "Equality of Opportunity in Supervised Learning",
+          "url": "https://arxiv.org/abs/1610.02413",
+          "source_type": "technical_paper",
+          "description": "Original paper introducing the equality of opportunity fairness criterion and post-processing algorithms.",
+          "authors": [
+            "Moritz Hardt",
+            "Eric Price",
+            "Nathan Srebro"
+          ],
+          "publication_date": "2016-10-07"
+        },
+        {
+          "title": "Fairlearn: Postprocessing Methods",
+          "url": "https://fairlearn.org/v0.10/user_guide/mitigation/postprocessing.html",
+          "source_type": "documentation",
+          "description": "Documentation for implementing threshold optimisation and calibration methods to achieve fairness constraints."
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "equalised-odds-post-processing",
+        "threshold-optimiser",
+        "reject-option-classification"
+      ]
+    },
+    {
+      "slug": "equal-opportunity-difference",
+      "name": "Equal Opportunity Difference",
+      "description": "A fairness metric that quantifies discrimination by measuring the difference in true positive rates (recall) between protected and privileged groups. Based on Hardt et al.'s equality of opportunity framework, this metric computes the maximum difference in TPR across demographic groups, with a value of 0 indicating perfect fairness. The technique provides a mathematical measure of whether qualified individuals from different groups have equal chances of receiving positive predictions.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "expertise-needed/low",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/testing",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/metric"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating a loan approval model to ensure that qualified applicants from different ethnic backgrounds have equal approval rates, measuring whether a 90% TPR for qualified white applicants is matched by similar rates for qualified minority applicants.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Auditing a medical diagnosis system to verify that patients with a particular condition are detected at equal rates across age groups, providing transparent evidence that diagnostic accuracy is consistent regardless of patient demographics.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Monitoring a university admissions algorithm in production to ensure that qualified students from different socioeconomic backgrounds have equal acceptance rates, validating the reliability of the fairness properties over time.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Only considers true positive rates and ignores false positive rate disparities, potentially allowing discrimination in the form of unequal false alarm rates between groups."
+        },
+        {
+          "description": "Requires accurate ground truth labels for the positive class, which may be biased or unavailable in some domains."
+        },
+        {
+          "description": "Improving TPR for one group might increase FPR for that group, creating trade-offs between different types of fairness."
+        },
+        {
+          "description": "Does not account for intersectional fairness across multiple protected attributes simultaneously."
+        },
+        {
+          "description": "May not capture fairness concerns for the negative class or individuals who should not receive positive predictions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "aif360.sklearn.metrics.equal_opportunity_difference — aif360 0.6.1 ...",
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.metrics.equal_opportunity_difference.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Welcome to TransparentAI's documentation! — TransparentAI 0.1.0 ...",
+          "url": "https://transparentai.readthedocs.io/en/latest/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "lale.lib.aif360.util module — LALE 0.9.0-dev documentation",
+          "url": "https://lale.readthedocs.io/en/latest/modules/lale.lib.aif360.util.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "IBM/bias-mitigation-of-machine-learning-models-using-aif360",
+          "url": "https://github.com/IBM/bias-mitigation-of-machine-learning-models-using-aif360",
+          "source_type": "software_package"
+        },
+        {
+          "title": "aif360.algorithms.postprocessing.RejectOptionClassification ...",
+          "url": "https://aif360.readthedocs.io/en/latest/modules/generated/aif360.algorithms.postprocessing.RejectOptionClassification.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "demographic-parity-assessment",
+        "average-odds-difference"
+      ]
+    }
+  ],
+  "count": 14
+}

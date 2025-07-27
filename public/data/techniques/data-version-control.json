@@ -1,0 +1,83 @@
+{
+  "slug": "data-version-control",
+  "name": "Data Version Control",
+  "description": "Data Version Control (DVC) is a Git-like version control system specifically designed for machine learning data, models, and experiments. It tracks changes to large data files, maintains reproducible ML pipelines, and creates a complete audit trail of data transformations, model training, and evaluation processes. DVC works alongside Git to provide end-to-end lineage tracking from raw data through preprocessing, training, and deployment, enabling teams to reproduce any model version and understand exactly how datasets evolved throughout the ML lifecycle.",
+  "assurance_goals": [
+    "Transparency",
+    "Reliability"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/transparency",
+    "assurance-goal-category/reliability",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/documentation",
+    "expertise-needed/software-engineering",
+    "expertise-needed/ml-engineering",
+    "lifecycle-stage/data-handling",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/system-deployment-and-use",
+    "technique-type/process"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Tracking medical imaging dataset versions and model training pipelines to ensure reproducible research results, enabling hospitals to verify which specific data version and preprocessing steps were used for regulatory submissions.",
+      "goal": "Transparency"
+    },
+    {
+      "description": "Managing credit scoring model data pipelines with complete version control of training datasets, feature engineering steps, and model artifacts, ensuring reliable model reproduction and rollback capabilities when performance issues arise.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Maintaining pharmaceutical drug discovery data lineage across multiple research teams, tracking compound datasets, feature extraction processes, and model versions to support FDA submissions with complete experimental provenance.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Requires learning Git-like workflows and CLI commands, which may have a steep learning curve for teams unfamiliar with version control systems."
+    },
+    {
+      "description": "Storage costs can be substantial for large datasets with frequent changes, especially when maintaining multiple versions and branches of data."
+    },
+    {
+      "description": "Complex data pipelines with many interdependencies may require significant setup time and careful configuration to track properly."
+    },
+    {
+      "description": "Performance can degrade with very large files or datasets due to checksumming and synchronisation overhead during operations."
+    },
+    {
+      "description": "Team coordination becomes essential as improper branch management or merge conflicts can disrupt collaborative workflows."
+    }
+  ],
+  "resources": [
+    {
+      "title": "DVC Documentation",
+      "url": "https://dvc.org/doc",
+      "source_type": "documentation",
+      "description": "Comprehensive official documentation covering DVC installation, data versioning, pipeline creation, and collaborative workflows with tutorials and best practices"
+    },
+    {
+      "title": "iterative/dvc",
+      "url": "https://github.com/iterative/dvc",
+      "source_type": "software_package",
+      "description": "Official DVC open-source repository containing the complete data version control system for machine learning with Git integration"
+    },
+    {
+      "title": "DVC Tutorial - Data Version Control for Machine Learning",
+      "url": "https://dvc.org/doc/start",
+      "source_type": "tutorial",
+      "description": "Step-by-step getting started guide demonstrating DVC basics including data tracking, pipeline creation, and experiment management"
+    }
+  ],
+  "complexity_rating": 3,
+  "computational_cost_rating": 2,
+  "acronym": "DVC",
+  "related_techniques": [
+    "model-cards",
+    "datasheets-for-datasets",
+    "mlflow-experiment-tracking",
+    "automated-documentation-generation"
+  ]
+}

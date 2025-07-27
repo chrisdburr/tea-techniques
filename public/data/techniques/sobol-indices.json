@@ -1,0 +1,95 @@
+{
+  "slug": "sobol-indices",
+  "name": "Sobol Indices",
+  "description": "Sobol Indices quantify how much each input feature contributes to the total variance in a model's predictions through global sensitivity analysis. The technique calculates first-order indices (individual feature contributions) and total-order indices (including all interaction effects involving that feature). By systematically sampling the input space and decomposing output variance, Sobol Indices reveal which features drive model uncertainty and which interactions between features are most important for predictions.",
+  "assurance_goals": [
+    "Explainability",
+    "Fairness"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/explainability",
+    "assurance-goal-category/fairness",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/ml-engineering",
+    "expertise-needed/statistics",
+    "explanatory-scope/global",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Analysing a climate prediction model to determine which atmospheric parameters (temperature, humidity, pressure) contribute most to rainfall forecast uncertainty, helping meteorologists understand which measurements need the highest precision.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Evaluating a financial risk model to identify which economic indicators (interest rates, inflation, GDP growth) drive the most variability in portfolio value predictions, enabling better risk management strategies.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Analysing a credit scoring model to quantify how much prediction variance stems from zip code (a potential proxy for race), helping identify features that may cause disparate impact across demographic groups.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Computationally expensive, requiring thousands of model evaluations to achieve stable variance estimates, making it impractical for very slow models."
+    },
+    {
+      "description": "Assumes input features are independently distributed, which can lead to misleading results when features are correlated in real data."
+    },
+    {
+      "description": "Curse of dimensionality makes the technique increasingly difficult and expensive to apply as the number of input features grows beyond 10-20."
+    },
+    {
+      "description": "Requires defining appropriate probability distributions for input features, which may not accurately reflect real-world feature distributions."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Sobol Tensor Trains for Global Sensitivity Analysis",
+      "url": "http://arxiv.org/pdf/1712.00233v1",
+      "source_type": "technical_paper",
+      "authors": [
+        "Rafael Ballester-Ripoll",
+        "Enrique G. Paredes",
+        "Renato Pajarola"
+      ],
+      "publication_date": "2017-12-01"
+    },
+    {
+      "title": "Sobol indices — UQpy v4.2.0 documentation",
+      "url": "https://uqpyproject.readthedocs.io/en/latest/sensitivity/sobol.html",
+      "source_type": "documentation"
+    },
+    {
+      "title": "Sobol Indices to Measure Feature Importance | Towards Data Science",
+      "url": "https://towardsdatascience.com/sobol-indices-to-measure-feature-importance-54cedc3281bc/",
+      "source_type": "tutorial"
+    },
+    {
+      "title": "Basics — SALib's documentation",
+      "url": "https://salib.readthedocs.io/en/latest/user_guide/basics.html",
+      "source_type": "documentation"
+    },
+    {
+      "title": "UQpy (Uncertainty Quantification with python)",
+      "url": "https://github.com/SURGroup/UQpy",
+      "source_type": "software_package"
+    },
+    {
+      "title": "SALib/SALib",
+      "url": "https://github.com/SALib/SALib",
+      "source_type": "software_package"
+    }
+  ],
+  "complexity_rating": 4,
+  "computational_cost_rating": 5,
+  "related_techniques": [
+    "permutation-importance",
+    "mean-decrease-impurity",
+    "coefficient-magnitudes-in-linear-models"
+  ]
+}

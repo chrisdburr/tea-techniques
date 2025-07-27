@@ -1,0 +1,109 @@
+{
+  "slug": "attribute-removal-fairness-through-unawareness",
+  "name": "Attribute Removal (Fairness Through Unawareness)",
+  "description": "Attribute Removal (Fairness Through Unawareness) ensures fairness by completely excluding protected attributes such as race, gender, or age from the model's input features. While this approach prevents direct discrimination, it may not eliminate bias if other features are correlated with protected attributes (proxy discrimination). This technique represents the most basic fairness intervention but often needs to be combined with other approaches to address indirect bias through seemingly neutral features.",
+  "assurance_goals": [
+    "Fairness",
+    "Transparency"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/fairness",
+    "assurance-goal-category/transparency",
+    "data-requirements/sensitive-attributes",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/low",
+    "fairness-approach/group",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Removing gender, race, and age attributes from hiring algorithms to prevent direct discrimination, whilst acknowledging that indirect bias may persist through correlated features like education institution or postal code.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Excluding protected demographic attributes from credit scoring models to comply with fair lending regulations, ensuring no explicit consideration of race, gender, or ethnicity in loan approval decisions.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Building medical diagnosis models that exclude patient race and ethnicity to prevent biased treatment recommendations, whilst ensuring clinical decisions are based solely on medical indicators and symptoms.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Creating transparent regulatory reporting systems that demonstrate compliance by explicitly documenting which protected attributes have been excluded from decision-making algorithms, providing clear audit trails for regulatory review.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Proxy discrimination remains a major concern as seemingly neutral features (education, postal code, previous employment) may strongly correlate with protected attributes, perpetuating indirect bias."
+    },
+    {
+      "description": "Intersectional bias cannot be addressed through simple attribute removal, as complex interactions between multiple demographic characteristics may create compounding discrimination effects."
+    },
+    {
+      "description": "Legal and regulatory compliance may be insufficient, as many jurisdictions require demonstrating disparate impact absence rather than simply removing protected attributes from models."
+    },
+    {
+      "description": "Identifying all potential proxy variables is practically impossible, especially with high-dimensional data where subtle correlations with protected attributes may exist in unexpected features."
+    },
+    {
+      "description": "Performance degradation may occur if removed attributes contain legitimate predictive information, creating tension between fairness objectives and model accuracy requirements."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Fairness Through Awareness",
+      "url": "https://arxiv.org/abs/1104.3913",
+      "source_type": "technical_paper",
+      "description": "Foundational paper introducing fairness through awareness concept and demonstrating limitations of fairness through unawareness",
+      "authors": [
+        "Dwork, Cynthia",
+        "Hardt, Moritz",
+        "Pitassi, Toniann",
+        "Reingold, Omer",
+        "Zemel, Richard"
+      ],
+      "publication_date": "2012-01-01"
+    },
+    {
+      "title": "Fairness Constraints: Mechanisms for Fair Classification",
+      "url": "https://arxiv.org/abs/1507.05259",
+      "source_type": "technical_paper",
+      "description": "Comprehensive analysis of fairness approaches including attribute removal limitations and proxy discrimination challenges",
+      "authors": [
+        "Zafar, Muhammad Bilal",
+        "Valera, Isabel",
+        "Rodriguez, Manuel Gomez",
+        "Gummadi, Krishna P."
+      ],
+      "publication_date": "2015-07-19"
+    },
+    {
+      "title": "Fairlearn: A toolkit for assessing and improving fairness in machine learning",
+      "url": "https://github.com/fairlearn/fairlearn",
+      "source_type": "software_package",
+      "description": "Microsoft's comprehensive fairness toolkit with preprocessing methods including attribute removal and proxy detection tools"
+    },
+    {
+      "title": "The Ethical Algorithm: The Science of Socially Aware Algorithm Design",
+      "url": "https://global.oup.com/academic/product/the-ethical-algorithm-9780190948207",
+      "source_type": "documentation",
+      "description": "Accessible book covering fairness through unawareness concepts and practical considerations for practitioners",
+      "authors": [
+        "Kearns, Michael",
+        "Roth, Aaron"
+      ],
+      "publication_date": "2019-11-01"
+    }
+  ],
+  "complexity_rating": 1,
+  "computational_cost_rating": 1,
+  "related_techniques": [
+    "sensitivity-analysis-for-fairness",
+    "fairness-gan",
+    "bayesian-fairness-regularization"
+  ]
+}

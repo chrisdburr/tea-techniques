@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Resource",
+  "description": "Schema for a resource reference in the TEA Techniques database",
+  "type": "object",
+  "required": ["title", "url"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Title of the resource",
+      "minLength": 3,
+      "maxLength": 200
+    },
+    "url": {
+      "type": "string",
+      "description": "URL to the resource",
+      "format": "uri",
+      "pattern": "^https?://"
+    },
+    "source_type": {
+      "type": "string",
+      "description": "Type of resource",
+      "enum": [
+        "technical_paper",
+        "software_package",
+        "documentation",
+        "tutorial"
+      ]
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief description of the resource",
+      "maxLength": 300
+    },
+    "authors": {
+      "type": "array",
+      "description": "Authors of the resource (primarily for papers)",
+      "items": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 100
+      }
+    },
+    "publication_date": {
+      "type": "string",
+      "description": "Publication date in ISO format (YYYY-MM-DD)",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    }
+  },
+  "additionalProperties": false
+}

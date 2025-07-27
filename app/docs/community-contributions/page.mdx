@@ -1,0 +1,137 @@
+import {
+MDXPageLayout,
+generateMetadataFromFrontmatter,
+} from '@/components/layout/mdx-page-layout';
+import { Github, GitPullRequest, MessageSquare, Users } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
+export const frontmatter = {
+  title: 'Community Contributions',
+  description: 'Learn how to contribute new techniques, improvements, and feedback to the TEA Techniques platform.',
+  breadcrumbs: [
+    { label: 'Home', href: '/' },
+    { label: 'Docs', href: '/docs' },
+    { label: 'Community Contributions', href: '/docs/community-contributions' }
+  ],
+  publishedAt: '2024-01-01',
+  updatedAt: '2024-07-25',
+  tableOfContents: true
+};
+
+export const dynamic = 'force-static';
+export const metadata = generateMetadataFromFrontmatter(frontmatter);
+
+export default function CommunityContributionsPage({ children }) {
+  return <MDXPageLayout frontmatter={frontmatter}>{children}</MDXPageLayout>;
+}
+
+TEA Techniques thrives on community contributions. Whether you're a researcher, practitioner, or
+organization working on responsible AI, your insights and experiences can help others in the field.
+This guide explains how to contribute effectively.
+
+## Ways to Contribute
+
+### ⬆️ Submit New Techniques
+
+If you've developed or successfully applied a technique for AI assurance that isn't in our collection, we encourage you to submit it. New techniques help expand the toolkit available to the community.
+
+### ✨ Improve Existing techniques
+
+Have you found a better way to implement a technique? Or discovered additional considerations? Your improvements help keep techniques current and practical.
+
+### 📄 Share Case Studies
+
+Real-world examples make techniques more accessible. Share how you've applied techniques in practice, including challenges faced and results achieved.
+
+You can also do this via the [TEA Platform](https://assuranceplatform.azurewebsites.net) if you have an assurance case or argument patten that you'd like to share with the community.
+
+## Contribution Process
+
+### 1. Before You Start
+
+- **Check existing techniques:** Ensure your contribution doesn't duplicate existing content
+- **Review the evaluation criteria:** Familiarise yourself with our
+  [evaluation standards](/about/technique-evaluation)
+- **Gather supporting evidence:** Collect research papers, case studies, or implementation examples
+
+### 2. Prepare Your Contribution
+
+Use the following template structure for new techniques:
+
+{/* Add schema and template once developed */}
+
+### 3. Submit Your Contribution
+
+**Via GitHub (Preferred):**
+
+1. Fork the repository
+2. Create a new branch: `feature/technique-name`
+3. Add your technique to `data/techniques.json`
+4. Submit a pull request with a clear description
+
+**Via Issue:** If you're not comfortable with Git, create an issue with your technique details and
+we'll help integrate it.
+
+### 4. Review Process
+
+After submission, your contribution will go through:
+
+- Initial review for completeness and alignment
+- Community discussion and feedback
+- Technical validation by domain experts
+- Final approval and integration
+
+This process typically takes 2-4 weeks depending on the complexity of the contribution.
+
+## Contribution Guidelines
+
+### Quality Standards
+
+- Write clearly and concisely
+- Provide actionable, step-by-step guidance
+- Include real-world examples where possible
+- Cite sources and provide references
+- Be objective and evidence-based
+
+### Code of Conduct
+
+- Be respectful and inclusive
+- Welcome diverse perspectives
+- Provide constructive feedback
+- Focus on advancing responsible AI
+
+### Licensing
+
+By contributing to TEA Techniques, you agree that your contributions will be licensed under the same
+open license as the project. This ensures the community can freely use and build upon all
+contributions.
+
+## Recognition
+
+We value and recognize all contributions to TEA Techniques:
+
+- Contributors are credited in technique metadata
+- Significant contributors are acknowledged in release notes
+- Active contributors may be invited to join the review team
+- Your organization can be listed as a contributing partner
+
+## Get Help
+
+Need assistance with your contribution? We're here to help:
+
+<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+  <LinkCard
+    href="https://github.com/alan-turing-institute/AssurancePlatform/issues"
+    title="GitHub Issues"
+    description="Ask questions or report problems"
+    icon={Github}
+    external
+  />
+  <LinkCard
+    href="https://github.com/alan-turing-institute/AssurancePlatform/discussions"
+    title="Discussions"
+    description="Join community conversations"
+    icon={MessageSquare}
+    external
+  />
+</div>

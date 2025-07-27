@@ -1,0 +1,102 @@
+{
+  "slug": "sensitivity-analysis-for-fairness",
+  "name": "Sensitivity Analysis for Fairness",
+  "description": "Sensitivity Analysis for Fairness systematically evaluates how model predictions change when sensitive attributes or their proxies are perturbed whilst holding other factors constant. The technique involves creating counterfactual instances by modifying potentially discriminatory features (race, gender, age) or their correlates (zip code, names, education institutions) and measuring the resulting prediction differences. This controlled perturbation approach quantifies the degree to which protected characteristics influence model decisions, helping detect both direct discrimination and indirect bias through proxy variables even when sensitive attributes are not explicitly used as model inputs.",
+  "assurance_goals": [
+    "Fairness"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/fairness",
+    "data-requirements/sensitive-attributes",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/statistics",
+    "explanatory-scope/local",
+    "fairness-approach/group",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Testing whether a lending model's decisions change significantly when only the applicant's zip code (which may correlate with race) is altered, while keeping all other factors constant.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Evaluating a recruitment algorithm by systematically changing candidate names from stereotypically male to female names (whilst keeping qualifications identical) to measure whether gender bias affects hiring recommendations, revealing discrimination through name-based proxies.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Assessing a healthcare resource allocation model by varying patient zip codes across different socioeconomic areas to determine whether geographic proxies for race and income inappropriately influence treatment recommendations.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Requires domain expertise to identify relevant proxy variables for sensitive attributes, which may not be obvious or comprehensive."
+    },
+    {
+      "description": "Computationally intensive for complex models when testing many feature combinations or perturbation ranges."
+    },
+    {
+      "description": "Choice of perturbation ranges and comparison points involves subjective decisions that can significantly affect results and conclusions."
+    },
+    {
+      "description": "May miss subtle or interaction-based forms of discrimination that only manifest under specific combinations of features."
+    }
+  ],
+  "resources": [
+    {
+      "title": "The Fragility of Fairness: Causal Sensitivity Analysis for Fair Machine Learning",
+      "url": "http://arxiv.org/pdf/2410.09600v2",
+      "source_type": "technical_paper",
+      "authors": [
+        "Jake Fawkes",
+        "Nic Fishman",
+        "Mel Andrews",
+        "Zachary C. Lipton"
+      ],
+      "publication_date": "2024-10-12"
+    },
+    {
+      "title": "Fair SA: Sensitivity Analysis for Fairness in Face Recognition",
+      "url": "http://arxiv.org/pdf/2202.03586v2",
+      "source_type": "technical_paper",
+      "authors": [
+        "Aparna R. Joshi",
+        "Xavier Suau",
+        "Nivedha Sivakumar",
+        "Luca Zappella",
+        "Nicholas Apostoloff"
+      ],
+      "publication_date": "2022-02-08"
+    },
+    {
+      "title": "fairlearn/fairlearn",
+      "url": "https://github.com/fairlearn/fairlearn",
+      "source_type": "software_package"
+    },
+    {
+      "title": "Aequitas: Bias Audit Toolkit",
+      "url": "https://github.com/dssg/aequitas",
+      "source_type": "software_package"
+    },
+    {
+      "title": "Fairness Through Sensitivity Analysis - Towards Data Science",
+      "url": "https://towardsdatascience.com/fairness-through-sensitivity-analysis-3ea1b4d79e6c",
+      "source_type": "tutorial"
+    },
+    {
+      "title": "User Guide - Fairlearn documentation",
+      "url": "https://fairlearn.org/v0.8.0/user_guide/assessment.html",
+      "source_type": "documentation"
+    }
+  ],
+  "complexity_rating": 3,
+  "computational_cost_rating": 3,
+  "related_techniques": [
+    "fairness-gan",
+    "attribute-removal-fairness-through-unawareness",
+    "bayesian-fairness-regularization"
+  ]
+}

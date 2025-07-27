@@ -1,0 +1,67 @@
+{
+  "slug": "ridge-regression-surrogates",
+  "name": "Ridge Regression Surrogates",
+  "description": "This technique approximates a complex model by training a ridge regression (a linear model with L2 regularization) on the original model's predictions. The ridge regression serves as a global surrogate that balances fidelity and interpretability, capturing the main linear relationships that the complex model learned while ignoring noise due to regularization.",
+  "assurance_goals": [
+    "Explainability",
+    "Transparency"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/explainability",
+    "assurance-goal-category/transparency",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/structured-output",
+    "expertise-needed/ml-engineering",
+    "explanatory-scope/global",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Approximating a complex ensemble model used for credit scoring with a ridge regression surrogate to identify the most influential features (income, credit history, debt-to-income ratio) and their linear relationships for regulatory compliance reporting.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Creating a ridge regression surrogate of a neural network used for medical diagnosis to understand which patient symptoms and biomarkers have the strongest linear predictive relationships with disease outcomes.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Creating an interpretable approximation of a complex insurance pricing model for regulatory compliance, enabling stakeholders to understand and validate the decision-making process through transparent linear relationships.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Linear approximation may miss important non-linear relationships and interactions captured by the original complex model."
+    },
+    {
+      "description": "Requires a representative dataset to train the surrogate model, which may not be available or may be expensive to generate."
+    },
+    {
+      "description": "Ridge regularisation may oversimplify the model by shrinking coefficients, potentially hiding important but less dominant features."
+    },
+    {
+      "description": "Surrogate fidelity depends on how well linear relationships approximate the original model's behaviour across the entire input space."
+    }
+  ],
+  "resources": [
+    {
+      "title": "scikit-learn Ridge Regression Documentation",
+      "url": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html",
+      "source_type": "documentation"
+    },
+    {
+      "title": "Interpretable Machine Learning: A Guide for Making Black Box Models Explainable",
+      "url": "https://christophm.github.io/interpretable-ml-book/global.html",
+      "source_type": "documentation"
+    }
+  ],
+  "complexity_rating": 3,
+  "computational_cost_rating": 2,
+  "related_techniques": [
+    "rulefit",
+    "model-distillation"
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "tag": {
+    "name": "evidence-type/boundary-analysis",
+    "slug": "evidence-type-boundary-analysis",
+    "count": 1,
+    "category": "evidence-type"
+  },
+  "techniques": [
+    {
+      "slug": "safety-envelope-testing",
+      "name": "Safety Envelope Testing",
+      "description": "Safety envelope testing systematically evaluates AI system performance at the boundaries of its intended operational domain to identify potential failure modes before deployment. The technique involves defining the system's operational design domain (ODD), creating test scenarios that approach or exceed these boundaries, and measuring performance degradation as conditions become more challenging. By testing edge cases, environmental extremes, and boundary conditions, it reveals where the system transitions from safe to unsafe operation, enabling the establishment of clear operational limits and safety margins for deployment.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/reliability",
+        "data-requirements/test-scenarios",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/boundary-analysis",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/safety-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/testing"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing autonomous vehicle perception systems at the limits of weather conditions, lighting, and sensor coverage to establish safe operational boundaries and determine when human intervention is required.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Evaluating medical AI diagnostic systems with edge cases near decision boundaries to ensure reliable performance and identify when the system should defer to human specialists.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Assessing financial trading algorithms under extreme market conditions and volatility to prevent catastrophic losses and ensure system shutdown protocols activate appropriately.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires comprehensive domain expertise to identify relevant boundary conditions and edge cases that could affect system safety."
+        },
+        {
+          "description": "May be computationally expensive and time-consuming, especially for complex systems with high-dimensional operational domains."
+        },
+        {
+          "description": "Difficult to achieve complete coverage of all possible boundary conditions, potentially missing critical edge cases."
+        },
+        {
+          "description": "Results may not generalise to novel scenarios that fall outside the tested boundary conditions."
+        },
+        {
+          "description": "Establishing appropriate safety thresholds and performance criteria requires careful calibration based on domain-specific risk tolerance."
+        }
+      ],
+      "resources": [
+        {
+          "title": "On the brittleness of AI systems",
+          "url": "https://arxiv.org/abs/2009.00802",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andrew J. Lohn"
+          ],
+          "publication_date": "2020-09-02",
+          "description": "Analysis of AI system brittleness and the need for improved testing, especially for out-of-distribution performance"
+        },
+        {
+          "title": "Safety Assurance of Artificial Intelligence-Based Systems: A Systematic Literature Review",
+          "url": "https://ieeexplore.ieee.org/abstract/document/9984982/",
+          "source_type": "technical_paper",
+          "authors": [
+            "Antonio V. Silva Neto",
+            "João B. Camargo",
+            "Jorge R. Almeida",
+            "Paulo S. Cugnasca"
+          ],
+          "publication_date": "2022-12-14",
+          "description": "Comprehensive systematic literature review on safety assurance methods for AI-based systems"
+        },
+        {
+          "title": "AMLAS - Assurance of Machine Learning in Autonomous Systems",
+          "url": "https://www.york.ac.uk/assuring-autonomy/guidance/amlas/amlas-tool/",
+          "source_type": "documentation",
+          "description": "Tool for systematically creating safety cases for machine learning components with guidance through safety envelope testing"
+        },
+        {
+          "title": "System and Safety Analysis with SysAI A Statistical Learning Framework",
+          "url": "https://ntrs.nasa.gov/citations/20220009665",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yuning He"
+          ],
+          "publication_date": "2022-07-12",
+          "description": "NASA technical report on statistical learning framework for system and safety analysis in AI systems"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "permutation-tests",
+        "cross-validation",
+        "area-under-precision-recall-curve",
+        "red-teaming"
+      ]
+    }
+  ],
+  "count": 1
+}

@@ -1,0 +1,109 @@
+{
+  "slug": "red-teaming",
+  "name": "Red Teaming",
+  "description": "Red teaming involves systematic adversarial testing of AI/ML systems by dedicated specialists who attempt to identify flaws, vulnerabilities, harmful outputs, and ways to circumvent safety measures. Drawing from cybersecurity practices, red teams employ diverse attack vectors including prompt injection, adversarial examples, edge case exploitation, social engineering scenarios, and goal misalignment probes. Unlike standard testing that validates expected behaviour, red teaming specifically seeks to break systems through creative and adversarial approaches, revealing non-obvious risks and failure modes that could be exploited maliciously or cause harm in deployment.",
+  "assurance_goals": [
+    "Safety",
+    "Reliability",
+    "Fairness",
+    "Security"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/safety",
+    "assurance-goal-category/reliability",
+    "assurance-goal-category/fairness",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/qualitative-report",
+    "expertise-needed/security",
+    "expertise-needed/ml-engineering",
+    "lifecycle-stage/system-deployment-and-use",
+    "technique-type/procedural"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Testing a content moderation AI by attempting to make it generate harmful outputs through creative prompt injection, jailbreaking techniques, and edge case scenarios to identify safety vulnerabilities before deployment.",
+      "goal": "Safety"
+    },
+    {
+      "description": "Probing a medical diagnosis AI system with adversarial examples and edge cases to identify failure modes that could lead to incorrect diagnoses, ensuring the system fails gracefully rather than confidently providing wrong information.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Systematically testing a hiring algorithm with inputs designed to reveal hidden biases, using adversarial examples to check if the system can be manipulated to discriminate against protected groups or favour certain demographics unfairly.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Requires highly specialized expertise in both AI/ML systems and adversarial attack methods, making it expensive and difficult to scale across organizations."
+    },
+    {
+      "description": "Limited by the creativity and knowledge of red team members - can only discover vulnerabilities that testers think to explore, potentially missing novel attack vectors."
+    },
+    {
+      "description": "Time-intensive process that may not be feasible for rapid development cycles or resource-constrained projects, potentially delaying beneficial system deployments."
+    },
+    {
+      "description": "May not generalize to real-world adversarial scenarios, as red team attacks may differ significantly from actual malicious use patterns or user behaviours."
+    },
+    {
+      "description": "Risk of false confidence if red teaming is incomplete or superficial, leading organizations to believe systems are safer than they actually are."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Red Teaming LLM Applications - DeepLearning.AI",
+      "url": "https://www.deeplearning.ai/short-courses/red-teaming-llm-applications/",
+      "source_type": "tutorial",
+      "description": "Course teaching how to identify and test vulnerabilities in large language model applications using red teaming techniques"
+    },
+    {
+      "title": "Building Safe GenAI Applications: An End-to-End Overview of Red Teaming for Large Language Models",
+      "url": "https://www.semanticscholar.org/paper/a2fb135fc4bfa323bc92dd498ba45bcaf7259a02",
+      "source_type": "technical_paper",
+      "authors": [
+        "Alberto Purpura",
+        "Sahil Wadhwa",
+        "Jesse Zymet",
+        "Akshay Gupta",
+        "Andy Luo",
+        "Melissa Kazemi Rad",
+        "Swapnil Shinde",
+        "M. Sorower"
+      ],
+      "description": "Comprehensive overview of red teaming methodologies for building safe generative AI applications"
+    },
+    {
+      "title": "Effective Automation to Support the Human Infrastructure in AI Red Teaming",
+      "url": "https://www.semanticscholar.org/paper/c42dcb3a795f970d657ee46537553634eea2b014",
+      "source_type": "technical_paper",
+      "authors": [
+        "Alice Qian Zhang",
+        "Jina Suh",
+        "Mary L. Gray",
+        "Hong Shen"
+      ],
+      "description": "Research on automation tools and processes to enhance human-led red teaming efforts in AI systems"
+    },
+    {
+      "title": "Trojan Activation Attack: Red-Teaming Large Language Models using Steering Vectors for Safety-Alignment",
+      "url": "https://www.semanticscholar.org/paper/598df44f1d21a5d1fe3940c0bb2a6128a62c1c15",
+      "source_type": "technical_paper",
+      "authors": [
+        "Haoran Wang",
+        "Kai Shu"
+      ],
+      "description": "Technical paper on using steering vectors to conduct Trojan activation attacks as part of red teaming safety-aligned LLMs"
+    }
+  ],
+  "complexity_rating": 4,
+  "computational_cost_rating": 3,
+  "related_techniques": [
+    "internal-review-boards",
+    "human-in-the-loop-safeguards",
+    "confidence-thresholding",
+    "runtime-monitoring-and-circuit-breakers"
+  ]
+}

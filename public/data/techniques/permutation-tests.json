@@ -1,0 +1,96 @@
+{
+  "slug": "permutation-tests",
+  "name": "Permutation Tests",
+  "description": "Permutation tests assess the statistical significance of observed results (such as model accuracy, feature importance, or group differences) by comparing them to what would occur purely by chance. The technique randomly shuffles labels or data thousands of times, recalculating the metric of interest each time to build an empirical null distribution. If the actual observed result falls in the extreme tail of this distribution (typically beyond the 95th or 99th percentile), it provides strong evidence that the relationship is genuine rather than due to random chance, without requiring parametric assumptions about data distributions.",
+  "assurance_goals": [
+    "Explainability",
+    "Reliability"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/explainability",
+    "assurance-goal-category/reliability",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/statistics",
+    "explanatory-scope/global",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/system-deployment-and-use",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Validating feature importance in medical diagnosis models by permuting each feature 10,000 times to ensure that identified risk factors (e.g., blood pressure, cholesterol) have statistically significant predictive power beyond random chance.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Testing whether observed differences in loan approval rates between demographic groups are statistically significant by permuting group labels and calculating the approval rate difference distribution under the null hypothesis of no discrimination.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Verifying that a model's claimed 95% accuracy on test data is genuinely better than random guessing by permuting labels 5,000 times and confirming the actual accuracy falls beyond the 99th percentile of the null distribution.",
+      "goal": "Reliability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Computationally expensive as it requires thousands of model evaluations or metric calculations, scaling poorly with dataset size and model complexity."
+    },
+    {
+      "description": "Requires many permutations (typically 5,000-10,000) to achieve reliable p-values for strict significance thresholds like p < 0.01."
+    },
+    {
+      "description": "Assumes exchangeability of observations under the null hypothesis, which may be violated in time series or hierarchical data structures."
+    },
+    {
+      "description": "Cannot be easily parallelised for some metrics that require global model retraining, limiting scalability for complex machine learning pipelines."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Permutation Tests for Classification",
+      "url": "https://core.ac.uk/download/4383831.pdf",
+      "source_type": "technical_paper",
+      "authors": [
+        "Golland, Polina",
+        "Mukherjee, Sayan",
+        "Panchenko, Dmitry"
+      ],
+      "publication_date": "2003-01-01"
+    },
+    {
+      "title": "How to use Permutation Tests | Towards Data Science",
+      "url": "https://towardsdatascience.com/how-to-use-permutation-tests-bacc79f45749/",
+      "source_type": "tutorial"
+    },
+    {
+      "title": "Permutation test in R | Towards Data Science",
+      "url": "https://towardsdatascience.com/permutation-test-in-r-77d551a9f891/",
+      "source_type": "tutorial"
+    },
+    {
+      "title": "The Exchangeability Assumption for Permutation Tests of Multiple Regression Models: Implications for Statistics and Data Science Educators",
+      "url": "http://arxiv.org/pdf/2406.07756v2",
+      "source_type": "documentation",
+      "authors": [
+        "Johanna Hardin",
+        "Lauren Quesada",
+        "Julie Ye",
+        "Nicholas J. Horton"
+      ],
+      "publication_date": "2024-06-11"
+    },
+    {
+      "title": "scikit-learn permutation_importance",
+      "url": "https://scikit-learn.org/stable/modules/permutation_importance.html",
+      "source_type": "documentation"
+    }
+  ],
+  "complexity_rating": 3,
+  "computational_cost_rating": 4,
+  "related_techniques": [
+    "cross-validation",
+    "area-under-precision-recall-curve"
+  ]
+}

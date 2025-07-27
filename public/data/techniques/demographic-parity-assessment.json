@@ -1,0 +1,99 @@
+{
+  "slug": "demographic-parity-assessment",
+  "name": "Demographic Parity Assessment",
+  "description": "Demographic Parity Assessment evaluates whether a model produces equal positive prediction rates across different demographic groups, regardless of underlying differences in qualifications or base rates. It quantifies fairness using metrics like Statistical Parity Difference (the absolute difference in positive outcome rates between groups) or Disparate Impact ratio (the ratio of positive rates). Unlike techniques that modify data or models, this is purely a measurement approach that highlights when protected groups receive favourable outcomes at different rates, helping organisations identify and document potential discrimination.",
+  "assurance_goals": [
+    "Fairness"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/fairness",
+    "data-requirements/sensitive-attributes",
+    "data-type/any",
+    "evidence-type/fairness-metric",
+    "expertise-needed/statistics",
+    "fairness-approach/group",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/system-deployment-and-use",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Evaluating credit approval algorithms by calculating that loan approval rates for different racial groups must be within 20% of each other (0.8 disparate impact ratio), ensuring compliance with anti-discrimination regulations.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Monitoring hiring platforms by measuring that job recommendation rates for male vs female candidates remain statistically equivalent (Statistical Parity Difference < 0.05), preventing systemic gender bias in career opportunities.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Auditing healthcare triage systems to verify that urgent care assignment rates are equal across ethnic groups, ensuring that automated medical prioritisation doesn't disadvantage minority patients.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Purely observational - identifies discrimination but doesn't provide solutions for remediation or bias mitigation."
+    },
+    {
+      "description": "May penalise models for legitimate differences in base rates between groups, potentially forcing artificial equality where none should exist."
+    },
+    {
+      "description": "Can conflict with individual fairness principles, where similarly qualified individuals might receive different treatment to achieve group parity."
+    },
+    {
+      "description": "Doesn't account for quality of outcomes or consider whether equal rates are actually desirable given different group needs or preferences."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Fairness through awareness",
+      "url": "http://arxiv.org/pdf/1104.3913v1",
+      "source_type": "technical_paper",
+      "authors": [
+        "Cynthia Dwork",
+        "Moritz Hardt",
+        "Toniann Pitassi",
+        "Omer Reingold",
+        "Richard Zemel"
+      ],
+      "publication_date": "2011-04-20"
+    },
+    {
+      "title": "AI Fairness 360 Toolkit",
+      "url": "https://github.com/Trusted-AI/AIF360",
+      "source_type": "software_package"
+    },
+    {
+      "title": "Fairlearn - Demographic Parity",
+      "url": "https://fairlearn.org/main/user_guide/fairness_in_machine_learning.html#demographic-parity",
+      "source_type": "documentation"
+    },
+    {
+      "title": "A Data-Centric Approach to Detecting and Mitigating Demographic Bias in Pediatric Mental Health Text: A Case Study in Anxiety Detection",
+      "url": "https://www.semanticscholar.org/paper/ce96e451a2685485c05f06fb0d991e29a9c43dae",
+      "source_type": "technical_paper",
+      "authors": [
+        "Julia Ive",
+        "Paulina Bondaronek",
+        "Vishal Yadav",
+        "D. Santel",
+        "Tracy Glauser",
+        "Tina Cheng",
+        "Jeffrey R. Strawn",
+        "G. Agasthya",
+        "Jordan Tschida",
+        "Sanghyun Choo",
+        "Mayanka Chandrashekar",
+        "Anuj J. Kapadia",
+        "J. Pestian"
+      ]
+    }
+  ],
+  "complexity_rating": 1,
+  "computational_cost_rating": 1,
+  "related_techniques": [
+    "equal-opportunity-difference",
+    "average-odds-difference"
+  ]
+}

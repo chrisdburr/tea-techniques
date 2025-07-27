@@ -1,0 +1,95 @@
+{
+  "slug": "integrated-gradients",
+  "name": "Integrated Gradients",
+  "description": "Integrated Gradients is an attribution technique that explains a model's prediction by quantifying the contribution of each input feature. It works by accumulating gradients along a straight path from a user-defined baseline input (e.g., a black image or an all-zero vector) to the actual input. This path integral ensures that the attributions satisfy fundamental axioms like completeness (attributions sum up to the difference between the prediction and the baseline prediction) and sensitivity (non-zero attributions for features that change the prediction). The output is a set of importance scores, often visualised as heatmaps, indicating which parts of the input were most influential for the model's decision.",
+  "assurance_goals": [
+    "Explainability"
+  ],
+  "tags": [
+    "applicable-models/neural-network",
+    "assurance-goal-category/explainability",
+    "data-requirements/labelled-data",
+    "data-requirements/reference-dataset",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "evidence-type/visualization",
+    "expertise-needed/ml-engineering",
+    "expertise-needed/statistics",
+    "explanatory-scope/local",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Analysing a medical image classification model to understand which specific pixels or regions in an X-ray image contribute most to a diagnosis of pneumonia, ensuring the model focuses on relevant pathological features rather than artifacts.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Explaining the sentiment prediction of a natural language processing model by highlighting which words or phrases in a review most strongly influenced its classification as positive or negative, revealing the model's interpretative focus.",
+      "goal": "Explainability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Requires a carefully chosen and meaningful baseline input; an inappropriate baseline can lead to misleading or uninformative attributions."
+    },
+    {
+      "description": "The model must be differentiable, which limits its direct application to models with non-differentiable components or discrete inputs without workarounds."
+    },
+    {
+      "description": "Computationally more expensive than simple gradient-based methods, as it requires multiple gradient calculations along the integration path."
+    },
+    {
+      "description": "While satisfying completeness, the attributions can sometimes be visually noisy or difficult for humans to interpret intuitively, especially for complex inputs."
+    }
+  ],
+  "resources": [
+    {
+      "title": "ankurtaly/Integrated-Gradients",
+      "url": "https://github.com/ankurtaly/Integrated-Gradients",
+      "source_type": "software_package"
+    },
+    {
+      "title": "pytorch/captum",
+      "url": "https://github.com/pytorch/captum",
+      "source_type": "software_package"
+    },
+    {
+      "title": "Maximum Entropy Baseline for Integrated Gradients",
+      "url": "http://arxiv.org/pdf/2204.05948v1",
+      "source_type": "technical_paper",
+      "authors": [
+        "Hanxiao Tan"
+      ],
+      "publication_date": "2022-04-12"
+    },
+    {
+      "title": "Integrated Gradients from Scratch | Towards Data Science",
+      "url": "https://towardsdatascience.com/integrated-gradients-from-scratch-b46311e4ab4/",
+      "source_type": "tutorial"
+    },
+    {
+      "title": "Understanding Integrated Gradients with SmoothTaylor for Deep Neural Network Attribution",
+      "url": "http://arxiv.org/pdf/2004.10484v2",
+      "source_type": "technical_paper",
+      "authors": [
+        "Gary S. W. Goh",
+        "Sebastian Lapuschkin",
+        "Leander Weber",
+        "Wojciech Samek",
+        "Alexander Binder"
+      ],
+      "publication_date": "2020-04-22"
+    }
+  ],
+  "complexity_rating": 4,
+  "computational_cost_rating": 3,
+  "related_techniques": [
+    "shapley-additive-explanations",
+    "deeplift",
+    "layer-wise-relevance-propagation",
+    "local-interpretable-model-agnostic-explanations",
+    "contrastive-explanation-method",
+    "anchor"
+  ]
+}

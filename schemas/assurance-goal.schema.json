@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Assurance Goal",
+  "description": "Schema for an assurance goal in the TEA Techniques database",
+  "type": "object",
+  "required": ["name", "slug", "count", "description"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the assurance goal",
+      "enum": [
+        "Explainability",
+        "Fairness",
+        "Privacy",
+        "Reliability",
+        "Safety",
+        "Security",
+        "Transparency"
+      ]
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL-friendly identifier for the goal",
+      "pattern": "^[a-z]+(?:-[a-z]+)*$",
+      "examples": ["explainability", "fairness", "privacy"]
+    },
+    "count": {
+      "type": "integer",
+      "description": "Number of techniques that address this goal",
+      "minimum": 0
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief description of what this goal entails",
+      "minLength": 20,
+      "maxLength": 200
+    }
+  },
+  "additionalProperties": false
+}

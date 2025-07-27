@@ -1,0 +1,152 @@
+import {
+MDXPageLayout,
+generateMetadataFromFrontmatter,
+} from '@/components/layout/mdx-page-layout';
+import { Badge } from '@/components/ui/badge';
+
+export const frontmatter = {
+  title: 'Data Schema',
+  description: 'JSON schema documentation for TEA Techniques data structures.',
+  breadcrumbs: [
+    { label: 'Home', href: '/' },
+    { label: 'Docs', href: '/docs' },
+    { label: 'Data Schema', href: '/docs/data-schema' }
+  ],
+  publishedAt: '2024-01-01',
+  updatedAt: '2024-07-27',
+  tableOfContents: true
+};
+
+export const dynamic = 'force-static';
+export const metadata = generateMetadataFromFrontmatter(frontmatter);
+
+export default function DataSchemaPage({ children }) {
+  return <MDXPageLayout frontmatter={frontmatter}>{children}</MDXPageLayout>;
+}
+
+<Callout variant="info" title="About">
+  This page documents the JSON schema and data structures used throughout the TEA Techniques API.
+</Callout>
+
+## Data Schema Documentation
+
+### Technique Object Structure
+
+Each technique follows this schema:
+
+```typescript
+interface Technique {
+  slug: string;                    // URL-friendly identifier
+  name: string;                    // Display name
+  description: string;             // Detailed explanation
+  assurance_goals: string[];       // Associated goals
+  tags: string[];                  // Categorisation tags
+  example_use_cases: UseCase[];    // Real-world examples
+  limitations: Limitation[];       // Known constraints
+  relevant_standards?: Standard[]; // Industry standards
+  references?: Reference[];        // Academic/industry sources
+}
+
+interface UseCase {
+  description: string;
+  goal: string;  // Associated assurance goal
+}
+
+interface Limitation {
+  description: string;
+}
+
+interface Standard {
+  name: string;           // Standard name (e.g., "ISO 27001")
+  description?: string;   // Brief description
+  url?: string;          // Link to standard documentation
+}
+
+interface Reference {
+  text: string;          // Citation text
+  url?: string;          // Link to source
+}
+```
+
+### Tag Object Structure
+
+Tags are organised hierarchically:
+
+```typescript
+interface TagCategory {
+  category: string;        // e.g., "applicable-models"
+  displayName: string;     // e.g., "Applicable Models"
+  tags: Tag[];
+}
+
+interface Tag {
+  value: string;          // e.g., "neural-network"
+  label: string;          // e.g., "Neural Network"
+  count: number;          // Number of techniques
+}
+```
+
+### Assurance Goal Structure
+
+```typescript
+interface AssuranceGoal {
+  id: string;             // e.g., "explainability"
+  name: string;           // e.g., "Explainability"
+  description: string;    // Detailed explanation
+  icon: string;           // Icon identifier
+  techniqueCount: number; // Associated techniques
+}
+```
+
+### Search Index Structure
+
+The search indices use a simplified structure optimised for Fuse.js:
+
+```typescript
+interface SearchIndexEntry {
+  slug: string;           // Technique identifier
+  name: string;           // Technique name
+  description: string;    // Truncated description
+  goals: string[];        // Assurance goals
+  tags: string[];         // All associated tags
+}
+```
+
+### Filter Response Structure
+
+Pre-computed filter results follow this pattern:
+
+```typescript
+interface FilterResponse {
+  category: string;       // Filter category
+  tag: string;           // Specific tag
+  techniques: string[];   // Array of technique slugs
+  count: number;         // Total matching techniques
+}
+```
+
+## Field Descriptions
+
+### Common Fields
+
+- **slug**: A URL-safe identifier derived from the technique name, used for routing and file names
+- **name**: The human-readable name of the technique, properly capitalised
+- **description**: A comprehensive explanation of what the technique does and how it works
+
+### Technique-Specific Fields
+
+- **assurance_goals**: An array of goal identifiers (explainability, fairness, privacy, reliability, safety, transparency)
+- **tags**: Hierarchical tags following the pattern `category/value` (e.g., "lifecycle-stage/deployment")
+- **example_use_cases**: Real-world applications demonstrating how the technique addresses specific goals
+- **limitations**: Known constraints, assumptions, or scenarios where the technique may not be suitable
+- **relevant_standards**: Industry or regulatory standards that reference or require the technique
+- **references**: Academic papers, documentation, or other sources for further reading
+
+### Metadata Fields
+
+Some endpoints include additional metadata:
+
+- **count**: Number of items in a collection
+- **techniqueCount**: Number of techniques associated with a goal or tag
+- **displayName**: Human-friendly version of technical identifiers
+- **icon**: Reference to UI icon assets (primarily for assurance goals)

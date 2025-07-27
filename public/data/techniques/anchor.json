@@ -1,0 +1,87 @@
+{
+  "slug": "anchor",
+  "name": "ANCHOR",
+  "description": "ANCHOR generates high-precision if-then rules that explain individual predictions by identifying the minimal set of feature conditions that guarantee a specific prediction with high confidence. It searches for 'anchor' conditions (e.g., 'age > 30 AND income < £50k') that ensure the model gives the same prediction at least 95% of the time when those conditions are met. This creates human-readable rules that users can trust as sufficient conditions for understanding why a particular decision was made.",
+  "assurance_goals": [
+    "Explainability",
+    "Transparency"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/explainability",
+    "assurance-goal-category/transparency",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/statistics",
+    "explanatory-scope/local",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Explaining loan application decisions with rules like 'IF credit_score > 650 AND debt_ratio < 0.4 THEN approval = 95% likely', giving applicants clear, actionable conditions they can understand and potentially improve.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Generating diagnostic rules for medical predictions such as 'IF fever > 38.5°C AND white_blood_cells > 12,000 THEN infection = 92% likely', helping clinicians validate automated diagnoses with trusted clinical indicators.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Creating transparent hiring decisions with rules like 'IF experience >= 3_years AND degree = relevant THEN hire = 89% likely', providing clear justification for recruitment decisions that can be audited for fairness.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Limited to local explanations for individual instances, cannot provide global insights about overall model behaviour."
+    },
+    {
+      "description": "Requires discretisation of continuous features, which can lose important nuanced information and create arbitrary thresholds."
+    },
+    {
+      "description": "May fail to find suitable anchor rules if precision requirements are too strict or if the prediction space is highly complex."
+    },
+    {
+      "description": "Computationally expensive as it requires extensive sampling to validate rule precision, especially for high-dimensional data."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Anchors: High-Precision Model-Agnostic Explanations",
+      "url": "https://homes.cs.washington.edu/~marcotcr/aaai18.pdf",
+      "source_type": "technical_paper",
+      "authors": [
+        "Marco Tulio Ribeiro",
+        "Sameer Singh",
+        "Carlos Guestrin"
+      ],
+      "publication_date": "2018-01-01"
+    },
+    {
+      "title": "marcotcr/anchor",
+      "url": "https://github.com/marcotcr/anchor",
+      "source_type": "software_package"
+    },
+    {
+      "title": "alibi/alibi",
+      "url": "https://github.com/SeldonIO/alibi",
+      "source_type": "software_package"
+    },
+    {
+      "title": "Interpretable Machine Learning - Anchors",
+      "url": "https://christophm.github.io/interpretable-ml-book/anchors.html",
+      "source_type": "documentation"
+    }
+  ],
+  "complexity_rating": 3,
+  "computational_cost_rating": 3,
+  "related_techniques": [
+    "shapley-additive-explanations",
+    "integrated-gradients",
+    "deeplift",
+    "layer-wise-relevance-propagation",
+    "local-interpretable-model-agnostic-explanations",
+    "contrastive-explanation-method"
+  ]
+}

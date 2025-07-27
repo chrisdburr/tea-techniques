@@ -1,0 +1,85 @@
+{
+  "slug": "empirical-calibration",
+  "name": "Empirical Calibration",
+  "description": "Empirical calibration adjusts a model's predicted probabilities to match observed frequencies. For example, if events predicted with 80% confidence only occur 60% of the time, calibration would correct this overconfidence. Common techniques include Platt scaling and isotonic regression, which learn transformations that map the model's raw scores to well-calibrated probabilities, improving the reliability of confidence measures for downstream decisions.",
+  "assurance_goals": [
+    "Reliability",
+    "Transparency",
+    "Fairness"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/reliability",
+    "assurance-goal-category/transparency",
+    "assurance-goal-category/fairness",
+    "data-requirements/calibration-set",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/statistics",
+    "explanatory-scope/global",
+    "lifecycle-stage/system-deployment-and-use",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Adjusting a credit default prediction model's probabilities to ensure that loan applicants with a predicted 30% default risk actually default 30% of the time, improving decision-making.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Calibrating a medical diagnosis model's confidence scores so that stakeholders can meaningfully interpret probability outputs, enabling doctors to make informed decisions about treatment urgency based on reliable confidence estimates.",
+      "goal": "Transparency"
+    },
+    {
+      "description": "Ensuring that a hiring algorithm's confidence scores are equally well-calibrated across different demographic groups, preventing systematically overconfident predictions for certain populations that could lead to biased decision-making.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Requires a separate held-out calibration dataset, which reduces the amount of data available for model training."
+    },
+    {
+      "description": "Calibration performance can degrade over time if the underlying data distribution shifts, requiring periodic recalibration."
+    },
+    {
+      "description": "May sacrifice some discriminative power in favour of calibration, potentially reducing the model's ability to distinguish between classes."
+    },
+    {
+      "description": "Calibration methods assume that the calibration set is representative of future data, which may not hold in dynamic environments."
+    }
+  ],
+  "resources": [
+    {
+      "title": "google/empirical_calibration",
+      "url": "https://github.com/google/empirical_calibration",
+      "source_type": "software_package"
+    },
+    {
+      "title": "A Python Library For Empirical Calibration",
+      "url": "http://arxiv.org/pdf/1906.11920v2",
+      "source_type": "technical_paper",
+      "authors": [
+        "Xiaojing Wang",
+        "Jingang Miao",
+        "Yunting Sun"
+      ],
+      "publication_date": "2019-07-25"
+    },
+    {
+      "title": "Assessing the effectiveness of empirical calibration under different bias scenarios",
+      "url": "http://arxiv.org/pdf/2111.04233v2",
+      "source_type": "technical_paper",
+      "authors": [
+        "Hon Hwang",
+        "Juan C Quiroz",
+        "Blanca Gallego"
+      ],
+      "publication_date": "2021-11-08"
+    }
+  ],
+  "complexity_rating": 2,
+  "computational_cost_rating": 2,
+  "related_techniques": [
+    "temperature-scaling"
+  ]
+}

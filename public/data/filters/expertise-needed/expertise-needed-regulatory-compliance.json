@@ -1,0 +1,231 @@
+{
+  "tag": {
+    "name": "expertise-needed/regulatory-compliance",
+    "slug": "expertise-needed-regulatory-compliance",
+    "count": 2,
+    "category": "expertise-needed"
+  },
+  "techniques": [
+    {
+      "slug": "model-cards",
+      "name": "Model Cards",
+      "description": "Model cards are standardised documentation frameworks that systematically document machine learning models through structured templates. The templates cover intended use cases, performance metrics across different demographic groups and operating conditions, training data characteristics, evaluation procedures, limitations, and ethical considerations. They serve as comprehensive technical specifications that enable informed model selection, prevent inappropriate deployment, support regulatory compliance, and facilitate fair assessment by providing transparent reporting of model capabilities and constraints across diverse populations and scenarios.",
+      "assurance_goals": [
+        "Transparency",
+        "Fairness",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/documentation/model-card",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-training-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/documentation",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/regulatory-compliance",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/documentation"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Documenting a medical diagnosis AI with detailed performance metrics across different patient demographics, age groups, and clinical conditions, enabling healthcare providers to understand when the model should be trusted and when additional expert consultation is needed for patient safety.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Creating comprehensive model cards for hiring algorithms that transparently report performance differences across demographic groups, helping HR departments identify potential bias issues and ensure equitable candidate evaluation processes.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Publishing detailed model documentation for a credit scoring API that clearly describes training data sources, evaluation methodologies, and performance limitations, enabling financial institutions to make informed decisions about model deployment and regulatory compliance.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Creating comprehensive model cards requires substantial time, expertise, and resources to gather performance data across diverse conditions and demographic groups, potentially delaying model deployment timelines."
+        },
+        {
+          "description": "Information can become outdated quickly as models are retrained, updated, or deployed in new contexts, requiring ongoing maintenance and version control to remain accurate and useful."
+        },
+        {
+          "description": "Organisations may provide incomplete or superficial documentation to avoid revealing competitive advantages or potential liabilities, undermining the transparency goals of model cards."
+        },
+        {
+          "description": "Lack of standardised formats and enforcement mechanisms means model card quality and completeness vary significantly across different organisations and use cases."
+        },
+        {
+          "description": "Technical complexity of documenting model behaviour across all relevant dimensions may exceed the expertise of some development teams, leading to gaps in critical information."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Model Cards for Model Reporting",
+          "url": "http://arxiv.org/pdf/1810.03993v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Margaret Mitchell",
+            "Simone Wu",
+            "Andrew Zaldivar",
+            "Parker Barnes",
+            "Lucy Vasserman",
+            "Ben Hutchinson",
+            "Elena Spitzer",
+            "Inioluwa Deborah Raji",
+            "Timnit Gebru"
+          ],
+          "publication_date": "2018-10-05",
+          "description": "Foundational paper introducing model cards as a framework for transparent model reporting and responsible AI documentation"
+        },
+        {
+          "title": "Model Card Guidebook",
+          "url": "https://huggingface.co/docs/hub/en/model-card-guidebook",
+          "source_type": "tutorial",
+          "description": "Comprehensive guide providing updated model card templates, creator tools, and practical insights for implementing model documentation across diverse stakeholder needs"
+        },
+        {
+          "title": "scikit-learn model cards documentation",
+          "url": "https://skops.readthedocs.io/en/stable/auto_examples/plot_model_card.html",
+          "source_type": "tutorial",
+          "description": "Practical tutorial demonstrating how to create comprehensive model cards for scikit-learn models using the skops library with metrics, visualisations, and metadata"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "datasheets-for-datasets",
+        "data-version-control",
+        "automated-documentation-generation"
+      ]
+    },
+    {
+      "slug": "datasheets-for-datasets",
+      "name": "Datasheets for Datasets",
+      "description": "Datasheets for datasets establish comprehensive documentation standards for datasets, systematically recording creation methodology, data composition, collection procedures, preprocessing transformations, intended applications, potential biases, privacy considerations, and maintenance protocols. These structured documents enhance dataset transparency by providing essential context for appropriate usage, enabling informed decisions about dataset suitability for specific tasks, supporting bias detection and mitigation efforts, ensuring compliance with data protection regulations, and promoting responsible data stewardship throughout the entire data lifecycle from collection to disposal.",
+      "assurance_goals": [
+        "Transparency",
+        "Fairness",
+        "Privacy"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/privacy",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/documentation",
+        "expertise-needed/domain-knowledge",
+        "expertise-needed/regulatory-compliance",
+        "lifecycle-stage/data-handling",
+        "lifecycle-stage/data-handling/collection",
+        "lifecycle-stage/data-handling/preparation",
+        "technique-type/documentation"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Documenting a medical imaging dataset with detailed information about patient privacy protections, anonymisation procedures, and data sharing constraints to ensure sensitive health information is handled appropriately and regulatory compliance is maintained.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Creating comprehensive datasheets for recruitment datasets that document demographic representation across different job categories, helping developers identify potential bias in training data and develop more equitable hiring algorithms.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Establishing transparent documentation for financial transaction datasets that clearly describes data collection methodology, preprocessing steps, and intended use cases, enabling researchers to make informed decisions about dataset appropriateness for their specific applications.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Creating thorough datasheets requires significant time investment and domain expertise to properly document collection methods, biases, and ethical considerations, potentially delaying dataset release or publication."
+        },
+        {
+          "description": "Information may become outdated as datasets undergo preprocessing, cleaning, or augmentation, requiring ongoing maintenance to ensure documentation accuracy throughout the data lifecycle."
+        },
+        {
+          "description": "Absence of standardised templates and enforcement mechanisms leads to inconsistent documentation quality and completeness across different organisations and research communities."
+        },
+        {
+          "description": "Dataset creators may intentionally omit sensitive information about collection methods, participant consent, or potential biases to avoid legal liability or competitive disadvantage."
+        },
+        {
+          "description": "Limited adoption and awareness means many existing datasets lack proper documentation, creating gaps in the historical record and making legacy dataset assessment difficult."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Datasheets for Datasets",
+          "url": "https://arxiv.org/abs/1803.09010",
+          "source_type": "technical_paper",
+          "authors": [
+            "Timnit Gebru",
+            "Jamie Morgenstern",
+            "Briana Vecchione",
+            "Jennifer Wortman Vaughan",
+            "Hanna Wallach",
+            "Hal Daumé III",
+            "Kate Crawford"
+          ],
+          "publication_date": "2018-03-23",
+          "description": "Foundational paper proposing standardised documentation for machine learning datasets to facilitate transparency, accountability, and better communication between dataset creators and consumers"
+        },
+        {
+          "title": "Datasheets for AI and medical datasets (DAIMS): a data validation and documentation framework before machine learning analysis in medical research",
+          "url": "http://arxiv.org/pdf/2501.14094v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ramtin Zargari Marandi",
+            "Anne Svane Frahm",
+            "Maja Milojevic"
+          ],
+          "publication_date": "2025-01-23",
+          "description": "Recent framework extending datasheets specifically for medical AI datasets, providing validation and documentation standards for healthcare machine learning research"
+        },
+        {
+          "title": "MT-Adapted Datasheets for Datasets: Template and Repository",
+          "url": "http://arxiv.org/pdf/2005.13156v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Marta R. Costa-jussà",
+            "Roger Creus",
+            "Oriol Domingo",
+            "Albert Domínguez",
+            "Miquel Escobar",
+            "Cayetana López",
+            "Marina Garcia",
+            "Margarita Geleta"
+          ],
+          "publication_date": "2020-05-27"
+        },
+        {
+          "title": "Understanding Machine Learning Practitioners' Data Documentation Perceptions, Needs, Challenges, and Desiderata",
+          "url": "http://arxiv.org/pdf/2206.02923v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Amy K. Heger",
+            "Liz B. Marquis",
+            "Mihaela Vorvoreanu",
+            "Hanna Wallach",
+            "Jennifer Wortman Vaughan"
+          ],
+          "publication_date": "2022-06-06"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "model-cards",
+        "mlflow-experiment-tracking",
+        "data-version-control",
+        "automated-documentation-generation"
+      ]
+    }
+  ],
+  "count": 2
+}

@@ -1,0 +1,89 @@
+{
+  "slug": "deeplift",
+  "name": "DeepLIFT",
+  "description": "DeepLIFT (Deep Learning Important FeaTures) explains neural network predictions by decomposing the difference between the actual output and a reference output back to individual input features. It compares each neuron's activation to a reference activation (typically from a baseline input like all zeros or the dataset mean) and propagates these differences backwards through the network using chain rule modifications. Unlike gradient-based methods, DeepLIFT satisfies the sensitivity property (zero input gets zero attribution) and provides more stable attributions by using discrete differences rather than gradients.",
+  "assurance_goals": [
+    "Explainability",
+    "Transparency"
+  ],
+  "tags": [
+    "applicable-models/neural-network",
+    "assurance-goal-category/explainability",
+    "assurance-goal-category/transparency",
+    "data-requirements/access-to-model-internals",
+    "data-requirements/reference-dataset",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/ml-engineering",
+    "explanatory-scope/local",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/system-deployment-and-use",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Identifying which genomic sequences contribute to a neural network's prediction of protein binding sites, helping biologists understand regulatory mechanisms by comparing to neutral DNA baselines.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Debugging a deep learning image classifier that misclassifies medical scans by attributing the decision to specific image regions, revealing if the model focuses on irrelevant artifacts rather than pathological features.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Providing transparent explanations for automated loan approval decisions by showing which financial features (relative to typical applicant profiles) most influenced the neural network's recommendation.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Requires careful selection of reference baseline, as different choices can lead to substantially different attribution scores."
+    },
+    {
+      "description": "Implementation complexity varies significantly across different neural network architectures and layer types."
+    },
+    {
+      "description": "May produce unintuitive results when the chosen reference is not representative of the decision boundary."
+    },
+    {
+      "description": "Limited to feedforward networks and specific layer types, not suitable for all modern architectures like transformers."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Learning Important Features Through Propagating Activation Differences",
+      "url": "http://arxiv.org/pdf/1704.02685v2",
+      "source_type": "technical_paper",
+      "authors": [
+        "Avanti Shrikumar",
+        "Peyton Greenside",
+        "Anshul Kundaje"
+      ],
+      "publication_date": "2017-04-10"
+    },
+    {
+      "title": "pytorch/captum",
+      "url": "https://github.com/pytorch/captum",
+      "source_type": "software_package"
+    },
+    {
+      "title": "Tutorial A3: DeepLIFT/SHAP — tangermeme v0.1.0 documentation",
+      "url": "https://tangermeme.readthedocs.io/en/latest/tutorials/Tutorial_A3_Deep_LIFT_SHAP.html",
+      "source_type": "tutorial"
+    },
+    {
+      "title": "DeepLIFT Documentation - Captum",
+      "url": "https://captum.ai/api/deep_lift.html",
+      "source_type": "documentation"
+    }
+  ],
+  "complexity_rating": 4,
+  "computational_cost_rating": 3,
+  "related_techniques": [
+    "shapley-additive-explanations",
+    "integrated-gradients",
+    "layer-wise-relevance-propagation",
+    "local-interpretable-model-agnostic-explanations",
+    "contrastive-explanation-method",
+    "anchor"
+  ]
+}

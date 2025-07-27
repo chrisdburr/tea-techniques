@@ -1,0 +1,377 @@
+{
+  "tag": {
+    "name": "lifecycle-stage/system-deployment-and-use/monitoring",
+    "slug": "lifecycle-stage-system-deployment-and-use-monitoring",
+    "count": 4,
+    "category": "lifecycle-stage"
+  },
+  "techniques": [
+    {
+      "slug": "anomaly-detection",
+      "name": "Anomaly Detection",
+      "description": "Anomaly detection identifies unusual behaviours, inputs, or outputs that deviate significantly from established normal patterns using statistical, machine learning, or rule-based methods. Applied to AI/ML systems, it serves as a continuous monitoring mechanism that can flag unexpected model predictions, suspicious input patterns, data drift, adversarial attacks, or operational malfunctions. By establishing baselines of normal system behaviour and alerting when deviations exceed predefined thresholds, organisations can detect potential security threats, model degradation, fairness violations, or system failures before they cause significant harm.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Fairness",
+        "Security"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring/anomaly-detection",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/system-deployment-and-use",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Monitoring a content moderation AI system to detect when it starts flagging significantly more or fewer posts than usual, which could indicate model drift, adversarial attacks, or changes in user behaviour patterns that require immediate investigation to prevent harmful content from appearing.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Implementing anomaly detection on a medical diagnosis AI to identify when prediction confidence scores or feature importance patterns deviate from historical norms, helping catch model degradation or data quality issues that could lead to misdiagnoses before patients are affected.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Deploying anomaly detection on a hiring algorithm to monitor for unusual patterns in how candidates from different demographic groups are scored or rejected, enabling early detection of emerging bias issues or attempts to game the system through demographic manipulation.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Setting appropriate sensitivity thresholds is challenging and requires domain expertise, as overly sensitive settings generate excessive false alarms whilst conservative settings may miss genuine anomalies."
+        },
+        {
+          "description": "May generate false positives for legitimate edge cases or rare but valid system behaviours, potentially causing unnecessary alerts and disrupting normal operations."
+        },
+        {
+          "description": "Limited effectiveness against novel or sophisticated attacks that deliberately mimic normal patterns or gradually shift behaviour to avoid detection thresholds."
+        },
+        {
+          "description": "Requires substantial historical data to establish reliable baselines of normal behaviour, and may struggle with systems that have naturally high variability or seasonal patterns."
+        },
+        {
+          "description": "Detection lag can occur between when an anomaly begins and when it exceeds detection thresholds, potentially allowing harmful behaviour to persist during the detection window."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Anomaly Detection Toolkit (ADTK)",
+          "url": "https://adtk.readthedocs.io/en/stable/",
+          "source_type": "software_package",
+          "description": "Python library for unsupervised and rule-based time series anomaly detection with unified APIs, flexible algorithm combination, and support for feature engineering and ensemble methods"
+        },
+        {
+          "title": "TimeEval: Time Series Anomaly Detection Evaluation Framework",
+          "url": "https://timeeval.readthedocs.io/",
+          "source_type": "software_package",
+          "description": "Comprehensive evaluation tool for comparing time series anomaly detection algorithms across multiple datasets with standardized metrics and distributed execution support"
+        },
+        {
+          "title": "DeepOD: Deep Learning for Outlier Detection",
+          "url": "https://deepod.readthedocs.io/",
+          "source_type": "software_package",
+          "description": "Python library featuring 27 deep learning algorithms for tabular and time-series anomaly detection with unified APIs and diverse network architectures including LSTM, GRU, TCN, and Transformer"
+        },
+        {
+          "title": "A Beginner's Guide to Anomaly Detection Techniques in Data Science",
+          "url": "https://www.kdnuggets.com/2023/05/beginner-guide-anomaly-detection-techniques-data-science.html",
+          "source_type": "tutorial",
+          "description": "Beginner-friendly introduction covering Isolation Forest, Local Outlier Factor, and Autoencoder techniques with explanations of point, contextual, and collective anomaly types"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "out-of-distribution-detector-for-neural-networks"
+      ]
+    },
+    {
+      "slug": "runtime-monitoring-and-circuit-breakers",
+      "name": "Runtime Monitoring and Circuit Breakers",
+      "description": "Runtime monitoring and circuit breakers establish continuous surveillance of AI/ML systems in production, tracking critical metrics such as prediction accuracy, response times, input characteristics, output distributions, and system resource usage. When monitored parameters exceed predefined safety thresholds or exhibit anomalous patterns, automated circuit breakers immediately trigger protective actions including request throttling, service degradation, system shutdown, or failover to backup mechanisms. This approach provides real-time defensive capabilities that prevent cascading failures, ensure consistent service reliability, and maintain transparent operation status for stakeholders monitoring system health.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring/anomaly-detection",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/software-engineering",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/system-deployment-and-use",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Implementing circuit breakers in a medical AI system that automatically halt diagnosis recommendations if prediction confidence drops below 85%, error rates exceed 2%, or response times increase beyond acceptable limits, preventing potentially harmful misdiagnoses during system degradation.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Deploying runtime monitoring for a recommendation engine that tracks recommendation diversity, click-through rates, and user engagement patterns, automatically switching to simpler algorithms when complex models show signs of performance degradation or unusual behaviour patterns.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Establishing transparent monitoring dashboards for a loan approval system that display real-time metrics on approval rates across demographic groups, processing times, and model confidence levels, enabling stakeholders to verify consistent and fair operation.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Threshold calibration requires extensive domain expertise and historical data analysis, as overly sensitive settings trigger excessive false alarms whilst conservative thresholds may miss genuine system failures."
+        },
+        {
+          "description": "False positive alerts can unnecessarily disrupt service availability and user experience, potentially causing more harm than the issues they aim to prevent, especially in time-sensitive applications."
+        },
+        {
+          "description": "Sophisticated attacks or gradual performance degradation may operate within normal metric ranges, evading detection by staying below established thresholds whilst still causing cumulative damage."
+        },
+        {
+          "description": "Monitoring infrastructure introduces additional complexity and potential failure points, requiring robust implementation to avoid situations where the monitoring system itself becomes a source of system instability."
+        },
+        {
+          "description": "High-frequency monitoring and circuit breaker mechanisms can add computational overhead and latency to system operations, potentially impacting performance in resource-constrained environments."
+        }
+      ],
+      "resources": [
+        {
+          "title": "aiobreaker: Python Circuit Breaker for Asyncio",
+          "url": "https://github.com/arlyon/aiobreaker",
+          "source_type": "software_package",
+          "description": "Python library implementing the Circuit Breaker design pattern for asyncio applications, preventing system-wide failures by protecting integration points with configurable failure thresholds and reset timeouts"
+        },
+        {
+          "title": "Improving Alignment and Robustness with Circuit Breakers",
+          "url": "https://arxiv.org/html/2406.04313v4",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andy Zou"
+          ],
+          "description": "Research paper introducing circuit breakers for AI safety that directly interrupt harmful model representations during generation, significantly reducing attack success rates while maintaining model capabilities"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "internal-review-boards",
+        "red-teaming",
+        "human-in-the-loop-safeguards",
+        "confidence-thresholding"
+      ]
+    },
+    {
+      "slug": "equalised-odds-post-processing",
+      "name": "Equalised Odds Post-Processing",
+      "description": "A post-processing fairness technique based on Hardt et al.'s seminal work that adjusts classification thresholds after model training to achieve equal true positive rates and false positive rates across demographic groups. The method uses group-specific decision thresholds, potentially with randomisation, to satisfy the equalised odds constraint whilst preserving model utility. This approach enables fairness mitigation without retraining, making it applicable to existing deployed models or when training data access is restricted.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/testing",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Post-processing a criminal recidivism risk assessment model to ensure equal error rates across racial groups, using group-specific thresholds to achieve equal TPR and FPR whilst maintaining predictive accuracy for judicial decision support.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Adjusting a hiring algorithm's decision thresholds to ensure equal opportunities for qualified candidates across gender groups, providing transparent evidence that the screening process treats all demographics equitably.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Calibrating a medical diagnosis model's outputs to maintain equal detection rates across age groups, ensuring reliable performance monitoring and consistent healthcare delivery regardless of patient demographics.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "May require randomisation in decision-making, leading to inconsistent outcomes for similar individuals to achieve group-level fairness constraints."
+        },
+        {
+          "description": "Post-processing can reduce overall model accuracy or confidence scores, particularly when group-specific ROC curves do not intersect favourably."
+        },
+        {
+          "description": "Violates calibration properties of the original model, creating a trade-off between equalised odds and predictive rate parity."
+        },
+        {
+          "description": "Limited to combinations of error rates that lie on the intersection of group-specific ROC curves, which may represent poor trade-offs."
+        },
+        {
+          "description": "Requires access to sensitive attributes during deployment, which may not be available or legally permissible in all contexts."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Equality of Opportunity in Supervised Learning",
+          "url": "https://arxiv.org/abs/1610.02413",
+          "source_type": "technical_paper",
+          "description": "Foundational paper by Hardt et al. introducing the equalised odds post-processing algorithm and mathematical framework for fairness constraints.",
+          "authors": [
+            "Moritz Hardt",
+            "Eric Price",
+            "Nathan Srebro"
+          ],
+          "publication_date": "2016-10-07"
+        },
+        {
+          "title": "Equalized odds postprocessing under imperfect group information",
+          "url": "https://arxiv.org/abs/1906.03284",
+          "source_type": "technical_paper",
+          "description": "Extension of Hardt et al.'s method examining robustness when protected attribute information is imperfect or noisy.",
+          "authors": [
+            "Pranjal Awasthi",
+            "Matthäus Kleindessner",
+            "Jamie Morgenstern"
+          ],
+          "publication_date": "2019-06-07"
+        },
+        {
+          "title": "Fairlearn: ThresholdOptimizer",
+          "url": "https://fairlearn.org/v0.10/api_reference/generated/fairlearn.postprocessing.ThresholdOptimizer.html",
+          "source_type": "documentation",
+          "description": "Microsoft's Fairlearn implementation of the Hardt et al. algorithm with API documentation and usage examples for equalised odds constraints."
+        },
+        {
+          "title": "IBM AIF360",
+          "url": "https://github.com/Trusted-AI/AIF360",
+          "source_type": "software_package",
+          "description": "Comprehensive fairness toolkit including EqualizedOddsPostprocessing implementation based on Hardt et al.'s original algorithm."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "threshold-optimiser",
+        "reject-option-classification",
+        "calibration-with-equality-of-opportunity"
+      ]
+    },
+    {
+      "slug": "equal-opportunity-difference",
+      "name": "Equal Opportunity Difference",
+      "description": "A fairness metric that quantifies discrimination by measuring the difference in true positive rates (recall) between protected and privileged groups. Based on Hardt et al.'s equality of opportunity framework, this metric computes the maximum difference in TPR across demographic groups, with a value of 0 indicating perfect fairness. The technique provides a mathematical measure of whether qualified individuals from different groups have equal chances of receiving positive predictions.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "expertise-needed/low",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/testing",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/metric"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating a loan approval model to ensure that qualified applicants from different ethnic backgrounds have equal approval rates, measuring whether a 90% TPR for qualified white applicants is matched by similar rates for qualified minority applicants.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Auditing a medical diagnosis system to verify that patients with a particular condition are detected at equal rates across age groups, providing transparent evidence that diagnostic accuracy is consistent regardless of patient demographics.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Monitoring a university admissions algorithm in production to ensure that qualified students from different socioeconomic backgrounds have equal acceptance rates, validating the reliability of the fairness properties over time.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Only considers true positive rates and ignores false positive rate disparities, potentially allowing discrimination in the form of unequal false alarm rates between groups."
+        },
+        {
+          "description": "Requires accurate ground truth labels for the positive class, which may be biased or unavailable in some domains."
+        },
+        {
+          "description": "Improving TPR for one group might increase FPR for that group, creating trade-offs between different types of fairness."
+        },
+        {
+          "description": "Does not account for intersectional fairness across multiple protected attributes simultaneously."
+        },
+        {
+          "description": "May not capture fairness concerns for the negative class or individuals who should not receive positive predictions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "aif360.sklearn.metrics.equal_opportunity_difference — aif360 0.6.1 ...",
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.metrics.equal_opportunity_difference.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Welcome to TransparentAI's documentation! — TransparentAI 0.1.0 ...",
+          "url": "https://transparentai.readthedocs.io/en/latest/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "lale.lib.aif360.util module — LALE 0.9.0-dev documentation",
+          "url": "https://lale.readthedocs.io/en/latest/modules/lale.lib.aif360.util.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "IBM/bias-mitigation-of-machine-learning-models-using-aif360",
+          "url": "https://github.com/IBM/bias-mitigation-of-machine-learning-models-using-aif360",
+          "source_type": "software_package"
+        },
+        {
+          "title": "aif360.algorithms.postprocessing.RejectOptionClassification ...",
+          "url": "https://aif360.readthedocs.io/en/latest/modules/generated/aif360.algorithms.postprocessing.RejectOptionClassification.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "demographic-parity-assessment",
+        "average-odds-difference"
+      ]
+    }
+  ],
+  "count": 4
+}

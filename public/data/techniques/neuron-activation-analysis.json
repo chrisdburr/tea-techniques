@@ -1,0 +1,124 @@
+{
+  "slug": "neuron-activation-analysis",
+  "name": "Neuron Activation Analysis",
+  "description": "Neuron activation analysis examines the firing patterns of individual neurons in neural networks by probing them with diverse inputs and analysing their activation responses. This technique helps understand what concepts, features, or patterns different neurons have learned to recognise, providing insights into the model's internal representations. For large language models, this can reveal neurons specialised for linguistic concepts, semantic categories, or even potentially harmful patterns, enabling targeted interventions and deeper model understanding.",
+  "assurance_goals": [
+    "Explainability",
+    "Safety",
+    "Fairness"
+  ],
+  "tags": [
+    "applicable-models/neural-network",
+    "applicable-models/llm",
+    "applicable-models/transformer",
+    "assurance-goal-category/explainability",
+    "assurance-goal-category/safety",
+    "assurance-goal-category/fairness",
+    "data-requirements/access-to-model-internals",
+    "data-type/text",
+    "evidence-type/quantitative-metric",
+    "evidence-type/visualisation",
+    "explanatory-scope/local",
+    "explanatory-scope/global",
+    "expertise-needed/ml-engineering",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/testing",
+    "lifecycle-stage/monitoring",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Analysing GPT-based models to identify specific neurons that activate on toxic or harmful content, enabling targeted interventions to reduce model toxicity whilst preserving general language capabilities for safer AI deployment.",
+      "goal": "Safety"
+    },
+    {
+      "description": "Examining activation patterns in multilingual language models to detect neurons that exhibit systematic biases when processing text from different linguistic communities, revealing implicit representation inequalities that could affect downstream applications.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Investigating individual neurons in medical language models to understand which clinical concepts and medical knowledge representations drive diagnostic suggestions, enabling healthcare professionals to validate the model's medical reasoning pathways.",
+      "goal": "Explainability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Many neurons exhibit polysemantic behaviour, representing multiple unrelated concepts simultaneously, making it difficult to assign clear interpretable meanings to individual neural units."
+    },
+    {
+      "description": "Important model behaviours are often distributed across many neurons rather than localised in single units, requiring analysis of neural circuits and interactions that can be exponentially complex."
+    },
+    {
+      "description": "Computational costs scale dramatically with modern large language models containing billions of parameters, making comprehensive neuron-by-neuron analysis prohibitively expensive for complete model understanding."
+    },
+    {
+      "description": "Neuron activation patterns are highly context-dependent, with the same neuron potentially serving different roles based on surrounding input context, complicating consistent interpretation across diverse scenarios."
+    },
+    {
+      "description": "Interpretation of activation patterns often relies on subjective human analysis without rigorous validation methods, potentially leading to confirmation bias or misattribution of neural functions."
+    }
+  ],
+  "resources": [
+    {
+      "title": "jalammar/ecco",
+      "url": "https://github.com/jalammar/ecco",
+      "source_type": "software_package"
+    },
+    {
+      "title": "NeuRel-Attack: Neuron Relearning for Safety Disalignment in Large Language Models",
+      "url": "http://arxiv.org/pdf/2504.21053v1",
+      "source_type": "technical_paper",
+      "authors": [
+        "Yi Zhou",
+        "Wenpeng Xing",
+        "Dezhang Kong",
+        "Changting Lin",
+        "Meng Han"
+      ],
+      "publication_date": "2025-04-29"
+    },
+    {
+      "title": "On the Value of Labeled Data and Symbolic Methods for Hidden Neuron Activation Analysis",
+      "url": "http://arxiv.org/pdf/2404.13567v1",
+      "source_type": "technical_paper",
+      "authors": [
+        "Abhilekha Dalal",
+        "Rushrukh Rayan",
+        "Adrita Barua",
+        "Eugene Y. Vasserman",
+        "Md Kamruzzaman Sarker",
+        "Pascal Hitzler"
+      ],
+      "publication_date": "2024-04-21"
+    },
+    {
+      "title": "On the Value of Labeled Data and Symbolic Methods for Hidden Neuron\n  Activation Analysis",
+      "url": "http://arxiv.org/abs/2404.13567",
+      "source_type": "technical_paper",
+      "authors": [
+        "Barua, Adrita",
+        "Dalal, Abhilekha",
+        "Hitzler, Pascal",
+        "Rayan, Rushrukh",
+        "Sarker, Md Kamruzzaman",
+        "Vasserman, Eugene Y."
+      ],
+      "publication_date": "2024-04-21"
+    },
+    {
+      "title": "Ecco",
+      "url": "https://ecco.readthedocs.io/",
+      "source_type": "documentation"
+    },
+    {
+      "title": "Tracing the Thoughts in Language Models",
+      "url": "https://www.anthropic.com/news/tracing-thoughts-language-model",
+      "source_type": "documentation"
+    }
+  ],
+  "complexity_rating": 5,
+  "computational_cost_rating": 4,
+  "related_techniques": [
+    "prototype-and-criticism-models",
+    "concept-activation-vectors"
+  ]
+}

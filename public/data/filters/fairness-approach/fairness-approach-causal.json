@@ -1,0 +1,159 @@
+{
+  "tag": {
+    "name": "fairness-approach/causal",
+    "slug": "fairness-approach-causal",
+    "count": 2,
+    "category": "fairness-approach"
+  },
+  "techniques": [
+    {
+      "slug": "counterfactual-fairness-assessment",
+      "name": "Counterfactual Fairness Assessment",
+      "description": "Counterfactual Fairness Assessment evaluates whether a model's predictions would remain unchanged if an individual's protected attributes (race, gender, age) were different, whilst keeping all other causally legitimate factors constant. The technique requires constructing a causal graph that maps relationships between variables, then using do-calculus or structural causal models to simulate counterfactual scenarios. For example, it asks: 'Would this loan application still be approved if the applicant were a different race, holding constant their actual qualifications and economic circumstances?' This individual-level fairness criterion helps identify when decisions depend improperly on protected characteristics.",
+      "assurance_goals": [
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/causal-inference",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "fairness-approach/causal",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating a hiring algorithm by testing whether qualified candidates would receive the same evaluation scores if their gender were different, whilst controlling for actual skills, experience, and education, revealing whether gender bias affects recruitment decisions.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Assessing a criminal sentencing model by examining whether defendants with identical criminal histories and case circumstances would receive the same sentence recommendations regardless of their race, identifying potential discriminatory patterns in judicial AI systems.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires explicit specification of causal relationships between variables, which involves subjective assumptions about what constitutes legitimate versus illegitimate causal pathways."
+        },
+        {
+          "description": "May be mathematically impossible to satisfy simultaneously with other fairness criteria (like statistical parity), forcing practitioners to choose between competing fairness definitions."
+        },
+        {
+          "description": "Implementation complexity is high, requiring sophisticated causal inference techniques and structural causal models that are difficult to construct and validate."
+        },
+        {
+          "description": "Depends heavily on the quality and completeness of the causal graph, which may be incorrect or missing important confounding variables."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Counterfactual Fairness",
+          "url": "https://proceedings.neurips.cc/paper/2017/file/a486cd07e4ac3d270571622f4f316ec5-Paper.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Matt J. Kusner",
+            "Joshua Loftus",
+            "Chris Russell",
+            "Ricardo Silva"
+          ],
+          "publication_date": "2017-12-04"
+        },
+        {
+          "title": "fairlearn/fairlearn",
+          "url": "https://github.com/fairlearn/fairlearn",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Counterfactual Fairness in Text Classification through Robustness",
+          "url": "http://arxiv.org/pdf/1809.10610v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sahaj Garg",
+            "Vincent Perot",
+            "Nicole Limtiaco",
+            "Ankur Taly",
+            "Ed H. Chi",
+            "Alex Beutel"
+          ],
+          "publication_date": "2018-09-27"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "path-specific-counterfactual-fairness-assessment"
+      ]
+    },
+    {
+      "slug": "path-specific-counterfactual-fairness-assessment",
+      "name": "Path-Specific Counterfactual Fairness Assessment",
+      "description": "A causal fairness evaluation technique that assesses algorithmic discrimination by examining specific causal pathways in a model's decision-making process. Unlike general counterfactual fairness, this approach enables practitioners to identify and intervene on particular causal paths that may introduce bias whilst preserving other legitimate pathways. The method uses causal graphs to distinguish between direct discrimination (through protected attributes) and indirect discrimination (through seemingly neutral factors that correlate with protected attributes), allowing for more nuanced fairness assessments in complex causal settings.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/causal",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/causal-graph",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "evidence-type/causal-analysis",
+        "expertise-needed/causal-inference",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "fairness-approach/causal",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "technique-type/metric"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating hiring algorithms by identifying which causal pathways from education and experience legitimately affect job performance versus those that introduce gender or racial bias, enabling targeted interventions that preserve merit-based selection whilst eliminating discriminatory pathways.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Analysing loan approval models to provide transparent evidence of which factors legitimately influence creditworthiness versus those that create indirect discrimination, enabling clear explanations to regulators about causal mechanisms underlying fair lending decisions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Assessing medical diagnosis systems to ensure reliable performance by distinguishing between clinically relevant causal pathways (symptoms to diagnosis) and potentially biased pathways (demographics to diagnosis), maintaining diagnostic accuracy whilst preventing healthcare disparities.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires identifying which causal pathways are 'allowable' and which are not—a subjective decision; analyzing specific paths adds complexity to the causal model and the fairness criterion."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Path-Specific Counterfactual Fairness via Dividend Correction",
+          "url": "https://www.semanticscholar.org/paper/197367ee337e8838fd2ef1a887101ddc84eb0612",
+          "source_type": "technical_paper",
+          "authors": [
+            "Daisuke Hatano",
+            "Satoshi Hara",
+            "Hiromi Arai"
+          ]
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "counterfactual-fairness-assessment"
+      ]
+    }
+  ],
+  "count": 2
+}

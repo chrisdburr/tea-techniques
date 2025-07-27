@@ -1,0 +1,98 @@
+{
+  "slug": "synthetic-data-generation",
+  "name": "Synthetic Data Generation",
+  "description": "Synthetic data generation creates artificial datasets that aim to preserve the statistical properties, distributions, and relationships of real data whilst containing no actual records from real individuals. The technique encompasses various approaches including generative adversarial networks (GANs), variational autoencoders (VAEs), statistical sampling methods, and privacy-preserving techniques like differential privacy. Beyond privacy protection, synthetic data serves multiple purposes: augmenting limited datasets, balancing class distributions, testing model robustness, enabling data sharing across organisations, and supporting fairness assessments by generating representative samples for underrepresented groups.",
+  "assurance_goals": [
+    "Privacy",
+    "Fairness",
+    "Reliability",
+    "Safety"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/privacy",
+    "assurance-goal-category/fairness",
+    "assurance-goal-category/reliability",
+    "assurance-goal-category/safety",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/structured-output",
+    "expertise-needed/cryptography",
+    "expertise-needed/ml-engineering",
+    "expertise-needed/statistics",
+    "lifecycle-stage/data-handling",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Creating realistic but synthetic electronic health records for developing and testing medical diagnosis algorithms without exposing real patient data, enabling secure collaboration between healthcare institutions.",
+      "goal": "Privacy"
+    },
+    {
+      "description": "Generating synthetic samples for underrepresented demographic groups in a hiring dataset to train fair recruitment models, ensuring all groups have sufficient representation for bias testing and mitigation.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Augmenting limited training data for rare medical conditions by generating synthetic patient records, improving model reliability and performance on edge cases where real data is insufficient.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Creating synthetic financial transaction data for testing fraud detection systems in development environments, avoiding exposure of real customer financial information whilst maintaining realistic attack patterns.",
+      "goal": "Safety"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "May not capture all subtle patterns, correlations, and edge cases present in real data, potentially leading to reduced model performance when deployed on actual data with different characteristics."
+    },
+    {
+      "description": "Generating high-quality synthetic data that maintains both statistical fidelity and utility requires sophisticated techniques and substantial computational resources, especially for complex, high-dimensional datasets."
+    },
+    {
+      "description": "Privacy-preserving approaches may still risk information leakage through statistical inference attacks, membership inference, or model inversion, requiring careful privacy budget management and validation."
+    },
+    {
+      "description": "Synthetic data may inadvertently amplify existing biases in the original data or introduce new biases through the generation process, particularly in generative models trained on biased datasets."
+    },
+    {
+      "description": "Validation and quality assessment of synthetic data is challenging, as traditional metrics may not adequately capture whether the synthetic data preserves the relationships and patterns needed for specific downstream tasks."
+    }
+  ],
+  "resources": [
+    {
+      "title": "sdv-dev/SDV",
+      "url": "https://github.com/sdv-dev/SDV",
+      "source_type": "software_package"
+    },
+    {
+      "title": "An evaluation framework for synthetic data generation models",
+      "url": "http://arxiv.org/pdf/2404.08866v1",
+      "source_type": "technical_paper",
+      "authors": [
+        "Ioannis E. Livieris",
+        "Nikos Alimpertis",
+        "George Domalis",
+        "Dimitris Tsakalidis"
+      ],
+      "publication_date": "2024-04-13"
+    },
+    {
+      "title": "Synthetic Data — SecureML 0.2.2 documentation",
+      "url": "https://secureml.readthedocs.io/en/latest/user_guide/synthetic_data.html",
+      "source_type": "documentation"
+    },
+    {
+      "title": "How to Generate Real-World Synthetic Data with CTGAN | Towards ...",
+      "url": "https://towardsdatascience.com/how-to-generate-real-world-synthetic-data-with-ctgan-af41b4d60fde/",
+      "source_type": "tutorial"
+    }
+  ],
+  "complexity_rating": 4,
+  "computational_cost_rating": 4,
+  "related_techniques": [
+    "federated-learning",
+    "differential-privacy",
+    "homomorphic-encryption"
+  ]
+}

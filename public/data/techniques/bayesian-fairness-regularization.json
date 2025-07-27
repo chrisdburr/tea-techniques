@@ -1,0 +1,113 @@
+{
+  "slug": "bayesian-fairness-regularization",
+  "name": "Bayesian Fairness Regularization",
+  "description": "Bayesian Fairness Regularization incorporates fairness constraints into machine learning models through Bayesian methods, treating fairness as a prior distribution or regularization term. This approach includes techniques like Fair Bayesian Optimization that use constrained optimization to tune model hyperparameters whilst enforcing fairness constraints, and methods that add regularization terms to objective functions to penalize discriminatory predictions. The technique allows for probabilistic interpretation of fairness constraints and can account for uncertainty in both model parameters and fairness requirements.",
+  "assurance_goals": [
+    "Fairness",
+    "Reliability"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/fairness",
+    "assurance-goal-category/reliability",
+    "data-requirements/sensitive-attributes",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/ml-engineering",
+    "expertise-needed/statistics",
+    "fairness-approach/group",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Using Fair Bayesian Optimization to tune hyperparameters of credit risk models, automatically balancing predictive accuracy with fairness constraints across different demographic groups whilst accounting for uncertainty in both model performance and fairness requirements.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Implementing Bayesian neural networks with fairness-aware priors for hiring recommendation systems, where uncertainty in fairness constraints is modeled probabilistically to ensure robust fair decision-making across different candidate populations.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Applying Bayesian regularization techniques to medical diagnosis models to ensure reliable performance across patient demographics, using probabilistic constraints to maintain consistent diagnostic accuracy whilst preventing algorithmic bias in healthcare delivery.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Developing insurance premium calculation models using Bayesian fairness regularization to ensure actuarially sound pricing that meets regulatory fairness requirements, with probabilistic modeling of both risk assessment accuracy and demographic equity.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Prior selection challenges make it difficult to specify appropriate prior distributions for fairness constraints, requiring domain expertise and potentially leading to suboptimal or biased outcomes if priors are poorly chosen."
+    },
+    {
+      "description": "Computational complexity increases significantly due to Bayesian inference requirements, including sampling methods, variational inference, or optimization over probability distributions, making the approach less scalable for large datasets."
+    },
+    {
+      "description": "Sensitivity to hyperparameters affects both the Bayesian inference process and fairness regularization terms, requiring careful tuning of multiple parameters that control the trade-off between accuracy, fairness, and computational efficiency."
+    },
+    {
+      "description": "Convergence and stability issues may arise in Bayesian optimization with fairness constraints, particularly when fairness objectives conflict with performance objectives or when the constraint space becomes highly complex."
+    },
+    {
+      "description": "Limited theoretical understanding exists for the interaction between Bayesian uncertainty quantification and fairness constraints, making it challenging to provide guarantees about both predictive performance and fairness under uncertainty."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Bayesian fairness",
+      "url": "https://arxiv.org/abs/1706.00119",
+      "source_type": "technical_paper",
+      "description": "Foundational paper introducing Bayesian approaches to fairness under parameter uncertainty, demonstrating how Bayesian perspectives lead to fair decision rules",
+      "authors": [
+        "Dimitrakakis, Christos",
+        "Liu, Yang",
+        "Parkes, David",
+        "Radanovic, Goran"
+      ],
+      "publication_date": "2017-05-31"
+    },
+    {
+      "title": "Fair Bayesian Optimization",
+      "url": "https://arxiv.org/abs/2006.05109",
+      "source_type": "technical_paper",
+      "description": "Constrained Bayesian optimization framework for optimizing ML model performance while enforcing fairness constraints through hyperparameter tuning",
+      "authors": [
+        "Perrone, Valerio",
+        "Donini, Michele",
+        "Zafar, Muhammad Bilal",
+        "Schmucker, Robin",
+        "Kenthapadi, Krishnaram",
+        "Archambeau, Cédric"
+      ],
+      "publication_date": "2020-06-09"
+    },
+    {
+      "title": "Fair Gaussian Processes",
+      "url": "https://github.com/ztanml/fgp",
+      "source_type": "software_package",
+      "description": "MATLAB implementation of Fair Gaussian Processes with multiple fairness criteria support including statistical parity, equality of opportunity, and equalized odds"
+    },
+    {
+      "title": "Fairness-Aware Classifier with Prejudice Remover Regularizer",
+      "url": "https://link.springer.com/chapter/10.1007/978-3-642-33486-3_3",
+      "source_type": "technical_paper",
+      "description": "Seminal paper introducing regularization-based approach to fairness in probabilistic discriminative models with mathematical framework for fairness constraints",
+      "authors": [
+        "Kamishima, Toshihiro",
+        "Akaho, Shotaro",
+        "Asoh, Hideki",
+        "Sakuma, Jun"
+      ],
+      "publication_date": "2012-09-24"
+    }
+  ],
+  "complexity_rating": 5,
+  "computational_cost_rating": 4,
+  "related_techniques": [
+    "sensitivity-analysis-for-fairness",
+    "fairness-gan",
+    "attribute-removal-fairness-through-unawareness"
+  ]
+}

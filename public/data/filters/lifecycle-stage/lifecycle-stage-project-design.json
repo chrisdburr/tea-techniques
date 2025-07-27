@@ -1,0 +1,278 @@
+{
+  "tag": {
+    "name": "lifecycle-stage/project-design",
+    "slug": "lifecycle-stage-project-design",
+    "count": 3,
+    "category": "lifecycle-stage"
+  },
+  "techniques": [
+    {
+      "slug": "automated-documentation-generation",
+      "name": "Automated Documentation Generation",
+      "description": "Automated documentation generation creates and maintains up-to-date documentation using various methods including programmatic scripts, large language models (LLMs), and extraction tools. These approaches can capture model architectures, data schemas, feature importance, performance metrics, API specifications, and lineage information without manual writing. Methods range from traditional code parsing and template-based generation to modern AI-assisted documentation that can understand context and generate human-readable explanations.",
+      "assurance_goals": [
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/documentation",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/documentation",
+        "expertise-needed/software-engineering",
+        "lifecycle-stage/project-design",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/deployment",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Automatically generating comprehensive model cards for a healthcare AI system each time a new version is deployed, including updated performance metrics across demographic groups, data lineage information, and bias evaluation results for regulatory compliance documentation.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Using LLM-powered tools to automatically document complex financial risk models by analysing code, extracting business logic, and generating human-readable explanations of model behaviour for audit trails and stakeholder communication.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Implementing automated API documentation generation for a machine learning platform that extracts endpoint specifications, parameter definitions, and usage examples, ensuring documentation stays synchronised with code changes and reducing deployment errors from outdated documentation.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "AI-generated documentation may miss critical domain context and business logic that human experts would include, potentially leading to incomplete or misleading explanations of model behaviour."
+        },
+        {
+          "description": "Template-based approaches often struggle with unstructured information and complex relationships between code components, limiting their ability to capture nuanced system interactions."
+        },
+        {
+          "description": "Quality heavily depends on code quality and instrumentation comprehensiveness; poorly commented or documented source code will result in inadequate generated documentation."
+        },
+        {
+          "description": "Maintenance overhead can be significant as automated systems require configuration updates when code structures change, and generated content may need human review for accuracy and completeness."
+        },
+        {
+          "description": "LLM-based approaches may introduce hallucinations or inaccuracies, particularly when documenting complex technical details or domain-specific terminology without proper validation mechanisms."
+        }
+      ],
+      "resources": [
+        {
+          "title": "daynin/fundoc",
+          "url": "https://github.com/daynin/fundoc",
+          "source_type": "software_package",
+          "description": "Language-agnostic documentation generator written in Rust that enables keeping documentation synchronised with code across multiple file types and programming languages."
+        },
+        {
+          "title": "Generative AI for Software Development - DeepLearning.AI",
+          "url": "https://www.deeplearning.ai/courses/generative-ai-for-software-development/",
+          "source_type": "tutorial",
+          "description": "Comprehensive course covering AI-powered documentation techniques including LLM-assisted documentation generation, formatting for automated tools, and improving code documentation quality."
+        },
+        {
+          "title": "Documentation Generator Analysis — Wiser Documentation",
+          "url": "https://chiplicity.readthedocs.io/en/latest/On_Software/DocumentationGenerator.html",
+          "source_type": "documentation",
+          "description": "Detailed analysis and comparison of documentation generator tools including Sphinx, Doxygen, and other approaches for automated documentation workflows."
+        },
+        {
+          "title": "pyTooling/sphinx-reports",
+          "url": "https://github.com/pyTooling/sphinx-reports",
+          "source_type": "software_package",
+          "description": "Sphinx extension that automatically integrates software development reports (unit tests, coverage, documentation coverage) into documentation as appendix pages."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "model-cards",
+        "datasheets-for-datasets",
+        "data-version-control"
+      ]
+    },
+    {
+      "slug": "intrinsically-interpretable-models",
+      "name": "Intrinsically Interpretable Models",
+      "description": "Intrinsically interpretable models are machine learning algorithms that are transparent by design, allowing users to understand their decision-making process without requiring additional explanation techniques. This category includes decision trees and rule lists (which use if-then logic), linear and logistic regression models (which use weighted feature combinations), and other simple algorithms where the model structure itself provides interpretability. These models prioritise transparency over complexity, making them ideal when stakeholder understanding and regulatory compliance are paramount.",
+      "assurance_goals": [
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/tree-based",
+        "applicable-models/linear",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/structured-output",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/low",
+        "explanatory-scope/global",
+        "lifecycle-stage/project-design",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Developing a medical diagnosis support system using a decision tree with clear if-then rules based on symptoms and test results, allowing healthcare professionals to trace the reasoning path and explain diagnoses to patients whilst ensuring clinical transparency and accountability.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Creating a fraud detection model using logistic regression with carefully selected features (transaction amount, location, time patterns) where each coefficient's contribution can be understood and validated, ensuring reliable performance that financial institutions can audit and regulatory bodies can approve.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Implementing a hiring decision support tool using rule lists that explicitly state qualification criteria and scoring logic, providing transparent candidate evaluation that can be explained to applicants and reviewed for fairness whilst meeting legal requirements for employment decision documentation.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Generally achieve lower predictive accuracy than complex models (neural networks, ensembles) for difficult problems involving high-dimensional data, non-linear relationships, or complex feature interactions."
+        },
+        {
+          "description": "Linear models cannot capture non-linear relationships or feature interactions without manual feature engineering, limiting their applicability to inherently non-linear domains like image recognition or natural language processing."
+        },
+        {
+          "description": "Decision trees can become unstable with small changes in training data, potentially leading to completely different tree structures and predictions, affecting model reliability in dynamic environments."
+        },
+        {
+          "description": "Deep decision trees may lose interpretability despite being inherently transparent, as human cognitive limits make it difficult to follow complex branching logic with many levels and conditions."
+        },
+        {
+          "description": "Feature selection becomes critical for maintaining interpretability, requiring domain expertise to identify the most relevant variables whilst potentially missing important but subtle predictive signals."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn Decision Trees",
+          "url": "https://scikit-learn.org/stable/modules/tree.html",
+          "source_type": "documentation",
+          "description": "Comprehensive documentation for decision tree implementation in scikit-learn, including classification and regression trees with interpretability guidelines and visualisation tools."
+        },
+        {
+          "title": "scikit-learn Linear Models",
+          "url": "https://scikit-learn.org/stable/modules/linear_model.html",
+          "source_type": "documentation",
+          "description": "Complete guide to linear and logistic regression models in scikit-learn, covering implementation, feature selection, and coefficient interpretation for transparent modeling."
+        },
+        {
+          "title": "Interpretable Machine Learning",
+          "url": "https://christophm.github.io/interpretable-ml-book/",
+          "source_type": "tutorial",
+          "description": "Open-source book providing comprehensive coverage of interpretable machine learning models including decision trees, linear models, and rule-based systems with practical examples."
+        },
+        {
+          "title": "R package 'rpart' for Recursive Partitioning",
+          "url": "https://cran.r-project.org/web/packages/rpart/index.html",
+          "source_type": "software_package",
+          "description": "R implementation of recursive partitioning for classification, regression and survival trees with extensive documentation and plotting capabilities for interpretable tree models."
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "monotonicity-constraints",
+        "generalized-additive-models"
+      ]
+    },
+    {
+      "slug": "generalized-additive-models",
+      "name": "Generalized Additive Models",
+      "description": "An intrinsically interpretable modelling technique that extends linear models by allowing flexible, nonlinear relationships between individual features and the target whilst maintaining the additive structure that preserves transparency. Each feature's effect is modelled separately as a smooth function, visualised as a curve showing how the feature influences predictions across its range. GAMs achieve this through spline functions or other smoothing techniques that capture complex patterns in individual variables without interactions, making them particularly valuable for domains requiring both predictive accuracy and model interpretability.",
+      "assurance_goals": [
+        "Transparency",
+        "Explainability",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/gam",
+        "applicable-models/linear-model",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/feature-analysis",
+        "assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
+        "assurance-goal-category/reliability",
+        "data-requirements/labelled-data",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualisation",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/project-design",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Predicting hospital readmission risk with a GAM that provides transparent, auditable risk assessments by showing how readmission probability varies nonlinearly with patient age, blood pressure, and medication adherence, enabling clinicians to understand and trust the model's reasoning for regulatory compliance.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Building a credit scoring model that explains loan decisions to applicants by visualising how income, credit history, and debt-to-income ratio individually affect approval likelihood, providing clear feature attributions that satisfy fair lending requirements and regulatory explainability mandates.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Developing an environmental monitoring system that reliably predicts air quality using GAMs to model the smooth, nonlinear relationships between weather variables, ensuring stable predictions across seasonal variations whilst maintaining interpretable relationships that environmental scientists can validate.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Cannot capture complex interactions between features unless explicitly modelled, limiting their ability to represent relationships where variables influence each other."
+        },
+        {
+          "description": "Setup requires domain expertise to decide which features need nonlinear treatment and appropriate smoothing parameters, making model specification more challenging than linear models."
+        },
+        {
+          "description": "Fitting process is computationally more expensive than linear models, particularly for large datasets with many features requiring smoothing."
+        },
+        {
+          "description": "Risk of overfitting individual feature relationships if smoothing parameters are not properly regularised, potentially reducing generalisation performance."
+        },
+        {
+          "description": "Interpretation complexity increases with the number of nonlinear features, as understanding multiple smooth curves simultaneously becomes cognitively demanding."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Generalized Additive Models",
+          "url": "https://hastie.su.domains/Papers/gam.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Trevor Hastie",
+            "Robert Tibshirani"
+          ],
+          "publication_date": "1986-01-01"
+        },
+        {
+          "title": "pyGAM: Generalized Additive Models in Python",
+          "url": "https://github.com/dswah/pyGAM",
+          "source_type": "software_package"
+        },
+        {
+          "title": "mgcv: Mixed GAM Computation Vehicle with Automatic Smoothness Estimation",
+          "url": "https://cran.r-project.org/web/packages/mgcv/index.html",
+          "source_type": "software_package"
+        },
+        {
+          "title": "A Tour of pyGAM — pyGAM documentation",
+          "url": "https://pygam.readthedocs.io/en/latest/notebooks/tour_of_pygam.html",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "acronym": "GAMs",
+      "related_techniques": [
+        "monotonicity-constraints",
+        "intrinsically-interpretable-models"
+      ]
+    }
+  ],
+  "count": 3
+}

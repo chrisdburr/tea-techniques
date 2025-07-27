@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "TEA Technique",
+  "description": "Schema for a single technique in the TEA Techniques database",
+  "type": "object",
+  "required": ["slug", "name", "description", "assurance_goals", "tags"],
+  "properties": {
+    "slug": {
+      "type": "string",
+      "description": "URL-friendly unique identifier for the technique",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "examples": ["shapley-additive-explanations", "permutation-importance"]
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable name of the technique",
+      "minLength": 3,
+      "maxLength": 100,
+      "examples": ["SHapley Additive exPlanations", "Permutation Importance"]
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the technique and how it works",
+      "minLength": 50,
+      "maxLength": 2000
+    },
+    "assurance_goals": {
+      "type": "array",
+      "description": "List of assurance goals this technique addresses",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "Explainability",
+          "Fairness",
+          "Privacy",
+          "Reliability",
+          "Safety",
+          "Security",
+          "Transparency"
+        ]
+      }
+    },
+    "tags": {
+      "type": "array",
+      "description": "Categorization tags for the technique",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z-]+/[a-z-]+(?:/[a-z-]+)*$",
+        "examples": [
+          "applicable-models/agnostic",
+          "data-type/text",
+          "lifecycle-stage/model-development"
+        ]
+      }
+    },
+    "example_use_cases": {
+      "type": "array",
+      "description": "Real-world examples of how this technique can be applied",
+      "items": {
+        "type": "object",
+        "required": ["description", "goal"],
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the use case",
+            "minLength": 20,
+            "maxLength": 500
+          },
+          "goal": {
+            "type": "string",
+            "description": "The assurance goal this use case addresses",
+            "enum": [
+              "Explainability",
+              "Fairness",
+              "Privacy",
+              "Reliability",
+              "Safety",
+              "Security",
+              "Transparency"
+            ]
+          }
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "description": "Known limitations or considerations when using this technique",
+      "items": {
+        "type": "object",
+        "required": ["description"],
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Description of the limitation",
+            "minLength": 20,
+            "maxLength": 500
+          }
+        }
+      }
+    },
+    "resources": {
+      "type": "array",
+      "description": "External resources for learning more about this technique",
+      "items": {
+        "type": "object",
+        "required": ["title", "url"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title of the resource",
+            "minLength": 3,
+            "maxLength": 200
+          },
+          "url": {
+            "type": "string",
+            "description": "URL to the resource",
+            "format": "uri",
+            "pattern": "^https?://"
+          },
+          "source_type": {
+            "type": "string",
+            "description": "Type of resource",
+            "enum": [
+              "technical_paper",
+              "software_package",
+              "documentation",
+              "tutorial"
+            ]
+          },
+          "authors": {
+            "type": "array",
+            "description": "Authors of the resource (for papers)",
+            "items": {
+              "type": "string"
+            }
+          },
+          "publication_date": {
+            "type": "string",
+            "description": "Publication date in ISO format",
+            "format": "date"
+          }
+        }
+      }
+    },
+    "complexity_rating": {
+      "type": "integer",
+      "description": "Complexity rating from 1 (simple) to 5 (very complex)",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "computational_cost_rating": {
+      "type": "integer",
+      "description": "Computational cost rating from 1 (low) to 5 (very high)",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "acronym": {
+      "type": "string",
+      "description": "Common acronym for the technique",
+      "pattern": "^[A-Za-z0-9-]+$",
+      "examples": ["SHAP", "LIME", "t-SNE", "CAM", "IRBs"]
+    },
+    "related_techniques": {
+      "type": "array",
+      "description": "Slugs of related techniques",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      }
+    }
+  },
+  "additionalProperties": false
+}

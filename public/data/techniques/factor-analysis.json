@@ -1,0 +1,86 @@
+{
+  "slug": "factor-analysis",
+  "name": "Factor Analysis",
+  "description": "Factor analysis is a statistical technique that identifies latent variables (hidden factors) underlying observed correlations in data. It works by analysing how variables relate to each other, finding a smaller number of unobserved factors that explain patterns among multiple observed variables. Unlike PCA which maximises total variance, factor analysis focuses on shared variance (communalities - the variance variables have in common) whilst separating out unique variance and measurement error. After extracting factors, rotation methods like varimax (which creates uncorrelated factors) or oblimin (allowing correlated factors) help make factors more interpretable by aligning them with distinct groups of variables.",
+  "assurance_goals": [
+    "Explainability",
+    "Transparency"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/explainability",
+    "assurance-goal-category/transparency",
+    "data-requirements/no-special-requirements",
+    "data-type/tabular",
+    "evidence-type/quantitative-metric",
+    "evidence-type/structured-output",
+    "expertise-needed/statistics",
+    "explanatory-scope/global",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Analysing customer satisfaction surveys to identify key drivers (e.g., 'service quality', 'product value', 'convenience') from dozens of individual questions, helping businesses focus improvement efforts.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Reducing dimensionality of financial indicators to identify underlying economic factors (e.g., 'growth', 'inflation', 'credit risk') for more interpretable risk models.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Creating transparent feature groups for regulatory reporting by showing how multiple correlated features can be summarised into interpretable factors with clear business meaning.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Assumes linear relationships between variables and multivariate normality of data."
+    },
+    {
+      "description": "Results can be abstract and require domain expertise to interpret meaningfully."
+    },
+    {
+      "description": "Sensitive to the choice of number of factors and rotation method, which can significantly affect interpretability."
+    },
+    {
+      "description": "Requires sufficiently large sample sizes relative to the number of variables for stable results."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Factor Analysis, Probabilistic Principal Component Analysis, Variational Inference, and Variational Autoencoder: Tutorial and Survey",
+      "url": "http://arxiv.org/pdf/2101.00734v2",
+      "source_type": "documentation",
+      "authors": [
+        "Benyamin Ghojogh",
+        "Ali Ghodsi",
+        "Fakhri Karray",
+        "Mark Crowley"
+      ],
+      "publication_date": "2021-01-04"
+    },
+    {
+      "title": "Factor Analysis in R Course | DataCamp",
+      "url": "https://www.datacamp.com/courses/factor-analysis-in-r",
+      "source_type": "tutorial"
+    },
+    {
+      "title": "EducationalTestingService/factor_analyzer",
+      "url": "https://github.com/EducationalTestingService/factor_analyzer",
+      "source_type": "software_package"
+    },
+    {
+      "title": "Confirmatory Factor Analysis Fundamentals | Towards Data Science",
+      "url": "https://towardsdatascience.com/confirmatory-factor-analysis-theory-aac11af008a6/",
+      "source_type": "tutorial"
+    }
+  ],
+  "complexity_rating": 3,
+  "computational_cost_rating": 3,
+  "related_techniques": [
+    "principal-component-analysis",
+    "t-sne",
+    "umap"
+  ]
+}

@@ -1,0 +1,168 @@
+import {
+  MDXPageLayout,
+  generateMetadataFromFrontmatter,
+} from '@/components/layout/mdx-page-layout';
+import Link from 'next/link';
+import { AllTagDefinitions } from '@/components/about/tag-definitions-table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+
+export const frontmatter = {
+  title: 'Tag Definitions',
+  description: 'Learn about the tag system used to categorize TEA Techniques and how it helps you find the right techniques for your needs.',
+  breadcrumbs: [
+    { label: 'Home', href: '/' },
+    { label: 'About', href: '/about' },
+    { label: 'Tag Definitions', href: '/about/tag-definitions' }
+  ],
+  publishedAt: '2024-01-01',
+  updatedAt: '2024-07-25',
+  tableOfContents: true
+};
+
+export const dynamic = 'force-static';
+export const metadata = generateMetadataFromFrontmatter(frontmatter);
+
+export default function TagDefinitionsPage({ children }) {
+  return <MDXPageLayout frontmatter={frontmatter}>{children}</MDXPageLayout>;
+}
+
+<Callout variant="info" title="About">
+  This document explains the structured but flexible tag system that helps categorise the TEA techniques and makes it easier to find the right technique that matches your specific needs and context.
+</Callout>
+
+## What are Tags?
+
+Tags are labels that categorize each technique based on various dimensions such as the assurance goals they address, the types of models they work with, the lifecycle stages where they apply, and the expertise required to implement them.
+
+The tag system follows a hierarchical structure using forward slashes (`/`) as separators, allowing for precise categorization while maintaining flexibility for future expansion.
+
+### Tag Format
+
+Tags follow a consistent format:
+- **Prefix:** Indicates the broad classification scheme (e.g., `assurance-goal-category`)
+- **Tag Content:** Represents the specific content within the prefix, potentially including sub-topics
+- **Example:** `assurance-goal-category/explainability/feature-analysis/importance-attribution`
+
+All parts of tags are **lowercase** and use **hyphens** (`-`) instead of spaces or underscores.
+
+## Tag Categories
+
+The tag system is organized into 10 main categories, each serving a specific purpose in classifying techniques:
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Category</TableHead>
+      <TableHead>Purpose</TableHead>
+      <TableHead>Number of Tags</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell className="font-mono">assurance-goal-category</TableCell>
+      <TableCell>Primary responsible AI goal that the technique helps achieve</TableCell>
+      <TableCell>18</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">applicable-models</TableCell>
+      <TableCell>Types of machine learning models the technique can be applied to</TableCell>
+      <TableCell>16</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">lifecycle-stage</TableCell>
+      <TableCell>Stages of the AI system development lifecycle where the technique is applicable</TableCell>
+      <TableCell>18</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">expertise-needed</TableCell>
+      <TableCell>Type of knowledge or expertise required to apply the technique effectively</TableCell>
+      <TableCell>16</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">evidence-type</TableCell>
+      <TableCell>Type of output or evidential artifact produced by the technique</TableCell>
+      <TableCell>15</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">data-requirements</TableCell>
+      <TableCell>Specific data needs or dependencies for applying the technique</TableCell>
+      <TableCell>13</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">data-type</TableCell>
+      <TableCell>Types of data the technique is designed for or applicable to</TableCell>
+      <TableCell>4</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">technique-type</TableCell>
+      <TableCell>Fundamental nature and approach of the technique</TableCell>
+      <TableCell>11</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">explanatory-scope</TableCell>
+      <TableCell>Whether the explanation is instance-specific (local) or model-wide (global)</TableCell>
+      <TableCell>2</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">fairness-approach</TableCell>
+      <TableCell>Underlying approach to fairness for fairness-related techniques</TableCell>
+      <TableCell>2</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+## All Tag Definitions
+
+<AllTagDefinitions />
+
+## How to Use Tags
+
+### Finding Relevant Techniques
+
+Use the [Filters page](/filters) to browse techniques by parent categories (e.g. applicable model, expertise needed).
+
+### Understanding Technique Scope
+
+Each technique page shows its corresponding tags, helping you quickly understand what it's designed for, what expertise is needed, and how it fits into your development workflow.
+
+These tags can also be used to find similar techniques, in case the first one you discover is not quite right.
+
+### Multiple Tags
+
+Most techniques have multiple tags across different categories. For example, a technique might address both explainability and fairness, work with multiple model types, and apply to several lifecycle stages.
+
+## Benefits of Tags
+
+### Structured Organization
+
+The hierarchical tag system allows for precise categorization while maintaining flexibility. As new techniques and concepts emerge in responsible AI, the system can evolve through the governance process outlined in our documentation.
+
+### Cross-Platform Compatibility
+
+The standardized tag format ensures compatibility with other tools and platforms, including:
+- The [TEA Platform](https://assuranceplatform.azurewebsites.net) for assurance case development
+- Integration with third-party AI governance tools
+- Automated analysis and reporting systems
+
+### Open Source Extensibility
+
+Since the entire dataset is available via our [public GitHub repository](https://github.com/alan-turing-institute/AssurancePlatform), other applications can:
+- Build on our tag taxonomy
+- Create specialized views for specific domains
+- Contribute new tags through the governance process
+- Develop automated tagging tools
+
+### Enhanced Discovery
+
+The multi-dimensional tagging system enables:
+- Finding techniques that match multiple criteria
+- Discovering related techniques through shared tags
+- Building custom workflows based on lifecycle stages
+- Identifying gaps in technique coverage

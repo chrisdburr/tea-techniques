@@ -1,0 +1,79 @@
+{
+  "slug": "principal-component-analysis",
+  "name": "Principal Component Analysis",
+  "description": "Principal Component Analysis transforms high-dimensional data into a lower-dimensional representation by finding the directions (principal components) that capture the maximum variance in the data. Each component is a linear combination of original features, with the first component explaining the most variance, the second component the most remaining variance orthogonal to the first, and so on. This technique reveals underlying patterns in data structure, enables visualization of complex datasets, and helps identify which combinations of features drive the most variation in the data.",
+  "assurance_goals": [
+    "Explainability"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/explainability",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "evidence-type/visualization",
+    "expertise-needed/statistics",
+    "explanatory-scope/global",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Analysing customer behavior data with dozens of variables (purchase frequency, spending patterns, demographics) to identify the 2-3 main dimensions that explain customer segmentation, revealing whether customers cluster by spending level, product preferences, or shopping frequency.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Reducing dimensionality of image data for facial recognition systems by finding the principal components that capture the most variation in face shapes and expressions, helping understand which facial features contribute most to distinguishing between individuals.",
+      "goal": "Explainability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Principal components are abstract linear combinations of original features that often lack clear real-world interpretation or meaning."
+    },
+    {
+      "description": "Only captures linear relationships between features, missing non-linear patterns and complex interactions in the data."
+    },
+    {
+      "description": "Results are highly sensitive to feature scaling - features with larger numerical ranges can dominate the principal components."
+    },
+    {
+      "description": "Information loss is inherent when reducing dimensions, and choosing the optimal number of components requires balancing simplicity with retained variance."
+    }
+  ],
+  "resources": [
+    {
+      "title": "erdogant/pca",
+      "url": "https://github.com/erdogant/pca",
+      "source_type": "software_package"
+    },
+    {
+      "title": "How to Calculate Principal Component Analysis (PCA) from Scratch ...",
+      "url": "https://www.machinelearningmastery.com/calculate-principal-component-analysis-scratch-python/",
+      "source_type": "tutorial"
+    },
+    {
+      "title": "A One-Stop Shop for Principal Component Analysis | Towards Data ...",
+      "url": "https://towardsdatascience.com/a-one-stop-shop-for-principal-component-analysis-5582fb7e0a9c/",
+      "source_type": "tutorial"
+    },
+    {
+      "title": "Principal Component Analysis (PCA) with Scikit-Learn - KDnuggets",
+      "url": "https://www.kdnuggets.com/2023/05/principal-component-analysis-pca-scikitlearn.html",
+      "source_type": "tutorial"
+    },
+    {
+      "title": "willtownes/glmpca-py",
+      "url": "https://github.com/willtownes/glmpca-py",
+      "source_type": "software_package"
+    }
+  ],
+  "complexity_rating": 2,
+  "computational_cost_rating": 2,
+  "acronym": "PCA",
+  "related_techniques": [
+    "factor-analysis",
+    "t-sne",
+    "umap"
+  ]
+}

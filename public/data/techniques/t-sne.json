@@ -1,0 +1,72 @@
+{
+  "slug": "t-sne",
+  "name": "t-SNE",
+  "description": "t-SNE (t-Distributed Stochastic Neighbour Embedding) is a non-linear dimensionality reduction technique that creates 2D or 3D visualisations of high-dimensional data by preserving local neighbourhood relationships. The algorithm converts similarities between data points into joint probabilities in the high-dimensional space, then tries to minimise the divergence between these probabilities and those in the low-dimensional embedding. This approach excels at revealing cluster structures and local patterns, making it particularly effective for exploratory data analysis and understanding complex data relationships that linear methods like PCA might miss.",
+  "assurance_goals": [
+    "Explainability"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/explainability",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/visualization",
+    "expertise-needed/statistics",
+    "explanatory-scope/global",
+    "lifecycle-stage/model-development",
+    "technique-type/visualization"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Analyzing genomic data with thousands of gene expression features to visualize how different cancer subtypes cluster together, revealing which tumors have similar molecular signatures and potentially similar treatment responses.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Exploring deep learning model embeddings to understand how a neural network represents different categories of images, showing whether the model groups similar objects (cars, animals, furniture) in meaningful clusters in its internal feature space.",
+      "goal": "Explainability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Non-deterministic algorithm produces different results on each run, making it difficult to reproduce exact visualizations or compare results across studies."
+    },
+    {
+      "description": "Prioritizes preserving local neighborhood structure at the expense of global relationships, potentially creating misleading impressions about overall data topology."
+    },
+    {
+      "description": "Computationally expensive with O(n²) complexity, making it impractical for datasets with more than ~10,000 points without approximation methods."
+    },
+    {
+      "description": "Sensitive to hyperparameter choices (perplexity, learning rate, iterations) that can dramatically affect clustering patterns and require domain expertise to tune appropriately."
+    }
+  ],
+  "resources": [
+    {
+      "title": "pavlin-policar/openTSNE",
+      "url": "https://github.com/pavlin-policar/openTSNE",
+      "source_type": "software_package"
+    },
+    {
+      "title": "openTSNE: Extensible, parallel implementations of t-SNE ...",
+      "url": "https://opentsne.readthedocs.io/",
+      "source_type": "documentation"
+    },
+    {
+      "title": "How t-SNE works — openTSNE 1.0.0 documentation",
+      "url": "https://opentsne.readthedocs.io/en/stable/tsne_algorithm.html",
+      "source_type": "documentation"
+    },
+    {
+      "title": "t-SNE from Scratch (ft. NumPy) | Towards Data Science",
+      "url": "https://towardsdatascience.com/t-sne-from-scratch-ft-numpy-172ee2a61df7/",
+      "source_type": "tutorial"
+    }
+  ],
+  "complexity_rating": 3,
+  "computational_cost_rating": 4,
+  "related_techniques": [
+    "factor-analysis",
+    "principal-component-analysis",
+    "umap"
+  ]
+}

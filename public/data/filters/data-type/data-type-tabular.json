@@ -1,0 +1,688 @@
+{
+  "tag": {
+    "name": "data-type/tabular",
+    "slug": "data-type-tabular",
+    "count": 8,
+    "category": "data-type"
+  },
+  "techniques": [
+    {
+      "slug": "mean-decrease-impurity",
+      "name": "Mean Decrease Impurity",
+      "description": "Mean Decrease Impurity (MDI) quantifies a feature's importance in tree-based models (e.g., Random Forests, Gradient Boosting Machines) by measuring the total reduction in impurity (e.g., Gini impurity, entropy) across all splits where the feature is used. Features that lead to larger, more consistent reductions in impurity are considered more important, indicating their effectiveness in creating homogeneous child nodes and improving predictive accuracy.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/tree-based",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Determining the most influential genetic markers in a decision tree model predicting disease susceptibility, by identifying which markers consistently lead to the purest splits between healthy and diseased patient groups.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Assessing the key factors driving customer purchasing decisions in an e-commerce random forest model, revealing which product attributes or customer demographics are most effective in segmenting buyers.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "MDI is inherently biased towards features with more unique values or those that allow for more splits, potentially overestimating their true importance."
+        },
+        {
+          "description": "It is only applicable to tree-based models and cannot be directly used with other model architectures."
+        },
+        {
+          "description": "The importance scores can be unstable, varying significantly with small changes in the training data or model parameters."
+        },
+        {
+          "description": "MDI does not account for feature interactions, meaning it might not accurately reflect the importance of features that are only relevant when combined with others."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Trees, forests, and impurity-based variable importance",
+          "url": "http://arxiv.org/pdf/2001.04295v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Erwan Scornet"
+          ],
+          "publication_date": "2020-01-13"
+        },
+        {
+          "title": "A Debiased MDI Feature Importance Measure for Random Forests",
+          "url": "http://arxiv.org/pdf/1906.10845v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xiao Li",
+            "Yu Wang",
+            "Sumanta Basu",
+            "Karl Kumbier",
+            "Bin Yu"
+          ],
+          "publication_date": "2019-06-26"
+        },
+        {
+          "title": "Variable Importance in Random Forests | Towards Data Science",
+          "url": "https://towardsdatascience.com/variable-importance-in-random-forests-20c6690e44e0/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Interpreting Deep Forest through Feature Contribution and MDI Feature Importance",
+          "url": "http://arxiv.org/pdf/2305.00805v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yi-Xiao He",
+            "Shen-Huan Lyu",
+            "Yuan Jiang"
+          ],
+          "publication_date": "2023-05-01"
+        },
+        {
+          "title": "optuna.importance.MeanDecreaseImpurityImportanceEvaluator ...",
+          "url": "https://optuna.readthedocs.io/en/stable/reference/generated/optuna.importance.MeanDecreaseImpurityImportanceEvaluator.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "permutation-importance",
+        "coefficient-magnitudes-in-linear-models",
+        "sobol-indices"
+      ]
+    },
+    {
+      "slug": "coefficient-magnitudes-in-linear-models",
+      "name": "Coefficient Magnitudes (in Linear Models)",
+      "description": "Coefficient Magnitudes assess feature influence in linear models by examining the absolute values of their coefficients. Features with larger absolute coefficients are considered to have a stronger impact on the prediction, while the sign of the coefficient indicates the direction of that influence (positive or negative). This technique provides a straightforward and transparent way to understand the direct linear relationship between each input feature and the model's output.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/linear-model",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/low",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/metric"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Interpreting which features influence housing price predictions in linear regression, such as identifying that 'number of bedrooms' has a larger positive impact than 'distance to city centre' based on coefficient magnitudes.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Explaining the factors contributing to customer lifetime value (CLV) in a linear model, showing how 'average monthly spend' has a strong positive coefficient, making the model transparent for business stakeholders.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Only valid for linear relationships; it cannot capture complex non-linear patterns or interactions between features."
+        },
+        {
+          "description": "Highly sensitive to feature scaling; features with larger numerical ranges can appear more important even if their true impact is smaller."
+        },
+        {
+          "description": "Can be misleading in the presence of multicollinearity, where correlated features may split importance or have unstable coefficients."
+        },
+        {
+          "description": "Does not imply causation; a strong correlation (large coefficient) does not necessarily mean a causal relationship."
+        }
+      ],
+      "resources": [],
+      "complexity_rating": 1,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "permutation-importance",
+        "mean-decrease-impurity",
+        "sobol-indices"
+      ]
+    },
+    {
+      "slug": "factor-analysis",
+      "name": "Factor Analysis",
+      "description": "Factor analysis is a statistical technique that identifies latent variables (hidden factors) underlying observed correlations in data. It works by analysing how variables relate to each other, finding a smaller number of unobserved factors that explain patterns among multiple observed variables. Unlike PCA which maximises total variance, factor analysis focuses on shared variance (communalities - the variance variables have in common) whilst separating out unique variance and measurement error. After extracting factors, rotation methods like varimax (which creates uncorrelated factors) or oblimin (allowing correlated factors) help make factors more interpretable by aligning them with distinct groups of variables.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "evidence-type/structured-output",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing customer satisfaction surveys to identify key drivers (e.g., 'service quality', 'product value', 'convenience') from dozens of individual questions, helping businesses focus improvement efforts.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Reducing dimensionality of financial indicators to identify underlying economic factors (e.g., 'growth', 'inflation', 'credit risk') for more interpretable risk models.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating transparent feature groups for regulatory reporting by showing how multiple correlated features can be summarised into interpretable factors with clear business meaning.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Assumes linear relationships between variables and multivariate normality of data."
+        },
+        {
+          "description": "Results can be abstract and require domain expertise to interpret meaningfully."
+        },
+        {
+          "description": "Sensitive to the choice of number of factors and rotation method, which can significantly affect interpretability."
+        },
+        {
+          "description": "Requires sufficiently large sample sizes relative to the number of variables for stable results."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Factor Analysis, Probabilistic Principal Component Analysis, Variational Inference, and Variational Autoencoder: Tutorial and Survey",
+          "url": "http://arxiv.org/pdf/2101.00734v2",
+          "source_type": "documentation",
+          "authors": [
+            "Benyamin Ghojogh",
+            "Ali Ghodsi",
+            "Fakhri Karray",
+            "Mark Crowley"
+          ],
+          "publication_date": "2021-01-04"
+        },
+        {
+          "title": "Factor Analysis in R Course | DataCamp",
+          "url": "https://www.datacamp.com/courses/factor-analysis-in-r",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "EducationalTestingService/factor_analyzer",
+          "url": "https://github.com/EducationalTestingService/factor_analyzer",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Confirmatory Factor Analysis Fundamentals | Towards Data Science",
+          "url": "https://towardsdatascience.com/confirmatory-factor-analysis-theory-aac11af008a6/",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "principal-component-analysis",
+        "t-sne",
+        "umap"
+      ]
+    },
+    {
+      "slug": "monotonicity-constraints",
+      "name": "Monotonicity Constraints",
+      "description": "Monotonicity constraints enforce consistent directional relationships between input features and model predictions, ensuring that increasing a feature value either always increases, always decreases, or has no effect on the output. These constraints integrate domain knowledge into model training, preventing counterintuitive relationships that may arise from spurious correlations in data. By maintaining logical feature relationships (e.g., experience always positively influences salary), monotonicity constraints enhance model trustworthiness, interpretability, and alignment with business logic whilst often improving generalisation to new data.",
+      "assurance_goals": [
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/tree-based",
+        "applicable-models/gaussian-process",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/labelled-data",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "expertise-needed/domain-knowledge",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Enforcing that a mortgage approval model always treats higher income, longer employment history, and higher credit scores as positive factors, making the decision logic transparent and intuitive for loan officers and applicants whilst preventing counterintuitive relationships that could undermine trust in the system.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Constraining a healthcare cost prediction model so that age and number of chronic conditions always increase predicted costs, ensuring the model generalises reliably to new patient populations and maintains logical behaviour even when training data contains sampling biases or unusual correlations.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Implementing monotonic constraints in an insurance premium model where driving experience always reduces premiums and accident history always increases them, creating consistent pricing logic that regulatory authorities can easily validate and customers can understand and trust.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Can reduce model accuracy when real-world relationships are inherently non-monotonic, such as the inverted-U relationship between experience and performance, where constraints force oversimplified linear relationships."
+        },
+        {
+          "description": "Requires substantial domain expertise to identify which features should have monotonic relationships, creating dependency on subject matter experts and potential for incorrect constraint specification."
+        },
+        {
+          "description": "Increases computational complexity during training as optimisation algorithms must respect additional constraints, potentially leading to longer training times and convergence difficulties."
+        },
+        {
+          "description": "May mask important non-linear patterns in data that could be crucial for understanding system behaviour, particularly in exploratory analysis where discovering unexpected relationships is valuable."
+        },
+        {
+          "description": "Limited applicability to certain model types, with implementation varying significantly across algorithms (well-supported in tree-based models, more complex in neural networks), restricting technique flexibility."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Monotonic Constraints — xgboost 3.1.0-dev documentation",
+          "url": "https://xgboost.readthedocs.io/en/latest/tutorials/monotonic.html",
+          "source_type": "documentation",
+          "description": "Comprehensive tutorial on implementing monotonic constraints in XGBoost, including parameter configuration, practical examples, and visual demonstrations of constraint effects on model predictions."
+        },
+        {
+          "title": "NONPARAMETRIC KERNEL REGRESSION SUBJECT TO MONOTONICITY CONSTRAINTS",
+          "url": "https://www.semanticscholar.org/paper/28e2be532d66694d3fe3486671f5c0217f58892d",
+          "source_type": "technical_paper",
+          "authors": [
+            "P. Hall",
+            "Li-Shan Huang"
+          ],
+          "description": "Foundational research paper on implementing monotonicity constraints in nonparametric kernel regression methods, providing theoretical background and algorithmic approaches for enforcing monotonic relationships."
+        },
+        {
+          "title": "scikit-learn Isotonic Regression",
+          "url": "https://scikit-learn.org/stable/modules/isotonic.html",
+          "source_type": "documentation",
+          "description": "Documentation for scikit-learn's isotonic regression implementation, providing alternative approach to monotonic relationships through non-parametric regression that preserves monotonic order."
+        },
+        {
+          "title": "High-dimensional additive Gaussian processes under monotonicity constraints",
+          "url": "https://www.semanticscholar.org/paper/4d4f1e2de3742735dcc47d2e51cc572a4415231e",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andrés F. López-Lopera",
+            "F. Bachoc",
+            "O. Roustant"
+          ],
+          "description": "Advanced research on extending monotonicity constraints to high-dimensional Gaussian process models, addressing scalability challenges and additive model structures for complex constraint applications."
+        },
+        {
+          "title": "cagrell/gp_constr",
+          "url": "https://github.com/cagrell/gp_constr",
+          "source_type": "software_package",
+          "description": "Python implementation of Gaussian process regression with linear operator constraints including boundedness and monotonicity, featuring RBF and Matérn kernels with practical examples."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "intrinsically-interpretable-models",
+        "generalized-additive-models"
+      ]
+    },
+    {
+      "slug": "generalized-additive-models",
+      "name": "Generalized Additive Models",
+      "description": "An intrinsically interpretable modelling technique that extends linear models by allowing flexible, nonlinear relationships between individual features and the target whilst maintaining the additive structure that preserves transparency. Each feature's effect is modelled separately as a smooth function, visualised as a curve showing how the feature influences predictions across its range. GAMs achieve this through spline functions or other smoothing techniques that capture complex patterns in individual variables without interactions, making them particularly valuable for domains requiring both predictive accuracy and model interpretability.",
+      "assurance_goals": [
+        "Transparency",
+        "Explainability",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/gam",
+        "applicable-models/linear-model",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/feature-analysis",
+        "assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
+        "assurance-goal-category/reliability",
+        "data-requirements/labelled-data",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualisation",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/project-design",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Predicting hospital readmission risk with a GAM that provides transparent, auditable risk assessments by showing how readmission probability varies nonlinearly with patient age, blood pressure, and medication adherence, enabling clinicians to understand and trust the model's reasoning for regulatory compliance.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Building a credit scoring model that explains loan decisions to applicants by visualising how income, credit history, and debt-to-income ratio individually affect approval likelihood, providing clear feature attributions that satisfy fair lending requirements and regulatory explainability mandates.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Developing an environmental monitoring system that reliably predicts air quality using GAMs to model the smooth, nonlinear relationships between weather variables, ensuring stable predictions across seasonal variations whilst maintaining interpretable relationships that environmental scientists can validate.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Cannot capture complex interactions between features unless explicitly modelled, limiting their ability to represent relationships where variables influence each other."
+        },
+        {
+          "description": "Setup requires domain expertise to decide which features need nonlinear treatment and appropriate smoothing parameters, making model specification more challenging than linear models."
+        },
+        {
+          "description": "Fitting process is computationally more expensive than linear models, particularly for large datasets with many features requiring smoothing."
+        },
+        {
+          "description": "Risk of overfitting individual feature relationships if smoothing parameters are not properly regularised, potentially reducing generalisation performance."
+        },
+        {
+          "description": "Interpretation complexity increases with the number of nonlinear features, as understanding multiple smooth curves simultaneously becomes cognitively demanding."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Generalized Additive Models",
+          "url": "https://hastie.su.domains/Papers/gam.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Trevor Hastie",
+            "Robert Tibshirani"
+          ],
+          "publication_date": "1986-01-01"
+        },
+        {
+          "title": "pyGAM: Generalized Additive Models in Python",
+          "url": "https://github.com/dswah/pyGAM",
+          "source_type": "software_package"
+        },
+        {
+          "title": "mgcv: Mixed GAM Computation Vehicle with Automatic Smoothness Estimation",
+          "url": "https://cran.r-project.org/web/packages/mgcv/index.html",
+          "source_type": "software_package"
+        },
+        {
+          "title": "A Tour of pyGAM — pyGAM documentation",
+          "url": "https://pygam.readthedocs.io/en/latest/notebooks/tour_of_pygam.html",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "acronym": "GAMs",
+      "related_techniques": [
+        "monotonicity-constraints",
+        "intrinsically-interpretable-models"
+      ]
+    },
+    {
+      "slug": "disparate-impact-remover",
+      "name": "Disparate Impact Remover",
+      "description": "Disparate Impact Remover is a preprocessing technique that transforms feature values in a dataset to reduce statistical dependence between features and protected attributes (like race or gender). The method modifies non-protected features through mathematical transformations that preserve the utility of the data whilst reducing correlations that could lead to discriminatory outcomes. This approach specifically targets the '80% rule' disparate impact threshold by adjusting feature distributions to ensure more equitable treatment across demographic groups in downstream model predictions.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/sensitive-attributes",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Transforming features in a credit scoring dataset where variables like 'years of employment' and 'education level' are correlated with race, applying mathematical transformations to reduce these correlations whilst preserving the predictive value for creditworthiness assessment.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Preprocessing a recruitment dataset where features like 'previous job titles' and 'university attended' correlate with gender, modifying these features to ensure the '80% rule' is met whilst maintaining useful information for predicting job performance.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Preprocessing financial lending data to provide transparent bias metrics showing the quantified reduction in correlation between protected attributes and creditworthiness features, enabling institutions to demonstrate compliance with the 80% rule and explain their fairness interventions to regulators.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring consistent model performance across demographic groups in healthcare risk assessment by mathematically transforming features to reduce protected attribute correlations, improving reliability of predictions for minority populations who may have been systematically under-served.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Feature transformations may reduce model accuracy by removing or distorting important predictive information during the debiasing process."
+        },
+        {
+          "description": "Only addresses measured protected attributes and cannot eliminate bias that operates through unmeasured proxy variables."
+        },
+        {
+          "description": "Effectiveness depends on the specific transformation method chosen and may not generalise well to different datasets or domains."
+        },
+        {
+          "description": "May create artificial feature distributions that don't reflect real-world data patterns, potentially causing issues in model deployment."
+        }
+      ],
+      "resources": [
+        {
+          "title": "holistic-ai/holisticai",
+          "url": "https://github.com/holistic-ai/holisticai",
+          "source_type": "software_package",
+          "description": "Comprehensive open-source toolkit for AI fairness with bias measurement, mitigation techniques, and visualisation tools"
+        },
+        {
+          "title": "Disparate Impact Remover — holisticai documentation",
+          "url": "https://holisticai.readthedocs.io/en/latest/getting_started/bias/mitigation/preprocessing/bc_disparate_impact_remover_disparate_impact_remover.html",
+          "source_type": "tutorial",
+          "description": "Comprehensive tutorial covering theoretical background, methodology, and practical implementation of disparate impact removal"
+        },
+        {
+          "title": "Trusted-AI/AIF360",
+          "url": "https://github.com/Trusted-AI/AIF360",
+          "source_type": "software_package",
+          "description": "IBM Research's extensible open-source library for detecting and mitigating algorithmic bias across multiple domains"
+        },
+        {
+          "title": "aif360.algorithms.preprocessing.DisparateImpactRemover — aif360 ...",
+          "url": "https://aif360.readthedocs.io/en/latest/modules/generated/aif360.algorithms.preprocessing.DisparateImpactRemover.html",
+          "source_type": "documentation",
+          "description": "Technical API documentation for AIF360's DisparateImpactRemover class with parameters, methods, and usage examples"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "reweighing",
+        "relabelling",
+        "preferential-sampling"
+      ]
+    },
+    {
+      "slug": "prejudice-remover-regulariser",
+      "name": "Prejudice Remover Regulariser",
+      "description": "An in-processing fairness technique that adds a fairness penalty to machine learning models to reduce bias against protected groups. The method works by minimising 'mutual information' - essentially reducing how much the model's predictions reveal about sensitive attributes like race or gender. By adding this penalty term to the learning objective (typically in logistic regression), the technique ensures predictions become less dependent on protected features. This addresses not only direct discrimination but also indirect bias through correlated features. Practitioners can adjust a tuning parameter to balance between maintaining accuracy and removing prejudice from the model.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/logistic-regression",
+        "applicable-models/probabilistic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training credit scoring models with prejudice remover regularisation to ensure loan approval decisions are not influenced by gender or ethnicity, minimising mutual information between predictions and protected attributes whilst maintaining accurate risk assessment.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Developing transparent university admission models that provide clear evidence of bias mitigation by demonstrating reduced statistical dependence between acceptance decisions and protected characteristics, enabling regulatory compliance reporting.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Building reliable recruitment screening models that maintain consistent performance across demographic groups by regularising against indirect prejudice through correlated features like school names or postal codes that might proxy for protected attributes.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires careful tuning of the fairness penalty hyperparameter, where too high values severely degrade accuracy whilst too low values provide insufficient bias mitigation."
+        },
+        {
+          "description": "Primarily applicable to probabilistic discriminative models like logistic regression, limiting its use with other model architectures such as deep neural networks or tree-based methods."
+        },
+        {
+          "description": "Computational complexity increases with the calculation of mutual information between predictions and sensitive attributes, particularly for high-dimensional data."
+        },
+        {
+          "description": "May not fully eliminate all forms of discrimination, particularly when complex interactions between multiple sensitive attributes create intersectional biases."
+        },
+        {
+          "description": "Effectiveness depends on accurate identification and inclusion of all sensitive attributes, potentially missing hidden biases from unobserved protected characteristics."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Fairness-Aware Classifier with Prejudice Remover Regularizer",
+          "url": "https://link.springer.com/chapter/10.1007/978-3-642-33486-3_3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Toshihiro Kamishima",
+            "Shotaro Akaho",
+            "Hideki Asoh",
+            "Jun Sakuma"
+          ],
+          "publication_date": "2012-09-24"
+        },
+        {
+          "title": "Fairness-Aware Machine Learning and Data Mining",
+          "url": "https://www.kamishima.net/faml/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Fairness-aware Classifier (faclass)",
+          "url": "https://www.kamishima.net/faclass/",
+          "source_type": "software_package"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "adversarial-debiasing",
+        "fair-adversarial-networks",
+        "meta-fair-classifier",
+        "exponentiated-gradient-reduction",
+        "fair-transfer-learning",
+        "adaptive-sensitive-reweighting",
+        "multi-accuracy-boosting"
+      ]
+    },
+    {
+      "slug": "path-specific-counterfactual-fairness-assessment",
+      "name": "Path-Specific Counterfactual Fairness Assessment",
+      "description": "A causal fairness evaluation technique that assesses algorithmic discrimination by examining specific causal pathways in a model's decision-making process. Unlike general counterfactual fairness, this approach enables practitioners to identify and intervene on particular causal paths that may introduce bias whilst preserving other legitimate pathways. The method uses causal graphs to distinguish between direct discrimination (through protected attributes) and indirect discrimination (through seemingly neutral factors that correlate with protected attributes), allowing for more nuanced fairness assessments in complex causal settings.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/causal",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/causal-graph",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "evidence-type/causal-analysis",
+        "expertise-needed/causal-inference",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "fairness-approach/causal",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "technique-type/metric"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating hiring algorithms by identifying which causal pathways from education and experience legitimately affect job performance versus those that introduce gender or racial bias, enabling targeted interventions that preserve merit-based selection whilst eliminating discriminatory pathways.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Analysing loan approval models to provide transparent evidence of which factors legitimately influence creditworthiness versus those that create indirect discrimination, enabling clear explanations to regulators about causal mechanisms underlying fair lending decisions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Assessing medical diagnosis systems to ensure reliable performance by distinguishing between clinically relevant causal pathways (symptoms to diagnosis) and potentially biased pathways (demographics to diagnosis), maintaining diagnostic accuracy whilst preventing healthcare disparities.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires identifying which causal pathways are 'allowable' and which are not—a subjective decision; analyzing specific paths adds complexity to the causal model and the fairness criterion."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Path-Specific Counterfactual Fairness via Dividend Correction",
+          "url": "https://www.semanticscholar.org/paper/197367ee337e8838fd2ef1a887101ddc84eb0612",
+          "source_type": "technical_paper",
+          "authors": [
+            "Daisuke Hatano",
+            "Satoshi Hara",
+            "Hiromi Arai"
+          ]
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "counterfactual-fairness-assessment"
+      ]
+    }
+  ],
+  "count": 8
+}

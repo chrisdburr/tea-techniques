@@ -1,0 +1,93 @@
+{
+  "tag": {
+    "name": "expertise-needed/stakeholder-engagement",
+    "slug": "expertise-needed-stakeholder-engagement",
+    "count": 1,
+    "category": "expertise-needed"
+  },
+  "techniques": [
+    {
+      "slug": "human-in-the-loop-safeguards",
+      "name": "Human-in-the-Loop Safeguards",
+      "description": "Human-in-the-loop safeguards establish systematic checkpoints where human experts review, validate, or override AI/ML system decisions before they take effect. This governance approach combines automated efficiency with human judgement by defining clear intervention criteria (such as uncertainty thresholds, risk levels, or sensitive contexts) that trigger mandatory human oversight. By incorporating domain expertise, ethical considerations, and contextual understanding that machines may lack, these safeguards help ensure that critical decisions maintain appropriate human accountability whilst preserving the benefits of automated processing for routine cases.",
+      "assurance_goals": [
+        "Safety",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "expertise-needed/domain-knowledge",
+        "expertise-needed/stakeholder-engagement",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/process"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Implementing mandatory human physician review for any medical AI diagnostic recommendation before treatment decisions are made, especially for complex cases or when the system confidence is below established thresholds, ensuring patient safety through expert oversight.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Requiring human review of automated loan approval decisions when applicants request explanations or appeal rejections, allowing human underwriters to provide clear reasoning and ensure customers understand the decision-making process behind their application outcomes.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Mandating human oversight when hiring algorithms flag candidates from underrepresented groups for rejection, enabling recruiters to verify that decisions are based on legitimate job-relevant criteria rather than potential algorithmic bias, and providing fair recourse mechanisms.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Scales poorly with high request volumes, creating bottlenecks that can delay critical decisions and potentially overwhelm human reviewers with excessive workload."
+        },
+        {
+          "description": "Introduces significant latency into automated processes, potentially making time-sensitive applications impractical or reducing user satisfaction with slower response times."
+        },
+        {
+          "description": "Human reviewers may experience decision fatigue, leading to decreased attention quality over time and potential inconsistency in review standards across different cases or time periods."
+        },
+        {
+          "description": "Risk of automation bias where humans defer too readily to AI recommendations rather than providing meaningful independent review, undermining the safeguard's effectiveness."
+        },
+        {
+          "description": "Requires significant ongoing investment in human resources, training, and expertise maintenance, making it expensive to implement and sustain across large-scale systems."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Human-in-the-Loop AI: A Comprehensive Guide",
+          "url": "https://www.holisticai.com/blog/human-in-the-loop-ai",
+          "source_type": "tutorial",
+          "description": "Comprehensive guide covering HITL AI collaborative approach, including human oversight throughout AI lifecycle, bias mitigation, ethical alignment, and applications across healthcare, manufacturing, and finance"
+        },
+        {
+          "title": "Improving the Applicability of AI for Psychiatric Applications through Human-in-the-loop Methodologies",
+          "url": "https://core.ac.uk/download/544064129.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Chandler, Chelsea",
+            "Elvevåg, Brita",
+            "Foltz, Peter W."
+          ],
+          "publication_date": "2022-01-01",
+          "description": "Technical paper exploring HITL methodologies for psychiatric AI applications, focusing on improving applicability and clinical effectiveness through human oversight integration"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "internal-review-boards",
+        "red-teaming",
+        "confidence-thresholding",
+        "runtime-monitoring-and-circuit-breakers"
+      ]
+    }
+  ],
+  "count": 1
+}

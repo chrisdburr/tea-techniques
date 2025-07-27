@@ -1,0 +1,103 @@
+{
+  "slug": "area-under-precision-recall-curve",
+  "name": "Area Under Precision-Recall Curve",
+  "description": "Area Under Precision-Recall Curve (AUPRC) measures model performance by plotting precision (the proportion of positive predictions that are correct) against recall (the proportion of actual positives that are correctly identified) at various classification thresholds, then calculating the area under the resulting curve. Unlike accuracy or AUC-ROC, AUPRC is particularly valuable for imbalanced datasets where the minority class is of primary interest---a perfect score is 1.0, whilst random performance equals the positive class proportion. By focusing on the precision-recall trade-off, it provides a more informative assessment than overall accuracy for scenarios where false positives and false negatives have different costs, especially when positive examples are rare.",
+  "assurance_goals": [
+    "Reliability",
+    "Transparency",
+    "Fairness"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/reliability",
+    "assurance-goal-category/transparency",
+    "assurance-goal-category/fairness",
+    "data-requirements/labelled-data",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/ml-engineering",
+    "expertise-needed/statistics",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/system-deployment-and-use",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Evaluating fraud detection models where genuine transactions far outnumber fraudulent ones, using AUPRC to optimise the balance between catching fraud (high recall) and minimising false alarms (high precision) for cost-effective operations.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Providing transparent performance metrics for rare disease detection systems to medical regulators, where AUPRC clearly shows model effectiveness on the minority positive class rather than being masked by high accuracy on negative cases.",
+      "goal": "Transparency"
+    },
+    {
+      "description": "Ensuring fair evaluation of loan default prediction across demographic groups by comparing AUPRC scores, revealing whether models perform equally well at identifying high-risk borrowers regardless of protected characteristics.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "More sensitive to class distribution than ROC curves, making it difficult to compare models across datasets with different positive class proportions or to set universal performance thresholds."
+    },
+    {
+      "description": "Can be overly optimistic on extremely imbalanced datasets where even random predictions may achieve seemingly high AUPRC scores due to the small positive class size."
+    },
+    {
+      "description": "Provides limited insight into performance at specific operating points, requiring additional analysis to determine optimal threshold selection for deployment."
+    },
+    {
+      "description": "Interpolation methods for calculating the area under the curve can vary between implementations, potentially leading to slightly different scores for the same model."
+    },
+    {
+      "description": "Less interpretable than simple metrics like precision or recall at a fixed threshold, making it harder to communicate performance to non-technical stakeholders."
+    }
+  ],
+  "resources": [
+    {
+      "title": "scikit-learn Precision-Recall",
+      "url": "https://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html",
+      "source_type": "documentation",
+      "description": "Comprehensive guide to precision-recall curves and AUPRC calculation in scikit-learn with practical examples"
+    },
+    {
+      "title": "Stochastic Optimization of Areas Under Precision-Recall Curves with Provable Convergence",
+      "url": "https://www.semanticscholar.org/paper/c1b5b9dfc7d6e024097f63947aa5db06e1c192d8",
+      "source_type": "technical_paper",
+      "authors": [
+        "Qi Qi",
+        "Youzhi Luo",
+        "Zhao Xu",
+        "Shuiwang Ji",
+        "Tianbao Yang"
+      ],
+      "description": "Technical paper on optimising AUPRC directly during model training with convergence guarantees"
+    },
+    {
+      "title": "A Closer Look at AUROC and AUPRC under Class Imbalance",
+      "url": "http://arxiv.org/pdf/2401.06091v4",
+      "source_type": "technical_paper",
+      "authors": [
+        "Matthew B. A. McDermott",
+        "Haoran Zhang",
+        "Lasse Hyldig Hansen",
+        "Giovanni Angelotti",
+        "Jack Gallifant"
+      ],
+      "publication_date": "2024-01-11",
+      "description": "Recent analysis of AUPRC behaviour under extreme class imbalance with practical recommendations"
+    },
+    {
+      "title": "DominikRafacz/auprc",
+      "url": "https://github.com/DominikRafacz/auprc",
+      "source_type": "software_package",
+      "description": "R package for calculating AUPRC with functions for plotting precision-recall curves and mlr3 integration"
+    }
+  ],
+  "complexity_rating": 2,
+  "computational_cost_rating": 2,
+  "acronym": "AUPRC",
+  "related_techniques": [
+    "permutation-tests",
+    "cross-validation"
+  ]
+}

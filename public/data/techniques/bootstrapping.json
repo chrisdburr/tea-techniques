@@ -1,0 +1,93 @@
+{
+  "slug": "bootstrapping",
+  "name": "Bootstrapping",
+  "description": "Bootstrapping estimates uncertainty by repeatedly resampling the original dataset with replacement to create many new training sets, training a model on each sample, and analysing the variation in predictions. This approach provides confidence intervals and stability measures without making strong statistical assumptions. By showing how predictions change with different random samples of the data, it reveals how sensitive the model is to the specific training examples and provides robust uncertainty estimates.",
+  "assurance_goals": [
+    "Reliability",
+    "Transparency",
+    "Fairness"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/reliability",
+    "assurance-goal-category/transparency",
+    "assurance-goal-category/fairness",
+    "data-requirements/access-to-training-data",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "explanatory-scope/global",
+    "expertise-needed/ml-engineering",
+    "expertise-needed/statistics",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Estimating uncertainty in financial risk models by resampling historical data to understand how predictions might vary under different historical scenarios.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Providing confidence intervals for medical diagnosis predictions to help doctors understand the reliability of AI recommendations and make more informed treatment decisions.",
+      "goal": "Transparency"
+    },
+    {
+      "description": "Assessing whether prediction uncertainty is consistent across different demographic groups in hiring algorithms, identifying if the model is systematically more uncertain for certain populations.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Computationally expensive as it requires training multiple models on resampled datasets."
+    },
+    {
+      "description": "Does not account for uncertainty in model structure or architecture choices."
+    },
+    {
+      "description": "Cannot detect systematically missing data patterns or biases present in the original dataset."
+    },
+    {
+      "description": "Assumes that the original dataset is representative of the population of interest."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Deterministic bootstrapping for a class of bootstrap methods",
+      "url": "http://arxiv.org/pdf/1903.10816v2",
+      "source_type": "technical_paper",
+      "authors": [
+        "Thomas Pitschel"
+      ],
+      "publication_date": "2019-03-26"
+    },
+    {
+      "title": "A Gentle Introduction to the Bootstrap Method ...",
+      "url": "https://www.machinelearningmastery.com/a-gentle-introduction-to-the-bootstrap-method/",
+      "source_type": "tutorial"
+    },
+    {
+      "title": "scipy.stats.bootstrap",
+      "url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html",
+      "source_type": "software_package"
+    },
+    {
+      "title": "Bootstrapping and bagging — modAL documentation",
+      "url": "https://modal-python.readthedocs.io/en/latest/content/examples/bootstrapping_and_bagging.html",
+      "source_type": "tutorial"
+    },
+    {
+      "title": "Machine Learning: What is Bootstrapping? - KDnuggets",
+      "url": "https://www.kdnuggets.com/2023/03/bootstrapping.html",
+      "source_type": "tutorial"
+    }
+  ],
+  "complexity_rating": 3,
+  "computational_cost_rating": 4,
+  "related_techniques": [
+    "monte-carlo-dropout",
+    "prediction-intervals",
+    "quantile-regression",
+    "conformal-prediction",
+    "deep-ensembles",
+    "jackknife-resampling"
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "slug": "adversarial-debiasing",
+  "name": "Adversarial Debiasing",
+  "description": "Adversarial debiasing reduces bias by training models using a competitive adversarial setup, similar to Generative Adversarial Networks (GANs). The technique involves two neural networks: a predictor that learns to make accurate predictions on the main task, and an adversary (bias detector) that attempts to predict protected attributes (such as race, gender, or age) from the predictor's internal representations. Through adversarial training, the predictor learns to produce representations that retain predictive power for the main task whilst being uninformative about protected characteristics, thereby reducing discriminatory bias.",
+  "assurance_goals": [
+    "Fairness"
+  ],
+  "tags": [
+    "applicable-models/neural-network",
+    "assurance-goal-category/fairness",
+    "assurance-goal-category/fairness/group",
+    "data-requirements/sensitive-attributes",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/ml-engineering",
+    "fairness-approach/group",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Training a resume screening model for a technology company that evaluates candidates based on skills and experience whilst preventing the internal representations from encoding gender or ethnicity information, ensuring hiring decisions cannot be influenced by protected characteristics even indirectly through correlated features.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Developing a credit scoring model for loan approvals that accurately predicts default risk whilst ensuring the model's internal features cannot be used to infer applicants' race or age, thereby preventing discriminatory lending practices whilst maintaining predictive accuracy.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Creating a medical diagnosis model that makes accurate predictions about patient conditions whilst ensuring that the learned representations cannot reveal sensitive demographic information like gender or ethnicity, protecting patient privacy whilst maintaining clinical effectiveness.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Significantly more complex to implement than standard models, requiring expertise in adversarial training techniques and careful architecture design for both predictor and adversary networks."
+    },
+    {
+      "description": "Requires careful hyperparameter tuning to balance the competing objectives of task performance and bias mitigation, as overly strong adversarial training can harm predictive accuracy."
+    },
+    {
+      "description": "Effectiveness heavily depends on the quality and design of the adversary network - a weak adversary may fail to detect subtle biases, whilst an overly strong adversary may eliminate useful information."
+    },
+    {
+      "description": "Training can be unstable and may suffer from convergence issues common to adversarial training, requiring careful learning rate scheduling and regularisation techniques."
+    },
+    {
+      "description": "Provides no formal guarantees about bias elimination and may not prevent all forms of discrimination, particularly when protected attributes can be inferred from other available features."
+    }
+  ],
+  "resources": [
+    {
+      "title": "AI Fairness 360 (AIF360)",
+      "url": "https://github.com/Trusted-AI/AIF360",
+      "source_type": "software_package",
+      "description": "Comprehensive toolkit for bias detection and mitigation including adversarial debiasing implementations"
+    },
+    {
+      "title": "On the Fairness ROAD: Robust Optimization for Adversarial Debiasing",
+      "url": "https://www.semanticscholar.org/paper/0c887592d781538a1b5c2168eae541b563c0ba9a",
+      "source_type": "technical_paper",
+      "authors": [
+        "Vincent Grari",
+        "Thibault Laugel",
+        "Tatsunori B. Hashimoto",
+        "S. Lamprier",
+        "Marcin Detyniecki"
+      ]
+    },
+    {
+      "title": "aif360.sklearn.inprocessing.AdversarialDebiasing — aif360 0.6.1 ...",
+      "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.inprocessing.AdversarialDebiasing.html",
+      "source_type": "documentation"
+    },
+    {
+      "title": "Towards Learning an Unbiased Classifier from Biased Data via Conditional Adversarial Debiasing",
+      "url": "http://arxiv.org/pdf/2103.06179v1",
+      "source_type": "technical_paper",
+      "authors": [
+        "Christian Reimers",
+        "Paul Bodesheim",
+        "Jakob Runge",
+        "Joachim Denzler"
+      ],
+      "publication_date": "2021-03-10"
+    }
+  ],
+  "complexity_rating": 4,
+  "computational_cost_rating": 3,
+  "related_techniques": [
+    "fair-adversarial-networks",
+    "prejudice-remover-regulariser",
+    "meta-fair-classifier",
+    "exponentiated-gradient-reduction",
+    "fair-transfer-learning",
+    "adaptive-sensitive-reweighting",
+    "multi-accuracy-boosting"
+  ]
+}

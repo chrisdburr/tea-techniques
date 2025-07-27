@@ -1,0 +1,72 @@
+{
+  "slug": "saliency-maps",
+  "name": "Saliency Maps",
+  "description": "Saliency maps are visual explanations for image classification models that highlight which pixels in an image most strongly influence the model's prediction. Computed by calculating gradients of the model's output with respect to input pixels, saliency maps produce heatmaps where brighter regions indicate pixels that, when changed, would most significantly affect the prediction. This technique helps users understand which parts of an image the model is 'looking at' when making decisions.",
+  "assurance_goals": [
+    "Explainability",
+    "Fairness"
+  ],
+  "tags": [
+    "applicable-models/neural-network",
+    "assurance-goal-category/explainability",
+    "assurance-goal-category/fairness",
+    "data-requirements/access-to-model-internals",
+    "data-type/image",
+    "evidence-type/visualization",
+    "expertise-needed/ml-engineering",
+    "explanatory-scope/local",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Analysing X-ray images in a pneumonia detection model to verify that the algorithm focuses on lung regions showing inflammatory patterns rather than irrelevant areas like medical equipment or patient positioning markers.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Examining skin lesion classification models to ensure the algorithm identifies diagnostic features (irregular borders, colour variation) rather than artifacts like rulers, hair, or skin markings that shouldn't influence medical decisions.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Auditing a dermatology AI system to verify it focuses on medical symptoms rather than skin colour when diagnosing conditions, ensuring equitable treatment across racial groups by revealing inappropriate attention to demographic features.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Saliency maps are often noisy and can change dramatically with small input perturbations, making them unstable."
+    },
+    {
+      "description": "Highlighted regions may not correspond to semantically meaningful or human-understandable features."
+    },
+    {
+      "description": "Only indicates local gradient information, not causal importance or actual decision-making logic."
+    },
+    {
+      "description": "May highlight irrelevant pixels that happen to have high gradients due to model artifacts rather than meaningful patterns."
+    }
+  ],
+  "resources": [
+    {
+      "title": "utkuozbulak/pytorch-cnn-visualizations",
+      "url": "https://github.com/utkuozbulak/pytorch-cnn-visualizations",
+      "source_type": "software_package"
+    },
+    {
+      "title": "Concepts of Saliency and Explainability in AI",
+      "url": "https://xaitk-saliency.readthedocs.io/en/latest/xaitk_explanation.html",
+      "source_type": "documentation"
+    },
+    {
+      "title": "Occlusion Saliency Example",
+      "url": "https://xaitk-saliency.readthedocs.io/en/latest/examples/OcclusionSaliency.html",
+      "source_type": "tutorial"
+    }
+  ],
+  "complexity_rating": 3,
+  "computational_cost_rating": 2,
+  "related_techniques": [
+    "gradient-weighted-class-activation-mapping",
+    "occlusion-sensitivity"
+  ]
+}

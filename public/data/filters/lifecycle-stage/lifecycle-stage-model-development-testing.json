@@ -1,0 +1,315 @@
+{
+  "tag": {
+    "name": "lifecycle-stage/model-development/testing",
+    "slug": "lifecycle-stage-model-development-testing",
+    "count": 3,
+    "category": "lifecycle-stage"
+  },
+  "techniques": [
+    {
+      "slug": "equalised-odds-post-processing",
+      "name": "Equalised Odds Post-Processing",
+      "description": "A post-processing fairness technique based on Hardt et al.'s seminal work that adjusts classification thresholds after model training to achieve equal true positive rates and false positive rates across demographic groups. The method uses group-specific decision thresholds, potentially with randomisation, to satisfy the equalised odds constraint whilst preserving model utility. This approach enables fairness mitigation without retraining, making it applicable to existing deployed models or when training data access is restricted.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/testing",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Post-processing a criminal recidivism risk assessment model to ensure equal error rates across racial groups, using group-specific thresholds to achieve equal TPR and FPR whilst maintaining predictive accuracy for judicial decision support.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Adjusting a hiring algorithm's decision thresholds to ensure equal opportunities for qualified candidates across gender groups, providing transparent evidence that the screening process treats all demographics equitably.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Calibrating a medical diagnosis model's outputs to maintain equal detection rates across age groups, ensuring reliable performance monitoring and consistent healthcare delivery regardless of patient demographics.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "May require randomisation in decision-making, leading to inconsistent outcomes for similar individuals to achieve group-level fairness constraints."
+        },
+        {
+          "description": "Post-processing can reduce overall model accuracy or confidence scores, particularly when group-specific ROC curves do not intersect favourably."
+        },
+        {
+          "description": "Violates calibration properties of the original model, creating a trade-off between equalised odds and predictive rate parity."
+        },
+        {
+          "description": "Limited to combinations of error rates that lie on the intersection of group-specific ROC curves, which may represent poor trade-offs."
+        },
+        {
+          "description": "Requires access to sensitive attributes during deployment, which may not be available or legally permissible in all contexts."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Equality of Opportunity in Supervised Learning",
+          "url": "https://arxiv.org/abs/1610.02413",
+          "source_type": "technical_paper",
+          "description": "Foundational paper by Hardt et al. introducing the equalised odds post-processing algorithm and mathematical framework for fairness constraints.",
+          "authors": [
+            "Moritz Hardt",
+            "Eric Price",
+            "Nathan Srebro"
+          ],
+          "publication_date": "2016-10-07"
+        },
+        {
+          "title": "Equalized odds postprocessing under imperfect group information",
+          "url": "https://arxiv.org/abs/1906.03284",
+          "source_type": "technical_paper",
+          "description": "Extension of Hardt et al.'s method examining robustness when protected attribute information is imperfect or noisy.",
+          "authors": [
+            "Pranjal Awasthi",
+            "Matthäus Kleindessner",
+            "Jamie Morgenstern"
+          ],
+          "publication_date": "2019-06-07"
+        },
+        {
+          "title": "Fairlearn: ThresholdOptimizer",
+          "url": "https://fairlearn.org/v0.10/api_reference/generated/fairlearn.postprocessing.ThresholdOptimizer.html",
+          "source_type": "documentation",
+          "description": "Microsoft's Fairlearn implementation of the Hardt et al. algorithm with API documentation and usage examples for equalised odds constraints."
+        },
+        {
+          "title": "IBM AIF360",
+          "url": "https://github.com/Trusted-AI/AIF360",
+          "source_type": "software_package",
+          "description": "Comprehensive fairness toolkit including EqualizedOddsPostprocessing implementation based on Hardt et al.'s original algorithm."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "threshold-optimiser",
+        "reject-option-classification",
+        "calibration-with-equality-of-opportunity"
+      ]
+    },
+    {
+      "slug": "calibration-with-equality-of-opportunity",
+      "name": "Calibration with Equality of Opportunity",
+      "description": "A post-processing fairness technique that adjusts model predictions to achieve equal true positive rates across protected groups whilst maintaining calibration within each group. The method addresses fairness by ensuring that qualified individuals from different demographic groups have equal chances of receiving positive predictions, whilst preserving the meaning of probability scores within each group. This technique attempts to balance the competing objectives of group fairness and accurate probability estimation.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/calibration-set",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/testing",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting a loan approval model to ensure that qualified applicants from different ethnic backgrounds have equal approval rates, whilst maintaining that a 70% predicted repayment probability means the same thing for each ethnic group in practice.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Post-processing a university admissions algorithm to equalise acceptance rates for qualified students across gender groups, whilst ensuring the predicted success scores remain well-calibrated within each gender to support transparent decision-making.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Calibrating a medical diagnosis model to maintain equal detection rates for a disease across different age groups whilst preserving the reliability of risk scores, ensuring that a 30% risk prediction accurately reflects actual disease occurrence within each age group.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Fundamental mathematical incompatibility exists between perfect calibration and exact equality of opportunity, except in highly constrained special cases."
+        },
+        {
+          "description": "May reduce overall model accuracy or calibration when forcing equal true positive rates across groups with genuinely different base rates."
+        },
+        {
+          "description": "Requires access to sensitive attributes during post-processing, which may not be available or legally permissible in all contexts."
+        },
+        {
+          "description": "The technique only addresses one aspect of fairness (true positive rates) and may allow disparities in false positive rates between groups."
+        },
+        {
+          "description": "Post-processing approaches cannot address biases inherent in the training data or model architecture, only adjust final predictions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "On Fairness and Calibration",
+          "url": "https://arxiv.org/abs/1709.02012",
+          "source_type": "technical_paper",
+          "description": "Foundational paper demonstrating the mathematical tension between calibration and equalised odds fairness constraints.",
+          "authors": [
+            "Geoff Pleiss",
+            "Manish Raghavan",
+            "Felix Wu",
+            "Jon Kleinberg",
+            "Kilian Q. Weinberger"
+          ],
+          "publication_date": "2017-09-06"
+        },
+        {
+          "title": "equalized_odds_and_calibration",
+          "url": "https://github.com/gpleiss/equalized_odds_and_calibration",
+          "source_type": "software_package",
+          "description": "Python implementation of post-processing methods for achieving calibration with equality of opportunity constraints."
+        },
+        {
+          "title": "Equality of Opportunity in Supervised Learning",
+          "url": "https://arxiv.org/abs/1610.02413",
+          "source_type": "technical_paper",
+          "description": "Original paper introducing the equality of opportunity fairness criterion and post-processing algorithms.",
+          "authors": [
+            "Moritz Hardt",
+            "Eric Price",
+            "Nathan Srebro"
+          ],
+          "publication_date": "2016-10-07"
+        },
+        {
+          "title": "Fairlearn: Postprocessing Methods",
+          "url": "https://fairlearn.org/v0.10/user_guide/mitigation/postprocessing.html",
+          "source_type": "documentation",
+          "description": "Documentation for implementing threshold optimisation and calibration methods to achieve fairness constraints."
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "equalised-odds-post-processing",
+        "threshold-optimiser",
+        "reject-option-classification"
+      ]
+    },
+    {
+      "slug": "equal-opportunity-difference",
+      "name": "Equal Opportunity Difference",
+      "description": "A fairness metric that quantifies discrimination by measuring the difference in true positive rates (recall) between protected and privileged groups. Based on Hardt et al.'s equality of opportunity framework, this metric computes the maximum difference in TPR across demographic groups, with a value of 0 indicating perfect fairness. The technique provides a mathematical measure of whether qualified individuals from different groups have equal chances of receiving positive predictions.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "expertise-needed/low",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/testing",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/metric"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating a loan approval model to ensure that qualified applicants from different ethnic backgrounds have equal approval rates, measuring whether a 90% TPR for qualified white applicants is matched by similar rates for qualified minority applicants.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Auditing a medical diagnosis system to verify that patients with a particular condition are detected at equal rates across age groups, providing transparent evidence that diagnostic accuracy is consistent regardless of patient demographics.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Monitoring a university admissions algorithm in production to ensure that qualified students from different socioeconomic backgrounds have equal acceptance rates, validating the reliability of the fairness properties over time.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Only considers true positive rates and ignores false positive rate disparities, potentially allowing discrimination in the form of unequal false alarm rates between groups."
+        },
+        {
+          "description": "Requires accurate ground truth labels for the positive class, which may be biased or unavailable in some domains."
+        },
+        {
+          "description": "Improving TPR for one group might increase FPR for that group, creating trade-offs between different types of fairness."
+        },
+        {
+          "description": "Does not account for intersectional fairness across multiple protected attributes simultaneously."
+        },
+        {
+          "description": "May not capture fairness concerns for the negative class or individuals who should not receive positive predictions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "aif360.sklearn.metrics.equal_opportunity_difference — aif360 0.6.1 ...",
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.metrics.equal_opportunity_difference.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Welcome to TransparentAI's documentation! — TransparentAI 0.1.0 ...",
+          "url": "https://transparentai.readthedocs.io/en/latest/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "lale.lib.aif360.util module — LALE 0.9.0-dev documentation",
+          "url": "https://lale.readthedocs.io/en/latest/modules/lale.lib.aif360.util.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "IBM/bias-mitigation-of-machine-learning-models-using-aif360",
+          "url": "https://github.com/IBM/bias-mitigation-of-machine-learning-models-using-aif360",
+          "source_type": "software_package"
+        },
+        {
+          "title": "aif360.algorithms.postprocessing.RejectOptionClassification ...",
+          "url": "https://aif360.readthedocs.io/en/latest/modules/generated/aif360.algorithms.postprocessing.RejectOptionClassification.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "demographic-parity-assessment",
+        "average-odds-difference"
+      ]
+    }
+  ],
+  "count": 3
+}

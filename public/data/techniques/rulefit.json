@@ -1,0 +1,93 @@
+{
+  "slug": "rulefit",
+  "name": "RuleFit",
+  "description": "RuleFit is a method that creates an interpretable model by combining linear terms with decision rules. It first extracts potential rules from ensemble trees, then builds a sparse linear model where those rules (binary conditions) and original features are used as predictors, with regularization to keep the model simple. The final model is a linear combination of a small set of rules and original features, balancing interpretability with predictive power.",
+  "assurance_goals": [
+    "Explainability",
+    "Transparency"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/explainability",
+    "assurance-goal-category/transparency",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/statistics",
+    "explanatory-scope/global",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Building customer churn prediction models with rules like 'IF contract_length < 12_months AND support_calls > 5 THEN churn_risk = high', allowing marketing teams to understand and act on the key drivers of customer attrition.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Creating credit scoring models that combine traditional linear factors (income, age) with interpretable rules (IF recent_missed_payments = 0 AND account_age > 2_years THEN creditworthy), providing transparent lending decisions.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Developing regulatory-compliant medical diagnosis models where treatment recommendations combine clinical measurements with clear decision rules (IF blood_pressure > 140 AND diabetes = true THEN high_risk), enabling audit trails for healthcare decisions.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Can generate large numbers of rules even with regularisation, potentially overwhelming users and reducing practical interpretability."
+    },
+    {
+      "description": "Performance may be inferior to complex ensemble methods when rule complexity is constrained for interpretability."
+    },
+    {
+      "description": "Rule extraction quality depends heavily on the underlying tree ensemble, which may miss important feature interactions if not properly configured."
+    },
+    {
+      "description": "Requires careful hyperparameter tuning to balance between model complexity and interpretability, with no universal optimal setting."
+    }
+  ],
+  "resources": [
+    {
+      "title": "christophM/rulefit",
+      "url": "https://github.com/christophM/rulefit",
+      "source_type": "software_package"
+    },
+    {
+      "title": "Tree Ensembles with Rule Structured Horseshoe Regularization",
+      "url": "http://arxiv.org/pdf/1702.05008v2",
+      "source_type": "technical_paper",
+      "authors": [
+        "Malte Nalenz",
+        "Mattias Villani"
+      ],
+      "publication_date": "2017-02-16"
+    },
+    {
+      "title": "Safe RuleFit: Learning Optimal Sparse Rule Model by Meta Safe Screening",
+      "url": "http://arxiv.org/pdf/1810.01683v2",
+      "source_type": "technical_paper",
+      "authors": [
+        "Hiroki Kato",
+        "Hiroyuki Hanada",
+        "Ichiro Takeuchi"
+      ],
+      "publication_date": "2018-10-03"
+    },
+    {
+      "title": "csinva/imodels",
+      "url": "https://github.com/csinva/imodels",
+      "source_type": "software_package"
+    },
+    {
+      "title": "Getting More From Regression Models with RuleFit | Towards Data ...",
+      "url": "https://towardsdatascience.com/getting-more-from-regression-models-with-rulefit-2e6be8d77432/",
+      "source_type": "tutorial"
+    }
+  ],
+  "complexity_rating": 3,
+  "computational_cost_rating": 3,
+  "related_techniques": [
+    "ridge-regression-surrogates",
+    "model-distillation"
+  ]
+}

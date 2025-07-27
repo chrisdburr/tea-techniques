@@ -1,0 +1,109 @@
+{
+  "slug": "temperature-scaling",
+  "name": "Temperature Scaling",
+  "description": "Temperature scaling adjusts a model's confidence by applying a single parameter (temperature) to its predictions. When a model is too confident in its wrong answers, temperature scaling can fix this by making the predictions more realistic. It works by dividing the model's outputs by the temperature value before converting them to probabilities. Higher temperatures make the model less confident, whilst lower temperatures increase confidence. The technique maintains the model's accuracy whilst ensuring that when it says it's 90% confident, it's actually right about 90% of the time.",
+  "assurance_goals": [
+    "Reliability",
+    "Transparency",
+    "Fairness"
+  ],
+  "tags": [
+    "applicable-models/neural-network",
+    "assurance-goal-category/reliability",
+    "assurance-goal-category/transparency",
+    "assurance-goal-category/fairness",
+    "data-requirements/access-to-model-internals",
+    "data-requirements/calibration-set",
+    "data-requirements/validation-set",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "explanatory-scope/global",
+    "expertise-needed/statistics",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Adjusting a deep learning image classifier's confidence scores to be realistic, ensuring that when it's 90% confident, it's right 90% of the time.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Making medical diagnosis model predictions more trustworthy by providing realistic confidence scores that doctors can interpret and use to make informed decisions about patient care.",
+      "goal": "Transparency"
+    },
+    {
+      "description": "Ensuring fair treatment across patient demographics by calibrating confidence scores equally across different groups, preventing systematic over-confidence in predictions for certain populations.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Only addresses calibration at the overall dataset level, not subgroup-specific miscalibration issues."
+    },
+    {
+      "description": "Does not improve the rank ordering or accuracy of predictions, only adjusts confidence levels."
+    },
+    {
+      "description": "Assumes that calibration errors are consistent across different types of inputs and feature values."
+    },
+    {
+      "description": "Requires a separate validation set for temperature parameter optimisation, which may not be available in small datasets."
+    }
+  ],
+  "resources": [
+    {
+      "title": "gpleiss/temperature_scaling",
+      "url": "https://github.com/gpleiss/temperature_scaling",
+      "source_type": "software_package"
+    },
+    {
+      "title": "Exploring the Impact of Temperature Scaling in Softmax for Classification and Adversarial Robustness",
+      "url": "http://arxiv.org/pdf/2502.20604v1",
+      "source_type": "technical_paper",
+      "authors": [
+        "Hao Xuan",
+        "Bokai Yang",
+        "Xingyu Li"
+      ],
+      "publication_date": "2025-02-28"
+    },
+    {
+      "title": "Neural Clamping: Joint Input Perturbation and Temperature Scaling for Neural Network Calibration",
+      "url": "http://arxiv.org/pdf/2209.11604v2",
+      "source_type": "technical_paper",
+      "authors": [
+        "Yung-Chen Tang",
+        "Pin-Yu Chen",
+        "Tsung-Yi Ho"
+      ],
+      "publication_date": "2024-07-24"
+    },
+    {
+      "title": "On Calibration of Modern Neural Networks | arXiv",
+      "url": "https://arxiv.org/abs/1706.04599",
+      "source_type": "technical_paper",
+      "authors": [
+        "Chuan Guo",
+        "Geoff Pleiss",
+        "Yu Sun",
+        "Kilian Q. Weinberger"
+      ],
+      "publication_date": "2017-06-14"
+    },
+    {
+      "title": "On the Limitations of Temperature Scaling for Distributions with Overlaps",
+      "url": "http://arxiv.org/pdf/2306.00740v3",
+      "source_type": "technical_paper",
+      "authors": [
+        "Muthu Chidambaram",
+        "Rong Ge"
+      ],
+      "publication_date": "2023-06-01"
+    }
+  ],
+  "complexity_rating": 1,
+  "computational_cost_rating": 1,
+  "related_techniques": [
+    "empirical-calibration"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Tag",
+  "description": "Schema for a tag in the TEA Techniques database",
+  "type": "object",
+  "required": ["name", "slug", "count", "category"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Full tag name including category",
+      "pattern": "^[a-z-]+/[a-z-]+(?:/[a-z-]+)*$",
+      "examples": [
+        "applicable-models/agnostic",
+        "data-type/text",
+        "lifecycle-stage/model-development"
+      ]
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL-friendly identifier for the tag",
+      "pattern": "^[a-z-]+$",
+      "examples": ["applicable-models-agnostic", "data-type-text"]
+    },
+    "count": {
+      "type": "integer",
+      "description": "Number of techniques with this tag",
+      "minimum": 0
+    },
+    "category": {
+      "type": "string",
+      "description": "Category this tag belongs to",
+      "enum": [
+        "applicable-models",
+        "assurance-goal-category",
+        "data-requirements",
+        "data-type",
+        "evidence-type",
+        "expertise-needed",
+        "explanatory-scope",
+        "fairness-approach",
+        "lifecycle-stage",
+        "technique-type"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,100 @@
+{
+  "slug": "shapley-additive-explanations",
+  "name": "SHapley Additive exPlanations",
+  "description": "SHAP explains model predictions by quantifying how much each input feature contributes to the outcome. It assigns an importance score to every feature, indicating whether it pushes the prediction towards or away from the average. The method systematically evaluates how predictions change as features are included or excluded, drawing on game theory concepts to ensure a fair distribution of contributions.",
+  "assurance_goals": [
+    "Explainability",
+    "Fairness",
+    "Reliability"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/explainability",
+    "assurance-goal-category/explainability/feature-analysis",
+    "assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
+    "assurance-goal-category/fairness",
+    "assurance-goal-category/reliability",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/statistics",
+    "explanatory-scope/global",
+    "explanatory-scope/local",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Analysing a customer churn prediction model to understand why a specific high-value customer was flagged as likely to leave, revealing that recent support ticket interactions and declining purchase frequency were the main drivers.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Auditing a loan approval model by comparing SHAP values for applicants from different demographic groups, ensuring that protected characteristics like race or gender do not have an undue influence on credit decisions.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Validating a medical diagnosis model by confirming that its predictions are based on relevant clinical features (e.g., blood pressure, cholesterol levels) rather than spurious correlations (e.g., patient ID or appointment time), thereby improving model reliability.",
+      "goal": "Reliability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Assumes feature independence, which can produce misleading explanations when features are highly correlated, as the model may attribute importance to features that are merely proxies for others."
+    },
+    {
+      "description": "Computationally expensive for models with many features or large datasets, as the number of required predictions grows exponentially with the number of features."
+    },
+    {
+      "description": "The choice of background dataset for generating explanations can significantly influence the results, requiring careful selection to ensure a representative baseline."
+    },
+    {
+      "description": "Global explanations derived from averaging local SHAP values may obscure important heterogeneous effects where features impact subgroups of the population differently."
+    }
+  ],
+  "resources": [
+    {
+      "title": "shap/shap",
+      "url": "https://github.com/shap/shap",
+      "source_type": "software_package"
+    },
+    {
+      "title": "Introduction to SHapley Additive exPlanations (SHAP) — XAI Tutorials",
+      "url": "https://xai-tutorials.readthedocs.io/en/latest/_model_agnostic_xai/shap.html",
+      "source_type": "tutorial"
+    },
+    {
+      "title": "An empirical study of the effect of background data size on the stability of SHapley Additive exPlanations (SHAP) for deep learning models",
+      "url": "http://arxiv.org/pdf/2204.11351v3",
+      "source_type": "technical_paper",
+      "authors": [
+        "Han Yuan",
+        "Mingxuan Liu",
+        "Lican Kang",
+        "Chenkui Miao",
+        "Ying Wu"
+      ],
+      "publication_date": "2022-04-24"
+    },
+    {
+      "title": "SHAP: Shapley Additive Explanations | Towards Data Science",
+      "url": "https://towardsdatascience.com/shap-shapley-additive-explanations-5a2a271ed9c3/",
+      "source_type": "tutorial"
+    },
+    {
+      "title": "MAIF/shapash",
+      "url": "https://github.com/MAIF/shapash",
+      "source_type": "software_package"
+    }
+  ],
+  "complexity_rating": 3,
+  "computational_cost_rating": 4,
+  "acronym": "SHAP",
+  "related_techniques": [
+    "integrated-gradients",
+    "deeplift",
+    "layer-wise-relevance-propagation",
+    "local-interpretable-model-agnostic-explanations",
+    "contrastive-explanation-method",
+    "anchor"
+  ]
+}

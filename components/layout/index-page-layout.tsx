@@ -137,8 +137,8 @@ export function IndexPageLayout({
                       href={child.href}
                       key={child.href}
                     >
-                      <Card className="h-full transition-shadow hover:shadow-lg">
-                        <CardHeader>
+                      <Card className="flex h-full flex-col transition-shadow hover:shadow-lg">
+                        <CardHeader className="flex-1">
                           <div className="flex items-start justify-between">
                             <div className="flex items-center gap-3">
                               {Icon && (
@@ -257,8 +257,8 @@ export function IndexPageLayout({
                       href={child.href}
                       key={child.href}
                     >
-                      <Card className="h-full transition-shadow hover:shadow-lg">
-                        <CardHeader>
+                      <Card className="flex h-full flex-col transition-shadow hover:shadow-lg">
+                        <CardHeader className="flex-1">
                           <div className="flex items-start justify-between">
                             <div className="flex items-center gap-3">
                               {Icon && (

@@ -46,9 +46,9 @@ export function TechniqueTags({ technique }: TechniqueTagsProps) {
       <div className="space-y-6">
         {Object.entries(filteredTagsByCategory).map(([category, tags]) => {
           // For hierarchical tags, only show the most specific ones
-          const uniqueTags = tags.filter((tag) => {
+          const uniqueTags = (tags as string[]).filter((tag) => {
             // Check if this tag is a parent of any other tag in the list
-            return !tags.some(
+            return !(tags as string[]).some(
               (otherTag) => otherTag !== tag && otherTag.startsWith(`${tag}/`)
             );
           });
@@ -59,7 +59,7 @@ export function TechniqueTags({ technique }: TechniqueTagsProps) {
                 {formatTagCategory(category)}
               </h3>
               <div className="flex flex-wrap gap-2">
-                {uniqueTags.map((tag) => {
+                {uniqueTags.map((tag: string) => {
                   // Get only the last part of the tag for display
                   const tagParts = tag.split('/');
                   const lastPart = tagParts.at(-1) ?? tag;

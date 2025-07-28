@@ -5,6 +5,7 @@ import Link from 'next/link';
 import {
   BookOpen,
   ChevronRight,
+  ExternalLink,
   Filter,
   Grid3X3,
   Home,
@@ -178,6 +179,13 @@ export function NavMain() {
     },
   ];
 
+  // Add GitHub link as a separate item
+  const githubItem: NavigationItem = {
+    title: 'GitHub',
+    url: 'https://github.com/alan-turing-institute/tea-techniques',
+    icon: ExternalLink,
+  };
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Navigation</SidebarGroupLabel>
@@ -235,6 +243,16 @@ export function NavMain() {
             )}
           </SidebarMenuItem>
         ))}
+
+        {/* GitHub Link */}
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild tooltip={githubItem.title}>
+            <a href={githubItem.url} rel="noopener noreferrer" target="_blank">
+              {githubItem.icon && <githubItem.icon />}
+              <span>{githubItem.title}</span>
+            </a>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>
   );

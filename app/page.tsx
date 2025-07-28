@@ -108,7 +108,7 @@ export default function Home() {
             <CardContent>
               <p className="text-muted-foreground">
                 TEA Techniques is designed to be an open, collaborative resource
-                for the AI ethics community.
+                for the Responsible AI community.
               </p>
             </CardContent>
           </Card>
@@ -121,7 +121,7 @@ export default function Home() {
           <h2 className="font-bold text-3xl">Ready to get started?</h2>
           <p className="mx-auto max-w-2xl text-muted-foreground text-xl">
             Explore our database of techniques to help ensure your AI systems
-            are trustworthy and ethically developed.
+            are trustworthy and ethical.
           </p>
           <div className="pt-4">
             <Button asChild size="lg">

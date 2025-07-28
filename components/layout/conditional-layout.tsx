@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
+import { Footer } from '@/components/layout/footer';
 import { HomepageHeader } from '@/components/layout/homepage-header';
 
 // Lazy load the sidebar components for non-homepage routes
@@ -21,9 +22,10 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
 
   if (isHomepage) {
     return (
-      <div className="min-h-screen">
+      <div className="flex min-h-screen flex-col">
         <HomepageHeader />
-        <main>{children}</main>
+        <main className="flex-1">{children}</main>
+        <Footer />
       </div>
     );
   }

@@ -1,3 +1,5 @@
+import { ExternalLink } from '@/components/icons';
+
 export function Footer() {
   return (
     <footer className="mt-auto border-t bg-background">
@@ -48,26 +50,13 @@ export function Footer() {
             <ul className="space-y-2 text-muted-foreground text-sm">
               <li>
                 <a
-                  className="transition-colors hover:text-primary"
-                  href="/about/project-info"
+                  className="flex items-center gap-2 transition-colors hover:text-primary"
+                  href="https://github.com/alan-turing-institute/tea-techniques"
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
-                  Project Information
-                </a>
-              </li>
-              <li>
-                <a
-                  className="transition-colors hover:text-primary"
-                  href="/about/tag-definitions"
-                >
-                  Tag Definitions
-                </a>
-              </li>
-              <li>
-                <a
-                  className="transition-colors hover:text-primary"
-                  href="/docs/developer-instructions"
-                >
-                  Developer Instructions
+                  <ExternalLink className="h-4 w-4" />
+                  <span>GitHub</span>
                 </a>
               </li>
             </ul>
@@ -75,9 +64,7 @@ export function Footer() {
         </div>
 
         <div className="mt-8 border-t pt-8 text-center text-muted-foreground text-sm">
-          <p>
-            &copy; 2025 TEA Techniques. Built as a static site with Next.js.
-          </p>
+          <p>&copy; 2025 Alan Turing Institute. Built using Next.js.</p>
         </div>
       </div>
     </footer>

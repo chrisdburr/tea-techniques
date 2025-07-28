@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ArrowRight, Search, X } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import GoalIcon from '@/components/ui/goal-icon';
+import { getAssetPath } from '@/lib/config';
 import type { Technique } from '@/lib/types';
 
 interface SearchResult {
@@ -37,17 +38,17 @@ export function SearchModal({ category }: SearchModalProps = {}) {
 
       // Determine which search index to load
       const loadSearchData = async () => {
-        let searchIndexUrl = '/data/search-index.json';
+        let searchIndexUrl = getAssetPath('/data/search-index.json');
 
         // If category is specified, try to load category-specific index
         if (category) {
           try {
-            const manifest = await fetch('/data/search-manifest.json').then(
-              (res) => res.json()
-            );
+            const manifest = await fetch(
+              getAssetPath('/data/search-manifest.json')
+            ).then((res) => res.json());
             const categorySlug = category.toLowerCase().replace(/\s+/g, '-');
             if (manifest.categories?.[categorySlug]) {
-              searchIndexUrl = manifest.categories[categorySlug];
+              searchIndexUrl = getAssetPath(manifest.categories[categorySlug]);
             }
           } catch {
             // Fall back to global index if manifest doesn't exist

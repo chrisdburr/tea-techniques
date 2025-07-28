@@ -15,7 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export const frontmatter = {
   title: 'Data Serving',
-  description: 'How TEA Techniques serves data through GitHub to simulate an API.',
+  description: 'How TEA Techniques serves data through GitHub to simulate an API',
   breadcrumbs: [
     { label: 'Home', href: '/' },
     { label: 'Docs', href: '/docs' },
@@ -37,11 +37,9 @@ export default function ApiDataServingPage({ children }) {
   This page explains the approach used to serve static data files as "API endpoints" via a GitHub repository.
 </Callout>
 
-TEA Techniques provides programmatic access to its data through a collection of static JSON files hosted on GitHub Pages. While not a traditional API with a server processing requests, this approach allows users or developers to fetch technique data, and filtered collections using standard HTTP requests.
+TEA Techniques provides programmatic access to its data through a collection of static JSON files hosted on GitHub Pages. While not a traditional RESTful API, this approach allows users or developers to fetch technique data and filtered collections using standard HTTP requests. Developers can integrate TEA Techniques data into their applications just as they would with any API. The files are served with proper CORS headers, cached by GitHub's CDN, and available without authentication.
 
-Developers can integrate TEA Techniques data into their applications just as they would with any REST API. The files are served with proper CORS headers, cached by GitHub's CDN, and available without authentication.
-
-This documentation outlines the available endpoints, data structures, and best practices for consuming the TEA Techniques data in your projects.
+This documentation outlines the available "endpoints", data structures, and best practices for using the TEA Techniques data in your projects.
 
 ## Overview
 
@@ -53,7 +51,7 @@ The TEA Techniques static API follows a simple three-step process:
 
 ### Build Process Details
 
-During the build process, our data generation scripts transform the master `techniques.json` file into:
+During the build process, our data generation scripts transforms the master `techniques.json` file into:
 
 - **92 individual technique files**: One JSON file per technique for efficient loading
 - **7 category files**: Pre-filtered techniques for each assurance goal
@@ -67,8 +65,8 @@ The build process results in the following directory structure:
 
 ```
 /data/
-├── techniques.json              # Master data file
-├── techniques-metadata.json     # Lightweight metadata for all techniques
+├── techniques.json             # Master data file
+├── techniques-metadata.json    # Lightweight metadata for all techniques
 ├── assurance-goals.json        # Definitions of the 6 goals
 ├── tags.json                   # All 116 tags with categories
 ├── search-index.json           # Global search index
@@ -101,7 +99,7 @@ These endpoints provide the primary data structures used throughout the applicat
   <TableBody>
     <TableRow>
       <TableCell className="font-mono text-sm">GET /data/techniques.json</TableCell>
-      <TableCell><Badge variant="outline">~429KB</Badge></TableCell>
+      <TableCell><Badge variant="outline">~433KB</Badge></TableCell>
       <TableCell>Complete list of all 92 techniques with full metadata</TableCell>
       <TableCell>Main data source for technique listings and search</TableCell>
     </TableRow>
@@ -162,12 +160,12 @@ Available goals:
 - `security` - Techniques for system protection
 - `transparency` - Techniques for documentation and disclosure
 
-### Filter Endpoints
+### Tag Endpoints
 
 Pre-computed results for every tag filter combination:
 
 ```
-GET /data/filters/[category]/[tag].json
+GET /data/filters/[tag-category]/[tag].json
 ```
 
 Categories include:
@@ -178,15 +176,9 @@ Categories include:
 - `technique-type` - Implementation approach (e.g., algorithmic, documentation)
 - `expertise-needed` - Required skills (e.g., statistics, ml-engineering)
 
-### Search Indices
-
-Goal-specific search indices for scoped searching:
-
-```
-GET /data/search/[goal]-index.json
-```
-
-These provide optimised Fuse.js indices for searching within specific assurance goals.
+<Callout variant="info" title="Tag Definitions">
+  See [Tag Definitions](../../about/tag-definitions/) for further information about all of our tags, including their definitions.
+</Callout>
 
 ## Implementation Examples
 

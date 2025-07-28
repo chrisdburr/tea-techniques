@@ -37,9 +37,9 @@ const nextConfig = {
   // Disable powered by header
   poweredByHeader: false,
 
-  // Configure for potential GitHub Pages deployment
-  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
-  assetPrefix: process.env.NEXT_PUBLIC_ASSET_PREFIX || '',
+  // Configure for GitHub Pages deployment
+  basePath: '/tea-techniques',
+  assetPrefix: '/tea-techniques',
 
   // Performance budgets and optimizations
   experimental: {

@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
+import { getAssetPath } from '@/lib/config';
 import { cn } from '@/lib/utils';
 
 interface LogoProps {
@@ -35,8 +36,8 @@ export function Logo({ className, size = 32 }: LogoProps) {
       height={size}
       src={
         resolvedTheme === 'dark'
-          ? '/logo-dark-mode.png'
-          : '/logo-light-mode.png'
+          ? getAssetPath('/logo-dark-mode.png')
+          : getAssetPath('/logo-light-mode.png')
       }
       width={size}
     />

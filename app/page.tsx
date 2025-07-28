@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { getAssetPath } from '@/lib/config';
 // Force static rendering for static export
 export const dynamic = 'force-static';
 
@@ -47,7 +48,7 @@ export default function Home() {
               className="w-full object-cover"
               height={500}
               priority
-              src="/hero.jpg"
+              src={getAssetPath('/hero.jpg')}
               width={800}
             />
           </div>

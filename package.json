@@ -28,7 +28,8 @@
     "validate:verbose": "node scripts/validate-data.js --verbose",
     "validate:routes": "tsx scripts/validate-tag-routes.ts",
     "generate-schemas": "node scripts/generate-schemas.js",
-    "prebuild": "pnpm run generate-data && pnpm run validate && pnpm run generate-sitemap"
+    "prebuild": "pnpm run generate-data && pnpm run validate && pnpm run generate-sitemap",
+    "prepare": "husky"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",
@@ -73,6 +74,8 @@
     "autoprefixer": "^10.4.20",
     "bundle-phobia-cli": "^0.14.14",
     "chalk": "^5.3.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
     "playwright": "^1.54.1",
     "postcss": "^8.5.0",
     "prettier": "^3.6.2",
@@ -85,5 +88,20 @@
     "ultracite": "5.0.48",
     "web-vitals": "^5.0.3",
     "webpack-bundle-analyzer": "^4.10.2"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs,cjs}": [
+      "pnpm lint",
+      "pnpm format"
+    ],
+    "*.{md,mdx}": [
+      "pnpm format"
+    ],
+    "**/*.{ts,tsx}": [
+      "bash -c 'pnpm type-check'"
+    ],
+    "public/data/**/*.json": [
+      "bash -c 'pnpm validate'"
+    ]
   }
 }

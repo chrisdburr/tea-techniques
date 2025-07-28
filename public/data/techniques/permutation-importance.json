@@ -1,0 +1,92 @@
+{
+  "slug": "permutation-importance",
+  "name": "Permutation Importance",
+  "description": "Permutation Importance quantifies a feature's contribution to a model's performance by randomly shuffling its values and measuring the resulting drop in predictive accuracy. If shuffling a feature significantly degrades the model's performance, that feature is considered important. This model-agnostic technique helps identify which inputs are genuinely driving predictions, rather than just being correlated with the outcome.",
+  "assurance_goals": [
+    "Explainability",
+    "Reliability"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/explainability",
+    "assurance-goal-category/explainability/feature-analysis",
+    "assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
+    "assurance-goal-category/reliability",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/statistics",
+    "explanatory-scope/global",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Assessing which patient characteristics (e.g., age, blood pressure, cholesterol) are most critical for a medical diagnosis model by observing the performance drop when each characteristic's values are randomly shuffled, ensuring the model relies on clinically relevant factors.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Validating the robustness of a fraud detection model by permuting features like transaction amount or location, and confirming that the model's ability to detect fraud significantly decreases only for truly important features, thereby improving confidence in its reliability.",
+      "goal": "Reliability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Can be misleading when features are highly correlated, as shuffling one feature might indirectly affect others, leading to an overestimation of its importance."
+    },
+    {
+      "description": "Computationally expensive for large datasets or complex models, as it requires re-evaluating the model many times for each feature."
+    },
+    {
+      "description": "Does not account for interactions between features; it measures the marginal importance of a feature, assuming other features remain unchanged."
+    },
+    {
+      "description": "The choice of metric for evaluating performance drop (e.g., accuracy, F1-score) can influence the perceived importance of features."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Asymptotic Unbiasedness of the Permutation Importance Measure in Random Forest Models",
+      "url": "http://arxiv.org/pdf/1912.03306v1",
+      "source_type": "technical_paper",
+      "authors": [
+        "Burim Ramosaj",
+        "Markus Pauly"
+      ],
+      "publication_date": "2019-12-05"
+    },
+    {
+      "title": "eli5.permutation_importance — ELI5 0.15.0 documentation",
+      "url": "https://eli5.readthedocs.io/en/latest/autodocs/permutation_importance.html",
+      "source_type": "documentation"
+    },
+    {
+      "title": "Permutation Importance — PermutationImportance 1.2.1.5 ...",
+      "url": "https://permutationimportance.readthedocs.io/en/latest/permutation.html",
+      "source_type": "documentation"
+    },
+    {
+      "title": "parrt/random-forest-importances",
+      "url": "https://github.com/parrt/random-forest-importances",
+      "source_type": "software_package"
+    },
+    {
+      "title": "Statistically Valid Variable Importance Assessment through Conditional Permutations",
+      "url": "http://arxiv.org/pdf/2309.07593v2",
+      "source_type": "technical_paper",
+      "authors": [
+        "Ahmad Chamma",
+        "Denis A. Engemann",
+        "Bertrand Thirion"
+      ],
+      "publication_date": "2023-09-14"
+    }
+  ],
+  "complexity_rating": 2,
+  "computational_cost_rating": 3,
+  "related_techniques": [
+    "mean-decrease-impurity",
+    "coefficient-magnitudes-in-linear-models",
+    "sobol-indices"
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "slug": "layer-wise-relevance-propagation",
+  "name": "Layer-wise Relevance Propagation",
+  "description": "Layer-wise Relevance Propagation (LRP) explains neural network predictions by working backwards through the network to show how much each input feature contributed to the final decision. It follows a simple conservation rule: the total contribution scores always add up to the original prediction. Starting from the output, LRP distributes 'relevance' backwards through each layer using different rules depending on the layer type. This creates a detailed breakdown showing which input features helped or hindered the prediction, making it easier to understand why the network made a particular decision.",
+  "assurance_goals": [
+    "Explainability",
+    "Transparency"
+  ],
+  "tags": [
+    "applicable-models/neural-network",
+    "assurance-goal-category/explainability",
+    "assurance-goal-category/transparency",
+    "data-requirements/access-to-model-internals",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/ml-engineering",
+    "explanatory-scope/local",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/system-deployment-and-use",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Identifying which pixels in chest X-rays contribute to pneumonia detection, helping radiologists verify AI diagnoses by highlighting anatomical regions the model considers relevant.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Debugging a neural network's misclassification of handwritten digits by tracing relevance through layers to identify which input pixels caused the error and which network layers amplified it.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Providing transparent explanations for automated credit scoring decisions by showing which financial features received positive or negative relevance scores, enabling clear regulatory reporting.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Requires different propagation rules for each layer type, making implementation complex for new architectures."
+    },
+    {
+      "description": "Can produce negative relevance scores which may be difficult to interpret intuitively."
+    },
+    {
+      "description": "Rule selection (LRP-ε, LRP-γ, etc.) significantly affects results and requires domain expertise."
+    },
+    {
+      "description": "Limited to feedforward networks and may not work well with modern architectures like transformers without substantial modifications."
+    }
+  ],
+  "resources": [
+    {
+      "title": "rachtibat/LRP-eXplains-Transformers",
+      "url": "https://github.com/rachtibat/LRP-eXplains-Transformers",
+      "source_type": "software_package"
+    },
+    {
+      "title": "sebastian-lapuschkin/lrp_toolbox",
+      "url": "https://github.com/sebastian-lapuschkin/lrp_toolbox",
+      "source_type": "software_package"
+    },
+    {
+      "title": "Getting started — zennit documentation",
+      "url": "https://zennit.readthedocs.io/en/latest/getting-started.html",
+      "source_type": "documentation"
+    },
+    {
+      "title": "Layer-wise Relevance Propagation eXplains Transformers (LXT) documentation",
+      "url": "https://lxt.readthedocs.io/",
+      "source_type": "documentation"
+    },
+    {
+      "title": "On Pixel-Wise Explanations for Non-Linear Classifier Decisions by Layer-Wise Relevance Propagation",
+      "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0130140",
+      "source_type": "technical_paper",
+      "authors": [
+        "Sebastian Bach",
+        "Alexander Binder",
+        "Grégoire Montavon",
+        "Frederick Klauschen",
+        "Klaus-Robert Müller",
+        "Wojciech Samek"
+      ],
+      "publication_date": "2015-07-10"
+    }
+  ],
+  "complexity_rating": 5,
+  "computational_cost_rating": 3,
+  "acronym": "LRP",
+  "related_techniques": [
+    "shapley-additive-explanations",
+    "integrated-gradients",
+    "deeplift",
+    "local-interpretable-model-agnostic-explanations",
+    "contrastive-explanation-method",
+    "anchor"
+  ]
+}

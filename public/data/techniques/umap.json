@@ -1,0 +1,85 @@
+{
+  "slug": "umap",
+  "name": "UMAP",
+  "description": "UMAP (Uniform Manifold Approximation and Projection) is a non-linear dimensionality reduction technique that creates 2D or 3D visualisations of high-dimensional data by constructing a mathematical model of the data's underlying manifold structure. Unlike t-SNE, UMAP preserves both local neighbourhood relationships and global topology more effectively, using techniques from topological data analysis and Riemannian geometry. This approach often produces more interpretable cluster layouts while maintaining meaningful distances between clusters, making it particularly valuable for exploratory data analysis and understanding complex dataset structures.",
+  "assurance_goals": [
+    "Explainability"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/explainability",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/visualization",
+    "expertise-needed/statistics",
+    "explanatory-scope/global",
+    "lifecycle-stage/model-development",
+    "technique-type/visualization"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Analysing single-cell RNA sequencing data to visualise how different cell types cluster based on gene expression patterns, revealing developmental trajectories and identifying previously unknown cell subtypes in tissue samples.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Exploring customer segmentation by reducing hundreds of behavioural and demographic features to 2D space, showing how different customer groups relate to each other and identifying transition zones where customers might move between segments.",
+      "goal": "Explainability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Hyperparameter choices (n_neighbors, min_dist, metric) significantly influence the embedding structure and can lead to very different interpretations of the same data."
+    },
+    {
+      "description": "While preserving global structure better than t-SNE, distances in the reduced space still don't directly correspond to distances in the original feature space."
+    },
+    {
+      "description": "Performance can be sensitive to the choice of distance metric, which may not be obvious for complex or mixed data types."
+    },
+    {
+      "description": "Like other manifold learning techniques, it assumes the data lies on a lower-dimensional manifold, which may not hold for all datasets."
+    }
+  ],
+  "resources": [
+    {
+      "title": "lmcinnes/umap",
+      "url": "https://github.com/lmcinnes/umap",
+      "source_type": "software_package"
+    },
+    {
+      "title": "UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction",
+      "url": "http://arxiv.org/pdf/1802.03426v3",
+      "source_type": "technical_paper",
+      "authors": [
+        "Leland McInnes",
+        "John Healy",
+        "James Melville"
+      ],
+      "publication_date": "2018-02-09"
+    },
+    {
+      "title": "Uniform Manifold Approximation and Projection (UMAP) and its Variants: Tutorial and Survey",
+      "url": "http://arxiv.org/pdf/2109.02508v1",
+      "source_type": "documentation",
+      "authors": [
+        "Benyamin Ghojogh",
+        "Ali Ghodsi",
+        "Fakhri Karray",
+        "Mark Crowley"
+      ],
+      "publication_date": "2021-08-25"
+    },
+    {
+      "title": "How UMAP Works — umap 0.5.8 documentation",
+      "url": "https://umap-learn.readthedocs.io/en/latest/how_umap_works.html",
+      "source_type": "tutorial"
+    }
+  ],
+  "complexity_rating": 3,
+  "computational_cost_rating": 3,
+  "related_techniques": [
+    "factor-analysis",
+    "principal-component-analysis",
+    "t-sne"
+  ]
+}

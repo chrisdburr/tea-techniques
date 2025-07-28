@@ -1,0 +1,383 @@
+{
+  "tag": {
+    "name": "evidence-type/qualitative-report",
+    "slug": "evidence-type-qualitative-report",
+    "count": 4,
+    "category": "evidence-type"
+  },
+  "techniques": [
+    {
+      "slug": "local-interpretable-model-agnostic-explanations",
+      "name": "Local Interpretable Model-Agnostic Explanations",
+      "description": "LIME (Local Interpretable Model-agnostic Explanations) explains individual predictions by approximating the complex model's behaviour in a small neighbourhood around a specific instance. It works by creating perturbed versions of the input (e.g., removing words from text, changing pixel values in images, or varying feature values), obtaining the model's predictions for these variations, and training a simple interpretable model (typically linear regression) weighted by proximity to the original instance. The coefficients of this local surrogate model reveal which features most influenced the specific prediction.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Explaining why a specific patient received a high-risk diagnosis by showing which symptoms (fever, blood pressure, age) contributed most to the prediction, helping doctors validate the AI's reasoning.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging a text classifier's misclassification of a movie review by highlighting which words (e.g., sarcastic phrases) confused the model, enabling targeted model improvements.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations to customers about automated decisions in insurance claims, showing which claim features influenced approval or denial to meet regulatory requirements.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Explanations can be unstable due to random sampling, producing different results across multiple runs."
+        },
+        {
+          "description": "The linear surrogate may poorly approximate highly non-linear model behaviour in the local region."
+        },
+        {
+          "description": "Defining the neighbourhood size and perturbation strategy requires careful tuning for each data type."
+        },
+        {
+          "description": "Can be computationally expensive for explaining many instances due to repeated model queries."
+        }
+      ],
+      "resources": [
+        {
+          "title": "marcotcr/lime",
+          "url": "https://github.com/marcotcr/lime",
+          "source_type": "software_package"
+        },
+        {
+          "title": "thomasp85/lime (R package)",
+          "url": "https://github.com/thomasp85/lime",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Local Interpretable Model-Agnostic Explanations (lime) — lime 0.1 ...",
+          "url": "https://lime-ml.readthedocs.io/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "'Why Should I Trust You?' Explaining the Predictions of Any Classifier",
+          "url": "https://arxiv.org/abs/1602.04938",
+          "source_type": "technical_paper",
+          "authors": [
+            "Marco Tulio Ribeiro",
+            "Sameer Singh",
+            "Carlos Guestrin"
+          ],
+          "publication_date": "2016-02-16"
+        },
+        {
+          "title": "How to convince your boss to trust your ML/DL models - Towards Data Science",
+          "url": "https://towardsdatascience.com/how-to-convince-your-boss-to-trust-your-ml-dl-models-671f707246a8",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Enhanced LIME — ADS 2.6.5 documentation",
+          "url": "https://accelerated-data-science.readthedocs.io/en/v2.6.5/user_guide/model_explainability/lime.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 3,
+      "acronym": "LIME",
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "deeplift",
+        "layer-wise-relevance-propagation",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "internal-review-boards",
+      "name": "Internal Review Boards",
+      "description": "Internal Review Boards (IRBs) provide independent, systematic evaluation of AI/ML projects throughout their lifecycle to identify ethical, safety, and societal risks before they materialise. Typically composed of multidisciplinary experts including ethicists, domain specialists, legal counsel, community representatives, and technical staff, IRBs review project proposals, assess potential harms to individuals and communities, evaluate mitigation strategies, and establish ongoing monitoring requirements. Unlike traditional research ethics committees, AI-focused IRBs address algorithmic bias, fairness concerns, privacy implications, and societal impact at scale, providing essential governance for responsible AI development and deployment.",
+      "assurance_goals": [
+        "Safety",
+        "Fairness",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "evidence-type/governance-framework",
+        "expertise-needed/ethics",
+        "expertise-needed/legal",
+        "expertise-needed/domain-expertise",
+        "lifecycle-stage/project-planning",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/process"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Reviewing a proposed criminal risk assessment tool to evaluate potential discriminatory impacts, privacy implications, and societal consequences before development begins, ensuring vulnerable communities are protected from algorithmic harm.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Evaluating a hiring algorithm for bias across demographic groups, requiring algorithmic audits and ongoing monitoring to ensure equitable treatment of all candidates and compliance with employment law.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Establishing transparent governance processes for a healthcare AI system, requiring clear documentation of decision-making criteria, model limitations, and performance metrics that can be communicated to patients and regulators.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Can significantly slow development timelines and increase project costs, potentially making organisations less competitive or delaying beneficial AI applications from reaching users."
+        },
+        {
+          "description": "Effectiveness heavily depends on board composition, with inadequate diversity or expertise leading to blind spots in risk assessment and biased decision-making."
+        },
+        {
+          "description": "May face internal pressure to approve revenue-generating projects or strategic initiatives, compromising independence and rigorous ethical evaluation."
+        },
+        {
+          "description": "Limited authority or enforcement mechanisms can result in recommendations being ignored, particularly when they conflict with business objectives or technical constraints."
+        },
+        {
+          "description": "Risk of becoming bureaucratic or box-ticking exercises rather than substantive evaluations, especially in organisations without strong ethical leadership or clear accountability structures."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Investigating Algorithm Review Boards for Organizational Responsible Artificial Intelligence Governance",
+          "url": "https://link.springer.com/article/10.1007/s43681-024-00574-8",
+          "source_type": "technical_paper",
+          "authors": [
+            "Emily Hadley",
+            "Alan Blatecky",
+            "Megan Comfort"
+          ],
+          "publication_date": "2024-09-16",
+          "description": "Research on how organizations can establish algorithm review boards to govern and mitigate risks in AI deployment across sectors"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 1,
+      "acronym": "IRBs",
+      "related_techniques": [
+        "red-teaming",
+        "human-in-the-loop-safeguards",
+        "confidence-thresholding",
+        "runtime-monitoring-and-circuit-breakers"
+      ]
+    },
+    {
+      "slug": "red-teaming",
+      "name": "Red Teaming",
+      "description": "Red teaming involves systematic adversarial testing of AI/ML systems by dedicated specialists who attempt to identify flaws, vulnerabilities, harmful outputs, and ways to circumvent safety measures. Drawing from cybersecurity practices, red teams employ diverse attack vectors including prompt injection, adversarial examples, edge case exploitation, social engineering scenarios, and goal misalignment probes. Unlike standard testing that validates expected behaviour, red teaming specifically seeks to break systems through creative and adversarial approaches, revealing non-obvious risks and failure modes that could be exploited maliciously or cause harm in deployment.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Fairness",
+        "Security"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "expertise-needed/security",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/procedural"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing a content moderation AI by attempting to make it generate harmful outputs through creative prompt injection, jailbreaking techniques, and edge case scenarios to identify safety vulnerabilities before deployment.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Probing a medical diagnosis AI system with adversarial examples and edge cases to identify failure modes that could lead to incorrect diagnoses, ensuring the system fails gracefully rather than confidently providing wrong information.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Systematically testing a hiring algorithm with inputs designed to reveal hidden biases, using adversarial examples to check if the system can be manipulated to discriminate against protected groups or favour certain demographics unfairly.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires highly specialized expertise in both AI/ML systems and adversarial attack methods, making it expensive and difficult to scale across organizations."
+        },
+        {
+          "description": "Limited by the creativity and knowledge of red team members - can only discover vulnerabilities that testers think to explore, potentially missing novel attack vectors."
+        },
+        {
+          "description": "Time-intensive process that may not be feasible for rapid development cycles or resource-constrained projects, potentially delaying beneficial system deployments."
+        },
+        {
+          "description": "May not generalize to real-world adversarial scenarios, as red team attacks may differ significantly from actual malicious use patterns or user behaviours."
+        },
+        {
+          "description": "Risk of false confidence if red teaming is incomplete or superficial, leading organizations to believe systems are safer than they actually are."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Red Teaming LLM Applications - DeepLearning.AI",
+          "url": "https://www.deeplearning.ai/short-courses/red-teaming-llm-applications/",
+          "source_type": "tutorial",
+          "description": "Course teaching how to identify and test vulnerabilities in large language model applications using red teaming techniques"
+        },
+        {
+          "title": "Building Safe GenAI Applications: An End-to-End Overview of Red Teaming for Large Language Models",
+          "url": "https://www.semanticscholar.org/paper/a2fb135fc4bfa323bc92dd498ba45bcaf7259a02",
+          "source_type": "technical_paper",
+          "authors": [
+            "Alberto Purpura",
+            "Sahil Wadhwa",
+            "Jesse Zymet",
+            "Akshay Gupta",
+            "Andy Luo",
+            "Melissa Kazemi Rad",
+            "Swapnil Shinde",
+            "M. Sorower"
+          ],
+          "description": "Comprehensive overview of red teaming methodologies for building safe generative AI applications"
+        },
+        {
+          "title": "Effective Automation to Support the Human Infrastructure in AI Red Teaming",
+          "url": "https://www.semanticscholar.org/paper/c42dcb3a795f970d657ee46537553634eea2b014",
+          "source_type": "technical_paper",
+          "authors": [
+            "Alice Qian Zhang",
+            "Jina Suh",
+            "Mary L. Gray",
+            "Hong Shen"
+          ],
+          "description": "Research on automation tools and processes to enhance human-led red teaming efforts in AI systems"
+        },
+        {
+          "title": "Trojan Activation Attack: Red-Teaming Large Language Models using Steering Vectors for Safety-Alignment",
+          "url": "https://www.semanticscholar.org/paper/598df44f1d21a5d1fe3940c0bb2a6128a62c1c15",
+          "source_type": "technical_paper",
+          "authors": [
+            "Haoran Wang",
+            "Kai Shu"
+          ],
+          "description": "Technical paper on using steering vectors to conduct Trojan activation attacks as part of red teaming safety-aligned LLMs"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "internal-review-boards",
+        "human-in-the-loop-safeguards",
+        "confidence-thresholding",
+        "runtime-monitoring-and-circuit-breakers"
+      ]
+    },
+    {
+      "slug": "human-in-the-loop-safeguards",
+      "name": "Human-in-the-Loop Safeguards",
+      "description": "Human-in-the-loop safeguards establish systematic checkpoints where human experts review, validate, or override AI/ML system decisions before they take effect. This governance approach combines automated efficiency with human judgement by defining clear intervention criteria (such as uncertainty thresholds, risk levels, or sensitive contexts) that trigger mandatory human oversight. By incorporating domain expertise, ethical considerations, and contextual understanding that machines may lack, these safeguards help ensure that critical decisions maintain appropriate human accountability whilst preserving the benefits of automated processing for routine cases.",
+      "assurance_goals": [
+        "Safety",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "expertise-needed/domain-knowledge",
+        "expertise-needed/stakeholder-engagement",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/process"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Implementing mandatory human physician review for any medical AI diagnostic recommendation before treatment decisions are made, especially for complex cases or when the system confidence is below established thresholds, ensuring patient safety through expert oversight.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Requiring human review of automated loan approval decisions when applicants request explanations or appeal rejections, allowing human underwriters to provide clear reasoning and ensure customers understand the decision-making process behind their application outcomes.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Mandating human oversight when hiring algorithms flag candidates from underrepresented groups for rejection, enabling recruiters to verify that decisions are based on legitimate job-relevant criteria rather than potential algorithmic bias, and providing fair recourse mechanisms.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Scales poorly with high request volumes, creating bottlenecks that can delay critical decisions and potentially overwhelm human reviewers with excessive workload."
+        },
+        {
+          "description": "Introduces significant latency into automated processes, potentially making time-sensitive applications impractical or reducing user satisfaction with slower response times."
+        },
+        {
+          "description": "Human reviewers may experience decision fatigue, leading to decreased attention quality over time and potential inconsistency in review standards across different cases or time periods."
+        },
+        {
+          "description": "Risk of automation bias where humans defer too readily to AI recommendations rather than providing meaningful independent review, undermining the safeguard's effectiveness."
+        },
+        {
+          "description": "Requires significant ongoing investment in human resources, training, and expertise maintenance, making it expensive to implement and sustain across large-scale systems."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Human-in-the-Loop AI: A Comprehensive Guide",
+          "url": "https://www.holisticai.com/blog/human-in-the-loop-ai",
+          "source_type": "tutorial",
+          "description": "Comprehensive guide covering HITL AI collaborative approach, including human oversight throughout AI lifecycle, bias mitigation, ethical alignment, and applications across healthcare, manufacturing, and finance"
+        },
+        {
+          "title": "Improving the Applicability of AI for Psychiatric Applications through Human-in-the-loop Methodologies",
+          "url": "https://core.ac.uk/download/544064129.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Chandler, Chelsea",
+            "Elvevåg, Brita",
+            "Foltz, Peter W."
+          ],
+          "publication_date": "2022-01-01",
+          "description": "Technical paper exploring HITL methodologies for psychiatric AI applications, focusing on improving applicability and clinical effectiveness through human oversight integration"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "internal-review-boards",
+        "red-teaming",
+        "confidence-thresholding",
+        "runtime-monitoring-and-circuit-breakers"
+      ]
+    }
+  ],
+  "count": 4
+}

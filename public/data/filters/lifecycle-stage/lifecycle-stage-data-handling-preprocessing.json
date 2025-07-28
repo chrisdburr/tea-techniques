@@ -1,0 +1,116 @@
+{
+  "tag": {
+    "name": "lifecycle-stage/data-handling/preprocessing",
+    "slug": "lifecycle-stage-data-handling-preprocessing",
+    "count": 1,
+    "category": "lifecycle-stage"
+  },
+  "techniques": [
+    {
+      "slug": "reweighing",
+      "name": "Reweighing",
+      "description": "Reweighing is a pre-processing technique that mitigates bias by assigning different weights to training examples based on their group membership and class label. The weights are calculated to ensure that privileged and unprivileged groups have equal influence on the model's training process, effectively balancing the dataset without altering the feature values themselves. This helps to train fairer models by correcting for historical imbalances in how different groups are represented in the data.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group/statistical-parity",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/access-to-training-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "expertise-needed/low",
+        "fairness-approach/group",
+        "lifecycle-stage/data-handling/preprocessing",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "In a loan application system, if historical data shows that a higher proportion of applicants from a minority group were denied loans (negative outcome), reweighing would assign higher weights to these instances. This forces the model to pay more attention to correctly classifying the underrepresented group, aiming to correct for historical bias and improve fairness metrics like equal opportunity.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "When developing a hiring model, if the training data contains fewer female applicants for senior roles, reweighing can be applied to increase the importance of these instances. This helps to prevent the model from learning a spurious correlation between gender and seniority, ensuring that female candidates are evaluated more equitably during the screening process.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "In a medical diagnosis system, reweighing provides transparency by explicitly showing which demographic groups required adjustment for balanced representation. The computed weights serve as documentation of historical bias patterns in medical data, helping clinicians understand potential disparities and ensuring the model's decisions are based on medical evidence rather than demographic correlations.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "For a credit scoring model deployed across different regions, reweighing improves reliability by ensuring consistent performance across demographic groups. By balancing the training data representation, the model maintains stable accuracy metrics across different population segments, reducing the risk of performance degradation when deployed in areas with different demographic compositions.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "The technique only adjusts the overall influence of demographic groups and does not address biases that may be encoded within the features themselves."
+        },
+        {
+          "description": "Assigning very high weights to a small number of instances from an underrepresented group can increase the model's variance and make it sensitive to outliers, potentially harming generalisation."
+        },
+        {
+          "description": "The effectiveness of reweighing depends on the assumption that the labels in the training data are accurate; it cannot correct for label bias where outcomes were themselves the result of historical discrimination."
+        },
+        {
+          "description": "It may not be effective if the feature distributions for different groups are fundamentally different, as it cannot change the underlying data relationships."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Achieving Fairness at No Utility Cost via Data Reweighing with Influence",
+          "url": "http://arxiv.org/pdf/2202.00787v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Peizhao Li",
+            "Hongfu Liu"
+          ],
+          "publication_date": "2022-02-01",
+          "description": "Presents a novel reweighing approach that computes individual sample weights based on influence functions to achieve fairness without sacrificing model utility"
+        },
+        {
+          "title": "aif360.sklearn.preprocessing.Reweighing — aif360 0.6.1 ...",
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.preprocessing.Reweighing.html",
+          "source_type": "documentation",
+          "description": "Documentation for scikit-learn compatible implementation of the reweighing preprocessing technique in the AI Fairness 360 library"
+        },
+        {
+          "title": "brandeis-machine-learning/influence-fairness",
+          "url": "https://github.com/brandeis-machine-learning/influence-fairness",
+          "source_type": "software_package",
+          "description": "Python implementation of influence-based data reweighing for achieving cost-free fairness with experiments on tabular datasets"
+        },
+        {
+          "title": "Boosting Fair Classifier Generalization through Adaptive Priority Reweighing",
+          "url": "http://arxiv.org/pdf/2309.08375v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Zhihao Hu",
+            "Yiran Xu",
+            "Mengnan Du",
+            "Jindong Gu",
+            "Xinmei Tian",
+            "Fengxiang He"
+          ],
+          "publication_date": "2023-09-15",
+          "description": "Advanced reweighing technique that adaptively prioritises samples near decision boundaries to improve fairness generalisation across different demographic groups"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "disparate-impact-remover",
+        "relabelling",
+        "preferential-sampling"
+      ]
+    }
+  ],
+  "count": 1
+}

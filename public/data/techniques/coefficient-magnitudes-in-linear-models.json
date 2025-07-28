@@ -1,0 +1,53 @@
+{
+  "slug": "coefficient-magnitudes-in-linear-models",
+  "name": "Coefficient Magnitudes (in Linear Models)",
+  "description": "Coefficient Magnitudes assess feature influence in linear models by examining the absolute values of their coefficients. Features with larger absolute coefficients are considered to have a stronger impact on the prediction, while the sign of the coefficient indicates the direction of that influence (positive or negative). This technique provides a straightforward and transparent way to understand the direct linear relationship between each input feature and the model's output.",
+  "assurance_goals": [
+    "Explainability",
+    "Transparency"
+  ],
+  "tags": [
+    "applicable-models/linear-model",
+    "assurance-goal-category/explainability",
+    "assurance-goal-category/transparency",
+    "data-requirements/no-special-requirements",
+    "data-type/tabular",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/low",
+    "explanatory-scope/global",
+    "lifecycle-stage/model-development",
+    "technique-type/metric"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Interpreting which features influence housing price predictions in linear regression, such as identifying that 'number of bedrooms' has a larger positive impact than 'distance to city centre' based on coefficient magnitudes.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Explaining the factors contributing to customer lifetime value (CLV) in a linear model, showing how 'average monthly spend' has a strong positive coefficient, making the model transparent for business stakeholders.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Only valid for linear relationships; it cannot capture complex non-linear patterns or interactions between features."
+    },
+    {
+      "description": "Highly sensitive to feature scaling; features with larger numerical ranges can appear more important even if their true impact is smaller."
+    },
+    {
+      "description": "Can be misleading in the presence of multicollinearity, where correlated features may split importance or have unstable coefficients."
+    },
+    {
+      "description": "Does not imply causation; a strong correlation (large coefficient) does not necessarily mean a causal relationship."
+    }
+  ],
+  "resources": [],
+  "complexity_rating": 1,
+  "computational_cost_rating": 1,
+  "related_techniques": [
+    "permutation-importance",
+    "mean-decrease-impurity",
+    "sobol-indices"
+  ]
+}

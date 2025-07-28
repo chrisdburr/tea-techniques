@@ -1,0 +1,101 @@
+{
+  "slug": "average-odds-difference",
+  "name": "Average Odds Difference",
+  "description": "Average Odds Difference measures fairness by calculating the average difference in both false positive rates and true positive rates between different demographic groups. This metric captures how consistently a model performs across groups for both positive and negative predictions. A value of 0 indicates perfect fairness under the equalized odds criterion, while larger absolute values indicate greater disparities in model performance between groups.",
+  "assurance_goals": [
+    "Fairness",
+    "Reliability"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/fairness",
+    "assurance-goal-category/reliability",
+    "data-requirements/sensitive-attributes",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/low",
+    "fairness-approach/group",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/testing",
+    "technique-type/metric"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Evaluating criminal risk assessment tools to ensure equal false positive rates (wrongly flagging low-risk individuals as high-risk) and true positive rates (correctly identifying high-risk individuals) across racial and ethnic groups.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Auditing hiring algorithms to verify that both the rate of correctly identifying qualified candidates and the rate of incorrectly rejecting qualified candidates remain consistent across gender and demographic groups.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Monitoring loan approval systems to ensure reliable performance by checking that both approval rates for creditworthy applicants and rejection rates for non-creditworthy applicants are consistent across protected demographic categories.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Testing medical diagnostic models to validate that diagnostic accuracy (both correctly identifying disease and correctly ruling out disease) remains consistent across patient demographics, ensuring reliable healthcare delivery.",
+      "goal": "Reliability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Averaging effect can mask important disparities when false positive and true positive rate differences compensate for each other, potentially hiding significant bias in one direction."
+    },
+    {
+      "description": "Requires access to ground truth labels and sensitive attribute information, which may not be available in all deployment scenarios or may be subject to privacy constraints."
+    },
+    {
+      "description": "Does not account for base rate differences between groups, meaning equal error rates may not translate to equal treatment when group prevalences differ significantly."
+    },
+    {
+      "description": "Focuses solely on prediction accuracy disparities without considering whether the underlying decision-making process or feature selection introduces systematic bias against certain groups."
+    },
+    {
+      "description": "May encourage optimization for fairness metrics at the expense of overall model performance, potentially reducing utility for the primary prediction task."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Equality of Opportunity in Supervised Learning",
+      "url": "https://arxiv.org/abs/1610.02413",
+      "source_type": "technical_paper",
+      "description": "Foundational paper introducing equalized odds and related fairness metrics including average odds difference",
+      "authors": [
+        "Hardt, Moritz",
+        "Price, Eric",
+        "Srebro, Nathan"
+      ],
+      "publication_date": "2016-10-07"
+    },
+    {
+      "title": "FairBalance: How to Achieve Equalized Odds With Data Pre-processing",
+      "url": "https://arxiv.org/abs/2107.08310",
+      "source_type": "technical_paper",
+      "description": "Research on achieving equalized odds through data preprocessing techniques with practical implementation guidance",
+      "authors": [
+        "Yu, Zhe",
+        "Chakraborty, Joymallya",
+        "Menzies, Tim"
+      ],
+      "publication_date": "2021-07-17"
+    },
+    {
+      "title": "AIF360: Average Odds Difference Documentation",
+      "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.metrics.average_odds_difference.html",
+      "source_type": "documentation",
+      "description": "IBM AIF360 toolkit implementation and documentation for computing average odds difference metrics"
+    },
+    {
+      "title": "Fairlearn: A toolkit for assessing and improving fairness in machine learning",
+      "url": "https://github.com/fairlearn/fairlearn",
+      "source_type": "software_package",
+      "description": "Microsoft's comprehensive fairness toolkit with implementations of various fairness metrics including average odds difference"
+    }
+  ],
+  "complexity_rating": 2,
+  "computational_cost_rating": 1,
+  "related_techniques": [
+    "demographic-parity-assessment",
+    "equal-opportunity-difference"
+  ]
+}

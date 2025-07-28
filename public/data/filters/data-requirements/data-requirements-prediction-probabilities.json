@@ -1,0 +1,111 @@
+{
+  "tag": {
+    "name": "data-requirements/prediction-probabilities",
+    "slug": "data-requirements-prediction-probabilities",
+    "count": 1,
+    "category": "data-requirements"
+  },
+  "techniques": [
+    {
+      "slug": "reject-option-classification",
+      "name": "Reject Option Classification",
+      "description": "A post-processing fairness technique that modifies predictions in regions of high uncertainty to favour disadvantaged groups and achieve fairness objectives. The method identifies a 'rejection region' where the model's confidence is low (typically near the decision boundary) and reassigns predictions within this region to benefit underrepresented groups. By leveraging model uncertainty, this approach can improve fairness metrics like demographic parity or equalised odds whilst minimising changes to confident predictions, thus preserving overall accuracy for cases where the model is certain.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-requirements/prediction-probabilities",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "fairness-approach/group",
+        "lifecycle-stage/post-processing",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting hiring algorithm predictions in the uncertainty region where candidate scores are close to the threshold, reassigning borderline cases to ensure equal selection rates across gender and ethnicity groups whilst maintaining decisions for clearly qualified or unqualified candidates.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Improving reliability of loan approval systems by identifying applications where the model is uncertain and adjusting these edge cases to ensure consistent approval rates across demographic groups, reducing the risk of systematic discrimination in borderline creditworthiness assessments.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Creating transparent bail decision systems that clearly document which predictions fall within the rejection region and how adjustments are made, providing courts with explainable fairness interventions that show exactly when and why decisions were modified for equity.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires models that provide reliable uncertainty estimates or probability scores, limiting applicability to deterministic classifiers without confidence outputs."
+        },
+        {
+          "description": "Selection of the rejection region threshold is subjective and requires careful tuning to balance fairness improvements with accuracy preservation."
+        },
+        {
+          "description": "May reject too many instances if tuned conservatively, potentially affecting a large portion of predictions and reducing the model's practical utility."
+        },
+        {
+          "description": "Cannot address bias in confident predictions outside the rejection region, limiting effectiveness when discrimination occurs in high-certainty cases."
+        },
+        {
+          "description": "Performance depends on the quality of uncertainty estimates, which may be poorly calibrated in some models, leading to inappropriate rejection regions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Machine Learning with a Reject Option: A survey",
+          "url": "https://www.semanticscholar.org/paper/24864a7f899718477c04ede9c0bea906c5dc2667",
+          "source_type": "documentation",
+          "authors": [
+            "Kilian Hendrickx",
+            "Lorenzo Perini",
+            "Dries Van der Plas",
+            "Wannes Meert",
+            "Jesse Davis"
+          ]
+        },
+        {
+          "title": "aif360.algorithms.postprocessing.RejectOptionClassification ...",
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.algorithms.postprocessing.RejectOptionClassification.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Survey on Leveraging Uncertainty Estimation Towards Trustworthy Deep Neural Networks: The Case of Reject Option and Post-training Processing",
+          "url": "https://www.semanticscholar.org/paper/e939c6ac58e08b539ae8a7dc54216bceb775b085",
+          "source_type": "documentation",
+          "authors": [
+            "M. Hasan",
+            "Moloud Abdar",
+            "A. Khosravi",
+            "U. Aickelin",
+            "Pietro Lio'",
+            "Ibrahim Hossain",
+            "Ashikur Rahman",
+            "Saeid Nahavandi"
+          ]
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "equalised-odds-post-processing",
+        "threshold-optimiser",
+        "calibration-with-equality-of-opportunity"
+      ]
+    }
+  ],
+  "count": 1
+}

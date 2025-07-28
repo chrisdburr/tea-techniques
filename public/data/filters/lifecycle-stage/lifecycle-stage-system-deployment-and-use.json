@@ -1,0 +1,2705 @@
+{
+  "tag": {
+    "name": "lifecycle-stage/system-deployment-and-use",
+    "slug": "lifecycle-stage-system-deployment-and-use",
+    "count": 28,
+    "category": "lifecycle-stage"
+  },
+  "techniques": [
+    {
+      "slug": "deeplift",
+      "name": "DeepLIFT",
+      "description": "DeepLIFT (Deep Learning Important FeaTures) explains neural network predictions by decomposing the difference between the actual output and a reference output back to individual input features. It compares each neuron's activation to a reference activation (typically from a baseline input like all zeros or the dataset mean) and propagates these differences backwards through the network using chain rule modifications. Unlike gradient-based methods, DeepLIFT satisfies the sensitivity property (zero input gets zero attribution) and provides more stable attributions by using discrete differences rather than gradients.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-requirements/reference-dataset",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Identifying which genomic sequences contribute to a neural network's prediction of protein binding sites, helping biologists understand regulatory mechanisms by comparing to neutral DNA baselines.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging a deep learning image classifier that misclassifies medical scans by attributing the decision to specific image regions, revealing if the model focuses on irrelevant artifacts rather than pathological features.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations for automated loan approval decisions by showing which financial features (relative to typical applicant profiles) most influenced the neural network's recommendation.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires careful selection of reference baseline, as different choices can lead to substantially different attribution scores."
+        },
+        {
+          "description": "Implementation complexity varies significantly across different neural network architectures and layer types."
+        },
+        {
+          "description": "May produce unintuitive results when the chosen reference is not representative of the decision boundary."
+        },
+        {
+          "description": "Limited to feedforward networks and specific layer types, not suitable for all modern architectures like transformers."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Learning Important Features Through Propagating Activation Differences",
+          "url": "http://arxiv.org/pdf/1704.02685v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Avanti Shrikumar",
+            "Peyton Greenside",
+            "Anshul Kundaje"
+          ],
+          "publication_date": "2017-04-10"
+        },
+        {
+          "title": "pytorch/captum",
+          "url": "https://github.com/pytorch/captum",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Tutorial A3: DeepLIFT/SHAP — tangermeme v0.1.0 documentation",
+          "url": "https://tangermeme.readthedocs.io/en/latest/tutorials/Tutorial_A3_Deep_LIFT_SHAP.html",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "DeepLIFT Documentation - Captum",
+          "url": "https://captum.ai/api/deep_lift.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "layer-wise-relevance-propagation",
+        "local-interpretable-model-agnostic-explanations",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "layer-wise-relevance-propagation",
+      "name": "Layer-wise Relevance Propagation",
+      "description": "Layer-wise Relevance Propagation (LRP) explains neural network predictions by working backwards through the network to show how much each input feature contributed to the final decision. It follows a simple conservation rule: the total contribution scores always add up to the original prediction. Starting from the output, LRP distributes 'relevance' backwards through each layer using different rules depending on the layer type. This creates a detailed breakdown showing which input features helped or hindered the prediction, making it easier to understand why the network made a particular decision.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Identifying which pixels in chest X-rays contribute to pneumonia detection, helping radiologists verify AI diagnoses by highlighting anatomical regions the model considers relevant.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging a neural network's misclassification of handwritten digits by tracing relevance through layers to identify which input pixels caused the error and which network layers amplified it.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations for automated credit scoring decisions by showing which financial features received positive or negative relevance scores, enabling clear regulatory reporting.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires different propagation rules for each layer type, making implementation complex for new architectures."
+        },
+        {
+          "description": "Can produce negative relevance scores which may be difficult to interpret intuitively."
+        },
+        {
+          "description": "Rule selection (LRP-ε, LRP-γ, etc.) significantly affects results and requires domain expertise."
+        },
+        {
+          "description": "Limited to feedforward networks and may not work well with modern architectures like transformers without substantial modifications."
+        }
+      ],
+      "resources": [
+        {
+          "title": "rachtibat/LRP-eXplains-Transformers",
+          "url": "https://github.com/rachtibat/LRP-eXplains-Transformers",
+          "source_type": "software_package"
+        },
+        {
+          "title": "sebastian-lapuschkin/lrp_toolbox",
+          "url": "https://github.com/sebastian-lapuschkin/lrp_toolbox",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Getting started — zennit documentation",
+          "url": "https://zennit.readthedocs.io/en/latest/getting-started.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Layer-wise Relevance Propagation eXplains Transformers (LXT) documentation",
+          "url": "https://lxt.readthedocs.io/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "On Pixel-Wise Explanations for Non-Linear Classifier Decisions by Layer-Wise Relevance Propagation",
+          "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0130140",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sebastian Bach",
+            "Alexander Binder",
+            "Grégoire Montavon",
+            "Frederick Klauschen",
+            "Klaus-Robert Müller",
+            "Wojciech Samek"
+          ],
+          "publication_date": "2015-07-10"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 3,
+      "acronym": "LRP",
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "deeplift",
+        "local-interpretable-model-agnostic-explanations",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "contextual-decomposition",
+      "name": "Contextual Decomposition",
+      "description": "Contextual Decomposition explains LSTM and RNN predictions by decomposing the final hidden state into contributions from individual inputs and their interactions. Unlike simpler attribution methods, it separates the direct contribution of specific words or phrases from the contextual effects of surrounding words. This is particularly useful for understanding how sequential models process language, as it can identify whether a word's influence comes from its individual meaning or from its interaction with nearby words in the sequence.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/recurrent-neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing why an LSTM-based spam filter flagged an email by decomposing contributions from individual words ('free', 'urgent') versus their contextual interactions ('free trial' together).",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Understanding how a medical text classifier diagnoses conditions from clinical notes by separating direct symptom mentions from contextual medical reasoning patterns.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations for automated content moderation decisions by showing which words and phrase interactions contributed to toxicity detection.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Primarily designed for LSTM and simple RNN architectures, not suitable for modern transformers or attention-based models."
+        },
+        {
+          "description": "Not widely implemented in standard machine learning libraries, often requiring custom implementation."
+        },
+        {
+          "description": "Computational overhead increases significantly with sequence length and model depth."
+        },
+        {
+          "description": "May not scale well to very complex models or capture all types of feature interactions in deep networks."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Beyond Word Importance: Contextual Decomposition to Extract Interactions from LSTMs",
+          "url": "http://arxiv.org/pdf/1801.05453v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "W. James Murdoch",
+            "Peter J. Liu",
+            "Bin Yu"
+          ],
+          "publication_date": "2018-01-16"
+        },
+        {
+          "title": "FredericGodin/ContextualDecomposition-NLP",
+          "url": "https://github.com/FredericGodin/ContextualDecomposition-NLP",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Interpreting patient-Specific risk prediction using contextual decomposition of BiLSTMs: Application to children with asthma",
+          "url": "https://core.ac.uk/download/294758884.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Alsaad R.",
+            "Boughorbel S.",
+            "Janahi I.",
+            "Malluhi Q."
+          ],
+          "publication_date": "2019-01-01"
+        },
+        {
+          "title": "Towards Hierarchical Importance Attribution: Explaining Compositional Semantics for Neural Sequence Models",
+          "url": "http://arxiv.org/pdf/1911.06194v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xisen Jin",
+            "Zhongyu Wei",
+            "Junyi Du",
+            "Xiangyang Xue",
+            "Xiang Ren"
+          ],
+          "publication_date": "2019-11-08"
+        },
+        {
+          "title": "Efficient Automated Circuit Discovery in Transformers using Contextual Decomposition",
+          "url": "http://arxiv.org/pdf/2407.00886v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Aliyah R. Hsu",
+            "Georgia Zhou",
+            "Yeshwanth Cherapanamjeri",
+            "Yaxuan Huang",
+            "Anobel Y. Odisho",
+            "Peter R. Carroll",
+            "Bin Yu"
+          ],
+          "publication_date": "2024-07-01"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "taylor-decomposition",
+        "influence-functions"
+      ]
+    },
+    {
+      "slug": "local-interpretable-model-agnostic-explanations",
+      "name": "Local Interpretable Model-Agnostic Explanations",
+      "description": "LIME (Local Interpretable Model-agnostic Explanations) explains individual predictions by approximating the complex model's behaviour in a small neighbourhood around a specific instance. It works by creating perturbed versions of the input (e.g., removing words from text, changing pixel values in images, or varying feature values), obtaining the model's predictions for these variations, and training a simple interpretable model (typically linear regression) weighted by proximity to the original instance. The coefficients of this local surrogate model reveal which features most influenced the specific prediction.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Explaining why a specific patient received a high-risk diagnosis by showing which symptoms (fever, blood pressure, age) contributed most to the prediction, helping doctors validate the AI's reasoning.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging a text classifier's misclassification of a movie review by highlighting which words (e.g., sarcastic phrases) confused the model, enabling targeted model improvements.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations to customers about automated decisions in insurance claims, showing which claim features influenced approval or denial to meet regulatory requirements.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Explanations can be unstable due to random sampling, producing different results across multiple runs."
+        },
+        {
+          "description": "The linear surrogate may poorly approximate highly non-linear model behaviour in the local region."
+        },
+        {
+          "description": "Defining the neighbourhood size and perturbation strategy requires careful tuning for each data type."
+        },
+        {
+          "description": "Can be computationally expensive for explaining many instances due to repeated model queries."
+        }
+      ],
+      "resources": [
+        {
+          "title": "marcotcr/lime",
+          "url": "https://github.com/marcotcr/lime",
+          "source_type": "software_package"
+        },
+        {
+          "title": "thomasp85/lime (R package)",
+          "url": "https://github.com/thomasp85/lime",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Local Interpretable Model-Agnostic Explanations (lime) — lime 0.1 ...",
+          "url": "https://lime-ml.readthedocs.io/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "'Why Should I Trust You?' Explaining the Predictions of Any Classifier",
+          "url": "https://arxiv.org/abs/1602.04938",
+          "source_type": "technical_paper",
+          "authors": [
+            "Marco Tulio Ribeiro",
+            "Sameer Singh",
+            "Carlos Guestrin"
+          ],
+          "publication_date": "2016-02-16"
+        },
+        {
+          "title": "How to convince your boss to trust your ML/DL models - Towards Data Science",
+          "url": "https://towardsdatascience.com/how-to-convince-your-boss-to-trust-your-ml-dl-models-671f707246a8",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Enhanced LIME — ADS 2.6.5 documentation",
+          "url": "https://accelerated-data-science.readthedocs.io/en/v2.6.5/user_guide/model_explainability/lime.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 3,
+      "acronym": "LIME",
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "deeplift",
+        "layer-wise-relevance-propagation",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "monte-carlo-dropout",
+      "name": "Monte Carlo Dropout",
+      "description": "Monte Carlo Dropout estimates prediction uncertainty by applying dropout (randomly setting neural network weights to zero) during inference rather than just training. It performs multiple forward passes through the network with different random dropout patterns and collects the resulting predictions to form a distribution. Low variance across predictions indicates epistemic certainty (the model is confident), while high variance suggests epistemic uncertainty (the model is unsure). This technique transforms any dropout-trained neural network into a Bayesian approximation for uncertainty quantification.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Quantifying diagnostic uncertainty in medical imaging models by running 50+ Monte Carlo forward passes to detect when a chest X-ray classification is highly uncertain, prompting radiologist review for borderline cases.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Estimating prediction confidence in autonomous vehicle perception systems, where high uncertainty in object detection (e.g., variance > 0.3 across MC samples) triggers more conservative driving behaviour or human handover.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing uncertainty estimates in financial fraud detection models, where high epistemic uncertainty (wide prediction variance) indicates the model lacks sufficient training data for similar transaction patterns, requiring manual review.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Only captures epistemic (model) uncertainty, not aleatoric (data) uncertainty, providing an incomplete picture of total prediction uncertainty."
+        },
+        {
+          "description": "Computationally expensive as it requires multiple forward passes (typically 50-100) for each prediction, significantly increasing inference time."
+        },
+        {
+          "description": "Results depend critically on dropout rate matching the training configuration, and poorly calibrated dropout can lead to misleading uncertainty estimates."
+        },
+        {
+          "description": "Approximation quality varies with network architecture and dropout placement, with some configurations providing poor uncertainty calibration despite theoretical foundations."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning",
+          "url": "http://arxiv.org/pdf/1506.02142v6",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yarin Gal",
+            "Zoubin Ghahramani"
+          ],
+          "publication_date": "2016-06-06"
+        },
+        {
+          "title": "mattiasegu/uncertainty_estimation_deep_learning",
+          "url": "https://github.com/mattiasegu/uncertainty_estimation_deep_learning",
+          "source_type": "software_package"
+        },
+        {
+          "title": "uzh-rpg/deep_uncertainty_estimation",
+          "url": "https://github.com/uzh-rpg/deep_uncertainty_estimation",
+          "source_type": "software_package"
+        },
+        {
+          "title": "How certain are tansformers in image classification: uncertainty analysis with Monte Carlo dropout",
+          "url": "https://www.semanticscholar.org/paper/d7ff734c5b62a4a140fd560373d890e43d5b36cf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Md. Farhadul Islam",
+            "Sarah Zabeen",
+            "Md. Azharul Islam",
+            "Fardin Bin Rahman",
+            "Anushua Ahmed",
+            "Dewan Ziaul Karim",
+            "Annajiat Alim Rasel",
+            "Meem Arafat Manab"
+          ]
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "prediction-intervals",
+        "quantile-regression",
+        "conformal-prediction",
+        "deep-ensembles",
+        "bootstrapping",
+        "jackknife-resampling"
+      ]
+    },
+    {
+      "slug": "permutation-tests",
+      "name": "Permutation Tests",
+      "description": "Permutation tests assess the statistical significance of observed results (such as model accuracy, feature importance, or group differences) by comparing them to what would occur purely by chance. The technique randomly shuffles labels or data thousands of times, recalculating the metric of interest each time to build an empirical null distribution. If the actual observed result falls in the extreme tail of this distribution (typically beyond the 95th or 99th percentile), it provides strong evidence that the relationship is genuine rather than due to random chance, without requiring parametric assumptions about data distributions.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Validating feature importance in medical diagnosis models by permuting each feature 10,000 times to ensure that identified risk factors (e.g., blood pressure, cholesterol) have statistically significant predictive power beyond random chance.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Testing whether observed differences in loan approval rates between demographic groups are statistically significant by permuting group labels and calculating the approval rate difference distribution under the null hypothesis of no discrimination.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Verifying that a model's claimed 95% accuracy on test data is genuinely better than random guessing by permuting labels 5,000 times and confirming the actual accuracy falls beyond the 99th percentile of the null distribution.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive as it requires thousands of model evaluations or metric calculations, scaling poorly with dataset size and model complexity."
+        },
+        {
+          "description": "Requires many permutations (typically 5,000-10,000) to achieve reliable p-values for strict significance thresholds like p < 0.01."
+        },
+        {
+          "description": "Assumes exchangeability of observations under the null hypothesis, which may be violated in time series or hierarchical data structures."
+        },
+        {
+          "description": "Cannot be easily parallelised for some metrics that require global model retraining, limiting scalability for complex machine learning pipelines."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Permutation Tests for Classification",
+          "url": "https://core.ac.uk/download/4383831.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Golland, Polina",
+            "Mukherjee, Sayan",
+            "Panchenko, Dmitry"
+          ],
+          "publication_date": "2003-01-01"
+        },
+        {
+          "title": "How to use Permutation Tests | Towards Data Science",
+          "url": "https://towardsdatascience.com/how-to-use-permutation-tests-bacc79f45749/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Permutation test in R | Towards Data Science",
+          "url": "https://towardsdatascience.com/permutation-test-in-r-77d551a9f891/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "The Exchangeability Assumption for Permutation Tests of Multiple Regression Models: Implications for Statistics and Data Science Educators",
+          "url": "http://arxiv.org/pdf/2406.07756v2",
+          "source_type": "documentation",
+          "authors": [
+            "Johanna Hardin",
+            "Lauren Quesada",
+            "Julie Ye",
+            "Nicholas J. Horton"
+          ],
+          "publication_date": "2024-06-11"
+        },
+        {
+          "title": "scikit-learn permutation_importance",
+          "url": "https://scikit-learn.org/stable/modules/permutation_importance.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "cross-validation",
+        "area-under-precision-recall-curve"
+      ]
+    },
+    {
+      "slug": "demographic-parity-assessment",
+      "name": "Demographic Parity Assessment",
+      "description": "Demographic Parity Assessment evaluates whether a model produces equal positive prediction rates across different demographic groups, regardless of underlying differences in qualifications or base rates. It quantifies fairness using metrics like Statistical Parity Difference (the absolute difference in positive outcome rates between groups) or Disparate Impact ratio (the ratio of positive rates). Unlike techniques that modify data or models, this is purely a measurement approach that highlights when protected groups receive favourable outcomes at different rates, helping organisations identify and document potential discrimination.",
+      "assurance_goals": [
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating credit approval algorithms by calculating that loan approval rates for different racial groups must be within 20% of each other (0.8 disparate impact ratio), ensuring compliance with anti-discrimination regulations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Monitoring hiring platforms by measuring that job recommendation rates for male vs female candidates remain statistically equivalent (Statistical Parity Difference < 0.05), preventing systemic gender bias in career opportunities.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Auditing healthcare triage systems to verify that urgent care assignment rates are equal across ethnic groups, ensuring that automated medical prioritisation doesn't disadvantage minority patients.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Purely observational - identifies discrimination but doesn't provide solutions for remediation or bias mitigation."
+        },
+        {
+          "description": "May penalise models for legitimate differences in base rates between groups, potentially forcing artificial equality where none should exist."
+        },
+        {
+          "description": "Can conflict with individual fairness principles, where similarly qualified individuals might receive different treatment to achieve group parity."
+        },
+        {
+          "description": "Doesn't account for quality of outcomes or consider whether equal rates are actually desirable given different group needs or preferences."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Fairness through awareness",
+          "url": "http://arxiv.org/pdf/1104.3913v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Cynthia Dwork",
+            "Moritz Hardt",
+            "Toniann Pitassi",
+            "Omer Reingold",
+            "Richard Zemel"
+          ],
+          "publication_date": "2011-04-20"
+        },
+        {
+          "title": "AI Fairness 360 Toolkit",
+          "url": "https://github.com/Trusted-AI/AIF360",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Fairlearn - Demographic Parity",
+          "url": "https://fairlearn.org/main/user_guide/fairness_in_machine_learning.html#demographic-parity",
+          "source_type": "documentation"
+        },
+        {
+          "title": "A Data-Centric Approach to Detecting and Mitigating Demographic Bias in Pediatric Mental Health Text: A Case Study in Anxiety Detection",
+          "url": "https://www.semanticscholar.org/paper/ce96e451a2685485c05f06fb0d991e29a9c43dae",
+          "source_type": "technical_paper",
+          "authors": [
+            "Julia Ive",
+            "Paulina Bondaronek",
+            "Vishal Yadav",
+            "D. Santel",
+            "Tracy Glauser",
+            "Tina Cheng",
+            "Jeffrey R. Strawn",
+            "G. Agasthya",
+            "Jordan Tschida",
+            "Sanghyun Choo",
+            "Mayanka Chandrashekar",
+            "Anuj J. Kapadia",
+            "J. Pestian"
+          ]
+        }
+      ],
+      "complexity_rating": 1,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "equal-opportunity-difference",
+        "average-odds-difference"
+      ]
+    },
+    {
+      "slug": "federated-learning",
+      "name": "Federated Learning",
+      "description": "Federated learning enables collaborative model training across multiple distributed parties (devices, organisations, or data centres) without requiring centralised data sharing. Participants train models locally on their private datasets and only share model updates (gradients, weights, or aggregated statistics) with a central coordinator. This distributed approach serves multiple purposes: preserving data privacy and sovereignty, reducing communication costs, enabling learning from diverse data sources, improving model robustness through heterogeneous training, and facilitating compliance with data protection regulations whilst maintaining model performance comparable to centralised training.",
+      "assurance_goals": [
+        "Privacy",
+        "Reliability",
+        "Safety",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/software-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Developing a smartphone keyboard prediction model by learning from users' typing patterns without their text ever leaving their devices, enabling personalised predictions whilst maintaining complete data privacy.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Training a medical diagnosis model across multiple hospitals without sharing patient records, ensuring model robustness by learning from diverse patient populations and clinical practices across different institutions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Creating a cybersecurity threat detection model by federating learning across financial institutions without exposing sensitive transaction data, reducing systemic risk whilst maintaining competitive confidentiality.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Building a fair credit scoring model by training across multiple regions and demographics without centralising sensitive financial data, ensuring representation from diverse populations whilst respecting local data sovereignty laws.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Communication overhead can be substantial, especially with frequent model updates and large models, potentially limiting scalability and increasing training time compared to centralised approaches."
+        },
+        {
+          "description": "Statistical heterogeneity across participants (non-IID data distributions) can lead to training instability, slower convergence, and reduced model performance compared to centralised training on pooled data."
+        },
+        {
+          "description": "System heterogeneity in computational capabilities, network connectivity, and availability of participating devices can create bottlenecks and introduce bias towards more capable participants."
+        },
+        {
+          "description": "Privacy vulnerabilities remain through gradient leakage attacks, model inversion, and membership inference attacks that can potentially reconstruct sensitive information from shared model updates."
+        },
+        {
+          "description": "Coordination complexity increases with the number of participants, requiring sophisticated aggregation protocols, fault tolerance mechanisms, and secure communication infrastructure."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Open Federated Learning (OpenFL) Documentation",
+          "url": "https://openfl.readthedocs.io/en/stable/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Federated Learning - DeepLearning.AI",
+          "url": "https://www.deeplearning.ai/short-courses/intro-to-federated-learning/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "A Survey on Federated Learning Systems: Vision, Hype and Reality for Data Privacy and Protection",
+          "url": "http://arxiv.org/pdf/1907.09693v7",
+          "source_type": "documentation",
+          "authors": [
+            "Qinbin Li",
+            "Zeyi Wen",
+            "Zhaomin Wu",
+            "Sixu Hu",
+            "Naibo Wang",
+            "Yuan Li",
+            "Xu Liu",
+            "Bingsheng He"
+          ],
+          "publication_date": "2019-07-23"
+        },
+        {
+          "title": "Federated learning with hybrid differential privacy for secure and reliable cross-IoT platform knowledge sharing",
+          "url": "https://core.ac.uk/download/603345619.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Algburi, S.",
+            "Algburi, S.",
+            "Anupallavi, S.",
+            "Anupallavi, S.",
+            "Ashokkumar, S. R.",
+            "Ashokkumar, S. R.",
+            "Elmedany, W.",
+            "Elmedany, W.",
+            "Khalaf, O. I.",
+            "Khalaf, O. I.",
+            "Selvaraj, D.",
+            "Selvaraj, D.",
+            "Sharif, M. S.",
+            "Sharif, M. S."
+          ],
+          "publication_date": "2024-01-01"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "synthetic-data-generation",
+        "differential-privacy",
+        "homomorphic-encryption"
+      ]
+    },
+    {
+      "slug": "differential-privacy",
+      "name": "Differential Privacy",
+      "description": "Differential privacy provides mathematically rigorous privacy protection by adding carefully calibrated random noise to data queries, statistical computations, or machine learning outputs. The technique works by ensuring that the presence or absence of any individual's data has minimal impact on the results - specifically, any query result should be nearly indistinguishable whether or not a particular person's data is included. This is achieved through controlled noise addition that scales with the query's sensitivity and a privacy budget (epsilon) that quantifies the privacy-utility trade-off. The smaller the epsilon, the more noise is added and the stronger the privacy guarantee, but at the cost of reduced accuracy.",
+      "assurance_goals": [
+        "Privacy",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee/differential-privacy",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/privacy-guarantee",
+        "expertise-needed/cryptography",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/data-handling",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Protecting individual privacy in census data analysis by adding calibrated noise to demographic statistics, ensuring households cannot be re-identified whilst maintaining accurate population insights for policy planning.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Publishing differentially private aggregate statistics about model performance across different demographic groups, enabling transparent bias auditing without exposing sensitive individual prediction details or group membership.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Enabling fair evaluation of lending algorithms by releasing differentially private performance metrics across protected groups, allowing regulatory compliance checking whilst protecting individual applicant privacy.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Adding noise inherently reduces the accuracy and utility of results, with stronger privacy guarantees (smaller epsilon values) leading to more significant degradation in data quality."
+        },
+        {
+          "description": "Setting the privacy budget (epsilon) requires expertise and careful consideration of the privacy-utility trade-off, with no universal guidelines for appropriate values across different applications."
+        },
+        {
+          "description": "Sequential queries consume the privacy budget cumulatively, potentially requiring careful query planning and potentially prohibiting future analyses once the budget is exhausted."
+        },
+        {
+          "description": "Implementation complexity is high, requiring deep understanding of sensitivity analysis, noise mechanisms, and composition theorems to avoid inadvertent privacy violations."
+        },
+        {
+          "description": "May not protect against all privacy attacks, particularly sophisticated adversaries with auxiliary information or when combined with other data sources that could aid re-identification."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Google Differential Privacy Library",
+          "url": "https://github.com/google/differential-privacy",
+          "source_type": "software_package",
+          "description": "Open-source library providing implementations of differential privacy algorithms and utilities"
+        },
+        {
+          "title": "The Algorithmic Foundations of Differential Privacy",
+          "url": "https://www.cis.upenn.edu/~aaroth/Papers/privacybook.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Cynthia Dwork",
+            "Aaron Roth"
+          ],
+          "description": "Foundational monograph on differential privacy theory and algorithms"
+        },
+        {
+          "title": "Opacus: User-Friendly Differential Privacy Library in PyTorch",
+          "url": "https://github.com/pytorch/opacus",
+          "source_type": "software_package",
+          "description": "PyTorch library for training neural networks with differential privacy"
+        },
+        {
+          "title": "Programming Differential Privacy",
+          "url": "https://programming-dp.com/",
+          "source_type": "tutorial",
+          "description": "Comprehensive online book and tutorial for learning differential privacy programming"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "synthetic-data-generation",
+        "federated-learning",
+        "homomorphic-encryption"
+      ]
+    },
+    {
+      "slug": "homomorphic-encryption",
+      "name": "Homomorphic Encryption",
+      "description": "Homomorphic encryption allows computation on encrypted data without decrypting it first, producing encrypted results that, when decrypted, match the results of performing the same operations on the plaintext. This enables secure outsourced computation where sensitive data remains encrypted throughout processing. By allowing ML operations on encrypted data, it provides strong privacy guarantees for applications involving highly sensitive information.",
+      "assurance_goals": [
+        "Privacy",
+        "Safety",
+        "Transparency",
+        "Security"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/privacy-guarantee",
+        "expertise-needed/cryptography",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Enabling a cloud-based medical diagnosis service to process encrypted patient data and return encrypted results without the cloud provider ever accessing actual medical information, ensuring complete patient privacy during outsourced computation.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Securing financial risk assessment computations by allowing banks to jointly analyse encrypted transaction patterns for fraud detection without exposing individual customer data, reducing systemic security risks.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Enabling transparent audit of algorithmic decision-making by allowing regulators to verify model computations on encrypted data, providing accountability whilst protecting the proprietary nature of both the algorithm and the underlying data.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Extremely computationally expensive, often 100-1000x slower than unencrypted computation, making it impractical for real-time applications or large-scale data processing."
+        },
+        {
+          "description": "Limited range of operations supported efficiently, with complex operations like divisions, comparisons, and non-polynomial functions being particularly challenging or impossible to implement."
+        },
+        {
+          "description": "Implementation requires deep cryptographic expertise to avoid security vulnerabilities, choose appropriate parameters, and optimise performance for specific use cases."
+        },
+        {
+          "description": "Memory and storage requirements are significantly higher than traditional computation, as encrypted data typically requires much more space than plaintext equivalents."
+        },
+        {
+          "description": "Current fully homomorphic encryption schemes have practical limitations on computation depth before noise accumulation requires expensive bootstrapping operations to refresh ciphertexts."
+        }
+      ],
+      "resources": [
+        {
+          "title": "zama-ai/concrete-ml",
+          "url": "https://github.com/zama-ai/concrete-ml",
+          "source_type": "software_package",
+          "description": "Privacy-preserving machine learning library that enables data scientists to run ML models on encrypted data using FHE without cryptography expertise"
+        },
+        {
+          "title": "Survey on Fully Homomorphic Encryption, Theory, and Applications",
+          "url": "https://core.ac.uk/download/579858842.pdf",
+          "source_type": "documentation",
+          "authors": [
+            "Chiara Marcolla",
+            "Frank H.P. Fitzek",
+            "Marc Manzano",
+            "Najwa Aaraj",
+            "Riccardo Bassoli",
+            "Victor Sucasas"
+          ],
+          "publication_date": "2022-10-06",
+          "description": "Comprehensive survey covering FHE theory, cryptographic schemes, and practical applications across different domains"
+        },
+        {
+          "title": "Welcome to OpenFHE's documentation! — OpenFHE documentation",
+          "url": "https://openfhe-development.readthedocs.io/",
+          "source_type": "documentation",
+          "description": "Documentation for open-source C++ library supporting multiple FHE schemes including BFV, BGV, CKKS, and Boolean circuits"
+        },
+        {
+          "title": "Evaluation of Privacy-Preserving Support Vector Machine (SVM) Learning Using Homomorphic Encryption",
+          "url": "https://core.ac.uk/download/656115203.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ali, Hisham",
+            "Buchanan, William J."
+          ],
+          "publication_date": "2025-01-01",
+          "description": "Technical paper evaluating performance overhead of SVM learning with homomorphic encryption for privacy-preserving ML"
+        },
+        {
+          "title": "microsoft/SEAL",
+          "url": "https://github.com/microsoft/SEAL",
+          "source_type": "software_package",
+          "description": "Easy-to-use homomorphic encryption library enabling computations on encrypted integers and real numbers"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "synthetic-data-generation",
+        "federated-learning",
+        "differential-privacy"
+      ]
+    },
+    {
+      "slug": "prediction-intervals",
+      "name": "Prediction Intervals",
+      "description": "Prediction intervals provide a range of plausible values around a model's prediction, expressing uncertainty as 'the true value will likely fall between X and Y with Z% confidence'. For example, instead of predicting 'house price: £300,000', a prediction interval might say 'house price: £280,000 to £320,000 with 95% confidence'. This technique works by calculating upper and lower bounds that account for both model uncertainty (how confident the model is) and inherent randomness in the data. Prediction intervals are crucial for informed decision-making, as they help users understand the reliability and precision of predictions, enabling better risk assessment and planning.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/prediction-interval",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Providing realistic ranges for medical diagnosis predictions, such as 'patient survival time: 8-14 months with 90% confidence', enabling doctors to make informed treatment decisions and communicate uncertainty to patients and families.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Communicating uncertainty in automated loan approval systems by showing 'credit score prediction: 650-720 with 95% confidence' rather than a single score, helping loan officers understand prediction reliability and make transparent decisions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring consistent prediction uncertainty across demographic groups in hiring algorithms, verifying that prediction intervals have similar widths for different protected groups to avoid unfair confidence disparities.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Relies on assumptions about the error distribution (often normality) which may not hold in practice, leading to inaccurate interval coverage when data exhibits heavy tails, skewness, or other non-standard patterns."
+        },
+        {
+          "description": "Can be overconfident if the underlying model is poorly calibrated, producing intervals that are too narrow and fail to capture the true prediction uncertainty."
+        },
+        {
+          "description": "Vulnerable to distribution shift between training and deployment data, where intervals calculated on historical data may not reflect uncertainty in new, unseen conditions."
+        },
+        {
+          "description": "May require careful hyperparameter tuning and validation to achieve desired coverage rates, particularly when using advanced methods like conformal prediction or quantile regression."
+        },
+        {
+          "description": "Computational overhead increases when generating intervals for large datasets or complex models, especially when using resampling-based methods like bootstrapping."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn-contrib/MAPIE",
+          "url": "https://github.com/scikit-learn-contrib/MAPIE",
+          "source_type": "software_package",
+          "description": "Open-source Python library for quantifying uncertainties using conformal prediction techniques, compatible with scikit-learn, TensorFlow, and PyTorch"
+        },
+        {
+          "title": "MAPIE - Model Agnostic Prediction Interval Estimator",
+          "url": "https://mapie.readthedocs.io/",
+          "source_type": "documentation",
+          "description": "Official documentation for MAPIE library implementing distribution-free uncertainty estimates for regression and classification tasks"
+        },
+        {
+          "title": "valeman/awesome-conformal-prediction",
+          "url": "https://github.com/valeman/awesome-conformal-prediction",
+          "source_type": "software_package",
+          "description": "Curated collection of conformal prediction resources including videos, tutorials, books, papers, and open-source libraries"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "monte-carlo-dropout",
+        "quantile-regression",
+        "conformal-prediction",
+        "deep-ensembles",
+        "bootstrapping",
+        "jackknife-resampling"
+      ]
+    },
+    {
+      "slug": "quantile-regression",
+      "name": "Quantile Regression",
+      "description": "Quantile regression estimates specific percentiles (quantiles) of the target variable rather than just predicting the average outcome. For example, instead of predicting 'average house price = £300,000', it can predict 'there's a 10% chance the price will be below £250,000, 50% chance below £300,000, and 90% chance below £380,000'. This technique reveals how input features affect different parts of the outcome distribution - perhaps property size strongly influences luxury homes (90th percentile) but barely affects budget properties (10th percentile). By capturing the full conditional distribution, quantile regression provides rich uncertainty information and enables robust prediction intervals.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/prediction-interval",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Predicting patient recovery times after surgery by estimating multiple quantiles (e.g., 25th, 50th, 75th percentiles), enabling doctors to communicate realistic timeframes: 'Most patients recover within 2-4 weeks, but some may take up to 8 weeks', providing robust uncertainty estimates for treatment planning.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Revealing how income inequality affects different segments of society by showing how education's impact varies across income quantiles - demonstrating that education benefits high earners much more than low earners, providing transparent insights into systemic inequalities.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring equitable loan amount predictions across demographic groups by verifying that the spread of predicted loan amounts (difference between 90th and 10th percentiles) is consistent across protected groups, preventing discriminatory practices in lending ranges.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally intensive when fitting multiple quantiles simultaneously, especially for large datasets or complex models, as each quantile requires separate optimization."
+        },
+        {
+          "description": "May produce crossing quantiles without proper constraints, where predicted 90th percentile values are lower than 50th percentile values, creating logically inconsistent and unusable prediction intervals."
+        },
+        {
+          "description": "Sensitive to outliers and heavy-tailed distributions, particularly in extreme quantiles (e.g., 5th or 95th percentiles), which can lead to unstable and unreliable estimates."
+        },
+        {
+          "description": "Requires careful selection of quantile levels and may need domain expertise to interpret results meaningfully, as different quantiles may reveal conflicting patterns in feature relationships."
+        },
+        {
+          "description": "Less effective with small datasets where extreme quantiles cannot be reliably estimated due to insufficient data points in the tails of the distribution."
+        }
+      ],
+      "resources": [
+        {
+          "title": "statsmodels/statsmodels",
+          "url": "https://github.com/statsmodels/statsmodels",
+          "source_type": "software_package",
+          "description": "Python package providing comprehensive statistical modeling capabilities including quantile regression alongside descriptive statistics and statistical inference"
+        },
+        {
+          "title": "Quantile Regression in Machine Learning: A Survey",
+          "url": "https://www.semanticscholar.org/paper/01cd143c5a054b85afc9b99d473f84422ace7e05",
+          "source_type": "documentation",
+          "authors": [
+            "Anshul Kumar",
+            "Rajesh Wadhvani",
+            "A. Rasool",
+            "Muktesh Gupta"
+          ],
+          "description": "Comprehensive survey covering quantile regression applications, methods, and developments in machine learning contexts"
+        },
+        {
+          "title": "Tutorial for conformalized quantile regression (CQR) — MAPIE 0.8.5 ...",
+          "url": "https://mapie.readthedocs.io/en/v0.8.5/examples_regression/4-tutorials/plot_cqr_tutorial.html",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Quantile Regression Forest — sklearn_quantile 0.1.1 documentation",
+          "url": "https://sklearn-quantile.readthedocs.io/en/latest/methods.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Quantile machine learning models for python — sklearn_quantile ...",
+          "url": "https://sklearn-quantile.readthedocs.io/",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "monte-carlo-dropout",
+        "prediction-intervals",
+        "conformal-prediction",
+        "deep-ensembles",
+        "bootstrapping",
+        "jackknife-resampling"
+      ]
+    },
+    {
+      "slug": "conformal-prediction",
+      "name": "Conformal Prediction",
+      "description": "Conformal prediction provides mathematically guaranteed uncertainty quantification by creating prediction sets that contain the true outcome with a specified probability (e.g., exactly 95% coverage). The technique works by measuring how 'strange' or 'nonconforming' new predictions are compared to calibration data - if a prediction seems unusual, it gets wider intervals. For example, in medical diagnosis, instead of saying 'likely cancer', it might say 'possible diagnoses: {cancer, benign tumour} with 95% confidence'. This distribution-free method works with any underlying model (neural networks, random forests, etc.) and requires no assumptions about data distribution, making it a robust framework for reliable uncertainty estimates in high-stakes applications.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "data-requirements/calibration-set",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/prediction-interval",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Creating prediction sets for drug discovery that guarantee 95% coverage, such as 'this compound will likely have activity against {target A, target B, target C}', ensuring reliable decision-making in costly experimental validation.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing transparent multi-class predictions in judicial risk assessment by showing all plausible risk categories with guaranteed coverage, enabling judges to see the full range of possibilities rather than just a single point estimate.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring fair uncertainty quantification across demographic groups in college admissions by verifying that prediction set sizes (number of possible outcomes) are consistent across protected groups, preventing discriminatory overconfidence for certain populations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Prediction sets can be unnecessarily wide when nonconformity scores vary greatly across the feature space, leading to conservative intervals that reduce practical utility."
+        },
+        {
+          "description": "Requires a held-out calibration set separate from training data, reducing the amount of data available for model training, which can impact performance on small datasets."
+        },
+        {
+          "description": "Guarantees only hold under the exchangeability assumption - if test data distribution differs significantly from calibration data, coverage guarantees may be violated."
+        },
+        {
+          "description": "For multi-class problems, prediction sets may include many classes when the model is uncertain, making decisions difficult when sets contain opposing outcomes."
+        },
+        {
+          "description": "Computational cost increases with the number of calibration samples, and efficient implementation requires careful design for large-scale or real-time applications."
+        }
+      ],
+      "resources": [
+        {
+          "title": "A tutorial on conformal prediction",
+          "url": "http://arxiv.org/pdf/0706.3188v1",
+          "source_type": "documentation",
+          "authors": [
+            "Glenn Shafer",
+            "Vladimir Vovk"
+          ],
+          "publication_date": "2007-06-21",
+          "description": "Foundational tutorial introducing conformal prediction theory and applications by the method's creators"
+        },
+        {
+          "title": "valeman/awesome-conformal-prediction",
+          "url": "https://github.com/valeman/awesome-conformal-prediction",
+          "source_type": "software_package",
+          "description": "Curated collection of conformal prediction resources including videos, tutorials, books, papers, and open-source libraries"
+        },
+        {
+          "title": "scikit-learn-contrib/MAPIE",
+          "url": "https://github.com/scikit-learn-contrib/MAPIE",
+          "source_type": "software_package",
+          "description": "Python library for uncertainty quantification using conformal prediction across regression, classification, and time series tasks"
+        },
+        {
+          "title": "Tutorial for classification — MAPIE 0.8.6 documentation",
+          "url": "https://mapie.readthedocs.io/en/v0.8.6/examples_classification/4-tutorials/plot_main-tutorial-classification.html",
+          "source_type": "tutorial",
+          "description": "Practical tutorial demonstrating conformal prediction for classification tasks with guaranteed coverage"
+        },
+        {
+          "title": "Conformal Prediction: a Unified Review of Theory and New Challenges",
+          "url": "http://arxiv.org/pdf/2005.07972v2",
+          "source_type": "documentation",
+          "authors": [
+            "Matteo Fontana",
+            "Gianluca Zeni",
+            "Simone Vantini"
+          ],
+          "publication_date": "2020-05-16",
+          "description": "Comprehensive review of conformal prediction theory, recent advances, and emerging challenges in the field"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "monte-carlo-dropout",
+        "prediction-intervals",
+        "quantile-regression",
+        "deep-ensembles",
+        "bootstrapping",
+        "jackknife-resampling"
+      ]
+    },
+    {
+      "slug": "empirical-calibration",
+      "name": "Empirical Calibration",
+      "description": "Empirical calibration adjusts a model's predicted probabilities to match observed frequencies. For example, if events predicted with 80% confidence only occur 60% of the time, calibration would correct this overconfidence. Common techniques include Platt scaling and isotonic regression, which learn transformations that map the model's raw scores to well-calibrated probabilities, improving the reliability of confidence measures for downstream decisions.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "data-requirements/calibration-set",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting a credit default prediction model's probabilities to ensure that loan applicants with a predicted 30% default risk actually default 30% of the time, improving decision-making.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Calibrating a medical diagnosis model's confidence scores so that stakeholders can meaningfully interpret probability outputs, enabling doctors to make informed decisions about treatment urgency based on reliable confidence estimates.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring that a hiring algorithm's confidence scores are equally well-calibrated across different demographic groups, preventing systematically overconfident predictions for certain populations that could lead to biased decision-making.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires a separate held-out calibration dataset, which reduces the amount of data available for model training."
+        },
+        {
+          "description": "Calibration performance can degrade over time if the underlying data distribution shifts, requiring periodic recalibration."
+        },
+        {
+          "description": "May sacrifice some discriminative power in favour of calibration, potentially reducing the model's ability to distinguish between classes."
+        },
+        {
+          "description": "Calibration methods assume that the calibration set is representative of future data, which may not hold in dynamic environments."
+        }
+      ],
+      "resources": [
+        {
+          "title": "google/empirical_calibration",
+          "url": "https://github.com/google/empirical_calibration",
+          "source_type": "software_package"
+        },
+        {
+          "title": "A Python Library For Empirical Calibration",
+          "url": "http://arxiv.org/pdf/1906.11920v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xiaojing Wang",
+            "Jingang Miao",
+            "Yunting Sun"
+          ],
+          "publication_date": "2019-07-25"
+        },
+        {
+          "title": "Assessing the effectiveness of empirical calibration under different bias scenarios",
+          "url": "http://arxiv.org/pdf/2111.04233v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hon Hwang",
+            "Juan C Quiroz",
+            "Blanca Gallego"
+          ],
+          "publication_date": "2021-11-08"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "temperature-scaling"
+      ]
+    },
+    {
+      "slug": "deep-ensembles",
+      "name": "Deep Ensembles",
+      "description": "Deep ensembles combine predictions from multiple neural networks trained independently with different random initializations to capture epistemic uncertainty (model uncertainty). By training several models on the same data with different starting points, the ensemble reveals how much the model's predictions depend on training randomness. The disagreement between ensemble members naturally indicates prediction uncertainty - when models agree, confidence is high; when they disagree, uncertainty is revealed. This approach provides more reliable uncertainty estimates, better out-of-distribution detection, and improved calibration compared to single models.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/prediction-interval",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Improving self-driving car safety by using multiple neural networks to detect obstacles, where disagreement between models signals uncertainty and triggers extra caution or human intervention, providing robust uncertainty quantification for critical decisions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Communicating prediction confidence to medical professionals by showing the range of diagnoses from multiple trained models, enabling doctors to understand when the AI system is uncertain and requires additional human expertise or testing.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Detecting out-of-distribution inputs in financial fraud detection systems where ensemble disagreement signals potentially novel attack patterns that require immediate security team review and system safeguards.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive to train and deploy, requiring multiple complete neural networks which increases training time, memory usage, and inference costs proportionally to ensemble size."
+        },
+        {
+          "description": "May still provide overconfident predictions for inputs far from the training distribution, as all ensemble members can be similarly confident about out-of-distribution examples."
+        },
+        {
+          "description": "Requires careful hyperparameter tuning for each ensemble member to ensure diversity, as identical hyperparameters may lead to similar models that reduce uncertainty estimation quality."
+        },
+        {
+          "description": "Storage and deployment overhead increases linearly with ensemble size, making it challenging to deploy large ensembles in resource-constrained environments or real-time applications."
+        },
+        {
+          "description": "Ensemble predictions may be difficult to interpret individually, as the final decision emerges from averaging multiple models rather than from a single explainable pathway."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles",
+          "url": "https://arxiv.org/abs/1612.01474",
+          "source_type": "technical_paper",
+          "authors": [
+            "Balaji Lakshminarayanan",
+            "Alexander Pritzel",
+            "Charles Blundell"
+          ],
+          "publication_date": "2016-12-05",
+          "description": "Foundational paper introducing deep ensembles for uncertainty estimation in neural networks"
+        },
+        {
+          "title": "ENSTA-U2IS-AI/awesome-uncertainty-deeplearning",
+          "url": "https://github.com/ENSTA-U2IS-AI/awesome-uncertainty-deeplearning",
+          "source_type": "documentation",
+          "description": "Comprehensive collection of research papers, surveys, datasets, and code for uncertainty estimation in deep learning"
+        },
+        {
+          "title": "Deep Ensembles: A Loss Landscape Perspective",
+          "url": "http://arxiv.org/pdf/1912.02757v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Stanislav Fort",
+            "Huiyi Hu",
+            "Balaji Lakshminarayanan"
+          ],
+          "publication_date": "2019-12-05",
+          "description": "Analysis of why deep ensembles work well from the perspective of loss landscape geometry and mode connectivity"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "monte-carlo-dropout",
+        "prediction-intervals",
+        "quantile-regression",
+        "conformal-prediction",
+        "bootstrapping",
+        "jackknife-resampling"
+      ]
+    },
+    {
+      "slug": "jackknife-resampling",
+      "name": "Jackknife Resampling",
+      "description": "Jackknife resampling (also called leave-one-out resampling) assesses model stability and uncertainty by systematically removing one data point at a time and retraining the model on the remaining data. Unlike bootstrapping which samples with replacement, jackknife creates n different models by excluding each of the n data points once. This systematic approach reveals how individual points influence results, provides robust estimates of prediction variance, and identifies unusually influential observations that may be outliers or leverage points affecting model reliability.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/prediction-interval",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating how removing individual countries from a global climate model affects predictions, identifying which regions have outsized influence and providing robust uncertainty estimates for climate projections used in policy decisions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing transparent uncertainty estimates in medical risk prediction by showing how individual patient records influence model predictions, enabling clinicians to understand prediction stability and confidence intervals for treatment decisions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring fair model evaluation in hiring algorithms by systematically testing how removing candidates from different demographic groups affects model performance, revealing whether certain populations disproportionately influence the model's behaviour.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Extremely computationally intensive for large datasets, requiring training of n separate models for n data points, making it impractical for datasets with thousands or millions of observations."
+        },
+        {
+          "description": "May underestimate uncertainty compared to bootstrapping or other resampling methods, as it provides only n different samples rather than a broader exploration of the data distribution."
+        },
+        {
+          "description": "Assumes that removing single data points provides meaningful insights into model stability, which may not hold when multiple correlated observations drive model behaviour."
+        },
+        {
+          "description": "Can be sensitive to the choice of performance metric used for evaluation, as different metrics may show different patterns of sensitivity to individual data points."
+        },
+        {
+          "description": "Provides limited insight into model behaviour on truly novel data, as each jackknife sample is only minimally different from the full training set."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn model_selection.LeaveOneOut",
+          "url": "https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.LeaveOneOut.html",
+          "source_type": "documentation",
+          "description": "Scikit-learn implementation of leave-one-out cross-validation for jackknife resampling"
+        },
+        {
+          "title": "Cross-validation: evaluating estimator performance",
+          "url": "https://scikit-learn.org/stable/modules/cross_validation.html",
+          "source_type": "documentation",
+          "description": "Comprehensive guide to cross-validation methods including leave-one-out in scikit-learn"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "monte-carlo-dropout",
+        "prediction-intervals",
+        "quantile-regression",
+        "conformal-prediction",
+        "deep-ensembles",
+        "bootstrapping"
+      ]
+    },
+    {
+      "slug": "cross-validation",
+      "name": "Cross-validation",
+      "description": "Cross-validation evaluates model performance and robustness by systematically partitioning data into multiple subsets (folds) and training/testing repeatedly on different combinations. Common approaches include k-fold (splitting into k equal parts), stratified (preserving class distributions), and leave-one-out variants. By testing on multiple independent holdout sets, it reveals how performance varies across different data subsamples, provides robust estimates of generalisation ability, and helps detect overfitting or model instability that single train-test splits might miss.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Using 10-fold cross-validation to estimate a healthcare prediction model's true accuracy and detect overfitting, ensuring robust performance estimates that generalise beyond the specific training sample to new patient populations.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing transparent model evaluation in regulatory submissions by showing consistent performance across multiple validation folds, demonstrating to auditors that model performance claims are not cherry-picked from a single favourable test set.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring fair model evaluation across demographic groups by using stratified cross-validation that maintains representative proportions of protected classes in each fold, revealing whether performance is consistent across different population segments.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive for large datasets or complex models, requiring multiple training runs that scale linearly with the number of folds."
+        },
+        {
+          "description": "Can provide overly optimistic performance estimates when data has dependencies or structure (e.g., time series, grouped observations) that violate independence assumptions."
+        },
+        {
+          "description": "May not reflect real-world performance if the training data distribution differs significantly from future deployment conditions or population shifts."
+        },
+        {
+          "description": "Choice of fold number (k) involves a bias-variance trade-off: fewer folds reduce computational cost but increase variance in estimates, whilst more folds increase computation but may introduce bias."
+        },
+        {
+          "description": "Standard cross-validation doesn't account for temporal ordering in sequential data, potentially leading to data leakage where future information influences past predictions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn Cross-validation User Guide",
+          "url": "https://scikit-learn.org/stable/modules/cross_validation.html",
+          "source_type": "documentation",
+          "description": "Comprehensive guide to cross-validation methods and implementations in scikit-learn"
+        },
+        {
+          "title": "Cross-validation: what does it estimate and how well does it do it?",
+          "url": "http://arxiv.org/pdf/2104.00673v4",
+          "source_type": "technical_paper",
+          "authors": [
+            "Stephen Bates",
+            "Trevor Hastie",
+            "Robert Tibshirani"
+          ],
+          "publication_date": "2021-04-01",
+          "description": "Theoretical analysis of what cross-validation estimates and its accuracy in practice"
+        },
+        {
+          "title": "A Study of Cross-Validation and Bootstrap for Accuracy Estimation and Model Selection",
+          "url": "https://www.ijcai.org/Proceedings/95-2/Papers/016.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ron Kohavi"
+          ],
+          "publication_date": "1995-01-01",
+          "description": "Classic paper comparing cross-validation with bootstrap for model evaluation and selection"
+        },
+        {
+          "title": "Cross-Validation in Machine Learning: How to Do It Right",
+          "url": "https://neptune.ai/blog/cross-validation-in-machine-learning-how-to-do-it-right",
+          "source_type": "tutorial",
+          "description": "Practical guide covering different cross-validation strategies and common pitfalls to avoid"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "permutation-tests",
+        "area-under-precision-recall-curve"
+      ]
+    },
+    {
+      "slug": "area-under-precision-recall-curve",
+      "name": "Area Under Precision-Recall Curve",
+      "description": "Area Under Precision-Recall Curve (AUPRC) measures model performance by plotting precision (the proportion of positive predictions that are correct) against recall (the proportion of actual positives that are correctly identified) at various classification thresholds, then calculating the area under the resulting curve. Unlike accuracy or AUC-ROC, AUPRC is particularly valuable for imbalanced datasets where the minority class is of primary interest---a perfect score is 1.0, whilst random performance equals the positive class proportion. By focusing on the precision-recall trade-off, it provides a more informative assessment than overall accuracy for scenarios where false positives and false negatives have different costs, especially when positive examples are rare.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "data-requirements/labelled-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating fraud detection models where genuine transactions far outnumber fraudulent ones, using AUPRC to optimise the balance between catching fraud (high recall) and minimising false alarms (high precision) for cost-effective operations.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing transparent performance metrics for rare disease detection systems to medical regulators, where AUPRC clearly shows model effectiveness on the minority positive class rather than being masked by high accuracy on negative cases.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring fair evaluation of loan default prediction across demographic groups by comparing AUPRC scores, revealing whether models perform equally well at identifying high-risk borrowers regardless of protected characteristics.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "More sensitive to class distribution than ROC curves, making it difficult to compare models across datasets with different positive class proportions or to set universal performance thresholds."
+        },
+        {
+          "description": "Can be overly optimistic on extremely imbalanced datasets where even random predictions may achieve seemingly high AUPRC scores due to the small positive class size."
+        },
+        {
+          "description": "Provides limited insight into performance at specific operating points, requiring additional analysis to determine optimal threshold selection for deployment."
+        },
+        {
+          "description": "Interpolation methods for calculating the area under the curve can vary between implementations, potentially leading to slightly different scores for the same model."
+        },
+        {
+          "description": "Less interpretable than simple metrics like precision or recall at a fixed threshold, making it harder to communicate performance to non-technical stakeholders."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn Precision-Recall",
+          "url": "https://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html",
+          "source_type": "documentation",
+          "description": "Comprehensive guide to precision-recall curves and AUPRC calculation in scikit-learn with practical examples"
+        },
+        {
+          "title": "Stochastic Optimization of Areas Under Precision-Recall Curves with Provable Convergence",
+          "url": "https://www.semanticscholar.org/paper/c1b5b9dfc7d6e024097f63947aa5db06e1c192d8",
+          "source_type": "technical_paper",
+          "authors": [
+            "Qi Qi",
+            "Youzhi Luo",
+            "Zhao Xu",
+            "Shuiwang Ji",
+            "Tianbao Yang"
+          ],
+          "description": "Technical paper on optimising AUPRC directly during model training with convergence guarantees"
+        },
+        {
+          "title": "A Closer Look at AUROC and AUPRC under Class Imbalance",
+          "url": "http://arxiv.org/pdf/2401.06091v4",
+          "source_type": "technical_paper",
+          "authors": [
+            "Matthew B. A. McDermott",
+            "Haoran Zhang",
+            "Lasse Hyldig Hansen",
+            "Giovanni Angelotti",
+            "Jack Gallifant"
+          ],
+          "publication_date": "2024-01-11",
+          "description": "Recent analysis of AUPRC behaviour under extreme class imbalance with practical recommendations"
+        },
+        {
+          "title": "DominikRafacz/auprc",
+          "url": "https://github.com/DominikRafacz/auprc",
+          "source_type": "software_package",
+          "description": "R package for calculating AUPRC with functions for plotting precision-recall curves and mlr3 integration"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 2,
+      "acronym": "AUPRC",
+      "related_techniques": [
+        "permutation-tests",
+        "cross-validation"
+      ]
+    },
+    {
+      "slug": "safety-envelope-testing",
+      "name": "Safety Envelope Testing",
+      "description": "Safety envelope testing systematically evaluates AI system performance at the boundaries of its intended operational domain to identify potential failure modes before deployment. The technique involves defining the system's operational design domain (ODD), creating test scenarios that approach or exceed these boundaries, and measuring performance degradation as conditions become more challenging. By testing edge cases, environmental extremes, and boundary conditions, it reveals where the system transitions from safe to unsafe operation, enabling the establishment of clear operational limits and safety margins for deployment.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/reliability",
+        "data-requirements/test-scenarios",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/boundary-analysis",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/safety-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/testing"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing autonomous vehicle perception systems at the limits of weather conditions, lighting, and sensor coverage to establish safe operational boundaries and determine when human intervention is required.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Evaluating medical AI diagnostic systems with edge cases near decision boundaries to ensure reliable performance and identify when the system should defer to human specialists.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Assessing financial trading algorithms under extreme market conditions and volatility to prevent catastrophic losses and ensure system shutdown protocols activate appropriately.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires comprehensive domain expertise to identify relevant boundary conditions and edge cases that could affect system safety."
+        },
+        {
+          "description": "May be computationally expensive and time-consuming, especially for complex systems with high-dimensional operational domains."
+        },
+        {
+          "description": "Difficult to achieve complete coverage of all possible boundary conditions, potentially missing critical edge cases."
+        },
+        {
+          "description": "Results may not generalise to novel scenarios that fall outside the tested boundary conditions."
+        },
+        {
+          "description": "Establishing appropriate safety thresholds and performance criteria requires careful calibration based on domain-specific risk tolerance."
+        }
+      ],
+      "resources": [
+        {
+          "title": "On the brittleness of AI systems",
+          "url": "https://arxiv.org/abs/2009.00802",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andrew J. Lohn"
+          ],
+          "publication_date": "2020-09-02",
+          "description": "Analysis of AI system brittleness and the need for improved testing, especially for out-of-distribution performance"
+        },
+        {
+          "title": "Safety Assurance of Artificial Intelligence-Based Systems: A Systematic Literature Review",
+          "url": "https://ieeexplore.ieee.org/abstract/document/9984982/",
+          "source_type": "technical_paper",
+          "authors": [
+            "Antonio V. Silva Neto",
+            "João B. Camargo",
+            "Jorge R. Almeida",
+            "Paulo S. Cugnasca"
+          ],
+          "publication_date": "2022-12-14",
+          "description": "Comprehensive systematic literature review on safety assurance methods for AI-based systems"
+        },
+        {
+          "title": "AMLAS - Assurance of Machine Learning in Autonomous Systems",
+          "url": "https://www.york.ac.uk/assuring-autonomy/guidance/amlas/amlas-tool/",
+          "source_type": "documentation",
+          "description": "Tool for systematically creating safety cases for machine learning components with guidance through safety envelope testing"
+        },
+        {
+          "title": "System and Safety Analysis with SysAI A Statistical Learning Framework",
+          "url": "https://ntrs.nasa.gov/citations/20220009665",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yuning He"
+          ],
+          "publication_date": "2022-07-12",
+          "description": "NASA technical report on statistical learning framework for system and safety analysis in AI systems"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "permutation-tests",
+        "cross-validation",
+        "area-under-precision-recall-curve",
+        "red-teaming"
+      ]
+    },
+    {
+      "slug": "internal-review-boards",
+      "name": "Internal Review Boards",
+      "description": "Internal Review Boards (IRBs) provide independent, systematic evaluation of AI/ML projects throughout their lifecycle to identify ethical, safety, and societal risks before they materialise. Typically composed of multidisciplinary experts including ethicists, domain specialists, legal counsel, community representatives, and technical staff, IRBs review project proposals, assess potential harms to individuals and communities, evaluate mitigation strategies, and establish ongoing monitoring requirements. Unlike traditional research ethics committees, AI-focused IRBs address algorithmic bias, fairness concerns, privacy implications, and societal impact at scale, providing essential governance for responsible AI development and deployment.",
+      "assurance_goals": [
+        "Safety",
+        "Fairness",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "evidence-type/governance-framework",
+        "expertise-needed/ethics",
+        "expertise-needed/legal",
+        "expertise-needed/domain-expertise",
+        "lifecycle-stage/project-planning",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/process"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Reviewing a proposed criminal risk assessment tool to evaluate potential discriminatory impacts, privacy implications, and societal consequences before development begins, ensuring vulnerable communities are protected from algorithmic harm.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Evaluating a hiring algorithm for bias across demographic groups, requiring algorithmic audits and ongoing monitoring to ensure equitable treatment of all candidates and compliance with employment law.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Establishing transparent governance processes for a healthcare AI system, requiring clear documentation of decision-making criteria, model limitations, and performance metrics that can be communicated to patients and regulators.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Can significantly slow development timelines and increase project costs, potentially making organisations less competitive or delaying beneficial AI applications from reaching users."
+        },
+        {
+          "description": "Effectiveness heavily depends on board composition, with inadequate diversity or expertise leading to blind spots in risk assessment and biased decision-making."
+        },
+        {
+          "description": "May face internal pressure to approve revenue-generating projects or strategic initiatives, compromising independence and rigorous ethical evaluation."
+        },
+        {
+          "description": "Limited authority or enforcement mechanisms can result in recommendations being ignored, particularly when they conflict with business objectives or technical constraints."
+        },
+        {
+          "description": "Risk of becoming bureaucratic or box-ticking exercises rather than substantive evaluations, especially in organisations without strong ethical leadership or clear accountability structures."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Investigating Algorithm Review Boards for Organizational Responsible Artificial Intelligence Governance",
+          "url": "https://link.springer.com/article/10.1007/s43681-024-00574-8",
+          "source_type": "technical_paper",
+          "authors": [
+            "Emily Hadley",
+            "Alan Blatecky",
+            "Megan Comfort"
+          ],
+          "publication_date": "2024-09-16",
+          "description": "Research on how organizations can establish algorithm review boards to govern and mitigate risks in AI deployment across sectors"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 1,
+      "acronym": "IRBs",
+      "related_techniques": [
+        "red-teaming",
+        "human-in-the-loop-safeguards",
+        "confidence-thresholding",
+        "runtime-monitoring-and-circuit-breakers"
+      ]
+    },
+    {
+      "slug": "red-teaming",
+      "name": "Red Teaming",
+      "description": "Red teaming involves systematic adversarial testing of AI/ML systems by dedicated specialists who attempt to identify flaws, vulnerabilities, harmful outputs, and ways to circumvent safety measures. Drawing from cybersecurity practices, red teams employ diverse attack vectors including prompt injection, adversarial examples, edge case exploitation, social engineering scenarios, and goal misalignment probes. Unlike standard testing that validates expected behaviour, red teaming specifically seeks to break systems through creative and adversarial approaches, revealing non-obvious risks and failure modes that could be exploited maliciously or cause harm in deployment.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Fairness",
+        "Security"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "expertise-needed/security",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/procedural"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing a content moderation AI by attempting to make it generate harmful outputs through creative prompt injection, jailbreaking techniques, and edge case scenarios to identify safety vulnerabilities before deployment.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Probing a medical diagnosis AI system with adversarial examples and edge cases to identify failure modes that could lead to incorrect diagnoses, ensuring the system fails gracefully rather than confidently providing wrong information.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Systematically testing a hiring algorithm with inputs designed to reveal hidden biases, using adversarial examples to check if the system can be manipulated to discriminate against protected groups or favour certain demographics unfairly.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires highly specialized expertise in both AI/ML systems and adversarial attack methods, making it expensive and difficult to scale across organizations."
+        },
+        {
+          "description": "Limited by the creativity and knowledge of red team members - can only discover vulnerabilities that testers think to explore, potentially missing novel attack vectors."
+        },
+        {
+          "description": "Time-intensive process that may not be feasible for rapid development cycles or resource-constrained projects, potentially delaying beneficial system deployments."
+        },
+        {
+          "description": "May not generalize to real-world adversarial scenarios, as red team attacks may differ significantly from actual malicious use patterns or user behaviours."
+        },
+        {
+          "description": "Risk of false confidence if red teaming is incomplete or superficial, leading organizations to believe systems are safer than they actually are."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Red Teaming LLM Applications - DeepLearning.AI",
+          "url": "https://www.deeplearning.ai/short-courses/red-teaming-llm-applications/",
+          "source_type": "tutorial",
+          "description": "Course teaching how to identify and test vulnerabilities in large language model applications using red teaming techniques"
+        },
+        {
+          "title": "Building Safe GenAI Applications: An End-to-End Overview of Red Teaming for Large Language Models",
+          "url": "https://www.semanticscholar.org/paper/a2fb135fc4bfa323bc92dd498ba45bcaf7259a02",
+          "source_type": "technical_paper",
+          "authors": [
+            "Alberto Purpura",
+            "Sahil Wadhwa",
+            "Jesse Zymet",
+            "Akshay Gupta",
+            "Andy Luo",
+            "Melissa Kazemi Rad",
+            "Swapnil Shinde",
+            "M. Sorower"
+          ],
+          "description": "Comprehensive overview of red teaming methodologies for building safe generative AI applications"
+        },
+        {
+          "title": "Effective Automation to Support the Human Infrastructure in AI Red Teaming",
+          "url": "https://www.semanticscholar.org/paper/c42dcb3a795f970d657ee46537553634eea2b014",
+          "source_type": "technical_paper",
+          "authors": [
+            "Alice Qian Zhang",
+            "Jina Suh",
+            "Mary L. Gray",
+            "Hong Shen"
+          ],
+          "description": "Research on automation tools and processes to enhance human-led red teaming efforts in AI systems"
+        },
+        {
+          "title": "Trojan Activation Attack: Red-Teaming Large Language Models using Steering Vectors for Safety-Alignment",
+          "url": "https://www.semanticscholar.org/paper/598df44f1d21a5d1fe3940c0bb2a6128a62c1c15",
+          "source_type": "technical_paper",
+          "authors": [
+            "Haoran Wang",
+            "Kai Shu"
+          ],
+          "description": "Technical paper on using steering vectors to conduct Trojan activation attacks as part of red teaming safety-aligned LLMs"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "internal-review-boards",
+        "human-in-the-loop-safeguards",
+        "confidence-thresholding",
+        "runtime-monitoring-and-circuit-breakers"
+      ]
+    },
+    {
+      "slug": "anomaly-detection",
+      "name": "Anomaly Detection",
+      "description": "Anomaly detection identifies unusual behaviours, inputs, or outputs that deviate significantly from established normal patterns using statistical, machine learning, or rule-based methods. Applied to AI/ML systems, it serves as a continuous monitoring mechanism that can flag unexpected model predictions, suspicious input patterns, data drift, adversarial attacks, or operational malfunctions. By establishing baselines of normal system behaviour and alerting when deviations exceed predefined thresholds, organisations can detect potential security threats, model degradation, fairness violations, or system failures before they cause significant harm.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Fairness",
+        "Security"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring/anomaly-detection",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/system-deployment-and-use",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Monitoring a content moderation AI system to detect when it starts flagging significantly more or fewer posts than usual, which could indicate model drift, adversarial attacks, or changes in user behaviour patterns that require immediate investigation to prevent harmful content from appearing.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Implementing anomaly detection on a medical diagnosis AI to identify when prediction confidence scores or feature importance patterns deviate from historical norms, helping catch model degradation or data quality issues that could lead to misdiagnoses before patients are affected.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Deploying anomaly detection on a hiring algorithm to monitor for unusual patterns in how candidates from different demographic groups are scored or rejected, enabling early detection of emerging bias issues or attempts to game the system through demographic manipulation.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Setting appropriate sensitivity thresholds is challenging and requires domain expertise, as overly sensitive settings generate excessive false alarms whilst conservative settings may miss genuine anomalies."
+        },
+        {
+          "description": "May generate false positives for legitimate edge cases or rare but valid system behaviours, potentially causing unnecessary alerts and disrupting normal operations."
+        },
+        {
+          "description": "Limited effectiveness against novel or sophisticated attacks that deliberately mimic normal patterns or gradually shift behaviour to avoid detection thresholds."
+        },
+        {
+          "description": "Requires substantial historical data to establish reliable baselines of normal behaviour, and may struggle with systems that have naturally high variability or seasonal patterns."
+        },
+        {
+          "description": "Detection lag can occur between when an anomaly begins and when it exceeds detection thresholds, potentially allowing harmful behaviour to persist during the detection window."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Anomaly Detection Toolkit (ADTK)",
+          "url": "https://adtk.readthedocs.io/en/stable/",
+          "source_type": "software_package",
+          "description": "Python library for unsupervised and rule-based time series anomaly detection with unified APIs, flexible algorithm combination, and support for feature engineering and ensemble methods"
+        },
+        {
+          "title": "TimeEval: Time Series Anomaly Detection Evaluation Framework",
+          "url": "https://timeeval.readthedocs.io/",
+          "source_type": "software_package",
+          "description": "Comprehensive evaluation tool for comparing time series anomaly detection algorithms across multiple datasets with standardized metrics and distributed execution support"
+        },
+        {
+          "title": "DeepOD: Deep Learning for Outlier Detection",
+          "url": "https://deepod.readthedocs.io/",
+          "source_type": "software_package",
+          "description": "Python library featuring 27 deep learning algorithms for tabular and time-series anomaly detection with unified APIs and diverse network architectures including LSTM, GRU, TCN, and Transformer"
+        },
+        {
+          "title": "A Beginner's Guide to Anomaly Detection Techniques in Data Science",
+          "url": "https://www.kdnuggets.com/2023/05/beginner-guide-anomaly-detection-techniques-data-science.html",
+          "source_type": "tutorial",
+          "description": "Beginner-friendly introduction covering Isolation Forest, Local Outlier Factor, and Autoencoder techniques with explanations of point, contextual, and collective anomaly types"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "out-of-distribution-detector-for-neural-networks"
+      ]
+    },
+    {
+      "slug": "human-in-the-loop-safeguards",
+      "name": "Human-in-the-Loop Safeguards",
+      "description": "Human-in-the-loop safeguards establish systematic checkpoints where human experts review, validate, or override AI/ML system decisions before they take effect. This governance approach combines automated efficiency with human judgement by defining clear intervention criteria (such as uncertainty thresholds, risk levels, or sensitive contexts) that trigger mandatory human oversight. By incorporating domain expertise, ethical considerations, and contextual understanding that machines may lack, these safeguards help ensure that critical decisions maintain appropriate human accountability whilst preserving the benefits of automated processing for routine cases.",
+      "assurance_goals": [
+        "Safety",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "expertise-needed/domain-knowledge",
+        "expertise-needed/stakeholder-engagement",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/process"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Implementing mandatory human physician review for any medical AI diagnostic recommendation before treatment decisions are made, especially for complex cases or when the system confidence is below established thresholds, ensuring patient safety through expert oversight.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Requiring human review of automated loan approval decisions when applicants request explanations or appeal rejections, allowing human underwriters to provide clear reasoning and ensure customers understand the decision-making process behind their application outcomes.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Mandating human oversight when hiring algorithms flag candidates from underrepresented groups for rejection, enabling recruiters to verify that decisions are based on legitimate job-relevant criteria rather than potential algorithmic bias, and providing fair recourse mechanisms.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Scales poorly with high request volumes, creating bottlenecks that can delay critical decisions and potentially overwhelm human reviewers with excessive workload."
+        },
+        {
+          "description": "Introduces significant latency into automated processes, potentially making time-sensitive applications impractical or reducing user satisfaction with slower response times."
+        },
+        {
+          "description": "Human reviewers may experience decision fatigue, leading to decreased attention quality over time and potential inconsistency in review standards across different cases or time periods."
+        },
+        {
+          "description": "Risk of automation bias where humans defer too readily to AI recommendations rather than providing meaningful independent review, undermining the safeguard's effectiveness."
+        },
+        {
+          "description": "Requires significant ongoing investment in human resources, training, and expertise maintenance, making it expensive to implement and sustain across large-scale systems."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Human-in-the-Loop AI: A Comprehensive Guide",
+          "url": "https://www.holisticai.com/blog/human-in-the-loop-ai",
+          "source_type": "tutorial",
+          "description": "Comprehensive guide covering HITL AI collaborative approach, including human oversight throughout AI lifecycle, bias mitigation, ethical alignment, and applications across healthcare, manufacturing, and finance"
+        },
+        {
+          "title": "Improving the Applicability of AI for Psychiatric Applications through Human-in-the-loop Methodologies",
+          "url": "https://core.ac.uk/download/544064129.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Chandler, Chelsea",
+            "Elvevåg, Brita",
+            "Foltz, Peter W."
+          ],
+          "publication_date": "2022-01-01",
+          "description": "Technical paper exploring HITL methodologies for psychiatric AI applications, focusing on improving applicability and clinical effectiveness through human oversight integration"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "internal-review-boards",
+        "red-teaming",
+        "confidence-thresholding",
+        "runtime-monitoring-and-circuit-breakers"
+      ]
+    },
+    {
+      "slug": "confidence-thresholding",
+      "name": "Confidence Thresholding",
+      "description": "Confidence thresholding creates decision boundaries based on model uncertainty scores, routing predictions into different handling workflows depending on their confidence levels. High-confidence predictions (e.g., above 95%) proceed automatically, whilst medium-confidence cases (e.g., 70-95%) may trigger additional validation or human review, and low-confidence predictions (below 70%) receive extensive oversight or default to conservative fallback actions. This technique enables organisations to maintain automated efficiency for clear-cut cases whilst ensuring appropriate human intervention for uncertain decisions, balancing operational speed with risk management across safety-critical applications.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Implementing tiered confidence thresholds in autonomous vehicle decision-making where high-confidence lane changes (>98%) execute automatically, medium-confidence decisions (85-98%) trigger additional sensor verification, and low-confidence situations (<85%) engage conservative defensive driving modes or request human takeover.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Deploying confidence thresholding in fraud detection systems where high-confidence legitimate transactions (>90%) process immediately, medium-confidence cases (70-90%) undergo additional automated checks, and low-confidence transactions (<70%) require human analyst review, ensuring system reliability through graduated response mechanisms.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Using confidence thresholds in automated loan decisions to provide clear explanations to applicants, where high-confidence approvals include simple explanations, medium-confidence decisions provide detailed reasoning about key factors, and low-confidence cases receive comprehensive explanations with guidance on potential improvements.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Many models produce poorly calibrated confidence scores that don't accurately reflect true prediction uncertainty, leading to overconfident predictions for incorrect outputs or underconfident scores for correct predictions."
+        },
+        {
+          "description": "Threshold selection requires careful calibration and domain expertise, as inappropriate thresholds can either overwhelm human reviewers with too many cases or miss genuinely uncertain decisions that need oversight."
+        },
+        {
+          "description": "High-confidence predictions may still be incorrect or harmful, particularly when models encounter adversarial inputs, out-of-distribution data, or systematic biases that the confidence mechanism doesn't detect."
+        },
+        {
+          "description": "Static thresholds may become inappropriate over time as model performance degrades, data distribution shifts occur, or operational contexts change, requiring ongoing monitoring and adjustment."
+        },
+        {
+          "description": "Implementation complexity increases significantly when managing multiple confidence levels and routing mechanisms, potentially introducing system failures or inconsistencies in how different confidence ranges are handled."
+        }
+      ],
+      "resources": [
+        {
+          "title": "A Novel Dynamic Confidence Threshold Estimation AI Algorithm for Enhanced Object Detection",
+          "url": "https://www.semanticscholar.org/paper/93cda7adfa043c969639e094d6c27b1c4d507208",
+          "source_type": "technical_paper",
+          "authors": [
+            "Mounika Thatikonda",
+            "M. Pk",
+            "Fathi H. Amsaad"
+          ]
+        },
+        {
+          "title": "Improving speech recognition accuracy with multi-confidence thresholding",
+          "url": "https://www.semanticscholar.org/paper/bef1c8668115675f786e5a3c6d165f268e399e9d",
+          "source_type": "technical_paper",
+          "authors": [
+            "Shuangyu Chang"
+          ]
+        },
+        {
+          "title": "Improving the Robustness and Generalization of Deep Neural Network with Confidence Threshold Reduction",
+          "url": "http://arxiv.org/pdf/2206.00913v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xiangyuan Yang",
+            "Jie Lin",
+            "Hanlin Zhang",
+            "Xinyu Yang",
+            "Peng Zhao"
+          ],
+          "publication_date": "2022-06-02"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "internal-review-boards",
+        "red-teaming",
+        "human-in-the-loop-safeguards",
+        "runtime-monitoring-and-circuit-breakers"
+      ]
+    },
+    {
+      "slug": "runtime-monitoring-and-circuit-breakers",
+      "name": "Runtime Monitoring and Circuit Breakers",
+      "description": "Runtime monitoring and circuit breakers establish continuous surveillance of AI/ML systems in production, tracking critical metrics such as prediction accuracy, response times, input characteristics, output distributions, and system resource usage. When monitored parameters exceed predefined safety thresholds or exhibit anomalous patterns, automated circuit breakers immediately trigger protective actions including request throttling, service degradation, system shutdown, or failover to backup mechanisms. This approach provides real-time defensive capabilities that prevent cascading failures, ensure consistent service reliability, and maintain transparent operation status for stakeholders monitoring system health.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring/anomaly-detection",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/software-engineering",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/system-deployment-and-use",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Implementing circuit breakers in a medical AI system that automatically halt diagnosis recommendations if prediction confidence drops below 85%, error rates exceed 2%, or response times increase beyond acceptable limits, preventing potentially harmful misdiagnoses during system degradation.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Deploying runtime monitoring for a recommendation engine that tracks recommendation diversity, click-through rates, and user engagement patterns, automatically switching to simpler algorithms when complex models show signs of performance degradation or unusual behaviour patterns.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Establishing transparent monitoring dashboards for a loan approval system that display real-time metrics on approval rates across demographic groups, processing times, and model confidence levels, enabling stakeholders to verify consistent and fair operation.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Threshold calibration requires extensive domain expertise and historical data analysis, as overly sensitive settings trigger excessive false alarms whilst conservative thresholds may miss genuine system failures."
+        },
+        {
+          "description": "False positive alerts can unnecessarily disrupt service availability and user experience, potentially causing more harm than the issues they aim to prevent, especially in time-sensitive applications."
+        },
+        {
+          "description": "Sophisticated attacks or gradual performance degradation may operate within normal metric ranges, evading detection by staying below established thresholds whilst still causing cumulative damage."
+        },
+        {
+          "description": "Monitoring infrastructure introduces additional complexity and potential failure points, requiring robust implementation to avoid situations where the monitoring system itself becomes a source of system instability."
+        },
+        {
+          "description": "High-frequency monitoring and circuit breaker mechanisms can add computational overhead and latency to system operations, potentially impacting performance in resource-constrained environments."
+        }
+      ],
+      "resources": [
+        {
+          "title": "aiobreaker: Python Circuit Breaker for Asyncio",
+          "url": "https://github.com/arlyon/aiobreaker",
+          "source_type": "software_package",
+          "description": "Python library implementing the Circuit Breaker design pattern for asyncio applications, preventing system-wide failures by protecting integration points with configurable failure thresholds and reset timeouts"
+        },
+        {
+          "title": "Improving Alignment and Robustness with Circuit Breakers",
+          "url": "https://arxiv.org/html/2406.04313v4",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andy Zou"
+          ],
+          "description": "Research paper introducing circuit breakers for AI safety that directly interrupt harmful model representations during generation, significantly reducing attack success rates while maintaining model capabilities"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "internal-review-boards",
+        "red-teaming",
+        "human-in-the-loop-safeguards",
+        "confidence-thresholding"
+      ]
+    },
+    {
+      "slug": "model-cards",
+      "name": "Model Cards",
+      "description": "Model cards are standardised documentation frameworks that systematically document machine learning models through structured templates. The templates cover intended use cases, performance metrics across different demographic groups and operating conditions, training data characteristics, evaluation procedures, limitations, and ethical considerations. They serve as comprehensive technical specifications that enable informed model selection, prevent inappropriate deployment, support regulatory compliance, and facilitate fair assessment by providing transparent reporting of model capabilities and constraints across diverse populations and scenarios.",
+      "assurance_goals": [
+        "Transparency",
+        "Fairness",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/documentation/model-card",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-training-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/documentation",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/regulatory-compliance",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/documentation"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Documenting a medical diagnosis AI with detailed performance metrics across different patient demographics, age groups, and clinical conditions, enabling healthcare providers to understand when the model should be trusted and when additional expert consultation is needed for patient safety.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Creating comprehensive model cards for hiring algorithms that transparently report performance differences across demographic groups, helping HR departments identify potential bias issues and ensure equitable candidate evaluation processes.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Publishing detailed model documentation for a credit scoring API that clearly describes training data sources, evaluation methodologies, and performance limitations, enabling financial institutions to make informed decisions about model deployment and regulatory compliance.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Creating comprehensive model cards requires substantial time, expertise, and resources to gather performance data across diverse conditions and demographic groups, potentially delaying model deployment timelines."
+        },
+        {
+          "description": "Information can become outdated quickly as models are retrained, updated, or deployed in new contexts, requiring ongoing maintenance and version control to remain accurate and useful."
+        },
+        {
+          "description": "Organisations may provide incomplete or superficial documentation to avoid revealing competitive advantages or potential liabilities, undermining the transparency goals of model cards."
+        },
+        {
+          "description": "Lack of standardised formats and enforcement mechanisms means model card quality and completeness vary significantly across different organisations and use cases."
+        },
+        {
+          "description": "Technical complexity of documenting model behaviour across all relevant dimensions may exceed the expertise of some development teams, leading to gaps in critical information."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Model Cards for Model Reporting",
+          "url": "http://arxiv.org/pdf/1810.03993v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Margaret Mitchell",
+            "Simone Wu",
+            "Andrew Zaldivar",
+            "Parker Barnes",
+            "Lucy Vasserman",
+            "Ben Hutchinson",
+            "Elena Spitzer",
+            "Inioluwa Deborah Raji",
+            "Timnit Gebru"
+          ],
+          "publication_date": "2018-10-05",
+          "description": "Foundational paper introducing model cards as a framework for transparent model reporting and responsible AI documentation"
+        },
+        {
+          "title": "Model Card Guidebook",
+          "url": "https://huggingface.co/docs/hub/en/model-card-guidebook",
+          "source_type": "tutorial",
+          "description": "Comprehensive guide providing updated model card templates, creator tools, and practical insights for implementing model documentation across diverse stakeholder needs"
+        },
+        {
+          "title": "scikit-learn model cards documentation",
+          "url": "https://skops.readthedocs.io/en/stable/auto_examples/plot_model_card.html",
+          "source_type": "tutorial",
+          "description": "Practical tutorial demonstrating how to create comprehensive model cards for scikit-learn models using the skops library with metrics, visualisations, and metadata"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "datasheets-for-datasets",
+        "data-version-control",
+        "automated-documentation-generation"
+      ]
+    },
+    {
+      "slug": "mlflow-experiment-tracking",
+      "name": "MLflow Experiment Tracking",
+      "description": "MLflow is an open-source platform that tracks machine learning experiments by automatically logging parameters, metrics, models, and artifacts throughout the ML lifecycle. It provides a centralised repository for comparing different experimental runs, reproducing results, and managing model versions. Teams can track hyperparameters, evaluation metrics, model files, and execution environment details, creating a comprehensive audit trail that supports collaboration, reproducibility, and regulatory compliance across the entire machine learning development process.",
+      "assurance_goals": [
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/documentation",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/software-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/process"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Tracking medical diagnosis model experiments across different hospitals, logging hyperparameters, performance metrics, and model artifacts to ensure reproducible research and enable regulatory audits of model development processes.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Managing fraud detection model versions in production, tracking which specific model configuration and training data version is deployed, enabling quick rollback and performance comparison when system reliability issues arise.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Documenting loan approval model experiments with complete parameter tracking and performance logging across demographic groups, supporting fair lending compliance by providing transparent records of model development and validation processes.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires teams to adopt disciplined logging practices and may introduce overhead to development workflows if not properly integrated into existing processes."
+        },
+        {
+          "description": "Storage costs can grow substantially with extensive artifact logging, especially for large models or high-frequency experimentation."
+        },
+        {
+          "description": "Tracking quality depends on developers consistently logging relevant information, with incomplete logging leading to gaps in experimental records."
+        },
+        {
+          "description": "Complex multi-stage pipelines may require custom instrumentation to capture dependencies and data flow relationships effectively."
+        },
+        {
+          "description": "Security and access control configurations require careful setup to protect sensitive model information and experimental data in shared environments."
+        }
+      ],
+      "resources": [
+        {
+          "title": "MLflow Documentation",
+          "url": "https://mlflow.org/docs/latest/index.html",
+          "source_type": "documentation",
+          "description": "Comprehensive official documentation covering MLflow setup, tracking APIs, model management, and deployment workflows with examples and best practices"
+        },
+        {
+          "title": "mlflow/mlflow",
+          "url": "https://github.com/mlflow/mlflow",
+          "source_type": "software_package",
+          "description": "Official MLflow open-source repository containing the complete platform for ML experiment tracking, model management, and deployment"
+        },
+        {
+          "title": "An MLOps Framework for Explainable Network Intrusion Detection with MLflow",
+          "url": "https://ieeexplore.ieee.org/abstract/document/10733700",
+          "source_type": "technical_paper",
+          "authors": [
+            "Vincenzo Spadari",
+            "Francesco Cerasuolo",
+            "Giampaolo Bovenzi",
+            "Antonio Pescapè"
+          ],
+          "publication_date": "2024-06-26",
+          "description": "Research paper demonstrating MLflow framework application for managing machine learning pipelines in network intrusion detection, covering experiment tracking, model deployment, and monitoring across security datasets"
+        },
+        {
+          "title": "MLflow Tutorial - Machine Learning Lifecycle Management",
+          "url": "https://www.mlflow.org/docs/latest/tutorials-and-examples/tutorial.html",
+          "source_type": "tutorial",
+          "description": "Step-by-step tutorial demonstrating MLflow experiment tracking, model packaging, and deployment using real machine learning examples"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "model-cards",
+        "datasheets-for-datasets",
+        "data-version-control",
+        "automated-documentation-generation"
+      ]
+    },
+    {
+      "slug": "data-version-control",
+      "name": "Data Version Control",
+      "description": "Data Version Control (DVC) is a Git-like version control system specifically designed for machine learning data, models, and experiments. It tracks changes to large data files, maintains reproducible ML pipelines, and creates a complete audit trail of data transformations, model training, and evaluation processes. DVC works alongside Git to provide end-to-end lineage tracking from raw data through preprocessing, training, and deployment, enabling teams to reproduce any model version and understand exactly how datasets evolved throughout the ML lifecycle.",
+      "assurance_goals": [
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/documentation",
+        "expertise-needed/software-engineering",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/data-handling",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/process"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Tracking medical imaging dataset versions and model training pipelines to ensure reproducible research results, enabling hospitals to verify which specific data version and preprocessing steps were used for regulatory submissions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Managing credit scoring model data pipelines with complete version control of training datasets, feature engineering steps, and model artifacts, ensuring reliable model reproduction and rollback capabilities when performance issues arise.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Maintaining pharmaceutical drug discovery data lineage across multiple research teams, tracking compound datasets, feature extraction processes, and model versions to support FDA submissions with complete experimental provenance.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires learning Git-like workflows and CLI commands, which may have a steep learning curve for teams unfamiliar with version control systems."
+        },
+        {
+          "description": "Storage costs can be substantial for large datasets with frequent changes, especially when maintaining multiple versions and branches of data."
+        },
+        {
+          "description": "Complex data pipelines with many interdependencies may require significant setup time and careful configuration to track properly."
+        },
+        {
+          "description": "Performance can degrade with very large files or datasets due to checksumming and synchronisation overhead during operations."
+        },
+        {
+          "description": "Team coordination becomes essential as improper branch management or merge conflicts can disrupt collaborative workflows."
+        }
+      ],
+      "resources": [
+        {
+          "title": "DVC Documentation",
+          "url": "https://dvc.org/doc",
+          "source_type": "documentation",
+          "description": "Comprehensive official documentation covering DVC installation, data versioning, pipeline creation, and collaborative workflows with tutorials and best practices"
+        },
+        {
+          "title": "iterative/dvc",
+          "url": "https://github.com/iterative/dvc",
+          "source_type": "software_package",
+          "description": "Official DVC open-source repository containing the complete data version control system for machine learning with Git integration"
+        },
+        {
+          "title": "DVC Tutorial - Data Version Control for Machine Learning",
+          "url": "https://dvc.org/doc/start",
+          "source_type": "tutorial",
+          "description": "Step-by-step getting started guide demonstrating DVC basics including data tracking, pipeline creation, and experiment management"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "acronym": "DVC",
+      "related_techniques": [
+        "model-cards",
+        "datasheets-for-datasets",
+        "mlflow-experiment-tracking",
+        "automated-documentation-generation"
+      ]
+    }
+  ],
+  "count": 28
+}

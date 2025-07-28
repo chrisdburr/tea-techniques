@@ -1,0 +1,319 @@
+{
+  "goal": {
+    "name": "Security",
+    "slug": "security",
+    "count": 3,
+    "description": "Protecting AI systems from malicious attacks and unauthorized access."
+  },
+  "techniques": [
+    {
+      "slug": "homomorphic-encryption",
+      "name": "Homomorphic Encryption",
+      "description": "Homomorphic encryption allows computation on encrypted data without decrypting it first, producing encrypted results that, when decrypted, match the results of performing the same operations on the plaintext. This enables secure outsourced computation where sensitive data remains encrypted throughout processing. By allowing ML operations on encrypted data, it provides strong privacy guarantees for applications involving highly sensitive information.",
+      "assurance_goals": [
+        "Privacy",
+        "Safety",
+        "Transparency",
+        "Security"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/privacy-guarantee",
+        "expertise-needed/cryptography",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Enabling a cloud-based medical diagnosis service to process encrypted patient data and return encrypted results without the cloud provider ever accessing actual medical information, ensuring complete patient privacy during outsourced computation.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Securing financial risk assessment computations by allowing banks to jointly analyse encrypted transaction patterns for fraud detection without exposing individual customer data, reducing systemic security risks.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Enabling transparent audit of algorithmic decision-making by allowing regulators to verify model computations on encrypted data, providing accountability whilst protecting the proprietary nature of both the algorithm and the underlying data.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Extremely computationally expensive, often 100-1000x slower than unencrypted computation, making it impractical for real-time applications or large-scale data processing."
+        },
+        {
+          "description": "Limited range of operations supported efficiently, with complex operations like divisions, comparisons, and non-polynomial functions being particularly challenging or impossible to implement."
+        },
+        {
+          "description": "Implementation requires deep cryptographic expertise to avoid security vulnerabilities, choose appropriate parameters, and optimise performance for specific use cases."
+        },
+        {
+          "description": "Memory and storage requirements are significantly higher than traditional computation, as encrypted data typically requires much more space than plaintext equivalents."
+        },
+        {
+          "description": "Current fully homomorphic encryption schemes have practical limitations on computation depth before noise accumulation requires expensive bootstrapping operations to refresh ciphertexts."
+        }
+      ],
+      "resources": [
+        {
+          "title": "zama-ai/concrete-ml",
+          "url": "https://github.com/zama-ai/concrete-ml",
+          "source_type": "software_package",
+          "description": "Privacy-preserving machine learning library that enables data scientists to run ML models on encrypted data using FHE without cryptography expertise"
+        },
+        {
+          "title": "Survey on Fully Homomorphic Encryption, Theory, and Applications",
+          "url": "https://core.ac.uk/download/579858842.pdf",
+          "source_type": "documentation",
+          "authors": [
+            "Chiara Marcolla",
+            "Frank H.P. Fitzek",
+            "Marc Manzano",
+            "Najwa Aaraj",
+            "Riccardo Bassoli",
+            "Victor Sucasas"
+          ],
+          "publication_date": "2022-10-06",
+          "description": "Comprehensive survey covering FHE theory, cryptographic schemes, and practical applications across different domains"
+        },
+        {
+          "title": "Welcome to OpenFHE's documentation! — OpenFHE documentation",
+          "url": "https://openfhe-development.readthedocs.io/",
+          "source_type": "documentation",
+          "description": "Documentation for open-source C++ library supporting multiple FHE schemes including BFV, BGV, CKKS, and Boolean circuits"
+        },
+        {
+          "title": "Evaluation of Privacy-Preserving Support Vector Machine (SVM) Learning Using Homomorphic Encryption",
+          "url": "https://core.ac.uk/download/656115203.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ali, Hisham",
+            "Buchanan, William J."
+          ],
+          "publication_date": "2025-01-01",
+          "description": "Technical paper evaluating performance overhead of SVM learning with homomorphic encryption for privacy-preserving ML"
+        },
+        {
+          "title": "microsoft/SEAL",
+          "url": "https://github.com/microsoft/SEAL",
+          "source_type": "software_package",
+          "description": "Easy-to-use homomorphic encryption library enabling computations on encrypted integers and real numbers"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "synthetic-data-generation",
+        "federated-learning",
+        "differential-privacy"
+      ]
+    },
+    {
+      "slug": "red-teaming",
+      "name": "Red Teaming",
+      "description": "Red teaming involves systematic adversarial testing of AI/ML systems by dedicated specialists who attempt to identify flaws, vulnerabilities, harmful outputs, and ways to circumvent safety measures. Drawing from cybersecurity practices, red teams employ diverse attack vectors including prompt injection, adversarial examples, edge case exploitation, social engineering scenarios, and goal misalignment probes. Unlike standard testing that validates expected behaviour, red teaming specifically seeks to break systems through creative and adversarial approaches, revealing non-obvious risks and failure modes that could be exploited maliciously or cause harm in deployment.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Fairness",
+        "Security"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "expertise-needed/security",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/procedural"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing a content moderation AI by attempting to make it generate harmful outputs through creative prompt injection, jailbreaking techniques, and edge case scenarios to identify safety vulnerabilities before deployment.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Probing a medical diagnosis AI system with adversarial examples and edge cases to identify failure modes that could lead to incorrect diagnoses, ensuring the system fails gracefully rather than confidently providing wrong information.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Systematically testing a hiring algorithm with inputs designed to reveal hidden biases, using adversarial examples to check if the system can be manipulated to discriminate against protected groups or favour certain demographics unfairly.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires highly specialized expertise in both AI/ML systems and adversarial attack methods, making it expensive and difficult to scale across organizations."
+        },
+        {
+          "description": "Limited by the creativity and knowledge of red team members - can only discover vulnerabilities that testers think to explore, potentially missing novel attack vectors."
+        },
+        {
+          "description": "Time-intensive process that may not be feasible for rapid development cycles or resource-constrained projects, potentially delaying beneficial system deployments."
+        },
+        {
+          "description": "May not generalize to real-world adversarial scenarios, as red team attacks may differ significantly from actual malicious use patterns or user behaviours."
+        },
+        {
+          "description": "Risk of false confidence if red teaming is incomplete or superficial, leading organizations to believe systems are safer than they actually are."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Red Teaming LLM Applications - DeepLearning.AI",
+          "url": "https://www.deeplearning.ai/short-courses/red-teaming-llm-applications/",
+          "source_type": "tutorial",
+          "description": "Course teaching how to identify and test vulnerabilities in large language model applications using red teaming techniques"
+        },
+        {
+          "title": "Building Safe GenAI Applications: An End-to-End Overview of Red Teaming for Large Language Models",
+          "url": "https://www.semanticscholar.org/paper/a2fb135fc4bfa323bc92dd498ba45bcaf7259a02",
+          "source_type": "technical_paper",
+          "authors": [
+            "Alberto Purpura",
+            "Sahil Wadhwa",
+            "Jesse Zymet",
+            "Akshay Gupta",
+            "Andy Luo",
+            "Melissa Kazemi Rad",
+            "Swapnil Shinde",
+            "M. Sorower"
+          ],
+          "description": "Comprehensive overview of red teaming methodologies for building safe generative AI applications"
+        },
+        {
+          "title": "Effective Automation to Support the Human Infrastructure in AI Red Teaming",
+          "url": "https://www.semanticscholar.org/paper/c42dcb3a795f970d657ee46537553634eea2b014",
+          "source_type": "technical_paper",
+          "authors": [
+            "Alice Qian Zhang",
+            "Jina Suh",
+            "Mary L. Gray",
+            "Hong Shen"
+          ],
+          "description": "Research on automation tools and processes to enhance human-led red teaming efforts in AI systems"
+        },
+        {
+          "title": "Trojan Activation Attack: Red-Teaming Large Language Models using Steering Vectors for Safety-Alignment",
+          "url": "https://www.semanticscholar.org/paper/598df44f1d21a5d1fe3940c0bb2a6128a62c1c15",
+          "source_type": "technical_paper",
+          "authors": [
+            "Haoran Wang",
+            "Kai Shu"
+          ],
+          "description": "Technical paper on using steering vectors to conduct Trojan activation attacks as part of red teaming safety-aligned LLMs"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "internal-review-boards",
+        "human-in-the-loop-safeguards",
+        "confidence-thresholding",
+        "runtime-monitoring-and-circuit-breakers"
+      ]
+    },
+    {
+      "slug": "anomaly-detection",
+      "name": "Anomaly Detection",
+      "description": "Anomaly detection identifies unusual behaviours, inputs, or outputs that deviate significantly from established normal patterns using statistical, machine learning, or rule-based methods. Applied to AI/ML systems, it serves as a continuous monitoring mechanism that can flag unexpected model predictions, suspicious input patterns, data drift, adversarial attacks, or operational malfunctions. By establishing baselines of normal system behaviour and alerting when deviations exceed predefined thresholds, organisations can detect potential security threats, model degradation, fairness violations, or system failures before they cause significant harm.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Fairness",
+        "Security"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring/anomaly-detection",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/system-deployment-and-use",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Monitoring a content moderation AI system to detect when it starts flagging significantly more or fewer posts than usual, which could indicate model drift, adversarial attacks, or changes in user behaviour patterns that require immediate investigation to prevent harmful content from appearing.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Implementing anomaly detection on a medical diagnosis AI to identify when prediction confidence scores or feature importance patterns deviate from historical norms, helping catch model degradation or data quality issues that could lead to misdiagnoses before patients are affected.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Deploying anomaly detection on a hiring algorithm to monitor for unusual patterns in how candidates from different demographic groups are scored or rejected, enabling early detection of emerging bias issues or attempts to game the system through demographic manipulation.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Setting appropriate sensitivity thresholds is challenging and requires domain expertise, as overly sensitive settings generate excessive false alarms whilst conservative settings may miss genuine anomalies."
+        },
+        {
+          "description": "May generate false positives for legitimate edge cases or rare but valid system behaviours, potentially causing unnecessary alerts and disrupting normal operations."
+        },
+        {
+          "description": "Limited effectiveness against novel or sophisticated attacks that deliberately mimic normal patterns or gradually shift behaviour to avoid detection thresholds."
+        },
+        {
+          "description": "Requires substantial historical data to establish reliable baselines of normal behaviour, and may struggle with systems that have naturally high variability or seasonal patterns."
+        },
+        {
+          "description": "Detection lag can occur between when an anomaly begins and when it exceeds detection thresholds, potentially allowing harmful behaviour to persist during the detection window."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Anomaly Detection Toolkit (ADTK)",
+          "url": "https://adtk.readthedocs.io/en/stable/",
+          "source_type": "software_package",
+          "description": "Python library for unsupervised and rule-based time series anomaly detection with unified APIs, flexible algorithm combination, and support for feature engineering and ensemble methods"
+        },
+        {
+          "title": "TimeEval: Time Series Anomaly Detection Evaluation Framework",
+          "url": "https://timeeval.readthedocs.io/",
+          "source_type": "software_package",
+          "description": "Comprehensive evaluation tool for comparing time series anomaly detection algorithms across multiple datasets with standardized metrics and distributed execution support"
+        },
+        {
+          "title": "DeepOD: Deep Learning for Outlier Detection",
+          "url": "https://deepod.readthedocs.io/",
+          "source_type": "software_package",
+          "description": "Python library featuring 27 deep learning algorithms for tabular and time-series anomaly detection with unified APIs and diverse network architectures including LSTM, GRU, TCN, and Transformer"
+        },
+        {
+          "title": "A Beginner's Guide to Anomaly Detection Techniques in Data Science",
+          "url": "https://www.kdnuggets.com/2023/05/beginner-guide-anomaly-detection-techniques-data-science.html",
+          "source_type": "tutorial",
+          "description": "Beginner-friendly introduction covering Isolation Forest, Local Outlier Factor, and Autoencoder techniques with explanations of point, contextual, and collective anomaly types"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "out-of-distribution-detector-for-neural-networks"
+      ]
+    }
+  ],
+  "count": 3
+}

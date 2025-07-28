@@ -1,0 +1,195 @@
+[
+  {
+    "slug": "influence-functions",
+    "name": "Influence Functions",
+    "description": "Influence functions quantify how much each training example influenced a model's predictions by computing the change in prediction that would occur if that training example were removed and the model retrained. Using calculus and the implicit function theorem, they approximate this 'leave-one-out' effect without actually retraining the model by computing gradients and Hessian information. This mathematical approach reveals which specific training examples were most responsible for pushing the model toward or away from particular predictions, enabling practitioners to trace problematic outputs back to their root causes in the training data.",
+    "assurance_goals": [
+      "Explainability",
+      "Fairness",
+      "Privacy"
+    ],
+    "tags": [
+      "applicable-models/agnostic",
+      "assurance-goal-category/explainability",
+      "assurance-goal-category/fairness",
+      "assurance-goal-category/privacy",
+      "data-requirements/access-to-training-data",
+      "data-type/any",
+      "evidence-type/quantitative-metric",
+      "expertise-needed/ml-engineering",
+      "explanatory-scope/local",
+      "lifecycle-stage/model-development",
+      "technique-type/algorithmic"
+    ],
+    "searchText": "influence functions influence functions quantify how much each training example influenced a model's predictions by computing the change in prediction that would occur if that training example were removed and the model retrained. using calculus and the implicit function theorem, they approximate this 'leave-one-out' effect without actually retraining the model by computing gradients and hessian information. this mathematical approach reveals which specific training examples were most responsible for pushing the model toward or away from particular predictions, enabling practitioners to trace problematic outputs back to their root causes in the training data. explainability fairness privacy applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/fairness assurance-goal-category/privacy data-requirements/access-to-training-data data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
+  },
+  {
+    "slug": "synthetic-data-generation",
+    "name": "Synthetic Data Generation",
+    "description": "Synthetic data generation creates artificial datasets that aim to preserve the statistical properties, distributions, and relationships of real data whilst containing no actual records from real individuals. The technique encompasses various approaches including generative adversarial networks (GANs), variational autoencoders (VAEs), statistical sampling methods, and privacy-preserving techniques like differential privacy. Beyond privacy protection, synthetic data serves multiple purposes: augmenting limited datasets, balancing class distributions, testing model robustness, enabling data sharing across organisations, and supporting fairness assessments by generating representative samples for underrepresented groups.",
+    "assurance_goals": [
+      "Privacy",
+      "Fairness",
+      "Reliability",
+      "Safety"
+    ],
+    "tags": [
+      "applicable-models/agnostic",
+      "assurance-goal-category/privacy",
+      "assurance-goal-category/fairness",
+      "assurance-goal-category/reliability",
+      "assurance-goal-category/safety",
+      "data-requirements/no-special-requirements",
+      "data-type/any",
+      "evidence-type/structured-output",
+      "expertise-needed/cryptography",
+      "expertise-needed/ml-engineering",
+      "expertise-needed/statistics",
+      "lifecycle-stage/data-handling",
+      "lifecycle-stage/model-development",
+      "technique-type/algorithmic"
+    ],
+    "searchText": "synthetic data generation synthetic data generation creates artificial datasets that aim to preserve the statistical properties, distributions, and relationships of real data whilst containing no actual records from real individuals. the technique encompasses various approaches including generative adversarial networks (gans), variational autoencoders (vaes), statistical sampling methods, and privacy-preserving techniques like differential privacy. beyond privacy protection, synthetic data serves multiple purposes: augmenting limited datasets, balancing class distributions, testing model robustness, enabling data sharing across organisations, and supporting fairness assessments by generating representative samples for underrepresented groups. privacy fairness reliability safety applicable-models/agnostic assurance-goal-category/privacy assurance-goal-category/fairness assurance-goal-category/reliability assurance-goal-category/safety data-requirements/no-special-requirements data-type/any evidence-type/structured-output expertise-needed/cryptography expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/data-handling lifecycle-stage/model-development technique-type/algorithmic"
+  },
+  {
+    "slug": "federated-learning",
+    "name": "Federated Learning",
+    "description": "Federated learning enables collaborative model training across multiple distributed parties (devices, organisations, or data centres) without requiring centralised data sharing. Participants train models locally on their private datasets and only share model updates (gradients, weights, or aggregated statistics) with a central coordinator. This distributed approach serves multiple purposes: preserving data privacy and sovereignty, reducing communication costs, enabling learning from diverse data sources, improving model robustness through heterogeneous training, and facilitating compliance with data protection regulations whilst maintaining model performance comparable to centralised training.",
+    "assurance_goals": [
+      "Privacy",
+      "Reliability",
+      "Safety",
+      "Fairness"
+    ],
+    "tags": [
+      "applicable-models/agnostic",
+      "assurance-goal-category/privacy",
+      "assurance-goal-category/reliability",
+      "assurance-goal-category/safety",
+      "assurance-goal-category/fairness",
+      "data-requirements/no-special-requirements",
+      "data-type/any",
+      "evidence-type/quantitative-metric",
+      "expertise-needed/ml-engineering",
+      "expertise-needed/software-engineering",
+      "lifecycle-stage/model-development",
+      "lifecycle-stage/system-deployment-and-use",
+      "technique-type/algorithmic"
+    ],
+    "searchText": "federated learning federated learning enables collaborative model training across multiple distributed parties (devices, organisations, or data centres) without requiring centralised data sharing. participants train models locally on their private datasets and only share model updates (gradients, weights, or aggregated statistics) with a central coordinator. this distributed approach serves multiple purposes: preserving data privacy and sovereignty, reducing communication costs, enabling learning from diverse data sources, improving model robustness through heterogeneous training, and facilitating compliance with data protection regulations whilst maintaining model performance comparable to centralised training. privacy reliability safety fairness applicable-models/agnostic assurance-goal-category/privacy assurance-goal-category/reliability assurance-goal-category/safety assurance-goal-category/fairness data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/software-engineering lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+  },
+  {
+    "slug": "differential-privacy",
+    "name": "Differential Privacy",
+    "description": "Differential privacy provides mathematically rigorous privacy protection by adding carefully calibrated random noise to data queries, statistical computations, or machine learning outputs. The technique works by ensuring that the presence or absence of any individual's data has minimal impact on the results - specifically, any query result should be nearly indistinguishable whether or not a particular person's data is included. This is achieved through controlled noise addition that scales with the query's sensitivity and a privacy budget (epsilon) that quantifies the privacy-utility trade-off. The smaller the epsilon, the more noise is added and the stronger the privacy guarantee, but at the cost of reduced accuracy.",
+    "assurance_goals": [
+      "Privacy",
+      "Transparency",
+      "Fairness"
+    ],
+    "tags": [
+      "applicable-models/agnostic",
+      "assurance-goal-category/privacy",
+      "assurance-goal-category/privacy/formal-guarantee/differential-privacy",
+      "assurance-goal-category/transparency",
+      "assurance-goal-category/fairness",
+      "data-requirements/no-special-requirements",
+      "data-type/any",
+      "evidence-type/quantitative-metric",
+      "evidence-type/privacy-guarantee",
+      "expertise-needed/cryptography",
+      "expertise-needed/ml-engineering",
+      "expertise-needed/statistics",
+      "lifecycle-stage/data-handling",
+      "lifecycle-stage/model-development",
+      "lifecycle-stage/system-deployment-and-use",
+      "technique-type/algorithmic"
+    ],
+    "searchText": "differential privacy differential privacy provides mathematically rigorous privacy protection by adding carefully calibrated random noise to data queries, statistical computations, or machine learning outputs. the technique works by ensuring that the presence or absence of any individual's data has minimal impact on the results - specifically, any query result should be nearly indistinguishable whether or not a particular person's data is included. this is achieved through controlled noise addition that scales with the query's sensitivity and a privacy budget (epsilon) that quantifies the privacy-utility trade-off. the smaller the epsilon, the more noise is added and the stronger the privacy guarantee, but at the cost of reduced accuracy. privacy transparency fairness applicable-models/agnostic assurance-goal-category/privacy assurance-goal-category/privacy/formal-guarantee/differential-privacy assurance-goal-category/transparency assurance-goal-category/fairness data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric evidence-type/privacy-guarantee expertise-needed/cryptography expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/data-handling lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+  },
+  {
+    "slug": "homomorphic-encryption",
+    "name": "Homomorphic Encryption",
+    "description": "Homomorphic encryption allows computation on encrypted data without decrypting it first, producing encrypted results that, when decrypted, match the results of performing the same operations on the plaintext. This enables secure outsourced computation where sensitive data remains encrypted throughout processing. By allowing ML operations on encrypted data, it provides strong privacy guarantees for applications involving highly sensitive information.",
+    "assurance_goals": [
+      "Privacy",
+      "Safety",
+      "Transparency",
+      "Security"
+    ],
+    "tags": [
+      "applicable-models/agnostic",
+      "assurance-goal-category/privacy",
+      "assurance-goal-category/privacy/formal-guarantee",
+      "assurance-goal-category/safety",
+      "assurance-goal-category/transparency",
+      "data-requirements/no-special-requirements",
+      "data-type/any",
+      "evidence-type/quantitative-metric",
+      "evidence-type/privacy-guarantee",
+      "expertise-needed/cryptography",
+      "expertise-needed/ml-engineering",
+      "lifecycle-stage/model-development",
+      "lifecycle-stage/system-deployment-and-use",
+      "technique-type/algorithmic"
+    ],
+    "searchText": "homomorphic encryption homomorphic encryption allows computation on encrypted data without decrypting it first, producing encrypted results that, when decrypted, match the results of performing the same operations on the plaintext. this enables secure outsourced computation where sensitive data remains encrypted throughout processing. by allowing ml operations on encrypted data, it provides strong privacy guarantees for applications involving highly sensitive information. privacy safety transparency security applicable-models/agnostic assurance-goal-category/privacy assurance-goal-category/privacy/formal-guarantee assurance-goal-category/safety assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric evidence-type/privacy-guarantee expertise-needed/cryptography expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+  },
+  {
+    "slug": "datasheets-for-datasets",
+    "name": "Datasheets for Datasets",
+    "description": "Datasheets for datasets establish comprehensive documentation standards for datasets, systematically recording creation methodology, data composition, collection procedures, preprocessing transformations, intended applications, potential biases, privacy considerations, and maintenance protocols. These structured documents enhance dataset transparency by providing essential context for appropriate usage, enabling informed decisions about dataset suitability for specific tasks, supporting bias detection and mitigation efforts, ensuring compliance with data protection regulations, and promoting responsible data stewardship throughout the entire data lifecycle from collection to disposal.",
+    "assurance_goals": [
+      "Transparency",
+      "Fairness",
+      "Privacy"
+    ],
+    "tags": [
+      "applicable-models/agnostic",
+      "assurance-goal-category/transparency",
+      "assurance-goal-category/fairness",
+      "assurance-goal-category/privacy",
+      "data-requirements/no-special-requirements",
+      "data-type/any",
+      "evidence-type/documentation",
+      "expertise-needed/domain-knowledge",
+      "expertise-needed/regulatory-compliance",
+      "lifecycle-stage/data-handling",
+      "lifecycle-stage/data-handling/collection",
+      "lifecycle-stage/data-handling/preparation",
+      "technique-type/documentation"
+    ],
+    "searchText": "datasheets for datasets datasheets for datasets establish comprehensive documentation standards for datasets, systematically recording creation methodology, data composition, collection procedures, preprocessing transformations, intended applications, potential biases, privacy considerations, and maintenance protocols. these structured documents enhance dataset transparency by providing essential context for appropriate usage, enabling informed decisions about dataset suitability for specific tasks, supporting bias detection and mitigation efforts, ensuring compliance with data protection regulations, and promoting responsible data stewardship throughout the entire data lifecycle from collection to disposal. transparency fairness privacy applicable-models/agnostic assurance-goal-category/transparency assurance-goal-category/fairness assurance-goal-category/privacy data-requirements/no-special-requirements data-type/any evidence-type/documentation expertise-needed/domain-knowledge expertise-needed/regulatory-compliance lifecycle-stage/data-handling lifecycle-stage/data-handling/collection lifecycle-stage/data-handling/preparation technique-type/documentation"
+  },
+  {
+    "slug": "fairness-gan",
+    "name": "Fairness GAN",
+    "description": "A data generation technique that employs Generative Adversarial Networks (GANs) to create fair synthetic datasets by learning to generate data representations that preserve utility whilst obfuscating protected attributes. Unlike traditional GANs, Fairness GANs incorporate fairness constraints into the training objective, ensuring that the generated data maintains statistical parity across demographic groups. The technique can be used for data augmentation to balance underrepresented groups or to create privacy-preserving synthetic datasets that remove demographic bias from training data.",
+    "assurance_goals": [
+      "Fairness",
+      "Privacy",
+      "Reliability"
+    ],
+    "tags": [
+      "applicable-models/gan",
+      "assurance-goal-category/fairness",
+      "assurance-goal-category/fairness/group",
+      "assurance-goal-category/privacy",
+      "assurance-goal-category/reliability",
+      "data-requirements/sensitive-attributes",
+      "data-requirements/labelled-data",
+      "data-type/any",
+      "evidence-type/quantitative-metric",
+      "evidence-type/fairness-metric",
+      "evidence-type/synthetic-data",
+      "expertise-needed/ml-engineering",
+      "expertise-needed/statistics",
+      "fairness-approach/group",
+      "lifecycle-stage/data-collection",
+      "lifecycle-stage/data-collection/data-augmentation",
+      "lifecycle-stage/model-development",
+      "technique-type/algorithmic"
+    ],
+    "searchText": "fairness gan a data generation technique that employs generative adversarial networks (gans) to create fair synthetic datasets by learning to generate data representations that preserve utility whilst obfuscating protected attributes. unlike traditional gans, fairness gans incorporate fairness constraints into the training objective, ensuring that the generated data maintains statistical parity across demographic groups. the technique can be used for data augmentation to balance underrepresented groups or to create privacy-preserving synthetic datasets that remove demographic bias from training data. fairness privacy reliability applicable-models/gan assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/privacy assurance-goal-category/reliability data-requirements/sensitive-attributes data-requirements/labelled-data data-type/any evidence-type/quantitative-metric evidence-type/fairness-metric evidence-type/synthetic-data expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/data-collection lifecycle-stage/data-collection/data-augmentation lifecycle-stage/model-development technique-type/algorithmic"
+  }
+]

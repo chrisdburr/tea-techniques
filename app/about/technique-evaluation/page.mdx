@@ -1,0 +1,114 @@
+import {
+MDXPageLayout,
+generateMetadataFromFrontmatter,
+} from '@/components/layout/mdx-page-layout';
+import { BookOpen, Github } from 'lucide-react';
+
+export const frontmatter = {
+  title: 'Technique Evaluation',
+  description: 'Learn how TEA Techniques are evaluated, categorised, and selected for inclusion in the platform.',
+  breadcrumbs: [
+    { label: 'Home', href: '/' },
+    { label: 'About', href: '/about' },
+    { label: 'Technique Evaluation', href: '/about/technique-evaluation' }
+  ],
+  publishedAt: '2024-01-01',
+  updatedAt: '2024-07-25',
+  tableOfContents: true
+};
+
+export const dynamic = 'force-static';
+export const metadata = generateMetadataFromFrontmatter(frontmatter);
+
+export default function TechniqueEvaluationPage({ children }) {
+  return <MDXPageLayout frontmatter={frontmatter}>{children}</MDXPageLayout>;
+}
+
+<Callout variant="info" title="About">
+  This document outlines the criteria used to evaluate and select techniques for inclusion in the Trustworthy and Ethical Assurance (TEA) Techniques database (`techniques.json`). The goal is to create a curated, high-quality resource that helps practitioners build robust assurance cases for their AI systems.
+</Callout>
+
+## What is a "Technique" in this Context
+
+A **technique** refers to a specific method, tool or approach used to generate a tangible evidential artefact (e.g. metric, documentation, report).
+In the present context, these techniques are all directed towards evidencing the validity of assurance claims related to goals such as explainability, fairness, privacy, security, safety, and more.
+
+The evidence produced by applying these techniques is intended to be used within an assurance case to support claims about the system's trustworthiness and ethical credentials.
+Techniques can range from statistical tests and algorithms (e.g. LIME or SHAP), to documentation standards (e.g. Model Cards), and organisational processes (e.g. Red Teaming).
+
+<Callout variant="info" title="Conceptual Distinctions">
+It is helpful to distinguish the following concepts:
+
+- **Principles:** foundational concepts (e.g., fair outcomes, explainable predictions) that serve as goals to achieve.
+- **Specific Techniques or Implementations of Principles:** concrete methods used to measure, achieve, or provide evidence for principles (e.g., statistical parity difference as a metric for group fairness, DP-SGD as a technique to achieve privacy). The database primarily focuses on these specific, actionable techniques.
+- **Methods or processes:** broad approaches (e.g., "fairness-aware preprocessing") that may be served by multiple specific techniques.
+
+The TEA techniques covers all three of these categories.
+
+</Callout>
+
+## Criteria for Inclusion in the TEA Techniques Database
+
+Before we accept or add a new technique to the database, we assess it against the following criteria:
+
+1. **Relevance to Assurance Goals:**
+
+- Does the technique directly address _one or more_ principles?
+- Can the output of the technique serve as credible evidence for specific assurance claims related to these goals?
+
+2. **Nature of Evidence Provided:**
+
+- What kind of output does the technique produce (e.g., quantitative metrics, statistical tests, visualisations, counterfactual examples, formal proofs, qualitative reports)?
+- How does this output support a broader argument within an assurance case?
+
+3. **Applicability & Scope:**
+   - **Model Dependency:** Is it model-agnostic or specific to certain architectures (e.g., neural networks, decision trees)?
+   - **Data Type:** Is it applicable to specific data types (e.g. tabular, text, images, time series)?
+   - **Lifecycle Stage:** At which stage of a project's lifecycle would the technique typically be applied (e.g. project design, data preprocessing, model training, system deployment, monitoring)?
+   - **Scope of Explanation:** Does the technique provide local (instance-level) or global (model-level) insights?
+
+4. **Maturity and Validity:**
+
+- Is the technique well-established in research or practice? Is it peer-reviewed?
+- Is there empirical or theoretical evidence supporting its effectiveness and validity for its stated purpose?
+- Are its underlying assumptions clearly understood?
+
+5. **Practicality & Resource Requirements:**
+   - **Complexity and Expertise Needed:** How difficult is it to understand and implement?
+   - **Computational Cost:** How resource-intensive is it to run? Does it scale?
+   - **Data Requirements:** Does it have specific requirements regarding data size, format, or labelling?
+
+6. **Interpretability & Actionability:**
+
+- How easy is it for different stakeholders (developers, auditors, regulators) to understand the technique's output?
+- Can the results be readily translated into actionable steps or specific claims in an assurance case?
+- Are the limitations, constraints, and underlying assumptions well-documented?
+- Are there readily available software libraries, implementations, or detailed tutorials?
+
+### Why Have Evaluation Criteria
+
+Having clear, well-defined criteria for inclusion in the TEA Techniques dataset serves several crucial purposes:
+
+1. **Quality Control:** Ensures that the techniques listed are relevant, credible, and useful for building assurance cases in the [TEA Platform](https://assuranceplatform.azurewebsites.net).
+2. **Consistency:** Provides a standardised framework for evaluating diverse techniques, leading to a more coherent and useful dataset.
+3. **Scope Management:** Helps define the boundaries of the dataset, preventing the inclusion of irrelevant or poorly defined methods.
+4. **User Trust:** Builds confidence for users that the techniques presented have met a certain standard of relevance and utility for TEA purposes.
+5. **Contribution Guidance:** Offers clear guidelines for community members who wish to suggest new techniques for inclusion.
+
+## Contributing New Techniques
+
+<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+  <LinkCard
+    href="/docs/community-contributions"
+    title="Contribution Guide"
+    description="Learn how to contribute to TEA Techniques"
+    icon={BookOpen}
+  />
+  <LinkCard
+    href="https://github.com/alan-turing-institute/AssurancePlatform"
+    title="GitHub Repository"
+    description="View source code and submit issues"
+    icon={Github}
+    external
+  />
+</div>

@@ -1,0 +1,118 @@
+{
+  "slug": "federated-learning",
+  "name": "Federated Learning",
+  "description": "Federated learning enables collaborative model training across multiple distributed parties (devices, organisations, or data centres) without requiring centralised data sharing. Participants train models locally on their private datasets and only share model updates (gradients, weights, or aggregated statistics) with a central coordinator. This distributed approach serves multiple purposes: preserving data privacy and sovereignty, reducing communication costs, enabling learning from diverse data sources, improving model robustness through heterogeneous training, and facilitating compliance with data protection regulations whilst maintaining model performance comparable to centralised training.",
+  "assurance_goals": [
+    "Privacy",
+    "Reliability",
+    "Safety",
+    "Fairness"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/privacy",
+    "assurance-goal-category/reliability",
+    "assurance-goal-category/safety",
+    "assurance-goal-category/fairness",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/ml-engineering",
+    "expertise-needed/software-engineering",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/system-deployment-and-use",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Developing a smartphone keyboard prediction model by learning from users' typing patterns without their text ever leaving their devices, enabling personalised predictions whilst maintaining complete data privacy.",
+      "goal": "Privacy"
+    },
+    {
+      "description": "Training a medical diagnosis model across multiple hospitals without sharing patient records, ensuring model robustness by learning from diverse patient populations and clinical practices across different institutions.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Creating a cybersecurity threat detection model by federating learning across financial institutions without exposing sensitive transaction data, reducing systemic risk whilst maintaining competitive confidentiality.",
+      "goal": "Safety"
+    },
+    {
+      "description": "Building a fair credit scoring model by training across multiple regions and demographics without centralising sensitive financial data, ensuring representation from diverse populations whilst respecting local data sovereignty laws.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Communication overhead can be substantial, especially with frequent model updates and large models, potentially limiting scalability and increasing training time compared to centralised approaches."
+    },
+    {
+      "description": "Statistical heterogeneity across participants (non-IID data distributions) can lead to training instability, slower convergence, and reduced model performance compared to centralised training on pooled data."
+    },
+    {
+      "description": "System heterogeneity in computational capabilities, network connectivity, and availability of participating devices can create bottlenecks and introduce bias towards more capable participants."
+    },
+    {
+      "description": "Privacy vulnerabilities remain through gradient leakage attacks, model inversion, and membership inference attacks that can potentially reconstruct sensitive information from shared model updates."
+    },
+    {
+      "description": "Coordination complexity increases with the number of participants, requiring sophisticated aggregation protocols, fault tolerance mechanisms, and secure communication infrastructure."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Open Federated Learning (OpenFL) Documentation",
+      "url": "https://openfl.readthedocs.io/en/stable/",
+      "source_type": "documentation"
+    },
+    {
+      "title": "Federated Learning - DeepLearning.AI",
+      "url": "https://www.deeplearning.ai/short-courses/intro-to-federated-learning/",
+      "source_type": "tutorial"
+    },
+    {
+      "title": "A Survey on Federated Learning Systems: Vision, Hype and Reality for Data Privacy and Protection",
+      "url": "http://arxiv.org/pdf/1907.09693v7",
+      "source_type": "documentation",
+      "authors": [
+        "Qinbin Li",
+        "Zeyi Wen",
+        "Zhaomin Wu",
+        "Sixu Hu",
+        "Naibo Wang",
+        "Yuan Li",
+        "Xu Liu",
+        "Bingsheng He"
+      ],
+      "publication_date": "2019-07-23"
+    },
+    {
+      "title": "Federated learning with hybrid differential privacy for secure and reliable cross-IoT platform knowledge sharing",
+      "url": "https://core.ac.uk/download/603345619.pdf",
+      "source_type": "technical_paper",
+      "authors": [
+        "Algburi, S.",
+        "Algburi, S.",
+        "Anupallavi, S.",
+        "Anupallavi, S.",
+        "Ashokkumar, S. R.",
+        "Ashokkumar, S. R.",
+        "Elmedany, W.",
+        "Elmedany, W.",
+        "Khalaf, O. I.",
+        "Khalaf, O. I.",
+        "Selvaraj, D.",
+        "Selvaraj, D.",
+        "Sharif, M. S.",
+        "Sharif, M. S."
+      ],
+      "publication_date": "2024-01-01"
+    }
+  ],
+  "complexity_rating": 4,
+  "computational_cost_rating": 5,
+  "related_techniques": [
+    "synthetic-data-generation",
+    "differential-privacy",
+    "homomorphic-encryption"
+  ]
+}

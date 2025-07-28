@@ -1,0 +1,76 @@
+{
+  "tag": {
+    "name": "data-requirements/causal-graph",
+    "slug": "data-requirements-causal-graph",
+    "count": 1,
+    "category": "data-requirements"
+  },
+  "techniques": [
+    {
+      "slug": "path-specific-counterfactual-fairness-assessment",
+      "name": "Path-Specific Counterfactual Fairness Assessment",
+      "description": "A causal fairness evaluation technique that assesses algorithmic discrimination by examining specific causal pathways in a model's decision-making process. Unlike general counterfactual fairness, this approach enables practitioners to identify and intervene on particular causal paths that may introduce bias whilst preserving other legitimate pathways. The method uses causal graphs to distinguish between direct discrimination (through protected attributes) and indirect discrimination (through seemingly neutral factors that correlate with protected attributes), allowing for more nuanced fairness assessments in complex causal settings.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/causal",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/causal-graph",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "evidence-type/causal-analysis",
+        "expertise-needed/causal-inference",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "fairness-approach/causal",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "technique-type/metric"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating hiring algorithms by identifying which causal pathways from education and experience legitimately affect job performance versus those that introduce gender or racial bias, enabling targeted interventions that preserve merit-based selection whilst eliminating discriminatory pathways.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Analysing loan approval models to provide transparent evidence of which factors legitimately influence creditworthiness versus those that create indirect discrimination, enabling clear explanations to regulators about causal mechanisms underlying fair lending decisions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Assessing medical diagnosis systems to ensure reliable performance by distinguishing between clinically relevant causal pathways (symptoms to diagnosis) and potentially biased pathways (demographics to diagnosis), maintaining diagnostic accuracy whilst preventing healthcare disparities.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires identifying which causal pathways are 'allowable' and which are not—a subjective decision; analyzing specific paths adds complexity to the causal model and the fairness criterion."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Path-Specific Counterfactual Fairness via Dividend Correction",
+          "url": "https://www.semanticscholar.org/paper/197367ee337e8838fd2ef1a887101ddc84eb0612",
+          "source_type": "technical_paper",
+          "authors": [
+            "Daisuke Hatano",
+            "Satoshi Hara",
+            "Hiromi Arai"
+          ]
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "counterfactual-fairness-assessment"
+      ]
+    }
+  ],
+  "count": 1
+}

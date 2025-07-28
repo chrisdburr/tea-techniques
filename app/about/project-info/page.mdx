@@ -1,0 +1,94 @@
+import {
+  MDXPageLayout,
+  generateMetadataFromFrontmatter,
+} from '@/components/layout/mdx-page-layout';
+import { BookOpen, Github } from 'lucide-react';
+
+export const frontmatter = {
+  title: 'Project Information',
+  description: 'Learn about the TEA platform\'s goals and how it helps project teams implement responsible AI practices.',
+  breadcrumbs: [
+    { label: 'Home', href: '/' },
+    { label: 'About', href: '/about' },
+    { label: 'Project Information', href: '/about/project-info' }
+  ],
+  publishedAt: '2024-01-01',
+  updatedAt: '2024-07-25',
+  tableOfContents: true
+};
+
+export const dynamic = 'force-static';
+export const metadata = generateMetadataFromFrontmatter(frontmatter);
+
+export default function ProjectInfoPage({ children }) {
+  return <MDXPageLayout frontmatter={frontmatter}>{children}</MDXPageLayout>;
+}
+
+## Background
+
+The Trustworthy and Ethical Assurance (TEA) platform was developed as part of a [broader research programme](https://www.turing.ac.uk/research/research-projects/trustworthy-and-ethical-assurance-digital-twins-tea-dt) led by the Alan Turing Institute (and in collaboration with the Centre for Assuring Autonomy) to address the growing need for practical, implementable approaches to responsible AI design, development, and deployment.
+
+As AI systems become increasingly prevalent in critical applications, the gap between high-level ethical principles and day-to-day development practices has become more apparent. While many understand the ethical risks associated with AI (e.g. biased data, opaque behaviour), knowledge of how to mitigate these diverse risks in a practical manner lags behind.
+
+TEA techniques was designed to address this challenge, as an extension of the [TEA platform](https://assuranceplatform.azurewebsites.net). By organising techniques according to the various assurance goals they can be leveraged to support, our goal is to help researchers, developers, project teams, and organisations discover ways to generate reliable and trustworthy evidence to support claims about their AI systems and projects.
+
+## Core Objectives
+
+- **Practical Implementation:** help transform abstract ethical principles into actionable techniques that can be integrated into existing project workflows
+- **Comprehensive Coverage:** provide coverage for a wide-range of normative principles and all stages of the AI lifecycle, from initial design through deployment and monitoring
+- **Reliable Evidence:** provide methods for generating and documenting evidence that AI systems meet specified criteria (e.g. fair outcomes, transparent decision-making, safe and effective predictions)
+- **Community-Driven Development:** foster collaboration and knowledge sharing among researchers and practitioners to drive adoption of best practices
+- **Domain Agnostic:** ensure techniques can be used and applied regardless of specific technologies (e.g. models, pipelines) or domains (e.g. healthcare, education)
+- **Inclusive Participation**: offer techniques that can be used by a wide variety of expertise levels and diverse backgrounds, to help widen participation and involvement in the AI assurance ecosystem
+
+## How TEA Techniques Work
+
+### <Badge>Step 1</Badge> Goal Alignment
+
+Techniques are mapped to specific assurance goals such as fairness, explainability, and robustness. This allows practitioners to select techniques based on their initial goal-based requirements and compliance needs.
+
+### <Badge>Step 2</Badge> Structured Format
+
+Each technique follows a consistent structure, regardless of goal, including clear descriptions, example use cases, limitations, and resources.
+
+### <Badge>Step 3</Badge> Supporting Categories and Tags
+
+Techniques are further categorised according to a wide-range of extensible tags (e.g. expertise needed, applicable models, data requirements) to help people find the right technique for their project or system.
+
+### <Badge>Step 4</Badge> Evidence Generation
+
+Each technique includes links to external resources, such as official software packages, journal articles, and tutorials to help users learn more about a specific technique.
+
+### <Badge>Step 5</Badge> TEA Platform Integration
+
+~The TEA techniques are also accessible from within the TEA platform, to help teams discover suitable techniques to help justify claims in an existing assurance case.~ (Coming Soon)
+
+## Get Involved
+
+TEA Techniques is an open initiative that welcomes contributions from the community.
+Whether you're a researcher, practitioner, or organisation working on responsible AI, there are multiple ways to get involved:
+
+<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+  <LinkCard
+    href="/docs/community-contributions"
+    title="Contribution Guide"
+    description="Learn how to contribute to TEA Techniques"
+    icon={BookOpen}
+  />
+  <LinkCard
+    href="https://github.com/alan-turing-institute/AssurancePlatform"
+    title="GitHub Repository"
+    description="View source code and submit issues"
+    icon={Github}
+    external
+  />
+</div>
+
+## Acknowledgments
+
+TEA Techniques is part of the broader TEA platform initiative hosted by the Alan Turing Institute, and has received additional funding from the following sources:
+
+- From October 2024 to present, the project has received support from the EPSRC CVDNet project.
+- From March 2024 until September 2024, the project is funded by UKRI's BRAID programme as part of a scoping research award for the Trustworthy and Ethical Assurance of Digital Twins project.
+- Between April 2023 and December 2023, this project received funding from the Assuring Autonomy International Programme, a partnership between Lloyd’s Register Foundation and the University of York, which was awarded to Dr Christopher Burr.
+- Between July 2021 and June 2022 this project received funding from the UKRI’s Trustworthy Autonomous Hub, which was awarded to Dr Christopher Burr (Grant number: TAS_PP_00040).

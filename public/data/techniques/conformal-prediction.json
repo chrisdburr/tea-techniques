@@ -1,0 +1,110 @@
+{
+  "slug": "conformal-prediction",
+  "name": "Conformal Prediction",
+  "description": "Conformal prediction provides mathematically guaranteed uncertainty quantification by creating prediction sets that contain the true outcome with a specified probability (e.g., exactly 95% coverage). The technique works by measuring how 'strange' or 'nonconforming' new predictions are compared to calibration data - if a prediction seems unusual, it gets wider intervals. For example, in medical diagnosis, instead of saying 'likely cancer', it might say 'possible diagnoses: {cancer, benign tumour} with 95% confidence'. This distribution-free method works with any underlying model (neural networks, random forests, etc.) and requires no assumptions about data distribution, making it a robust framework for reliable uncertainty estimates in high-stakes applications.",
+  "assurance_goals": [
+    "Reliability",
+    "Transparency",
+    "Fairness"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/reliability",
+    "assurance-goal-category/reliability/uncertainty-quantification",
+    "assurance-goal-category/transparency",
+    "assurance-goal-category/fairness",
+    "data-requirements/calibration-set",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "evidence-type/prediction-interval",
+    "expertise-needed/ml-engineering",
+    "expertise-needed/statistics",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/system-deployment-and-use",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Creating prediction sets for drug discovery that guarantee 95% coverage, such as 'this compound will likely have activity against {target A, target B, target C}', ensuring reliable decision-making in costly experimental validation.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Providing transparent multi-class predictions in judicial risk assessment by showing all plausible risk categories with guaranteed coverage, enabling judges to see the full range of possibilities rather than just a single point estimate.",
+      "goal": "Transparency"
+    },
+    {
+      "description": "Ensuring fair uncertainty quantification across demographic groups in college admissions by verifying that prediction set sizes (number of possible outcomes) are consistent across protected groups, preventing discriminatory overconfidence for certain populations.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Prediction sets can be unnecessarily wide when nonconformity scores vary greatly across the feature space, leading to conservative intervals that reduce practical utility."
+    },
+    {
+      "description": "Requires a held-out calibration set separate from training data, reducing the amount of data available for model training, which can impact performance on small datasets."
+    },
+    {
+      "description": "Guarantees only hold under the exchangeability assumption - if test data distribution differs significantly from calibration data, coverage guarantees may be violated."
+    },
+    {
+      "description": "For multi-class problems, prediction sets may include many classes when the model is uncertain, making decisions difficult when sets contain opposing outcomes."
+    },
+    {
+      "description": "Computational cost increases with the number of calibration samples, and efficient implementation requires careful design for large-scale or real-time applications."
+    }
+  ],
+  "resources": [
+    {
+      "title": "A tutorial on conformal prediction",
+      "url": "http://arxiv.org/pdf/0706.3188v1",
+      "source_type": "documentation",
+      "authors": [
+        "Glenn Shafer",
+        "Vladimir Vovk"
+      ],
+      "publication_date": "2007-06-21",
+      "description": "Foundational tutorial introducing conformal prediction theory and applications by the method's creators"
+    },
+    {
+      "title": "valeman/awesome-conformal-prediction",
+      "url": "https://github.com/valeman/awesome-conformal-prediction",
+      "source_type": "software_package",
+      "description": "Curated collection of conformal prediction resources including videos, tutorials, books, papers, and open-source libraries"
+    },
+    {
+      "title": "scikit-learn-contrib/MAPIE",
+      "url": "https://github.com/scikit-learn-contrib/MAPIE",
+      "source_type": "software_package",
+      "description": "Python library for uncertainty quantification using conformal prediction across regression, classification, and time series tasks"
+    },
+    {
+      "title": "Tutorial for classification — MAPIE 0.8.6 documentation",
+      "url": "https://mapie.readthedocs.io/en/v0.8.6/examples_classification/4-tutorials/plot_main-tutorial-classification.html",
+      "source_type": "tutorial",
+      "description": "Practical tutorial demonstrating conformal prediction for classification tasks with guaranteed coverage"
+    },
+    {
+      "title": "Conformal Prediction: a Unified Review of Theory and New Challenges",
+      "url": "http://arxiv.org/pdf/2005.07972v2",
+      "source_type": "documentation",
+      "authors": [
+        "Matteo Fontana",
+        "Gianluca Zeni",
+        "Simone Vantini"
+      ],
+      "publication_date": "2020-05-16",
+      "description": "Comprehensive review of conformal prediction theory, recent advances, and emerging challenges in the field"
+    }
+  ],
+  "complexity_rating": 4,
+  "computational_cost_rating": 2,
+  "related_techniques": [
+    "monte-carlo-dropout",
+    "prediction-intervals",
+    "quantile-regression",
+    "deep-ensembles",
+    "bootstrapping",
+    "jackknife-resampling"
+  ]
+}

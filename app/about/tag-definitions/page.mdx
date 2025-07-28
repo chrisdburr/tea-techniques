@@ -1,0 +1,152 @@
+import {
+  MDXPageLayout,
+  generateMetadataFromFrontmatter,
+} from '@/components/layout/mdx-page-layout';
+import Link from 'next/link';
+import { AllTagDefinitions } from '@/components/about/tag-definitions-table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+
+export const frontmatter = {
+  title: 'Tag Definitions',
+  description: 'Learn about the tag system used by TEA Techniques and how it helps you find the right techniques for your needs.',
+  breadcrumbs: [
+    { label: 'Home', href: '/' },
+    { label: 'About', href: '/about' },
+    { label: 'Tag Definitions', href: '/about/tag-definitions' }
+  ],
+  publishedAt: '2024-01-01',
+  updatedAt: '2024-07-25',
+  tableOfContents: true
+};
+
+export const dynamic = 'force-static';
+export const metadata = generateMetadataFromFrontmatter(frontmatter);
+
+export default function TagDefinitionsPage({ children }) {
+  return <MDXPageLayout frontmatter={frontmatter}>{children}</MDXPageLayout>;
+}
+
+<Callout variant="info" title="About">
+  This document explains the tagging system that helps categorise the TEA techniques and makes it easier to find the right technique that matches your specific needs and context.
+</Callout>
+
+## What are Tags?
+
+Tags are labels that categorise each technique based on various dimensions such as the assurance goals they address, the types of models they work with, the lifecycle stages where they apply, and the expertise required to implement them.
+
+The tag system follows a hierarchical structure, allowing for precise categorisation while maintaining flexibility for future expansion.
+
+### Tag Format
+
+Tags follow a consistent format:
+
+- **Prefix:** indicates the primary category for the tag (e.g., `expertise-needed`)
+- **Tag Content:** Represents the specific content within the prefix, potentially including sub-topics using forward slashes (`/`) as separator
+- **Example:** `assurance-goal-category/explainability/feature-analysis/importance-attribution`
+
+All parts of tags are **lowercase** and use **hyphens** (`-`) instead of spaces or underscores.
+
+## How to Use Tags
+
+### Finding Relevant Techniques
+
+Use the [Filters page](/filters) to browse techniques by category (e.g. applicable model, expertise needed).
+
+### Understanding Technique Scope
+
+Each technique page shows its corresponding tags, helping you quickly understand what it's designed for, what expertise is needed, and how it fits into your development workflow.
+
+These tags can also be used to find similar techniques, in case the first one you discover is not quite right. Each technique page also shows a list of related techniques to further help your search.
+
+## Tag Categories
+
+The tag system is organized into 8 main categories (i.e. prefixes), each serving a specific purpose in classifying techniques:
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Category</TableHead>
+      <TableHead>Purpose</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell className="font-mono">assurance-goal-category</TableCell>
+      <TableCell>The assurance goal(s) that the technique helps achieve</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">applicable-models</TableCell>
+      <TableCell>Types of ML/AI models to which the technique can be applied</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">lifecycle-stage</TableCell>
+      <TableCell>Stages of the project/system lifecycle where the technique is applicable</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">expertise-needed</TableCell>
+      <TableCell>Type of knowledge or expertise required to apply the technique effectively</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">evidence-type</TableCell>
+      <TableCell>Type of output or evidential artifact produced by the technique</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">data-type</TableCell>
+      <TableCell>Types of data the technique is designed for or applicable to</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">data-requirements</TableCell>
+      <TableCell>Additional data needs or dependencies for using the technique (e.g. access to model internals)</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">technique-type</TableCell>
+      <TableCell>Fundamental nature and approach of the technique (e.g. stakeholder engagement)</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">explanatory-scope</TableCell>
+      <TableCell>Whether the explanation is instance-specific (local) or model-wide (global)</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">fairness-approach</TableCell>
+      <TableCell>Underlying approach to fairness for fairness-related techniques</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+There are also 2 additional categories that are applicable only to a subset of techniques:
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Category</TableHead>
+      <TableHead>Purpose</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell className="font-mono">explanatory-scope</TableCell>
+      <TableCell>Whether the explanation is instance-specific (local) or model-wide (global)</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono">fairness-approach</TableCell>
+      <TableCell>Underlying approach to fairness for fairness-related techniques</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+## All Tag Definitions
+
+<AllTagDefinitions />
+
+## Benefits of Tags
+
+1. Structured Organisation: The hierarchical tag system allows for precise categorisation of techniques while maintaining flexibility. For instance, new tags can be proposed and extended by members of the community. This is important, because as new techniques and concepts emerge, the tag system can evolve to stay up-to-date.
+2. Cross-Platform Compatibility: the tag format enables extensibility and integration with other tools and platforms, including the [TEA Platform](https://assuranceplatform.azurewebsites.net) for assurance case development. Other applications can also build on our tag taxonomy, or create specialized views for specific domains.
+3. Enhanced Discovery: the tagging system helps users finding techniques that match multiple criteria, and also identifying gaps in technique coverage.

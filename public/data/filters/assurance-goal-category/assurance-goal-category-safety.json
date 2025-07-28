@@ -1,0 +1,1828 @@
+{
+  "tag": {
+    "name": "assurance-goal-category/safety",
+    "slug": "assurance-goal-category-safety",
+    "count": 19,
+    "category": "assurance-goal-category"
+  },
+  "techniques": [
+    {
+      "slug": "out-of-distribution-detector-for-neural-networks",
+      "name": "Out-of-DIstribution detector for Neural networks",
+      "description": "ODIN (Out-of-Distribution Detector for Neural Networks) identifies when a neural network encounters inputs significantly different from its training distribution. It enhances detection by applying temperature scaling to soften the model's output distribution and adding small, carefully calibrated perturbations to the input that push in-distribution samples towards higher confidence predictions. By measuring the maximum softmax probability after these adjustments, ODIN can effectively distinguish between in-distribution and out-of-distribution inputs, flagging potentially unreliable predictions before they cause downstream errors.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Detecting anomalous medical images in diagnostic systems, where ODIN flags X-rays or scans containing rare pathologies or imaging artefacts not present in training data, preventing misdiagnosis and prompting specialist review.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Protecting autonomous vehicle perception systems by identifying novel road scenarios (e.g., unusual weather conditions, rare obstacle types) that fall outside the training distribution, triggering fallback safety mechanisms.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Monitoring production ML systems for data drift by detecting when incoming customer behaviour patterns deviate significantly from training data, helping explain why model performance may degrade over time.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires careful tuning of temperature scaling and perturbation magnitude parameters, which may need adjustment for different types of out-of-distribution data."
+        },
+        {
+          "description": "Performance degrades when out-of-distribution samples are very similar to training data, making near-distribution detection challenging."
+        },
+        {
+          "description": "Vulnerable to adversarial examples specifically crafted to evade detection by mimicking in-distribution characteristics."
+        },
+        {
+          "description": "Computational overhead from input preprocessing and perturbation generation can impact real-time inference applications."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Enhancing The Reliability of Out-of-distribution Image Detection in Neural Networks",
+          "url": "http://arxiv.org/pdf/1706.02690v5",
+          "source_type": "technical_paper",
+          "authors": [
+            "Shiyu Liang",
+            "Yixuan Li",
+            "R. Srikant"
+          ],
+          "publication_date": "2017-06-08"
+        },
+        {
+          "title": "facebookresearch/odin",
+          "url": "https://github.com/facebookresearch/odin",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Generalized ODIN: Detecting Out-of-distribution Image without Learning from Out-of-distribution Data",
+          "url": "http://arxiv.org/pdf/2002.11297v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yen-Chang Hsu",
+            "Yilin Shen",
+            "Hongxia Jin",
+            "Zsolt Kira"
+          ],
+          "publication_date": "2020-02-26"
+        },
+        {
+          "title": "Detection of out-of-distribution samples using binary neuron activation patterns",
+          "url": "http://arxiv.org/abs/2212.14268",
+          "source_type": "technical_paper",
+          "authors": [
+            "Chachuła, Krystian",
+            "Olber, Bartlomiej",
+            "Popowicz, Adam",
+            "Radlak, Krystian",
+            "Szczepankiewicz, Michal"
+          ],
+          "publication_date": "2023-03-24"
+        },
+        {
+          "title": "Out-of-Distribution Detection with ODIN - A Tutorial",
+          "url": "https://medium.com/@abhaypatil2000/out-of-distribution-detection-using-odin-f1a3e9e6b3b8",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "acronym": "ODIN",
+      "related_techniques": [
+        "anomaly-detection"
+      ]
+    },
+    {
+      "slug": "synthetic-data-generation",
+      "name": "Synthetic Data Generation",
+      "description": "Synthetic data generation creates artificial datasets that aim to preserve the statistical properties, distributions, and relationships of real data whilst containing no actual records from real individuals. The technique encompasses various approaches including generative adversarial networks (GANs), variational autoencoders (VAEs), statistical sampling methods, and privacy-preserving techniques like differential privacy. Beyond privacy protection, synthetic data serves multiple purposes: augmenting limited datasets, balancing class distributions, testing model robustness, enabling data sharing across organisations, and supporting fairness assessments by generating representative samples for underrepresented groups.",
+      "assurance_goals": [
+        "Privacy",
+        "Fairness",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/structured-output",
+        "expertise-needed/cryptography",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/data-handling",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Creating realistic but synthetic electronic health records for developing and testing medical diagnosis algorithms without exposing real patient data, enabling secure collaboration between healthcare institutions.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Generating synthetic samples for underrepresented demographic groups in a hiring dataset to train fair recruitment models, ensuring all groups have sufficient representation for bias testing and mitigation.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Augmenting limited training data for rare medical conditions by generating synthetic patient records, improving model reliability and performance on edge cases where real data is insufficient.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Creating synthetic financial transaction data for testing fraud detection systems in development environments, avoiding exposure of real customer financial information whilst maintaining realistic attack patterns.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "May not capture all subtle patterns, correlations, and edge cases present in real data, potentially leading to reduced model performance when deployed on actual data with different characteristics."
+        },
+        {
+          "description": "Generating high-quality synthetic data that maintains both statistical fidelity and utility requires sophisticated techniques and substantial computational resources, especially for complex, high-dimensional datasets."
+        },
+        {
+          "description": "Privacy-preserving approaches may still risk information leakage through statistical inference attacks, membership inference, or model inversion, requiring careful privacy budget management and validation."
+        },
+        {
+          "description": "Synthetic data may inadvertently amplify existing biases in the original data or introduce new biases through the generation process, particularly in generative models trained on biased datasets."
+        },
+        {
+          "description": "Validation and quality assessment of synthetic data is challenging, as traditional metrics may not adequately capture whether the synthetic data preserves the relationships and patterns needed for specific downstream tasks."
+        }
+      ],
+      "resources": [
+        {
+          "title": "sdv-dev/SDV",
+          "url": "https://github.com/sdv-dev/SDV",
+          "source_type": "software_package"
+        },
+        {
+          "title": "An evaluation framework for synthetic data generation models",
+          "url": "http://arxiv.org/pdf/2404.08866v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ioannis E. Livieris",
+            "Nikos Alimpertis",
+            "George Domalis",
+            "Dimitris Tsakalidis"
+          ],
+          "publication_date": "2024-04-13"
+        },
+        {
+          "title": "Synthetic Data — SecureML 0.2.2 documentation",
+          "url": "https://secureml.readthedocs.io/en/latest/user_guide/synthetic_data.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "How to Generate Real-World Synthetic Data with CTGAN | Towards ...",
+          "url": "https://towardsdatascience.com/how-to-generate-real-world-synthetic-data-with-ctgan-af41b4d60fde/",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "federated-learning",
+        "differential-privacy",
+        "homomorphic-encryption"
+      ]
+    },
+    {
+      "slug": "federated-learning",
+      "name": "Federated Learning",
+      "description": "Federated learning enables collaborative model training across multiple distributed parties (devices, organisations, or data centres) without requiring centralised data sharing. Participants train models locally on their private datasets and only share model updates (gradients, weights, or aggregated statistics) with a central coordinator. This distributed approach serves multiple purposes: preserving data privacy and sovereignty, reducing communication costs, enabling learning from diverse data sources, improving model robustness through heterogeneous training, and facilitating compliance with data protection regulations whilst maintaining model performance comparable to centralised training.",
+      "assurance_goals": [
+        "Privacy",
+        "Reliability",
+        "Safety",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/software-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Developing a smartphone keyboard prediction model by learning from users' typing patterns without their text ever leaving their devices, enabling personalised predictions whilst maintaining complete data privacy.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Training a medical diagnosis model across multiple hospitals without sharing patient records, ensuring model robustness by learning from diverse patient populations and clinical practices across different institutions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Creating a cybersecurity threat detection model by federating learning across financial institutions without exposing sensitive transaction data, reducing systemic risk whilst maintaining competitive confidentiality.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Building a fair credit scoring model by training across multiple regions and demographics without centralising sensitive financial data, ensuring representation from diverse populations whilst respecting local data sovereignty laws.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Communication overhead can be substantial, especially with frequent model updates and large models, potentially limiting scalability and increasing training time compared to centralised approaches."
+        },
+        {
+          "description": "Statistical heterogeneity across participants (non-IID data distributions) can lead to training instability, slower convergence, and reduced model performance compared to centralised training on pooled data."
+        },
+        {
+          "description": "System heterogeneity in computational capabilities, network connectivity, and availability of participating devices can create bottlenecks and introduce bias towards more capable participants."
+        },
+        {
+          "description": "Privacy vulnerabilities remain through gradient leakage attacks, model inversion, and membership inference attacks that can potentially reconstruct sensitive information from shared model updates."
+        },
+        {
+          "description": "Coordination complexity increases with the number of participants, requiring sophisticated aggregation protocols, fault tolerance mechanisms, and secure communication infrastructure."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Open Federated Learning (OpenFL) Documentation",
+          "url": "https://openfl.readthedocs.io/en/stable/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Federated Learning - DeepLearning.AI",
+          "url": "https://www.deeplearning.ai/short-courses/intro-to-federated-learning/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "A Survey on Federated Learning Systems: Vision, Hype and Reality for Data Privacy and Protection",
+          "url": "http://arxiv.org/pdf/1907.09693v7",
+          "source_type": "documentation",
+          "authors": [
+            "Qinbin Li",
+            "Zeyi Wen",
+            "Zhaomin Wu",
+            "Sixu Hu",
+            "Naibo Wang",
+            "Yuan Li",
+            "Xu Liu",
+            "Bingsheng He"
+          ],
+          "publication_date": "2019-07-23"
+        },
+        {
+          "title": "Federated learning with hybrid differential privacy for secure and reliable cross-IoT platform knowledge sharing",
+          "url": "https://core.ac.uk/download/603345619.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Algburi, S.",
+            "Algburi, S.",
+            "Anupallavi, S.",
+            "Anupallavi, S.",
+            "Ashokkumar, S. R.",
+            "Ashokkumar, S. R.",
+            "Elmedany, W.",
+            "Elmedany, W.",
+            "Khalaf, O. I.",
+            "Khalaf, O. I.",
+            "Selvaraj, D.",
+            "Selvaraj, D.",
+            "Sharif, M. S.",
+            "Sharif, M. S."
+          ],
+          "publication_date": "2024-01-01"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "synthetic-data-generation",
+        "differential-privacy",
+        "homomorphic-encryption"
+      ]
+    },
+    {
+      "slug": "homomorphic-encryption",
+      "name": "Homomorphic Encryption",
+      "description": "Homomorphic encryption allows computation on encrypted data without decrypting it first, producing encrypted results that, when decrypted, match the results of performing the same operations on the plaintext. This enables secure outsourced computation where sensitive data remains encrypted throughout processing. By allowing ML operations on encrypted data, it provides strong privacy guarantees for applications involving highly sensitive information.",
+      "assurance_goals": [
+        "Privacy",
+        "Safety",
+        "Transparency",
+        "Security"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/privacy-guarantee",
+        "expertise-needed/cryptography",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Enabling a cloud-based medical diagnosis service to process encrypted patient data and return encrypted results without the cloud provider ever accessing actual medical information, ensuring complete patient privacy during outsourced computation.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Securing financial risk assessment computations by allowing banks to jointly analyse encrypted transaction patterns for fraud detection without exposing individual customer data, reducing systemic security risks.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Enabling transparent audit of algorithmic decision-making by allowing regulators to verify model computations on encrypted data, providing accountability whilst protecting the proprietary nature of both the algorithm and the underlying data.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Extremely computationally expensive, often 100-1000x slower than unencrypted computation, making it impractical for real-time applications or large-scale data processing."
+        },
+        {
+          "description": "Limited range of operations supported efficiently, with complex operations like divisions, comparisons, and non-polynomial functions being particularly challenging or impossible to implement."
+        },
+        {
+          "description": "Implementation requires deep cryptographic expertise to avoid security vulnerabilities, choose appropriate parameters, and optimise performance for specific use cases."
+        },
+        {
+          "description": "Memory and storage requirements are significantly higher than traditional computation, as encrypted data typically requires much more space than plaintext equivalents."
+        },
+        {
+          "description": "Current fully homomorphic encryption schemes have practical limitations on computation depth before noise accumulation requires expensive bootstrapping operations to refresh ciphertexts."
+        }
+      ],
+      "resources": [
+        {
+          "title": "zama-ai/concrete-ml",
+          "url": "https://github.com/zama-ai/concrete-ml",
+          "source_type": "software_package",
+          "description": "Privacy-preserving machine learning library that enables data scientists to run ML models on encrypted data using FHE without cryptography expertise"
+        },
+        {
+          "title": "Survey on Fully Homomorphic Encryption, Theory, and Applications",
+          "url": "https://core.ac.uk/download/579858842.pdf",
+          "source_type": "documentation",
+          "authors": [
+            "Chiara Marcolla",
+            "Frank H.P. Fitzek",
+            "Marc Manzano",
+            "Najwa Aaraj",
+            "Riccardo Bassoli",
+            "Victor Sucasas"
+          ],
+          "publication_date": "2022-10-06",
+          "description": "Comprehensive survey covering FHE theory, cryptographic schemes, and practical applications across different domains"
+        },
+        {
+          "title": "Welcome to OpenFHE's documentation! — OpenFHE documentation",
+          "url": "https://openfhe-development.readthedocs.io/",
+          "source_type": "documentation",
+          "description": "Documentation for open-source C++ library supporting multiple FHE schemes including BFV, BGV, CKKS, and Boolean circuits"
+        },
+        {
+          "title": "Evaluation of Privacy-Preserving Support Vector Machine (SVM) Learning Using Homomorphic Encryption",
+          "url": "https://core.ac.uk/download/656115203.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ali, Hisham",
+            "Buchanan, William J."
+          ],
+          "publication_date": "2025-01-01",
+          "description": "Technical paper evaluating performance overhead of SVM learning with homomorphic encryption for privacy-preserving ML"
+        },
+        {
+          "title": "microsoft/SEAL",
+          "url": "https://github.com/microsoft/SEAL",
+          "source_type": "software_package",
+          "description": "Easy-to-use homomorphic encryption library enabling computations on encrypted integers and real numbers"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "synthetic-data-generation",
+        "federated-learning",
+        "differential-privacy"
+      ]
+    },
+    {
+      "slug": "deep-ensembles",
+      "name": "Deep Ensembles",
+      "description": "Deep ensembles combine predictions from multiple neural networks trained independently with different random initializations to capture epistemic uncertainty (model uncertainty). By training several models on the same data with different starting points, the ensemble reveals how much the model's predictions depend on training randomness. The disagreement between ensemble members naturally indicates prediction uncertainty - when models agree, confidence is high; when they disagree, uncertainty is revealed. This approach provides more reliable uncertainty estimates, better out-of-distribution detection, and improved calibration compared to single models.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/prediction-interval",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Improving self-driving car safety by using multiple neural networks to detect obstacles, where disagreement between models signals uncertainty and triggers extra caution or human intervention, providing robust uncertainty quantification for critical decisions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Communicating prediction confidence to medical professionals by showing the range of diagnoses from multiple trained models, enabling doctors to understand when the AI system is uncertain and requires additional human expertise or testing.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Detecting out-of-distribution inputs in financial fraud detection systems where ensemble disagreement signals potentially novel attack patterns that require immediate security team review and system safeguards.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive to train and deploy, requiring multiple complete neural networks which increases training time, memory usage, and inference costs proportionally to ensemble size."
+        },
+        {
+          "description": "May still provide overconfident predictions for inputs far from the training distribution, as all ensemble members can be similarly confident about out-of-distribution examples."
+        },
+        {
+          "description": "Requires careful hyperparameter tuning for each ensemble member to ensure diversity, as identical hyperparameters may lead to similar models that reduce uncertainty estimation quality."
+        },
+        {
+          "description": "Storage and deployment overhead increases linearly with ensemble size, making it challenging to deploy large ensembles in resource-constrained environments or real-time applications."
+        },
+        {
+          "description": "Ensemble predictions may be difficult to interpret individually, as the final decision emerges from averaging multiple models rather than from a single explainable pathway."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles",
+          "url": "https://arxiv.org/abs/1612.01474",
+          "source_type": "technical_paper",
+          "authors": [
+            "Balaji Lakshminarayanan",
+            "Alexander Pritzel",
+            "Charles Blundell"
+          ],
+          "publication_date": "2016-12-05",
+          "description": "Foundational paper introducing deep ensembles for uncertainty estimation in neural networks"
+        },
+        {
+          "title": "ENSTA-U2IS-AI/awesome-uncertainty-deeplearning",
+          "url": "https://github.com/ENSTA-U2IS-AI/awesome-uncertainty-deeplearning",
+          "source_type": "documentation",
+          "description": "Comprehensive collection of research papers, surveys, datasets, and code for uncertainty estimation in deep learning"
+        },
+        {
+          "title": "Deep Ensembles: A Loss Landscape Perspective",
+          "url": "http://arxiv.org/pdf/1912.02757v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Stanislav Fort",
+            "Huiyi Hu",
+            "Balaji Lakshminarayanan"
+          ],
+          "publication_date": "2019-12-05",
+          "description": "Analysis of why deep ensembles work well from the perspective of loss landscape geometry and mode connectivity"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "monte-carlo-dropout",
+        "prediction-intervals",
+        "quantile-regression",
+        "conformal-prediction",
+        "bootstrapping",
+        "jackknife-resampling"
+      ]
+    },
+    {
+      "slug": "safety-envelope-testing",
+      "name": "Safety Envelope Testing",
+      "description": "Safety envelope testing systematically evaluates AI system performance at the boundaries of its intended operational domain to identify potential failure modes before deployment. The technique involves defining the system's operational design domain (ODD), creating test scenarios that approach or exceed these boundaries, and measuring performance degradation as conditions become more challenging. By testing edge cases, environmental extremes, and boundary conditions, it reveals where the system transitions from safe to unsafe operation, enabling the establishment of clear operational limits and safety margins for deployment.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/reliability",
+        "data-requirements/test-scenarios",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/boundary-analysis",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/safety-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/testing"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing autonomous vehicle perception systems at the limits of weather conditions, lighting, and sensor coverage to establish safe operational boundaries and determine when human intervention is required.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Evaluating medical AI diagnostic systems with edge cases near decision boundaries to ensure reliable performance and identify when the system should defer to human specialists.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Assessing financial trading algorithms under extreme market conditions and volatility to prevent catastrophic losses and ensure system shutdown protocols activate appropriately.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires comprehensive domain expertise to identify relevant boundary conditions and edge cases that could affect system safety."
+        },
+        {
+          "description": "May be computationally expensive and time-consuming, especially for complex systems with high-dimensional operational domains."
+        },
+        {
+          "description": "Difficult to achieve complete coverage of all possible boundary conditions, potentially missing critical edge cases."
+        },
+        {
+          "description": "Results may not generalise to novel scenarios that fall outside the tested boundary conditions."
+        },
+        {
+          "description": "Establishing appropriate safety thresholds and performance criteria requires careful calibration based on domain-specific risk tolerance."
+        }
+      ],
+      "resources": [
+        {
+          "title": "On the brittleness of AI systems",
+          "url": "https://arxiv.org/abs/2009.00802",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andrew J. Lohn"
+          ],
+          "publication_date": "2020-09-02",
+          "description": "Analysis of AI system brittleness and the need for improved testing, especially for out-of-distribution performance"
+        },
+        {
+          "title": "Safety Assurance of Artificial Intelligence-Based Systems: A Systematic Literature Review",
+          "url": "https://ieeexplore.ieee.org/abstract/document/9984982/",
+          "source_type": "technical_paper",
+          "authors": [
+            "Antonio V. Silva Neto",
+            "João B. Camargo",
+            "Jorge R. Almeida",
+            "Paulo S. Cugnasca"
+          ],
+          "publication_date": "2022-12-14",
+          "description": "Comprehensive systematic literature review on safety assurance methods for AI-based systems"
+        },
+        {
+          "title": "AMLAS - Assurance of Machine Learning in Autonomous Systems",
+          "url": "https://www.york.ac.uk/assuring-autonomy/guidance/amlas/amlas-tool/",
+          "source_type": "documentation",
+          "description": "Tool for systematically creating safety cases for machine learning components with guidance through safety envelope testing"
+        },
+        {
+          "title": "System and Safety Analysis with SysAI A Statistical Learning Framework",
+          "url": "https://ntrs.nasa.gov/citations/20220009665",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yuning He"
+          ],
+          "publication_date": "2022-07-12",
+          "description": "NASA technical report on statistical learning framework for system and safety analysis in AI systems"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "permutation-tests",
+        "cross-validation",
+        "area-under-precision-recall-curve",
+        "red-teaming"
+      ]
+    },
+    {
+      "slug": "internal-review-boards",
+      "name": "Internal Review Boards",
+      "description": "Internal Review Boards (IRBs) provide independent, systematic evaluation of AI/ML projects throughout their lifecycle to identify ethical, safety, and societal risks before they materialise. Typically composed of multidisciplinary experts including ethicists, domain specialists, legal counsel, community representatives, and technical staff, IRBs review project proposals, assess potential harms to individuals and communities, evaluate mitigation strategies, and establish ongoing monitoring requirements. Unlike traditional research ethics committees, AI-focused IRBs address algorithmic bias, fairness concerns, privacy implications, and societal impact at scale, providing essential governance for responsible AI development and deployment.",
+      "assurance_goals": [
+        "Safety",
+        "Fairness",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "evidence-type/governance-framework",
+        "expertise-needed/ethics",
+        "expertise-needed/legal",
+        "expertise-needed/domain-expertise",
+        "lifecycle-stage/project-planning",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/process"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Reviewing a proposed criminal risk assessment tool to evaluate potential discriminatory impacts, privacy implications, and societal consequences before development begins, ensuring vulnerable communities are protected from algorithmic harm.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Evaluating a hiring algorithm for bias across demographic groups, requiring algorithmic audits and ongoing monitoring to ensure equitable treatment of all candidates and compliance with employment law.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Establishing transparent governance processes for a healthcare AI system, requiring clear documentation of decision-making criteria, model limitations, and performance metrics that can be communicated to patients and regulators.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Can significantly slow development timelines and increase project costs, potentially making organisations less competitive or delaying beneficial AI applications from reaching users."
+        },
+        {
+          "description": "Effectiveness heavily depends on board composition, with inadequate diversity or expertise leading to blind spots in risk assessment and biased decision-making."
+        },
+        {
+          "description": "May face internal pressure to approve revenue-generating projects or strategic initiatives, compromising independence and rigorous ethical evaluation."
+        },
+        {
+          "description": "Limited authority or enforcement mechanisms can result in recommendations being ignored, particularly when they conflict with business objectives or technical constraints."
+        },
+        {
+          "description": "Risk of becoming bureaucratic or box-ticking exercises rather than substantive evaluations, especially in organisations without strong ethical leadership or clear accountability structures."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Investigating Algorithm Review Boards for Organizational Responsible Artificial Intelligence Governance",
+          "url": "https://link.springer.com/article/10.1007/s43681-024-00574-8",
+          "source_type": "technical_paper",
+          "authors": [
+            "Emily Hadley",
+            "Alan Blatecky",
+            "Megan Comfort"
+          ],
+          "publication_date": "2024-09-16",
+          "description": "Research on how organizations can establish algorithm review boards to govern and mitigate risks in AI deployment across sectors"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 1,
+      "acronym": "IRBs",
+      "related_techniques": [
+        "red-teaming",
+        "human-in-the-loop-safeguards",
+        "confidence-thresholding",
+        "runtime-monitoring-and-circuit-breakers"
+      ]
+    },
+    {
+      "slug": "red-teaming",
+      "name": "Red Teaming",
+      "description": "Red teaming involves systematic adversarial testing of AI/ML systems by dedicated specialists who attempt to identify flaws, vulnerabilities, harmful outputs, and ways to circumvent safety measures. Drawing from cybersecurity practices, red teams employ diverse attack vectors including prompt injection, adversarial examples, edge case exploitation, social engineering scenarios, and goal misalignment probes. Unlike standard testing that validates expected behaviour, red teaming specifically seeks to break systems through creative and adversarial approaches, revealing non-obvious risks and failure modes that could be exploited maliciously or cause harm in deployment.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Fairness",
+        "Security"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "expertise-needed/security",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/procedural"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing a content moderation AI by attempting to make it generate harmful outputs through creative prompt injection, jailbreaking techniques, and edge case scenarios to identify safety vulnerabilities before deployment.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Probing a medical diagnosis AI system with adversarial examples and edge cases to identify failure modes that could lead to incorrect diagnoses, ensuring the system fails gracefully rather than confidently providing wrong information.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Systematically testing a hiring algorithm with inputs designed to reveal hidden biases, using adversarial examples to check if the system can be manipulated to discriminate against protected groups or favour certain demographics unfairly.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires highly specialized expertise in both AI/ML systems and adversarial attack methods, making it expensive and difficult to scale across organizations."
+        },
+        {
+          "description": "Limited by the creativity and knowledge of red team members - can only discover vulnerabilities that testers think to explore, potentially missing novel attack vectors."
+        },
+        {
+          "description": "Time-intensive process that may not be feasible for rapid development cycles or resource-constrained projects, potentially delaying beneficial system deployments."
+        },
+        {
+          "description": "May not generalize to real-world adversarial scenarios, as red team attacks may differ significantly from actual malicious use patterns or user behaviours."
+        },
+        {
+          "description": "Risk of false confidence if red teaming is incomplete or superficial, leading organizations to believe systems are safer than they actually are."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Red Teaming LLM Applications - DeepLearning.AI",
+          "url": "https://www.deeplearning.ai/short-courses/red-teaming-llm-applications/",
+          "source_type": "tutorial",
+          "description": "Course teaching how to identify and test vulnerabilities in large language model applications using red teaming techniques"
+        },
+        {
+          "title": "Building Safe GenAI Applications: An End-to-End Overview of Red Teaming for Large Language Models",
+          "url": "https://www.semanticscholar.org/paper/a2fb135fc4bfa323bc92dd498ba45bcaf7259a02",
+          "source_type": "technical_paper",
+          "authors": [
+            "Alberto Purpura",
+            "Sahil Wadhwa",
+            "Jesse Zymet",
+            "Akshay Gupta",
+            "Andy Luo",
+            "Melissa Kazemi Rad",
+            "Swapnil Shinde",
+            "M. Sorower"
+          ],
+          "description": "Comprehensive overview of red teaming methodologies for building safe generative AI applications"
+        },
+        {
+          "title": "Effective Automation to Support the Human Infrastructure in AI Red Teaming",
+          "url": "https://www.semanticscholar.org/paper/c42dcb3a795f970d657ee46537553634eea2b014",
+          "source_type": "technical_paper",
+          "authors": [
+            "Alice Qian Zhang",
+            "Jina Suh",
+            "Mary L. Gray",
+            "Hong Shen"
+          ],
+          "description": "Research on automation tools and processes to enhance human-led red teaming efforts in AI systems"
+        },
+        {
+          "title": "Trojan Activation Attack: Red-Teaming Large Language Models using Steering Vectors for Safety-Alignment",
+          "url": "https://www.semanticscholar.org/paper/598df44f1d21a5d1fe3940c0bb2a6128a62c1c15",
+          "source_type": "technical_paper",
+          "authors": [
+            "Haoran Wang",
+            "Kai Shu"
+          ],
+          "description": "Technical paper on using steering vectors to conduct Trojan activation attacks as part of red teaming safety-aligned LLMs"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "internal-review-boards",
+        "human-in-the-loop-safeguards",
+        "confidence-thresholding",
+        "runtime-monitoring-and-circuit-breakers"
+      ]
+    },
+    {
+      "slug": "anomaly-detection",
+      "name": "Anomaly Detection",
+      "description": "Anomaly detection identifies unusual behaviours, inputs, or outputs that deviate significantly from established normal patterns using statistical, machine learning, or rule-based methods. Applied to AI/ML systems, it serves as a continuous monitoring mechanism that can flag unexpected model predictions, suspicious input patterns, data drift, adversarial attacks, or operational malfunctions. By establishing baselines of normal system behaviour and alerting when deviations exceed predefined thresholds, organisations can detect potential security threats, model degradation, fairness violations, or system failures before they cause significant harm.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Fairness",
+        "Security"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring/anomaly-detection",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/system-deployment-and-use",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Monitoring a content moderation AI system to detect when it starts flagging significantly more or fewer posts than usual, which could indicate model drift, adversarial attacks, or changes in user behaviour patterns that require immediate investigation to prevent harmful content from appearing.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Implementing anomaly detection on a medical diagnosis AI to identify when prediction confidence scores or feature importance patterns deviate from historical norms, helping catch model degradation or data quality issues that could lead to misdiagnoses before patients are affected.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Deploying anomaly detection on a hiring algorithm to monitor for unusual patterns in how candidates from different demographic groups are scored or rejected, enabling early detection of emerging bias issues or attempts to game the system through demographic manipulation.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Setting appropriate sensitivity thresholds is challenging and requires domain expertise, as overly sensitive settings generate excessive false alarms whilst conservative settings may miss genuine anomalies."
+        },
+        {
+          "description": "May generate false positives for legitimate edge cases or rare but valid system behaviours, potentially causing unnecessary alerts and disrupting normal operations."
+        },
+        {
+          "description": "Limited effectiveness against novel or sophisticated attacks that deliberately mimic normal patterns or gradually shift behaviour to avoid detection thresholds."
+        },
+        {
+          "description": "Requires substantial historical data to establish reliable baselines of normal behaviour, and may struggle with systems that have naturally high variability or seasonal patterns."
+        },
+        {
+          "description": "Detection lag can occur between when an anomaly begins and when it exceeds detection thresholds, potentially allowing harmful behaviour to persist during the detection window."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Anomaly Detection Toolkit (ADTK)",
+          "url": "https://adtk.readthedocs.io/en/stable/",
+          "source_type": "software_package",
+          "description": "Python library for unsupervised and rule-based time series anomaly detection with unified APIs, flexible algorithm combination, and support for feature engineering and ensemble methods"
+        },
+        {
+          "title": "TimeEval: Time Series Anomaly Detection Evaluation Framework",
+          "url": "https://timeeval.readthedocs.io/",
+          "source_type": "software_package",
+          "description": "Comprehensive evaluation tool for comparing time series anomaly detection algorithms across multiple datasets with standardized metrics and distributed execution support"
+        },
+        {
+          "title": "DeepOD: Deep Learning for Outlier Detection",
+          "url": "https://deepod.readthedocs.io/",
+          "source_type": "software_package",
+          "description": "Python library featuring 27 deep learning algorithms for tabular and time-series anomaly detection with unified APIs and diverse network architectures including LSTM, GRU, TCN, and Transformer"
+        },
+        {
+          "title": "A Beginner's Guide to Anomaly Detection Techniques in Data Science",
+          "url": "https://www.kdnuggets.com/2023/05/beginner-guide-anomaly-detection-techniques-data-science.html",
+          "source_type": "tutorial",
+          "description": "Beginner-friendly introduction covering Isolation Forest, Local Outlier Factor, and Autoencoder techniques with explanations of point, contextual, and collective anomaly types"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "out-of-distribution-detector-for-neural-networks"
+      ]
+    },
+    {
+      "slug": "human-in-the-loop-safeguards",
+      "name": "Human-in-the-Loop Safeguards",
+      "description": "Human-in-the-loop safeguards establish systematic checkpoints where human experts review, validate, or override AI/ML system decisions before they take effect. This governance approach combines automated efficiency with human judgement by defining clear intervention criteria (such as uncertainty thresholds, risk levels, or sensitive contexts) that trigger mandatory human oversight. By incorporating domain expertise, ethical considerations, and contextual understanding that machines may lack, these safeguards help ensure that critical decisions maintain appropriate human accountability whilst preserving the benefits of automated processing for routine cases.",
+      "assurance_goals": [
+        "Safety",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "expertise-needed/domain-knowledge",
+        "expertise-needed/stakeholder-engagement",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/process"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Implementing mandatory human physician review for any medical AI diagnostic recommendation before treatment decisions are made, especially for complex cases or when the system confidence is below established thresholds, ensuring patient safety through expert oversight.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Requiring human review of automated loan approval decisions when applicants request explanations or appeal rejections, allowing human underwriters to provide clear reasoning and ensure customers understand the decision-making process behind their application outcomes.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Mandating human oversight when hiring algorithms flag candidates from underrepresented groups for rejection, enabling recruiters to verify that decisions are based on legitimate job-relevant criteria rather than potential algorithmic bias, and providing fair recourse mechanisms.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Scales poorly with high request volumes, creating bottlenecks that can delay critical decisions and potentially overwhelm human reviewers with excessive workload."
+        },
+        {
+          "description": "Introduces significant latency into automated processes, potentially making time-sensitive applications impractical or reducing user satisfaction with slower response times."
+        },
+        {
+          "description": "Human reviewers may experience decision fatigue, leading to decreased attention quality over time and potential inconsistency in review standards across different cases or time periods."
+        },
+        {
+          "description": "Risk of automation bias where humans defer too readily to AI recommendations rather than providing meaningful independent review, undermining the safeguard's effectiveness."
+        },
+        {
+          "description": "Requires significant ongoing investment in human resources, training, and expertise maintenance, making it expensive to implement and sustain across large-scale systems."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Human-in-the-Loop AI: A Comprehensive Guide",
+          "url": "https://www.holisticai.com/blog/human-in-the-loop-ai",
+          "source_type": "tutorial",
+          "description": "Comprehensive guide covering HITL AI collaborative approach, including human oversight throughout AI lifecycle, bias mitigation, ethical alignment, and applications across healthcare, manufacturing, and finance"
+        },
+        {
+          "title": "Improving the Applicability of AI for Psychiatric Applications through Human-in-the-loop Methodologies",
+          "url": "https://core.ac.uk/download/544064129.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Chandler, Chelsea",
+            "Elvevåg, Brita",
+            "Foltz, Peter W."
+          ],
+          "publication_date": "2022-01-01",
+          "description": "Technical paper exploring HITL methodologies for psychiatric AI applications, focusing on improving applicability and clinical effectiveness through human oversight integration"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "internal-review-boards",
+        "red-teaming",
+        "confidence-thresholding",
+        "runtime-monitoring-and-circuit-breakers"
+      ]
+    },
+    {
+      "slug": "confidence-thresholding",
+      "name": "Confidence Thresholding",
+      "description": "Confidence thresholding creates decision boundaries based on model uncertainty scores, routing predictions into different handling workflows depending on their confidence levels. High-confidence predictions (e.g., above 95%) proceed automatically, whilst medium-confidence cases (e.g., 70-95%) may trigger additional validation or human review, and low-confidence predictions (below 70%) receive extensive oversight or default to conservative fallback actions. This technique enables organisations to maintain automated efficiency for clear-cut cases whilst ensuring appropriate human intervention for uncertain decisions, balancing operational speed with risk management across safety-critical applications.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Implementing tiered confidence thresholds in autonomous vehicle decision-making where high-confidence lane changes (>98%) execute automatically, medium-confidence decisions (85-98%) trigger additional sensor verification, and low-confidence situations (<85%) engage conservative defensive driving modes or request human takeover.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Deploying confidence thresholding in fraud detection systems where high-confidence legitimate transactions (>90%) process immediately, medium-confidence cases (70-90%) undergo additional automated checks, and low-confidence transactions (<70%) require human analyst review, ensuring system reliability through graduated response mechanisms.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Using confidence thresholds in automated loan decisions to provide clear explanations to applicants, where high-confidence approvals include simple explanations, medium-confidence decisions provide detailed reasoning about key factors, and low-confidence cases receive comprehensive explanations with guidance on potential improvements.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Many models produce poorly calibrated confidence scores that don't accurately reflect true prediction uncertainty, leading to overconfident predictions for incorrect outputs or underconfident scores for correct predictions."
+        },
+        {
+          "description": "Threshold selection requires careful calibration and domain expertise, as inappropriate thresholds can either overwhelm human reviewers with too many cases or miss genuinely uncertain decisions that need oversight."
+        },
+        {
+          "description": "High-confidence predictions may still be incorrect or harmful, particularly when models encounter adversarial inputs, out-of-distribution data, or systematic biases that the confidence mechanism doesn't detect."
+        },
+        {
+          "description": "Static thresholds may become inappropriate over time as model performance degrades, data distribution shifts occur, or operational contexts change, requiring ongoing monitoring and adjustment."
+        },
+        {
+          "description": "Implementation complexity increases significantly when managing multiple confidence levels and routing mechanisms, potentially introducing system failures or inconsistencies in how different confidence ranges are handled."
+        }
+      ],
+      "resources": [
+        {
+          "title": "A Novel Dynamic Confidence Threshold Estimation AI Algorithm for Enhanced Object Detection",
+          "url": "https://www.semanticscholar.org/paper/93cda7adfa043c969639e094d6c27b1c4d507208",
+          "source_type": "technical_paper",
+          "authors": [
+            "Mounika Thatikonda",
+            "M. Pk",
+            "Fathi H. Amsaad"
+          ]
+        },
+        {
+          "title": "Improving speech recognition accuracy with multi-confidence thresholding",
+          "url": "https://www.semanticscholar.org/paper/bef1c8668115675f786e5a3c6d165f268e399e9d",
+          "source_type": "technical_paper",
+          "authors": [
+            "Shuangyu Chang"
+          ]
+        },
+        {
+          "title": "Improving the Robustness and Generalization of Deep Neural Network with Confidence Threshold Reduction",
+          "url": "http://arxiv.org/pdf/2206.00913v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xiangyuan Yang",
+            "Jie Lin",
+            "Hanlin Zhang",
+            "Xinyu Yang",
+            "Peng Zhao"
+          ],
+          "publication_date": "2022-06-02"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "internal-review-boards",
+        "red-teaming",
+        "human-in-the-loop-safeguards",
+        "runtime-monitoring-and-circuit-breakers"
+      ]
+    },
+    {
+      "slug": "runtime-monitoring-and-circuit-breakers",
+      "name": "Runtime Monitoring and Circuit Breakers",
+      "description": "Runtime monitoring and circuit breakers establish continuous surveillance of AI/ML systems in production, tracking critical metrics such as prediction accuracy, response times, input characteristics, output distributions, and system resource usage. When monitored parameters exceed predefined safety thresholds or exhibit anomalous patterns, automated circuit breakers immediately trigger protective actions including request throttling, service degradation, system shutdown, or failover to backup mechanisms. This approach provides real-time defensive capabilities that prevent cascading failures, ensure consistent service reliability, and maintain transparent operation status for stakeholders monitoring system health.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring/anomaly-detection",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/software-engineering",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/system-deployment-and-use",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Implementing circuit breakers in a medical AI system that automatically halt diagnosis recommendations if prediction confidence drops below 85%, error rates exceed 2%, or response times increase beyond acceptable limits, preventing potentially harmful misdiagnoses during system degradation.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Deploying runtime monitoring for a recommendation engine that tracks recommendation diversity, click-through rates, and user engagement patterns, automatically switching to simpler algorithms when complex models show signs of performance degradation or unusual behaviour patterns.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Establishing transparent monitoring dashboards for a loan approval system that display real-time metrics on approval rates across demographic groups, processing times, and model confidence levels, enabling stakeholders to verify consistent and fair operation.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Threshold calibration requires extensive domain expertise and historical data analysis, as overly sensitive settings trigger excessive false alarms whilst conservative thresholds may miss genuine system failures."
+        },
+        {
+          "description": "False positive alerts can unnecessarily disrupt service availability and user experience, potentially causing more harm than the issues they aim to prevent, especially in time-sensitive applications."
+        },
+        {
+          "description": "Sophisticated attacks or gradual performance degradation may operate within normal metric ranges, evading detection by staying below established thresholds whilst still causing cumulative damage."
+        },
+        {
+          "description": "Monitoring infrastructure introduces additional complexity and potential failure points, requiring robust implementation to avoid situations where the monitoring system itself becomes a source of system instability."
+        },
+        {
+          "description": "High-frequency monitoring and circuit breaker mechanisms can add computational overhead and latency to system operations, potentially impacting performance in resource-constrained environments."
+        }
+      ],
+      "resources": [
+        {
+          "title": "aiobreaker: Python Circuit Breaker for Asyncio",
+          "url": "https://github.com/arlyon/aiobreaker",
+          "source_type": "software_package",
+          "description": "Python library implementing the Circuit Breaker design pattern for asyncio applications, preventing system-wide failures by protecting integration points with configurable failure thresholds and reset timeouts"
+        },
+        {
+          "title": "Improving Alignment and Robustness with Circuit Breakers",
+          "url": "https://arxiv.org/html/2406.04313v4",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andy Zou"
+          ],
+          "description": "Research paper introducing circuit breakers for AI safety that directly interrupt harmful model representations during generation, significantly reducing attack success rates while maintaining model capabilities"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "internal-review-boards",
+        "red-teaming",
+        "human-in-the-loop-safeguards",
+        "confidence-thresholding"
+      ]
+    },
+    {
+      "slug": "model-cards",
+      "name": "Model Cards",
+      "description": "Model cards are standardised documentation frameworks that systematically document machine learning models through structured templates. The templates cover intended use cases, performance metrics across different demographic groups and operating conditions, training data characteristics, evaluation procedures, limitations, and ethical considerations. They serve as comprehensive technical specifications that enable informed model selection, prevent inappropriate deployment, support regulatory compliance, and facilitate fair assessment by providing transparent reporting of model capabilities and constraints across diverse populations and scenarios.",
+      "assurance_goals": [
+        "Transparency",
+        "Fairness",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/documentation/model-card",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-training-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/documentation",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/regulatory-compliance",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/documentation"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Documenting a medical diagnosis AI with detailed performance metrics across different patient demographics, age groups, and clinical conditions, enabling healthcare providers to understand when the model should be trusted and when additional expert consultation is needed for patient safety.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Creating comprehensive model cards for hiring algorithms that transparently report performance differences across demographic groups, helping HR departments identify potential bias issues and ensure equitable candidate evaluation processes.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Publishing detailed model documentation for a credit scoring API that clearly describes training data sources, evaluation methodologies, and performance limitations, enabling financial institutions to make informed decisions about model deployment and regulatory compliance.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Creating comprehensive model cards requires substantial time, expertise, and resources to gather performance data across diverse conditions and demographic groups, potentially delaying model deployment timelines."
+        },
+        {
+          "description": "Information can become outdated quickly as models are retrained, updated, or deployed in new contexts, requiring ongoing maintenance and version control to remain accurate and useful."
+        },
+        {
+          "description": "Organisations may provide incomplete or superficial documentation to avoid revealing competitive advantages or potential liabilities, undermining the transparency goals of model cards."
+        },
+        {
+          "description": "Lack of standardised formats and enforcement mechanisms means model card quality and completeness vary significantly across different organisations and use cases."
+        },
+        {
+          "description": "Technical complexity of documenting model behaviour across all relevant dimensions may exceed the expertise of some development teams, leading to gaps in critical information."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Model Cards for Model Reporting",
+          "url": "http://arxiv.org/pdf/1810.03993v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Margaret Mitchell",
+            "Simone Wu",
+            "Andrew Zaldivar",
+            "Parker Barnes",
+            "Lucy Vasserman",
+            "Ben Hutchinson",
+            "Elena Spitzer",
+            "Inioluwa Deborah Raji",
+            "Timnit Gebru"
+          ],
+          "publication_date": "2018-10-05",
+          "description": "Foundational paper introducing model cards as a framework for transparent model reporting and responsible AI documentation"
+        },
+        {
+          "title": "Model Card Guidebook",
+          "url": "https://huggingface.co/docs/hub/en/model-card-guidebook",
+          "source_type": "tutorial",
+          "description": "Comprehensive guide providing updated model card templates, creator tools, and practical insights for implementing model documentation across diverse stakeholder needs"
+        },
+        {
+          "title": "scikit-learn model cards documentation",
+          "url": "https://skops.readthedocs.io/en/stable/auto_examples/plot_model_card.html",
+          "source_type": "tutorial",
+          "description": "Practical tutorial demonstrating how to create comprehensive model cards for scikit-learn models using the skops library with metrics, visualisations, and metadata"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "datasheets-for-datasets",
+        "data-version-control",
+        "automated-documentation-generation"
+      ]
+    },
+    {
+      "slug": "model-distillation",
+      "name": "Model Distillation",
+      "description": "Model distillation transfers knowledge from a large, complex model (teacher) to a smaller, more efficient model (student) by training the student to mimic the teacher's behaviour. The student learns from the teacher's soft predictions and intermediate representations rather than just hard labels, capturing nuanced decision boundaries and uncertainty. This produces models that are faster, require less memory, and are often more interpretable whilst maintaining much of the original performance. Beyond compression, distillation can improve model reliability by regularising training and enable deployment in resource-constrained environments.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/deployment",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Compressing a large medical diagnosis model into a smaller student model that can run on edge devices in resource-limited clinics, making the decision process more transparent for healthcare professionals whilst maintaining diagnostic accuracy for critical patient care.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating a compressed fraud detection model from a complex ensemble teacher that maintains detection performance whilst being more robust to adversarial attacks and data drift, ensuring consistent protection of financial transactions across varying conditions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Distilling a large autonomous vehicle perception model into a smaller student model that can run with guaranteed inference times and lower computational requirements, ensuring predictable safety-critical decision-making under real-time constraints.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Student models typically achieve 90-95% of teacher performance, creating a trade-off between model efficiency and predictive accuracy that may be unacceptable for high-stakes applications requiring maximum precision."
+        },
+        {
+          "description": "Distillation process can be computationally expensive, requiring extensive teacher model inference during training and careful hyperparameter tuning to balance knowledge transfer with student model capacity."
+        },
+        {
+          "description": "Knowledge transfer quality depends heavily on teacher-student architecture compatibility and the chosen distillation objectives, with mismatched designs potentially leading to ineffective learning or mode collapse."
+        },
+        {
+          "description": "Student models may inherit teacher model biases and vulnerabilities whilst potentially introducing new failure modes, requiring separate validation for fairness, robustness, and safety properties."
+        },
+        {
+          "description": "Compressed models may lack the teacher's capability to handle edge cases or out-of-distribution inputs, potentially creating safety risks when deployed in environments different from the training distribution."
+        }
+      ],
+      "resources": [
+        {
+          "title": "airaria/TextBrewer",
+          "url": "https://github.com/airaria/TextBrewer",
+          "source_type": "software_package",
+          "description": "PyTorch-based knowledge distillation toolkit for natural language processing with support for transformer models, flexible distillation strategies, and multi-teacher approaches."
+        },
+        {
+          "title": "Main features — TextBrewer 0.2.1.post1 documentation",
+          "url": "https://textbrewer.readthedocs.io/",
+          "source_type": "documentation",
+          "description": "Comprehensive documentation for TextBrewer including tutorials, API reference, configuration guides, and experimental results for knowledge distillation in NLP tasks."
+        },
+        {
+          "title": "A Generic Approach for Reproducible Model Distillation",
+          "url": "http://arxiv.org/abs/2211.12631",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hooker, Giles",
+            "Xu, Peiru",
+            "Zhou, Yunzhe"
+          ],
+          "publication_date": "2023-04-27",
+          "description": "Research paper presenting a framework for reproducible knowledge distillation with standardised evaluation protocols and benchmarking across different model architectures and distillation techniques."
+        },
+        {
+          "title": "dkozlov/awesome-knowledge-distillation",
+          "url": "https://github.com/dkozlov/awesome-knowledge-distillation",
+          "source_type": "software_package",
+          "description": "Curated collection of knowledge distillation resources including academic papers, implementation code across multiple frameworks (PyTorch, TensorFlow, Keras), and educational videos."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "ridge-regression-surrogates",
+        "rulefit",
+        "model-pruning"
+      ]
+    },
+    {
+      "slug": "model-pruning",
+      "name": "Model Pruning",
+      "description": "Model pruning systematically removes less important weights, neurons, or entire layers from neural networks to create smaller, more efficient models whilst maintaining performance. This process involves iterative removal based on importance criteria (weight magnitudes, gradient information, activation patterns) followed by fine-tuning. Pruning can be structured (removing entire neurons/channels) or unstructured (removing individual weights), with structured pruning providing greater computational benefits and interpretability through simplified architectures.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-optimization",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Compressing a medical imaging model from 100MB to 15MB for deployment on edge devices in remote clinics, enabling healthcare professionals to audit the remaining critical feature detectors and understand which anatomical patterns drive diagnoses whilst maintaining diagnostic accuracy.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Pruning a financial fraud detection model by 70% to eliminate redundant pathways that amplify noise, creating a more robust system that maintains consistent predictions across different transaction types and reduces false positives during market volatility.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Reducing an autonomous vehicle perception model to ensure predictable inference times under 50ms for safety-critical decisions, removing non-essential neurons to guarantee consistent computational behaviour whilst maintaining object detection accuracy for pedestrian safety.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Determining optimal pruning ratios requires extensive experimentation as over-pruning can cause dramatic accuracy degradation, whilst under-pruning provides minimal benefits, making the process time-consuming and resource-intensive."
+        },
+        {
+          "description": "Structured pruning often requires specific hardware or software framework support to realise computational benefits, limiting deployment flexibility and potentially necessitating model architecture changes."
+        },
+        {
+          "description": "Pruned models may exhibit reduced robustness to out-of-distribution inputs or adversarial attacks, as removing neurons can eliminate defensive redundancy that helped handle edge cases."
+        },
+        {
+          "description": "The iterative pruning and fine-tuning process can be computationally expensive, sometimes requiring more resources than training the original model, particularly for large-scale networks."
+        },
+        {
+          "description": "Pruning criteria based on weight magnitudes or gradients may not align with interpretability goals, potentially removing neurons that contribute to model transparency whilst retaining complex, opaque pathways."
+        }
+      ],
+      "resources": [
+        {
+          "title": "horseee/LLM-Pruner",
+          "url": "https://github.com/horseee/LLM-Pruner",
+          "source_type": "software_package",
+          "description": "Structural pruning tool for large language models supporting Llama, BLOOM, and other LLMs with three-stage compression process requiring only 50,000 training samples for post-training recovery."
+        },
+        {
+          "title": "Pruning Quickstart — Neural Network Intelligence",
+          "url": "https://nni.readthedocs.io/en/stable/tutorials/pruning_quick_start.html",
+          "source_type": "tutorial",
+          "description": "Step-by-step tutorial for implementing model pruning using Microsoft's NNI toolkit, covering basic usage, pruning algorithms, and practical examples for neural network compression."
+        },
+        {
+          "title": "Overview of NNI Model Pruning — Neural Network Intelligence",
+          "url": "https://nni.readthedocs.io/en/stable/compression/pruning.html",
+          "source_type": "documentation",
+          "description": "Comprehensive documentation for NNI's pruning capabilities covering structured and unstructured pruning strategies, supported algorithms, and integration with popular deep learning frameworks."
+        },
+        {
+          "title": "coldlarry/YOLOv3-complete-pruning",
+          "url": "https://github.com/coldlarry/YOLOv3-complete-pruning",
+          "source_type": "software_package",
+          "description": "Complete pruning implementation for YOLOv3 object detection models demonstrating computer vision model compression with minimal accuracy loss for real-time inference applications."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "model-distillation"
+      ]
+    },
+    {
+      "slug": "neuron-activation-analysis",
+      "name": "Neuron Activation Analysis",
+      "description": "Neuron activation analysis examines the firing patterns of individual neurons in neural networks by probing them with diverse inputs and analysing their activation responses. This technique helps understand what concepts, features, or patterns different neurons have learned to recognise, providing insights into the model's internal representations. For large language models, this can reveal neurons specialised for linguistic concepts, semantic categories, or even potentially harmful patterns, enabling targeted interventions and deeper model understanding.",
+      "assurance_goals": [
+        "Explainability",
+        "Safety",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "applicable-models/llm",
+        "applicable-models/transformer",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/fairness",
+        "data-requirements/access-to-model-internals",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualisation",
+        "explanatory-scope/local",
+        "explanatory-scope/global",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/testing",
+        "lifecycle-stage/monitoring",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing GPT-based models to identify specific neurons that activate on toxic or harmful content, enabling targeted interventions to reduce model toxicity whilst preserving general language capabilities for safer AI deployment.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Examining activation patterns in multilingual language models to detect neurons that exhibit systematic biases when processing text from different linguistic communities, revealing implicit representation inequalities that could affect downstream applications.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Investigating individual neurons in medical language models to understand which clinical concepts and medical knowledge representations drive diagnostic suggestions, enabling healthcare professionals to validate the model's medical reasoning pathways.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Many neurons exhibit polysemantic behaviour, representing multiple unrelated concepts simultaneously, making it difficult to assign clear interpretable meanings to individual neural units."
+        },
+        {
+          "description": "Important model behaviours are often distributed across many neurons rather than localised in single units, requiring analysis of neural circuits and interactions that can be exponentially complex."
+        },
+        {
+          "description": "Computational costs scale dramatically with modern large language models containing billions of parameters, making comprehensive neuron-by-neuron analysis prohibitively expensive for complete model understanding."
+        },
+        {
+          "description": "Neuron activation patterns are highly context-dependent, with the same neuron potentially serving different roles based on surrounding input context, complicating consistent interpretation across diverse scenarios."
+        },
+        {
+          "description": "Interpretation of activation patterns often relies on subjective human analysis without rigorous validation methods, potentially leading to confirmation bias or misattribution of neural functions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "jalammar/ecco",
+          "url": "https://github.com/jalammar/ecco",
+          "source_type": "software_package"
+        },
+        {
+          "title": "NeuRel-Attack: Neuron Relearning for Safety Disalignment in Large Language Models",
+          "url": "http://arxiv.org/pdf/2504.21053v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yi Zhou",
+            "Wenpeng Xing",
+            "Dezhang Kong",
+            "Changting Lin",
+            "Meng Han"
+          ],
+          "publication_date": "2025-04-29"
+        },
+        {
+          "title": "On the Value of Labeled Data and Symbolic Methods for Hidden Neuron Activation Analysis",
+          "url": "http://arxiv.org/pdf/2404.13567v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Abhilekha Dalal",
+            "Rushrukh Rayan",
+            "Adrita Barua",
+            "Eugene Y. Vasserman",
+            "Md Kamruzzaman Sarker",
+            "Pascal Hitzler"
+          ],
+          "publication_date": "2024-04-21"
+        },
+        {
+          "title": "On the Value of Labeled Data and Symbolic Methods for Hidden Neuron\n  Activation Analysis",
+          "url": "http://arxiv.org/abs/2404.13567",
+          "source_type": "technical_paper",
+          "authors": [
+            "Barua, Adrita",
+            "Dalal, Abhilekha",
+            "Hitzler, Pascal",
+            "Rayan, Rushrukh",
+            "Sarker, Md Kamruzzaman",
+            "Vasserman, Eugene Y."
+          ],
+          "publication_date": "2024-04-21"
+        },
+        {
+          "title": "Ecco",
+          "url": "https://ecco.readthedocs.io/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Tracing the Thoughts in Language Models",
+          "url": "https://www.anthropic.com/news/tracing-thoughts-language-model",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "prototype-and-criticism-models",
+        "concept-activation-vectors"
+      ]
+    },
+    {
+      "slug": "prompt-sensitivity-analysis",
+      "name": "Prompt Sensitivity Analysis",
+      "description": "Prompt Sensitivity Analysis systematically evaluates how variations in input prompts affect large language model outputs, providing insights into model robustness, consistency, and interpretability. This technique involves creating controlled perturbations of prompts whilst maintaining semantic meaning, then measuring how these changes influence model responses. It encompasses various types of prompt modifications including lexical substitutions, syntactic restructuring, formatting changes, and contextual variations. The analysis typically quantifies sensitivity through metrics such as output consistency, semantic similarity, and statistical measures of variance across prompt variations.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/llm",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "expertise-needed/linguistics",
+        "expertise-needed/experimental-design",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "technique-type/experimental"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing medical diagnosis LLMs with semantically equivalent but syntactically different symptom descriptions to ensure consistent diagnostic recommendations across different patient communication styles, identifying potential failure modes where slight phrasing changes could lead to dangerous misdiagnoses.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Analysing how variations in candidate descriptions (gendered language, cultural references, educational institution prestige indicators) affect LLM-based CV screening recommendations to identify potential discriminatory patterns and ensure equitable treatment across diverse applicant backgrounds.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Examining how different ways of framing financial questions (formal vs informal language, technical vs layperson terminology) affect investment advice generated by LLMs to improve user understanding and model transparency whilst ensuring consistent advisory quality.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Analysis is inherently limited to the specific prompt variations tested, potentially missing important sensitivity patterns that weren't anticipated during study design, making comprehensive coverage challenging."
+        },
+        {
+          "description": "Systematic exploration of prompt variations can be computationally expensive, particularly for large-scale sensitivity analysis across multiple dimensions of variation, requiring significant resources for thorough evaluation."
+        },
+        {
+          "description": "Ensuring that prompt variations maintain semantic equivalence whilst introducing meaningful perturbations requires careful linguistic expertise and validation, which can be subjective and domain-dependent."
+        },
+        {
+          "description": "Results may reveal sensitivity patterns that are difficult to interpret or act upon, particularly when multiple types of variations interact in complex ways, limiting practical applicability of findings."
+        },
+        {
+          "description": "The meaningfulness of sensitivity measurements depends heavily on the choice of baseline prompts and variation strategies, which can introduce methodological biases and affect the generalisability of conclusions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Quantifying Language Models' Sensitivity to Spurious Features in Prompt Design or: How I learned to start worrying about prompt formatting",
+          "url": "https://www.semanticscholar.org/paper/17a6116e5bbd8b87082cbb2e795885567300c483",
+          "source_type": "technical_paper",
+          "authors": [
+            "Melanie Sclar",
+            "Yejin Choi",
+            "Yulia Tsvetkov",
+            "Alane Suhr"
+          ]
+        },
+        {
+          "title": "PromptPrism: A Linguistically-Inspired Taxonomy for Prompts",
+          "url": "http://arxiv.org/pdf/2505.12592v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sullam Jeoung",
+            "Yueyan Chen",
+            "Yi Zhang",
+            "Shuai Wang",
+            "Haibo Ding",
+            "Lin Lee Cheong"
+          ],
+          "publication_date": "2025-05-19"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "causal-mediation-analysis-in-language-models",
+        "feature-attribution-with-integrated-gradients-in-nlp"
+      ]
+    },
+    {
+      "slug": "causal-mediation-analysis-in-language-models",
+      "name": "Causal Mediation Analysis in Language Models",
+      "description": "Causal mediation analysis in language models is a mechanistic interpretability technique that systematically investigates how specific internal components (neurons, attention heads, or layers) causally contribute to model outputs. By performing controlled interventions—such as activating, deactivating, or modifying specific components—researchers can trace the causal pathways through which information flows and transforms within the model. This approach goes beyond correlation to establish causal relationships, enabling researchers to understand not just what features influence outputs, but how and why they do so through specific computational pathways.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/llm",
+        "applicable-models/transformer",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-model-internals",
+        "data-type/text",
+        "evidence-type/causal-analysis",
+        "expertise-needed/causal-inference",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/post-deployment",
+        "technique-type/mechanistic-interpretability"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Investigating causal pathways in content moderation models to understand how specific attention mechanisms contribute to flagging potentially harmful content, enabling verification that safety decisions rely on appropriate features rather than spurious correlations and ensuring robust content filtering.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Identifying specific neurons or attention heads that causally contribute to biased outputs in hiring or lending language models, enabling targeted interventions to reduce discriminatory behaviour whilst preserving model performance on legitimate tasks and ensuring fair treatment across demographics.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Tracing causal pathways in large language models performing mathematical reasoning tasks to understand how intermediate steps are computed and stored, revealing which components are responsible for different aspects of logical inference and enabling validation of reasoning processes.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires sophisticated understanding of model architecture to design meaningful interventions, as poorly chosen intervention points may yield misleading causal conclusions or fail to capture relevant computational pathways."
+        },
+        {
+          "description": "Results are highly dependent on the validity of underlying causal assumptions, which can be difficult to verify in complex, high-dimensional neural network spaces where multiple causal pathways may interact."
+        },
+        {
+          "description": "Comprehensive causal analysis requires extensive computational resources, particularly for large models, as each intervention requires separate forward passes and multiple intervention combinations for robust conclusions."
+        },
+        {
+          "description": "Distinguishing between direct causal effects and indirect effects mediated through other components can be challenging, potentially leading to oversimplified causal narratives that miss important intermediate processes."
+        },
+        {
+          "description": "Causal relationships identified in specific contexts or datasets may not generalise to different domains, tasks, or model versions, requiring careful validation across diverse scenarios to ensure robust findings."
+        }
+      ],
+      "resources": [],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "prompt-sensitivity-analysis",
+        "feature-attribution-with-integrated-gradients-in-nlp"
+      ]
+    },
+    {
+      "slug": "feature-attribution-with-integrated-gradients-in-nlp",
+      "name": "Feature Attribution with Integrated Gradients in NLP",
+      "description": "Applies Integrated Gradients to natural language processing models to attribute prediction importance to individual input tokens, words, or subword units. This technique computes gradients along a straight-line path from a baseline input (typically all-zeros, padding tokens, or neutral text) to the actual input, integrating these gradients to obtain attribution scores. Unlike vanilla gradient methods, Integrated Gradients satisfies axioms of sensitivity and implementation invariance, making it particularly valuable for understanding transformer-based language models where token interactions are complex.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/transformer",
+        "applicable-models/llm",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualisation",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/testing",
+        "technique-type/gradient-based"
+      ],
+      "example_use_cases": [
+        {
+          "description": "In a clinical decision support system processing doctor's notes to predict patient risk, Integrated Gradients identifies which medical terms, symptoms, or phrases most strongly influence risk predictions, enabling clinicians to verify that the model focuses on clinically relevant information rather than spurious correlations and supporting regulatory compliance in healthcare AI.",
+          "goal": "Safety"
+        },
+        {
+          "description": "For automated loan approval systems processing free-text application descriptions, Integrated Gradients reveals which words or phrases drive acceptance decisions, supporting fairness audits by highlighting whether protected characteristics inadvertently influence decisions and enabling transparent explanations to customers about application outcomes.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "In content moderation systems flagging potentially harmful posts, Integrated Gradients identifies which specific words or linguistic patterns trigger safety classifications, enabling platform teams to debug false positives and validate that models focus on genuinely problematic language rather than demographic markers.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computational overhead scales significantly with document length as processing requires computing gradients across many integration steps (typically 20-300), making real-time applications or large-scale document processing challenging."
+        },
+        {
+          "description": "Choice of baseline input (zero embeddings, padding tokens, neutral text, or average embeddings) substantially affects attribution results, but optimal baseline selection remains domain-specific and often requires extensive experimentation."
+        },
+        {
+          "description": "In transformer models with attention mechanisms, importance often spreads across many tokens, making it difficult to identify clear, actionable insights, especially for complex reasoning tasks where multiple tokens contribute collectively."
+        },
+        {
+          "description": "Modern NLP models use subword tokenisation (BPE, WordPiece), making attribution results difficult to interpret at the word level, as single words may split across multiple tokens with varying attribution scores."
+        },
+        {
+          "description": "While Integrated Gradients identifies correlative relationships between tokens and predictions, it cannot establish causal relationships or distinguish between spurious correlations and meaningful semantic dependencies in the input text."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Captum: Model Interpretability for PyTorch",
+          "url": "https://captum.ai/",
+          "source_type": "software_package",
+          "description": "Open-source PyTorch library implementing Integrated Gradients with multi-modal support including text, featuring easy integration with transformer models and comprehensive NLP tutorials (BERT SQUAD, IMDB classification, Llama2 attribution)."
+        },
+        {
+          "title": "Axiomatic Attribution for Deep Networks",
+          "url": "https://arxiv.org/abs/1703.01365",
+          "source_type": "technical_paper",
+          "authors": [
+            "Mukund Sundararajan",
+            "Ankur Taly",
+            "Qiqi Yan"
+          ],
+          "publication_date": "2017-03-19",
+          "description": "Original paper introducing Integrated Gradients method with fundamental axioms of sensitivity and implementation invariance, demonstrating applications across text models and providing theoretical foundations for attribution methods."
+        },
+        {
+          "title": "The Building Blocks of Interpretability",
+          "url": "https://distill.pub/2020/attribution-baselines/",
+          "source_type": "tutorial",
+          "description": "Interactive Distill article providing comprehensive guidance on baseline selection for Integrated Gradients, exploring different baseline types and their impact on feature attribution quality with transferable principles for NLP applications."
+        },
+        {
+          "title": "transformers-interpret",
+          "url": "https://github.com/cdpierse/transformers-interpret",
+          "source_type": "software_package",
+          "description": "Model explainability library designed for Hugging Face transformers, enabling transformer model explanation in two lines of code with HTML visualisations and support for sequence classification, multi-label classification, and computer vision models."
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "prompt-sensitivity-analysis",
+        "causal-mediation-analysis-in-language-models"
+      ]
+    }
+  ],
+  "count": 19
+}

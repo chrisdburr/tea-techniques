@@ -1,0 +1,106 @@
+{
+  "slug": "out-of-distribution-detector-for-neural-networks",
+  "name": "Out-of-DIstribution detector for Neural networks",
+  "description": "ODIN (Out-of-Distribution Detector for Neural Networks) identifies when a neural network encounters inputs significantly different from its training distribution. It enhances detection by applying temperature scaling to soften the model's output distribution and adding small, carefully calibrated perturbations to the input that push in-distribution samples towards higher confidence predictions. By measuring the maximum softmax probability after these adjustments, ODIN can effectively distinguish between in-distribution and out-of-distribution inputs, flagging potentially unreliable predictions before they cause downstream errors.",
+  "assurance_goals": [
+    "Explainability",
+    "Reliability",
+    "Safety"
+  ],
+  "tags": [
+    "applicable-models/neural-network",
+    "assurance-goal-category/explainability",
+    "assurance-goal-category/reliability",
+    "assurance-goal-category/safety",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/ml-engineering",
+    "expertise-needed/statistics",
+    "explanatory-scope/global",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Detecting anomalous medical images in diagnostic systems, where ODIN flags X-rays or scans containing rare pathologies or imaging artefacts not present in training data, preventing misdiagnosis and prompting specialist review.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Protecting autonomous vehicle perception systems by identifying novel road scenarios (e.g., unusual weather conditions, rare obstacle types) that fall outside the training distribution, triggering fallback safety mechanisms.",
+      "goal": "Safety"
+    },
+    {
+      "description": "Monitoring production ML systems for data drift by detecting when incoming customer behaviour patterns deviate significantly from training data, helping explain why model performance may degrade over time.",
+      "goal": "Explainability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Requires careful tuning of temperature scaling and perturbation magnitude parameters, which may need adjustment for different types of out-of-distribution data."
+    },
+    {
+      "description": "Performance degrades when out-of-distribution samples are very similar to training data, making near-distribution detection challenging."
+    },
+    {
+      "description": "Vulnerable to adversarial examples specifically crafted to evade detection by mimicking in-distribution characteristics."
+    },
+    {
+      "description": "Computational overhead from input preprocessing and perturbation generation can impact real-time inference applications."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Enhancing The Reliability of Out-of-distribution Image Detection in Neural Networks",
+      "url": "http://arxiv.org/pdf/1706.02690v5",
+      "source_type": "technical_paper",
+      "authors": [
+        "Shiyu Liang",
+        "Yixuan Li",
+        "R. Srikant"
+      ],
+      "publication_date": "2017-06-08"
+    },
+    {
+      "title": "facebookresearch/odin",
+      "url": "https://github.com/facebookresearch/odin",
+      "source_type": "software_package"
+    },
+    {
+      "title": "Generalized ODIN: Detecting Out-of-distribution Image without Learning from Out-of-distribution Data",
+      "url": "http://arxiv.org/pdf/2002.11297v2",
+      "source_type": "technical_paper",
+      "authors": [
+        "Yen-Chang Hsu",
+        "Yilin Shen",
+        "Hongxia Jin",
+        "Zsolt Kira"
+      ],
+      "publication_date": "2020-02-26"
+    },
+    {
+      "title": "Detection of out-of-distribution samples using binary neuron activation patterns",
+      "url": "http://arxiv.org/abs/2212.14268",
+      "source_type": "technical_paper",
+      "authors": [
+        "Chachuła, Krystian",
+        "Olber, Bartlomiej",
+        "Popowicz, Adam",
+        "Radlak, Krystian",
+        "Szczepankiewicz, Michal"
+      ],
+      "publication_date": "2023-03-24"
+    },
+    {
+      "title": "Out-of-Distribution Detection with ODIN - A Tutorial",
+      "url": "https://medium.com/@abhaypatil2000/out-of-distribution-detection-using-odin-f1a3e9e6b3b8",
+      "source_type": "tutorial"
+    }
+  ],
+  "complexity_rating": 4,
+  "computational_cost_rating": 3,
+  "acronym": "ODIN",
+  "related_techniques": [
+    "anomaly-detection"
+  ]
+}

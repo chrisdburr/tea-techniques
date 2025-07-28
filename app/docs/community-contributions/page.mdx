@@ -1,0 +1,127 @@
+import {
+MDXPageLayout,
+generateMetadataFromFrontmatter,
+} from '@/components/layout/mdx-page-layout';
+import { Github, GitPullRequest, MessageSquare, Users } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
+export const frontmatter = {
+  title: 'Community Contributions',
+  description: 'Learn how to contribute new techniques, improvements, and feedback to the TEA Techniques platform.',
+  breadcrumbs: [
+    { label: 'Home', href: '/' },
+    { label: 'Docs', href: '/docs' },
+    { label: 'Community Contributions', href: '/docs/community-contributions' }
+  ],
+  publishedAt: '2024-01-01',
+  updatedAt: '2024-07-25',
+  tableOfContents: true
+};
+
+export const dynamic = 'force-static';
+export const metadata = generateMetadataFromFrontmatter(frontmatter);
+
+export default function CommunityContributionsPage({ children }) {
+  return <MDXPageLayout frontmatter={frontmatter}>{children}</MDXPageLayout>;
+}
+
+TEA Techniques thrives on community contributions. Whether you're a researcher, developer, or AI practitioner, your insights and experiences can help others in the field.
+This guide explains how to contribute effectively.
+
+## Ways to Contribute
+
+There are several ways you can contribute:
+
+1. **Submit New Techniques**: if you know about or have developed a technique that isn't in our collection, we encourage you to submit it by [raising an issue](https://github.com/alan-turing-institute/tea-techniques/issues) or opening a [pull request](https://github.com/alan-turing-institute/tea-techniques/pulls). New techniques help expand the toolkit available to the community.
+2. **Improve Existing techniques**: have you found a typo, correction, or a better way to implement an existing technique? Your improvements help keep techniques current and practical.
+3. **Share Case Studies**: real-world examples make techniques more accessible. Share how you've applied techniques in practice, including challenges faced and results achieved. The best way to do this is via the [TEA Platform](https://assuranceplatform.azurewebsites.net) where you can share case studies with attached assurance cases.
+
+## Contribution Process
+
+### 1. Before You Start
+
+- **Check existing techniques:** Ensure your contribution doesn't duplicate existing content
+- **Review the evaluation criteria:** Familiarise yourself with our
+  [evaluation standards](/about/technique-evaluation)
+- **Gather supporting evidence:** Collect research papers, case studies, or implementation examples
+
+### 2. Prepare Your Contribution
+
+~Use the following template structure for new techniques:~
+
+Coming soon!
+
+{/* Add schema and template once developed */}
+
+### 3. Submit Your Contribution
+
+**Via GitHub (Preferred):**
+
+1. Fork our repository: [https://github.com/alan-turing-institute/tea-techniques](https://github.com/alan-turing-institute/tea-techniques)
+2. Create a new branch: `technique-submission/technique-name`
+3. Add your new technique or revision to `data/techniques.json`
+4. Submit a pull request with a clear description
+
+**Via Issue:** If you're not comfortable with Git, create an issue with your technique details and
+we'll help integrate it.
+
+### 4. Review Process
+
+After submission, your contribution will go through:
+
+- Review for completeness and alignment with our [evaluation standards](/about/technique-evaluation)
+- Request for any amendments
+- Final approval and integration
+
+This process typically takes 2-4 weeks depending on the complexity of the contribution.
+
+## Contribution Guidelines
+
+### Quality Standards
+
+- Write clearly and concisely
+- Provide actionable, step-by-step guidance
+- Include real-world examples where possible
+- Cite sources and provide references
+- Be objective and evidence-based
+
+### Code of Conduct
+
+- Be respectful and inclusive
+- Welcome diverse perspectives
+- Provide constructive feedback
+- Focus on advancing responsible AI
+
+### Licensing
+
+By contributing to TEA Techniques, you agree that your contributions will be licensed under the same [MIT license](../../../LICENSE) as the project.
+
+## Recognition
+
+We value and recognise all contributions to TEA Techniques:
+
+- Contributors are credited in technique metadata
+- We use the [All Contributors](https://allcontributors.org/) bot to ensure all forms of contribution are recognised and displayed on our repository's [README](../../../README.md)
+- Active contributors may be invited to join the review team
+- Your organisation can be listed as a contributing partner
+
+## Get Help
+
+Need assistance with your contribution? We're here to help:
+
+<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+  <LinkCard
+    href="https://github.com/alan-turing-institute/AssurancePlatform/issues"
+    title="GitHub Issues"
+    description="Ask questions or report problems"
+    icon={Github}
+    external
+  />
+  <LinkCard
+    href="https://github.com/alan-turing-institute/AssurancePlatform/discussions"
+    title="Discussions"
+    description="Join community conversations"
+    icon={MessageSquare}
+    external
+  />
+</div>

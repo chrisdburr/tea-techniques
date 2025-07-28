@@ -1,0 +1,107 @@
+{
+  "slug": "calibration-with-equality-of-opportunity",
+  "name": "Calibration with Equality of Opportunity",
+  "description": "A post-processing fairness technique that adjusts model predictions to achieve equal true positive rates across protected groups whilst maintaining calibration within each group. The method addresses fairness by ensuring that qualified individuals from different demographic groups have equal chances of receiving positive predictions, whilst preserving the meaning of probability scores within each group. This technique attempts to balance the competing objectives of group fairness and accurate probability estimation.",
+  "assurance_goals": [
+    "Fairness",
+    "Transparency",
+    "Reliability"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/fairness",
+    "assurance-goal-category/fairness/group",
+    "assurance-goal-category/transparency",
+    "assurance-goal-category/reliability",
+    "data-requirements/calibration-set",
+    "data-requirements/sensitive-attributes",
+    "data-requirements/labelled-data",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "evidence-type/fairness-metric",
+    "expertise-needed/ml-engineering",
+    "expertise-needed/statistics",
+    "fairness-approach/group",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/model-development/testing",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Adjusting a loan approval model to ensure that qualified applicants from different ethnic backgrounds have equal approval rates, whilst maintaining that a 70% predicted repayment probability means the same thing for each ethnic group in practice.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Post-processing a university admissions algorithm to equalise acceptance rates for qualified students across gender groups, whilst ensuring the predicted success scores remain well-calibrated within each gender to support transparent decision-making.",
+      "goal": "Transparency"
+    },
+    {
+      "description": "Calibrating a medical diagnosis model to maintain equal detection rates for a disease across different age groups whilst preserving the reliability of risk scores, ensuring that a 30% risk prediction accurately reflects actual disease occurrence within each age group.",
+      "goal": "Reliability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Fundamental mathematical incompatibility exists between perfect calibration and exact equality of opportunity, except in highly constrained special cases."
+    },
+    {
+      "description": "May reduce overall model accuracy or calibration when forcing equal true positive rates across groups with genuinely different base rates."
+    },
+    {
+      "description": "Requires access to sensitive attributes during post-processing, which may not be available or legally permissible in all contexts."
+    },
+    {
+      "description": "The technique only addresses one aspect of fairness (true positive rates) and may allow disparities in false positive rates between groups."
+    },
+    {
+      "description": "Post-processing approaches cannot address biases inherent in the training data or model architecture, only adjust final predictions."
+    }
+  ],
+  "resources": [
+    {
+      "title": "On Fairness and Calibration",
+      "url": "https://arxiv.org/abs/1709.02012",
+      "source_type": "technical_paper",
+      "description": "Foundational paper demonstrating the mathematical tension between calibration and equalised odds fairness constraints.",
+      "authors": [
+        "Geoff Pleiss",
+        "Manish Raghavan",
+        "Felix Wu",
+        "Jon Kleinberg",
+        "Kilian Q. Weinberger"
+      ],
+      "publication_date": "2017-09-06"
+    },
+    {
+      "title": "equalized_odds_and_calibration",
+      "url": "https://github.com/gpleiss/equalized_odds_and_calibration",
+      "source_type": "software_package",
+      "description": "Python implementation of post-processing methods for achieving calibration with equality of opportunity constraints."
+    },
+    {
+      "title": "Equality of Opportunity in Supervised Learning",
+      "url": "https://arxiv.org/abs/1610.02413",
+      "source_type": "technical_paper",
+      "description": "Original paper introducing the equality of opportunity fairness criterion and post-processing algorithms.",
+      "authors": [
+        "Moritz Hardt",
+        "Eric Price",
+        "Nathan Srebro"
+      ],
+      "publication_date": "2016-10-07"
+    },
+    {
+      "title": "Fairlearn: Postprocessing Methods",
+      "url": "https://fairlearn.org/v0.10/user_guide/mitigation/postprocessing.html",
+      "source_type": "documentation",
+      "description": "Documentation for implementing threshold optimisation and calibration methods to achieve fairness constraints."
+    }
+  ],
+  "complexity_rating": 4,
+  "computational_cost_rating": 2,
+  "related_techniques": [
+    "equalised-odds-post-processing",
+    "threshold-optimiser",
+    "reject-option-classification"
+  ]
+}

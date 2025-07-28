@@ -1,0 +1,314 @@
+import {
+MDXPageLayout,
+generateMetadataFromFrontmatter,
+} from '@/components/layout/mdx-page-layout';
+import {
+ArrowRight,
+BookOpen,
+Github,
+} from 'lucide-react';
+import Link from 'next/link';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+export const frontmatter = {
+  title: 'Data Serving',
+  description: 'How TEA Techniques serves data through GitHub to simulate an API',
+  breadcrumbs: [
+    { label: 'Home', href: '/' },
+    { label: 'Docs', href: '/docs' },
+    { label: 'API Data Serving', href: '/docs/api-data-serving' }
+  ],
+  publishedAt: '2024-01-01',
+  updatedAt: '2024-07-27',
+  tableOfContents: true
+};
+
+export const dynamic = 'force-static';
+export const metadata = generateMetadataFromFrontmatter(frontmatter);
+
+export default function ApiDataServingPage({ children }) {
+  return <MDXPageLayout frontmatter={frontmatter}>{children}</MDXPageLayout>;
+}
+
+<Callout variant="info" title="About">
+  This page explains the approach used to serve static data files as "API endpoints" via a GitHub repository.
+</Callout>
+
+TEA Techniques provides programmatic access to its data through a collection of static JSON files hosted on GitHub Pages. While not a traditional RESTful API, this approach allows users or developers to fetch technique data and filtered collections using standard HTTP requests. Developers can integrate TEA Techniques data into their applications just as they would with any API. The files are served with proper CORS headers, cached by GitHub's CDN, and available without authentication.
+
+This documentation outlines the available "endpoints", data structures, and best practices for using the TEA Techniques data in your projects.
+
+## Overview
+
+The TEA Techniques static API follows a simple three-step process:
+
+1. **Source Data** <Badge variant="secondary">techniques.json</Badge> - Master file containing all 92 techniques
+2. **Build Process** <Badge variant="secondary">228 JSON files</Badge> - Optimised endpoints generated at build time
+3. **GitHub Pages** <Badge variant="secondary">Global CDN</Badge> - Worldwide distribution through GitHub's infrastructure
+
+### Build Process Details
+
+During the build process, our data generation scripts transforms the master `techniques.json` file into:
+
+- **92 individual technique files**: One JSON file per technique for efficient loading
+- **7 category files**: Pre-filtered techniques for each assurance goal
+- **116 filter combination files** - Pre-computed results for every tag filter
+- **7 search indices**: Optimised Fuse.js indices for fast client-side search
+- **Additional metadata files**: Supporting data structures for the application
+
+### Directory Structure
+
+The build process results in the following directory structure:
+
+```
+/data/
+├── techniques.json             # Master data file
+├── techniques-metadata.json    # Lightweight metadata for all techniques
+├── assurance-goals.json        # Definitions of the 6 goals
+├── tags.json                   # All 116 tags with categories
+├── search-index.json           # Global search index
+├── techniques/                 # Individual technique files
+│   └── [slug].json
+├── categories/                 # Pre-filtered by assurance goal
+│   └── [goal].json
+├── filters/                    # Pre-filtered by tag category
+│   └── [category]/
+│       └── [tag].json
+└── search/                     # Goal-specific search indices
+    └── [goal]-index.json
+```
+
+## Available Endpoints
+
+### Core Data Endpoints
+
+These endpoints provide the primary data structures used throughout the application:
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Endpoint</TableHead>
+      <TableHead>Size</TableHead>
+      <TableHead>Description</TableHead>
+      <TableHead>Purpose</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell className="font-mono text-sm">GET /data/techniques.json</TableCell>
+      <TableCell><Badge variant="outline">~433KB</Badge></TableCell>
+      <TableCell>Complete list of all 92 techniques with full metadata</TableCell>
+      <TableCell>Main data source for technique listings and search</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono text-sm">GET /data/techniques-metadata.json</TableCell>
+      <TableCell><Badge variant="outline">~119KB</Badge></TableCell>
+      <TableCell>Lightweight metadata for all techniques (names, slugs, goals)</TableCell>
+      <TableCell>Navigation menus and quick lookups</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono text-sm">GET /data/search-index.json</TableCell>
+      <TableCell><Badge variant="outline">~216KB</Badge></TableCell>
+      <TableCell>Optimised search index for Fuse.js client-side search</TableCell>
+      <TableCell>Fast search across names, descriptions, and tags</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono text-sm">GET /data/assurance-goals.json</TableCell>
+      <TableCell><Badge variant="outline">~1.2KB</Badge></TableCell>
+      <TableCell>Definitions and metadata for the 6 assurance goals</TableCell>
+      <TableCell>Category page content and filtering</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell className="font-mono text-sm">GET /data/tags.json</TableCell>
+      <TableCell><Badge variant="outline">~18KB</Badge></TableCell>
+      <TableCell>Complete list of 116 tags organised by category</TableCell>
+      <TableCell>Tag definitions and filter functionality</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+### Individual Technique Endpoints
+
+Each technique has its own endpoint for efficient loading of detail pages:
+
+```
+GET /data/techniques/[slug].json
+```
+
+Example: `/data/techniques/shapley-additive-explanations.json`
+
+These files contain the complete data for a single technique, typically 5-10KB each.
+
+### Category Endpoints
+
+Pre-filtered collections of techniques by assurance goal:
+
+```
+GET /data/categories/[goal].json
+```
+
+Available goals:
+
+- `explainability` - Techniques for understanding AI decisions
+- `fairness` - Techniques for ensuring equitable outcomes
+- `privacy` - Techniques for protecting sensitive data
+- `reliability` - Techniques for consistent performance
+- `safety` - Techniques for preventing harm
+- `security` - Techniques for system protection
+- `transparency` - Techniques for documentation and disclosure
+
+### Tag Endpoints
+
+Pre-computed results for every tag filter combination:
+
+```
+GET /data/filters/[tag-category]/[tag].json
+```
+
+Categories include:
+
+- `applicable-models` - Model types (e.g., neural-network, linear-model)
+- `data-type` - Input data formats (e.g., text, image, tabular)
+- `lifecycle-stage` - Development phases (e.g., data-collection, deployment)
+- `technique-type` - Implementation approach (e.g., algorithmic, documentation)
+- `expertise-needed` - Required skills (e.g., statistics, ml-engineering)
+
+<Callout variant="info" title="Tag Definitions">
+  See [Tag Definitions](../../about/tag-definitions/) for further information about all of our tags, including their definitions.
+</Callout>
+
+## Implementation Examples
+
+<Tabs defaultValue="javascript" className="mt-6">
+  <TabsList>
+    <TabsTrigger value="javascript">JavaScript</TabsTrigger>
+    <TabsTrigger value="python">Python</TabsTrigger>
+    <TabsTrigger value="curl">cURL</TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="javascript">
+
+    ```javascript
+    // Fetch all techniques
+    async function getTechniques() {
+      try {
+        const response = await fetch('/data/techniques.json');
+        if (!response.ok) throw new Error('Failed to fetch');
+        return await response.json();
+      } catch (error) {
+        console.error('Error loading techniques:', error);
+        return [];
+      }
+    }
+
+    // Fetch specific technique
+    async function getTechnique(slug) {
+      const response = await fetch(`/data/techniques/${slug}.json`);
+      if (response.status === 404) {
+        throw new Error('Technique not found');
+      }
+      return response.json();
+    }
+
+    // Using with React Query
+    import { useQuery } from '@tanstack/react-query';
+
+    function useTechniques() {
+      return useQuery({
+        queryKey: ['techniques'],
+        queryFn: () => fetch('/data/techniques.json').then(res => res.json()),
+        staleTime: 1000 * 60 * 60, // 1 hour
+      });
+    }
+    ```
+
+  </TabsContent>
+
+  <TabsContent value="python">
+
+    ```python
+    import requests
+    from typing import List, Dict, Optional
+
+    class TEAClient:
+        def __init__(self, base_url: str = "https://alan-turing-institute.github.io/tea-techniques"):
+            self.base_url = base_url
+
+        def get_techniques(self) -> List[Dict]:
+            """Fetch all techniques"""
+            response = requests.get(f"{self.base_url}/data/techniques.json")
+            response.raise_for_status()
+            return response.json()
+
+        def get_technique(self, slug: str) -> Optional[Dict]:
+            """Fetch a specific technique by slug"""
+            response = requests.get(f"{self.base_url}/data/techniques/{slug}.json")
+            if response.status_code == 404:
+                return None
+            response.raise_for_status()
+            return response.json()
+
+        def search_techniques(self, query: str) -> List[Dict]:
+            """Search techniques using the pre-built index"""
+            # Note: Actual search logic would need to be implemented client-side
+            # This is just fetching the index
+            response = requests.get(f"{self.base_url}/data/search-index.json")
+            response.raise_for_status()
+            return response.json()
+
+    # Usage example
+    client = TEAClient()
+    techniques = client.get_techniques()
+    shap = client.get_technique("shapley-additive-explanations")
+    ```
+
+  </TabsContent>
+
+  <TabsContent value="curl">
+
+    ```bash
+    # Fetch all techniques
+    curl https://alan-turing-institute.github.io/tea-techniques/data/techniques.json
+
+    # Fetch specific technique
+    curl https://alan-turing-institute.github.io/tea-techniques/data/techniques/shapley-additive-explanations.json
+
+    # Fetch techniques for explainability
+    curl https://alan-turing-institute.github.io/tea-techniques/data/categories/explainability.json
+
+    # Pretty print with jq
+    curl https://alan-turing-institute.github.io/tea-techniques/data/tags.json | jq '.categories[0]'
+
+    # Save to file
+    curl -o techniques.json https://alan-turing-institute.github.io/tea-techniques/data/techniques.json
+
+    # With error handling
+    curl -f https://alan-turing-institute.github.io/tea-techniques/data/techniques/invalid-slug.json || echo "Technique not found"
+    ```
+
+  </TabsContent>
+</Tabs>
+
+## Get Involved
+
+TEA Techniques is an open initiative that welcomes contributions from the community.
+Whether you're a researcher, practitioner, or organisation working on responsible AI, there are multiple ways to get involved:
+
+<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+  <LinkCard
+    href="/docs/community-contributions"
+    title="Contribution Guide"
+    description="Learn how to contribute to TEA Techniques"
+    icon={BookOpen}
+  />
+  <LinkCard
+    href="https://github.com/alan-turing-institute/AssurancePlatform"
+    title="GitHub Repository"
+    description="View source code and submit issues"
+    icon={Github}
+    external
+  />
+</div>

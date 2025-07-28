@@ -1,0 +1,103 @@
+{
+  "slug": "relabelling",
+  "name": "Relabelling",
+  "description": "A preprocessing fairness technique that modifies class labels in training data to achieve equal positive outcome rates across protected groups. Also known as 'data massaging', this method identifies instances that contribute to discriminatory patterns and flips their labels (from positive to negative or vice versa) to balance the proportion of positive outcomes between demographic groups. The technique aims to remove historical bias from training data whilst preserving the overall class distribution, enabling standard classifiers to learn from discrimination-free datasets.",
+  "assurance_goals": [
+    "Fairness",
+    "Transparency",
+    "Reliability"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/fairness",
+    "assurance-goal-category/fairness/group",
+    "assurance-goal-category/transparency",
+    "assurance-goal-category/reliability",
+    "data-requirements/access-to-training-data",
+    "data-requirements/sensitive-attributes",
+    "data-requirements/labelled-data",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "evidence-type/dataset-analysis",
+    "expertise-needed/statistics",
+    "expertise-needed/domain-knowledge",
+    "fairness-approach/group",
+    "lifecycle-stage/data-collection",
+    "lifecycle-stage/data-collection/data-preprocessing",
+    "lifecycle-stage/model-development",
+    "technique-type/procedural"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Preprocessing historical hiring datasets by relabelling borderline cases to ensure equal hiring rates across gender and ethnicity groups, correcting for past discriminatory practices whilst maintaining overall qualification standards for fair recruitment model training.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Creating transparent credit scoring datasets by documenting which loan applications had labels modified to address historical lending discrimination, providing clear audit trails showing how training data bias was systematically corrected before model development.",
+      "goal": "Transparency"
+    },
+    {
+      "description": "Improving reliability of medical diagnosis training data by relabelling cases where demographic bias may have influenced historical diagnoses, ensuring models learn from corrected labels that reflect true medical conditions rather than biased historical treatment patterns.",
+      "goal": "Reliability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Altering training labels risks introducing new biases or artificial patterns that may not reflect genuine relationships in the data."
+    },
+    {
+      "description": "Deciding which instances to relabel requires careful selection criteria and domain expertise to avoid inappropriate label changes."
+    },
+    {
+      "description": "May reduce prediction accuracy if too many labels are changed, particularly when the modifications conflict with genuine patterns in the data."
+    },
+    {
+      "description": "Requires access to ground truth or expert knowledge to determine whether original labels reflect genuine outcomes or discriminatory bias."
+    },
+    {
+      "description": "Effectiveness depends on accurate identification of discriminatory instances, which can be challenging when bias patterns are subtle or complex."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Data preprocessing techniques for classification without discrimination",
+      "url": "https://link.springer.com/article/10.1007/s10115-011-0463-8",
+      "source_type": "technical_paper",
+      "authors": [
+        "Faisal Kamiran",
+        "Toon Calders"
+      ],
+      "publication_date": "2012-06-01"
+    },
+    {
+      "title": "Classifying without discriminating",
+      "url": "https://www.researchgate.net/publication/224440330_Classifying_without_discriminating",
+      "source_type": "technical_paper",
+      "authors": [
+        "Toon Calders",
+        "Sicco Verwer"
+      ],
+      "publication_date": "2010-02-01"
+    },
+    {
+      "title": "Data Pre-Processing for Discrimination Prevention",
+      "url": "https://krvarshney.github.io/pubs/CalmonWVRV_jstsp2018.pdf",
+      "source_type": "technical_paper",
+      "authors": [
+        "Flavio Calmon",
+        "Dennis Wei",
+        "Bhanukiran Vinzamuri",
+        "Karthikeyan Natesan Ramamurthy",
+        "Kush R. Varshney"
+      ],
+      "publication_date": "2018-01-01"
+    }
+  ],
+  "complexity_rating": 3,
+  "computational_cost_rating": 2,
+  "related_techniques": [
+    "reweighing",
+    "disparate-impact-remover",
+    "preferential-sampling"
+  ]
+}

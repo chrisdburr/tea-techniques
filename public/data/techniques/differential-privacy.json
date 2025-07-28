@@ -1,0 +1,96 @@
+{
+  "slug": "differential-privacy",
+  "name": "Differential Privacy",
+  "description": "Differential privacy provides mathematically rigorous privacy protection by adding carefully calibrated random noise to data queries, statistical computations, or machine learning outputs. The technique works by ensuring that the presence or absence of any individual's data has minimal impact on the results - specifically, any query result should be nearly indistinguishable whether or not a particular person's data is included. This is achieved through controlled noise addition that scales with the query's sensitivity and a privacy budget (epsilon) that quantifies the privacy-utility trade-off. The smaller the epsilon, the more noise is added and the stronger the privacy guarantee, but at the cost of reduced accuracy.",
+  "assurance_goals": [
+    "Privacy",
+    "Transparency",
+    "Fairness"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/privacy",
+    "assurance-goal-category/privacy/formal-guarantee/differential-privacy",
+    "assurance-goal-category/transparency",
+    "assurance-goal-category/fairness",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "evidence-type/privacy-guarantee",
+    "expertise-needed/cryptography",
+    "expertise-needed/ml-engineering",
+    "expertise-needed/statistics",
+    "lifecycle-stage/data-handling",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/system-deployment-and-use",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Protecting individual privacy in census data analysis by adding calibrated noise to demographic statistics, ensuring households cannot be re-identified whilst maintaining accurate population insights for policy planning.",
+      "goal": "Privacy"
+    },
+    {
+      "description": "Publishing differentially private aggregate statistics about model performance across different demographic groups, enabling transparent bias auditing without exposing sensitive individual prediction details or group membership.",
+      "goal": "Transparency"
+    },
+    {
+      "description": "Enabling fair evaluation of lending algorithms by releasing differentially private performance metrics across protected groups, allowing regulatory compliance checking whilst protecting individual applicant privacy.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Adding noise inherently reduces the accuracy and utility of results, with stronger privacy guarantees (smaller epsilon values) leading to more significant degradation in data quality."
+    },
+    {
+      "description": "Setting the privacy budget (epsilon) requires expertise and careful consideration of the privacy-utility trade-off, with no universal guidelines for appropriate values across different applications."
+    },
+    {
+      "description": "Sequential queries consume the privacy budget cumulatively, potentially requiring careful query planning and potentially prohibiting future analyses once the budget is exhausted."
+    },
+    {
+      "description": "Implementation complexity is high, requiring deep understanding of sensitivity analysis, noise mechanisms, and composition theorems to avoid inadvertent privacy violations."
+    },
+    {
+      "description": "May not protect against all privacy attacks, particularly sophisticated adversaries with auxiliary information or when combined with other data sources that could aid re-identification."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Google Differential Privacy Library",
+      "url": "https://github.com/google/differential-privacy",
+      "source_type": "software_package",
+      "description": "Open-source library providing implementations of differential privacy algorithms and utilities"
+    },
+    {
+      "title": "The Algorithmic Foundations of Differential Privacy",
+      "url": "https://www.cis.upenn.edu/~aaroth/Papers/privacybook.pdf",
+      "source_type": "technical_paper",
+      "authors": [
+        "Cynthia Dwork",
+        "Aaron Roth"
+      ],
+      "description": "Foundational monograph on differential privacy theory and algorithms"
+    },
+    {
+      "title": "Opacus: User-Friendly Differential Privacy Library in PyTorch",
+      "url": "https://github.com/pytorch/opacus",
+      "source_type": "software_package",
+      "description": "PyTorch library for training neural networks with differential privacy"
+    },
+    {
+      "title": "Programming Differential Privacy",
+      "url": "https://programming-dp.com/",
+      "source_type": "tutorial",
+      "description": "Comprehensive online book and tutorial for learning differential privacy programming"
+    }
+  ],
+  "complexity_rating": 5,
+  "computational_cost_rating": 3,
+  "related_techniques": [
+    "synthetic-data-generation",
+    "federated-learning",
+    "homomorphic-encryption"
+  ]
+}

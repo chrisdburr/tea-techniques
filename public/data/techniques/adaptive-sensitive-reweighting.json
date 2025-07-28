@@ -1,0 +1,104 @@
+{
+  "slug": "adaptive-sensitive-reweighting",
+  "name": "Adaptive Sensitive Reweighting",
+  "description": "Adaptive Sensitive Reweighting dynamically adjusts the importance of training examples during model training based on real-time performance across different demographic groups. Unlike traditional static reweighting that fixes weights at the start, this technique continuously monitors fairness metrics and automatically increases the weight of examples from underperforming groups whilst decreasing weights for overrepresented groups. The adaptive mechanism prevents models from perpetuating historical biases by ensuring balanced learning across all demographics throughout the training process.",
+  "assurance_goals": [
+    "Fairness",
+    "Reliability"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/fairness",
+    "assurance-goal-category/reliability",
+    "data-requirements/access-to-model-internals",
+    "data-requirements/sensitive-attributes",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/ml-engineering",
+    "fairness-approach/group",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Training speech recognition systems that adapt weights during training to ensure consistent accuracy across different accents, dialects, and linguistic backgrounds, preventing models from favouring dominant accent groups in the training data.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Developing hiring algorithms that dynamically adjust training example weights to maintain consistent evaluation performance across demographic groups, ensuring the model doesn't learn to favour candidates from overrepresented backgrounds.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Building medical diagnostic models that adaptively reweight patient examples during training to ensure reliable performance across different age groups, ethnicities, and socioeconomic backgrounds, preventing healthcare disparities.",
+      "goal": "Reliability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Training instability can occur when adaptive weight adjustments cause oscillations between demographic groups, potentially preventing convergence if reweighting parameters are not carefully tuned."
+    },
+    {
+      "description": "Computational overhead increases significantly due to continuous monitoring of fairness metrics across groups during training, requiring additional memory and processing time."
+    },
+    {
+      "description": "Risk of overfitting to specific demographic subgroups if the adaptation mechanism becomes too aggressive in correcting for observed performance disparities during training."
+    },
+    {
+      "description": "Requires careful hyperparameter tuning for adaptation rates and fairness thresholds, making the technique sensitive to configuration choices that may not generalise across different datasets."
+    },
+    {
+      "description": "May inadvertently harm overall model performance if the reweighting process prioritises fairness at the expense of learning important patterns that benefit all groups."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Adaptive Sensitive Reweighting to Mitigate Bias in Fairness-aware Classification",
+      "url": "https://dl.acm.org/doi/10.1145/3178876.3186133",
+      "source_type": "technical_paper",
+      "description": "Original paper introducing adaptive sensitive reweighting technique using CULEP model for bias mitigation in classification tasks",
+      "authors": [
+        "Krasanakis, Emmanouil",
+        "Spyromitros-Xioufis, Eleftherios",
+        "Papadopoulos, Symeon",
+        "Kompatsiaris, Yiannis"
+      ],
+      "publication_date": "2018-04-23"
+    },
+    {
+      "title": "AIF360: A comprehensive set of fairness metrics for datasets and machine learning models",
+      "url": "https://github.com/Trusted-AI/AIF360",
+      "source_type": "software_package",
+      "description": "IBM's comprehensive fairness toolkit including implementations of various reweighting techniques and bias mitigation methods"
+    },
+    {
+      "title": "Fairlearn: A toolkit for assessing and improving fairness in machine learning",
+      "url": "https://github.com/fairlearn/fairlearn",
+      "source_type": "software_package",
+      "description": "Microsoft's open-source toolkit providing reweighting and other bias mitigation algorithms with comprehensive documentation"
+    },
+    {
+      "title": "Causal Fairness-Guided Dataset Reweighting using Neural Networks",
+      "url": "https://arxiv.org/abs/2311.10512",
+      "source_type": "technical_paper",
+      "description": "Recent research on causal fairness-guided dataset reweighting using neural networks to address fairness from causal perspective",
+      "authors": [
+        "Zhao, Xuan",
+        "Broelemann, Klaus",
+        "Ruggieri, Salvatore",
+        "Kasneci, Gjergji"
+      ],
+      "publication_date": "2023-11-17"
+    }
+  ],
+  "complexity_rating": 4,
+  "computational_cost_rating": 3,
+  "related_techniques": [
+    "adversarial-debiasing",
+    "fair-adversarial-networks",
+    "prejudice-remover-regulariser",
+    "meta-fair-classifier",
+    "exponentiated-gradient-reduction",
+    "fair-transfer-learning",
+    "multi-accuracy-boosting"
+  ]
+}

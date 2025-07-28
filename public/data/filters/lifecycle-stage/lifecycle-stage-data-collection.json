@@ -1,0 +1,322 @@
+{
+  "tag": {
+    "name": "lifecycle-stage/data-collection",
+    "slug": "lifecycle-stage-data-collection",
+    "count": 3,
+    "category": "lifecycle-stage"
+  },
+  "techniques": [
+    {
+      "slug": "fairness-gan",
+      "name": "Fairness GAN",
+      "description": "A data generation technique that employs Generative Adversarial Networks (GANs) to create fair synthetic datasets by learning to generate data representations that preserve utility whilst obfuscating protected attributes. Unlike traditional GANs, Fairness GANs incorporate fairness constraints into the training objective, ensuring that the generated data maintains statistical parity across demographic groups. The technique can be used for data augmentation to balance underrepresented groups or to create privacy-preserving synthetic datasets that remove demographic bias from training data.",
+      "assurance_goals": [
+        "Fairness",
+        "Privacy",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/gan",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/reliability",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "evidence-type/synthetic-data",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-augmentation",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Generating balanced synthetic datasets for medical research by creating additional samples from underrepresented demographic groups, ensuring equal representation across ethnicity and gender whilst maintaining the statistical properties needed for robust model training.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Creating privacy-preserving synthetic datasets for financial services that remove demographic identifiers whilst preserving the underlying patterns needed for credit risk assessment, allowing secure data sharing between institutions without exposing sensitive customer information.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Augmenting recruitment datasets by generating synthetic candidate profiles that balance gender and ethnicity representation, ensuring reliable model performance across all demographic groups when real-world data exhibits significant imbalances.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "GAN training is notoriously difficult to stabilise, with potential for mode collapse or failure to converge, especially when additional fairness constraints are imposed."
+        },
+        {
+          "description": "Ensuring fairness in generated data may come at the cost of data utility, potentially reducing the quality or realism of synthetic samples."
+        },
+        {
+          "description": "Requires large datasets to train both generator and discriminator networks effectively, limiting applicability in data-scarce domains."
+        },
+        {
+          "description": "Evaluation complexity is high, as it requires assessing both the quality of generated data and the preservation of fairness properties across demographic groups."
+        },
+        {
+          "description": "May inadvertently introduce new biases if the fairness constraints are not properly specified or if the training data itself contains subtle biases."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Fairness GAN",
+          "url": "http://arxiv.org/pdf/1805.09910v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Prasanna Sattigeri",
+            "Samuel C. Hoffman",
+            "Vijil Chenthamarakshan",
+            "Kush R. Varshney"
+          ],
+          "publication_date": "2018-05-24"
+        },
+        {
+          "title": "Fair GANs through model rebalancing for extremely imbalanced class distributions",
+          "url": "http://arxiv.org/pdf/2308.08638v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Anubhav Jain",
+            "Nasir Memon",
+            "Julian Togelius"
+          ],
+          "publication_date": "2023-08-16"
+        },
+        {
+          "title": "Inclusive GAN: Improving Data and Minority Coverage in Generative Models",
+          "url": "http://arxiv.org/abs/2004.03355",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ning Yu",
+            "Ke Li",
+            "Peng Zhou",
+            "Jitendra Malik",
+            "Larry Davis",
+            "Mario Fritz"
+          ],
+          "publication_date": "2020-04-07"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "sensitivity-analysis-for-fairness",
+        "attribute-removal-fairness-through-unawareness",
+        "bayesian-fairness-regularization"
+      ]
+    },
+    {
+      "slug": "relabelling",
+      "name": "Relabelling",
+      "description": "A preprocessing fairness technique that modifies class labels in training data to achieve equal positive outcome rates across protected groups. Also known as 'data massaging', this method identifies instances that contribute to discriminatory patterns and flips their labels (from positive to negative or vice versa) to balance the proportion of positive outcomes between demographic groups. The technique aims to remove historical bias from training data whilst preserving the overall class distribution, enabling standard classifiers to learn from discrimination-free datasets.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/reliability",
+        "data-requirements/access-to-training-data",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/dataset-analysis",
+        "expertise-needed/statistics",
+        "expertise-needed/domain-knowledge",
+        "fairness-approach/group",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-preprocessing",
+        "lifecycle-stage/model-development",
+        "technique-type/procedural"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Preprocessing historical hiring datasets by relabelling borderline cases to ensure equal hiring rates across gender and ethnicity groups, correcting for past discriminatory practices whilst maintaining overall qualification standards for fair recruitment model training.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Creating transparent credit scoring datasets by documenting which loan applications had labels modified to address historical lending discrimination, providing clear audit trails showing how training data bias was systematically corrected before model development.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Improving reliability of medical diagnosis training data by relabelling cases where demographic bias may have influenced historical diagnoses, ensuring models learn from corrected labels that reflect true medical conditions rather than biased historical treatment patterns.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Altering training labels risks introducing new biases or artificial patterns that may not reflect genuine relationships in the data."
+        },
+        {
+          "description": "Deciding which instances to relabel requires careful selection criteria and domain expertise to avoid inappropriate label changes."
+        },
+        {
+          "description": "May reduce prediction accuracy if too many labels are changed, particularly when the modifications conflict with genuine patterns in the data."
+        },
+        {
+          "description": "Requires access to ground truth or expert knowledge to determine whether original labels reflect genuine outcomes or discriminatory bias."
+        },
+        {
+          "description": "Effectiveness depends on accurate identification of discriminatory instances, which can be challenging when bias patterns are subtle or complex."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Data preprocessing techniques for classification without discrimination",
+          "url": "https://link.springer.com/article/10.1007/s10115-011-0463-8",
+          "source_type": "technical_paper",
+          "authors": [
+            "Faisal Kamiran",
+            "Toon Calders"
+          ],
+          "publication_date": "2012-06-01"
+        },
+        {
+          "title": "Classifying without discriminating",
+          "url": "https://www.researchgate.net/publication/224440330_Classifying_without_discriminating",
+          "source_type": "technical_paper",
+          "authors": [
+            "Toon Calders",
+            "Sicco Verwer"
+          ],
+          "publication_date": "2010-02-01"
+        },
+        {
+          "title": "Data Pre-Processing for Discrimination Prevention",
+          "url": "https://krvarshney.github.io/pubs/CalmonWVRV_jstsp2018.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Flavio Calmon",
+            "Dennis Wei",
+            "Bhanukiran Vinzamuri",
+            "Karthikeyan Natesan Ramamurthy",
+            "Kush R. Varshney"
+          ],
+          "publication_date": "2018-01-01"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "reweighing",
+        "disparate-impact-remover",
+        "preferential-sampling"
+      ]
+    },
+    {
+      "slug": "preferential-sampling",
+      "name": "Preferential Sampling",
+      "description": "A preprocessing fairness technique developed by Kamiran and Calders that addresses dataset imbalances by re-sampling training data with preference for underrepresented groups to achieve discrimination-free classification. This method modifies the training distribution by prioritising borderline objects (instances near decision boundaries) from underrepresented groups for duplication whilst potentially removing instances from overrepresented groups. Unlike relabelling approaches, preferential sampling maintains original class labels whilst creating a more balanced dataset that prevents models from learning biased patterns due to skewed group representation.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/dataset-analysis",
+        "expertise-needed/low",
+        "fairness-approach/group",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-preprocessing",
+        "lifecycle-stage/model-development",
+        "technique-type/procedural"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Preprocessing hiring datasets by preferentially sampling candidates from underrepresented gender and ethnic groups, particularly focusing on borderline cases near decision boundaries, to ensure fair representation whilst maintaining original qualifications and labels for unbiased recruitment model training.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Balancing medical training datasets by oversampling patients from underrepresented demographic groups to ensure reliable diagnostic performance across all populations, preventing models from exhibiting reduced accuracy for minority patient groups due to insufficient training examples.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Creating transparent credit scoring datasets by documenting and adjusting the sampling process to ensure equal representation across demographic groups, providing clear evidence to regulators that training data imbalances have been addressed without altering original creditworthiness labels.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Oversampling minority groups can cause overfitting to duplicated examples, particularly when borderline instances are repeatedly sampled, potentially reducing model generalisation."
+        },
+        {
+          "description": "Undersampling majority groups may remove important examples that contain valuable information, potentially degrading overall model performance."
+        },
+        {
+          "description": "Does not address inherent algorithmic bias in the learning process itself, only correcting for representation imbalances in the training data."
+        },
+        {
+          "description": "Selection of borderline objects requires careful threshold tuning and may be sensitive to the choice of distance metrics or similarity measures used."
+        },
+        {
+          "description": "May not address intersectional fairness issues when multiple protected attributes create complex group combinations that require nuanced sampling strategies."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Data preprocessing techniques for classification without discrimination",
+          "url": "https://link.springer.com/article/10.1007/s10115-011-0463-8",
+          "source_type": "technical_paper",
+          "authors": [
+            "Faisal Kamiran",
+            "Toon Calders"
+          ],
+          "publication_date": "2012-06-01"
+        },
+        {
+          "title": "Classification with no discrimination by preferential sampling",
+          "url": "https://research.tue.nl/en/publications/classification-with-no-discrimination-by-preferential-sampling",
+          "source_type": "technical_paper",
+          "authors": [
+            "Faisal Kamiran",
+            "Toon Calders"
+          ],
+          "publication_date": "2010-05-27"
+        },
+        {
+          "title": "A Survey on Bias and Fairness in Machine Learning",
+          "url": "https://arxiv.org/abs/1908.09635",
+          "source_type": "documentation",
+          "authors": [
+            "Ninareh Mehrabi",
+            "Fred Morstatter",
+            "Nripsuta Saxena",
+            "Kristina Lerman",
+            "Aram Galstyan"
+          ],
+          "publication_date": "2019-08-25"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "reweighing",
+        "disparate-impact-remover",
+        "relabelling"
+      ]
+    }
+  ],
+  "count": 3
+}

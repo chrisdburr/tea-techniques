@@ -1,0 +1,94 @@
+{
+  "slug": "mlflow-experiment-tracking",
+  "name": "MLflow Experiment Tracking",
+  "description": "MLflow is an open-source platform that tracks machine learning experiments by automatically logging parameters, metrics, models, and artifacts throughout the ML lifecycle. It provides a centralised repository for comparing different experimental runs, reproducing results, and managing model versions. Teams can track hyperparameters, evaluation metrics, model files, and execution environment details, creating a comprehensive audit trail that supports collaboration, reproducibility, and regulatory compliance across the entire machine learning development process.",
+  "assurance_goals": [
+    "Transparency",
+    "Reliability"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/transparency",
+    "assurance-goal-category/reliability",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/documentation",
+    "expertise-needed/ml-engineering",
+    "expertise-needed/software-engineering",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/system-deployment-and-use",
+    "technique-type/process"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Tracking medical diagnosis model experiments across different hospitals, logging hyperparameters, performance metrics, and model artifacts to ensure reproducible research and enable regulatory audits of model development processes.",
+      "goal": "Transparency"
+    },
+    {
+      "description": "Managing fraud detection model versions in production, tracking which specific model configuration and training data version is deployed, enabling quick rollback and performance comparison when system reliability issues arise.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Documenting loan approval model experiments with complete parameter tracking and performance logging across demographic groups, supporting fair lending compliance by providing transparent records of model development and validation processes.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Requires teams to adopt disciplined logging practices and may introduce overhead to development workflows if not properly integrated into existing processes."
+    },
+    {
+      "description": "Storage costs can grow substantially with extensive artifact logging, especially for large models or high-frequency experimentation."
+    },
+    {
+      "description": "Tracking quality depends on developers consistently logging relevant information, with incomplete logging leading to gaps in experimental records."
+    },
+    {
+      "description": "Complex multi-stage pipelines may require custom instrumentation to capture dependencies and data flow relationships effectively."
+    },
+    {
+      "description": "Security and access control configurations require careful setup to protect sensitive model information and experimental data in shared environments."
+    }
+  ],
+  "resources": [
+    {
+      "title": "MLflow Documentation",
+      "url": "https://mlflow.org/docs/latest/index.html",
+      "source_type": "documentation",
+      "description": "Comprehensive official documentation covering MLflow setup, tracking APIs, model management, and deployment workflows with examples and best practices"
+    },
+    {
+      "title": "mlflow/mlflow",
+      "url": "https://github.com/mlflow/mlflow",
+      "source_type": "software_package",
+      "description": "Official MLflow open-source repository containing the complete platform for ML experiment tracking, model management, and deployment"
+    },
+    {
+      "title": "An MLOps Framework for Explainable Network Intrusion Detection with MLflow",
+      "url": "https://ieeexplore.ieee.org/abstract/document/10733700",
+      "source_type": "technical_paper",
+      "authors": [
+        "Vincenzo Spadari",
+        "Francesco Cerasuolo",
+        "Giampaolo Bovenzi",
+        "Antonio Pescapè"
+      ],
+      "publication_date": "2024-06-26",
+      "description": "Research paper demonstrating MLflow framework application for managing machine learning pipelines in network intrusion detection, covering experiment tracking, model deployment, and monitoring across security datasets"
+    },
+    {
+      "title": "MLflow Tutorial - Machine Learning Lifecycle Management",
+      "url": "https://www.mlflow.org/docs/latest/tutorials-and-examples/tutorial.html",
+      "source_type": "tutorial",
+      "description": "Step-by-step tutorial demonstrating MLflow experiment tracking, model packaging, and deployment using real machine learning examples"
+    }
+  ],
+  "complexity_rating": 2,
+  "computational_cost_rating": 2,
+  "related_techniques": [
+    "model-cards",
+    "datasheets-for-datasets",
+    "data-version-control",
+    "automated-documentation-generation"
+  ]
+}

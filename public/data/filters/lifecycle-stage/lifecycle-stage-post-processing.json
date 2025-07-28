@@ -1,0 +1,212 @@
+{
+  "tag": {
+    "name": "lifecycle-stage/post-processing",
+    "slug": "lifecycle-stage-post-processing",
+    "count": 2,
+    "category": "lifecycle-stage"
+  },
+  "techniques": [
+    {
+      "slug": "threshold-optimiser",
+      "name": "Threshold Optimiser",
+      "description": "Threshold Optimiser adjusts decision thresholds for different demographic groups after model training to satisfy specific fairness constraints. This post-processing technique optimises group-specific thresholds by analysing the probability distribution of model outputs, allowing practitioners to achieve fairness goals like demographic parity or equalised opportunity without modifying the underlying model. The optimiser finds optimal threshold values for each group that balance fairness requirements with overall model performance, making it particularly useful when fairness considerations arise after model deployment.",
+      "assurance_goals": [
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/post-processing",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting hiring decision thresholds in a recruitment system to ensure equal opportunity rates across gender and ethnicity groups, where the model outputs probability scores but different demographic groups require different thresholds to achieve equitable outcomes.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Optimising credit approval thresholds for different demographic groups in loan applications to satisfy regulatory requirements for equal treatment whilst maintaining acceptable default rates across all groups.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Calibrating medical diagnosis thresholds across age and gender groups to ensure diagnostic accuracy is maintained whilst preventing systematic over-diagnosis or under-diagnosis in specific populations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires a held-out dataset with known group memberships to determine optimal thresholds for each demographic group."
+        },
+        {
+          "description": "Threshold values may need recalibration when input data distributions shift or model performance changes over time."
+        },
+        {
+          "description": "Using different decision thresholds per group can raise legal or ethical concerns in deployment contexts where equal treatment is mandated."
+        },
+        {
+          "description": "Performance depends on the quality and representativeness of the calibration dataset for each demographic group."
+        },
+        {
+          "description": "May lead to reduced overall accuracy as the optimisation trades off individual accuracy for group fairness."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Group-Aware Threshold Adaptation for Fair Classification",
+          "url": "https://arxiv.org/abs/2111.04271",
+          "source_type": "technical_paper",
+          "authors": [
+            "Jang, Taeuk",
+            "Shi, Pengyi",
+            "Wang, Xiaoqian"
+          ],
+          "publication_date": "2021-11-08",
+          "description": "Introduces a novel post-processing method for learning adaptive classification thresholds for each demographic group by optimising confusion matrices estimated from model probability distributions."
+        },
+        {
+          "title": "Equality of Opportunity in Supervised Learning",
+          "url": "https://arxiv.org/abs/1610.02413",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hardt, Moritz",
+            "Price, Eric",
+            "Srebro, Nathan"
+          ],
+          "publication_date": "2016-10-07",
+          "description": "Foundational work introducing threshold optimisation techniques to achieve equalized opportunity and demographic parity in supervised learning."
+        },
+        {
+          "title": "AIF360: A comprehensive set of fairness metrics and algorithms",
+          "url": "https://github.com/Trusted-AI/AIF360",
+          "source_type": "software_package",
+          "description": "Open-source library containing threshold optimisation implementations for various fairness constraints including equalized odds and demographic parity."
+        },
+        {
+          "title": "Fairlearn: A toolkit for assessing and improving fairness in AI",
+          "url": "https://github.com/fairlearn/fairlearn",
+          "source_type": "software_package",
+          "description": "Python library providing threshold optimisation methods and post-processing algorithms for achieving fairness in machine learning models."
+        },
+        {
+          "title": "HolisticAI: Randomized Threshold Optimizer",
+          "url": "https://holisticai.readthedocs.io/en/latest/getting_started/bias/mitigation/postprocessing/bc_ml_debiaser_rto.html",
+          "source_type": "documentation",
+          "description": "Documentation for the Randomized Threshold Optimizer implementation that achieves statistical parity through group-aware threshold adjustment with randomization."
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "equalised-odds-post-processing",
+        "reject-option-classification",
+        "calibration-with-equality-of-opportunity"
+      ]
+    },
+    {
+      "slug": "reject-option-classification",
+      "name": "Reject Option Classification",
+      "description": "A post-processing fairness technique that modifies predictions in regions of high uncertainty to favour disadvantaged groups and achieve fairness objectives. The method identifies a 'rejection region' where the model's confidence is low (typically near the decision boundary) and reassigns predictions within this region to benefit underrepresented groups. By leveraging model uncertainty, this approach can improve fairness metrics like demographic parity or equalised odds whilst minimising changes to confident predictions, thus preserving overall accuracy for cases where the model is certain.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/sensitive-attributes",
+        "data-requirements/labelled-data",
+        "data-requirements/prediction-probabilities",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/fairness-metric",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "fairness-approach/group",
+        "lifecycle-stage/post-processing",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting hiring algorithm predictions in the uncertainty region where candidate scores are close to the threshold, reassigning borderline cases to ensure equal selection rates across gender and ethnicity groups whilst maintaining decisions for clearly qualified or unqualified candidates.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Improving reliability of loan approval systems by identifying applications where the model is uncertain and adjusting these edge cases to ensure consistent approval rates across demographic groups, reducing the risk of systematic discrimination in borderline creditworthiness assessments.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Creating transparent bail decision systems that clearly document which predictions fall within the rejection region and how adjustments are made, providing courts with explainable fairness interventions that show exactly when and why decisions were modified for equity.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires models that provide reliable uncertainty estimates or probability scores, limiting applicability to deterministic classifiers without confidence outputs."
+        },
+        {
+          "description": "Selection of the rejection region threshold is subjective and requires careful tuning to balance fairness improvements with accuracy preservation."
+        },
+        {
+          "description": "May reject too many instances if tuned conservatively, potentially affecting a large portion of predictions and reducing the model's practical utility."
+        },
+        {
+          "description": "Cannot address bias in confident predictions outside the rejection region, limiting effectiveness when discrimination occurs in high-certainty cases."
+        },
+        {
+          "description": "Performance depends on the quality of uncertainty estimates, which may be poorly calibrated in some models, leading to inappropriate rejection regions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Machine Learning with a Reject Option: A survey",
+          "url": "https://www.semanticscholar.org/paper/24864a7f899718477c04ede9c0bea906c5dc2667",
+          "source_type": "documentation",
+          "authors": [
+            "Kilian Hendrickx",
+            "Lorenzo Perini",
+            "Dries Van der Plas",
+            "Wannes Meert",
+            "Jesse Davis"
+          ]
+        },
+        {
+          "title": "aif360.algorithms.postprocessing.RejectOptionClassification ...",
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.algorithms.postprocessing.RejectOptionClassification.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Survey on Leveraging Uncertainty Estimation Towards Trustworthy Deep Neural Networks: The Case of Reject Option and Post-training Processing",
+          "url": "https://www.semanticscholar.org/paper/e939c6ac58e08b539ae8a7dc54216bceb775b085",
+          "source_type": "documentation",
+          "authors": [
+            "M. Hasan",
+            "Moloud Abdar",
+            "A. Khosravi",
+            "U. Aickelin",
+            "Pietro Lio'",
+            "Ibrahim Hossain",
+            "Ashikur Rahman",
+            "Saeid Nahavandi"
+          ]
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "equalised-odds-post-processing",
+        "threshold-optimiser",
+        "calibration-with-equality-of-opportunity"
+      ]
+    }
+  ],
+  "count": 2
+}

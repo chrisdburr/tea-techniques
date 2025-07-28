@@ -1,0 +1,92 @@
+{
+  "slug": "equal-opportunity-difference",
+  "name": "Equal Opportunity Difference",
+  "description": "A fairness metric that quantifies discrimination by measuring the difference in true positive rates (recall) between protected and privileged groups. Based on Hardt et al.'s equality of opportunity framework, this metric computes the maximum difference in TPR across demographic groups, with a value of 0 indicating perfect fairness. The technique provides a mathematical measure of whether qualified individuals from different groups have equal chances of receiving positive predictions.",
+  "assurance_goals": [
+    "Fairness",
+    "Transparency",
+    "Reliability"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/fairness",
+    "assurance-goal-category/fairness/group",
+    "assurance-goal-category/transparency",
+    "assurance-goal-category/reliability",
+    "data-requirements/sensitive-attributes",
+    "data-requirements/labelled-data",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "evidence-type/fairness-metric",
+    "expertise-needed/low",
+    "fairness-approach/group",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/model-development/testing",
+    "lifecycle-stage/system-deployment-and-use/monitoring",
+    "technique-type/metric"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Evaluating a loan approval model to ensure that qualified applicants from different ethnic backgrounds have equal approval rates, measuring whether a 90% TPR for qualified white applicants is matched by similar rates for qualified minority applicants.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Auditing a medical diagnosis system to verify that patients with a particular condition are detected at equal rates across age groups, providing transparent evidence that diagnostic accuracy is consistent regardless of patient demographics.",
+      "goal": "Transparency"
+    },
+    {
+      "description": "Monitoring a university admissions algorithm in production to ensure that qualified students from different socioeconomic backgrounds have equal acceptance rates, validating the reliability of the fairness properties over time.",
+      "goal": "Reliability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Only considers true positive rates and ignores false positive rate disparities, potentially allowing discrimination in the form of unequal false alarm rates between groups."
+    },
+    {
+      "description": "Requires accurate ground truth labels for the positive class, which may be biased or unavailable in some domains."
+    },
+    {
+      "description": "Improving TPR for one group might increase FPR for that group, creating trade-offs between different types of fairness."
+    },
+    {
+      "description": "Does not account for intersectional fairness across multiple protected attributes simultaneously."
+    },
+    {
+      "description": "May not capture fairness concerns for the negative class or individuals who should not receive positive predictions."
+    }
+  ],
+  "resources": [
+    {
+      "title": "aif360.sklearn.metrics.equal_opportunity_difference — aif360 0.6.1 ...",
+      "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.metrics.equal_opportunity_difference.html",
+      "source_type": "documentation"
+    },
+    {
+      "title": "Welcome to TransparentAI's documentation! — TransparentAI 0.1.0 ...",
+      "url": "https://transparentai.readthedocs.io/en/latest/",
+      "source_type": "documentation"
+    },
+    {
+      "title": "lale.lib.aif360.util module — LALE 0.9.0-dev documentation",
+      "url": "https://lale.readthedocs.io/en/latest/modules/lale.lib.aif360.util.html",
+      "source_type": "documentation"
+    },
+    {
+      "title": "IBM/bias-mitigation-of-machine-learning-models-using-aif360",
+      "url": "https://github.com/IBM/bias-mitigation-of-machine-learning-models-using-aif360",
+      "source_type": "software_package"
+    },
+    {
+      "title": "aif360.algorithms.postprocessing.RejectOptionClassification ...",
+      "url": "https://aif360.readthedocs.io/en/latest/modules/generated/aif360.algorithms.postprocessing.RejectOptionClassification.html",
+      "source_type": "documentation"
+    }
+  ],
+  "complexity_rating": 2,
+  "computational_cost_rating": 1,
+  "related_techniques": [
+    "demographic-parity-assessment",
+    "average-odds-difference"
+  ]
+}

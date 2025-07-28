@@ -1,0 +1,99 @@
+{
+  "slug": "deep-ensembles",
+  "name": "Deep Ensembles",
+  "description": "Deep ensembles combine predictions from multiple neural networks trained independently with different random initializations to capture epistemic uncertainty (model uncertainty). By training several models on the same data with different starting points, the ensemble reveals how much the model's predictions depend on training randomness. The disagreement between ensemble members naturally indicates prediction uncertainty - when models agree, confidence is high; when they disagree, uncertainty is revealed. This approach provides more reliable uncertainty estimates, better out-of-distribution detection, and improved calibration compared to single models.",
+  "assurance_goals": [
+    "Reliability",
+    "Transparency",
+    "Safety"
+  ],
+  "tags": [
+    "applicable-models/neural-network",
+    "assurance-goal-category/reliability",
+    "assurance-goal-category/reliability/uncertainty-quantification",
+    "assurance-goal-category/transparency",
+    "assurance-goal-category/safety",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "evidence-type/prediction-interval",
+    "expertise-needed/ml-engineering",
+    "expertise-needed/statistics",
+    "lifecycle-stage/model-development",
+    "lifecycle-stage/system-deployment-and-use",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Improving self-driving car safety by using multiple neural networks to detect obstacles, where disagreement between models signals uncertainty and triggers extra caution or human intervention, providing robust uncertainty quantification for critical decisions.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Communicating prediction confidence to medical professionals by showing the range of diagnoses from multiple trained models, enabling doctors to understand when the AI system is uncertain and requires additional human expertise or testing.",
+      "goal": "Transparency"
+    },
+    {
+      "description": "Detecting out-of-distribution inputs in financial fraud detection systems where ensemble disagreement signals potentially novel attack patterns that require immediate security team review and system safeguards.",
+      "goal": "Safety"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Computationally expensive to train and deploy, requiring multiple complete neural networks which increases training time, memory usage, and inference costs proportionally to ensemble size."
+    },
+    {
+      "description": "May still provide overconfident predictions for inputs far from the training distribution, as all ensemble members can be similarly confident about out-of-distribution examples."
+    },
+    {
+      "description": "Requires careful hyperparameter tuning for each ensemble member to ensure diversity, as identical hyperparameters may lead to similar models that reduce uncertainty estimation quality."
+    },
+    {
+      "description": "Storage and deployment overhead increases linearly with ensemble size, making it challenging to deploy large ensembles in resource-constrained environments or real-time applications."
+    },
+    {
+      "description": "Ensemble predictions may be difficult to interpret individually, as the final decision emerges from averaging multiple models rather than from a single explainable pathway."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles",
+      "url": "https://arxiv.org/abs/1612.01474",
+      "source_type": "technical_paper",
+      "authors": [
+        "Balaji Lakshminarayanan",
+        "Alexander Pritzel",
+        "Charles Blundell"
+      ],
+      "publication_date": "2016-12-05",
+      "description": "Foundational paper introducing deep ensembles for uncertainty estimation in neural networks"
+    },
+    {
+      "title": "ENSTA-U2IS-AI/awesome-uncertainty-deeplearning",
+      "url": "https://github.com/ENSTA-U2IS-AI/awesome-uncertainty-deeplearning",
+      "source_type": "documentation",
+      "description": "Comprehensive collection of research papers, surveys, datasets, and code for uncertainty estimation in deep learning"
+    },
+    {
+      "title": "Deep Ensembles: A Loss Landscape Perspective",
+      "url": "http://arxiv.org/pdf/1912.02757v2",
+      "source_type": "technical_paper",
+      "authors": [
+        "Stanislav Fort",
+        "Huiyi Hu",
+        "Balaji Lakshminarayanan"
+      ],
+      "publication_date": "2019-12-05",
+      "description": "Analysis of why deep ensembles work well from the perspective of loss landscape geometry and mode connectivity"
+    }
+  ],
+  "complexity_rating": 3,
+  "computational_cost_rating": 5,
+  "related_techniques": [
+    "monte-carlo-dropout",
+    "prediction-intervals",
+    "quantile-regression",
+    "conformal-prediction",
+    "bootstrapping",
+    "jackknife-resampling"
+  ]
+}

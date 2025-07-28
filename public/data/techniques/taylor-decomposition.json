@@ -1,0 +1,80 @@
+{
+  "slug": "taylor-decomposition",
+  "name": "Taylor Decomposition",
+  "description": "Taylor Decomposition is a mathematical technique that explains neural network predictions by computing first-order and higher-order derivatives of the network's output with respect to input features. It decomposes the prediction into relevance scores that indicate how much each input feature and feature interaction contributes to the final decision. The method uses Layer-wise Relevance Propagation (LRP) principles to trace prediction contributions backwards through the network layers, providing precise mathematical attributions for each input element.",
+  "assurance_goals": [
+    "Explainability"
+  ],
+  "tags": [
+    "applicable-models/neural-network",
+    "applicable-models/cnn",
+    "assurance-goal-category/explainability",
+    "data-requirements/access-to-model-internals",
+    "data-type/any",
+    "evidence-type/quantitative-metric",
+    "expertise-needed/ml-engineering",
+    "explanatory-scope/local",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Analyzing which pixels in an image contribute most to a convolutional neural network's classification decision, showing both positive and negative relevance scores for different regions of the input image.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Understanding how different word embeddings in a sentiment analysis model contribute to the final sentiment score, revealing which terms drive positive vs negative predictions.",
+      "goal": "Explainability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Mathematically complex requiring deep understanding of calculus and neural network architectures."
+    },
+    {
+      "description": "Computationally intensive as it requires computing gradients and higher-order derivatives through the entire network."
+    },
+    {
+      "description": "Approximations used in practice may introduce errors that affect attribution accuracy."
+    },
+    {
+      "description": "Limited tooling availability compared to other explainability methods, with most implementations being research-focused rather than production-ready."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Explaining NonLinear Classification Decisions with Deep Taylor Decomposition",
+      "url": "http://arxiv.org/pdf/1512.02479v1",
+      "source_type": "technical_paper",
+      "authors": [
+        "Grégoire Montavon",
+        "Sebastian Bach",
+        "Alexander Binder",
+        "Wojciech Samek",
+        "Klaus-Robert Müller"
+      ],
+      "publication_date": "2015-12-08"
+    },
+    {
+      "title": "A Rigorous Study Of The Deep Taylor Decomposition",
+      "url": "http://arxiv.org/pdf/2211.08425v1",
+      "source_type": "technical_paper",
+      "authors": [
+        "Leon Sixt",
+        "Tim Landgraf"
+      ],
+      "publication_date": "2022-11-14"
+    },
+    {
+      "title": "sebastian-lapuschkin/lrp_toolbox",
+      "url": "https://github.com/sebastian-lapuschkin/lrp_toolbox",
+      "source_type": "software_package"
+    }
+  ],
+  "complexity_rating": 5,
+  "computational_cost_rating": 4,
+  "related_techniques": [
+    "contextual-decomposition",
+    "influence-functions"
+  ]
+}

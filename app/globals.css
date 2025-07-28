@@ -1,0 +1,386 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 221.2 83.2% 53.3%;
+  --radius: 0.375rem;
+}
+
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 217.2 91.2% 59.8%;
+  --primary-foreground: 222.2 84% 4.9%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 224.3 76.3% 94.1%;
+}
+
+body {
+  font-family: var(--font-sans);
+  line-height: 1.5;
+}
+
+/* Ensure proper line clamping */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Prism syntax highlighting theme */
+/* Adapted for light/dark mode compatibility */
+pre[class*="language-"],
+code[class*="language-"] {
+  @apply text-foreground;
+  background: none;
+  font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+  font-size: 0.875rem;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  @apply p-4 m-0 overflow-auto rounded-lg;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  @apply px-1 py-0.5 rounded;
+  white-space: normal;
+}
+
+/* Tokens */
+.token.comment,
+.token.block-comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  @apply text-green-600 dark:text-green-400;
+}
+
+.token.punctuation {
+  @apply text-muted-foreground;
+}
+
+.token.tag,
+.token.attr-name,
+.token.namespace,
+.token.deleted {
+  @apply text-red-600 dark:text-red-400;
+}
+
+.token.function-name {
+  @apply text-blue-600 dark:text-blue-400;
+}
+
+.token.boolean,
+.token.number,
+.token.function {
+  @apply text-blue-600 dark:text-blue-400;
+}
+
+.token.property,
+.token.class-name,
+.token.constant,
+.token.symbol {
+  @apply text-pink-600 dark:text-pink-400;
+}
+
+.token.selector,
+.token.important,
+.token.atrule,
+.token.keyword,
+.token.builtin {
+  @apply text-purple-600 dark:text-purple-400;
+}
+
+.token.string,
+.token.char,
+.token.attr-value,
+.token.regex,
+.token.variable {
+  @apply text-green-600 dark:text-green-400;
+}
+
+.token.operator,
+.token.entity,
+.token.url {
+  @apply text-cyan-600 dark:text-cyan-400;
+}
+
+.token.important,
+.token.bold {
+  @apply font-bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+.token.entity {
+  @apply cursor-help;
+}
+
+.token.inserted {
+  @apply text-green-600 dark:text-green-400;
+}
+
+/* Line numbers */
+pre[class*="language-"].line-numbers {
+  position: relative;
+  padding-left: 3.8em;
+  counter-reset: linenumber;
+}
+
+.line-numbers .line-numbers-rows {
+  position: absolute;
+  pointer-events: none;
+  top: 1rem;
+  font-size: 100%;
+  left: 0;
+  width: 3em;
+  letter-spacing: -1px;
+  @apply border-r border-border;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.line-numbers-rows > span {
+  display: block;
+  counter-increment: linenumber;
+}
+
+.line-numbers-rows > span:before {
+  content: counter(linenumber);
+  @apply text-muted-foreground;
+  display: block;
+  padding-right: 0.8em;
+  text-align: right;
+}
+
+/* Custom prose styles to override typography plugin defaults */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply border-none;
+}
+
+/* Remove underlines from all links in prose - base rule */
+.prose a {
+  @apply no-underline;
+}
+
+/* Remove underlines from heading links - higher specificity */
+.prose h1 a,
+.prose h2 a,
+.prose h3 a,
+.prose h4 a,
+.prose h5 a,
+.prose h6 a {
+  @apply no-underline;
+}
+
+/* Remove underlines from custom components in prose - higher specificity */
+.prose .grid a,
+.prose [class*="card"] a {
+  @apply no-underline;
+}
+
+/* Fix code block styling in prose */
+.prose pre {
+  @apply bg-transparent p-0 m-0;
+}
+
+/* Remove prose wrapper styles from code blocks */
+.prose .group.relative {
+  @apply mt-0 mb-0;
+}
+
+/* Base code styling in prose */
+.prose pre {
+  @apply text-foreground !important;
+}
+
+/* Code elements in prose - higher specificity */
+.prose pre code {
+  @apply bg-transparent text-inherit !important;
+}
+
+/* Ensure proper text color in code blocks - higher specificity */
+.prose code[class*="language-"],
+.prose pre[class*="language-"] {
+  @apply text-foreground;
+}
+
+/* Line numbers code styling - highest specificity */
+pre[class*="language-"].line-numbers > code {
+  position: relative;
+  white-space: inherit;
+  @apply bg-transparent text-inherit;
+}
+
+/* Ensure syntax highlighting colors work */
+.prose pre code .token {
+  color: inherit;
+}
+
+/* Override Prism's default dark theme colors */
+.prose pre code .token.comment {
+  @apply text-green-600 dark:text-green-400;
+}
+.prose pre code .token.keyword {
+  @apply text-purple-600 dark:text-purple-400;
+}
+.prose pre code .token.string {
+  @apply text-green-600 dark:text-green-400;
+}
+.prose pre code .token.function {
+  @apply text-blue-600 dark:text-blue-400;
+}
+.prose pre code .token.operator {
+  @apply text-cyan-600 dark:text-cyan-400;
+}
+
+/* Add proper padding to code blocks */
+.prose pre {
+  @apply p-2;
+}
+
+/* Improve code block container styling */
+.prose .rehype-code-container {
+  @apply bg-muted/50 dark:bg-zinc-900 rounded-lg overflow-hidden my-6;
+}
+
+/* Style the language label if shown */
+.prose .rehype-code-title {
+  @apply bg-muted px-4 py-2 text-sm text-muted-foreground border-b border-border;
+}

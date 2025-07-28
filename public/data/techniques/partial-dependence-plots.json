@@ -1,0 +1,95 @@
+{
+  "slug": "partial-dependence-plots",
+  "name": "Partial Dependence Plots",
+  "description": "Partial Dependence Plots show how changing one or two features affects a model's predictions on average. The technique works by varying the selected feature(s) across their full range whilst keeping all other features fixed at their original values, then averaging the predictions. This creates a clear visualisation of whether increasing or decreasing a feature tends to increase or decrease predictions, and reveals patterns like linear trends, plateaus, or threshold effects that help explain model behaviour.",
+  "assurance_goals": [
+    "Explainability"
+  ],
+  "tags": [
+    "applicable-models/agnostic",
+    "assurance-goal-category/explainability",
+    "data-requirements/no-special-requirements",
+    "data-type/any",
+    "evidence-type/visualization",
+    "expertise-needed/ml-engineering",
+    "explanatory-scope/global",
+    "lifecycle-stage/model-development",
+    "technique-type/algorithmic"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Analysing how house prices change with property size in a real estate prediction model, revealing whether the relationship is linear or if there are diminishing returns for very large properties.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Examining how customer age affects predicted loan default probability in a credit scoring model, showing whether risk increases steadily with age or has specific age ranges with higher risk.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Visualising how temperature affects crop yield predictions in agricultural models, identifying optimal temperature ranges and potential threshold effects.",
+      "goal": "Explainability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Assumes features are independent when averaging, which can be misleading when features are highly correlated."
+    },
+    {
+      "description": "Shows only average effects across all instances, potentially hiding important variations in how different subgroups respond to feature changes."
+    },
+    {
+      "description": "Cannot reveal instance-specific effects or interactions between the plotted feature and other features."
+    },
+    {
+      "description": "May be computationally expensive for large datasets since it requires making predictions across the full range of feature values."
+    }
+  ],
+  "resources": [
+    {
+      "title": "DanielKerrigan/PDPilot",
+      "url": "https://github.com/DanielKerrigan/PDPilot",
+      "source_type": "software_package"
+    },
+    {
+      "title": "Peeking Inside the Black Box: Visualizing Statistical Learning with Plots of Individual Conditional Expectation",
+      "url": "http://arxiv.org/pdf/1309.6392v2",
+      "source_type": "technical_paper",
+      "authors": [
+        "Alex Goldstein",
+        "Adam Kapelner",
+        "Justin Bleich",
+        "Emil Pitkin"
+      ],
+      "publication_date": "2013-09-25"
+    },
+    {
+      "title": "SauceCat/PDPbox",
+      "url": "https://github.com/SauceCat/PDPbox",
+      "source_type": "software_package"
+    },
+    {
+      "title": "iPDP: On Partial Dependence Plots in Dynamic Modeling Scenarios",
+      "url": "http://arxiv.org/pdf/2306.07775v1",
+      "source_type": "technical_paper",
+      "authors": [
+        "Maximilian Muschalik",
+        "Fabian Fumagalli",
+        "Rohit Jagtani",
+        "Barbara Hammer",
+        "Eyke Hüllermeier"
+      ],
+      "publication_date": "2023-06-13"
+    },
+    {
+      "title": "How to Interpret Models: PDP and ICE | Towards Data Science",
+      "url": "https://towardsdatascience.com/how-to-interpret-models-pdp-and-ice-eabed0062e2c/",
+      "source_type": "tutorial"
+    }
+  ],
+  "complexity_rating": 2,
+  "computational_cost_rating": 2,
+  "acronym": "PDP",
+  "related_techniques": [
+    "individual-conditional-expectation-plots"
+  ]
+}

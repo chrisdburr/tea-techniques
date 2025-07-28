@@ -1,0 +1,26 @@
+# Development Dockerfile for TEA Techniques
+FROM node:24-alpine
+
+# Install dependencies for building native modules
+RUN apk add --no-cache python3 make g++ git
+
+# Install pnpm globally
+RUN corepack enable && corepack prepare pnpm@10.13.1 --activate
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files first for better layer caching
+COPY package.json pnpm-lock.yaml ./
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy the rest of the application
+COPY . .
+
+# Expose the Next.js development server port
+EXPOSE 3000
+
+# Command to run the development server
+CMD ["pnpm", "run", "dev"]

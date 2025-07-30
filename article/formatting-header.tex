@@ -1,0 +1,28 @@
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+
+% JSON formatting with line breaks
+\lstset{
+    basicstyle=\small\ttfamily,
+    breaklines=true,
+    breakatwhitespace=false,
+    frame=single,
+    numbers=none,
+    showstringspaces=false,
+    columns=fullflexible,
+    keepspaces=true,
+    breakindent=2em,
+    postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}
+}
+
+% Better table column types
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+% Adjust longtable settings
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}

@@ -15,117 +15,72 @@ const DATA_HANDLING_REGEX =
 const UTILITIES_REGEX =
   /[\\/]node_modules[\\/](clsx|class-variance-authority|tailwind-merge|lucide-react|fuse\.js)[\\/]/;
 
-// Check if we're in development mode
-const isDev = process.env.NODE_ENV !== 'production';
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Configure MDX
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
 
-  // Enable static export only in production
-  ...(isDev ? {} : { output: 'export' }),
+  // DEVELOPMENT MODE - No static export
+  // output: 'export',  // Commented out for development
 
-  // Disable image optimization only for static export
+  // Enable image optimization in development
   images: {
-    unoptimized: !isDev,
+    unoptimized: false,
   },
 
-  // Enable trailing slashes for better static hosting
-  trailingSlash: true,
-
-  // Disabled for static generation compatibility
-  reactStrictMode: false,
-
-  // Disable powered by header
-  poweredByHeader: false,
-
-  // Configure for GitHub Pages deployment
+  // Base path configuration
   basePath: '/tea-techniques',
+
+  // Important: add assetPrefix to ensure public files are served correctly
   assetPrefix: '/tea-techniques',
 
-  // Performance budgets and optimizations
-  experimental: {
-    optimizePackageImports: [
-      // Icons
-      'lucide-react',
-      // Radix UI components
-      '@radix-ui/react-dialog',
-      '@radix-ui/react-dropdown-menu',
-      '@radix-ui/react-tabs',
-      '@radix-ui/react-tooltip',
-      '@radix-ui/react-separator',
-      '@radix-ui/react-collapsible',
-      '@radix-ui/react-avatar',
-      '@radix-ui/react-select',
-      '@radix-ui/react-slot',
-      // Utility libraries
-      'clsx',
-      'class-variance-authority',
-      'tailwind-merge',
-    ],
-  },
+  // Enable trailing slash to match static export expectations
+  trailingSlash: true,
 
-  // Bundle analyzer configuration
-  webpack: (config, { dev, isServer }) => {
-    // Performance budgets for chunks
-    if (!(dev || isServer)) {
-      config.performance = {
-        maxAssetSize: 250_000, // 250KB
-        maxEntrypointSize: 400_000, // 400KB
-        hints: 'warning',
-      };
-    }
+  // React configuration
+  reactStrictMode: false,
 
-    // Optimize chunks
-    if (!(dev || isServer)) {
+  // Configure webpack for better chunk splitting
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Split vendor chunks for better caching
       config.optimization = {
         ...config.optimization,
         splitChunks: {
           chunks: 'all',
           maxInitialRequests: 25,
           minSize: 20_000,
+          maxSize: 244_000,
           cacheGroups: {
-            // Framework chunk - React, Next.js core
             framework: {
               test: FRAMEWORK_REGEX,
               name: 'framework',
               priority: 40,
               enforce: true,
             },
-            // UI libraries chunk - All Radix UI components
-            uiLibraries: {
+            ui: {
               test: UI_LIBRARIES_REGEX,
               name: 'ui-libraries',
               priority: 30,
-              enforce: true,
             },
-            // Form and table libraries
             dataHandling: {
               test: DATA_HANDLING_REGEX,
               name: 'data-handling',
               priority: 25,
-              enforce: true,
             },
-            // Utilities chunk - Common utilities
             utilities: {
               test: UTILITIES_REGEX,
               name: 'utilities',
               priority: 20,
-              enforce: true,
             },
-            // Default vendor chunk for remaining dependencies
             vendor: {
               test: NODE_MODULES_REGEX,
               name: 'vendor',
               priority: 10,
-              enforce: true,
             },
-            // Common chunks for shared app code
-            common: {
-              name: 'common',
+            default: {
               minChunks: 2,
-              priority: 5,
+              priority: -20,
               reuseExistingChunk: true,
             },
           },
@@ -137,33 +92,31 @@ const nextConfig = {
   },
 };
 
+// Configure MDX support
 const withMDX = createMDX({
   options: {
     remarkPlugins: [remarkGfm],
     rehypePlugins: [
       rehypeSlug,
+      [rehypePrismPlus, { showLineNumbers: true, ignoreMissing: true }],
       [
         rehypeAutolinkHeadings,
         {
-          behavior: 'wrap',
           properties: {
             className: ['anchor'],
           },
-        },
-      ],
-      [
-        rehypePrismPlus,
-        {
-          showLineNumbers: false,
-          ignoreMissing: true,
         },
       ],
     ],
   },
 });
 
+// Apply MDX configuration
+const mdxConfig = withMDX(nextConfig);
+
+// Apply Bundle Analyzer if ANALYZE is set
 const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 });
 
-export default bundleAnalyzer(withMDX(nextConfig));
+export default bundleAnalyzer(mdxConfig);

@@ -1,5 +1,5 @@
 export const config = {
-  basePath: process.env.NODE_ENV === 'production' ? '/tea-techniques' : '',
+  basePath: '/tea-techniques',
 };
 
 export function getAssetPath(path: string): string {

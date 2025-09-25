@@ -10,8 +10,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { getAssetPath } from '@/lib/config';
-// Force static rendering for static export
-export const dynamic = 'force-static';
 
 export default function Home() {
   return (
@@ -30,7 +28,7 @@ export default function Home() {
               technologies.
             </p>
             <div className="flex flex-wrap gap-4 pt-4">
-              <Button asChild className="font-medium" size="lg">
+              <Button asChild size="lg">
                 <Link href="/techniques">Explore Techniques</Link>
               </Button>
               <Button asChild size="lg" variant="outline">

@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import {
   BookOpen,
   ChevronRight,
@@ -12,12 +13,21 @@ import {
   Info,
   Library,
   type LucideIcon,
+  Sparkles,
 } from '@/components/icons';
 
 const SearchModal = dynamic(
   () =>
     import('@/components/search/search-modal').then((mod) => ({
       default: mod.SearchModal,
+    })),
+  { ssr: false }
+);
+
+const TechniqueWizard = dynamic(
+  () =>
+    import('@/components/wizard/technique-wizard').then((mod) => ({
+      default: mod.TechniqueWizard,
     })),
   { ssr: false }
 );
@@ -52,6 +62,18 @@ interface NavigationItem {
 
 export function NavMain() {
   const { state } = useSidebar();
+  const [isWizardOpen, setIsWizardOpen] = useState(false);
+  const [techniques, setTechniques] = useState([]);
+
+  // Load techniques data
+  useEffect(() => {
+    fetch('/data/techniques.json')
+      .then((res) => res.json())
+      .then((data) => setTechniques(data))
+      .catch(() => {
+        // Failed to load techniques
+      });
+  }, []);
 
   const navigationItems: NavigationItem[] = [
     {
@@ -187,73 +209,97 @@ export function NavMain() {
   };
 
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel>Navigation</SidebarGroupLabel>
-      <SidebarMenu>
-        {/* Search */}
-        <SidebarMenuItem>
-          <SearchModal />
-        </SidebarMenuItem>
+    <>
+      <SidebarGroup>
+        <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+        <SidebarMenu>
+          {/* Search */}
+          <SidebarMenuItem>
+            <SearchModal />
+          </SidebarMenuItem>
 
-        {/* Navigation Items */}
-        {navigationItems.map((item) => (
-          <SidebarMenuItem key={item.title}>
-            {item.items && item.items.length > 0 ? (
-              state === 'collapsed' ? (
+          {/* Find Technique Wizard */}
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={() => setIsWizardOpen(true)}
+              tooltip="Find the Right Technique"
+            >
+              <Sparkles />
+              <span>Find the Right Technique</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+
+          {/* Navigation Items */}
+          {navigationItems.map((item) => (
+            <SidebarMenuItem key={item.title}>
+              {item.items && item.items.length > 0 ? (
+                state === 'collapsed' ? (
+                  <SidebarMenuButton asChild tooltip={item.title}>
+                    <Link href={item.url}>
+                      {item.icon && <item.icon />}
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                ) : (
+                  <Collapsible
+                    className="group/collapsible"
+                    defaultOpen={item.isActive}
+                  >
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton tooltip={item.title}>
+                        {item.icon && <item.icon />}
+                        <span>{item.title}</span>
+                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {item.items.map((subItem) => (
+                          <SidebarMenuSubItem key={subItem.title}>
+                            <SidebarMenuSubButton asChild>
+                              <Link href={subItem.url}>
+                                <span>{subItem.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </Collapsible>
+                )
+              ) : (
                 <SidebarMenuButton asChild tooltip={item.title}>
                   <Link href={item.url}>
                     {item.icon && <item.icon />}
                     <span>{item.title}</span>
                   </Link>
                 </SidebarMenuButton>
-              ) : (
-                <Collapsible
-                  className="group/collapsible"
-                  defaultOpen={item.isActive}
-                >
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton tooltip={item.title}>
-                      {item.icon && <item.icon />}
-                      <span>{item.title}</span>
-                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <SidebarMenuSub>
-                      {item.items.map((subItem) => (
-                        <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton asChild>
-                            <Link href={subItem.url}>
-                              <span>{subItem.title}</span>
-                            </Link>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      ))}
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                </Collapsible>
-              )
-            ) : (
-              <SidebarMenuButton asChild tooltip={item.title}>
-                <Link href={item.url}>
-                  {item.icon && <item.icon />}
-                  <span>{item.title}</span>
-                </Link>
-              </SidebarMenuButton>
-            )}
-          </SidebarMenuItem>
-        ))}
+              )}
+            </SidebarMenuItem>
+          ))}
 
-        {/* GitHub Link */}
-        <SidebarMenuItem>
-          <SidebarMenuButton asChild tooltip={githubItem.title}>
-            <a href={githubItem.url} rel="noopener noreferrer" target="_blank">
-              {githubItem.icon && <githubItem.icon />}
-              <span>{githubItem.title}</span>
-            </a>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-      </SidebarMenu>
-    </SidebarGroup>
+          {/* GitHub Link */}
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild tooltip={githubItem.title}>
+              <a
+                href={githubItem.url}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {githubItem.icon && <githubItem.icon />}
+                <span>{githubItem.title}</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
+
+      {/* Technique Wizard Modal */}
+      <TechniqueWizard
+        isOpen={isWizardOpen}
+        onClose={() => setIsWizardOpen(false)}
+        techniques={techniques}
+      />
+    </>
   );
 }

@@ -6,7 +6,7 @@ import { TechniqueHeader } from '@/components/technique/sections/technique-heade
 import { TechniqueLimitations } from '@/components/technique/sections/technique-limitations';
 import { TechniqueRelatedTable } from '@/components/technique/sections/technique-related-table';
 import { TechniqueResources } from '@/components/technique/sections/technique-resources';
-import { TechniqueTagsInline } from '@/components/technique/sections/technique-tags-inline';
+import { TechniqueTagsHierarchical } from '@/components/technique/sections/technique-tags-hierarchical';
 import { TechniqueUseCases } from '@/components/technique/sections/technique-use-cases';
 import { TableOfContents } from '@/components/technique/table-of-contents';
 import {
@@ -93,7 +93,7 @@ export default async function TechniquePage({ params }: TechniquePageProps) {
           <TechniqueLimitations technique={technique} />
           <TechniqueResources technique={technique} />
           <TechniqueRelatedTable relatedTechniques={relatedTechniques} />
-          <TechniqueTagsInline technique={technique} />
+          <TechniqueTagsHierarchical technique={technique} />
         </div>
 
         {/* Table of Contents */}

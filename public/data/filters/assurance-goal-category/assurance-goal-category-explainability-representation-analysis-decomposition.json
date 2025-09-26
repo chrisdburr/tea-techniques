@@ -1,0 +1,514 @@
+{
+  "tag": {
+    "name": "assurance-goal-category/explainability/representation-analysis/decomposition",
+    "slug": "assurance-goal-category-explainability-representation-analysis-decomposition",
+    "count": 5,
+    "category": "assurance-goal-category"
+  },
+  "techniques": [
+    {
+      "slug": "deeplift",
+      "name": "DeepLIFT",
+      "description": "DeepLIFT (Deep Learning Important FeaTures) explains neural network predictions by decomposing the difference between the actual output and a reference output back to individual input features. It compares each neuron's activation to a reference activation (typically from a baseline input like all zeros or the dataset mean) and propagates these differences backwards through the network using chain rule modifications. Unlike gradient-based methods, DeepLIFT satisfies the sensitivity property (zero input gets zero attribution) and provides more stable attributions by using discrete differences rather than gradients.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-requirements/reference-dataset",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Identifying which genomic sequences contribute to a neural network's prediction of protein binding sites, helping biologists understand regulatory mechanisms by comparing to neutral DNA baselines.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging a deep learning image classifier that misclassifies medical scans by attributing the decision to specific image regions, revealing if the model focuses on irrelevant artifacts rather than pathological features.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations for automated loan approval decisions by showing which financial features (relative to typical applicant profiles) most influenced the neural network's recommendation.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires careful selection of reference baseline, as different choices can lead to substantially different attribution scores."
+        },
+        {
+          "description": "Implementation complexity varies significantly across different neural network architectures and layer types."
+        },
+        {
+          "description": "May produce unintuitive results when the chosen reference is not representative of the decision boundary."
+        },
+        {
+          "description": "Limited to feedforward networks and specific layer types, not suitable for all modern architectures like transformers."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Learning Important Features Through Propagating Activation Differences",
+          "url": "http://arxiv.org/pdf/1704.02685v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Avanti Shrikumar",
+            "Peyton Greenside",
+            "Anshul Kundaje"
+          ],
+          "publication_date": "2017-04-10"
+        },
+        {
+          "title": "pytorch/captum",
+          "url": "https://github.com/pytorch/captum",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Tutorial A3: DeepLIFT/SHAP — tangermeme v0.1.0 documentation",
+          "url": "https://tangermeme.readthedocs.io/en/latest/tutorials/Tutorial_A3_Deep_LIFT_SHAP.html",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "DeepLIFT Documentation - Captum",
+          "url": "https://captum.ai/api/deep_lift.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "layer-wise-relevance-propagation",
+        "local-interpretable-model-agnostic-explanations",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "layer-wise-relevance-propagation",
+      "name": "Layer-wise Relevance Propagation",
+      "description": "Layer-wise Relevance Propagation (LRP) explains neural network predictions by working backwards through the network to show how much each input feature contributed to the final decision. It follows a simple conservation rule: the total contribution scores always add up to the original prediction. Starting from the output, LRP distributes 'relevance' backwards through each layer using different rules depending on the layer type. This creates a detailed breakdown showing which input features helped or hindered the prediction, making it easier to understand why the network made a particular decision.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/model-specific",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Identifying which pixels in chest X-rays contribute to pneumonia detection, helping radiologists verify AI diagnoses by highlighting anatomical regions the model considers relevant.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging a neural network's misclassification of handwritten digits by tracing relevance through layers to identify which input pixels caused the error and which network layers amplified it.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations for automated credit scoring decisions by showing which financial features received positive or negative relevance scores, enabling clear regulatory reporting.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires different propagation rules for each layer type, making implementation complex for new architectures."
+        },
+        {
+          "description": "Can produce negative relevance scores which may be difficult to interpret intuitively."
+        },
+        {
+          "description": "Rule selection (LRP-ε, LRP-γ, etc.) significantly affects results and requires domain expertise."
+        },
+        {
+          "description": "Limited to feedforward networks and may not work well with modern architectures like transformers without substantial modifications."
+        }
+      ],
+      "resources": [
+        {
+          "title": "rachtibat/LRP-eXplains-Transformers",
+          "url": "https://github.com/rachtibat/LRP-eXplains-Transformers",
+          "source_type": "software_package"
+        },
+        {
+          "title": "sebastian-lapuschkin/lrp_toolbox",
+          "url": "https://github.com/sebastian-lapuschkin/lrp_toolbox",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Getting started — zennit documentation",
+          "url": "https://zennit.readthedocs.io/en/latest/getting-started.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Layer-wise Relevance Propagation eXplains Transformers (LXT) documentation",
+          "url": "https://lxt.readthedocs.io/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "On Pixel-Wise Explanations for Non-Linear Classifier Decisions by Layer-Wise Relevance Propagation",
+          "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0130140",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sebastian Bach",
+            "Alexander Binder",
+            "Grégoire Montavon",
+            "Frederick Klauschen",
+            "Klaus-Robert Müller",
+            "Wojciech Samek"
+          ],
+          "publication_date": "2015-07-10"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 3,
+      "acronym": "LRP",
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "deeplift",
+        "local-interpretable-model-agnostic-explanations",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "contextual-decomposition",
+      "name": "Contextual Decomposition",
+      "description": "Contextual Decomposition explains LSTM and RNN predictions by decomposing the final hidden state into contributions from individual inputs and their interactions. Unlike simpler attribution methods, it separates the direct contribution of specific words or phrases from the contextual effects of surrounding words. This is particularly useful for understanding how sequential models process language, as it can identify whether a word's influence comes from its individual meaning or from its interaction with nearby words in the sequence.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/recurrent-neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/attribution-methods/model-specific",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing why an LSTM-based spam filter flagged an email by decomposing contributions from individual words ('free', 'urgent') versus their contextual interactions ('free trial' together).",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Understanding how a medical text classifier diagnoses conditions from clinical notes by separating direct symptom mentions from contextual medical reasoning patterns.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations for automated content moderation decisions by showing which words and phrase interactions contributed to toxicity detection.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Primarily designed for LSTM and simple RNN architectures, not suitable for modern transformers or attention-based models."
+        },
+        {
+          "description": "Not widely implemented in standard machine learning libraries, often requiring custom implementation."
+        },
+        {
+          "description": "Computational overhead increases significantly with sequence length and model depth."
+        },
+        {
+          "description": "May not scale well to very complex models or capture all types of feature interactions in deep networks."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Beyond Word Importance: Contextual Decomposition to Extract Interactions from LSTMs",
+          "url": "http://arxiv.org/pdf/1801.05453v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "W. James Murdoch",
+            "Peter J. Liu",
+            "Bin Yu"
+          ],
+          "publication_date": "2018-01-16"
+        },
+        {
+          "title": "FredericGodin/ContextualDecomposition-NLP",
+          "url": "https://github.com/FredericGodin/ContextualDecomposition-NLP",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Interpreting patient-Specific risk prediction using contextual decomposition of BiLSTMs: Application to children with asthma",
+          "url": "https://core.ac.uk/download/294758884.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Alsaad R.",
+            "Boughorbel S.",
+            "Janahi I.",
+            "Malluhi Q."
+          ],
+          "publication_date": "2019-01-01"
+        },
+        {
+          "title": "Towards Hierarchical Importance Attribution: Explaining Compositional Semantics for Neural Sequence Models",
+          "url": "http://arxiv.org/pdf/1911.06194v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xisen Jin",
+            "Zhongyu Wei",
+            "Junyi Du",
+            "Xiangyang Xue",
+            "Xiang Ren"
+          ],
+          "publication_date": "2019-11-08"
+        },
+        {
+          "title": "Efficient Automated Circuit Discovery in Transformers using Contextual Decomposition",
+          "url": "http://arxiv.org/pdf/2407.00886v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Aliyah R. Hsu",
+            "Georgia Zhou",
+            "Yeshwanth Cherapanamjeri",
+            "Yaxuan Huang",
+            "Anobel Y. Odisho",
+            "Peter R. Carroll",
+            "Bin Yu"
+          ],
+          "publication_date": "2024-07-01"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "taylor-decomposition",
+        "influence-functions"
+      ]
+    },
+    {
+      "slug": "taylor-decomposition",
+      "name": "Taylor Decomposition",
+      "description": "Taylor Decomposition is a mathematical technique that explains neural network predictions by computing first-order and higher-order derivatives of the network's output with respect to input features. It decomposes the prediction into relevance scores that indicate how much each input feature and feature interaction contributes to the final decision. The method uses Layer-wise Relevance Propagation (LRP) principles to trace prediction contributions backwards through the network layers, providing precise mathematical attributions for each input element.",
+      "assurance_goals": [
+        "Explainability"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "applicable-models/cnn",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/fidelity",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analyzing which pixels in an image contribute most to a convolutional neural network's classification decision, showing both positive and negative relevance scores for different regions of the input image.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Understanding how different word embeddings in a sentiment analysis model contribute to the final sentiment score, revealing which terms drive positive vs negative predictions.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Mathematically complex requiring deep understanding of calculus and neural network architectures."
+        },
+        {
+          "description": "Computationally intensive as it requires computing gradients and higher-order derivatives through the entire network."
+        },
+        {
+          "description": "Approximations used in practice may introduce errors that affect attribution accuracy."
+        },
+        {
+          "description": "Limited tooling availability compared to other explainability methods, with most implementations being research-focused rather than production-ready."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Explaining NonLinear Classification Decisions with Deep Taylor Decomposition",
+          "url": "http://arxiv.org/pdf/1512.02479v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Grégoire Montavon",
+            "Sebastian Bach",
+            "Alexander Binder",
+            "Wojciech Samek",
+            "Klaus-Robert Müller"
+          ],
+          "publication_date": "2015-12-08"
+        },
+        {
+          "title": "A Rigorous Study Of The Deep Taylor Decomposition",
+          "url": "http://arxiv.org/pdf/2211.08425v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Leon Sixt",
+            "Tim Landgraf"
+          ],
+          "publication_date": "2022-11-14"
+        },
+        {
+          "title": "sebastian-lapuschkin/lrp_toolbox",
+          "url": "https://github.com/sebastian-lapuschkin/lrp_toolbox",
+          "source_type": "software_package"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "contextual-decomposition",
+        "influence-functions"
+      ]
+    },
+    {
+      "slug": "classical-attention-analysis-in-neural-networks",
+      "name": "Classical Attention Analysis in Neural Networks",
+      "description": "Classical attention mechanisms in RNNs and CNNs create alignment matrices and temporal attention patterns that show how models focus on different input elements over time or space. This technique analyses these traditional attention patterns, particularly in encoder-decoder architectures and sequence-to-sequence models, where attention weights reveal which source elements influence each output step. Unlike transformer self-attention analysis, this focuses on understanding alignment patterns, temporal dependencies, and encoder-decoder attention dynamics in classical neural architectures.",
+      "assurance_goals": [
+        "Explainability"
+      ],
+      "tags": [
+        "applicable-models/rnn",
+        "applicable-models/cnn",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/visualization-methods/attention-patterns",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/fidelity",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/visualization",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing encoder-decoder attention in a neural machine translation model to verify the alignment between source and target words, ensuring the model learns proper translation correspondences rather than positional biases.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Examining temporal attention patterns in an RNN-based image captioning model to understand how attention moves across different image regions as it generates each word of the caption description.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Attention weights are not always strongly correlated with feature importance for the final prediction."
+        },
+        {
+          "description": "High attention does not necessarily imply causal influence - models can attend to irrelevant but correlated features."
+        },
+        {
+          "description": "Only applicable to neural network architectures that explicitly use attention mechanisms."
+        },
+        {
+          "description": "Interpretation can be misleading without understanding the specific attention mechanism implementation and training dynamics."
+        }
+      ],
+      "resources": [
+        {
+          "title": "An Attentive Survey of Attention Models",
+          "url": "https://www.semanticscholar.org/paper/a8427ce5aee6d62800c725588e89940ed4910e0d",
+          "source_type": "documentation",
+          "authors": [
+            "S. Chaudhari",
+            "Gungor Polatkan",
+            "R. Ramanath",
+            "Varun Mithal"
+          ]
+        },
+        {
+          "title": "Attention, please! A survey of neural attention models in deep learning",
+          "url": "https://www.semanticscholar.org/paper/44930df2a3186edb58c4d6f6e5ed828c5d6a0089",
+          "source_type": "documentation",
+          "authors": [
+            "Alana de Santana Correia",
+            "E. Colombini"
+          ]
+        },
+        {
+          "title": "ecco - Explain, Analyze, and Visualize NLP Language Models",
+          "url": "https://github.com/jalammar/ecco",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Enhancing Sentiment Analysis of Twitter Data Using Recurrent Neural Networks with Attention Mechanism",
+          "url": "https://www.semanticscholar.org/paper/c59e0158280a567114ae8ca64a932eefd127e0aa",
+          "source_type": "technical_paper",
+          "authors": [
+            "S. Nithya",
+            "X. A. Presskila",
+            "B. Sakthivel",
+            "R. Krishnan",
+            "K. Narayanan",
+            "S. Sundararajan"
+          ]
+        },
+        {
+          "title": "Can Neural Networks Develop Attention? Google Thinks they Can ...",
+          "url": "https://www.kdnuggets.com/2019/11/neural-networks-develop-attention-google.html",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "attention-visualisation-in-transformers"
+      ]
+    }
+  ],
+  "count": 5
+}

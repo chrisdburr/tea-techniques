@@ -1,0 +1,348 @@
+{
+  "tag": {
+    "name": "assurance-goal-category/explainability/representation-analysis/dimensionality-reduction",
+    "slug": "assurance-goal-category-explainability-representation-analysis-dimensionality-reduction",
+    "count": 4,
+    "category": "assurance-goal-category"
+  },
+  "techniques": [
+    {
+      "slug": "factor-analysis",
+      "name": "Factor Analysis",
+      "description": "Factor analysis is a statistical technique that identifies latent variables (hidden factors) underlying observed correlations in data. It works by analysing how variables relate to each other, finding a smaller number of unobserved factors that explain patterns among multiple observed variables. Unlike PCA which maximises total variance, factor analysis focuses on shared variance (communalities - the variance variables have in common) whilst separating out unique variance and measurement error. After extracting factors, rotation methods like varimax (which creates uncorrelated factors) or oblimin (allowing correlated factors) help make factors more interpretable by aligning them with distinct groups of variables.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/representation-analysis/dimensionality-reduction",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "evidence-type/structured-output",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing customer satisfaction surveys to identify key drivers (e.g., 'service quality', 'product value', 'convenience') from dozens of individual questions, helping businesses focus improvement efforts.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Reducing dimensionality of financial indicators to identify underlying economic factors (e.g., 'growth', 'inflation', 'credit risk') for more interpretable risk models.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating transparent feature groups for regulatory reporting by showing how multiple correlated features can be summarised into interpretable factors with clear business meaning.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Assumes linear relationships between variables and multivariate normality of data."
+        },
+        {
+          "description": "Results can be abstract and require domain expertise to interpret meaningfully."
+        },
+        {
+          "description": "Sensitive to the choice of number of factors and rotation method, which can significantly affect interpretability."
+        },
+        {
+          "description": "Requires sufficiently large sample sizes relative to the number of variables for stable results."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Factor Analysis, Probabilistic Principal Component Analysis, Variational Inference, and Variational Autoencoder: Tutorial and Survey",
+          "url": "http://arxiv.org/pdf/2101.00734v2",
+          "source_type": "documentation",
+          "authors": [
+            "Benyamin Ghojogh",
+            "Ali Ghodsi",
+            "Fakhri Karray",
+            "Mark Crowley"
+          ],
+          "publication_date": "2021-01-04"
+        },
+        {
+          "title": "Factor Analysis in R Course | DataCamp",
+          "url": "https://www.datacamp.com/courses/factor-analysis-in-r",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "EducationalTestingService/factor_analyzer",
+          "url": "https://github.com/EducationalTestingService/factor_analyzer",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Confirmatory Factor Analysis Fundamentals | Towards Data Science",
+          "url": "https://towardsdatascience.com/confirmatory-factor-analysis-theory-aac11af008a6/",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "principal-component-analysis",
+        "t-sne",
+        "umap"
+      ]
+    },
+    {
+      "slug": "principal-component-analysis",
+      "name": "Principal Component Analysis",
+      "description": "Principal Component Analysis transforms high-dimensional data into a lower-dimensional representation by finding the directions (principal components) that capture the maximum variance in the data. Each component is a linear combination of original features, with the first component explaining the most variance, the second component the most remaining variance orthogonal to the first, and so on. This technique reveals underlying patterns in data structure, enables visualization of complex datasets, and helps identify which combinations of features drive the most variation in the data.",
+      "assurance_goals": [
+        "Explainability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/representation-analysis/dimensionality-reduction",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualization",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing customer behavior data with dozens of variables (purchase frequency, spending patterns, demographics) to identify the 2-3 main dimensions that explain customer segmentation, revealing whether customers cluster by spending level, product preferences, or shopping frequency.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Reducing dimensionality of image data for facial recognition systems by finding the principal components that capture the most variation in face shapes and expressions, helping understand which facial features contribute most to distinguishing between individuals.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Principal components are abstract linear combinations of original features that often lack clear real-world interpretation or meaning."
+        },
+        {
+          "description": "Only captures linear relationships between features, missing non-linear patterns and complex interactions in the data."
+        },
+        {
+          "description": "Results are highly sensitive to feature scaling - features with larger numerical ranges can dominate the principal components."
+        },
+        {
+          "description": "Information loss is inherent when reducing dimensions, and choosing the optimal number of components requires balancing simplicity with retained variance."
+        }
+      ],
+      "resources": [
+        {
+          "title": "erdogant/pca",
+          "url": "https://github.com/erdogant/pca",
+          "source_type": "software_package"
+        },
+        {
+          "title": "How to Calculate Principal Component Analysis (PCA) from Scratch ...",
+          "url": "https://www.machinelearningmastery.com/calculate-principal-component-analysis-scratch-python/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "A One-Stop Shop for Principal Component Analysis | Towards Data ...",
+          "url": "https://towardsdatascience.com/a-one-stop-shop-for-principal-component-analysis-5582fb7e0a9c/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Principal Component Analysis (PCA) with Scikit-Learn - KDnuggets",
+          "url": "https://www.kdnuggets.com/2023/05/principal-component-analysis-pca-scikitlearn.html",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "willtownes/glmpca-py",
+          "url": "https://github.com/willtownes/glmpca-py",
+          "source_type": "software_package"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 2,
+      "acronym": "PCA",
+      "related_techniques": [
+        "factor-analysis",
+        "t-sne",
+        "umap"
+      ]
+    },
+    {
+      "slug": "t-sne",
+      "name": "t-SNE",
+      "description": "t-SNE (t-Distributed Stochastic Neighbour Embedding) is a non-linear dimensionality reduction technique that creates 2D or 3D visualisations of high-dimensional data by preserving local neighbourhood relationships. The algorithm converts similarities between data points into joint probabilities in the high-dimensional space, then tries to minimise the divergence between these probabilities and those in the low-dimensional embedding. This approach excels at revealing cluster structures and local patterns, making it particularly effective for exploratory data analysis and understanding complex data relationships that linear methods like PCA might miss.",
+      "assurance_goals": [
+        "Explainability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/representation-analysis/dimensionality-reduction",
+        "assurance-goal-category/explainability/visualization-methods/feature-relationships",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/visualization",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/visualization"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analyzing genomic data with thousands of gene expression features to visualize how different cancer subtypes cluster together, revealing which tumors have similar molecular signatures and potentially similar treatment responses.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Exploring deep learning model embeddings to understand how a neural network represents different categories of images, showing whether the model groups similar objects (cars, animals, furniture) in meaningful clusters in its internal feature space.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Non-deterministic algorithm produces different results on each run, making it difficult to reproduce exact visualizations or compare results across studies."
+        },
+        {
+          "description": "Prioritizes preserving local neighborhood structure at the expense of global relationships, potentially creating misleading impressions about overall data topology."
+        },
+        {
+          "description": "Computationally expensive with O(n²) complexity, making it impractical for datasets with more than ~10,000 points without approximation methods."
+        },
+        {
+          "description": "Sensitive to hyperparameter choices (perplexity, learning rate, iterations) that can dramatically affect clustering patterns and require domain expertise to tune appropriately."
+        }
+      ],
+      "resources": [
+        {
+          "title": "pavlin-policar/openTSNE",
+          "url": "https://github.com/pavlin-policar/openTSNE",
+          "source_type": "software_package"
+        },
+        {
+          "title": "openTSNE: Extensible, parallel implementations of t-SNE ...",
+          "url": "https://opentsne.readthedocs.io/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "How t-SNE works — openTSNE 1.0.0 documentation",
+          "url": "https://opentsne.readthedocs.io/en/stable/tsne_algorithm.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "t-SNE from Scratch (ft. NumPy) | Towards Data Science",
+          "url": "https://towardsdatascience.com/t-sne-from-scratch-ft-numpy-172ee2a61df7/",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "factor-analysis",
+        "principal-component-analysis",
+        "umap"
+      ]
+    },
+    {
+      "slug": "umap",
+      "name": "UMAP",
+      "description": "UMAP (Uniform Manifold Approximation and Projection) is a non-linear dimensionality reduction technique that creates 2D or 3D visualisations of high-dimensional data by constructing a mathematical model of the data's underlying manifold structure. Unlike t-SNE, UMAP preserves both local neighbourhood relationships and global topology more effectively, using techniques from topological data analysis and Riemannian geometry. This approach often produces more interpretable cluster layouts while maintaining meaningful distances between clusters, making it particularly valuable for exploratory data analysis and understanding complex dataset structures.",
+      "assurance_goals": [
+        "Explainability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/representation-analysis/dimensionality-reduction",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/property/fidelity",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/visualization",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/visualization"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing single-cell RNA sequencing data to visualise how different cell types cluster based on gene expression patterns, revealing developmental trajectories and identifying previously unknown cell subtypes in tissue samples.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Exploring customer segmentation by reducing hundreds of behavioural and demographic features to 2D space, showing how different customer groups relate to each other and identifying transition zones where customers might move between segments.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Hyperparameter choices (n_neighbors, min_dist, metric) significantly influence the embedding structure and can lead to very different interpretations of the same data."
+        },
+        {
+          "description": "While preserving global structure better than t-SNE, distances in the reduced space still don't directly correspond to distances in the original feature space."
+        },
+        {
+          "description": "Performance can be sensitive to the choice of distance metric, which may not be obvious for complex or mixed data types."
+        },
+        {
+          "description": "Like other manifold learning techniques, it assumes the data lies on a lower-dimensional manifold, which may not hold for all datasets."
+        }
+      ],
+      "resources": [
+        {
+          "title": "lmcinnes/umap",
+          "url": "https://github.com/lmcinnes/umap",
+          "source_type": "software_package"
+        },
+        {
+          "title": "UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction",
+          "url": "http://arxiv.org/pdf/1802.03426v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Leland McInnes",
+            "John Healy",
+            "James Melville"
+          ],
+          "publication_date": "2018-02-09"
+        },
+        {
+          "title": "Uniform Manifold Approximation and Projection (UMAP) and its Variants: Tutorial and Survey",
+          "url": "http://arxiv.org/pdf/2109.02508v1",
+          "source_type": "documentation",
+          "authors": [
+            "Benyamin Ghojogh",
+            "Ali Ghodsi",
+            "Fakhri Karray",
+            "Mark Crowley"
+          ],
+          "publication_date": "2021-08-25"
+        },
+        {
+          "title": "How UMAP Works — umap 0.5.8 documentation",
+          "url": "https://umap-learn.readthedocs.io/en/latest/how_umap_works.html",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "factor-analysis",
+        "principal-component-analysis",
+        "t-sne"
+      ]
+    }
+  ],
+  "count": 4
+}

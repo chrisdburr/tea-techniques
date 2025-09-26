@@ -1,0 +1,914 @@
+{
+  "tag": {
+    "name": "assurance-goal-category/explainability/property/completeness",
+    "slug": "assurance-goal-category-explainability-property-completeness",
+    "count": 9,
+    "category": "assurance-goal-category"
+  },
+  "techniques": [
+    {
+      "slug": "shapley-additive-explanations",
+      "name": "SHapley Additive exPlanations",
+      "description": "SHAP explains model predictions by quantifying how much each input feature contributes to the outcome. It assigns an importance score to every feature, indicating whether it pushes the prediction towards or away from the average. The method systematically evaluates how predictions change as features are included or excluded, drawing on game theory concepts to ensure a fair distribution of contributions.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing a customer churn prediction model to understand why a specific high-value customer was flagged as likely to leave, revealing that recent support ticket interactions and declining purchase frequency were the main drivers.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Auditing a loan approval model by comparing SHAP values for applicants from different demographic groups, ensuring that protected characteristics like race or gender do not have an undue influence on credit decisions.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Validating a medical diagnosis model by confirming that its predictions are based on relevant clinical features (e.g., blood pressure, cholesterol levels) rather than spurious correlations (e.g., patient ID or appointment time), thereby improving model reliability.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Assumes feature independence, which can produce misleading explanations when features are highly correlated, as the model may attribute importance to features that are merely proxies for others."
+        },
+        {
+          "description": "Computationally expensive for models with many features or large datasets, as the number of required predictions grows exponentially with the number of features."
+        },
+        {
+          "description": "The choice of background dataset for generating explanations can significantly influence the results, requiring careful selection to ensure a representative baseline."
+        },
+        {
+          "description": "Global explanations derived from averaging local SHAP values may obscure important heterogeneous effects where features impact subgroups of the population differently."
+        }
+      ],
+      "resources": [
+        {
+          "title": "shap/shap",
+          "url": "https://github.com/shap/shap",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Introduction to SHapley Additive exPlanations (SHAP) — XAI Tutorials",
+          "url": "https://xai-tutorials.readthedocs.io/en/latest/_model_agnostic_xai/shap.html",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "An empirical study of the effect of background data size on the stability of SHapley Additive exPlanations (SHAP) for deep learning models",
+          "url": "http://arxiv.org/pdf/2204.11351v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Han Yuan",
+            "Mingxuan Liu",
+            "Lican Kang",
+            "Chenkui Miao",
+            "Ying Wu"
+          ],
+          "publication_date": "2022-04-24"
+        },
+        {
+          "title": "SHAP: Shapley Additive Explanations | Towards Data Science",
+          "url": "https://towardsdatascience.com/shap-shapley-additive-explanations-5a2a271ed9c3/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "MAIF/shapash",
+          "url": "https://github.com/MAIF/shapash",
+          "source_type": "software_package"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "acronym": "SHAP",
+      "related_techniques": [
+        "integrated-gradients",
+        "deeplift",
+        "layer-wise-relevance-propagation",
+        "local-interpretable-model-agnostic-explanations",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "mean-decrease-impurity",
+      "name": "Mean Decrease Impurity",
+      "description": "Mean Decrease Impurity (MDI) quantifies a feature's importance in tree-based models (e.g., Random Forests, Gradient Boosting Machines) by measuring the total reduction in impurity (e.g., Gini impurity, entropy) across all splits where the feature is used. Features that lead to larger, more consistent reductions in impurity are considered more important, indicating their effectiveness in creating homogeneous child nodes and improving predictive accuracy.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/tree-based",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/model-specific",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Determining the most influential genetic markers in a decision tree model predicting disease susceptibility, by identifying which markers consistently lead to the purest splits between healthy and diseased patient groups.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Assessing the key factors driving customer purchasing decisions in an e-commerce random forest model, revealing which product attributes or customer demographics are most effective in segmenting buyers.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "MDI is inherently biased towards features with more unique values or those that allow for more splits, potentially overestimating their true importance."
+        },
+        {
+          "description": "It is only applicable to tree-based models and cannot be directly used with other model architectures."
+        },
+        {
+          "description": "The importance scores can be unstable, varying significantly with small changes in the training data or model parameters."
+        },
+        {
+          "description": "MDI does not account for feature interactions, meaning it might not accurately reflect the importance of features that are only relevant when combined with others."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Trees, forests, and impurity-based variable importance",
+          "url": "http://arxiv.org/pdf/2001.04295v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Erwan Scornet"
+          ],
+          "publication_date": "2020-01-13"
+        },
+        {
+          "title": "A Debiased MDI Feature Importance Measure for Random Forests",
+          "url": "http://arxiv.org/pdf/1906.10845v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xiao Li",
+            "Yu Wang",
+            "Sumanta Basu",
+            "Karl Kumbier",
+            "Bin Yu"
+          ],
+          "publication_date": "2019-06-26"
+        },
+        {
+          "title": "Variable Importance in Random Forests | Towards Data Science",
+          "url": "https://towardsdatascience.com/variable-importance-in-random-forests-20c6690e44e0/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Interpreting Deep Forest through Feature Contribution and MDI Feature Importance",
+          "url": "http://arxiv.org/pdf/2305.00805v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yi-Xiao He",
+            "Shen-Huan Lyu",
+            "Yuan Jiang"
+          ],
+          "publication_date": "2023-05-01"
+        },
+        {
+          "title": "optuna.importance.MeanDecreaseImpurityImportanceEvaluator ...",
+          "url": "https://optuna.readthedocs.io/en/stable/reference/generated/optuna.importance.MeanDecreaseImpurityImportanceEvaluator.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "permutation-importance",
+        "coefficient-magnitudes-in-linear-models",
+        "sobol-indices"
+      ]
+    },
+    {
+      "slug": "integrated-gradients",
+      "name": "Integrated Gradients",
+      "description": "Integrated Gradients is an attribution technique that explains a model's prediction by quantifying the contribution of each input feature. It works by accumulating gradients along a straight path from a user-defined baseline input (e.g., a black image or an all-zero vector) to the actual input. This path integral ensures that the attributions satisfy fundamental axioms like completeness (attributions sum up to the difference between the prediction and the baseline prediction) and sensitivity (non-zero attributions for features that change the prediction). The output is a set of importance scores, often visualised as heatmaps, indicating which parts of the input were most influential for the model's decision.",
+      "assurance_goals": [
+        "Explainability"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/consistency",
+        "data-requirements/labelled-data",
+        "data-requirements/reference-dataset",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualization",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing a medical image classification model to understand which specific pixels or regions in an X-ray image contribute most to a diagnosis of pneumonia, ensuring the model focuses on relevant pathological features rather than artifacts.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Explaining the sentiment prediction of a natural language processing model by highlighting which words or phrases in a review most strongly influenced its classification as positive or negative, revealing the model's interpretative focus.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires a carefully chosen and meaningful baseline input; an inappropriate baseline can lead to misleading or uninformative attributions."
+        },
+        {
+          "description": "The model must be differentiable, which limits its direct application to models with non-differentiable components or discrete inputs without workarounds."
+        },
+        {
+          "description": "Computationally more expensive than simple gradient-based methods, as it requires multiple gradient calculations along the integration path."
+        },
+        {
+          "description": "While satisfying completeness, the attributions can sometimes be visually noisy or difficult for humans to interpret intuitively, especially for complex inputs."
+        }
+      ],
+      "resources": [
+        {
+          "title": "ankurtaly/Integrated-Gradients",
+          "url": "https://github.com/ankurtaly/Integrated-Gradients",
+          "source_type": "software_package"
+        },
+        {
+          "title": "pytorch/captum",
+          "url": "https://github.com/pytorch/captum",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Maximum Entropy Baseline for Integrated Gradients",
+          "url": "http://arxiv.org/pdf/2204.05948v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hanxiao Tan"
+          ],
+          "publication_date": "2022-04-12"
+        },
+        {
+          "title": "Integrated Gradients from Scratch | Towards Data Science",
+          "url": "https://towardsdatascience.com/integrated-gradients-from-scratch-b46311e4ab4/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Understanding Integrated Gradients with SmoothTaylor for Deep Neural Network Attribution",
+          "url": "http://arxiv.org/pdf/2004.10484v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Gary S. W. Goh",
+            "Sebastian Lapuschkin",
+            "Leander Weber",
+            "Wojciech Samek",
+            "Alexander Binder"
+          ],
+          "publication_date": "2020-04-22"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "deeplift",
+        "layer-wise-relevance-propagation",
+        "local-interpretable-model-agnostic-explanations",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "deeplift",
+      "name": "DeepLIFT",
+      "description": "DeepLIFT (Deep Learning Important FeaTures) explains neural network predictions by decomposing the difference between the actual output and a reference output back to individual input features. It compares each neuron's activation to a reference activation (typically from a baseline input like all zeros or the dataset mean) and propagates these differences backwards through the network using chain rule modifications. Unlike gradient-based methods, DeepLIFT satisfies the sensitivity property (zero input gets zero attribution) and provides more stable attributions by using discrete differences rather than gradients.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-requirements/reference-dataset",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Identifying which genomic sequences contribute to a neural network's prediction of protein binding sites, helping biologists understand regulatory mechanisms by comparing to neutral DNA baselines.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging a deep learning image classifier that misclassifies medical scans by attributing the decision to specific image regions, revealing if the model focuses on irrelevant artifacts rather than pathological features.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations for automated loan approval decisions by showing which financial features (relative to typical applicant profiles) most influenced the neural network's recommendation.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires careful selection of reference baseline, as different choices can lead to substantially different attribution scores."
+        },
+        {
+          "description": "Implementation complexity varies significantly across different neural network architectures and layer types."
+        },
+        {
+          "description": "May produce unintuitive results when the chosen reference is not representative of the decision boundary."
+        },
+        {
+          "description": "Limited to feedforward networks and specific layer types, not suitable for all modern architectures like transformers."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Learning Important Features Through Propagating Activation Differences",
+          "url": "http://arxiv.org/pdf/1704.02685v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Avanti Shrikumar",
+            "Peyton Greenside",
+            "Anshul Kundaje"
+          ],
+          "publication_date": "2017-04-10"
+        },
+        {
+          "title": "pytorch/captum",
+          "url": "https://github.com/pytorch/captum",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Tutorial A3: DeepLIFT/SHAP — tangermeme v0.1.0 documentation",
+          "url": "https://tangermeme.readthedocs.io/en/latest/tutorials/Tutorial_A3_Deep_LIFT_SHAP.html",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "DeepLIFT Documentation - Captum",
+          "url": "https://captum.ai/api/deep_lift.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "layer-wise-relevance-propagation",
+        "local-interpretable-model-agnostic-explanations",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "layer-wise-relevance-propagation",
+      "name": "Layer-wise Relevance Propagation",
+      "description": "Layer-wise Relevance Propagation (LRP) explains neural network predictions by working backwards through the network to show how much each input feature contributed to the final decision. It follows a simple conservation rule: the total contribution scores always add up to the original prediction. Starting from the output, LRP distributes 'relevance' backwards through each layer using different rules depending on the layer type. This creates a detailed breakdown showing which input features helped or hindered the prediction, making it easier to understand why the network made a particular decision.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/model-specific",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Identifying which pixels in chest X-rays contribute to pneumonia detection, helping radiologists verify AI diagnoses by highlighting anatomical regions the model considers relevant.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging a neural network's misclassification of handwritten digits by tracing relevance through layers to identify which input pixels caused the error and which network layers amplified it.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations for automated credit scoring decisions by showing which financial features received positive or negative relevance scores, enabling clear regulatory reporting.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires different propagation rules for each layer type, making implementation complex for new architectures."
+        },
+        {
+          "description": "Can produce negative relevance scores which may be difficult to interpret intuitively."
+        },
+        {
+          "description": "Rule selection (LRP-ε, LRP-γ, etc.) significantly affects results and requires domain expertise."
+        },
+        {
+          "description": "Limited to feedforward networks and may not work well with modern architectures like transformers without substantial modifications."
+        }
+      ],
+      "resources": [
+        {
+          "title": "rachtibat/LRP-eXplains-Transformers",
+          "url": "https://github.com/rachtibat/LRP-eXplains-Transformers",
+          "source_type": "software_package"
+        },
+        {
+          "title": "sebastian-lapuschkin/lrp_toolbox",
+          "url": "https://github.com/sebastian-lapuschkin/lrp_toolbox",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Getting started — zennit documentation",
+          "url": "https://zennit.readthedocs.io/en/latest/getting-started.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Layer-wise Relevance Propagation eXplains Transformers (LXT) documentation",
+          "url": "https://lxt.readthedocs.io/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "On Pixel-Wise Explanations for Non-Linear Classifier Decisions by Layer-Wise Relevance Propagation",
+          "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0130140",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sebastian Bach",
+            "Alexander Binder",
+            "Grégoire Montavon",
+            "Frederick Klauschen",
+            "Klaus-Robert Müller",
+            "Wojciech Samek"
+          ],
+          "publication_date": "2015-07-10"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 3,
+      "acronym": "LRP",
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "deeplift",
+        "local-interpretable-model-agnostic-explanations",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "contextual-decomposition",
+      "name": "Contextual Decomposition",
+      "description": "Contextual Decomposition explains LSTM and RNN predictions by decomposing the final hidden state into contributions from individual inputs and their interactions. Unlike simpler attribution methods, it separates the direct contribution of specific words or phrases from the contextual effects of surrounding words. This is particularly useful for understanding how sequential models process language, as it can identify whether a word's influence comes from its individual meaning or from its interaction with nearby words in the sequence.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/recurrent-neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/attribution-methods/model-specific",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing why an LSTM-based spam filter flagged an email by decomposing contributions from individual words ('free', 'urgent') versus their contextual interactions ('free trial' together).",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Understanding how a medical text classifier diagnoses conditions from clinical notes by separating direct symptom mentions from contextual medical reasoning patterns.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations for automated content moderation decisions by showing which words and phrase interactions contributed to toxicity detection.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Primarily designed for LSTM and simple RNN architectures, not suitable for modern transformers or attention-based models."
+        },
+        {
+          "description": "Not widely implemented in standard machine learning libraries, often requiring custom implementation."
+        },
+        {
+          "description": "Computational overhead increases significantly with sequence length and model depth."
+        },
+        {
+          "description": "May not scale well to very complex models or capture all types of feature interactions in deep networks."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Beyond Word Importance: Contextual Decomposition to Extract Interactions from LSTMs",
+          "url": "http://arxiv.org/pdf/1801.05453v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "W. James Murdoch",
+            "Peter J. Liu",
+            "Bin Yu"
+          ],
+          "publication_date": "2018-01-16"
+        },
+        {
+          "title": "FredericGodin/ContextualDecomposition-NLP",
+          "url": "https://github.com/FredericGodin/ContextualDecomposition-NLP",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Interpreting patient-Specific risk prediction using contextual decomposition of BiLSTMs: Application to children with asthma",
+          "url": "https://core.ac.uk/download/294758884.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Alsaad R.",
+            "Boughorbel S.",
+            "Janahi I.",
+            "Malluhi Q."
+          ],
+          "publication_date": "2019-01-01"
+        },
+        {
+          "title": "Towards Hierarchical Importance Attribution: Explaining Compositional Semantics for Neural Sequence Models",
+          "url": "http://arxiv.org/pdf/1911.06194v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xisen Jin",
+            "Zhongyu Wei",
+            "Junyi Du",
+            "Xiangyang Xue",
+            "Xiang Ren"
+          ],
+          "publication_date": "2019-11-08"
+        },
+        {
+          "title": "Efficient Automated Circuit Discovery in Transformers using Contextual Decomposition",
+          "url": "http://arxiv.org/pdf/2407.00886v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Aliyah R. Hsu",
+            "Georgia Zhou",
+            "Yeshwanth Cherapanamjeri",
+            "Yaxuan Huang",
+            "Anobel Y. Odisho",
+            "Peter R. Carroll",
+            "Bin Yu"
+          ],
+          "publication_date": "2024-07-01"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "taylor-decomposition",
+        "influence-functions"
+      ]
+    },
+    {
+      "slug": "taylor-decomposition",
+      "name": "Taylor Decomposition",
+      "description": "Taylor Decomposition is a mathematical technique that explains neural network predictions by computing first-order and higher-order derivatives of the network's output with respect to input features. It decomposes the prediction into relevance scores that indicate how much each input feature and feature interaction contributes to the final decision. The method uses Layer-wise Relevance Propagation (LRP) principles to trace prediction contributions backwards through the network layers, providing precise mathematical attributions for each input element.",
+      "assurance_goals": [
+        "Explainability"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "applicable-models/cnn",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/fidelity",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analyzing which pixels in an image contribute most to a convolutional neural network's classification decision, showing both positive and negative relevance scores for different regions of the input image.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Understanding how different word embeddings in a sentiment analysis model contribute to the final sentiment score, revealing which terms drive positive vs negative predictions.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Mathematically complex requiring deep understanding of calculus and neural network architectures."
+        },
+        {
+          "description": "Computationally intensive as it requires computing gradients and higher-order derivatives through the entire network."
+        },
+        {
+          "description": "Approximations used in practice may introduce errors that affect attribution accuracy."
+        },
+        {
+          "description": "Limited tooling availability compared to other explainability methods, with most implementations being research-focused rather than production-ready."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Explaining NonLinear Classification Decisions with Deep Taylor Decomposition",
+          "url": "http://arxiv.org/pdf/1512.02479v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Grégoire Montavon",
+            "Sebastian Bach",
+            "Alexander Binder",
+            "Wojciech Samek",
+            "Klaus-Robert Müller"
+          ],
+          "publication_date": "2015-12-08"
+        },
+        {
+          "title": "A Rigorous Study Of The Deep Taylor Decomposition",
+          "url": "http://arxiv.org/pdf/2211.08425v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Leon Sixt",
+            "Tim Landgraf"
+          ],
+          "publication_date": "2022-11-14"
+        },
+        {
+          "title": "sebastian-lapuschkin/lrp_toolbox",
+          "url": "https://github.com/sebastian-lapuschkin/lrp_toolbox",
+          "source_type": "software_package"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "contextual-decomposition",
+        "influence-functions"
+      ]
+    },
+    {
+      "slug": "sobol-indices",
+      "name": "Sobol Indices",
+      "description": "Sobol Indices quantify how much each input feature contributes to the total variance in a model's predictions through global sensitivity analysis. The technique calculates first-order indices (individual feature contributions) and total-order indices (including all interaction effects involving that feature). By systematically sampling the input space and decomposing output variance, Sobol Indices reveal which features drive model uncertainty and which interactions between features are most important for predictions.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/causal-analysis/interaction-effects",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing a climate prediction model to determine which atmospheric parameters (temperature, humidity, pressure) contribute most to rainfall forecast uncertainty, helping meteorologists understand which measurements need the highest precision.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Evaluating a financial risk model to identify which economic indicators (interest rates, inflation, GDP growth) drive the most variability in portfolio value predictions, enabling better risk management strategies.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Analysing a credit scoring model to quantify how much prediction variance stems from zip code (a potential proxy for race), helping identify features that may cause disparate impact across demographic groups.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive, requiring thousands of model evaluations to achieve stable variance estimates, making it impractical for very slow models."
+        },
+        {
+          "description": "Assumes input features are independently distributed, which can lead to misleading results when features are correlated in real data."
+        },
+        {
+          "description": "Curse of dimensionality makes the technique increasingly difficult and expensive to apply as the number of input features grows beyond 10-20."
+        },
+        {
+          "description": "Requires defining appropriate probability distributions for input features, which may not accurately reflect real-world feature distributions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Sobol Tensor Trains for Global Sensitivity Analysis",
+          "url": "http://arxiv.org/pdf/1712.00233v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Rafael Ballester-Ripoll",
+            "Enrique G. Paredes",
+            "Renato Pajarola"
+          ],
+          "publication_date": "2017-12-01"
+        },
+        {
+          "title": "Sobol indices — UQpy v4.2.0 documentation",
+          "url": "https://uqpyproject.readthedocs.io/en/latest/sensitivity/sobol.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Sobol Indices to Measure Feature Importance | Towards Data Science",
+          "url": "https://towardsdatascience.com/sobol-indices-to-measure-feature-importance-54cedc3281bc/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Basics — SALib's documentation",
+          "url": "https://salib.readthedocs.io/en/latest/user_guide/basics.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "UQpy (Uncertainty Quantification with python)",
+          "url": "https://github.com/SURGroup/UQpy",
+          "source_type": "software_package"
+        },
+        {
+          "title": "SALib/SALib",
+          "url": "https://github.com/SALib/SALib",
+          "source_type": "software_package"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "permutation-importance",
+        "mean-decrease-impurity",
+        "coefficient-magnitudes-in-linear-models"
+      ]
+    },
+    {
+      "slug": "feature-attribution-with-integrated-gradients-in-nlp",
+      "name": "Feature Attribution with Integrated Gradients in NLP",
+      "description": "Applies Integrated Gradients to natural language processing models to attribute prediction importance to individual input tokens, words, or subword units. This technique computes gradients along a straight-line path from a baseline input (typically all-zeros, padding tokens, or neutral text) to the actual input, integrating these gradients to obtain attribution scores. Unlike vanilla gradient methods, Integrated Gradients satisfies axioms of sensitivity and implementation invariance, making it particularly valuable for understanding transformer-based language models where token interactions are complex.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/transformer",
+        "applicable-models/llm",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualisation",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/testing",
+        "technique-type/gradient-based",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/completeness"
+      ],
+      "example_use_cases": [
+        {
+          "description": "In a clinical decision support system processing doctor's notes to predict patient risk, Integrated Gradients identifies which medical terms, symptoms, or phrases most strongly influence risk predictions, enabling clinicians to verify that the model focuses on clinically relevant information rather than spurious correlations and supporting regulatory compliance in healthcare AI.",
+          "goal": "Safety"
+        },
+        {
+          "description": "For automated loan approval systems processing free-text application descriptions, Integrated Gradients reveals which words or phrases drive acceptance decisions, supporting fairness audits by highlighting whether protected characteristics inadvertently influence decisions and enabling transparent explanations to customers about application outcomes.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "In content moderation systems flagging potentially harmful posts, Integrated Gradients identifies which specific words or linguistic patterns trigger safety classifications, enabling platform teams to debug false positives and validate that models focus on genuinely problematic language rather than demographic markers.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computational overhead scales significantly with document length as processing requires computing gradients across many integration steps (typically 20-300), making real-time applications or large-scale document processing challenging."
+        },
+        {
+          "description": "Choice of baseline input (zero embeddings, padding tokens, neutral text, or average embeddings) substantially affects attribution results, but optimal baseline selection remains domain-specific and often requires extensive experimentation."
+        },
+        {
+          "description": "In transformer models with attention mechanisms, importance often spreads across many tokens, making it difficult to identify clear, actionable insights, especially for complex reasoning tasks where multiple tokens contribute collectively."
+        },
+        {
+          "description": "Modern NLP models use subword tokenisation (BPE, WordPiece), making attribution results difficult to interpret at the word level, as single words may split across multiple tokens with varying attribution scores."
+        },
+        {
+          "description": "While Integrated Gradients identifies correlative relationships between tokens and predictions, it cannot establish causal relationships or distinguish between spurious correlations and meaningful semantic dependencies in the input text."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Captum: Model Interpretability for PyTorch",
+          "url": "https://captum.ai/",
+          "source_type": "software_package",
+          "description": "Open-source PyTorch library implementing Integrated Gradients with multi-modal support including text, featuring easy integration with transformer models and comprehensive NLP tutorials (BERT SQUAD, IMDB classification, Llama2 attribution)."
+        },
+        {
+          "title": "Axiomatic Attribution for Deep Networks",
+          "url": "https://arxiv.org/abs/1703.01365",
+          "source_type": "technical_paper",
+          "authors": [
+            "Mukund Sundararajan",
+            "Ankur Taly",
+            "Qiqi Yan"
+          ],
+          "publication_date": "2017-03-19",
+          "description": "Original paper introducing Integrated Gradients method with fundamental axioms of sensitivity and implementation invariance, demonstrating applications across text models and providing theoretical foundations for attribution methods."
+        },
+        {
+          "title": "The Building Blocks of Interpretability",
+          "url": "https://distill.pub/2020/attribution-baselines/",
+          "source_type": "tutorial",
+          "description": "Interactive Distill article providing comprehensive guidance on baseline selection for Integrated Gradients, exploring different baseline types and their impact on feature attribution quality with transferable principles for NLP applications."
+        },
+        {
+          "title": "transformers-interpret",
+          "url": "https://github.com/cdpierse/transformers-interpret",
+          "source_type": "software_package",
+          "description": "Model explainability library designed for Hugging Face transformers, enabling transformer model explanation in two lines of code with HTML visualisations and support for sequence classification, multi-label classification, and computer vision models."
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "prompt-sensitivity-analysis",
+        "causal-mediation-analysis-in-language-models"
+      ]
+    }
+  ],
+  "count": 9
+}

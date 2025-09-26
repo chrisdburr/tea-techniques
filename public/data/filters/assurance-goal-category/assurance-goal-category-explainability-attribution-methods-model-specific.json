@@ -1,0 +1,394 @@
+{
+  "tag": {
+    "name": "assurance-goal-category/explainability/attribution-methods/model-specific",
+    "slug": "assurance-goal-category-explainability-attribution-methods-model-specific",
+    "count": 4,
+    "category": "assurance-goal-category"
+  },
+  "techniques": [
+    {
+      "slug": "mean-decrease-impurity",
+      "name": "Mean Decrease Impurity",
+      "description": "Mean Decrease Impurity (MDI) quantifies a feature's importance in tree-based models (e.g., Random Forests, Gradient Boosting Machines) by measuring the total reduction in impurity (e.g., Gini impurity, entropy) across all splits where the feature is used. Features that lead to larger, more consistent reductions in impurity are considered more important, indicating their effectiveness in creating homogeneous child nodes and improving predictive accuracy.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/tree-based",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/model-specific",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Determining the most influential genetic markers in a decision tree model predicting disease susceptibility, by identifying which markers consistently lead to the purest splits between healthy and diseased patient groups.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Assessing the key factors driving customer purchasing decisions in an e-commerce random forest model, revealing which product attributes or customer demographics are most effective in segmenting buyers.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "MDI is inherently biased towards features with more unique values or those that allow for more splits, potentially overestimating their true importance."
+        },
+        {
+          "description": "It is only applicable to tree-based models and cannot be directly used with other model architectures."
+        },
+        {
+          "description": "The importance scores can be unstable, varying significantly with small changes in the training data or model parameters."
+        },
+        {
+          "description": "MDI does not account for feature interactions, meaning it might not accurately reflect the importance of features that are only relevant when combined with others."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Trees, forests, and impurity-based variable importance",
+          "url": "http://arxiv.org/pdf/2001.04295v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Erwan Scornet"
+          ],
+          "publication_date": "2020-01-13"
+        },
+        {
+          "title": "A Debiased MDI Feature Importance Measure for Random Forests",
+          "url": "http://arxiv.org/pdf/1906.10845v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xiao Li",
+            "Yu Wang",
+            "Sumanta Basu",
+            "Karl Kumbier",
+            "Bin Yu"
+          ],
+          "publication_date": "2019-06-26"
+        },
+        {
+          "title": "Variable Importance in Random Forests | Towards Data Science",
+          "url": "https://towardsdatascience.com/variable-importance-in-random-forests-20c6690e44e0/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Interpreting Deep Forest through Feature Contribution and MDI Feature Importance",
+          "url": "http://arxiv.org/pdf/2305.00805v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yi-Xiao He",
+            "Shen-Huan Lyu",
+            "Yuan Jiang"
+          ],
+          "publication_date": "2023-05-01"
+        },
+        {
+          "title": "optuna.importance.MeanDecreaseImpurityImportanceEvaluator ...",
+          "url": "https://optuna.readthedocs.io/en/stable/reference/generated/optuna.importance.MeanDecreaseImpurityImportanceEvaluator.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "permutation-importance",
+        "coefficient-magnitudes-in-linear-models",
+        "sobol-indices"
+      ]
+    },
+    {
+      "slug": "coefficient-magnitudes-in-linear-models",
+      "name": "Coefficient Magnitudes (in Linear Models)",
+      "description": "Coefficient Magnitudes assess feature influence in linear models by examining the absolute values of their coefficients. Features with larger absolute coefficients are considered to have a stronger impact on the prediction, while the sign of the coefficient indicates the direction of that influence (positive or negative). This technique provides a straightforward and transparent way to understand the direct linear relationship between each input feature and the model's output.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/linear-model",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/model-specific",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/low",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/metric"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Interpreting which features influence housing price predictions in linear regression, such as identifying that 'number of bedrooms' has a larger positive impact than 'distance to city centre' based on coefficient magnitudes.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Explaining the factors contributing to customer lifetime value (CLV) in a linear model, showing how 'average monthly spend' has a strong positive coefficient, making the model transparent for business stakeholders.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Only valid for linear relationships; it cannot capture complex non-linear patterns or interactions between features."
+        },
+        {
+          "description": "Highly sensitive to feature scaling; features with larger numerical ranges can appear more important even if their true impact is smaller."
+        },
+        {
+          "description": "Can be misleading in the presence of multicollinearity, where correlated features may split importance or have unstable coefficients."
+        },
+        {
+          "description": "Does not imply causation; a strong correlation (large coefficient) does not necessarily mean a causal relationship."
+        }
+      ],
+      "resources": [],
+      "complexity_rating": 1,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "permutation-importance",
+        "mean-decrease-impurity",
+        "sobol-indices"
+      ]
+    },
+    {
+      "slug": "layer-wise-relevance-propagation",
+      "name": "Layer-wise Relevance Propagation",
+      "description": "Layer-wise Relevance Propagation (LRP) explains neural network predictions by working backwards through the network to show how much each input feature contributed to the final decision. It follows a simple conservation rule: the total contribution scores always add up to the original prediction. Starting from the output, LRP distributes 'relevance' backwards through each layer using different rules depending on the layer type. This creates a detailed breakdown showing which input features helped or hindered the prediction, making it easier to understand why the network made a particular decision.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/model-specific",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Identifying which pixels in chest X-rays contribute to pneumonia detection, helping radiologists verify AI diagnoses by highlighting anatomical regions the model considers relevant.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging a neural network's misclassification of handwritten digits by tracing relevance through layers to identify which input pixels caused the error and which network layers amplified it.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations for automated credit scoring decisions by showing which financial features received positive or negative relevance scores, enabling clear regulatory reporting.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires different propagation rules for each layer type, making implementation complex for new architectures."
+        },
+        {
+          "description": "Can produce negative relevance scores which may be difficult to interpret intuitively."
+        },
+        {
+          "description": "Rule selection (LRP-ε, LRP-γ, etc.) significantly affects results and requires domain expertise."
+        },
+        {
+          "description": "Limited to feedforward networks and may not work well with modern architectures like transformers without substantial modifications."
+        }
+      ],
+      "resources": [
+        {
+          "title": "rachtibat/LRP-eXplains-Transformers",
+          "url": "https://github.com/rachtibat/LRP-eXplains-Transformers",
+          "source_type": "software_package"
+        },
+        {
+          "title": "sebastian-lapuschkin/lrp_toolbox",
+          "url": "https://github.com/sebastian-lapuschkin/lrp_toolbox",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Getting started — zennit documentation",
+          "url": "https://zennit.readthedocs.io/en/latest/getting-started.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Layer-wise Relevance Propagation eXplains Transformers (LXT) documentation",
+          "url": "https://lxt.readthedocs.io/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "On Pixel-Wise Explanations for Non-Linear Classifier Decisions by Layer-Wise Relevance Propagation",
+          "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0130140",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sebastian Bach",
+            "Alexander Binder",
+            "Grégoire Montavon",
+            "Frederick Klauschen",
+            "Klaus-Robert Müller",
+            "Wojciech Samek"
+          ],
+          "publication_date": "2015-07-10"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 3,
+      "acronym": "LRP",
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "deeplift",
+        "local-interpretable-model-agnostic-explanations",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "contextual-decomposition",
+      "name": "Contextual Decomposition",
+      "description": "Contextual Decomposition explains LSTM and RNN predictions by decomposing the final hidden state into contributions from individual inputs and their interactions. Unlike simpler attribution methods, it separates the direct contribution of specific words or phrases from the contextual effects of surrounding words. This is particularly useful for understanding how sequential models process language, as it can identify whether a word's influence comes from its individual meaning or from its interaction with nearby words in the sequence.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/recurrent-neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/attribution-methods/model-specific",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing why an LSTM-based spam filter flagged an email by decomposing contributions from individual words ('free', 'urgent') versus their contextual interactions ('free trial' together).",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Understanding how a medical text classifier diagnoses conditions from clinical notes by separating direct symptom mentions from contextual medical reasoning patterns.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations for automated content moderation decisions by showing which words and phrase interactions contributed to toxicity detection.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Primarily designed for LSTM and simple RNN architectures, not suitable for modern transformers or attention-based models."
+        },
+        {
+          "description": "Not widely implemented in standard machine learning libraries, often requiring custom implementation."
+        },
+        {
+          "description": "Computational overhead increases significantly with sequence length and model depth."
+        },
+        {
+          "description": "May not scale well to very complex models or capture all types of feature interactions in deep networks."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Beyond Word Importance: Contextual Decomposition to Extract Interactions from LSTMs",
+          "url": "http://arxiv.org/pdf/1801.05453v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "W. James Murdoch",
+            "Peter J. Liu",
+            "Bin Yu"
+          ],
+          "publication_date": "2018-01-16"
+        },
+        {
+          "title": "FredericGodin/ContextualDecomposition-NLP",
+          "url": "https://github.com/FredericGodin/ContextualDecomposition-NLP",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Interpreting patient-Specific risk prediction using contextual decomposition of BiLSTMs: Application to children with asthma",
+          "url": "https://core.ac.uk/download/294758884.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Alsaad R.",
+            "Boughorbel S.",
+            "Janahi I.",
+            "Malluhi Q."
+          ],
+          "publication_date": "2019-01-01"
+        },
+        {
+          "title": "Towards Hierarchical Importance Attribution: Explaining Compositional Semantics for Neural Sequence Models",
+          "url": "http://arxiv.org/pdf/1911.06194v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xisen Jin",
+            "Zhongyu Wei",
+            "Junyi Du",
+            "Xiangyang Xue",
+            "Xiang Ren"
+          ],
+          "publication_date": "2019-11-08"
+        },
+        {
+          "title": "Efficient Automated Circuit Discovery in Transformers using Contextual Decomposition",
+          "url": "http://arxiv.org/pdf/2407.00886v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Aliyah R. Hsu",
+            "Georgia Zhou",
+            "Yeshwanth Cherapanamjeri",
+            "Yaxuan Huang",
+            "Anobel Y. Odisho",
+            "Peter R. Carroll",
+            "Bin Yu"
+          ],
+          "publication_date": "2024-07-01"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "taylor-decomposition",
+        "influence-functions"
+      ]
+    }
+  ],
+  "count": 4
+}

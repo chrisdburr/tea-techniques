@@ -1,0 +1,105 @@
+{
+  "tag": {
+    "name": "assurance-goal-category/explainability/instance-based/prototypes",
+    "slug": "assurance-goal-category-explainability-instance-based-prototypes",
+    "count": 1,
+    "category": "assurance-goal-category"
+  },
+  "techniques": [
+    {
+      "slug": "prototype-and-criticism-models",
+      "name": "Prototype and Criticism Models",
+      "description": "Prototype and Criticism Models provide data understanding by identifying two complementary sets of examples: prototypes represent the most typical instances that best summarise common patterns in the data, whilst criticisms are outliers or edge cases that are poorly represented by the prototypes. For example, in a dataset of customer transactions, prototypes might be the most representative buying patterns (frequent small purchases, occasional large purchases), whilst criticisms could be unusual behaviors (bulk buyers, one-time high-value customers). This dual approach reveals both what is normal and what is exceptional, helping understand data coverage and model blind spots.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/instance-based/prototypes",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/structured-output",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing medical imaging datasets to identify prototype scans that represent typical healthy tissue patterns and criticism examples showing rare disease presentations, helping radiologists understand what the model considers 'normal' versus cases requiring special attention.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Evaluating credit scoring models by finding prototype borrowers who represent typical low-risk profiles and criticism cases showing unusual but legitimate financial patterns that the model might misclassify, ensuring fair treatment of edge cases.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Evaluating representation bias in hiring datasets by examining whether prototypes systematically exclude certain demographic groups and criticisms disproportionately represent minorities, revealing data collection inequities.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Selection of prototypes and criticisms is highly dependent on the choice of distance metric or similarity measure, which may not capture all meaningful relationships in the data."
+        },
+        {
+          "description": "Computational complexity can become prohibitive for very large datasets, as the method often requires pairwise comparisons or optimisation over the entire dataset."
+        },
+        {
+          "description": "The number of prototypes and criticisms to select is typically a hyperparameter that requires domain expertise to set appropriately."
+        },
+        {
+          "description": "Results may not generalise well if the training data distribution differs significantly from the deployment data distribution."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Examples are not Enough, Learn to Criticize! Criticism for Interpretability",
+          "url": "https://proceedings.neurips.cc/paper/2016/file/5680522b8e2bb01943234bce7bf84534-Paper.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Been Kim",
+            "Rajiv Khanna",
+            "Oluwasanmi O. Koyejo"
+          ],
+          "publication_date": "2016-12-05"
+        },
+        {
+          "title": "SeldonIO/alibi",
+          "url": "https://github.com/SeldonIO/alibi",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Prototype Selection for Interpretable Classification",
+          "url": "http://arxiv.org/pdf/1202.5933v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Oscar Reyes",
+            "Carlos Morell",
+            "Sebastian Ventura"
+          ],
+          "publication_date": "2012-02-27"
+        },
+        {
+          "title": "Alibi Explain Documentation",
+          "url": "https://docs.seldon.io/projects/alibi/en/stable/",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "neuron-activation-analysis",
+        "concept-activation-vectors"
+      ]
+    }
+  ],
+  "count": 1
+}

@@ -1,0 +1,273 @@
+{
+  "tag": {
+    "name": "assurance-goal-category/explainability/representation-analysis/concept-identification",
+    "slug": "assurance-goal-category-explainability-representation-analysis-concept-identification",
+    "count": 2,
+    "category": "assurance-goal-category"
+  },
+  "techniques": [
+    {
+      "slug": "neuron-activation-analysis",
+      "name": "Neuron Activation Analysis",
+      "description": "Neuron activation analysis examines the firing patterns of individual neurons in neural networks by probing them with diverse inputs and analysing their activation responses. This technique helps understand what concepts, features, or patterns different neurons have learned to recognise, providing insights into the model's internal representations. For large language models, this can reveal neurons specialised for linguistic concepts, semantic categories, or even potentially harmful patterns, enabling targeted interventions and deeper model understanding.",
+      "assurance_goals": [
+        "Explainability",
+        "Safety",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "applicable-models/llm",
+        "applicable-models/transformer",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/fairness",
+        "data-requirements/access-to-model-internals",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualisation",
+        "explanatory-scope/local",
+        "explanatory-scope/global",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/testing",
+        "lifecycle-stage/monitoring",
+        "technique-type/algorithmic",
+        "assurance-goal-category/explainability/representation-analysis/concept-identification",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/property/comprehensibility"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing GPT-based models to identify specific neurons that activate on toxic or harmful content, enabling targeted interventions to reduce model toxicity whilst preserving general language capabilities for safer AI deployment.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Examining activation patterns in multilingual language models to detect neurons that exhibit systematic biases when processing text from different linguistic communities, revealing implicit representation inequalities that could affect downstream applications.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Investigating individual neurons in medical language models to understand which clinical concepts and medical knowledge representations drive diagnostic suggestions, enabling healthcare professionals to validate the model's medical reasoning pathways.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Many neurons exhibit polysemantic behaviour, representing multiple unrelated concepts simultaneously, making it difficult to assign clear interpretable meanings to individual neural units."
+        },
+        {
+          "description": "Important model behaviours are often distributed across many neurons rather than localised in single units, requiring analysis of neural circuits and interactions that can be exponentially complex."
+        },
+        {
+          "description": "Computational costs scale dramatically with modern large language models containing billions of parameters, making comprehensive neuron-by-neuron analysis prohibitively expensive for complete model understanding."
+        },
+        {
+          "description": "Neuron activation patterns are highly context-dependent, with the same neuron potentially serving different roles based on surrounding input context, complicating consistent interpretation across diverse scenarios."
+        },
+        {
+          "description": "Interpretation of activation patterns often relies on subjective human analysis without rigorous validation methods, potentially leading to confirmation bias or misattribution of neural functions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "jalammar/ecco",
+          "url": "https://github.com/jalammar/ecco",
+          "source_type": "software_package"
+        },
+        {
+          "title": "NeuRel-Attack: Neuron Relearning for Safety Disalignment in Large Language Models",
+          "url": "http://arxiv.org/pdf/2504.21053v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yi Zhou",
+            "Wenpeng Xing",
+            "Dezhang Kong",
+            "Changting Lin",
+            "Meng Han"
+          ],
+          "publication_date": "2025-04-29"
+        },
+        {
+          "title": "On the Value of Labeled Data and Symbolic Methods for Hidden Neuron Activation Analysis",
+          "url": "http://arxiv.org/pdf/2404.13567v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Abhilekha Dalal",
+            "Rushrukh Rayan",
+            "Adrita Barua",
+            "Eugene Y. Vasserman",
+            "Md Kamruzzaman Sarker",
+            "Pascal Hitzler"
+          ],
+          "publication_date": "2024-04-21"
+        },
+        {
+          "title": "On the Value of Labeled Data and Symbolic Methods for Hidden Neuron\n  Activation Analysis",
+          "url": "http://arxiv.org/abs/2404.13567",
+          "source_type": "technical_paper",
+          "authors": [
+            "Barua, Adrita",
+            "Dalal, Abhilekha",
+            "Hitzler, Pascal",
+            "Rayan, Rushrukh",
+            "Sarker, Md Kamruzzaman",
+            "Vasserman, Eugene Y."
+          ],
+          "publication_date": "2024-04-21"
+        },
+        {
+          "title": "Ecco",
+          "url": "https://ecco.readthedocs.io/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Tracing the Thoughts in Language Models",
+          "url": "https://www.anthropic.com/news/tracing-thoughts-language-model",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "prototype-and-criticism-models",
+        "concept-activation-vectors"
+      ]
+    },
+    {
+      "slug": "concept-activation-vectors",
+      "name": "Concept Activation Vectors",
+      "description": "Concept Activation Vectors (CAVs), also known as Testing with Concept Activation Vectors (TCAV), identify mathematical directions in neural network representation space that correspond to human-understandable concepts such as 'stripes', 'young', or 'medical equipment'. The technique works by finding linear directions that separate activations of concept examples from non-concept examples, then measuring how much these concept directions influence the model's predictions. This provides quantitative answers to questions like 'How much does the concept of youth affect this model's hiring decisions?' enabling systematic bias detection and model understanding.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "applicable-models/transformer",
+        "applicable-models/cnn",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualization",
+        "explanatory-scope/local",
+        "explanatory-scope/global",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-knowledge",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use/auditing",
+        "technique-type/algorithmic",
+        "assurance-goal-category/explainability/representation-analysis/concept-identification",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/causality"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Auditing a medical imaging model to verify it focuses on diagnostic features (like 'tumour characteristics') rather than irrelevant concepts (like 'scanner type' or 'patient positioning') when classifying chest X-rays, ensuring clinical decisions rely on medically relevant information.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Testing whether a hiring algorithm's resume screening decisions are influenced by concepts related to protected characteristics such as 'gender-associated names', 'prestigious universities', or 'employment gaps', enabling systematic bias detection and compliance verification.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Providing regulatory-compliant explanations for financial lending decisions by quantifying how concepts like 'debt-to-income ratio', 'employment stability', and 'credit history length' influence loan approval models, with precise sensitivity scores for audit documentation.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires clearly defined concept examples and non-concept examples, which can be challenging to obtain for abstract or subjective concepts."
+        },
+        {
+          "description": "Assumes that meaningful concept directions exist as linear separable directions in the model's internal representation space, which may not hold for all concepts."
+        },
+        {
+          "description": "Results depend heavily on which network layer is examined, as different layers capture different levels of abstraction and concept representation."
+        },
+        {
+          "description": "Computational cost grows significantly with model size and number of concepts tested, though recent advances like FastCAV address this limitation."
+        },
+        {
+          "description": "Interpretation requires domain expertise to define meaningful concepts and understand the significance of sensitivity scores in practical contexts."
+        }
+      ],
+      "resources": [
+        {
+          "title": "FastCAV: Efficient Computation of Concept Activation Vectors for Explaining Deep Neural Networks",
+          "url": "http://arxiv.org/pdf/2505.17883v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Laines Schmalwasser",
+            "Niklas Penzel",
+            "Joachim Denzler",
+            "Julia Niebling"
+          ],
+          "publication_date": "2025-05-23"
+        },
+        {
+          "title": "Concept Distillation: Leveraging Human-Centered Explanations for Model Improvement",
+          "url": "http://arxiv.org/pdf/2311.15303v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Avani Gupta",
+            "Saurabh Saini",
+            "P J Narayanan"
+          ],
+          "publication_date": "2023-11-26"
+        },
+        {
+          "title": "Post-Hoc Concept Disentanglement: From Correlated to Isolated Concept Representations",
+          "url": "http://arxiv.org/pdf/2503.05522v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Eren Erogullari",
+            "Sebastian Lapuschkin",
+            "Wojciech Samek",
+            "Frederik Pahde"
+          ],
+          "publication_date": "2025-03-07"
+        },
+        {
+          "title": "Concept Gradient: Concept-based Interpretation Without Linear Assumption",
+          "url": "http://arxiv.org/pdf/2208.14966v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andrew Bai",
+            "Chih-Kuan Yeh",
+            "Pradeep Ravikumar",
+            "Neil Y. C. Lin",
+            "Cho-Jui Hsieh"
+          ],
+          "publication_date": "2022-08-31"
+        },
+        {
+          "title": "SurroCBM: Concept Bottleneck Surrogate Models for Generative Post-hoc Explanation",
+          "url": "http://arxiv.org/pdf/2310.07698v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Bo Pan",
+            "Zhenke Liu",
+            "Yifei Zhang",
+            "Liang Zhao"
+          ],
+          "publication_date": "2023-10-11"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "acronym": "CAVs",
+      "related_techniques": [
+        "prototype-and-criticism-models",
+        "neuron-activation-analysis"
+      ]
+    }
+  ],
+  "count": 2
+}

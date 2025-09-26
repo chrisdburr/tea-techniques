@@ -1,0 +1,775 @@
+{
+  "tag": {
+    "name": "assurance-goal-category/explainability/property/sparsity",
+    "slug": "assurance-goal-category-explainability-property-sparsity",
+    "count": 8,
+    "category": "assurance-goal-category"
+  },
+  "techniques": [
+    {
+      "slug": "gradient-weighted-class-activation-mapping",
+      "name": "Gradient-weighted Class Activation Mapping",
+      "description": "Grad-CAM creates visual heatmaps showing which regions of an image a convolutional neural network focuses on when making a specific classification. Unlike pixel-level techniques, Grad-CAM produces coarser region-based explanations by using gradients from the predicted class to weight the CNN's final feature maps, then projecting these weighted activations back to create an overlay on the original image. This provides intuitive visual explanations of where the model is 'looking' for evidence of different classes.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/cnn",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/visualization-methods/activation-maps",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/fairness",
+        "data-requirements/access-to-model-internals",
+        "data-type/image",
+        "evidence-type/visualization",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Validating that a melanoma detection model focuses on the actual skin lesion rather than surrounding healthy skin, medical equipment, or artifacts when making cancer/benign classifications.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging an autonomous vehicle's traffic sign recognition system by visualising whether the model correctly focuses on the sign itself rather than background objects, shadows, or irrelevant visual elements.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Auditing a medical imaging system for racial bias by examining whether diagnostic predictions inappropriately focus on skin tone regions rather than actual pathological features, ensuring equitable healthcare AI deployment.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires access to the CNN's internal feature maps and gradients, limiting use to white-box scenarios."
+        },
+        {
+          "description": "Resolution is constrained by the final convolutional layer's feature map size, producing coarser localisation than pixel-level methods."
+        },
+        {
+          "description": "Only applicable to CNN architectures with clearly defined convolutional layers, not suitable for other neural network types."
+        },
+        {
+          "description": "May highlight regions that correlate with the class but aren't causally important for the model's decision-making process."
+        }
+      ],
+      "resources": [
+        {
+          "title": "jacobgil/pytorch-grad-cam",
+          "url": "https://github.com/jacobgil/pytorch-grad-cam",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Grad-CAM: Visualize class activation maps with Keras, TensorFlow ...",
+          "url": "https://pyimagesearch.com/2020/03/09/grad-cam-visualize-class-activation-maps-with-keras-tensorflow-and-deep-learning/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "kazuto1011/grad-cam-pytorch",
+          "url": "https://github.com/kazuto1011/grad-cam-pytorch",
+          "source_type": "software_package"
+        },
+        {
+          "title": "A Tutorial on Explainable Image Classification for Dementia Stages Using Convolutional Neural Network and Gradient-weighted Class Activation Mapping",
+          "url": "https://www.semanticscholar.org/paper/8b1139cb06cfe5ba69e2fd05e1450b43df031a02",
+          "source_type": "documentation",
+          "authors": [
+            "Kevin Kam Fung Yuen"
+          ]
+        },
+        {
+          "title": "A Guide to Grad-CAM in Deep Learning - Analytics Vidhya",
+          "url": "https://www.analyticsvidhya.com/blog/2023/12/grad-cam-in-deep-learning/",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "acronym": "Grad-CAM",
+      "related_techniques": [
+        "saliency-maps",
+        "occlusion-sensitivity"
+      ]
+    },
+    {
+      "slug": "occlusion-sensitivity",
+      "name": "Occlusion Sensitivity",
+      "description": "Occlusion sensitivity tests which parts of the input are important by occluding (masking or removing) them and seeing how the model's prediction changes. For example, portions of an image can be covered up in a sliding window fashion; if the model's confidence drops significantly when a certain region is occluded, that region was important for the prediction.",
+      "assurance_goals": [
+        "Explainability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/sparsity",
+        "data-requirements/no-special-requirements",
+        "data-type/image",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing which regions of a chest X-ray are critical for pneumonia detection by systematically covering different areas with grey patches and measuring how much the model's confidence drops for each occluded region.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Evaluating whether a facial recognition system relies on specific facial features by masking eyes, nose, mouth, or other regions to identify which areas cause the biggest drop in recognition accuracy.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive as it requires running inference multiple times for each region tested, scaling poorly with input size."
+        },
+        {
+          "description": "Choice of occlusion size and shape can significantly bias results - too small may miss important features, too large may occlude multiple relevant regions simultaneously."
+        },
+        {
+          "description": "Cannot capture interactions between multiple regions that jointly contribute to the prediction but are individually less important."
+        },
+        {
+          "description": "Results may be misleading if the model adapts to occlusion patterns or if occluded regions are filled with unrealistic pixel values."
+        }
+      ],
+      "resources": [
+        {
+          "title": "kazuto1011/grad-cam-pytorch",
+          "url": "https://github.com/kazuto1011/grad-cam-pytorch",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Occlusion Sensitivity Analysis with Augmentation Subspace Perturbation in Deep Feature Space",
+          "url": "http://arxiv.org/pdf/2311.15022v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Pedro Valois",
+            "Koichiro Niinuma",
+            "Kazuhiro Fukui"
+          ],
+          "publication_date": "2023-11-25"
+        },
+        {
+          "title": "Occlusion Sensitivity — tf-explain documentation",
+          "url": "https://tf-explain.readthedocs.io/en/latest/methods.html#occlusion-sensitivity",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Adaptive occlusion sensitivity analysis for visually explaining video recognition networks",
+          "url": "http://arxiv.org/pdf/2207.12859v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Tomoki Uchiyama",
+            "Naoya Sogi",
+            "Satoshi Iizuka",
+            "Koichiro Niinuma",
+            "Kazuhiro Fukui"
+          ],
+          "publication_date": "2022-07-26"
+        },
+        {
+          "title": "sicara/tf-explain",
+          "url": "https://github.com/sicara/tf-explain",
+          "source_type": "software_package"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "saliency-maps",
+        "gradient-weighted-class-activation-mapping"
+      ]
+    },
+    {
+      "slug": "prototype-and-criticism-models",
+      "name": "Prototype and Criticism Models",
+      "description": "Prototype and Criticism Models provide data understanding by identifying two complementary sets of examples: prototypes represent the most typical instances that best summarise common patterns in the data, whilst criticisms are outliers or edge cases that are poorly represented by the prototypes. For example, in a dataset of customer transactions, prototypes might be the most representative buying patterns (frequent small purchases, occasional large purchases), whilst criticisms could be unusual behaviors (bulk buyers, one-time high-value customers). This dual approach reveals both what is normal and what is exceptional, helping understand data coverage and model blind spots.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/instance-based/prototypes",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/structured-output",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing medical imaging datasets to identify prototype scans that represent typical healthy tissue patterns and criticism examples showing rare disease presentations, helping radiologists understand what the model considers 'normal' versus cases requiring special attention.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Evaluating credit scoring models by finding prototype borrowers who represent typical low-risk profiles and criticism cases showing unusual but legitimate financial patterns that the model might misclassify, ensuring fair treatment of edge cases.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Evaluating representation bias in hiring datasets by examining whether prototypes systematically exclude certain demographic groups and criticisms disproportionately represent minorities, revealing data collection inequities.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Selection of prototypes and criticisms is highly dependent on the choice of distance metric or similarity measure, which may not capture all meaningful relationships in the data."
+        },
+        {
+          "description": "Computational complexity can become prohibitive for very large datasets, as the method often requires pairwise comparisons or optimisation over the entire dataset."
+        },
+        {
+          "description": "The number of prototypes and criticisms to select is typically a hyperparameter that requires domain expertise to set appropriately."
+        },
+        {
+          "description": "Results may not generalise well if the training data distribution differs significantly from the deployment data distribution."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Examples are not Enough, Learn to Criticize! Criticism for Interpretability",
+          "url": "https://proceedings.neurips.cc/paper/2016/file/5680522b8e2bb01943234bce7bf84534-Paper.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Been Kim",
+            "Rajiv Khanna",
+            "Oluwasanmi O. Koyejo"
+          ],
+          "publication_date": "2016-12-05"
+        },
+        {
+          "title": "SeldonIO/alibi",
+          "url": "https://github.com/SeldonIO/alibi",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Prototype Selection for Interpretable Classification",
+          "url": "http://arxiv.org/pdf/1202.5933v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Oscar Reyes",
+            "Carlos Morell",
+            "Sebastian Ventura"
+          ],
+          "publication_date": "2012-02-27"
+        },
+        {
+          "title": "Alibi Explain Documentation",
+          "url": "https://docs.seldon.io/projects/alibi/en/stable/",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "neuron-activation-analysis",
+        "concept-activation-vectors"
+      ]
+    },
+    {
+      "slug": "contrastive-explanation-method",
+      "name": "Contrastive Explanation Method",
+      "description": "The Contrastive Explanation Method (CEM) explains model decisions by generating contrastive examples that reveal what makes a prediction distinctive. It identifies 'pertinent negatives' (minimal features that could be removed to change the prediction) and 'pertinent positives' (minimal features that must be present to maintain the prediction). This approach helps users understand not just what led to a decision, but what would need to change to achieve a different outcome, providing actionable insights for decision-making.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/instance-based/counterfactual",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/counterfactual-validity",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Explaining loan application rejections by showing that removing recent late payments (pertinent negative) or adding £5,000 more annual income (pertinent positive) would change the decision to approval, giving applicants clear actionable guidance.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Analysing medical diagnosis models by identifying that removing a specific symptom combination would change a high-risk classification to low-risk, helping clinicians understand the critical diagnostic factors.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent hiring decisions by showing job candidates exactly which qualifications (pertinent positives) they need to acquire or which application elements (pertinent negatives) might be hindering their success.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive as it requires solving an optimisation problem for each individual instance to find minimal perturbations."
+        },
+        {
+          "description": "Results can be highly sensitive to hyperparameter settings, requiring careful tuning to produce meaningful explanations."
+        },
+        {
+          "description": "May generate unrealistic or impossible contrastive examples if constraints are not properly specified, leading to impractical recommendations."
+        },
+        {
+          "description": "Limited to scenarios where feature perturbations are meaningful and actionable, making it less suitable for immutable characteristics or highly constrained domains."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Explanations based on the Missing: Towards Contrastive Explanations with Pertinent Negatives",
+          "url": "http://arxiv.org/pdf/1802.07623v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Amit Dhurandhar",
+            "Pin-Yu Chen",
+            "Ronny Luss",
+            "Chun-Chen Tu",
+            "Paishun Ting",
+            "Karthikeyan Shanmugam",
+            "Payel Das"
+          ],
+          "publication_date": "2018-02-21"
+        },
+        {
+          "title": "Interpretable Machine Learning",
+          "url": "https://christophm.github.io/interpretable-ml-book/interpretability.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Benchmarking and survey of explanation methods for black box models",
+          "url": "https://core.ac.uk/download/599106733.pdf",
+          "source_type": "documentation",
+          "authors": [
+            "Bodria Francesco",
+            "Giannotti Fosca",
+            "Guidotti R.",
+            "Naretto Francesca",
+            "Pedreschi Dino",
+            "Rinzivillo S."
+          ],
+          "publication_date": "2023-01-01"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "acronym": "CEM",
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "deeplift",
+        "layer-wise-relevance-propagation",
+        "local-interpretable-model-agnostic-explanations",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "anchor",
+      "name": "ANCHOR",
+      "description": "ANCHOR generates high-precision if-then rules that explain individual predictions by identifying the minimal set of feature conditions that guarantee a specific prediction with high confidence. It searches for 'anchor' conditions (e.g., 'age > 30 AND income < £50k') that ensure the model gives the same prediction at least 95% of the time when those conditions are met. This creates human-readable rules that users can trust as sufficient conditions for understanding why a particular decision was made.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/surrogate-models/rule-extraction",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Explaining loan application decisions with rules like 'IF credit_score > 650 AND debt_ratio < 0.4 THEN approval = 95% likely', giving applicants clear, actionable conditions they can understand and potentially improve.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Generating diagnostic rules for medical predictions such as 'IF fever > 38.5°C AND white_blood_cells > 12,000 THEN infection = 92% likely', helping clinicians validate automated diagnoses with trusted clinical indicators.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating transparent hiring decisions with rules like 'IF experience >= 3_years AND degree = relevant THEN hire = 89% likely', providing clear justification for recruitment decisions that can be audited for fairness.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Limited to local explanations for individual instances, cannot provide global insights about overall model behaviour."
+        },
+        {
+          "description": "Requires discretisation of continuous features, which can lose important nuanced information and create arbitrary thresholds."
+        },
+        {
+          "description": "May fail to find suitable anchor rules if precision requirements are too strict or if the prediction space is highly complex."
+        },
+        {
+          "description": "Computationally expensive as it requires extensive sampling to validate rule precision, especially for high-dimensional data."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Anchors: High-Precision Model-Agnostic Explanations",
+          "url": "https://homes.cs.washington.edu/~marcotcr/aaai18.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Marco Tulio Ribeiro",
+            "Sameer Singh",
+            "Carlos Guestrin"
+          ],
+          "publication_date": "2018-01-01"
+        },
+        {
+          "title": "marcotcr/anchor",
+          "url": "https://github.com/marcotcr/anchor",
+          "source_type": "software_package"
+        },
+        {
+          "title": "alibi/alibi",
+          "url": "https://github.com/SeldonIO/alibi",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Interpretable Machine Learning - Anchors",
+          "url": "https://christophm.github.io/interpretable-ml-book/anchors.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "deeplift",
+        "layer-wise-relevance-propagation",
+        "local-interpretable-model-agnostic-explanations",
+        "contrastive-explanation-method"
+      ]
+    },
+    {
+      "slug": "rulefit",
+      "name": "RuleFit",
+      "description": "RuleFit is a method that creates an interpretable model by combining linear terms with decision rules. It first extracts potential rules from ensemble trees, then builds a sparse linear model where those rules (binary conditions) and original features are used as predictors, with regularization to keep the model simple. The final model is a linear combination of a small set of rules and original features, balancing interpretability with predictive power.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/surrogate-models/rule-extraction",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Building customer churn prediction models with rules like 'IF contract_length < 12_months AND support_calls > 5 THEN churn_risk = high', allowing marketing teams to understand and act on the key drivers of customer attrition.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating credit scoring models that combine traditional linear factors (income, age) with interpretable rules (IF recent_missed_payments = 0 AND account_age > 2_years THEN creditworthy), providing transparent lending decisions.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Developing regulatory-compliant medical diagnosis models where treatment recommendations combine clinical measurements with clear decision rules (IF blood_pressure > 140 AND diabetes = true THEN high_risk), enabling audit trails for healthcare decisions.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Can generate large numbers of rules even with regularisation, potentially overwhelming users and reducing practical interpretability."
+        },
+        {
+          "description": "Performance may be inferior to complex ensemble methods when rule complexity is constrained for interpretability."
+        },
+        {
+          "description": "Rule extraction quality depends heavily on the underlying tree ensemble, which may miss important feature interactions if not properly configured."
+        },
+        {
+          "description": "Requires careful hyperparameter tuning to balance between model complexity and interpretability, with no universal optimal setting."
+        }
+      ],
+      "resources": [
+        {
+          "title": "christophM/rulefit",
+          "url": "https://github.com/christophM/rulefit",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Tree Ensembles with Rule Structured Horseshoe Regularization",
+          "url": "http://arxiv.org/pdf/1702.05008v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Malte Nalenz",
+            "Mattias Villani"
+          ],
+          "publication_date": "2017-02-16"
+        },
+        {
+          "title": "Safe RuleFit: Learning Optimal Sparse Rule Model by Meta Safe Screening",
+          "url": "http://arxiv.org/pdf/1810.01683v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hiroki Kato",
+            "Hiroyuki Hanada",
+            "Ichiro Takeuchi"
+          ],
+          "publication_date": "2018-10-03"
+        },
+        {
+          "title": "csinva/imodels",
+          "url": "https://github.com/csinva/imodels",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Getting More From Regression Models with RuleFit | Towards Data ...",
+          "url": "https://towardsdatascience.com/getting-more-from-regression-models-with-rulefit-2e6be8d77432/",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "ridge-regression-surrogates",
+        "model-distillation"
+      ]
+    },
+    {
+      "slug": "generalized-additive-models",
+      "name": "Generalized Additive Models",
+      "description": "An intrinsically interpretable modelling technique that extends linear models by allowing flexible, nonlinear relationships between individual features and the target whilst maintaining the additive structure that preserves transparency. Each feature's effect is modelled separately as a smooth function, visualised as a curve showing how the feature influences predictions across its range. GAMs achieve this through spline functions or other smoothing techniques that capture complex patterns in individual variables without interactions, making them particularly valuable for domains requiring both predictive accuracy and model interpretability.",
+      "assurance_goals": [
+        "Transparency",
+        "Explainability",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/gam",
+        "applicable-models/linear-model",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+        "assurance-goal-category/explainability/visualization-methods/feature-relationships",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/reliability",
+        "data-requirements/labelled-data",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualisation",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/project-design",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Predicting hospital readmission risk with a GAM that provides transparent, auditable risk assessments by showing how readmission probability varies nonlinearly with patient age, blood pressure, and medication adherence, enabling clinicians to understand and trust the model's reasoning for regulatory compliance.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Building a credit scoring model that explains loan decisions to applicants by visualising how income, credit history, and debt-to-income ratio individually affect approval likelihood, providing clear feature attributions that satisfy fair lending requirements and regulatory explainability mandates.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Developing an environmental monitoring system that reliably predicts air quality using GAMs to model the smooth, nonlinear relationships between weather variables, ensuring stable predictions across seasonal variations whilst maintaining interpretable relationships that environmental scientists can validate.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Cannot capture complex interactions between features unless explicitly modelled, limiting their ability to represent relationships where variables influence each other."
+        },
+        {
+          "description": "Setup requires domain expertise to decide which features need nonlinear treatment and appropriate smoothing parameters, making model specification more challenging than linear models."
+        },
+        {
+          "description": "Fitting process is computationally more expensive than linear models, particularly for large datasets with many features requiring smoothing."
+        },
+        {
+          "description": "Risk of overfitting individual feature relationships if smoothing parameters are not properly regularised, potentially reducing generalisation performance."
+        },
+        {
+          "description": "Interpretation complexity increases with the number of nonlinear features, as understanding multiple smooth curves simultaneously becomes cognitively demanding."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Generalized Additive Models",
+          "url": "https://hastie.su.domains/Papers/gam.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Trevor Hastie",
+            "Robert Tibshirani"
+          ],
+          "publication_date": "1986-01-01"
+        },
+        {
+          "title": "pyGAM: Generalized Additive Models in Python",
+          "url": "https://github.com/dswah/pyGAM",
+          "source_type": "software_package"
+        },
+        {
+          "title": "mgcv: Mixed GAM Computation Vehicle with Automatic Smoothness Estimation",
+          "url": "https://cran.r-project.org/web/packages/mgcv/index.html",
+          "source_type": "software_package"
+        },
+        {
+          "title": "A Tour of pyGAM — pyGAM documentation",
+          "url": "https://pygam.readthedocs.io/en/latest/notebooks/tour_of_pygam.html",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "acronym": "GAMs",
+      "related_techniques": [
+        "monotonicity-constraints",
+        "intrinsically-interpretable-models"
+      ]
+    },
+    {
+      "slug": "model-pruning",
+      "name": "Model Pruning",
+      "description": "Model pruning systematically removes less important weights, neurons, or entire layers from neural networks to create smaller, more efficient models whilst maintaining performance. This process involves iterative removal based on importance criteria (weight magnitudes, gradient information, activation patterns) followed by fine-tuning. Pruning can be structured (removing entire neurons/channels) or unstructured (removing individual weights), with structured pruning providing greater computational benefits and interpretability through simplified architectures.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/model-simplification/pruning",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-optimization",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Compressing a medical imaging model from 100MB to 15MB for deployment on edge devices in remote clinics, enabling healthcare professionals to audit the remaining critical feature detectors and understand which anatomical patterns drive diagnoses whilst maintaining diagnostic accuracy.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Pruning a financial fraud detection model by 70% to eliminate redundant pathways that amplify noise, creating a more robust system that maintains consistent predictions across different transaction types and reduces false positives during market volatility.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Reducing an autonomous vehicle perception model to ensure predictable inference times under 50ms for safety-critical decisions, removing non-essential neurons to guarantee consistent computational behaviour whilst maintaining object detection accuracy for pedestrian safety.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Determining optimal pruning ratios requires extensive experimentation as over-pruning can cause dramatic accuracy degradation, whilst under-pruning provides minimal benefits, making the process time-consuming and resource-intensive."
+        },
+        {
+          "description": "Structured pruning often requires specific hardware or software framework support to realise computational benefits, limiting deployment flexibility and potentially necessitating model architecture changes."
+        },
+        {
+          "description": "Pruned models may exhibit reduced robustness to out-of-distribution inputs or adversarial attacks, as removing neurons can eliminate defensive redundancy that helped handle edge cases."
+        },
+        {
+          "description": "The iterative pruning and fine-tuning process can be computationally expensive, sometimes requiring more resources than training the original model, particularly for large-scale networks."
+        },
+        {
+          "description": "Pruning criteria based on weight magnitudes or gradients may not align with interpretability goals, potentially removing neurons that contribute to model transparency whilst retaining complex, opaque pathways."
+        }
+      ],
+      "resources": [
+        {
+          "title": "horseee/LLM-Pruner",
+          "url": "https://github.com/horseee/LLM-Pruner",
+          "source_type": "software_package",
+          "description": "Structural pruning tool for large language models supporting Llama, BLOOM, and other LLMs with three-stage compression process requiring only 50,000 training samples for post-training recovery."
+        },
+        {
+          "title": "Pruning Quickstart — Neural Network Intelligence",
+          "url": "https://nni.readthedocs.io/en/stable/tutorials/pruning_quick_start.html",
+          "source_type": "tutorial",
+          "description": "Step-by-step tutorial for implementing model pruning using Microsoft's NNI toolkit, covering basic usage, pruning algorithms, and practical examples for neural network compression."
+        },
+        {
+          "title": "Overview of NNI Model Pruning — Neural Network Intelligence",
+          "url": "https://nni.readthedocs.io/en/stable/compression/pruning.html",
+          "source_type": "documentation",
+          "description": "Comprehensive documentation for NNI's pruning capabilities covering structured and unstructured pruning strategies, supported algorithms, and integration with popular deep learning frameworks."
+        },
+        {
+          "title": "coldlarry/YOLOv3-complete-pruning",
+          "url": "https://github.com/coldlarry/YOLOv3-complete-pruning",
+          "source_type": "software_package",
+          "description": "Complete pruning implementation for YOLOv3 object detection models demonstrating computer vision model compression with minimal accuracy loss for real-time inference applications."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "model-distillation"
+      ]
+    }
+  ],
+  "count": 8
+}

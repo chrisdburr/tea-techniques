@@ -1,0 +1,581 @@
+{
+  "goal": "reliability",
+  "dimension": "uncertainty-quantification",
+  "subcategories": [],
+  "techniques": [
+    {
+      "slug": "prediction-intervals",
+      "name": "Prediction Intervals",
+      "description": "Prediction intervals provide a range of plausible values around a model's prediction, expressing uncertainty as 'the true value will likely fall between X and Y with Z% confidence'. For example, instead of predicting 'house price: £300,000', a prediction interval might say 'house price: £280,000 to £320,000 with 95% confidence'. This technique works by calculating upper and lower bounds that account for both model uncertainty (how confident the model is) and inherent randomness in the data. Prediction intervals are crucial for informed decision-making, as they help users understand the reliability and precision of predictions, enabling better risk assessment and planning.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/prediction-interval",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Providing realistic ranges for medical diagnosis predictions, such as 'patient survival time: 8-14 months with 90% confidence', enabling doctors to make informed treatment decisions and communicate uncertainty to patients and families.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Communicating uncertainty in automated loan approval systems by showing 'credit score prediction: 650-720 with 95% confidence' rather than a single score, helping loan officers understand prediction reliability and make transparent decisions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring consistent prediction uncertainty across demographic groups in hiring algorithms, verifying that prediction intervals have similar widths for different protected groups to avoid unfair confidence disparities.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Relies on assumptions about the error distribution (often normality) which may not hold in practice, leading to inaccurate interval coverage when data exhibits heavy tails, skewness, or other non-standard patterns."
+        },
+        {
+          "description": "Can be overconfident if the underlying model is poorly calibrated, producing intervals that are too narrow and fail to capture the true prediction uncertainty."
+        },
+        {
+          "description": "Vulnerable to distribution shift between training and deployment data, where intervals calculated on historical data may not reflect uncertainty in new, unseen conditions."
+        },
+        {
+          "description": "May require careful hyperparameter tuning and validation to achieve desired coverage rates, particularly when using advanced methods like conformal prediction or quantile regression."
+        },
+        {
+          "description": "Computational overhead increases when generating intervals for large datasets or complex models, especially when using resampling-based methods like bootstrapping."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn-contrib/MAPIE",
+          "url": "https://github.com/scikit-learn-contrib/MAPIE",
+          "source_type": "software_package",
+          "description": "Open-source Python library for quantifying uncertainties using conformal prediction techniques, compatible with scikit-learn, TensorFlow, and PyTorch"
+        },
+        {
+          "title": "MAPIE - Model Agnostic Prediction Interval Estimator",
+          "url": "https://mapie.readthedocs.io/",
+          "source_type": "documentation",
+          "description": "Official documentation for MAPIE library implementing distribution-free uncertainty estimates for regression and classification tasks"
+        },
+        {
+          "title": "valeman/awesome-conformal-prediction",
+          "url": "https://github.com/valeman/awesome-conformal-prediction",
+          "source_type": "software_package",
+          "description": "Curated collection of conformal prediction resources including videos, tutorials, books, papers, and open-source libraries"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "monte-carlo-dropout",
+        "quantile-regression",
+        "conformal-prediction",
+        "deep-ensembles",
+        "bootstrapping",
+        "jackknife-resampling"
+      ]
+    },
+    {
+      "slug": "quantile-regression",
+      "name": "Quantile Regression",
+      "description": "Quantile regression estimates specific percentiles (quantiles) of the target variable rather than just predicting the average outcome. For example, instead of predicting 'average house price = £300,000', it can predict 'there's a 10% chance the price will be below £250,000, 50% chance below £300,000, and 90% chance below £380,000'. This technique reveals how input features affect different parts of the outcome distribution - perhaps property size strongly influences luxury homes (90th percentile) but barely affects budget properties (10th percentile). By capturing the full conditional distribution, quantile regression provides rich uncertainty information and enables robust prediction intervals.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/prediction-interval",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Predicting patient recovery times after surgery by estimating multiple quantiles (e.g., 25th, 50th, 75th percentiles), enabling doctors to communicate realistic timeframes: 'Most patients recover within 2-4 weeks, but some may take up to 8 weeks', providing robust uncertainty estimates for treatment planning.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Revealing how income inequality affects different segments of society by showing how education's impact varies across income quantiles - demonstrating that education benefits high earners much more than low earners, providing transparent insights into systemic inequalities.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring equitable loan amount predictions across demographic groups by verifying that the spread of predicted loan amounts (difference between 90th and 10th percentiles) is consistent across protected groups, preventing discriminatory practices in lending ranges.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally intensive when fitting multiple quantiles simultaneously, especially for large datasets or complex models, as each quantile requires separate optimization."
+        },
+        {
+          "description": "May produce crossing quantiles without proper constraints, where predicted 90th percentile values are lower than 50th percentile values, creating logically inconsistent and unusable prediction intervals."
+        },
+        {
+          "description": "Sensitive to outliers and heavy-tailed distributions, particularly in extreme quantiles (e.g., 5th or 95th percentiles), which can lead to unstable and unreliable estimates."
+        },
+        {
+          "description": "Requires careful selection of quantile levels and may need domain expertise to interpret results meaningfully, as different quantiles may reveal conflicting patterns in feature relationships."
+        },
+        {
+          "description": "Less effective with small datasets where extreme quantiles cannot be reliably estimated due to insufficient data points in the tails of the distribution."
+        }
+      ],
+      "resources": [
+        {
+          "title": "statsmodels/statsmodels",
+          "url": "https://github.com/statsmodels/statsmodels",
+          "source_type": "software_package",
+          "description": "Python package providing comprehensive statistical modeling capabilities including quantile regression alongside descriptive statistics and statistical inference"
+        },
+        {
+          "title": "Quantile Regression in Machine Learning: A Survey",
+          "url": "https://www.semanticscholar.org/paper/01cd143c5a054b85afc9b99d473f84422ace7e05",
+          "source_type": "documentation",
+          "authors": [
+            "Anshul Kumar",
+            "Rajesh Wadhvani",
+            "A. Rasool",
+            "Muktesh Gupta"
+          ],
+          "description": "Comprehensive survey covering quantile regression applications, methods, and developments in machine learning contexts"
+        },
+        {
+          "title": "Tutorial for conformalized quantile regression (CQR) — MAPIE 0.8.5 ...",
+          "url": "https://mapie.readthedocs.io/en/v0.8.5/examples_regression/4-tutorials/plot_cqr_tutorial.html",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Quantile Regression Forest — sklearn_quantile 0.1.1 documentation",
+          "url": "https://sklearn-quantile.readthedocs.io/en/latest/methods.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Quantile machine learning models for python — sklearn_quantile ...",
+          "url": "https://sklearn-quantile.readthedocs.io/",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "monte-carlo-dropout",
+        "prediction-intervals",
+        "conformal-prediction",
+        "deep-ensembles",
+        "bootstrapping",
+        "jackknife-resampling"
+      ]
+    },
+    {
+      "slug": "conformal-prediction",
+      "name": "Conformal Prediction",
+      "description": "Conformal prediction provides mathematically guaranteed uncertainty quantification by creating prediction sets that contain the true outcome with a specified probability (e.g., exactly 95% coverage). The technique works by measuring how 'strange' or 'nonconforming' new predictions are compared to calibration data - if a prediction seems unusual, it gets wider intervals. For example, in medical diagnosis, instead of saying 'likely cancer', it might say 'possible diagnoses: {cancer, benign tumour} with 95% confidence'. This distribution-free method works with any underlying model (neural networks, random forests, etc.) and requires no assumptions about data distribution, making it a robust framework for reliable uncertainty estimates in high-stakes applications.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "data-requirements/calibration-set",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/prediction-interval",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Creating prediction sets for drug discovery that guarantee 95% coverage, such as 'this compound will likely have activity against {target A, target B, target C}', ensuring reliable decision-making in costly experimental validation.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing transparent multi-class predictions in judicial risk assessment by showing all plausible risk categories with guaranteed coverage, enabling judges to see the full range of possibilities rather than just a single point estimate.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring fair uncertainty quantification across demographic groups in college admissions by verifying that prediction set sizes (number of possible outcomes) are consistent across protected groups, preventing discriminatory overconfidence for certain populations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Prediction sets can be unnecessarily wide when nonconformity scores vary greatly across the feature space, leading to conservative intervals that reduce practical utility."
+        },
+        {
+          "description": "Requires a held-out calibration set separate from training data, reducing the amount of data available for model training, which can impact performance on small datasets."
+        },
+        {
+          "description": "Guarantees only hold under the exchangeability assumption - if test data distribution differs significantly from calibration data, coverage guarantees may be violated."
+        },
+        {
+          "description": "For multi-class problems, prediction sets may include many classes when the model is uncertain, making decisions difficult when sets contain opposing outcomes."
+        },
+        {
+          "description": "Computational cost increases with the number of calibration samples, and efficient implementation requires careful design for large-scale or real-time applications."
+        }
+      ],
+      "resources": [
+        {
+          "title": "A tutorial on conformal prediction",
+          "url": "http://arxiv.org/pdf/0706.3188v1",
+          "source_type": "documentation",
+          "authors": [
+            "Glenn Shafer",
+            "Vladimir Vovk"
+          ],
+          "publication_date": "2007-06-21",
+          "description": "Foundational tutorial introducing conformal prediction theory and applications by the method's creators"
+        },
+        {
+          "title": "valeman/awesome-conformal-prediction",
+          "url": "https://github.com/valeman/awesome-conformal-prediction",
+          "source_type": "software_package",
+          "description": "Curated collection of conformal prediction resources including videos, tutorials, books, papers, and open-source libraries"
+        },
+        {
+          "title": "scikit-learn-contrib/MAPIE",
+          "url": "https://github.com/scikit-learn-contrib/MAPIE",
+          "source_type": "software_package",
+          "description": "Python library for uncertainty quantification using conformal prediction across regression, classification, and time series tasks"
+        },
+        {
+          "title": "Tutorial for classification — MAPIE 0.8.6 documentation",
+          "url": "https://mapie.readthedocs.io/en/v0.8.6/examples_classification/4-tutorials/plot_main-tutorial-classification.html",
+          "source_type": "tutorial",
+          "description": "Practical tutorial demonstrating conformal prediction for classification tasks with guaranteed coverage"
+        },
+        {
+          "title": "Conformal Prediction: a Unified Review of Theory and New Challenges",
+          "url": "http://arxiv.org/pdf/2005.07972v2",
+          "source_type": "documentation",
+          "authors": [
+            "Matteo Fontana",
+            "Gianluca Zeni",
+            "Simone Vantini"
+          ],
+          "publication_date": "2020-05-16",
+          "description": "Comprehensive review of conformal prediction theory, recent advances, and emerging challenges in the field"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "monte-carlo-dropout",
+        "prediction-intervals",
+        "quantile-regression",
+        "deep-ensembles",
+        "bootstrapping",
+        "jackknife-resampling"
+      ]
+    },
+    {
+      "slug": "deep-ensembles",
+      "name": "Deep Ensembles",
+      "description": "Deep ensembles combine predictions from multiple neural networks trained independently with different random initializations to capture epistemic uncertainty (model uncertainty). By training several models on the same data with different starting points, the ensemble reveals how much the model's predictions depend on training randomness. The disagreement between ensemble members naturally indicates prediction uncertainty - when models agree, confidence is high; when they disagree, uncertainty is revealed. This approach provides more reliable uncertainty estimates, better out-of-distribution detection, and improved calibration compared to single models.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/prediction-interval",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Improving self-driving car safety by using multiple neural networks to detect obstacles, where disagreement between models signals uncertainty and triggers extra caution or human intervention, providing robust uncertainty quantification for critical decisions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Communicating prediction confidence to medical professionals by showing the range of diagnoses from multiple trained models, enabling doctors to understand when the AI system is uncertain and requires additional human expertise or testing.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Detecting out-of-distribution inputs in financial fraud detection systems where ensemble disagreement signals potentially novel attack patterns that require immediate security team review and system safeguards.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive to train and deploy, requiring multiple complete neural networks which increases training time, memory usage, and inference costs proportionally to ensemble size."
+        },
+        {
+          "description": "May still provide overconfident predictions for inputs far from the training distribution, as all ensemble members can be similarly confident about out-of-distribution examples."
+        },
+        {
+          "description": "Requires careful hyperparameter tuning for each ensemble member to ensure diversity, as identical hyperparameters may lead to similar models that reduce uncertainty estimation quality."
+        },
+        {
+          "description": "Storage and deployment overhead increases linearly with ensemble size, making it challenging to deploy large ensembles in resource-constrained environments or real-time applications."
+        },
+        {
+          "description": "Ensemble predictions may be difficult to interpret individually, as the final decision emerges from averaging multiple models rather than from a single explainable pathway."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles",
+          "url": "https://arxiv.org/abs/1612.01474",
+          "source_type": "technical_paper",
+          "authors": [
+            "Balaji Lakshminarayanan",
+            "Alexander Pritzel",
+            "Charles Blundell"
+          ],
+          "publication_date": "2016-12-05",
+          "description": "Foundational paper introducing deep ensembles for uncertainty estimation in neural networks"
+        },
+        {
+          "title": "ENSTA-U2IS-AI/awesome-uncertainty-deeplearning",
+          "url": "https://github.com/ENSTA-U2IS-AI/awesome-uncertainty-deeplearning",
+          "source_type": "documentation",
+          "description": "Comprehensive collection of research papers, surveys, datasets, and code for uncertainty estimation in deep learning"
+        },
+        {
+          "title": "Deep Ensembles: A Loss Landscape Perspective",
+          "url": "http://arxiv.org/pdf/1912.02757v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Stanislav Fort",
+            "Huiyi Hu",
+            "Balaji Lakshminarayanan"
+          ],
+          "publication_date": "2019-12-05",
+          "description": "Analysis of why deep ensembles work well from the perspective of loss landscape geometry and mode connectivity"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "monte-carlo-dropout",
+        "prediction-intervals",
+        "quantile-regression",
+        "conformal-prediction",
+        "bootstrapping",
+        "jackknife-resampling"
+      ]
+    },
+    {
+      "slug": "jackknife-resampling",
+      "name": "Jackknife Resampling",
+      "description": "Jackknife resampling (also called leave-one-out resampling) assesses model stability and uncertainty by systematically removing one data point at a time and retraining the model on the remaining data. Unlike bootstrapping which samples with replacement, jackknife creates n different models by excluding each of the n data points once. This systematic approach reveals how individual points influence results, provides robust estimates of prediction variance, and identifies unusually influential observations that may be outliers or leverage points affecting model reliability.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/fairness",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/prediction-interval",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating how removing individual countries from a global climate model affects predictions, identifying which regions have outsized influence and providing robust uncertainty estimates for climate projections used in policy decisions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing transparent uncertainty estimates in medical risk prediction by showing how individual patient records influence model predictions, enabling clinicians to understand prediction stability and confidence intervals for treatment decisions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring fair model evaluation in hiring algorithms by systematically testing how removing candidates from different demographic groups affects model performance, revealing whether certain populations disproportionately influence the model's behaviour.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Extremely computationally intensive for large datasets, requiring training of n separate models for n data points, making it impractical for datasets with thousands or millions of observations."
+        },
+        {
+          "description": "May underestimate uncertainty compared to bootstrapping or other resampling methods, as it provides only n different samples rather than a broader exploration of the data distribution."
+        },
+        {
+          "description": "Assumes that removing single data points provides meaningful insights into model stability, which may not hold when multiple correlated observations drive model behaviour."
+        },
+        {
+          "description": "Can be sensitive to the choice of performance metric used for evaluation, as different metrics may show different patterns of sensitivity to individual data points."
+        },
+        {
+          "description": "Provides limited insight into model behaviour on truly novel data, as each jackknife sample is only minimally different from the full training set."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn model_selection.LeaveOneOut",
+          "url": "https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.LeaveOneOut.html",
+          "source_type": "documentation",
+          "description": "Scikit-learn implementation of leave-one-out cross-validation for jackknife resampling"
+        },
+        {
+          "title": "Cross-validation: evaluating estimator performance",
+          "url": "https://scikit-learn.org/stable/modules/cross_validation.html",
+          "source_type": "documentation",
+          "description": "Comprehensive guide to cross-validation methods including leave-one-out in scikit-learn"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "monte-carlo-dropout",
+        "prediction-intervals",
+        "quantile-regression",
+        "conformal-prediction",
+        "deep-ensembles",
+        "bootstrapping"
+      ]
+    },
+    {
+      "slug": "confidence-thresholding",
+      "name": "Confidence Thresholding",
+      "description": "Confidence thresholding creates decision boundaries based on model uncertainty scores, routing predictions into different handling workflows depending on their confidence levels. High-confidence predictions (e.g., above 95%) proceed automatically, whilst medium-confidence cases (e.g., 70-95%) may trigger additional validation or human review, and low-confidence predictions (below 70%) receive extensive oversight or default to conservative fallback actions. This technique enables organisations to maintain automated efficiency for clear-cut cases whilst ensuring appropriate human intervention for uncertain decisions, balancing operational speed with risk management across safety-critical applications.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Implementing tiered confidence thresholds in autonomous vehicle decision-making where high-confidence lane changes (>98%) execute automatically, medium-confidence decisions (85-98%) trigger additional sensor verification, and low-confidence situations (<85%) engage conservative defensive driving modes or request human takeover.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Deploying confidence thresholding in fraud detection systems where high-confidence legitimate transactions (>90%) process immediately, medium-confidence cases (70-90%) undergo additional automated checks, and low-confidence transactions (<70%) require human analyst review, ensuring system reliability through graduated response mechanisms.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Using confidence thresholds in automated loan decisions to provide clear explanations to applicants, where high-confidence approvals include simple explanations, medium-confidence decisions provide detailed reasoning about key factors, and low-confidence cases receive comprehensive explanations with guidance on potential improvements.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Many models produce poorly calibrated confidence scores that don't accurately reflect true prediction uncertainty, leading to overconfident predictions for incorrect outputs or underconfident scores for correct predictions."
+        },
+        {
+          "description": "Threshold selection requires careful calibration and domain expertise, as inappropriate thresholds can either overwhelm human reviewers with too many cases or miss genuinely uncertain decisions that need oversight."
+        },
+        {
+          "description": "High-confidence predictions may still be incorrect or harmful, particularly when models encounter adversarial inputs, out-of-distribution data, or systematic biases that the confidence mechanism doesn't detect."
+        },
+        {
+          "description": "Static thresholds may become inappropriate over time as model performance degrades, data distribution shifts occur, or operational contexts change, requiring ongoing monitoring and adjustment."
+        },
+        {
+          "description": "Implementation complexity increases significantly when managing multiple confidence levels and routing mechanisms, potentially introducing system failures or inconsistencies in how different confidence ranges are handled."
+        }
+      ],
+      "resources": [
+        {
+          "title": "A Novel Dynamic Confidence Threshold Estimation AI Algorithm for Enhanced Object Detection",
+          "url": "https://www.semanticscholar.org/paper/93cda7adfa043c969639e094d6c27b1c4d507208",
+          "source_type": "technical_paper",
+          "authors": [
+            "Mounika Thatikonda",
+            "M. Pk",
+            "Fathi H. Amsaad"
+          ]
+        },
+        {
+          "title": "Improving speech recognition accuracy with multi-confidence thresholding",
+          "url": "https://www.semanticscholar.org/paper/bef1c8668115675f786e5a3c6d165f268e399e9d",
+          "source_type": "technical_paper",
+          "authors": [
+            "Shuangyu Chang"
+          ]
+        },
+        {
+          "title": "Improving the Robustness and Generalization of Deep Neural Network with Confidence Threshold Reduction",
+          "url": "http://arxiv.org/pdf/2206.00913v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xiangyuan Yang",
+            "Jie Lin",
+            "Hanlin Zhang",
+            "Xinyu Yang",
+            "Peng Zhao"
+          ],
+          "publication_date": "2022-06-02"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "internal-review-boards",
+        "red-teaming",
+        "human-in-the-loop-safeguards",
+        "runtime-monitoring-and-circuit-breakers"
+      ]
+    }
+  ],
+  "count": 6
+}

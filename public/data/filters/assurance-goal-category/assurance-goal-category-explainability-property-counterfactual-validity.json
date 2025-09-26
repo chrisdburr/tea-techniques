@@ -1,0 +1,114 @@
+{
+  "tag": {
+    "name": "assurance-goal-category/explainability/property/counterfactual-validity",
+    "slug": "assurance-goal-category-explainability-property-counterfactual-validity",
+    "count": 1,
+    "category": "assurance-goal-category"
+  },
+  "techniques": [
+    {
+      "slug": "contrastive-explanation-method",
+      "name": "Contrastive Explanation Method",
+      "description": "The Contrastive Explanation Method (CEM) explains model decisions by generating contrastive examples that reveal what makes a prediction distinctive. It identifies 'pertinent negatives' (minimal features that could be removed to change the prediction) and 'pertinent positives' (minimal features that must be present to maintain the prediction). This approach helps users understand not just what led to a decision, but what would need to change to achieve a different outcome, providing actionable insights for decision-making.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/instance-based/counterfactual",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/counterfactual-validity",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Explaining loan application rejections by showing that removing recent late payments (pertinent negative) or adding £5,000 more annual income (pertinent positive) would change the decision to approval, giving applicants clear actionable guidance.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Analysing medical diagnosis models by identifying that removing a specific symptom combination would change a high-risk classification to low-risk, helping clinicians understand the critical diagnostic factors.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent hiring decisions by showing job candidates exactly which qualifications (pertinent positives) they need to acquire or which application elements (pertinent negatives) might be hindering their success.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive as it requires solving an optimisation problem for each individual instance to find minimal perturbations."
+        },
+        {
+          "description": "Results can be highly sensitive to hyperparameter settings, requiring careful tuning to produce meaningful explanations."
+        },
+        {
+          "description": "May generate unrealistic or impossible contrastive examples if constraints are not properly specified, leading to impractical recommendations."
+        },
+        {
+          "description": "Limited to scenarios where feature perturbations are meaningful and actionable, making it less suitable for immutable characteristics or highly constrained domains."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Explanations based on the Missing: Towards Contrastive Explanations with Pertinent Negatives",
+          "url": "http://arxiv.org/pdf/1802.07623v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Amit Dhurandhar",
+            "Pin-Yu Chen",
+            "Ronny Luss",
+            "Chun-Chen Tu",
+            "Paishun Ting",
+            "Karthikeyan Shanmugam",
+            "Payel Das"
+          ],
+          "publication_date": "2018-02-21"
+        },
+        {
+          "title": "Interpretable Machine Learning",
+          "url": "https://christophm.github.io/interpretable-ml-book/interpretability.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Benchmarking and survey of explanation methods for black box models",
+          "url": "https://core.ac.uk/download/599106733.pdf",
+          "source_type": "documentation",
+          "authors": [
+            "Bodria Francesco",
+            "Giannotti Fosca",
+            "Guidotti R.",
+            "Naretto Francesca",
+            "Pedreschi Dino",
+            "Rinzivillo S."
+          ],
+          "publication_date": "2023-01-01"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "acronym": "CEM",
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "deeplift",
+        "layer-wise-relevance-propagation",
+        "local-interpretable-model-agnostic-explanations",
+        "anchor"
+      ]
+    }
+  ],
+  "count": 1
+}

@@ -1,0 +1,789 @@
+{
+  "tag": {
+    "name": "assurance-goal-category/explainability/explains/decision-boundaries",
+    "slug": "assurance-goal-category-explainability-explains-decision-boundaries",
+    "count": 8,
+    "category": "assurance-goal-category"
+  },
+  "techniques": [
+    {
+      "slug": "local-interpretable-model-agnostic-explanations",
+      "name": "Local Interpretable Model-Agnostic Explanations",
+      "description": "LIME (Local Interpretable Model-agnostic Explanations) explains individual predictions by approximating the complex model's behaviour in a small neighbourhood around a specific instance. It works by creating perturbed versions of the input (e.g., removing words from text, changing pixel values in images, or varying feature values), obtaining the model's predictions for these variations, and training a simple interpretable model (typically linear regression) weighted by proximity to the original instance. The coefficients of this local surrogate model reveal which features most influenced the specific prediction.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/surrogate-models/local-surrogates",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Explaining why a specific patient received a high-risk diagnosis by showing which symptoms (fever, blood pressure, age) contributed most to the prediction, helping doctors validate the AI's reasoning.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging a text classifier's misclassification of a movie review by highlighting which words (e.g., sarcastic phrases) confused the model, enabling targeted model improvements.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations to customers about automated decisions in insurance claims, showing which claim features influenced approval or denial to meet regulatory requirements.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Explanations can be unstable due to random sampling, producing different results across multiple runs."
+        },
+        {
+          "description": "The linear surrogate may poorly approximate highly non-linear model behaviour in the local region."
+        },
+        {
+          "description": "Defining the neighbourhood size and perturbation strategy requires careful tuning for each data type."
+        },
+        {
+          "description": "Can be computationally expensive for explaining many instances due to repeated model queries."
+        }
+      ],
+      "resources": [
+        {
+          "title": "marcotcr/lime",
+          "url": "https://github.com/marcotcr/lime",
+          "source_type": "software_package"
+        },
+        {
+          "title": "thomasp85/lime (R package)",
+          "url": "https://github.com/thomasp85/lime",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Local Interpretable Model-Agnostic Explanations (lime) — lime 0.1 ...",
+          "url": "https://lime-ml.readthedocs.io/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "'Why Should I Trust You?' Explaining the Predictions of Any Classifier",
+          "url": "https://arxiv.org/abs/1602.04938",
+          "source_type": "technical_paper",
+          "authors": [
+            "Marco Tulio Ribeiro",
+            "Sameer Singh",
+            "Carlos Guestrin"
+          ],
+          "publication_date": "2016-02-16"
+        },
+        {
+          "title": "How to convince your boss to trust your ML/DL models - Towards Data Science",
+          "url": "https://towardsdatascience.com/how-to-convince-your-boss-to-trust-your-ml-dl-models-671f707246a8",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Enhanced LIME — ADS 2.6.5 documentation",
+          "url": "https://accelerated-data-science.readthedocs.io/en/v2.6.5/user_guide/model_explainability/lime.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 3,
+      "acronym": "LIME",
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "deeplift",
+        "layer-wise-relevance-propagation",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "ridge-regression-surrogates",
+      "name": "Ridge Regression Surrogates",
+      "description": "This technique approximates a complex model by training a ridge regression (a linear model with L2 regularization) on the original model's predictions. The ridge regression serves as a global surrogate that balances fidelity and interpretability, capturing the main linear relationships that the complex model learned while ignoring noise due to regularization.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/structured-output",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Approximating a complex ensemble model used for credit scoring with a ridge regression surrogate to identify the most influential features (income, credit history, debt-to-income ratio) and their linear relationships for regulatory compliance reporting.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating a ridge regression surrogate of a neural network used for medical diagnosis to understand which patient symptoms and biomarkers have the strongest linear predictive relationships with disease outcomes.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating an interpretable approximation of a complex insurance pricing model for regulatory compliance, enabling stakeholders to understand and validate the decision-making process through transparent linear relationships.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Linear approximation may miss important non-linear relationships and interactions captured by the original complex model."
+        },
+        {
+          "description": "Requires a representative dataset to train the surrogate model, which may not be available or may be expensive to generate."
+        },
+        {
+          "description": "Ridge regularisation may oversimplify the model by shrinking coefficients, potentially hiding important but less dominant features."
+        },
+        {
+          "description": "Surrogate fidelity depends on how well linear relationships approximate the original model's behaviour across the entire input space."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn Ridge Regression Documentation",
+          "url": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Interpretable Machine Learning: A Guide for Making Black Box Models Explainable",
+          "url": "https://christophm.github.io/interpretable-ml-book/global.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "rulefit",
+        "model-distillation"
+      ]
+    },
+    {
+      "slug": "prototype-and-criticism-models",
+      "name": "Prototype and Criticism Models",
+      "description": "Prototype and Criticism Models provide data understanding by identifying two complementary sets of examples: prototypes represent the most typical instances that best summarise common patterns in the data, whilst criticisms are outliers or edge cases that are poorly represented by the prototypes. For example, in a dataset of customer transactions, prototypes might be the most representative buying patterns (frequent small purchases, occasional large purchases), whilst criticisms could be unusual behaviors (bulk buyers, one-time high-value customers). This dual approach reveals both what is normal and what is exceptional, helping understand data coverage and model blind spots.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/instance-based/prototypes",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/structured-output",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing medical imaging datasets to identify prototype scans that represent typical healthy tissue patterns and criticism examples showing rare disease presentations, helping radiologists understand what the model considers 'normal' versus cases requiring special attention.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Evaluating credit scoring models by finding prototype borrowers who represent typical low-risk profiles and criticism cases showing unusual but legitimate financial patterns that the model might misclassify, ensuring fair treatment of edge cases.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Evaluating representation bias in hiring datasets by examining whether prototypes systematically exclude certain demographic groups and criticisms disproportionately represent minorities, revealing data collection inequities.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Selection of prototypes and criticisms is highly dependent on the choice of distance metric or similarity measure, which may not capture all meaningful relationships in the data."
+        },
+        {
+          "description": "Computational complexity can become prohibitive for very large datasets, as the method often requires pairwise comparisons or optimisation over the entire dataset."
+        },
+        {
+          "description": "The number of prototypes and criticisms to select is typically a hyperparameter that requires domain expertise to set appropriately."
+        },
+        {
+          "description": "Results may not generalise well if the training data distribution differs significantly from the deployment data distribution."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Examples are not Enough, Learn to Criticize! Criticism for Interpretability",
+          "url": "https://proceedings.neurips.cc/paper/2016/file/5680522b8e2bb01943234bce7bf84534-Paper.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Been Kim",
+            "Rajiv Khanna",
+            "Oluwasanmi O. Koyejo"
+          ],
+          "publication_date": "2016-12-05"
+        },
+        {
+          "title": "SeldonIO/alibi",
+          "url": "https://github.com/SeldonIO/alibi",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Prototype Selection for Interpretable Classification",
+          "url": "http://arxiv.org/pdf/1202.5933v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Oscar Reyes",
+            "Carlos Morell",
+            "Sebastian Ventura"
+          ],
+          "publication_date": "2012-02-27"
+        },
+        {
+          "title": "Alibi Explain Documentation",
+          "url": "https://docs.seldon.io/projects/alibi/en/stable/",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "neuron-activation-analysis",
+        "concept-activation-vectors"
+      ]
+    },
+    {
+      "slug": "contrastive-explanation-method",
+      "name": "Contrastive Explanation Method",
+      "description": "The Contrastive Explanation Method (CEM) explains model decisions by generating contrastive examples that reveal what makes a prediction distinctive. It identifies 'pertinent negatives' (minimal features that could be removed to change the prediction) and 'pertinent positives' (minimal features that must be present to maintain the prediction). This approach helps users understand not just what led to a decision, but what would need to change to achieve a different outcome, providing actionable insights for decision-making.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/instance-based/counterfactual",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/counterfactual-validity",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Explaining loan application rejections by showing that removing recent late payments (pertinent negative) or adding £5,000 more annual income (pertinent positive) would change the decision to approval, giving applicants clear actionable guidance.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Analysing medical diagnosis models by identifying that removing a specific symptom combination would change a high-risk classification to low-risk, helping clinicians understand the critical diagnostic factors.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent hiring decisions by showing job candidates exactly which qualifications (pertinent positives) they need to acquire or which application elements (pertinent negatives) might be hindering their success.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive as it requires solving an optimisation problem for each individual instance to find minimal perturbations."
+        },
+        {
+          "description": "Results can be highly sensitive to hyperparameter settings, requiring careful tuning to produce meaningful explanations."
+        },
+        {
+          "description": "May generate unrealistic or impossible contrastive examples if constraints are not properly specified, leading to impractical recommendations."
+        },
+        {
+          "description": "Limited to scenarios where feature perturbations are meaningful and actionable, making it less suitable for immutable characteristics or highly constrained domains."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Explanations based on the Missing: Towards Contrastive Explanations with Pertinent Negatives",
+          "url": "http://arxiv.org/pdf/1802.07623v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Amit Dhurandhar",
+            "Pin-Yu Chen",
+            "Ronny Luss",
+            "Chun-Chen Tu",
+            "Paishun Ting",
+            "Karthikeyan Shanmugam",
+            "Payel Das"
+          ],
+          "publication_date": "2018-02-21"
+        },
+        {
+          "title": "Interpretable Machine Learning",
+          "url": "https://christophm.github.io/interpretable-ml-book/interpretability.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Benchmarking and survey of explanation methods for black box models",
+          "url": "https://core.ac.uk/download/599106733.pdf",
+          "source_type": "documentation",
+          "authors": [
+            "Bodria Francesco",
+            "Giannotti Fosca",
+            "Guidotti R.",
+            "Naretto Francesca",
+            "Pedreschi Dino",
+            "Rinzivillo S."
+          ],
+          "publication_date": "2023-01-01"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "acronym": "CEM",
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "deeplift",
+        "layer-wise-relevance-propagation",
+        "local-interpretable-model-agnostic-explanations",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "anchor",
+      "name": "ANCHOR",
+      "description": "ANCHOR generates high-precision if-then rules that explain individual predictions by identifying the minimal set of feature conditions that guarantee a specific prediction with high confidence. It searches for 'anchor' conditions (e.g., 'age > 30 AND income < £50k') that ensure the model gives the same prediction at least 95% of the time when those conditions are met. This creates human-readable rules that users can trust as sufficient conditions for understanding why a particular decision was made.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/surrogate-models/rule-extraction",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Explaining loan application decisions with rules like 'IF credit_score > 650 AND debt_ratio < 0.4 THEN approval = 95% likely', giving applicants clear, actionable conditions they can understand and potentially improve.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Generating diagnostic rules for medical predictions such as 'IF fever > 38.5°C AND white_blood_cells > 12,000 THEN infection = 92% likely', helping clinicians validate automated diagnoses with trusted clinical indicators.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating transparent hiring decisions with rules like 'IF experience >= 3_years AND degree = relevant THEN hire = 89% likely', providing clear justification for recruitment decisions that can be audited for fairness.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Limited to local explanations for individual instances, cannot provide global insights about overall model behaviour."
+        },
+        {
+          "description": "Requires discretisation of continuous features, which can lose important nuanced information and create arbitrary thresholds."
+        },
+        {
+          "description": "May fail to find suitable anchor rules if precision requirements are too strict or if the prediction space is highly complex."
+        },
+        {
+          "description": "Computationally expensive as it requires extensive sampling to validate rule precision, especially for high-dimensional data."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Anchors: High-Precision Model-Agnostic Explanations",
+          "url": "https://homes.cs.washington.edu/~marcotcr/aaai18.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Marco Tulio Ribeiro",
+            "Sameer Singh",
+            "Carlos Guestrin"
+          ],
+          "publication_date": "2018-01-01"
+        },
+        {
+          "title": "marcotcr/anchor",
+          "url": "https://github.com/marcotcr/anchor",
+          "source_type": "software_package"
+        },
+        {
+          "title": "alibi/alibi",
+          "url": "https://github.com/SeldonIO/alibi",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Interpretable Machine Learning - Anchors",
+          "url": "https://christophm.github.io/interpretable-ml-book/anchors.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "deeplift",
+        "layer-wise-relevance-propagation",
+        "local-interpretable-model-agnostic-explanations",
+        "contrastive-explanation-method"
+      ]
+    },
+    {
+      "slug": "rulefit",
+      "name": "RuleFit",
+      "description": "RuleFit is a method that creates an interpretable model by combining linear terms with decision rules. It first extracts potential rules from ensemble trees, then builds a sparse linear model where those rules (binary conditions) and original features are used as predictors, with regularization to keep the model simple. The final model is a linear combination of a small set of rules and original features, balancing interpretability with predictive power.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/surrogate-models/rule-extraction",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Building customer churn prediction models with rules like 'IF contract_length < 12_months AND support_calls > 5 THEN churn_risk = high', allowing marketing teams to understand and act on the key drivers of customer attrition.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating credit scoring models that combine traditional linear factors (income, age) with interpretable rules (IF recent_missed_payments = 0 AND account_age > 2_years THEN creditworthy), providing transparent lending decisions.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Developing regulatory-compliant medical diagnosis models where treatment recommendations combine clinical measurements with clear decision rules (IF blood_pressure > 140 AND diabetes = true THEN high_risk), enabling audit trails for healthcare decisions.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Can generate large numbers of rules even with regularisation, potentially overwhelming users and reducing practical interpretability."
+        },
+        {
+          "description": "Performance may be inferior to complex ensemble methods when rule complexity is constrained for interpretability."
+        },
+        {
+          "description": "Rule extraction quality depends heavily on the underlying tree ensemble, which may miss important feature interactions if not properly configured."
+        },
+        {
+          "description": "Requires careful hyperparameter tuning to balance between model complexity and interpretability, with no universal optimal setting."
+        }
+      ],
+      "resources": [
+        {
+          "title": "christophM/rulefit",
+          "url": "https://github.com/christophM/rulefit",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Tree Ensembles with Rule Structured Horseshoe Regularization",
+          "url": "http://arxiv.org/pdf/1702.05008v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Malte Nalenz",
+            "Mattias Villani"
+          ],
+          "publication_date": "2017-02-16"
+        },
+        {
+          "title": "Safe RuleFit: Learning Optimal Sparse Rule Model by Meta Safe Screening",
+          "url": "http://arxiv.org/pdf/1810.01683v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hiroki Kato",
+            "Hiroyuki Hanada",
+            "Ichiro Takeuchi"
+          ],
+          "publication_date": "2018-10-03"
+        },
+        {
+          "title": "csinva/imodels",
+          "url": "https://github.com/csinva/imodels",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Getting More From Regression Models with RuleFit | Towards Data ...",
+          "url": "https://towardsdatascience.com/getting-more-from-regression-models-with-rulefit-2e6be8d77432/",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "ridge-regression-surrogates",
+        "model-distillation"
+      ]
+    },
+    {
+      "slug": "out-of-distribution-detector-for-neural-networks",
+      "name": "Out-of-DIstribution detector for Neural networks",
+      "description": "ODIN (Out-of-Distribution Detector for Neural Networks) identifies when a neural network encounters inputs significantly different from its training distribution. It enhances detection by applying temperature scaling to soften the model's output distribution and adding small, carefully calibrated perturbations to the input that push in-distribution samples towards higher confidence predictions. By measuring the maximum softmax probability after these adjustments, ODIN can effectively distinguish between in-distribution and out-of-distribution inputs, flagging potentially unreliable predictions before they cause downstream errors.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/prediction-confidence",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Detecting anomalous medical images in diagnostic systems, where ODIN flags X-rays or scans containing rare pathologies or imaging artefacts not present in training data, preventing misdiagnosis and prompting specialist review.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Protecting autonomous vehicle perception systems by identifying novel road scenarios (e.g., unusual weather conditions, rare obstacle types) that fall outside the training distribution, triggering fallback safety mechanisms.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Monitoring production ML systems for data drift by detecting when incoming customer behaviour patterns deviate significantly from training data, helping explain why model performance may degrade over time.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires careful tuning of temperature scaling and perturbation magnitude parameters, which may need adjustment for different types of out-of-distribution data."
+        },
+        {
+          "description": "Performance degrades when out-of-distribution samples are very similar to training data, making near-distribution detection challenging."
+        },
+        {
+          "description": "Vulnerable to adversarial examples specifically crafted to evade detection by mimicking in-distribution characteristics."
+        },
+        {
+          "description": "Computational overhead from input preprocessing and perturbation generation can impact real-time inference applications."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Enhancing The Reliability of Out-of-distribution Image Detection in Neural Networks",
+          "url": "http://arxiv.org/pdf/1706.02690v5",
+          "source_type": "technical_paper",
+          "authors": [
+            "Shiyu Liang",
+            "Yixuan Li",
+            "R. Srikant"
+          ],
+          "publication_date": "2017-06-08"
+        },
+        {
+          "title": "facebookresearch/odin",
+          "url": "https://github.com/facebookresearch/odin",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Generalized ODIN: Detecting Out-of-distribution Image without Learning from Out-of-distribution Data",
+          "url": "http://arxiv.org/pdf/2002.11297v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yen-Chang Hsu",
+            "Yilin Shen",
+            "Hongxia Jin",
+            "Zsolt Kira"
+          ],
+          "publication_date": "2020-02-26"
+        },
+        {
+          "title": "Detection of out-of-distribution samples using binary neuron activation patterns",
+          "url": "http://arxiv.org/abs/2212.14268",
+          "source_type": "technical_paper",
+          "authors": [
+            "Chachuła, Krystian",
+            "Olber, Bartlomiej",
+            "Popowicz, Adam",
+            "Radlak, Krystian",
+            "Szczepankiewicz, Michal"
+          ],
+          "publication_date": "2023-03-24"
+        },
+        {
+          "title": "Out-of-Distribution Detection with ODIN - A Tutorial",
+          "url": "https://medium.com/@abhaypatil2000/out-of-distribution-detection-using-odin-f1a3e9e6b3b8",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "acronym": "ODIN",
+      "related_techniques": [
+        "anomaly-detection"
+      ]
+    },
+    {
+      "slug": "model-distillation",
+      "name": "Model Distillation",
+      "description": "Model distillation transfers knowledge from a large, complex model (teacher) to a smaller, more efficient model (student) by training the student to mimic the teacher's behaviour. The student learns from the teacher's soft predictions and intermediate representations rather than just hard labels, capturing nuanced decision boundaries and uncertainty. This produces models that are faster, require less memory, and are often more interpretable whilst maintaining much of the original performance. Beyond compression, distillation can improve model reliability by regularising training and enable deployment in resource-constrained environments.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/model-simplification/knowledge-transfer",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/deployment",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Compressing a large medical diagnosis model into a smaller student model that can run on edge devices in resource-limited clinics, making the decision process more transparent for healthcare professionals whilst maintaining diagnostic accuracy for critical patient care.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating a compressed fraud detection model from a complex ensemble teacher that maintains detection performance whilst being more robust to adversarial attacks and data drift, ensuring consistent protection of financial transactions across varying conditions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Distilling a large autonomous vehicle perception model into a smaller student model that can run with guaranteed inference times and lower computational requirements, ensuring predictable safety-critical decision-making under real-time constraints.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Student models typically achieve 90-95% of teacher performance, creating a trade-off between model efficiency and predictive accuracy that may be unacceptable for high-stakes applications requiring maximum precision."
+        },
+        {
+          "description": "Distillation process can be computationally expensive, requiring extensive teacher model inference during training and careful hyperparameter tuning to balance knowledge transfer with student model capacity."
+        },
+        {
+          "description": "Knowledge transfer quality depends heavily on teacher-student architecture compatibility and the chosen distillation objectives, with mismatched designs potentially leading to ineffective learning or mode collapse."
+        },
+        {
+          "description": "Student models may inherit teacher model biases and vulnerabilities whilst potentially introducing new failure modes, requiring separate validation for fairness, robustness, and safety properties."
+        },
+        {
+          "description": "Compressed models may lack the teacher's capability to handle edge cases or out-of-distribution inputs, potentially creating safety risks when deployed in environments different from the training distribution."
+        }
+      ],
+      "resources": [
+        {
+          "title": "airaria/TextBrewer",
+          "url": "https://github.com/airaria/TextBrewer",
+          "source_type": "software_package",
+          "description": "PyTorch-based knowledge distillation toolkit for natural language processing with support for transformer models, flexible distillation strategies, and multi-teacher approaches."
+        },
+        {
+          "title": "Main features — TextBrewer 0.2.1.post1 documentation",
+          "url": "https://textbrewer.readthedocs.io/",
+          "source_type": "documentation",
+          "description": "Comprehensive documentation for TextBrewer including tutorials, API reference, configuration guides, and experimental results for knowledge distillation in NLP tasks."
+        },
+        {
+          "title": "A Generic Approach for Reproducible Model Distillation",
+          "url": "http://arxiv.org/abs/2211.12631",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hooker, Giles",
+            "Xu, Peiru",
+            "Zhou, Yunzhe"
+          ],
+          "publication_date": "2023-04-27",
+          "description": "Research paper presenting a framework for reproducible knowledge distillation with standardised evaluation protocols and benchmarking across different model architectures and distillation techniques."
+        },
+        {
+          "title": "dkozlov/awesome-knowledge-distillation",
+          "url": "https://github.com/dkozlov/awesome-knowledge-distillation",
+          "source_type": "software_package",
+          "description": "Curated collection of knowledge distillation resources including academic papers, implementation code across multiple frameworks (PyTorch, TensorFlow, Keras), and educational videos."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "ridge-regression-surrogates",
+        "rulefit",
+        "model-pruning"
+      ]
+    }
+  ],
+  "count": 8
+}

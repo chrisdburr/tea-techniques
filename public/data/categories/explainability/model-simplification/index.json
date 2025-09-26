@@ -1,0 +1,200 @@
+{
+  "goal": "explainability",
+  "dimension": "model-simplification",
+  "subcategories": [
+    "knowledge-transfer",
+    "pruning"
+  ],
+  "techniques": [
+    {
+      "slug": "model-distillation",
+      "name": "Model Distillation",
+      "description": "Model distillation transfers knowledge from a large, complex model (teacher) to a smaller, more efficient model (student) by training the student to mimic the teacher's behaviour. The student learns from the teacher's soft predictions and intermediate representations rather than just hard labels, capturing nuanced decision boundaries and uncertainty. This produces models that are faster, require less memory, and are often more interpretable whilst maintaining much of the original performance. Beyond compression, distillation can improve model reliability by regularising training and enable deployment in resource-constrained environments.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/model-simplification/knowledge-transfer",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/deployment",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Compressing a large medical diagnosis model into a smaller student model that can run on edge devices in resource-limited clinics, making the decision process more transparent for healthcare professionals whilst maintaining diagnostic accuracy for critical patient care.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating a compressed fraud detection model from a complex ensemble teacher that maintains detection performance whilst being more robust to adversarial attacks and data drift, ensuring consistent protection of financial transactions across varying conditions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Distilling a large autonomous vehicle perception model into a smaller student model that can run with guaranteed inference times and lower computational requirements, ensuring predictable safety-critical decision-making under real-time constraints.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Student models typically achieve 90-95% of teacher performance, creating a trade-off between model efficiency and predictive accuracy that may be unacceptable for high-stakes applications requiring maximum precision."
+        },
+        {
+          "description": "Distillation process can be computationally expensive, requiring extensive teacher model inference during training and careful hyperparameter tuning to balance knowledge transfer with student model capacity."
+        },
+        {
+          "description": "Knowledge transfer quality depends heavily on teacher-student architecture compatibility and the chosen distillation objectives, with mismatched designs potentially leading to ineffective learning or mode collapse."
+        },
+        {
+          "description": "Student models may inherit teacher model biases and vulnerabilities whilst potentially introducing new failure modes, requiring separate validation for fairness, robustness, and safety properties."
+        },
+        {
+          "description": "Compressed models may lack the teacher's capability to handle edge cases or out-of-distribution inputs, potentially creating safety risks when deployed in environments different from the training distribution."
+        }
+      ],
+      "resources": [
+        {
+          "title": "airaria/TextBrewer",
+          "url": "https://github.com/airaria/TextBrewer",
+          "source_type": "software_package",
+          "description": "PyTorch-based knowledge distillation toolkit for natural language processing with support for transformer models, flexible distillation strategies, and multi-teacher approaches."
+        },
+        {
+          "title": "Main features — TextBrewer 0.2.1.post1 documentation",
+          "url": "https://textbrewer.readthedocs.io/",
+          "source_type": "documentation",
+          "description": "Comprehensive documentation for TextBrewer including tutorials, API reference, configuration guides, and experimental results for knowledge distillation in NLP tasks."
+        },
+        {
+          "title": "A Generic Approach for Reproducible Model Distillation",
+          "url": "http://arxiv.org/abs/2211.12631",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hooker, Giles",
+            "Xu, Peiru",
+            "Zhou, Yunzhe"
+          ],
+          "publication_date": "2023-04-27",
+          "description": "Research paper presenting a framework for reproducible knowledge distillation with standardised evaluation protocols and benchmarking across different model architectures and distillation techniques."
+        },
+        {
+          "title": "dkozlov/awesome-knowledge-distillation",
+          "url": "https://github.com/dkozlov/awesome-knowledge-distillation",
+          "source_type": "software_package",
+          "description": "Curated collection of knowledge distillation resources including academic papers, implementation code across multiple frameworks (PyTorch, TensorFlow, Keras), and educational videos."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "ridge-regression-surrogates",
+        "rulefit",
+        "model-pruning"
+      ]
+    },
+    {
+      "slug": "model-pruning",
+      "name": "Model Pruning",
+      "description": "Model pruning systematically removes less important weights, neurons, or entire layers from neural networks to create smaller, more efficient models whilst maintaining performance. This process involves iterative removal based on importance criteria (weight magnitudes, gradient information, activation patterns) followed by fine-tuning. Pruning can be structured (removing entire neurons/channels) or unstructured (removing individual weights), with structured pruning providing greater computational benefits and interpretability through simplified architectures.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/model-simplification/pruning",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-optimization",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Compressing a medical imaging model from 100MB to 15MB for deployment on edge devices in remote clinics, enabling healthcare professionals to audit the remaining critical feature detectors and understand which anatomical patterns drive diagnoses whilst maintaining diagnostic accuracy.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Pruning a financial fraud detection model by 70% to eliminate redundant pathways that amplify noise, creating a more robust system that maintains consistent predictions across different transaction types and reduces false positives during market volatility.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Reducing an autonomous vehicle perception model to ensure predictable inference times under 50ms for safety-critical decisions, removing non-essential neurons to guarantee consistent computational behaviour whilst maintaining object detection accuracy for pedestrian safety.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Determining optimal pruning ratios requires extensive experimentation as over-pruning can cause dramatic accuracy degradation, whilst under-pruning provides minimal benefits, making the process time-consuming and resource-intensive."
+        },
+        {
+          "description": "Structured pruning often requires specific hardware or software framework support to realise computational benefits, limiting deployment flexibility and potentially necessitating model architecture changes."
+        },
+        {
+          "description": "Pruned models may exhibit reduced robustness to out-of-distribution inputs or adversarial attacks, as removing neurons can eliminate defensive redundancy that helped handle edge cases."
+        },
+        {
+          "description": "The iterative pruning and fine-tuning process can be computationally expensive, sometimes requiring more resources than training the original model, particularly for large-scale networks."
+        },
+        {
+          "description": "Pruning criteria based on weight magnitudes or gradients may not align with interpretability goals, potentially removing neurons that contribute to model transparency whilst retaining complex, opaque pathways."
+        }
+      ],
+      "resources": [
+        {
+          "title": "horseee/LLM-Pruner",
+          "url": "https://github.com/horseee/LLM-Pruner",
+          "source_type": "software_package",
+          "description": "Structural pruning tool for large language models supporting Llama, BLOOM, and other LLMs with three-stage compression process requiring only 50,000 training samples for post-training recovery."
+        },
+        {
+          "title": "Pruning Quickstart — Neural Network Intelligence",
+          "url": "https://nni.readthedocs.io/en/stable/tutorials/pruning_quick_start.html",
+          "source_type": "tutorial",
+          "description": "Step-by-step tutorial for implementing model pruning using Microsoft's NNI toolkit, covering basic usage, pruning algorithms, and practical examples for neural network compression."
+        },
+        {
+          "title": "Overview of NNI Model Pruning — Neural Network Intelligence",
+          "url": "https://nni.readthedocs.io/en/stable/compression/pruning.html",
+          "source_type": "documentation",
+          "description": "Comprehensive documentation for NNI's pruning capabilities covering structured and unstructured pruning strategies, supported algorithms, and integration with popular deep learning frameworks."
+        },
+        {
+          "title": "coldlarry/YOLOv3-complete-pruning",
+          "url": "https://github.com/coldlarry/YOLOv3-complete-pruning",
+          "source_type": "software_package",
+          "description": "Complete pruning implementation for YOLOv3 object detection models demonstrating computer vision model compression with minimal accuracy loss for real-time inference applications."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "model-distillation"
+      ]
+    }
+  ],
+  "count": 2
+}

@@ -146,6 +146,7 @@ async function generateCategoryData(techniques, assuranceGoals) {
   const categoriesDir = path.join(dataDir, 'categories');
   await fs.mkdir(categoriesDir, { recursive: true });
 
+  // Generate main category files
   await Promise.all(
     assuranceGoals.map((goal) => {
       const categoryTechniques = techniques.filter((technique) =>
@@ -166,6 +167,123 @@ async function generateCategoryData(techniques, assuranceGoals) {
       );
     })
   );
+
+  // Generate hierarchical subcategory files for explainability
+  await generateHierarchicalCategoryData(techniques);
+}
+
+/**
+ * Generates JSON files for hierarchical category subcategories
+ * This enables routes like /categories/explainability/property/
+ */
+async function generateHierarchicalCategoryData(techniques) {
+  const hierarchicalTags = collectHierarchicalTags(techniques);
+  const hierarchyMap = buildHierarchyMap(hierarchicalTags, techniques);
+  await writeHierarchicalFiles(hierarchyMap);
+}
+
+/**
+ * Collects all hierarchical assurance-goal-category tags
+ */
+function collectHierarchicalTags(techniques) {
+  const hierarchicalTags = new Set();
+
+  for (const technique of techniques) {
+    if (!technique.tags) {
+      continue;
+    }
+
+    for (const tag of technique.tags) {
+      if (
+        tag.startsWith('assurance-goal-category/') &&
+        tag.split('/').length >= 3
+      ) {
+        hierarchicalTags.add(tag);
+      }
+    }
+  }
+
+  return hierarchicalTags;
+}
+
+/**
+ * Builds a hierarchy map from tags and techniques
+ */
+function buildHierarchyMap(hierarchicalTags, techniques) {
+  const hierarchyMap = {};
+
+  for (const tag of hierarchicalTags) {
+    const parts = tag.split('/');
+    const goal = parts[1]; // e.g., 'explainability'
+    const dimension = parts[2]; // e.g., 'property'
+    const subcategory = parts.slice(3).join('/'); // e.g., 'completeness'
+
+    // Initialize goal and dimension if needed
+    if (!hierarchyMap[goal]) {
+      hierarchyMap[goal] = {};
+    }
+    if (!hierarchyMap[goal][dimension]) {
+      hierarchyMap[goal][dimension] = {
+        techniques: new Set(),
+        subcategories: new Set(),
+      };
+    }
+
+    // Add subcategory if it exists
+    if (subcategory) {
+      hierarchyMap[goal][dimension].subcategories.add(subcategory);
+    }
+
+    // Find techniques with this tag
+    for (const technique of techniques) {
+      if (technique.tags?.includes(tag)) {
+        hierarchyMap[goal][dimension].techniques.add(technique);
+      }
+    }
+  }
+
+  return hierarchyMap;
+}
+
+/**
+ * Writes hierarchy JSON files to disk
+ */
+async function writeHierarchicalFiles(hierarchyMap) {
+  // Prepare all file write operations
+  const writeOperations = [];
+
+  for (const [goal, dimensions] of Object.entries(hierarchyMap)) {
+    const goalDir = path.join(dataDir, 'categories', goal);
+
+    for (const [dimension, data] of Object.entries(dimensions)) {
+      const dimensionDir = path.join(goalDir, dimension);
+      const dimensionTechniques = Array.from(data.techniques);
+      const subcategories = Array.from(data.subcategories).sort();
+
+      // Create directory and file write promises
+      writeOperations.push(
+        fs.mkdir(dimensionDir, { recursive: true }).then(() =>
+          fs.writeFile(
+            path.join(dimensionDir, 'index.json'),
+            JSON.stringify(
+              {
+                goal,
+                dimension,
+                subcategories,
+                techniques: dimensionTechniques,
+                count: dimensionTechniques.length,
+              },
+              null,
+              2
+            )
+          )
+        )
+      );
+    }
+  }
+
+  // Execute all operations in parallel
+  await Promise.all(writeOperations);
 }
 
 async function generateFilterData(techniques, tags) {

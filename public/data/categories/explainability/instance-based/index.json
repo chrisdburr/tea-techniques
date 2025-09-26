@@ -1,0 +1,329 @@
+{
+  "goal": "explainability",
+  "dimension": "instance-based",
+  "subcategories": [
+    "counterfactual",
+    "influence-analysis",
+    "prototypes"
+  ],
+  "techniques": [
+    {
+      "slug": "prototype-and-criticism-models",
+      "name": "Prototype and Criticism Models",
+      "description": "Prototype and Criticism Models provide data understanding by identifying two complementary sets of examples: prototypes represent the most typical instances that best summarise common patterns in the data, whilst criticisms are outliers or edge cases that are poorly represented by the prototypes. For example, in a dataset of customer transactions, prototypes might be the most representative buying patterns (frequent small purchases, occasional large purchases), whilst criticisms could be unusual behaviors (bulk buyers, one-time high-value customers). This dual approach reveals both what is normal and what is exceptional, helping understand data coverage and model blind spots.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/instance-based/prototypes",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/structured-output",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing medical imaging datasets to identify prototype scans that represent typical healthy tissue patterns and criticism examples showing rare disease presentations, helping radiologists understand what the model considers 'normal' versus cases requiring special attention.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Evaluating credit scoring models by finding prototype borrowers who represent typical low-risk profiles and criticism cases showing unusual but legitimate financial patterns that the model might misclassify, ensuring fair treatment of edge cases.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Evaluating representation bias in hiring datasets by examining whether prototypes systematically exclude certain demographic groups and criticisms disproportionately represent minorities, revealing data collection inequities.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Selection of prototypes and criticisms is highly dependent on the choice of distance metric or similarity measure, which may not capture all meaningful relationships in the data."
+        },
+        {
+          "description": "Computational complexity can become prohibitive for very large datasets, as the method often requires pairwise comparisons or optimisation over the entire dataset."
+        },
+        {
+          "description": "The number of prototypes and criticisms to select is typically a hyperparameter that requires domain expertise to set appropriately."
+        },
+        {
+          "description": "Results may not generalise well if the training data distribution differs significantly from the deployment data distribution."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Examples are not Enough, Learn to Criticize! Criticism for Interpretability",
+          "url": "https://proceedings.neurips.cc/paper/2016/file/5680522b8e2bb01943234bce7bf84534-Paper.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Been Kim",
+            "Rajiv Khanna",
+            "Oluwasanmi O. Koyejo"
+          ],
+          "publication_date": "2016-12-05"
+        },
+        {
+          "title": "SeldonIO/alibi",
+          "url": "https://github.com/SeldonIO/alibi",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Prototype Selection for Interpretable Classification",
+          "url": "http://arxiv.org/pdf/1202.5933v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Oscar Reyes",
+            "Carlos Morell",
+            "Sebastian Ventura"
+          ],
+          "publication_date": "2012-02-27"
+        },
+        {
+          "title": "Alibi Explain Documentation",
+          "url": "https://docs.seldon.io/projects/alibi/en/stable/",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "neuron-activation-analysis",
+        "concept-activation-vectors"
+      ]
+    },
+    {
+      "slug": "influence-functions",
+      "name": "Influence Functions",
+      "description": "Influence functions quantify how much each training example influenced a model's predictions by computing the change in prediction that would occur if that training example were removed and the model retrained. Using calculus and the implicit function theorem, they approximate this 'leave-one-out' effect without actually retraining the model by computing gradients and Hessian information. This mathematical approach reveals which specific training examples were most responsible for pushing the model toward or away from particular predictions, enabling practitioners to trace problematic outputs back to their root causes in the training data.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Privacy"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/instance-based/influence-analysis",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/property/causality",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/privacy",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Investigating why a medical diagnosis model misclassified a patient by identifying which specific training cases most influenced the incorrect prediction, revealing potential mislabelled examples or problematic patterns in the training data.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Analysing a spam detection system that falsely flagged legitimate emails by tracing the prediction back to influential training examples, discovering that certain training emails contained misleading patterns that caused the model to overfit.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Auditing a loan approval model for discriminatory patterns by identifying which training examples most influenced rejections of minority applicants, revealing whether biased historical decisions are driving current unfair outcomes.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Assessing membership inference risks in a medical model by identifying whether certain patient records have disproportionate influence on predictions, indicating potential data leakage vulnerabilities.",
+          "goal": "Privacy"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally intensive, requiring Hessian matrix computations that become intractable for very large models with millions of parameters."
+        },
+        {
+          "description": "Requires access to the complete training dataset and training process, making it impossible to apply to pre-trained models without access to original training data."
+        },
+        {
+          "description": "Accuracy degrades for highly non-convex models where the linear approximation underlying influence functions breaks down."
+        },
+        {
+          "description": "Results can be sensitive to hyperparameter choices and may not generalise well across different model architectures or training procedures."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Understanding Black-box Predictions via Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/08ad8fad21f6ec4cda4d56be1ca5e146b7c913a1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Pang Wei Koh",
+            "Percy Liang"
+          ]
+        },
+        {
+          "title": "nimarb/pytorch_influence_functions",
+          "url": "https://github.com/nimarb/pytorch_influence_functions",
+          "source_type": "software_package"
+        },
+        {
+          "title": "What is Your Data Worth to GPT? LLM-Scale Data Valuation with Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/f33f3dece9f34c1ec5417dccf9e0acf592d8e8cb",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sang Keun Choe",
+            "Hwijeen Ahn",
+            "Juhan Bae",
+            "Kewen Zhao",
+            "Minsoo Kang",
+            "Youngseog Chung",
+            "Adithya Pratapa",
+            "W. Neiswanger",
+            "Emma Strubell",
+            "Teruko Mitamura",
+            "Jeff G. Schneider",
+            "Eduard H. Hovy",
+            "Roger B. Grosse",
+            "Eric P. Xing"
+          ]
+        },
+        {
+          "title": "Scaling Up Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/ef2a773c3c7848a6cc16b18164be5f8876a310af",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andrea Schioppa",
+            "Polina Zablotskaia",
+            "David Vilar",
+            "Artem Sokolov"
+          ]
+        },
+        {
+          "title": "Welcome to torch-influence's API Reference! — torch-influence 0.1.0 ...",
+          "url": "https://torch-influence.readthedocs.io/",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "contextual-decomposition",
+        "taylor-decomposition"
+      ]
+    },
+    {
+      "slug": "contrastive-explanation-method",
+      "name": "Contrastive Explanation Method",
+      "description": "The Contrastive Explanation Method (CEM) explains model decisions by generating contrastive examples that reveal what makes a prediction distinctive. It identifies 'pertinent negatives' (minimal features that could be removed to change the prediction) and 'pertinent positives' (minimal features that must be present to maintain the prediction). This approach helps users understand not just what led to a decision, but what would need to change to achieve a different outcome, providing actionable insights for decision-making.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/instance-based/counterfactual",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/counterfactual-validity",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Explaining loan application rejections by showing that removing recent late payments (pertinent negative) or adding £5,000 more annual income (pertinent positive) would change the decision to approval, giving applicants clear actionable guidance.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Analysing medical diagnosis models by identifying that removing a specific symptom combination would change a high-risk classification to low-risk, helping clinicians understand the critical diagnostic factors.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent hiring decisions by showing job candidates exactly which qualifications (pertinent positives) they need to acquire or which application elements (pertinent negatives) might be hindering their success.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive as it requires solving an optimisation problem for each individual instance to find minimal perturbations."
+        },
+        {
+          "description": "Results can be highly sensitive to hyperparameter settings, requiring careful tuning to produce meaningful explanations."
+        },
+        {
+          "description": "May generate unrealistic or impossible contrastive examples if constraints are not properly specified, leading to impractical recommendations."
+        },
+        {
+          "description": "Limited to scenarios where feature perturbations are meaningful and actionable, making it less suitable for immutable characteristics or highly constrained domains."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Explanations based on the Missing: Towards Contrastive Explanations with Pertinent Negatives",
+          "url": "http://arxiv.org/pdf/1802.07623v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Amit Dhurandhar",
+            "Pin-Yu Chen",
+            "Ronny Luss",
+            "Chun-Chen Tu",
+            "Paishun Ting",
+            "Karthikeyan Shanmugam",
+            "Payel Das"
+          ],
+          "publication_date": "2018-02-21"
+        },
+        {
+          "title": "Interpretable Machine Learning",
+          "url": "https://christophm.github.io/interpretable-ml-book/interpretability.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Benchmarking and survey of explanation methods for black box models",
+          "url": "https://core.ac.uk/download/599106733.pdf",
+          "source_type": "documentation",
+          "authors": [
+            "Bodria Francesco",
+            "Giannotti Fosca",
+            "Guidotti R.",
+            "Naretto Francesca",
+            "Pedreschi Dino",
+            "Rinzivillo S."
+          ],
+          "publication_date": "2023-01-01"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "acronym": "CEM",
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "deeplift",
+        "layer-wise-relevance-propagation",
+        "local-interpretable-model-agnostic-explanations",
+        "anchor"
+      ]
+    }
+  ],
+  "count": 3
+}

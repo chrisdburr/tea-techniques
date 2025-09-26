@@ -1,0 +1,131 @@
+{
+  "tag": {
+    "name": "assurance-goal-category/explainability/instance-based/influence-analysis",
+    "slug": "assurance-goal-category-explainability-instance-based-influence-analysis",
+    "count": 1,
+    "category": "assurance-goal-category"
+  },
+  "techniques": [
+    {
+      "slug": "influence-functions",
+      "name": "Influence Functions",
+      "description": "Influence functions quantify how much each training example influenced a model's predictions by computing the change in prediction that would occur if that training example were removed and the model retrained. Using calculus and the implicit function theorem, they approximate this 'leave-one-out' effect without actually retraining the model by computing gradients and Hessian information. This mathematical approach reveals which specific training examples were most responsible for pushing the model toward or away from particular predictions, enabling practitioners to trace problematic outputs back to their root causes in the training data.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Privacy"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/instance-based/influence-analysis",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/property/causality",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/privacy",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Investigating why a medical diagnosis model misclassified a patient by identifying which specific training cases most influenced the incorrect prediction, revealing potential mislabelled examples or problematic patterns in the training data.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Analysing a spam detection system that falsely flagged legitimate emails by tracing the prediction back to influential training examples, discovering that certain training emails contained misleading patterns that caused the model to overfit.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Auditing a loan approval model for discriminatory patterns by identifying which training examples most influenced rejections of minority applicants, revealing whether biased historical decisions are driving current unfair outcomes.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Assessing membership inference risks in a medical model by identifying whether certain patient records have disproportionate influence on predictions, indicating potential data leakage vulnerabilities.",
+          "goal": "Privacy"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally intensive, requiring Hessian matrix computations that become intractable for very large models with millions of parameters."
+        },
+        {
+          "description": "Requires access to the complete training dataset and training process, making it impossible to apply to pre-trained models without access to original training data."
+        },
+        {
+          "description": "Accuracy degrades for highly non-convex models where the linear approximation underlying influence functions breaks down."
+        },
+        {
+          "description": "Results can be sensitive to hyperparameter choices and may not generalise well across different model architectures or training procedures."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Understanding Black-box Predictions via Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/08ad8fad21f6ec4cda4d56be1ca5e146b7c913a1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Pang Wei Koh",
+            "Percy Liang"
+          ]
+        },
+        {
+          "title": "nimarb/pytorch_influence_functions",
+          "url": "https://github.com/nimarb/pytorch_influence_functions",
+          "source_type": "software_package"
+        },
+        {
+          "title": "What is Your Data Worth to GPT? LLM-Scale Data Valuation with Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/f33f3dece9f34c1ec5417dccf9e0acf592d8e8cb",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sang Keun Choe",
+            "Hwijeen Ahn",
+            "Juhan Bae",
+            "Kewen Zhao",
+            "Minsoo Kang",
+            "Youngseog Chung",
+            "Adithya Pratapa",
+            "W. Neiswanger",
+            "Emma Strubell",
+            "Teruko Mitamura",
+            "Jeff G. Schneider",
+            "Eduard H. Hovy",
+            "Roger B. Grosse",
+            "Eric P. Xing"
+          ]
+        },
+        {
+          "title": "Scaling Up Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/ef2a773c3c7848a6cc16b18164be5f8876a310af",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andrea Schioppa",
+            "Polina Zablotskaia",
+            "David Vilar",
+            "Artem Sokolov"
+          ]
+        },
+        {
+          "title": "Welcome to torch-influence's API Reference! — torch-influence 0.1.0 ...",
+          "url": "https://torch-influence.readthedocs.io/",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "contextual-decomposition",
+        "taylor-decomposition"
+      ]
+    }
+  ],
+  "count": 1
+}

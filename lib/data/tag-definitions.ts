@@ -7,9 +7,9 @@
 export const tagDefinitions: Record<string, string> = {
   // Category-level definitions
   'applicable-models':
-    'Types of machine learning models the technique can be applied to',
+    'Types of computational models to which the technique can be applied',
   'lifecycle-stage':
-    'Stages of the AI system development lifecycle where the technique is applicable',
+    'Stages of the system development lifecycle where the technique is applicable',
   'expertise-needed':
     'Type of knowledge or expertise required to apply the technique effectively',
   'technique-type': 'Fundamental nature and approach of the technique',
@@ -17,9 +17,9 @@ export const tagDefinitions: Record<string, string> = {
     'Type of output or evidential artifact produced by the technique',
   'data-requirements':
     'Specific data needs or dependencies for applying the technique',
-  'data-type': 'Types of data the technique is designed for or applicable to',
+  'data-type': 'Types of data for which the technique is designed',
   'assurance-goal-category':
-    'Primary responsible AI goal that the technique helps achieve',
+    'Primary assurance goal that the technique helps achieve',
   'explanatory-scope':
     'Whether the explanation is instance-specific (local) or model-wide (global)',
   'fairness-approach':
@@ -212,6 +212,119 @@ export const tagDefinitions: Record<string, string> = {
   // Assurance Goal Categories
   'assurance-goal-category/explainability':
     'Techniques that help understand model decisions and behavior',
+
+  // EXPLAINABILITY - METHOD DIMENSION
+  // Attribution Methods
+  'assurance-goal-category/explainability/attribution-methods':
+    'Techniques that assign importance scores to inputs/features',
+  'assurance-goal-category/explainability/attribution-methods/gradient-based':
+    'Uses gradients/derivatives to compute feature importance (e.g., Integrated Gradients, Saliency Maps)',
+  'assurance-goal-category/explainability/attribution-methods/perturbation-based':
+    'Modifies inputs to measure impact on outputs (e.g., SHAP, Permutation Importance)',
+  'assurance-goal-category/explainability/attribution-methods/model-specific':
+    'Leverages specific model architecture for attribution (e.g., Mean Decrease Impurity for trees)',
+
+  // Surrogate Models
+  'assurance-goal-category/explainability/surrogate-models':
+    'Techniques that approximate complex models with interpretable ones',
+  'assurance-goal-category/explainability/surrogate-models/local-surrogates':
+    'Approximates model behavior around specific instances (e.g., LIME)',
+  'assurance-goal-category/explainability/surrogate-models/global-surrogates':
+    'Approximates entire model behavior with simpler model (e.g., GAMs, Model Distillation)',
+  'assurance-goal-category/explainability/surrogate-models/rule-extraction':
+    'Extracts interpretable rules from complex models (e.g., ANCHOR, RuleFit)',
+
+  // Visualization Methods
+  'assurance-goal-category/explainability/visualization-methods':
+    'Techniques focused on visual representation of model behavior',
+  'assurance-goal-category/explainability/visualization-methods/feature-relationships':
+    'Visualizes how features affect predictions (e.g., PDP, ICE Plots)',
+  'assurance-goal-category/explainability/visualization-methods/attention-patterns':
+    'Displays attention mechanisms in models (e.g., Attention Visualization in Transformers)',
+  'assurance-goal-category/explainability/visualization-methods/activation-maps':
+    'Creates visual heatmaps of model activations (e.g., Grad-CAM, Saliency Maps)',
+
+  // Representation Analysis
+  'assurance-goal-category/explainability/representation-analysis':
+    'Techniques analyzing internal model representations',
+  'assurance-goal-category/explainability/representation-analysis/dimensionality-reduction':
+    'Reduces complexity for understanding (e.g., PCA, t-SNE, UMAP)',
+  'assurance-goal-category/explainability/representation-analysis/concept-identification':
+    'Identifies learned concepts in models (e.g., CAVs, Neuron Activation Analysis)',
+  'assurance-goal-category/explainability/representation-analysis/decomposition':
+    'Breaks down predictions into components (e.g., Taylor Decomposition, Contextual Decomposition)',
+
+  // Instance-Based Methods
+  'assurance-goal-category/explainability/instance-based':
+    'Techniques using example-based explanations',
+  'assurance-goal-category/explainability/instance-based/prototypes':
+    'Uses representative examples for explanation (e.g., Prototype & Criticism Models)',
+  'assurance-goal-category/explainability/instance-based/influence-analysis':
+    'Traces impact of training data on predictions (e.g., Influence Functions)',
+  'assurance-goal-category/explainability/instance-based/counterfactual':
+    'Shows alternative scenarios that would change outcome (e.g., Contrastive Explanation Method)',
+
+  // Uncertainty Analysis
+  'assurance-goal-category/explainability/uncertainty-analysis':
+    'Techniques quantifying model confidence and robustness',
+  'assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty':
+    'Measures confidence in predictions (e.g., Monte Carlo Dropout)',
+  'assurance-goal-category/explainability/uncertainty-analysis/sensitivity-testing':
+    'Tests robustness to input changes (e.g., Prompt Sensitivity Analysis, Occlusion Sensitivity)',
+
+  // Causal Analysis
+  'assurance-goal-category/explainability/causal-analysis':
+    'Techniques examining causal relationships in models',
+  'assurance-goal-category/explainability/causal-analysis/mediation-analysis':
+    'Traces causal pathways through model (e.g., Causal Mediation Analysis)',
+  'assurance-goal-category/explainability/causal-analysis/interaction-effects':
+    'Analyzes feature interactions and their effects (e.g., Sobol Indices, Factor Analysis)',
+
+  // Model Simplification
+  'assurance-goal-category/explainability/model-simplification':
+    'Techniques that create simpler, more interpretable models',
+  'assurance-goal-category/explainability/model-simplification/pruning':
+    'Removes unnecessary model components (e.g., Model Pruning)',
+  'assurance-goal-category/explainability/model-simplification/knowledge-transfer':
+    'Transfers knowledge to simpler model (e.g., Model Distillation)',
+
+  // EXPLAINABILITY - TARGET DIMENSION
+  'assurance-goal-category/explainability/explains':
+    'The aspect of model behavior or data that the technique reveals',
+  'assurance-goal-category/explainability/explains/feature-importance':
+    'Identifies which inputs matter most for predictions',
+  'assurance-goal-category/explainability/explains/decision-boundaries':
+    'Shows how the model separates different outcomes',
+  'assurance-goal-category/explainability/explains/internal-mechanisms':
+    'Reveals how the model processes information internally',
+  'assurance-goal-category/explainability/explains/prediction-confidence':
+    'Quantifies how certain/uncertain the model is',
+  'assurance-goal-category/explainability/explains/data-patterns':
+    'Uncovers underlying structures and relationships in data',
+  'assurance-goal-category/explainability/explains/causal-pathways':
+    'Shows how effects propagate through the model',
+
+  // EXPLAINABILITY - PROPERTY DIMENSION
+  'assurance-goal-category/explainability/property':
+    'Key quality characteristics of the explanation',
+  'assurance-goal-category/explainability/property/completeness':
+    'Attributions fully account for model output',
+  'assurance-goal-category/explainability/property/consistency':
+    'Similar inputs produce similar explanations',
+  'assurance-goal-category/explainability/property/fidelity':
+    'Accurately represents true model behavior',
+  'assurance-goal-category/explainability/property/sparsity':
+    'Focuses on few, most important factors',
+  'assurance-goal-category/explainability/property/causality':
+    'Identifies causal rather than correlational relationships',
+  'assurance-goal-category/explainability/property/comprehensibility':
+    'Produces human-understandable formats',
+  'assurance-goal-category/explainability/property/efficiency':
+    'Computationally efficient to generate',
+  'assurance-goal-category/explainability/property/counterfactual-validity':
+    'Can show what changes would alter outcomes',
+
+  // Legacy feature analysis tags (kept for compatibility)
   'assurance-goal-category/explainability/feature-analysis':
     'Analyzes the role and importance of features',
   'assurance-goal-category/explainability/feature-analysis/importance-and-attribution':

@@ -11,8 +11,10 @@
     "tags": [
       "applicable-models/agnostic",
       "assurance-goal-category/explainability",
-      "assurance-goal-category/explainability/feature-analysis",
-      "assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
+      "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/property/completeness",
+      "assurance-goal-category/explainability/property/consistency",
       "assurance-goal-category/fairness",
       "assurance-goal-category/reliability",
       "data-requirements/no-special-requirements",
@@ -24,7 +26,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "shapley additive explanations shap explains model predictions by quantifying how much each input feature contributes to the outcome. it assigns an importance score to every feature, indicating whether it pushes the prediction towards or away from the average. the method systematically evaluates how predictions change as features are included or excluded, drawing on game theory concepts to ensure a fair distribution of contributions. explainability fairness reliability applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/feature-analysis assurance-goal-category/explainability/feature-analysis/importance-and-attribution assurance-goal-category/fairness assurance-goal-category/reliability data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/global explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "shapley additive explanations shap explains model predictions by quantifying how much each input feature contributes to the outcome. it assigns an importance score to every feature, indicating whether it pushes the prediction towards or away from the average. the method systematically evaluates how predictions change as features are included or excluded, drawing on game theory concepts to ensure a fair distribution of contributions. explainability fairness reliability applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/attribution-methods/perturbation-based assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/completeness assurance-goal-category/explainability/property/consistency assurance-goal-category/fairness assurance-goal-category/reliability data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/global explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "permutation-importance",
@@ -37,8 +39,10 @@
     "tags": [
       "applicable-models/agnostic",
       "assurance-goal-category/explainability",
-      "assurance-goal-category/explainability/feature-analysis",
-      "assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
+      "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/property/consistency",
+      "assurance-goal-category/explainability/property/fidelity",
       "assurance-goal-category/reliability",
       "data-requirements/no-special-requirements",
       "data-type/any",
@@ -48,7 +52,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "permutation importance permutation importance quantifies a feature's contribution to a model's performance by randomly shuffling its values and measuring the resulting drop in predictive accuracy. if shuffling a feature significantly degrades the model's performance, that feature is considered important. this model-agnostic technique helps identify which inputs are genuinely driving predictions, rather than just being correlated with the outcome. explainability reliability applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/feature-analysis assurance-goal-category/explainability/feature-analysis/importance-and-attribution assurance-goal-category/reliability data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "permutation importance permutation importance quantifies a feature's contribution to a model's performance by randomly shuffling its values and measuring the resulting drop in predictive accuracy. if shuffling a feature significantly degrades the model's performance, that feature is considered important. this model-agnostic technique helps identify which inputs are genuinely driving predictions, rather than just being correlated with the outcome. explainability reliability applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/attribution-methods/perturbation-based assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/consistency assurance-goal-category/explainability/property/fidelity assurance-goal-category/reliability data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "mean-decrease-impurity",
@@ -61,6 +65,10 @@
     "tags": [
       "applicable-models/tree-based",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/attribution-methods/model-specific",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/property/efficiency",
+      "assurance-goal-category/explainability/property/completeness",
       "assurance-goal-category/reliability",
       "data-requirements/no-special-requirements",
       "data-type/tabular",
@@ -70,7 +78,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "mean decrease impurity mean decrease impurity (mdi) quantifies a feature's importance in tree-based models (e.g., random forests, gradient boosting machines) by measuring the total reduction in impurity (e.g., gini impurity, entropy) across all splits where the feature is used. features that lead to larger, more consistent reductions in impurity are considered more important, indicating their effectiveness in creating homogeneous child nodes and improving predictive accuracy. explainability reliability applicable-models/tree-based assurance-goal-category/explainability assurance-goal-category/reliability data-requirements/no-special-requirements data-type/tabular evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "mean decrease impurity mean decrease impurity (mdi) quantifies a feature's importance in tree-based models (e.g., random forests, gradient boosting machines) by measuring the total reduction in impurity (e.g., gini impurity, entropy) across all splits where the feature is used. features that lead to larger, more consistent reductions in impurity are considered more important, indicating their effectiveness in creating homogeneous child nodes and improving predictive accuracy. explainability reliability applicable-models/tree-based assurance-goal-category/explainability assurance-goal-category/explainability/attribution-methods/model-specific assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/efficiency assurance-goal-category/explainability/property/completeness assurance-goal-category/reliability data-requirements/no-special-requirements data-type/tabular evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "monte-carlo-dropout",
@@ -83,6 +91,10 @@
     "tags": [
       "applicable-models/neural-network",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
+      "assurance-goal-category/explainability/explains/prediction-confidence",
+      "assurance-goal-category/explainability/property/consistency",
+      "assurance-goal-category/explainability/property/efficiency",
       "assurance-goal-category/reliability",
       "data-requirements/no-special-requirements",
       "data-type/any",
@@ -94,7 +106,7 @@
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
-    "searchText": "monte carlo dropout monte carlo dropout estimates prediction uncertainty by applying dropout (randomly setting neural network weights to zero) during inference rather than just training. it performs multiple forward passes through the network with different random dropout patterns and collects the resulting predictions to form a distribution. low variance across predictions indicates epistemic certainty (the model is confident), while high variance suggests epistemic uncertainty (the model is unsure). this technique transforms any dropout-trained neural network into a bayesian approximation for uncertainty quantification. explainability reliability applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/reliability data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+    "searchText": "monte carlo dropout monte carlo dropout estimates prediction uncertainty by applying dropout (randomly setting neural network weights to zero) during inference rather than just training. it performs multiple forward passes through the network with different random dropout patterns and collects the resulting predictions to form a distribution. low variance across predictions indicates epistemic certainty (the model is confident), while high variance suggests epistemic uncertainty (the model is unsure). this technique transforms any dropout-trained neural network into a bayesian approximation for uncertainty quantification. explainability reliability applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty assurance-goal-category/explainability/explains/prediction-confidence assurance-goal-category/explainability/property/consistency assurance-goal-category/explainability/property/efficiency assurance-goal-category/reliability data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
   },
   {
     "slug": "out-of-distribution-detector-for-neural-networks",
@@ -108,6 +120,12 @@
     "tags": [
       "applicable-models/neural-network",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
+      "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+      "assurance-goal-category/explainability/explains/prediction-confidence",
+      "assurance-goal-category/explainability/explains/decision-boundaries",
+      "assurance-goal-category/explainability/property/consistency",
+      "assurance-goal-category/explainability/property/fidelity",
       "assurance-goal-category/reliability",
       "assurance-goal-category/safety",
       "data-requirements/no-special-requirements",
@@ -119,7 +137,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "out-of-distribution detector for neural networks odin (out-of-distribution detector for neural networks) identifies when a neural network encounters inputs significantly different from its training distribution. it enhances detection by applying temperature scaling to soften the model's output distribution and adding small, carefully calibrated perturbations to the input that push in-distribution samples towards higher confidence predictions. by measuring the maximum softmax probability after these adjustments, odin can effectively distinguish between in-distribution and out-of-distribution inputs, flagging potentially unreliable predictions before they cause downstream errors. explainability reliability safety applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/reliability assurance-goal-category/safety data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "out-of-distribution detector for neural networks odin (out-of-distribution detector for neural networks) identifies when a neural network encounters inputs significantly different from its training distribution. it enhances detection by applying temperature scaling to soften the model's output distribution and adding small, carefully calibrated perturbations to the input that push in-distribution samples towards higher confidence predictions. by measuring the maximum softmax probability after these adjustments, odin can effectively distinguish between in-distribution and out-of-distribution inputs, flagging potentially unreliable predictions before they cause downstream errors. explainability reliability safety applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty assurance-goal-category/explainability/attribution-methods/perturbation-based assurance-goal-category/explainability/explains/prediction-confidence assurance-goal-category/explainability/explains/decision-boundaries assurance-goal-category/explainability/property/consistency assurance-goal-category/explainability/property/fidelity assurance-goal-category/reliability assurance-goal-category/safety data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "permutation-tests",
@@ -132,6 +150,10 @@
     "tags": [
       "applicable-models/agnostic",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/property/consistency",
+      "assurance-goal-category/explainability/property/fidelity",
       "assurance-goal-category/reliability",
       "data-requirements/no-special-requirements",
       "data-type/any",
@@ -142,7 +164,7 @@
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
-    "searchText": "permutation tests permutation tests assess the statistical significance of observed results (such as model accuracy, feature importance, or group differences) by comparing them to what would occur purely by chance. the technique randomly shuffles labels or data thousands of times, recalculating the metric of interest each time to build an empirical null distribution. if the actual observed result falls in the extreme tail of this distribution (typically beyond the 95th or 99th percentile), it provides strong evidence that the relationship is genuine rather than due to random chance, without requiring parametric assumptions about data distributions. explainability reliability applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/reliability data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+    "searchText": "permutation tests permutation tests assess the statistical significance of observed results (such as model accuracy, feature importance, or group differences) by comparing them to what would occur purely by chance. the technique randomly shuffles labels or data thousands of times, recalculating the metric of interest each time to build an empirical null distribution. if the actual observed result falls in the extreme tail of this distribution (typically beyond the 95th or 99th percentile), it provides strong evidence that the relationship is genuine rather than due to random chance, without requiring parametric assumptions about data distributions. explainability reliability applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/attribution-methods/perturbation-based assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/consistency assurance-goal-category/explainability/property/fidelity assurance-goal-category/reliability data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
   },
   {
     "slug": "synthetic-data-generation",
@@ -667,6 +689,12 @@
     "tags": [
       "applicable-models/neural-network",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/model-simplification/knowledge-transfer",
+      "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/explains/decision-boundaries",
+      "assurance-goal-category/explainability/property/fidelity",
+      "assurance-goal-category/explainability/property/comprehensibility",
       "assurance-goal-category/reliability",
       "assurance-goal-category/safety",
       "data-requirements/access-to-training-data",
@@ -677,7 +705,7 @@
       "lifecycle-stage/deployment",
       "technique-type/algorithmic"
     ],
-    "searchText": "model distillation model distillation transfers knowledge from a large, complex model (teacher) to a smaller, more efficient model (student) by training the student to mimic the teacher's behaviour. the student learns from the teacher's soft predictions and intermediate representations rather than just hard labels, capturing nuanced decision boundaries and uncertainty. this produces models that are faster, require less memory, and are often more interpretable whilst maintaining much of the original performance. beyond compression, distillation can improve model reliability by regularising training and enable deployment in resource-constrained environments. explainability reliability safety applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/reliability assurance-goal-category/safety data-requirements/access-to-training-data data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/deployment technique-type/algorithmic"
+    "searchText": "model distillation model distillation transfers knowledge from a large, complex model (teacher) to a smaller, more efficient model (student) by training the student to mimic the teacher's behaviour. the student learns from the teacher's soft predictions and intermediate representations rather than just hard labels, capturing nuanced decision boundaries and uncertainty. this produces models that are faster, require less memory, and are often more interpretable whilst maintaining much of the original performance. beyond compression, distillation can improve model reliability by regularising training and enable deployment in resource-constrained environments. explainability reliability safety applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/explainability/model-simplification/knowledge-transfer assurance-goal-category/explainability/surrogate-models/global-surrogates assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/explains/decision-boundaries assurance-goal-category/explainability/property/fidelity assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/reliability assurance-goal-category/safety data-requirements/access-to-training-data data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/deployment technique-type/algorithmic"
   },
   {
     "slug": "monotonicity-constraints",
@@ -741,8 +769,13 @@
       "applicable-models/linear-model",
       "assurance-goal-category/transparency",
       "assurance-goal-category/explainability",
-      "assurance-goal-category/explainability/feature-analysis",
-      "assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
+      "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+      "assurance-goal-category/explainability/visualization-methods/feature-relationships",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/explains/data-patterns",
+      "assurance-goal-category/explainability/property/comprehensibility",
+      "assurance-goal-category/explainability/property/fidelity",
+      "assurance-goal-category/explainability/property/sparsity",
       "assurance-goal-category/reliability",
       "data-requirements/labelled-data",
       "data-type/tabular",
@@ -754,7 +787,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "generalized additive models an intrinsically interpretable modelling technique that extends linear models by allowing flexible, nonlinear relationships between individual features and the target whilst maintaining the additive structure that preserves transparency. each feature's effect is modelled separately as a smooth function, visualised as a curve showing how the feature influences predictions across its range. gams achieve this through spline functions or other smoothing techniques that capture complex patterns in individual variables without interactions, making them particularly valuable for domains requiring both predictive accuracy and model interpretability. transparency explainability reliability applicable-models/gam applicable-models/linear-model assurance-goal-category/transparency assurance-goal-category/explainability assurance-goal-category/explainability/feature-analysis assurance-goal-category/explainability/feature-analysis/importance-and-attribution assurance-goal-category/reliability data-requirements/labelled-data data-type/tabular evidence-type/quantitative-metric evidence-type/visualisation expertise-needed/statistics explanatory-scope/global lifecycle-stage/project-design lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "generalized additive models an intrinsically interpretable modelling technique that extends linear models by allowing flexible, nonlinear relationships between individual features and the target whilst maintaining the additive structure that preserves transparency. each feature's effect is modelled separately as a smooth function, visualised as a curve showing how the feature influences predictions across its range. gams achieve this through spline functions or other smoothing techniques that capture complex patterns in individual variables without interactions, making them particularly valuable for domains requiring both predictive accuracy and model interpretability. transparency explainability reliability applicable-models/gam applicable-models/linear-model assurance-goal-category/transparency assurance-goal-category/explainability assurance-goal-category/explainability/surrogate-models/global-surrogates assurance-goal-category/explainability/visualization-methods/feature-relationships assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/explains/data-patterns assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/explainability/property/fidelity assurance-goal-category/explainability/property/sparsity assurance-goal-category/reliability data-requirements/labelled-data data-type/tabular evidence-type/quantitative-metric evidence-type/visualisation expertise-needed/statistics explanatory-scope/global lifecycle-stage/project-design lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "model-pruning",
@@ -768,6 +801,11 @@
     "tags": [
       "applicable-models/neural-network",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/model-simplification/pruning",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/property/sparsity",
+      "assurance-goal-category/explainability/property/comprehensibility",
       "assurance-goal-category/reliability",
       "assurance-goal-category/safety",
       "data-requirements/access-to-model-internals",
@@ -778,7 +816,7 @@
       "lifecycle-stage/model-optimization",
       "technique-type/algorithmic"
     ],
-    "searchText": "model pruning model pruning systematically removes less important weights, neurons, or entire layers from neural networks to create smaller, more efficient models whilst maintaining performance. this process involves iterative removal based on importance criteria (weight magnitudes, gradient information, activation patterns) followed by fine-tuning. pruning can be structured (removing entire neurons/channels) or unstructured (removing individual weights), with structured pruning providing greater computational benefits and interpretability through simplified architectures. explainability reliability safety applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/reliability assurance-goal-category/safety data-requirements/access-to-model-internals data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/model-optimization technique-type/algorithmic"
+    "searchText": "model pruning model pruning systematically removes less important weights, neurons, or entire layers from neural networks to create smaller, more efficient models whilst maintaining performance. this process involves iterative removal based on importance criteria (weight magnitudes, gradient information, activation patterns) followed by fine-tuning. pruning can be structured (removing entire neurons/channels) or unstructured (removing individual weights), with structured pruning providing greater computational benefits and interpretability through simplified architectures. explainability reliability safety applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/explainability/model-simplification/pruning assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/sparsity assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/reliability assurance-goal-category/safety data-requirements/access-to-model-internals data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/model-optimization technique-type/algorithmic"
   },
   {
     "slug": "prompt-sensitivity-analysis",
@@ -802,9 +840,15 @@
       "expertise-needed/experimental-design",
       "lifecycle-stage/model-development",
       "lifecycle-stage/model-evaluation",
-      "technique-type/experimental"
+      "technique-type/experimental",
+      "assurance-goal-category/explainability/uncertainty-analysis/sensitivity-testing",
+      "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/explains/prediction-confidence",
+      "assurance-goal-category/explainability/property/consistency",
+      "assurance-goal-category/explainability/property/fidelity"
     ],
-    "searchText": "prompt sensitivity analysis prompt sensitivity analysis systematically evaluates how variations in input prompts affect large language model outputs, providing insights into model robustness, consistency, and interpretability. this technique involves creating controlled perturbations of prompts whilst maintaining semantic meaning, then measuring how these changes influence model responses. it encompasses various types of prompt modifications including lexical substitutions, syntactic restructuring, formatting changes, and contextual variations. the analysis typically quantifies sensitivity through metrics such as output consistency, semantic similarity, and statistical measures of variance across prompt variations. explainability reliability safety applicable-models/llm assurance-goal-category/explainability assurance-goal-category/reliability assurance-goal-category/safety data-requirements/no-special-requirements data-type/text evidence-type/quantitative-metric expertise-needed/statistics expertise-needed/linguistics expertise-needed/experimental-design lifecycle-stage/model-development lifecycle-stage/model-evaluation technique-type/experimental"
+    "searchText": "prompt sensitivity analysis prompt sensitivity analysis systematically evaluates how variations in input prompts affect large language model outputs, providing insights into model robustness, consistency, and interpretability. this technique involves creating controlled perturbations of prompts whilst maintaining semantic meaning, then measuring how these changes influence model responses. it encompasses various types of prompt modifications including lexical substitutions, syntactic restructuring, formatting changes, and contextual variations. the analysis typically quantifies sensitivity through metrics such as output consistency, semantic similarity, and statistical measures of variance across prompt variations. explainability reliability safety applicable-models/llm assurance-goal-category/explainability assurance-goal-category/reliability assurance-goal-category/safety data-requirements/no-special-requirements data-type/text evidence-type/quantitative-metric expertise-needed/statistics expertise-needed/linguistics expertise-needed/experimental-design lifecycle-stage/model-development lifecycle-stage/model-evaluation technique-type/experimental assurance-goal-category/explainability/uncertainty-analysis/sensitivity-testing assurance-goal-category/explainability/attribution-methods/perturbation-based assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/explains/prediction-confidence assurance-goal-category/explainability/property/consistency assurance-goal-category/explainability/property/fidelity"
   },
   {
     "slug": "causal-mediation-analysis-in-language-models",
@@ -828,9 +872,14 @@
       "expertise-needed/ml-engineering",
       "lifecycle-stage/model-development",
       "lifecycle-stage/post-deployment",
-      "technique-type/mechanistic-interpretability"
+      "technique-type/mechanistic-interpretability",
+      "assurance-goal-category/explainability/causal-analysis/mediation-analysis",
+      "assurance-goal-category/explainability/explains/causal-pathways",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/property/causality",
+      "assurance-goal-category/explainability/property/fidelity"
     ],
-    "searchText": "causal mediation analysis in language models causal mediation analysis in language models is a mechanistic interpretability technique that systematically investigates how specific internal components (neurons, attention heads, or layers) causally contribute to model outputs. by performing controlled interventions—such as activating, deactivating, or modifying specific components—researchers can trace the causal pathways through which information flows and transforms within the model. this approach goes beyond correlation to establish causal relationships, enabling researchers to understand not just what features influence outputs, but how and why they do so through specific computational pathways. explainability reliability safety applicable-models/llm applicable-models/transformer assurance-goal-category/explainability assurance-goal-category/reliability assurance-goal-category/safety data-requirements/access-to-model-internals data-type/text evidence-type/causal-analysis expertise-needed/causal-inference expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/post-deployment technique-type/mechanistic-interpretability"
+    "searchText": "causal mediation analysis in language models causal mediation analysis in language models is a mechanistic interpretability technique that systematically investigates how specific internal components (neurons, attention heads, or layers) causally contribute to model outputs. by performing controlled interventions—such as activating, deactivating, or modifying specific components—researchers can trace the causal pathways through which information flows and transforms within the model. this approach goes beyond correlation to establish causal relationships, enabling researchers to understand not just what features influence outputs, but how and why they do so through specific computational pathways. explainability reliability safety applicable-models/llm applicable-models/transformer assurance-goal-category/explainability assurance-goal-category/reliability assurance-goal-category/safety data-requirements/access-to-model-internals data-type/text evidence-type/causal-analysis expertise-needed/causal-inference expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/post-deployment technique-type/mechanistic-interpretability assurance-goal-category/explainability/causal-analysis/mediation-analysis assurance-goal-category/explainability/explains/causal-pathways assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/property/causality assurance-goal-category/explainability/property/fidelity"
   },
   {
     "slug": "reweighing",

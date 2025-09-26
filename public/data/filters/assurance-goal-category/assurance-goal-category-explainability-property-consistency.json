@@ -1,0 +1,913 @@
+{
+  "tag": {
+    "name": "assurance-goal-category/explainability/property/consistency",
+    "slug": "assurance-goal-category-explainability-property-consistency",
+    "count": 9,
+    "category": "assurance-goal-category"
+  },
+  "techniques": [
+    {
+      "slug": "shapley-additive-explanations",
+      "name": "SHapley Additive exPlanations",
+      "description": "SHAP explains model predictions by quantifying how much each input feature contributes to the outcome. It assigns an importance score to every feature, indicating whether it pushes the prediction towards or away from the average. The method systematically evaluates how predictions change as features are included or excluded, drawing on game theory concepts to ensure a fair distribution of contributions.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing a customer churn prediction model to understand why a specific high-value customer was flagged as likely to leave, revealing that recent support ticket interactions and declining purchase frequency were the main drivers.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Auditing a loan approval model by comparing SHAP values for applicants from different demographic groups, ensuring that protected characteristics like race or gender do not have an undue influence on credit decisions.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Validating a medical diagnosis model by confirming that its predictions are based on relevant clinical features (e.g., blood pressure, cholesterol levels) rather than spurious correlations (e.g., patient ID or appointment time), thereby improving model reliability.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Assumes feature independence, which can produce misleading explanations when features are highly correlated, as the model may attribute importance to features that are merely proxies for others."
+        },
+        {
+          "description": "Computationally expensive for models with many features or large datasets, as the number of required predictions grows exponentially with the number of features."
+        },
+        {
+          "description": "The choice of background dataset for generating explanations can significantly influence the results, requiring careful selection to ensure a representative baseline."
+        },
+        {
+          "description": "Global explanations derived from averaging local SHAP values may obscure important heterogeneous effects where features impact subgroups of the population differently."
+        }
+      ],
+      "resources": [
+        {
+          "title": "shap/shap",
+          "url": "https://github.com/shap/shap",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Introduction to SHapley Additive exPlanations (SHAP) — XAI Tutorials",
+          "url": "https://xai-tutorials.readthedocs.io/en/latest/_model_agnostic_xai/shap.html",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "An empirical study of the effect of background data size on the stability of SHapley Additive exPlanations (SHAP) for deep learning models",
+          "url": "http://arxiv.org/pdf/2204.11351v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Han Yuan",
+            "Mingxuan Liu",
+            "Lican Kang",
+            "Chenkui Miao",
+            "Ying Wu"
+          ],
+          "publication_date": "2022-04-24"
+        },
+        {
+          "title": "SHAP: Shapley Additive Explanations | Towards Data Science",
+          "url": "https://towardsdatascience.com/shap-shapley-additive-explanations-5a2a271ed9c3/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "MAIF/shapash",
+          "url": "https://github.com/MAIF/shapash",
+          "source_type": "software_package"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "acronym": "SHAP",
+      "related_techniques": [
+        "integrated-gradients",
+        "deeplift",
+        "layer-wise-relevance-propagation",
+        "local-interpretable-model-agnostic-explanations",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "permutation-importance",
+      "name": "Permutation Importance",
+      "description": "Permutation Importance quantifies a feature's contribution to a model's performance by randomly shuffling its values and measuring the resulting drop in predictive accuracy. If shuffling a feature significantly degrades the model's performance, that feature is considered important. This model-agnostic technique helps identify which inputs are genuinely driving predictions, rather than just being correlated with the outcome.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Assessing which patient characteristics (e.g., age, blood pressure, cholesterol) are most critical for a medical diagnosis model by observing the performance drop when each characteristic's values are randomly shuffled, ensuring the model relies on clinically relevant factors.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Validating the robustness of a fraud detection model by permuting features like transaction amount or location, and confirming that the model's ability to detect fraud significantly decreases only for truly important features, thereby improving confidence in its reliability.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Can be misleading when features are highly correlated, as shuffling one feature might indirectly affect others, leading to an overestimation of its importance."
+        },
+        {
+          "description": "Computationally expensive for large datasets or complex models, as it requires re-evaluating the model many times for each feature."
+        },
+        {
+          "description": "Does not account for interactions between features; it measures the marginal importance of a feature, assuming other features remain unchanged."
+        },
+        {
+          "description": "The choice of metric for evaluating performance drop (e.g., accuracy, F1-score) can influence the perceived importance of features."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Asymptotic Unbiasedness of the Permutation Importance Measure in Random Forest Models",
+          "url": "http://arxiv.org/pdf/1912.03306v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Burim Ramosaj",
+            "Markus Pauly"
+          ],
+          "publication_date": "2019-12-05"
+        },
+        {
+          "title": "eli5.permutation_importance — ELI5 0.15.0 documentation",
+          "url": "https://eli5.readthedocs.io/en/latest/autodocs/permutation_importance.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Permutation Importance — PermutationImportance 1.2.1.5 ...",
+          "url": "https://permutationimportance.readthedocs.io/en/latest/permutation.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "parrt/random-forest-importances",
+          "url": "https://github.com/parrt/random-forest-importances",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Statistically Valid Variable Importance Assessment through Conditional Permutations",
+          "url": "http://arxiv.org/pdf/2309.07593v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ahmad Chamma",
+            "Denis A. Engemann",
+            "Bertrand Thirion"
+          ],
+          "publication_date": "2023-09-14"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "mean-decrease-impurity",
+        "coefficient-magnitudes-in-linear-models",
+        "sobol-indices"
+      ]
+    },
+    {
+      "slug": "integrated-gradients",
+      "name": "Integrated Gradients",
+      "description": "Integrated Gradients is an attribution technique that explains a model's prediction by quantifying the contribution of each input feature. It works by accumulating gradients along a straight path from a user-defined baseline input (e.g., a black image or an all-zero vector) to the actual input. This path integral ensures that the attributions satisfy fundamental axioms like completeness (attributions sum up to the difference between the prediction and the baseline prediction) and sensitivity (non-zero attributions for features that change the prediction). The output is a set of importance scores, often visualised as heatmaps, indicating which parts of the input were most influential for the model's decision.",
+      "assurance_goals": [
+        "Explainability"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/consistency",
+        "data-requirements/labelled-data",
+        "data-requirements/reference-dataset",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualization",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing a medical image classification model to understand which specific pixels or regions in an X-ray image contribute most to a diagnosis of pneumonia, ensuring the model focuses on relevant pathological features rather than artifacts.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Explaining the sentiment prediction of a natural language processing model by highlighting which words or phrases in a review most strongly influenced its classification as positive or negative, revealing the model's interpretative focus.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires a carefully chosen and meaningful baseline input; an inappropriate baseline can lead to misleading or uninformative attributions."
+        },
+        {
+          "description": "The model must be differentiable, which limits its direct application to models with non-differentiable components or discrete inputs without workarounds."
+        },
+        {
+          "description": "Computationally more expensive than simple gradient-based methods, as it requires multiple gradient calculations along the integration path."
+        },
+        {
+          "description": "While satisfying completeness, the attributions can sometimes be visually noisy or difficult for humans to interpret intuitively, especially for complex inputs."
+        }
+      ],
+      "resources": [
+        {
+          "title": "ankurtaly/Integrated-Gradients",
+          "url": "https://github.com/ankurtaly/Integrated-Gradients",
+          "source_type": "software_package"
+        },
+        {
+          "title": "pytorch/captum",
+          "url": "https://github.com/pytorch/captum",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Maximum Entropy Baseline for Integrated Gradients",
+          "url": "http://arxiv.org/pdf/2204.05948v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hanxiao Tan"
+          ],
+          "publication_date": "2022-04-12"
+        },
+        {
+          "title": "Integrated Gradients from Scratch | Towards Data Science",
+          "url": "https://towardsdatascience.com/integrated-gradients-from-scratch-b46311e4ab4/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Understanding Integrated Gradients with SmoothTaylor for Deep Neural Network Attribution",
+          "url": "http://arxiv.org/pdf/2004.10484v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Gary S. W. Goh",
+            "Sebastian Lapuschkin",
+            "Leander Weber",
+            "Wojciech Samek",
+            "Alexander Binder"
+          ],
+          "publication_date": "2020-04-22"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "deeplift",
+        "layer-wise-relevance-propagation",
+        "local-interpretable-model-agnostic-explanations",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "deeplift",
+      "name": "DeepLIFT",
+      "description": "DeepLIFT (Deep Learning Important FeaTures) explains neural network predictions by decomposing the difference between the actual output and a reference output back to individual input features. It compares each neuron's activation to a reference activation (typically from a baseline input like all zeros or the dataset mean) and propagates these differences backwards through the network using chain rule modifications. Unlike gradient-based methods, DeepLIFT satisfies the sensitivity property (zero input gets zero attribution) and provides more stable attributions by using discrete differences rather than gradients.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-requirements/reference-dataset",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Identifying which genomic sequences contribute to a neural network's prediction of protein binding sites, helping biologists understand regulatory mechanisms by comparing to neutral DNA baselines.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging a deep learning image classifier that misclassifies medical scans by attributing the decision to specific image regions, revealing if the model focuses on irrelevant artifacts rather than pathological features.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations for automated loan approval decisions by showing which financial features (relative to typical applicant profiles) most influenced the neural network's recommendation.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires careful selection of reference baseline, as different choices can lead to substantially different attribution scores."
+        },
+        {
+          "description": "Implementation complexity varies significantly across different neural network architectures and layer types."
+        },
+        {
+          "description": "May produce unintuitive results when the chosen reference is not representative of the decision boundary."
+        },
+        {
+          "description": "Limited to feedforward networks and specific layer types, not suitable for all modern architectures like transformers."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Learning Important Features Through Propagating Activation Differences",
+          "url": "http://arxiv.org/pdf/1704.02685v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Avanti Shrikumar",
+            "Peyton Greenside",
+            "Anshul Kundaje"
+          ],
+          "publication_date": "2017-04-10"
+        },
+        {
+          "title": "pytorch/captum",
+          "url": "https://github.com/pytorch/captum",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Tutorial A3: DeepLIFT/SHAP — tangermeme v0.1.0 documentation",
+          "url": "https://tangermeme.readthedocs.io/en/latest/tutorials/Tutorial_A3_Deep_LIFT_SHAP.html",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "DeepLIFT Documentation - Captum",
+          "url": "https://captum.ai/api/deep_lift.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "layer-wise-relevance-propagation",
+        "local-interpretable-model-agnostic-explanations",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "layer-wise-relevance-propagation",
+      "name": "Layer-wise Relevance Propagation",
+      "description": "Layer-wise Relevance Propagation (LRP) explains neural network predictions by working backwards through the network to show how much each input feature contributed to the final decision. It follows a simple conservation rule: the total contribution scores always add up to the original prediction. Starting from the output, LRP distributes 'relevance' backwards through each layer using different rules depending on the layer type. This creates a detailed breakdown showing which input features helped or hindered the prediction, making it easier to understand why the network made a particular decision.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/model-specific",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Identifying which pixels in chest X-rays contribute to pneumonia detection, helping radiologists verify AI diagnoses by highlighting anatomical regions the model considers relevant.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging a neural network's misclassification of handwritten digits by tracing relevance through layers to identify which input pixels caused the error and which network layers amplified it.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations for automated credit scoring decisions by showing which financial features received positive or negative relevance scores, enabling clear regulatory reporting.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires different propagation rules for each layer type, making implementation complex for new architectures."
+        },
+        {
+          "description": "Can produce negative relevance scores which may be difficult to interpret intuitively."
+        },
+        {
+          "description": "Rule selection (LRP-ε, LRP-γ, etc.) significantly affects results and requires domain expertise."
+        },
+        {
+          "description": "Limited to feedforward networks and may not work well with modern architectures like transformers without substantial modifications."
+        }
+      ],
+      "resources": [
+        {
+          "title": "rachtibat/LRP-eXplains-Transformers",
+          "url": "https://github.com/rachtibat/LRP-eXplains-Transformers",
+          "source_type": "software_package"
+        },
+        {
+          "title": "sebastian-lapuschkin/lrp_toolbox",
+          "url": "https://github.com/sebastian-lapuschkin/lrp_toolbox",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Getting started — zennit documentation",
+          "url": "https://zennit.readthedocs.io/en/latest/getting-started.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Layer-wise Relevance Propagation eXplains Transformers (LXT) documentation",
+          "url": "https://lxt.readthedocs.io/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "On Pixel-Wise Explanations for Non-Linear Classifier Decisions by Layer-Wise Relevance Propagation",
+          "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0130140",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sebastian Bach",
+            "Alexander Binder",
+            "Grégoire Montavon",
+            "Frederick Klauschen",
+            "Klaus-Robert Müller",
+            "Wojciech Samek"
+          ],
+          "publication_date": "2015-07-10"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 3,
+      "acronym": "LRP",
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "deeplift",
+        "local-interpretable-model-agnostic-explanations",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "monte-carlo-dropout",
+      "name": "Monte Carlo Dropout",
+      "description": "Monte Carlo Dropout estimates prediction uncertainty by applying dropout (randomly setting neural network weights to zero) during inference rather than just training. It performs multiple forward passes through the network with different random dropout patterns and collects the resulting predictions to form a distribution. Low variance across predictions indicates epistemic certainty (the model is confident), while high variance suggests epistemic uncertainty (the model is unsure). This technique transforms any dropout-trained neural network into a Bayesian approximation for uncertainty quantification.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
+        "assurance-goal-category/explainability/explains/prediction-confidence",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Quantifying diagnostic uncertainty in medical imaging models by running 50+ Monte Carlo forward passes to detect when a chest X-ray classification is highly uncertain, prompting radiologist review for borderline cases.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Estimating prediction confidence in autonomous vehicle perception systems, where high uncertainty in object detection (e.g., variance > 0.3 across MC samples) triggers more conservative driving behaviour or human handover.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing uncertainty estimates in financial fraud detection models, where high epistemic uncertainty (wide prediction variance) indicates the model lacks sufficient training data for similar transaction patterns, requiring manual review.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Only captures epistemic (model) uncertainty, not aleatoric (data) uncertainty, providing an incomplete picture of total prediction uncertainty."
+        },
+        {
+          "description": "Computationally expensive as it requires multiple forward passes (typically 50-100) for each prediction, significantly increasing inference time."
+        },
+        {
+          "description": "Results depend critically on dropout rate matching the training configuration, and poorly calibrated dropout can lead to misleading uncertainty estimates."
+        },
+        {
+          "description": "Approximation quality varies with network architecture and dropout placement, with some configurations providing poor uncertainty calibration despite theoretical foundations."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning",
+          "url": "http://arxiv.org/pdf/1506.02142v6",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yarin Gal",
+            "Zoubin Ghahramani"
+          ],
+          "publication_date": "2016-06-06"
+        },
+        {
+          "title": "mattiasegu/uncertainty_estimation_deep_learning",
+          "url": "https://github.com/mattiasegu/uncertainty_estimation_deep_learning",
+          "source_type": "software_package"
+        },
+        {
+          "title": "uzh-rpg/deep_uncertainty_estimation",
+          "url": "https://github.com/uzh-rpg/deep_uncertainty_estimation",
+          "source_type": "software_package"
+        },
+        {
+          "title": "How certain are tansformers in image classification: uncertainty analysis with Monte Carlo dropout",
+          "url": "https://www.semanticscholar.org/paper/d7ff734c5b62a4a140fd560373d890e43d5b36cf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Md. Farhadul Islam",
+            "Sarah Zabeen",
+            "Md. Azharul Islam",
+            "Fardin Bin Rahman",
+            "Anushua Ahmed",
+            "Dewan Ziaul Karim",
+            "Annajiat Alim Rasel",
+            "Meem Arafat Manab"
+          ]
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "prediction-intervals",
+        "quantile-regression",
+        "conformal-prediction",
+        "deep-ensembles",
+        "bootstrapping",
+        "jackknife-resampling"
+      ]
+    },
+    {
+      "slug": "out-of-distribution-detector-for-neural-networks",
+      "name": "Out-of-DIstribution detector for Neural networks",
+      "description": "ODIN (Out-of-Distribution Detector for Neural Networks) identifies when a neural network encounters inputs significantly different from its training distribution. It enhances detection by applying temperature scaling to soften the model's output distribution and adding small, carefully calibrated perturbations to the input that push in-distribution samples towards higher confidence predictions. By measuring the maximum softmax probability after these adjustments, ODIN can effectively distinguish between in-distribution and out-of-distribution inputs, flagging potentially unreliable predictions before they cause downstream errors.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/prediction-confidence",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Detecting anomalous medical images in diagnostic systems, where ODIN flags X-rays or scans containing rare pathologies or imaging artefacts not present in training data, preventing misdiagnosis and prompting specialist review.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Protecting autonomous vehicle perception systems by identifying novel road scenarios (e.g., unusual weather conditions, rare obstacle types) that fall outside the training distribution, triggering fallback safety mechanisms.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Monitoring production ML systems for data drift by detecting when incoming customer behaviour patterns deviate significantly from training data, helping explain why model performance may degrade over time.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires careful tuning of temperature scaling and perturbation magnitude parameters, which may need adjustment for different types of out-of-distribution data."
+        },
+        {
+          "description": "Performance degrades when out-of-distribution samples are very similar to training data, making near-distribution detection challenging."
+        },
+        {
+          "description": "Vulnerable to adversarial examples specifically crafted to evade detection by mimicking in-distribution characteristics."
+        },
+        {
+          "description": "Computational overhead from input preprocessing and perturbation generation can impact real-time inference applications."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Enhancing The Reliability of Out-of-distribution Image Detection in Neural Networks",
+          "url": "http://arxiv.org/pdf/1706.02690v5",
+          "source_type": "technical_paper",
+          "authors": [
+            "Shiyu Liang",
+            "Yixuan Li",
+            "R. Srikant"
+          ],
+          "publication_date": "2017-06-08"
+        },
+        {
+          "title": "facebookresearch/odin",
+          "url": "https://github.com/facebookresearch/odin",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Generalized ODIN: Detecting Out-of-distribution Image without Learning from Out-of-distribution Data",
+          "url": "http://arxiv.org/pdf/2002.11297v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yen-Chang Hsu",
+            "Yilin Shen",
+            "Hongxia Jin",
+            "Zsolt Kira"
+          ],
+          "publication_date": "2020-02-26"
+        },
+        {
+          "title": "Detection of out-of-distribution samples using binary neuron activation patterns",
+          "url": "http://arxiv.org/abs/2212.14268",
+          "source_type": "technical_paper",
+          "authors": [
+            "Chachuła, Krystian",
+            "Olber, Bartlomiej",
+            "Popowicz, Adam",
+            "Radlak, Krystian",
+            "Szczepankiewicz, Michal"
+          ],
+          "publication_date": "2023-03-24"
+        },
+        {
+          "title": "Out-of-Distribution Detection with ODIN - A Tutorial",
+          "url": "https://medium.com/@abhaypatil2000/out-of-distribution-detection-using-odin-f1a3e9e6b3b8",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "acronym": "ODIN",
+      "related_techniques": [
+        "anomaly-detection"
+      ]
+    },
+    {
+      "slug": "permutation-tests",
+      "name": "Permutation Tests",
+      "description": "Permutation tests assess the statistical significance of observed results (such as model accuracy, feature importance, or group differences) by comparing them to what would occur purely by chance. The technique randomly shuffles labels or data thousands of times, recalculating the metric of interest each time to build an empirical null distribution. If the actual observed result falls in the extreme tail of this distribution (typically beyond the 95th or 99th percentile), it provides strong evidence that the relationship is genuine rather than due to random chance, without requiring parametric assumptions about data distributions.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Validating feature importance in medical diagnosis models by permuting each feature 10,000 times to ensure that identified risk factors (e.g., blood pressure, cholesterol) have statistically significant predictive power beyond random chance.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Testing whether observed differences in loan approval rates between demographic groups are statistically significant by permuting group labels and calculating the approval rate difference distribution under the null hypothesis of no discrimination.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Verifying that a model's claimed 95% accuracy on test data is genuinely better than random guessing by permuting labels 5,000 times and confirming the actual accuracy falls beyond the 99th percentile of the null distribution.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive as it requires thousands of model evaluations or metric calculations, scaling poorly with dataset size and model complexity."
+        },
+        {
+          "description": "Requires many permutations (typically 5,000-10,000) to achieve reliable p-values for strict significance thresholds like p < 0.01."
+        },
+        {
+          "description": "Assumes exchangeability of observations under the null hypothesis, which may be violated in time series or hierarchical data structures."
+        },
+        {
+          "description": "Cannot be easily parallelised for some metrics that require global model retraining, limiting scalability for complex machine learning pipelines."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Permutation Tests for Classification",
+          "url": "https://core.ac.uk/download/4383831.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Golland, Polina",
+            "Mukherjee, Sayan",
+            "Panchenko, Dmitry"
+          ],
+          "publication_date": "2003-01-01"
+        },
+        {
+          "title": "How to use Permutation Tests | Towards Data Science",
+          "url": "https://towardsdatascience.com/how-to-use-permutation-tests-bacc79f45749/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Permutation test in R | Towards Data Science",
+          "url": "https://towardsdatascience.com/permutation-test-in-r-77d551a9f891/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "The Exchangeability Assumption for Permutation Tests of Multiple Regression Models: Implications for Statistics and Data Science Educators",
+          "url": "http://arxiv.org/pdf/2406.07756v2",
+          "source_type": "documentation",
+          "authors": [
+            "Johanna Hardin",
+            "Lauren Quesada",
+            "Julie Ye",
+            "Nicholas J. Horton"
+          ],
+          "publication_date": "2024-06-11"
+        },
+        {
+          "title": "scikit-learn permutation_importance",
+          "url": "https://scikit-learn.org/stable/modules/permutation_importance.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "cross-validation",
+        "area-under-precision-recall-curve"
+      ]
+    },
+    {
+      "slug": "prompt-sensitivity-analysis",
+      "name": "Prompt Sensitivity Analysis",
+      "description": "Prompt Sensitivity Analysis systematically evaluates how variations in input prompts affect large language model outputs, providing insights into model robustness, consistency, and interpretability. This technique involves creating controlled perturbations of prompts whilst maintaining semantic meaning, then measuring how these changes influence model responses. It encompasses various types of prompt modifications including lexical substitutions, syntactic restructuring, formatting changes, and contextual variations. The analysis typically quantifies sensitivity through metrics such as output consistency, semantic similarity, and statistical measures of variance across prompt variations.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/llm",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "expertise-needed/linguistics",
+        "expertise-needed/experimental-design",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "technique-type/experimental",
+        "assurance-goal-category/explainability/uncertainty-analysis/sensitivity-testing",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/explains/prediction-confidence",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/fidelity"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing medical diagnosis LLMs with semantically equivalent but syntactically different symptom descriptions to ensure consistent diagnostic recommendations across different patient communication styles, identifying potential failure modes where slight phrasing changes could lead to dangerous misdiagnoses.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Analysing how variations in candidate descriptions (gendered language, cultural references, educational institution prestige indicators) affect LLM-based CV screening recommendations to identify potential discriminatory patterns and ensure equitable treatment across diverse applicant backgrounds.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Examining how different ways of framing financial questions (formal vs informal language, technical vs layperson terminology) affect investment advice generated by LLMs to improve user understanding and model transparency whilst ensuring consistent advisory quality.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Analysis is inherently limited to the specific prompt variations tested, potentially missing important sensitivity patterns that weren't anticipated during study design, making comprehensive coverage challenging."
+        },
+        {
+          "description": "Systematic exploration of prompt variations can be computationally expensive, particularly for large-scale sensitivity analysis across multiple dimensions of variation, requiring significant resources for thorough evaluation."
+        },
+        {
+          "description": "Ensuring that prompt variations maintain semantic equivalence whilst introducing meaningful perturbations requires careful linguistic expertise and validation, which can be subjective and domain-dependent."
+        },
+        {
+          "description": "Results may reveal sensitivity patterns that are difficult to interpret or act upon, particularly when multiple types of variations interact in complex ways, limiting practical applicability of findings."
+        },
+        {
+          "description": "The meaningfulness of sensitivity measurements depends heavily on the choice of baseline prompts and variation strategies, which can introduce methodological biases and affect the generalisability of conclusions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Quantifying Language Models' Sensitivity to Spurious Features in Prompt Design or: How I learned to start worrying about prompt formatting",
+          "url": "https://www.semanticscholar.org/paper/17a6116e5bbd8b87082cbb2e795885567300c483",
+          "source_type": "technical_paper",
+          "authors": [
+            "Melanie Sclar",
+            "Yejin Choi",
+            "Yulia Tsvetkov",
+            "Alane Suhr"
+          ]
+        },
+        {
+          "title": "PromptPrism: A Linguistically-Inspired Taxonomy for Prompts",
+          "url": "http://arxiv.org/pdf/2505.12592v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sullam Jeoung",
+            "Yueyan Chen",
+            "Yi Zhang",
+            "Shuai Wang",
+            "Haibo Ding",
+            "Lin Lee Cheong"
+          ],
+          "publication_date": "2025-05-19"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "causal-mediation-analysis-in-language-models",
+        "feature-attribution-with-integrated-gradients-in-nlp"
+      ]
+    }
+  ],
+  "count": 9
+}

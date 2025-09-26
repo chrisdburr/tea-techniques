@@ -10,6 +10,11 @@
     "tags": [
       "applicable-models/linear-model",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/attribution-methods/model-specific",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/property/comprehensibility",
+      "assurance-goal-category/explainability/property/fidelity",
+      "assurance-goal-category/explainability/property/efficiency",
       "assurance-goal-category/transparency",
       "data-requirements/no-special-requirements",
       "data-type/tabular",
@@ -19,7 +24,7 @@
       "lifecycle-stage/model-development",
       "technique-type/metric"
     ],
-    "searchText": "coefficient magnitudes (in linear models) coefficient magnitudes assess feature influence in linear models by examining the absolute values of their coefficients. features with larger absolute coefficients are considered to have a stronger impact on the prediction, while the sign of the coefficient indicates the direction of that influence (positive or negative). this technique provides a straightforward and transparent way to understand the direct linear relationship between each input feature and the model's output. explainability transparency applicable-models/linear-model assurance-goal-category/explainability assurance-goal-category/transparency data-requirements/no-special-requirements data-type/tabular evidence-type/quantitative-metric expertise-needed/low explanatory-scope/global lifecycle-stage/model-development technique-type/metric"
+    "searchText": "coefficient magnitudes (in linear models) coefficient magnitudes assess feature influence in linear models by examining the absolute values of their coefficients. features with larger absolute coefficients are considered to have a stronger impact on the prediction, while the sign of the coefficient indicates the direction of that influence (positive or negative). this technique provides a straightforward and transparent way to understand the direct linear relationship between each input feature and the model's output. explainability transparency applicable-models/linear-model assurance-goal-category/explainability assurance-goal-category/explainability/attribution-methods/model-specific assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/explainability/property/fidelity assurance-goal-category/explainability/property/efficiency assurance-goal-category/transparency data-requirements/no-special-requirements data-type/tabular evidence-type/quantitative-metric expertise-needed/low explanatory-scope/global lifecycle-stage/model-development technique-type/metric"
   },
   {
     "slug": "deeplift",
@@ -32,6 +37,11 @@
     "tags": [
       "applicable-models/neural-network",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/attribution-methods/gradient-based",
+      "assurance-goal-category/explainability/representation-analysis/decomposition",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/property/completeness",
+      "assurance-goal-category/explainability/property/consistency",
       "assurance-goal-category/transparency",
       "data-requirements/access-to-model-internals",
       "data-requirements/reference-dataset",
@@ -43,7 +53,7 @@
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
-    "searchText": "deeplift deeplift (deep learning important features) explains neural network predictions by decomposing the difference between the actual output and a reference output back to individual input features. it compares each neuron's activation to a reference activation (typically from a baseline input like all zeros or the dataset mean) and propagates these differences backwards through the network using chain rule modifications. unlike gradient-based methods, deeplift satisfies the sensitivity property (zero input gets zero attribution) and provides more stable attributions by using discrete differences rather than gradients. explainability transparency applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/transparency data-requirements/access-to-model-internals data-requirements/reference-dataset data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+    "searchText": "deeplift deeplift (deep learning important features) explains neural network predictions by decomposing the difference between the actual output and a reference output back to individual input features. it compares each neuron's activation to a reference activation (typically from a baseline input like all zeros or the dataset mean) and propagates these differences backwards through the network using chain rule modifications. unlike gradient-based methods, deeplift satisfies the sensitivity property (zero input gets zero attribution) and provides more stable attributions by using discrete differences rather than gradients. explainability transparency applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/explainability/attribution-methods/gradient-based assurance-goal-category/explainability/representation-analysis/decomposition assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/completeness assurance-goal-category/explainability/property/consistency assurance-goal-category/transparency data-requirements/access-to-model-internals data-requirements/reference-dataset data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
   },
   {
     "slug": "layer-wise-relevance-propagation",
@@ -56,6 +66,13 @@
     "tags": [
       "applicable-models/neural-network",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/attribution-methods/model-specific",
+      "assurance-goal-category/explainability/representation-analysis/decomposition",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/property/completeness",
+      "assurance-goal-category/explainability/property/consistency",
+      "assurance-goal-category/explainability/property/fidelity",
       "assurance-goal-category/transparency",
       "data-requirements/access-to-model-internals",
       "data-type/any",
@@ -66,7 +83,7 @@
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
-    "searchText": "layer-wise relevance propagation layer-wise relevance propagation (lrp) explains neural network predictions by working backwards through the network to show how much each input feature contributed to the final decision. it follows a simple conservation rule: the total contribution scores always add up to the original prediction. starting from the output, lrp distributes 'relevance' backwards through each layer using different rules depending on the layer type. this creates a detailed breakdown showing which input features helped or hindered the prediction, making it easier to understand why the network made a particular decision. explainability transparency applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/transparency data-requirements/access-to-model-internals data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+    "searchText": "layer-wise relevance propagation layer-wise relevance propagation (lrp) explains neural network predictions by working backwards through the network to show how much each input feature contributed to the final decision. it follows a simple conservation rule: the total contribution scores always add up to the original prediction. starting from the output, lrp distributes 'relevance' backwards through each layer using different rules depending on the layer type. this creates a detailed breakdown showing which input features helped or hindered the prediction, making it easier to understand why the network made a particular decision. explainability transparency applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/explainability/attribution-methods/model-specific assurance-goal-category/explainability/representation-analysis/decomposition assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/property/completeness assurance-goal-category/explainability/property/consistency assurance-goal-category/explainability/property/fidelity assurance-goal-category/transparency data-requirements/access-to-model-internals data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
   },
   {
     "slug": "contextual-decomposition",
@@ -79,6 +96,12 @@
     "tags": [
       "applicable-models/recurrent-neural-network",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/representation-analysis/decomposition",
+      "assurance-goal-category/explainability/attribution-methods/model-specific",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/property/completeness",
+      "assurance-goal-category/explainability/property/fidelity",
       "assurance-goal-category/transparency",
       "data-requirements/no-special-requirements",
       "data-type/text",
@@ -89,7 +112,7 @@
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
-    "searchText": "contextual decomposition contextual decomposition explains lstm and rnn predictions by decomposing the final hidden state into contributions from individual inputs and their interactions. unlike simpler attribution methods, it separates the direct contribution of specific words or phrases from the contextual effects of surrounding words. this is particularly useful for understanding how sequential models process language, as it can identify whether a word's influence comes from its individual meaning or from its interaction with nearby words in the sequence. explainability transparency applicable-models/recurrent-neural-network assurance-goal-category/explainability assurance-goal-category/transparency data-requirements/no-special-requirements data-type/text evidence-type/quantitative-metric expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+    "searchText": "contextual decomposition contextual decomposition explains lstm and rnn predictions by decomposing the final hidden state into contributions from individual inputs and their interactions. unlike simpler attribution methods, it separates the direct contribution of specific words or phrases from the contextual effects of surrounding words. this is particularly useful for understanding how sequential models process language, as it can identify whether a word's influence comes from its individual meaning or from its interaction with nearby words in the sequence. explainability transparency applicable-models/recurrent-neural-network assurance-goal-category/explainability assurance-goal-category/explainability/representation-analysis/decomposition assurance-goal-category/explainability/attribution-methods/model-specific assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/property/completeness assurance-goal-category/explainability/property/fidelity assurance-goal-category/transparency data-requirements/no-special-requirements data-type/text evidence-type/quantitative-metric expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
   },
   {
     "slug": "local-interpretable-model-agnostic-explanations",
@@ -102,6 +125,11 @@
     "tags": [
       "applicable-models/agnostic",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/surrogate-models/local-surrogates",
+      "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/explains/decision-boundaries",
+      "assurance-goal-category/explainability/property/fidelity",
       "assurance-goal-category/transparency",
       "data-requirements/no-special-requirements",
       "data-type/any",
@@ -113,7 +141,7 @@
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
-    "searchText": "local interpretable model-agnostic explanations lime (local interpretable model-agnostic explanations) explains individual predictions by approximating the complex model's behaviour in a small neighbourhood around a specific instance. it works by creating perturbed versions of the input (e.g., removing words from text, changing pixel values in images, or varying feature values), obtaining the model's predictions for these variations, and training a simple interpretable model (typically linear regression) weighted by proximity to the original instance. the coefficients of this local surrogate model reveal which features most influenced the specific prediction. explainability transparency applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/qualitative-report evidence-type/quantitative-metric expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+    "searchText": "local interpretable model-agnostic explanations lime (local interpretable model-agnostic explanations) explains individual predictions by approximating the complex model's behaviour in a small neighbourhood around a specific instance. it works by creating perturbed versions of the input (e.g., removing words from text, changing pixel values in images, or varying feature values), obtaining the model's predictions for these variations, and training a simple interpretable model (typically linear regression) weighted by proximity to the original instance. the coefficients of this local surrogate model reveal which features most influenced the specific prediction. explainability transparency applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/surrogate-models/local-surrogates assurance-goal-category/explainability/attribution-methods/perturbation-based assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/explains/decision-boundaries assurance-goal-category/explainability/property/fidelity assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/qualitative-report evidence-type/quantitative-metric expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
   },
   {
     "slug": "ridge-regression-surrogates",
@@ -126,6 +154,11 @@
     "tags": [
       "applicable-models/agnostic",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/explains/decision-boundaries",
+      "assurance-goal-category/explainability/property/fidelity",
+      "assurance-goal-category/explainability/property/comprehensibility",
       "assurance-goal-category/transparency",
       "data-requirements/no-special-requirements",
       "data-type/any",
@@ -135,7 +168,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "ridge regression surrogates this technique approximates a complex model by training a ridge regression (a linear model with l2 regularization) on the original model's predictions. the ridge regression serves as a global surrogate that balances fidelity and interpretability, capturing the main linear relationships that the complex model learned while ignoring noise due to regularization. explainability transparency applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/structured-output expertise-needed/ml-engineering explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "ridge regression surrogates this technique approximates a complex model by training a ridge regression (a linear model with l2 regularization) on the original model's predictions. the ridge regression serves as a global surrogate that balances fidelity and interpretability, capturing the main linear relationships that the complex model learned while ignoring noise due to regularization. explainability transparency applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/surrogate-models/global-surrogates assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/explains/decision-boundaries assurance-goal-category/explainability/property/fidelity assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/structured-output expertise-needed/ml-engineering explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "factor-analysis",
@@ -148,6 +181,10 @@
     "tags": [
       "applicable-models/agnostic",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/representation-analysis/dimensionality-reduction",
+      "assurance-goal-category/explainability/explains/data-patterns",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/property/comprehensibility",
       "assurance-goal-category/transparency",
       "data-requirements/no-special-requirements",
       "data-type/tabular",
@@ -158,7 +195,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "factor analysis factor analysis is a statistical technique that identifies latent variables (hidden factors) underlying observed correlations in data. it works by analysing how variables relate to each other, finding a smaller number of unobserved factors that explain patterns among multiple observed variables. unlike pca which maximises total variance, factor analysis focuses on shared variance (communalities - the variance variables have in common) whilst separating out unique variance and measurement error. after extracting factors, rotation methods like varimax (which creates uncorrelated factors) or oblimin (allowing correlated factors) help make factors more interpretable by aligning them with distinct groups of variables. explainability transparency applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/transparency data-requirements/no-special-requirements data-type/tabular evidence-type/quantitative-metric evidence-type/structured-output expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "factor analysis factor analysis is a statistical technique that identifies latent variables (hidden factors) underlying observed correlations in data. it works by analysing how variables relate to each other, finding a smaller number of unobserved factors that explain patterns among multiple observed variables. unlike pca which maximises total variance, factor analysis focuses on shared variance (communalities - the variance variables have in common) whilst separating out unique variance and measurement error. after extracting factors, rotation methods like varimax (which creates uncorrelated factors) or oblimin (allowing correlated factors) help make factors more interpretable by aligning them with distinct groups of variables. explainability transparency applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/representation-analysis/dimensionality-reduction assurance-goal-category/explainability/explains/data-patterns assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/transparency data-requirements/no-special-requirements data-type/tabular evidence-type/quantitative-metric evidence-type/structured-output expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "contrastive-explanation-method",
@@ -171,6 +208,13 @@
     "tags": [
       "applicable-models/agnostic",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/instance-based/counterfactual",
+      "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+      "assurance-goal-category/explainability/explains/decision-boundaries",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/property/counterfactual-validity",
+      "assurance-goal-category/explainability/property/sparsity",
+      "assurance-goal-category/explainability/property/comprehensibility",
       "assurance-goal-category/transparency",
       "data-requirements/no-special-requirements",
       "data-type/any",
@@ -180,7 +224,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "contrastive explanation method the contrastive explanation method (cem) explains model decisions by generating contrastive examples that reveal what makes a prediction distinctive. it identifies 'pertinent negatives' (minimal features that could be removed to change the prediction) and 'pertinent positives' (minimal features that must be present to maintain the prediction). this approach helps users understand not just what led to a decision, but what would need to change to achieve a different outcome, providing actionable insights for decision-making. explainability transparency applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "contrastive explanation method the contrastive explanation method (cem) explains model decisions by generating contrastive examples that reveal what makes a prediction distinctive. it identifies 'pertinent negatives' (minimal features that could be removed to change the prediction) and 'pertinent positives' (minimal features that must be present to maintain the prediction). this approach helps users understand not just what led to a decision, but what would need to change to achieve a different outcome, providing actionable insights for decision-making. explainability transparency applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/instance-based/counterfactual assurance-goal-category/explainability/attribution-methods/perturbation-based assurance-goal-category/explainability/explains/decision-boundaries assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/counterfactual-validity assurance-goal-category/explainability/property/sparsity assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "anchor",
@@ -193,6 +237,12 @@
     "tags": [
       "applicable-models/agnostic",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/surrogate-models/rule-extraction",
+      "assurance-goal-category/explainability/explains/decision-boundaries",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/property/sparsity",
+      "assurance-goal-category/explainability/property/fidelity",
+      "assurance-goal-category/explainability/property/comprehensibility",
       "assurance-goal-category/transparency",
       "data-requirements/no-special-requirements",
       "data-type/any",
@@ -202,7 +252,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "anchor anchor generates high-precision if-then rules that explain individual predictions by identifying the minimal set of feature conditions that guarantee a specific prediction with high confidence. it searches for 'anchor' conditions (e.g., 'age > 30 and income < £50k') that ensure the model gives the same prediction at least 95% of the time when those conditions are met. this creates human-readable rules that users can trust as sufficient conditions for understanding why a particular decision was made. explainability transparency applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "anchor anchor generates high-precision if-then rules that explain individual predictions by identifying the minimal set of feature conditions that guarantee a specific prediction with high confidence. it searches for 'anchor' conditions (e.g., 'age > 30 and income < £50k') that ensure the model gives the same prediction at least 95% of the time when those conditions are met. this creates human-readable rules that users can trust as sufficient conditions for understanding why a particular decision was made. explainability transparency applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/surrogate-models/rule-extraction assurance-goal-category/explainability/explains/decision-boundaries assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/sparsity assurance-goal-category/explainability/property/fidelity assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "rulefit",
@@ -215,6 +265,13 @@
     "tags": [
       "applicable-models/agnostic",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/surrogate-models/rule-extraction",
+      "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/explains/decision-boundaries",
+      "assurance-goal-category/explainability/property/sparsity",
+      "assurance-goal-category/explainability/property/comprehensibility",
+      "assurance-goal-category/explainability/property/fidelity",
       "assurance-goal-category/transparency",
       "data-requirements/no-special-requirements",
       "data-type/any",
@@ -224,7 +281,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "rulefit rulefit is a method that creates an interpretable model by combining linear terms with decision rules. it first extracts potential rules from ensemble trees, then builds a sparse linear model where those rules (binary conditions) and original features are used as predictors, with regularization to keep the model simple. the final model is a linear combination of a small set of rules and original features, balancing interpretability with predictive power. explainability transparency applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "rulefit rulefit is a method that creates an interpretable model by combining linear terms with decision rules. it first extracts potential rules from ensemble trees, then builds a sparse linear model where those rules (binary conditions) and original features are used as predictors, with regularization to keep the model simple. the final model is a linear combination of a small set of rules and original features, balancing interpretability with predictive power. explainability transparency applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/surrogate-models/rule-extraction assurance-goal-category/explainability/surrogate-models/global-surrogates assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/explains/decision-boundaries assurance-goal-category/explainability/property/sparsity assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/explainability/property/fidelity assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "differential-privacy",
@@ -831,8 +888,13 @@
       "applicable-models/linear-model",
       "assurance-goal-category/transparency",
       "assurance-goal-category/explainability",
-      "assurance-goal-category/explainability/feature-analysis",
-      "assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
+      "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+      "assurance-goal-category/explainability/visualization-methods/feature-relationships",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/explains/data-patterns",
+      "assurance-goal-category/explainability/property/comprehensibility",
+      "assurance-goal-category/explainability/property/fidelity",
+      "assurance-goal-category/explainability/property/sparsity",
       "assurance-goal-category/reliability",
       "data-requirements/labelled-data",
       "data-type/tabular",
@@ -844,7 +906,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "generalized additive models an intrinsically interpretable modelling technique that extends linear models by allowing flexible, nonlinear relationships between individual features and the target whilst maintaining the additive structure that preserves transparency. each feature's effect is modelled separately as a smooth function, visualised as a curve showing how the feature influences predictions across its range. gams achieve this through spline functions or other smoothing techniques that capture complex patterns in individual variables without interactions, making them particularly valuable for domains requiring both predictive accuracy and model interpretability. transparency explainability reliability applicable-models/gam applicable-models/linear-model assurance-goal-category/transparency assurance-goal-category/explainability assurance-goal-category/explainability/feature-analysis assurance-goal-category/explainability/feature-analysis/importance-and-attribution assurance-goal-category/reliability data-requirements/labelled-data data-type/tabular evidence-type/quantitative-metric evidence-type/visualisation expertise-needed/statistics explanatory-scope/global lifecycle-stage/project-design lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "generalized additive models an intrinsically interpretable modelling technique that extends linear models by allowing flexible, nonlinear relationships between individual features and the target whilst maintaining the additive structure that preserves transparency. each feature's effect is modelled separately as a smooth function, visualised as a curve showing how the feature influences predictions across its range. gams achieve this through spline functions or other smoothing techniques that capture complex patterns in individual variables without interactions, making them particularly valuable for domains requiring both predictive accuracy and model interpretability. transparency explainability reliability applicable-models/gam applicable-models/linear-model assurance-goal-category/transparency assurance-goal-category/explainability assurance-goal-category/explainability/surrogate-models/global-surrogates assurance-goal-category/explainability/visualization-methods/feature-relationships assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/explains/data-patterns assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/explainability/property/fidelity assurance-goal-category/explainability/property/sparsity assurance-goal-category/reliability data-requirements/labelled-data data-type/tabular evidence-type/quantitative-metric evidence-type/visualisation expertise-needed/statistics explanatory-scope/global lifecycle-stage/project-design lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "concept-activation-vectors",
@@ -872,9 +934,14 @@
       "expertise-needed/domain-knowledge",
       "lifecycle-stage/model-development",
       "lifecycle-stage/system-deployment-and-use/auditing",
-      "technique-type/algorithmic"
+      "technique-type/algorithmic",
+      "assurance-goal-category/explainability/representation-analysis/concept-identification",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/explains/causal-pathways",
+      "assurance-goal-category/explainability/property/comprehensibility",
+      "assurance-goal-category/explainability/property/causality"
     ],
-    "searchText": "concept activation vectors concept activation vectors (cavs), also known as testing with concept activation vectors (tcav), identify mathematical directions in neural network representation space that correspond to human-understandable concepts such as 'stripes', 'young', or 'medical equipment'. the technique works by finding linear directions that separate activations of concept examples from non-concept examples, then measuring how much these concept directions influence the model's predictions. this provides quantitative answers to questions like 'how much does the concept of youth affect this model's hiring decisions?' enabling systematic bias detection and model understanding. explainability fairness transparency applicable-models/neural-network applicable-models/transformer applicable-models/cnn assurance-goal-category/explainability assurance-goal-category/fairness assurance-goal-category/transparency data-requirements/access-to-model-internals data-type/any evidence-type/quantitative-metric evidence-type/visualization explanatory-scope/local explanatory-scope/global expertise-needed/ml-engineering expertise-needed/domain-knowledge lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use/auditing technique-type/algorithmic"
+    "searchText": "concept activation vectors concept activation vectors (cavs), also known as testing with concept activation vectors (tcav), identify mathematical directions in neural network representation space that correspond to human-understandable concepts such as 'stripes', 'young', or 'medical equipment'. the technique works by finding linear directions that separate activations of concept examples from non-concept examples, then measuring how much these concept directions influence the model's predictions. this provides quantitative answers to questions like 'how much does the concept of youth affect this model's hiring decisions?' enabling systematic bias detection and model understanding. explainability fairness transparency applicable-models/neural-network applicable-models/transformer applicable-models/cnn assurance-goal-category/explainability assurance-goal-category/fairness assurance-goal-category/transparency data-requirements/access-to-model-internals data-type/any evidence-type/quantitative-metric evidence-type/visualization explanatory-scope/local explanatory-scope/global expertise-needed/ml-engineering expertise-needed/domain-knowledge lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use/auditing technique-type/algorithmic assurance-goal-category/explainability/representation-analysis/concept-identification assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/explains/causal-pathways assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/explainability/property/causality"
   },
   {
     "slug": "attention-visualisation-in-transformers",
@@ -901,9 +968,14 @@
       "explanatory-scope/global",
       "lifecycle-stage/model-development",
       "lifecycle-stage/testing",
-      "technique-type/algorithmic"
+      "technique-type/algorithmic",
+      "assurance-goal-category/explainability/visualization-methods/attention-patterns",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/explains/data-patterns",
+      "assurance-goal-category/explainability/property/comprehensibility",
+      "assurance-goal-category/explainability/property/efficiency"
     ],
-    "searchText": "attention visualisation in transformers attention visualisation in transformers analyses the multi-head self-attention mechanisms that enable transformers to process sequences by attending to different positions simultaneously. the technique visualises attention weights as heatmaps showing how strongly each token attends to every other token across different heads and layers. by examining these attention patterns, practitioners can understand how models like bert, gpt, and t5 build contextual representations, identify which tokens influence predictions most strongly, and detect potential biases in how the model processes different types of input. this provides insights into positional encoding effects, head specialisation patterns, and the evolution of attention from local to global context across layers. explainability fairness transparency applicable-models/transformer assurance-goal-category/explainability assurance-goal-category/explainability/feature-analysis assurance-goal-category/explainability/feature-analysis/importance-and-attribution assurance-goal-category/fairness assurance-goal-category/transparency data-requirements/access-to-model-internals data-type/text data-type/image evidence-type/visualization expertise-needed/ml-engineering explanatory-scope/local explanatory-scope/global lifecycle-stage/model-development lifecycle-stage/testing technique-type/algorithmic"
+    "searchText": "attention visualisation in transformers attention visualisation in transformers analyses the multi-head self-attention mechanisms that enable transformers to process sequences by attending to different positions simultaneously. the technique visualises attention weights as heatmaps showing how strongly each token attends to every other token across different heads and layers. by examining these attention patterns, practitioners can understand how models like bert, gpt, and t5 build contextual representations, identify which tokens influence predictions most strongly, and detect potential biases in how the model processes different types of input. this provides insights into positional encoding effects, head specialisation patterns, and the evolution of attention from local to global context across layers. explainability fairness transparency applicable-models/transformer assurance-goal-category/explainability assurance-goal-category/explainability/feature-analysis assurance-goal-category/explainability/feature-analysis/importance-and-attribution assurance-goal-category/fairness assurance-goal-category/transparency data-requirements/access-to-model-internals data-type/text data-type/image evidence-type/visualization expertise-needed/ml-engineering explanatory-scope/local explanatory-scope/global lifecycle-stage/model-development lifecycle-stage/testing technique-type/algorithmic assurance-goal-category/explainability/visualization-methods/attention-patterns assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/explains/data-patterns assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/explainability/property/efficiency"
   },
   {
     "slug": "reweighing",

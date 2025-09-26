@@ -1,0 +1,216 @@
+{
+  "tag": {
+    "name": "assurance-goal-category/explainability/visualization-methods/attention-patterns",
+    "slug": "assurance-goal-category-explainability-visualization-methods-attention-patterns",
+    "count": 2,
+    "category": "assurance-goal-category"
+  },
+  "techniques": [
+    {
+      "slug": "classical-attention-analysis-in-neural-networks",
+      "name": "Classical Attention Analysis in Neural Networks",
+      "description": "Classical attention mechanisms in RNNs and CNNs create alignment matrices and temporal attention patterns that show how models focus on different input elements over time or space. This technique analyses these traditional attention patterns, particularly in encoder-decoder architectures and sequence-to-sequence models, where attention weights reveal which source elements influence each output step. Unlike transformer self-attention analysis, this focuses on understanding alignment patterns, temporal dependencies, and encoder-decoder attention dynamics in classical neural architectures.",
+      "assurance_goals": [
+        "Explainability"
+      ],
+      "tags": [
+        "applicable-models/rnn",
+        "applicable-models/cnn",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/visualization-methods/attention-patterns",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/fidelity",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/visualization",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing encoder-decoder attention in a neural machine translation model to verify the alignment between source and target words, ensuring the model learns proper translation correspondences rather than positional biases.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Examining temporal attention patterns in an RNN-based image captioning model to understand how attention moves across different image regions as it generates each word of the caption description.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Attention weights are not always strongly correlated with feature importance for the final prediction."
+        },
+        {
+          "description": "High attention does not necessarily imply causal influence - models can attend to irrelevant but correlated features."
+        },
+        {
+          "description": "Only applicable to neural network architectures that explicitly use attention mechanisms."
+        },
+        {
+          "description": "Interpretation can be misleading without understanding the specific attention mechanism implementation and training dynamics."
+        }
+      ],
+      "resources": [
+        {
+          "title": "An Attentive Survey of Attention Models",
+          "url": "https://www.semanticscholar.org/paper/a8427ce5aee6d62800c725588e89940ed4910e0d",
+          "source_type": "documentation",
+          "authors": [
+            "S. Chaudhari",
+            "Gungor Polatkan",
+            "R. Ramanath",
+            "Varun Mithal"
+          ]
+        },
+        {
+          "title": "Attention, please! A survey of neural attention models in deep learning",
+          "url": "https://www.semanticscholar.org/paper/44930df2a3186edb58c4d6f6e5ed828c5d6a0089",
+          "source_type": "documentation",
+          "authors": [
+            "Alana de Santana Correia",
+            "E. Colombini"
+          ]
+        },
+        {
+          "title": "ecco - Explain, Analyze, and Visualize NLP Language Models",
+          "url": "https://github.com/jalammar/ecco",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Enhancing Sentiment Analysis of Twitter Data Using Recurrent Neural Networks with Attention Mechanism",
+          "url": "https://www.semanticscholar.org/paper/c59e0158280a567114ae8ca64a932eefd127e0aa",
+          "source_type": "technical_paper",
+          "authors": [
+            "S. Nithya",
+            "X. A. Presskila",
+            "B. Sakthivel",
+            "R. Krishnan",
+            "K. Narayanan",
+            "S. Sundararajan"
+          ]
+        },
+        {
+          "title": "Can Neural Networks Develop Attention? Google Thinks they Can ...",
+          "url": "https://www.kdnuggets.com/2019/11/neural-networks-develop-attention-google.html",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "attention-visualisation-in-transformers"
+      ]
+    },
+    {
+      "slug": "attention-visualisation-in-transformers",
+      "name": "Attention Visualisation in Transformers",
+      "description": "Attention Visualisation in Transformers analyses the multi-head self-attention mechanisms that enable transformers to process sequences by attending to different positions simultaneously. The technique visualises attention weights as heatmaps showing how strongly each token attends to every other token across different heads and layers. By examining these attention patterns, practitioners can understand how models like BERT, GPT, and T5 build contextual representations, identify which tokens influence predictions most strongly, and detect potential biases in how the model processes different types of input. This provides insights into positional encoding effects, head specialisation patterns, and the evolution of attention from local to global context across layers.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/transformer",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/feature-analysis",
+        "assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-type/text",
+        "data-type/image",
+        "evidence-type/visualization",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/testing",
+        "technique-type/algorithmic",
+        "assurance-goal-category/explainability/visualization-methods/attention-patterns",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/efficiency"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Examining attention patterns in a medical language model processing clinical notes to verify it focuses on relevant symptoms and conditions rather than irrelevant demographic identifiers, revealing that certain attention heads specialise in medical terminology whilst others track syntactic relationships between diagnoses and treatments.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Auditing a sentiment analysis model for customer reviews by visualising how attention weights differ when processing reviews from different demographic groups, discovering that the model pays disproportionate attention to certain cultural expressions or colloquialisms that could lead to biased sentiment predictions.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Creating visual explanations for regulatory compliance in a financial document classification system, showing which specific words and phrases in loan applications or contracts triggered particular risk assessments, enabling auditors to verify that decisions are based on legitimate financial factors rather than discriminatory language patterns.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "High attention weights do not necessarily indicate causal importance for predictions, as models may attend strongly to tokens that serve structural rather than semantic purposes."
+        },
+        {
+          "description": "The sheer number of attention heads and layers in modern transformers creates visualisation overload, making it difficult to identify meaningful patterns without systematic analysis tools."
+        },
+        {
+          "description": "Attention patterns can be misleading when models use residual connections and layer normalisation, as the final representation incorporates information beyond what attention weights suggest."
+        },
+        {
+          "description": "Different transformer architectures (encoder-only, decoder-only, encoder-decoder) exhibit fundamentally different attention patterns, limiting the generalisability of insights across model types."
+        },
+        {
+          "description": "The technique cannot explain the reasoning process within feed-forward layers or how attention patterns translate into specific predictions, providing only a partial view of model behaviour."
+        }
+      ],
+      "resources": [
+        {
+          "title": "jessevig/bertviz",
+          "url": "https://github.com/jessevig/bertviz",
+          "source_type": "software_package",
+          "description": "Interactive tool for visualising attention patterns in transformer language models including BERT, GPT-2, and T5"
+        },
+        {
+          "title": "Attention is All You Need",
+          "url": "https://arxiv.org/abs/1706.03762",
+          "source_type": "technical_paper",
+          "description": "Foundational paper introducing the transformer architecture and self-attention mechanism"
+        },
+        {
+          "title": "Analyzing Multi-Head Self-Attention: Specialized Heads Do the Heavy Lifting, the Rest Can Be Pruned",
+          "url": "https://arxiv.org/abs/1905.09418",
+          "source_type": "technical_paper",
+          "description": "Research showing how different attention heads specialise in distinct linguistic phenomena"
+        },
+        {
+          "title": "What Does BERT Look At? An Analysis of BERT's Attention",
+          "url": "https://arxiv.org/abs/1906.04341",
+          "source_type": "technical_paper",
+          "description": "Comprehensive analysis of attention patterns in BERT revealing syntactic and semantic specialisation"
+        },
+        {
+          "title": "Transformer Explainability Beyond Attention Visualization",
+          "url": "https://arxiv.org/abs/2012.09838",
+          "source_type": "technical_paper",
+          "description": "Methods for attribution beyond raw attention weights including relevancy propagation and gradient-based approaches"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "integrated-gradients",
+        "layer-wise-relevance-propagation",
+        "saliency-maps",
+        "gradient-weighted-class-activation-mapping",
+        "classical-attention-analysis-in-neural-networks",
+        "contrastive-explanation-method"
+      ]
+    }
+  ],
+  "count": 2
+}

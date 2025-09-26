@@ -1,0 +1,116 @@
+{
+  "tag": {
+    "name": "assurance-goal-category/explainability/surrogate-models/local-surrogates",
+    "slug": "assurance-goal-category-explainability-surrogate-models-local-surrogates",
+    "count": 1,
+    "category": "assurance-goal-category"
+  },
+  "techniques": [
+    {
+      "slug": "local-interpretable-model-agnostic-explanations",
+      "name": "Local Interpretable Model-Agnostic Explanations",
+      "description": "LIME (Local Interpretable Model-agnostic Explanations) explains individual predictions by approximating the complex model's behaviour in a small neighbourhood around a specific instance. It works by creating perturbed versions of the input (e.g., removing words from text, changing pixel values in images, or varying feature values), obtaining the model's predictions for these variations, and training a simple interpretable model (typically linear regression) weighted by proximity to the original instance. The coefficients of this local surrogate model reveal which features most influenced the specific prediction.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/surrogate-models/local-surrogates",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Explaining why a specific patient received a high-risk diagnosis by showing which symptoms (fever, blood pressure, age) contributed most to the prediction, helping doctors validate the AI's reasoning.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging a text classifier's misclassification of a movie review by highlighting which words (e.g., sarcastic phrases) confused the model, enabling targeted model improvements.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations to customers about automated decisions in insurance claims, showing which claim features influenced approval or denial to meet regulatory requirements.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Explanations can be unstable due to random sampling, producing different results across multiple runs."
+        },
+        {
+          "description": "The linear surrogate may poorly approximate highly non-linear model behaviour in the local region."
+        },
+        {
+          "description": "Defining the neighbourhood size and perturbation strategy requires careful tuning for each data type."
+        },
+        {
+          "description": "Can be computationally expensive for explaining many instances due to repeated model queries."
+        }
+      ],
+      "resources": [
+        {
+          "title": "marcotcr/lime",
+          "url": "https://github.com/marcotcr/lime",
+          "source_type": "software_package"
+        },
+        {
+          "title": "thomasp85/lime (R package)",
+          "url": "https://github.com/thomasp85/lime",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Local Interpretable Model-Agnostic Explanations (lime) — lime 0.1 ...",
+          "url": "https://lime-ml.readthedocs.io/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "'Why Should I Trust You?' Explaining the Predictions of Any Classifier",
+          "url": "https://arxiv.org/abs/1602.04938",
+          "source_type": "technical_paper",
+          "authors": [
+            "Marco Tulio Ribeiro",
+            "Sameer Singh",
+            "Carlos Guestrin"
+          ],
+          "publication_date": "2016-02-16"
+        },
+        {
+          "title": "How to convince your boss to trust your ML/DL models - Towards Data Science",
+          "url": "https://towardsdatascience.com/how-to-convince-your-boss-to-trust-your-ml-dl-models-671f707246a8",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Enhanced LIME — ADS 2.6.5 documentation",
+          "url": "https://accelerated-data-science.readthedocs.io/en/v2.6.5/user_guide/model_explainability/lime.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 3,
+      "acronym": "LIME",
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "deeplift",
+        "layer-wise-relevance-propagation",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    }
+  ],
+  "count": 1
+}

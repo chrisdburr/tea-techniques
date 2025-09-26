@@ -11,8 +11,10 @@
     "tags": [
       "applicable-models/agnostic",
       "assurance-goal-category/explainability",
-      "assurance-goal-category/explainability/feature-analysis",
-      "assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
+      "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/property/completeness",
+      "assurance-goal-category/explainability/property/consistency",
       "assurance-goal-category/fairness",
       "assurance-goal-category/reliability",
       "data-requirements/no-special-requirements",
@@ -24,7 +26,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "shapley additive explanations shap explains model predictions by quantifying how much each input feature contributes to the outcome. it assigns an importance score to every feature, indicating whether it pushes the prediction towards or away from the average. the method systematically evaluates how predictions change as features are included or excluded, drawing on game theory concepts to ensure a fair distribution of contributions. explainability fairness reliability applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/feature-analysis assurance-goal-category/explainability/feature-analysis/importance-and-attribution assurance-goal-category/fairness assurance-goal-category/reliability data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/global explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "shapley additive explanations shap explains model predictions by quantifying how much each input feature contributes to the outcome. it assigns an importance score to every feature, indicating whether it pushes the prediction towards or away from the average. the method systematically evaluates how predictions change as features are included or excluded, drawing on game theory concepts to ensure a fair distribution of contributions. explainability fairness reliability applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/attribution-methods/perturbation-based assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/completeness assurance-goal-category/explainability/property/consistency assurance-goal-category/fairness assurance-goal-category/reliability data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/global explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "sobol-indices",
@@ -37,6 +39,11 @@
     "tags": [
       "applicable-models/agnostic",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/causal-analysis/interaction-effects",
+      "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/explains/causal-pathways",
+      "assurance-goal-category/explainability/property/completeness",
       "assurance-goal-category/fairness",
       "data-requirements/no-special-requirements",
       "data-type/any",
@@ -47,7 +54,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "sobol indices sobol indices quantify how much each input feature contributes to the total variance in a model's predictions through global sensitivity analysis. the technique calculates first-order indices (individual feature contributions) and total-order indices (including all interaction effects involving that feature). by systematically sampling the input space and decomposing output variance, sobol indices reveal which features drive model uncertainty and which interactions between features are most important for predictions. explainability fairness applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/fairness data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "sobol indices sobol indices quantify how much each input feature contributes to the total variance in a model's predictions through global sensitivity analysis. the technique calculates first-order indices (individual feature contributions) and total-order indices (including all interaction effects involving that feature). by systematically sampling the input space and decomposing output variance, sobol indices reveal which features drive model uncertainty and which interactions between features are most important for predictions. explainability fairness applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/causal-analysis/interaction-effects assurance-goal-category/explainability/attribution-methods/perturbation-based assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/explains/causal-pathways assurance-goal-category/explainability/property/completeness assurance-goal-category/fairness data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "saliency-maps",
@@ -60,6 +67,11 @@
     "tags": [
       "applicable-models/neural-network",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/attribution-methods/gradient-based",
+      "assurance-goal-category/explainability/visualization-methods/activation-maps",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/property/efficiency",
+      "assurance-goal-category/explainability/property/comprehensibility",
       "assurance-goal-category/fairness",
       "data-requirements/access-to-model-internals",
       "data-type/image",
@@ -69,7 +81,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "saliency maps saliency maps are visual explanations for image classification models that highlight which pixels in an image most strongly influence the model's prediction. computed by calculating gradients of the model's output with respect to input pixels, saliency maps produce heatmaps where brighter regions indicate pixels that, when changed, would most significantly affect the prediction. this technique helps users understand which parts of an image the model is 'looking at' when making decisions. explainability fairness applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/fairness data-requirements/access-to-model-internals data-type/image evidence-type/visualization expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "saliency maps saliency maps are visual explanations for image classification models that highlight which pixels in an image most strongly influence the model's prediction. computed by calculating gradients of the model's output with respect to input pixels, saliency maps produce heatmaps where brighter regions indicate pixels that, when changed, would most significantly affect the prediction. this technique helps users understand which parts of an image the model is 'looking at' when making decisions. explainability fairness applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/explainability/attribution-methods/gradient-based assurance-goal-category/explainability/visualization-methods/activation-maps assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/efficiency assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/fairness data-requirements/access-to-model-internals data-type/image evidence-type/visualization expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "gradient-weighted-class-activation-mapping",
@@ -82,6 +94,13 @@
     "tags": [
       "applicable-models/cnn",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/visualization-methods/activation-maps",
+      "assurance-goal-category/explainability/attribution-methods/gradient-based",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/property/sparsity",
+      "assurance-goal-category/explainability/property/efficiency",
+      "assurance-goal-category/explainability/property/comprehensibility",
       "assurance-goal-category/fairness",
       "data-requirements/access-to-model-internals",
       "data-type/image",
@@ -91,7 +110,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "gradient-weighted class activation mapping grad-cam creates visual heatmaps showing which regions of an image a convolutional neural network focuses on when making a specific classification. unlike pixel-level techniques, grad-cam produces coarser region-based explanations by using gradients from the predicted class to weight the cnn's final feature maps, then projecting these weighted activations back to create an overlay on the original image. this provides intuitive visual explanations of where the model is 'looking' for evidence of different classes. explainability fairness applicable-models/cnn assurance-goal-category/explainability assurance-goal-category/fairness data-requirements/access-to-model-internals data-type/image evidence-type/visualization expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "gradient-weighted class activation mapping grad-cam creates visual heatmaps showing which regions of an image a convolutional neural network focuses on when making a specific classification. unlike pixel-level techniques, grad-cam produces coarser region-based explanations by using gradients from the predicted class to weight the cnn's final feature maps, then projecting these weighted activations back to create an overlay on the original image. this provides intuitive visual explanations of where the model is 'looking' for evidence of different classes. explainability fairness applicable-models/cnn assurance-goal-category/explainability assurance-goal-category/explainability/visualization-methods/activation-maps assurance-goal-category/explainability/attribution-methods/gradient-based assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/property/sparsity assurance-goal-category/explainability/property/efficiency assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/fairness data-requirements/access-to-model-internals data-type/image evidence-type/visualization expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "prototype-and-criticism-models",
@@ -104,6 +123,11 @@
     "tags": [
       "applicable-models/agnostic",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/instance-based/prototypes",
+      "assurance-goal-category/explainability/explains/decision-boundaries",
+      "assurance-goal-category/explainability/explains/data-patterns",
+      "assurance-goal-category/explainability/property/comprehensibility",
+      "assurance-goal-category/explainability/property/sparsity",
       "assurance-goal-category/fairness",
       "data-requirements/no-special-requirements",
       "data-type/any",
@@ -113,7 +137,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "prototype and criticism models prototype and criticism models provide data understanding by identifying two complementary sets of examples: prototypes represent the most typical instances that best summarise common patterns in the data, whilst criticisms are outliers or edge cases that are poorly represented by the prototypes. for example, in a dataset of customer transactions, prototypes might be the most representative buying patterns (frequent small purchases, occasional large purchases), whilst criticisms could be unusual behaviors (bulk buyers, one-time high-value customers). this dual approach reveals both what is normal and what is exceptional, helping understand data coverage and model blind spots. explainability fairness applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/fairness data-requirements/no-special-requirements data-type/any evidence-type/structured-output expertise-needed/ml-engineering explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "prototype and criticism models prototype and criticism models provide data understanding by identifying two complementary sets of examples: prototypes represent the most typical instances that best summarise common patterns in the data, whilst criticisms are outliers or edge cases that are poorly represented by the prototypes. for example, in a dataset of customer transactions, prototypes might be the most representative buying patterns (frequent small purchases, occasional large purchases), whilst criticisms could be unusual behaviors (bulk buyers, one-time high-value customers). this dual approach reveals both what is normal and what is exceptional, helping understand data coverage and model blind spots. explainability fairness applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/instance-based/prototypes assurance-goal-category/explainability/explains/decision-boundaries assurance-goal-category/explainability/explains/data-patterns assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/explainability/property/sparsity assurance-goal-category/fairness data-requirements/no-special-requirements data-type/any evidence-type/structured-output expertise-needed/ml-engineering explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "influence-functions",
@@ -127,6 +151,12 @@
     "tags": [
       "applicable-models/agnostic",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/instance-based/influence-analysis",
+      "assurance-goal-category/explainability/attribution-methods/gradient-based",
+      "assurance-goal-category/explainability/explains/data-patterns",
+      "assurance-goal-category/explainability/explains/causal-pathways",
+      "assurance-goal-category/explainability/property/causality",
+      "assurance-goal-category/explainability/property/fidelity",
       "assurance-goal-category/fairness",
       "assurance-goal-category/privacy",
       "data-requirements/access-to-training-data",
@@ -137,7 +167,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "influence functions influence functions quantify how much each training example influenced a model's predictions by computing the change in prediction that would occur if that training example were removed and the model retrained. using calculus and the implicit function theorem, they approximate this 'leave-one-out' effect without actually retraining the model by computing gradients and hessian information. this mathematical approach reveals which specific training examples were most responsible for pushing the model toward or away from particular predictions, enabling practitioners to trace problematic outputs back to their root causes in the training data. explainability fairness privacy applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/fairness assurance-goal-category/privacy data-requirements/access-to-training-data data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "influence functions influence functions quantify how much each training example influenced a model's predictions by computing the change in prediction that would occur if that training example were removed and the model retrained. using calculus and the implicit function theorem, they approximate this 'leave-one-out' effect without actually retraining the model by computing gradients and hessian information. this mathematical approach reveals which specific training examples were most responsible for pushing the model toward or away from particular predictions, enabling practitioners to trace problematic outputs back to their root causes in the training data. explainability fairness privacy applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/instance-based/influence-analysis assurance-goal-category/explainability/attribution-methods/gradient-based assurance-goal-category/explainability/explains/data-patterns assurance-goal-category/explainability/explains/causal-pathways assurance-goal-category/explainability/property/causality assurance-goal-category/explainability/property/fidelity assurance-goal-category/fairness assurance-goal-category/privacy data-requirements/access-to-training-data data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "demographic-parity-assessment",
@@ -723,9 +753,13 @@
       "lifecycle-stage/model-development",
       "lifecycle-stage/testing",
       "lifecycle-stage/monitoring",
-      "technique-type/algorithmic"
+      "technique-type/algorithmic",
+      "assurance-goal-category/explainability/representation-analysis/concept-identification",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/explains/data-patterns",
+      "assurance-goal-category/explainability/property/comprehensibility"
     ],
-    "searchText": "neuron activation analysis neuron activation analysis examines the firing patterns of individual neurons in neural networks by probing them with diverse inputs and analysing their activation responses. this technique helps understand what concepts, features, or patterns different neurons have learned to recognise, providing insights into the model's internal representations. for large language models, this can reveal neurons specialised for linguistic concepts, semantic categories, or even potentially harmful patterns, enabling targeted interventions and deeper model understanding. explainability safety fairness applicable-models/neural-network applicable-models/llm applicable-models/transformer assurance-goal-category/explainability assurance-goal-category/safety assurance-goal-category/fairness data-requirements/access-to-model-internals data-type/text evidence-type/quantitative-metric evidence-type/visualisation explanatory-scope/local explanatory-scope/global expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/testing lifecycle-stage/monitoring technique-type/algorithmic"
+    "searchText": "neuron activation analysis neuron activation analysis examines the firing patterns of individual neurons in neural networks by probing them with diverse inputs and analysing their activation responses. this technique helps understand what concepts, features, or patterns different neurons have learned to recognise, providing insights into the model's internal representations. for large language models, this can reveal neurons specialised for linguistic concepts, semantic categories, or even potentially harmful patterns, enabling targeted interventions and deeper model understanding. explainability safety fairness applicable-models/neural-network applicable-models/llm applicable-models/transformer assurance-goal-category/explainability assurance-goal-category/safety assurance-goal-category/fairness data-requirements/access-to-model-internals data-type/text evidence-type/quantitative-metric evidence-type/visualisation explanatory-scope/local explanatory-scope/global expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/testing lifecycle-stage/monitoring technique-type/algorithmic assurance-goal-category/explainability/representation-analysis/concept-identification assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/explains/data-patterns assurance-goal-category/explainability/property/comprehensibility"
   },
   {
     "slug": "feature-attribution-with-integrated-gradients-in-nlp",
@@ -749,9 +783,12 @@
       "expertise-needed/ml-engineering",
       "lifecycle-stage/model-development",
       "lifecycle-stage/testing",
-      "technique-type/gradient-based"
+      "technique-type/gradient-based",
+      "assurance-goal-category/explainability/attribution-methods/gradient-based",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/property/completeness"
     ],
-    "searchText": "feature attribution with integrated gradients in nlp applies integrated gradients to natural language processing models to attribute prediction importance to individual input tokens, words, or subword units. this technique computes gradients along a straight-line path from a baseline input (typically all-zeros, padding tokens, or neutral text) to the actual input, integrating these gradients to obtain attribution scores. unlike vanilla gradient methods, integrated gradients satisfies axioms of sensitivity and implementation invariance, making it particularly valuable for understanding transformer-based language models where token interactions are complex. explainability fairness safety applicable-models/transformer applicable-models/llm assurance-goal-category/explainability assurance-goal-category/fairness assurance-goal-category/safety data-requirements/no-special-requirements data-type/text evidence-type/quantitative-metric evidence-type/visualisation expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/testing technique-type/gradient-based"
+    "searchText": "feature attribution with integrated gradients in nlp applies integrated gradients to natural language processing models to attribute prediction importance to individual input tokens, words, or subword units. this technique computes gradients along a straight-line path from a baseline input (typically all-zeros, padding tokens, or neutral text) to the actual input, integrating these gradients to obtain attribution scores. unlike vanilla gradient methods, integrated gradients satisfies axioms of sensitivity and implementation invariance, making it particularly valuable for understanding transformer-based language models where token interactions are complex. explainability fairness safety applicable-models/transformer applicable-models/llm assurance-goal-category/explainability assurance-goal-category/fairness assurance-goal-category/safety data-requirements/no-special-requirements data-type/text evidence-type/quantitative-metric evidence-type/visualisation expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/testing technique-type/gradient-based assurance-goal-category/explainability/attribution-methods/gradient-based assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/completeness"
   },
   {
     "slug": "concept-activation-vectors",
@@ -779,9 +816,14 @@
       "expertise-needed/domain-knowledge",
       "lifecycle-stage/model-development",
       "lifecycle-stage/system-deployment-and-use/auditing",
-      "technique-type/algorithmic"
+      "technique-type/algorithmic",
+      "assurance-goal-category/explainability/representation-analysis/concept-identification",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/explains/causal-pathways",
+      "assurance-goal-category/explainability/property/comprehensibility",
+      "assurance-goal-category/explainability/property/causality"
     ],
-    "searchText": "concept activation vectors concept activation vectors (cavs), also known as testing with concept activation vectors (tcav), identify mathematical directions in neural network representation space that correspond to human-understandable concepts such as 'stripes', 'young', or 'medical equipment'. the technique works by finding linear directions that separate activations of concept examples from non-concept examples, then measuring how much these concept directions influence the model's predictions. this provides quantitative answers to questions like 'how much does the concept of youth affect this model's hiring decisions?' enabling systematic bias detection and model understanding. explainability fairness transparency applicable-models/neural-network applicable-models/transformer applicable-models/cnn assurance-goal-category/explainability assurance-goal-category/fairness assurance-goal-category/transparency data-requirements/access-to-model-internals data-type/any evidence-type/quantitative-metric evidence-type/visualization explanatory-scope/local explanatory-scope/global expertise-needed/ml-engineering expertise-needed/domain-knowledge lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use/auditing technique-type/algorithmic"
+    "searchText": "concept activation vectors concept activation vectors (cavs), also known as testing with concept activation vectors (tcav), identify mathematical directions in neural network representation space that correspond to human-understandable concepts such as 'stripes', 'young', or 'medical equipment'. the technique works by finding linear directions that separate activations of concept examples from non-concept examples, then measuring how much these concept directions influence the model's predictions. this provides quantitative answers to questions like 'how much does the concept of youth affect this model's hiring decisions?' enabling systematic bias detection and model understanding. explainability fairness transparency applicable-models/neural-network applicable-models/transformer applicable-models/cnn assurance-goal-category/explainability assurance-goal-category/fairness assurance-goal-category/transparency data-requirements/access-to-model-internals data-type/any evidence-type/quantitative-metric evidence-type/visualization explanatory-scope/local explanatory-scope/global expertise-needed/ml-engineering expertise-needed/domain-knowledge lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use/auditing technique-type/algorithmic assurance-goal-category/explainability/representation-analysis/concept-identification assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/explains/causal-pathways assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/explainability/property/causality"
   },
   {
     "slug": "attention-visualisation-in-transformers",
@@ -808,9 +850,14 @@
       "explanatory-scope/global",
       "lifecycle-stage/model-development",
       "lifecycle-stage/testing",
-      "technique-type/algorithmic"
+      "technique-type/algorithmic",
+      "assurance-goal-category/explainability/visualization-methods/attention-patterns",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/explains/data-patterns",
+      "assurance-goal-category/explainability/property/comprehensibility",
+      "assurance-goal-category/explainability/property/efficiency"
     ],
-    "searchText": "attention visualisation in transformers attention visualisation in transformers analyses the multi-head self-attention mechanisms that enable transformers to process sequences by attending to different positions simultaneously. the technique visualises attention weights as heatmaps showing how strongly each token attends to every other token across different heads and layers. by examining these attention patterns, practitioners can understand how models like bert, gpt, and t5 build contextual representations, identify which tokens influence predictions most strongly, and detect potential biases in how the model processes different types of input. this provides insights into positional encoding effects, head specialisation patterns, and the evolution of attention from local to global context across layers. explainability fairness transparency applicable-models/transformer assurance-goal-category/explainability assurance-goal-category/explainability/feature-analysis assurance-goal-category/explainability/feature-analysis/importance-and-attribution assurance-goal-category/fairness assurance-goal-category/transparency data-requirements/access-to-model-internals data-type/text data-type/image evidence-type/visualization expertise-needed/ml-engineering explanatory-scope/local explanatory-scope/global lifecycle-stage/model-development lifecycle-stage/testing technique-type/algorithmic"
+    "searchText": "attention visualisation in transformers attention visualisation in transformers analyses the multi-head self-attention mechanisms that enable transformers to process sequences by attending to different positions simultaneously. the technique visualises attention weights as heatmaps showing how strongly each token attends to every other token across different heads and layers. by examining these attention patterns, practitioners can understand how models like bert, gpt, and t5 build contextual representations, identify which tokens influence predictions most strongly, and detect potential biases in how the model processes different types of input. this provides insights into positional encoding effects, head specialisation patterns, and the evolution of attention from local to global context across layers. explainability fairness transparency applicable-models/transformer assurance-goal-category/explainability assurance-goal-category/explainability/feature-analysis assurance-goal-category/explainability/feature-analysis/importance-and-attribution assurance-goal-category/fairness assurance-goal-category/transparency data-requirements/access-to-model-internals data-type/text data-type/image evidence-type/visualization expertise-needed/ml-engineering explanatory-scope/local explanatory-scope/global lifecycle-stage/model-development lifecycle-stage/testing technique-type/algorithmic assurance-goal-category/explainability/visualization-methods/attention-patterns assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/explains/data-patterns assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/explainability/property/efficiency"
   },
   {
     "slug": "reweighing",

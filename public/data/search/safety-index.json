@@ -11,6 +11,12 @@
     "tags": [
       "applicable-models/neural-network",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
+      "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+      "assurance-goal-category/explainability/explains/prediction-confidence",
+      "assurance-goal-category/explainability/explains/decision-boundaries",
+      "assurance-goal-category/explainability/property/consistency",
+      "assurance-goal-category/explainability/property/fidelity",
       "assurance-goal-category/reliability",
       "assurance-goal-category/safety",
       "data-requirements/no-special-requirements",
@@ -22,7 +28,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "out-of-distribution detector for neural networks odin (out-of-distribution detector for neural networks) identifies when a neural network encounters inputs significantly different from its training distribution. it enhances detection by applying temperature scaling to soften the model's output distribution and adding small, carefully calibrated perturbations to the input that push in-distribution samples towards higher confidence predictions. by measuring the maximum softmax probability after these adjustments, odin can effectively distinguish between in-distribution and out-of-distribution inputs, flagging potentially unreliable predictions before they cause downstream errors. explainability reliability safety applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/reliability assurance-goal-category/safety data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "out-of-distribution detector for neural networks odin (out-of-distribution detector for neural networks) identifies when a neural network encounters inputs significantly different from its training distribution. it enhances detection by applying temperature scaling to soften the model's output distribution and adding small, carefully calibrated perturbations to the input that push in-distribution samples towards higher confidence predictions. by measuring the maximum softmax probability after these adjustments, odin can effectively distinguish between in-distribution and out-of-distribution inputs, flagging potentially unreliable predictions before they cause downstream errors. explainability reliability safety applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty assurance-goal-category/explainability/attribution-methods/perturbation-based assurance-goal-category/explainability/explains/prediction-confidence assurance-goal-category/explainability/explains/decision-boundaries assurance-goal-category/explainability/property/consistency assurance-goal-category/explainability/property/fidelity assurance-goal-category/reliability assurance-goal-category/safety data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "synthetic-data-generation",
@@ -353,6 +359,12 @@
     "tags": [
       "applicable-models/neural-network",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/model-simplification/knowledge-transfer",
+      "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/explains/decision-boundaries",
+      "assurance-goal-category/explainability/property/fidelity",
+      "assurance-goal-category/explainability/property/comprehensibility",
       "assurance-goal-category/reliability",
       "assurance-goal-category/safety",
       "data-requirements/access-to-training-data",
@@ -363,7 +375,7 @@
       "lifecycle-stage/deployment",
       "technique-type/algorithmic"
     ],
-    "searchText": "model distillation model distillation transfers knowledge from a large, complex model (teacher) to a smaller, more efficient model (student) by training the student to mimic the teacher's behaviour. the student learns from the teacher's soft predictions and intermediate representations rather than just hard labels, capturing nuanced decision boundaries and uncertainty. this produces models that are faster, require less memory, and are often more interpretable whilst maintaining much of the original performance. beyond compression, distillation can improve model reliability by regularising training and enable deployment in resource-constrained environments. explainability reliability safety applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/reliability assurance-goal-category/safety data-requirements/access-to-training-data data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/deployment technique-type/algorithmic"
+    "searchText": "model distillation model distillation transfers knowledge from a large, complex model (teacher) to a smaller, more efficient model (student) by training the student to mimic the teacher's behaviour. the student learns from the teacher's soft predictions and intermediate representations rather than just hard labels, capturing nuanced decision boundaries and uncertainty. this produces models that are faster, require less memory, and are often more interpretable whilst maintaining much of the original performance. beyond compression, distillation can improve model reliability by regularising training and enable deployment in resource-constrained environments. explainability reliability safety applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/explainability/model-simplification/knowledge-transfer assurance-goal-category/explainability/surrogate-models/global-surrogates assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/explains/decision-boundaries assurance-goal-category/explainability/property/fidelity assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/reliability assurance-goal-category/safety data-requirements/access-to-training-data data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/deployment technique-type/algorithmic"
   },
   {
     "slug": "model-pruning",
@@ -377,6 +389,11 @@
     "tags": [
       "applicable-models/neural-network",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/model-simplification/pruning",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/property/sparsity",
+      "assurance-goal-category/explainability/property/comprehensibility",
       "assurance-goal-category/reliability",
       "assurance-goal-category/safety",
       "data-requirements/access-to-model-internals",
@@ -387,7 +404,7 @@
       "lifecycle-stage/model-optimization",
       "technique-type/algorithmic"
     ],
-    "searchText": "model pruning model pruning systematically removes less important weights, neurons, or entire layers from neural networks to create smaller, more efficient models whilst maintaining performance. this process involves iterative removal based on importance criteria (weight magnitudes, gradient information, activation patterns) followed by fine-tuning. pruning can be structured (removing entire neurons/channels) or unstructured (removing individual weights), with structured pruning providing greater computational benefits and interpretability through simplified architectures. explainability reliability safety applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/reliability assurance-goal-category/safety data-requirements/access-to-model-internals data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/model-optimization technique-type/algorithmic"
+    "searchText": "model pruning model pruning systematically removes less important weights, neurons, or entire layers from neural networks to create smaller, more efficient models whilst maintaining performance. this process involves iterative removal based on importance criteria (weight magnitudes, gradient information, activation patterns) followed by fine-tuning. pruning can be structured (removing entire neurons/channels) or unstructured (removing individual weights), with structured pruning providing greater computational benefits and interpretability through simplified architectures. explainability reliability safety applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/explainability/model-simplification/pruning assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/sparsity assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/reliability assurance-goal-category/safety data-requirements/access-to-model-internals data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/model-optimization technique-type/algorithmic"
   },
   {
     "slug": "neuron-activation-analysis",
@@ -415,9 +432,13 @@
       "lifecycle-stage/model-development",
       "lifecycle-stage/testing",
       "lifecycle-stage/monitoring",
-      "technique-type/algorithmic"
+      "technique-type/algorithmic",
+      "assurance-goal-category/explainability/representation-analysis/concept-identification",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/explains/data-patterns",
+      "assurance-goal-category/explainability/property/comprehensibility"
     ],
-    "searchText": "neuron activation analysis neuron activation analysis examines the firing patterns of individual neurons in neural networks by probing them with diverse inputs and analysing their activation responses. this technique helps understand what concepts, features, or patterns different neurons have learned to recognise, providing insights into the model's internal representations. for large language models, this can reveal neurons specialised for linguistic concepts, semantic categories, or even potentially harmful patterns, enabling targeted interventions and deeper model understanding. explainability safety fairness applicable-models/neural-network applicable-models/llm applicable-models/transformer assurance-goal-category/explainability assurance-goal-category/safety assurance-goal-category/fairness data-requirements/access-to-model-internals data-type/text evidence-type/quantitative-metric evidence-type/visualisation explanatory-scope/local explanatory-scope/global expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/testing lifecycle-stage/monitoring technique-type/algorithmic"
+    "searchText": "neuron activation analysis neuron activation analysis examines the firing patterns of individual neurons in neural networks by probing them with diverse inputs and analysing their activation responses. this technique helps understand what concepts, features, or patterns different neurons have learned to recognise, providing insights into the model's internal representations. for large language models, this can reveal neurons specialised for linguistic concepts, semantic categories, or even potentially harmful patterns, enabling targeted interventions and deeper model understanding. explainability safety fairness applicable-models/neural-network applicable-models/llm applicable-models/transformer assurance-goal-category/explainability assurance-goal-category/safety assurance-goal-category/fairness data-requirements/access-to-model-internals data-type/text evidence-type/quantitative-metric evidence-type/visualisation explanatory-scope/local explanatory-scope/global expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/testing lifecycle-stage/monitoring technique-type/algorithmic assurance-goal-category/explainability/representation-analysis/concept-identification assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/explains/data-patterns assurance-goal-category/explainability/property/comprehensibility"
   },
   {
     "slug": "prompt-sensitivity-analysis",
@@ -441,9 +462,15 @@
       "expertise-needed/experimental-design",
       "lifecycle-stage/model-development",
       "lifecycle-stage/model-evaluation",
-      "technique-type/experimental"
+      "technique-type/experimental",
+      "assurance-goal-category/explainability/uncertainty-analysis/sensitivity-testing",
+      "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/explains/prediction-confidence",
+      "assurance-goal-category/explainability/property/consistency",
+      "assurance-goal-category/explainability/property/fidelity"
     ],
-    "searchText": "prompt sensitivity analysis prompt sensitivity analysis systematically evaluates how variations in input prompts affect large language model outputs, providing insights into model robustness, consistency, and interpretability. this technique involves creating controlled perturbations of prompts whilst maintaining semantic meaning, then measuring how these changes influence model responses. it encompasses various types of prompt modifications including lexical substitutions, syntactic restructuring, formatting changes, and contextual variations. the analysis typically quantifies sensitivity through metrics such as output consistency, semantic similarity, and statistical measures of variance across prompt variations. explainability reliability safety applicable-models/llm assurance-goal-category/explainability assurance-goal-category/reliability assurance-goal-category/safety data-requirements/no-special-requirements data-type/text evidence-type/quantitative-metric expertise-needed/statistics expertise-needed/linguistics expertise-needed/experimental-design lifecycle-stage/model-development lifecycle-stage/model-evaluation technique-type/experimental"
+    "searchText": "prompt sensitivity analysis prompt sensitivity analysis systematically evaluates how variations in input prompts affect large language model outputs, providing insights into model robustness, consistency, and interpretability. this technique involves creating controlled perturbations of prompts whilst maintaining semantic meaning, then measuring how these changes influence model responses. it encompasses various types of prompt modifications including lexical substitutions, syntactic restructuring, formatting changes, and contextual variations. the analysis typically quantifies sensitivity through metrics such as output consistency, semantic similarity, and statistical measures of variance across prompt variations. explainability reliability safety applicable-models/llm assurance-goal-category/explainability assurance-goal-category/reliability assurance-goal-category/safety data-requirements/no-special-requirements data-type/text evidence-type/quantitative-metric expertise-needed/statistics expertise-needed/linguistics expertise-needed/experimental-design lifecycle-stage/model-development lifecycle-stage/model-evaluation technique-type/experimental assurance-goal-category/explainability/uncertainty-analysis/sensitivity-testing assurance-goal-category/explainability/attribution-methods/perturbation-based assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/explains/prediction-confidence assurance-goal-category/explainability/property/consistency assurance-goal-category/explainability/property/fidelity"
   },
   {
     "slug": "causal-mediation-analysis-in-language-models",
@@ -467,9 +494,14 @@
       "expertise-needed/ml-engineering",
       "lifecycle-stage/model-development",
       "lifecycle-stage/post-deployment",
-      "technique-type/mechanistic-interpretability"
+      "technique-type/mechanistic-interpretability",
+      "assurance-goal-category/explainability/causal-analysis/mediation-analysis",
+      "assurance-goal-category/explainability/explains/causal-pathways",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/property/causality",
+      "assurance-goal-category/explainability/property/fidelity"
     ],
-    "searchText": "causal mediation analysis in language models causal mediation analysis in language models is a mechanistic interpretability technique that systematically investigates how specific internal components (neurons, attention heads, or layers) causally contribute to model outputs. by performing controlled interventions—such as activating, deactivating, or modifying specific components—researchers can trace the causal pathways through which information flows and transforms within the model. this approach goes beyond correlation to establish causal relationships, enabling researchers to understand not just what features influence outputs, but how and why they do so through specific computational pathways. explainability reliability safety applicable-models/llm applicable-models/transformer assurance-goal-category/explainability assurance-goal-category/reliability assurance-goal-category/safety data-requirements/access-to-model-internals data-type/text evidence-type/causal-analysis expertise-needed/causal-inference expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/post-deployment technique-type/mechanistic-interpretability"
+    "searchText": "causal mediation analysis in language models causal mediation analysis in language models is a mechanistic interpretability technique that systematically investigates how specific internal components (neurons, attention heads, or layers) causally contribute to model outputs. by performing controlled interventions—such as activating, deactivating, or modifying specific components—researchers can trace the causal pathways through which information flows and transforms within the model. this approach goes beyond correlation to establish causal relationships, enabling researchers to understand not just what features influence outputs, but how and why they do so through specific computational pathways. explainability reliability safety applicable-models/llm applicable-models/transformer assurance-goal-category/explainability assurance-goal-category/reliability assurance-goal-category/safety data-requirements/access-to-model-internals data-type/text evidence-type/causal-analysis expertise-needed/causal-inference expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/post-deployment technique-type/mechanistic-interpretability assurance-goal-category/explainability/causal-analysis/mediation-analysis assurance-goal-category/explainability/explains/causal-pathways assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/property/causality assurance-goal-category/explainability/property/fidelity"
   },
   {
     "slug": "feature-attribution-with-integrated-gradients-in-nlp",
@@ -493,8 +525,11 @@
       "expertise-needed/ml-engineering",
       "lifecycle-stage/model-development",
       "lifecycle-stage/testing",
-      "technique-type/gradient-based"
+      "technique-type/gradient-based",
+      "assurance-goal-category/explainability/attribution-methods/gradient-based",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/property/completeness"
     ],
-    "searchText": "feature attribution with integrated gradients in nlp applies integrated gradients to natural language processing models to attribute prediction importance to individual input tokens, words, or subword units. this technique computes gradients along a straight-line path from a baseline input (typically all-zeros, padding tokens, or neutral text) to the actual input, integrating these gradients to obtain attribution scores. unlike vanilla gradient methods, integrated gradients satisfies axioms of sensitivity and implementation invariance, making it particularly valuable for understanding transformer-based language models where token interactions are complex. explainability fairness safety applicable-models/transformer applicable-models/llm assurance-goal-category/explainability assurance-goal-category/fairness assurance-goal-category/safety data-requirements/no-special-requirements data-type/text evidence-type/quantitative-metric evidence-type/visualisation expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/testing technique-type/gradient-based"
+    "searchText": "feature attribution with integrated gradients in nlp applies integrated gradients to natural language processing models to attribute prediction importance to individual input tokens, words, or subword units. this technique computes gradients along a straight-line path from a baseline input (typically all-zeros, padding tokens, or neutral text) to the actual input, integrating these gradients to obtain attribution scores. unlike vanilla gradient methods, integrated gradients satisfies axioms of sensitivity and implementation invariance, making it particularly valuable for understanding transformer-based language models where token interactions are complex. explainability fairness safety applicable-models/transformer applicable-models/llm assurance-goal-category/explainability assurance-goal-category/fairness assurance-goal-category/safety data-requirements/no-special-requirements data-type/text evidence-type/quantitative-metric evidence-type/visualisation expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/testing technique-type/gradient-based assurance-goal-category/explainability/attribution-methods/gradient-based assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/completeness"
   }
 ]

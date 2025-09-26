@@ -1,0 +1,181 @@
+{
+  "tag": {
+    "name": "assurance-goal-category/explainability/visualization-methods/activation-maps",
+    "slug": "assurance-goal-category-explainability-visualization-methods-activation-maps",
+    "count": 2,
+    "category": "assurance-goal-category"
+  },
+  "techniques": [
+    {
+      "slug": "saliency-maps",
+      "name": "Saliency Maps",
+      "description": "Saliency maps are visual explanations for image classification models that highlight which pixels in an image most strongly influence the model's prediction. Computed by calculating gradients of the model's output with respect to input pixels, saliency maps produce heatmaps where brighter regions indicate pixels that, when changed, would most significantly affect the prediction. This technique helps users understand which parts of an image the model is 'looking at' when making decisions.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/visualization-methods/activation-maps",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/fairness",
+        "data-requirements/access-to-model-internals",
+        "data-type/image",
+        "evidence-type/visualization",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing X-ray images in a pneumonia detection model to verify that the algorithm focuses on lung regions showing inflammatory patterns rather than irrelevant areas like medical equipment or patient positioning markers.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Examining skin lesion classification models to ensure the algorithm identifies diagnostic features (irregular borders, colour variation) rather than artifacts like rulers, hair, or skin markings that shouldn't influence medical decisions.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Auditing a dermatology AI system to verify it focuses on medical symptoms rather than skin colour when diagnosing conditions, ensuring equitable treatment across racial groups by revealing inappropriate attention to demographic features.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Saliency maps are often noisy and can change dramatically with small input perturbations, making them unstable."
+        },
+        {
+          "description": "Highlighted regions may not correspond to semantically meaningful or human-understandable features."
+        },
+        {
+          "description": "Only indicates local gradient information, not causal importance or actual decision-making logic."
+        },
+        {
+          "description": "May highlight irrelevant pixels that happen to have high gradients due to model artifacts rather than meaningful patterns."
+        }
+      ],
+      "resources": [
+        {
+          "title": "utkuozbulak/pytorch-cnn-visualizations",
+          "url": "https://github.com/utkuozbulak/pytorch-cnn-visualizations",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Concepts of Saliency and Explainability in AI",
+          "url": "https://xaitk-saliency.readthedocs.io/en/latest/xaitk_explanation.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Occlusion Saliency Example",
+          "url": "https://xaitk-saliency.readthedocs.io/en/latest/examples/OcclusionSaliency.html",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "gradient-weighted-class-activation-mapping",
+        "occlusion-sensitivity"
+      ]
+    },
+    {
+      "slug": "gradient-weighted-class-activation-mapping",
+      "name": "Gradient-weighted Class Activation Mapping",
+      "description": "Grad-CAM creates visual heatmaps showing which regions of an image a convolutional neural network focuses on when making a specific classification. Unlike pixel-level techniques, Grad-CAM produces coarser region-based explanations by using gradients from the predicted class to weight the CNN's final feature maps, then projecting these weighted activations back to create an overlay on the original image. This provides intuitive visual explanations of where the model is 'looking' for evidence of different classes.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/cnn",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/visualization-methods/activation-maps",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/fairness",
+        "data-requirements/access-to-model-internals",
+        "data-type/image",
+        "evidence-type/visualization",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Validating that a melanoma detection model focuses on the actual skin lesion rather than surrounding healthy skin, medical equipment, or artifacts when making cancer/benign classifications.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging an autonomous vehicle's traffic sign recognition system by visualising whether the model correctly focuses on the sign itself rather than background objects, shadows, or irrelevant visual elements.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Auditing a medical imaging system for racial bias by examining whether diagnostic predictions inappropriately focus on skin tone regions rather than actual pathological features, ensuring equitable healthcare AI deployment.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires access to the CNN's internal feature maps and gradients, limiting use to white-box scenarios."
+        },
+        {
+          "description": "Resolution is constrained by the final convolutional layer's feature map size, producing coarser localisation than pixel-level methods."
+        },
+        {
+          "description": "Only applicable to CNN architectures with clearly defined convolutional layers, not suitable for other neural network types."
+        },
+        {
+          "description": "May highlight regions that correlate with the class but aren't causally important for the model's decision-making process."
+        }
+      ],
+      "resources": [
+        {
+          "title": "jacobgil/pytorch-grad-cam",
+          "url": "https://github.com/jacobgil/pytorch-grad-cam",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Grad-CAM: Visualize class activation maps with Keras, TensorFlow ...",
+          "url": "https://pyimagesearch.com/2020/03/09/grad-cam-visualize-class-activation-maps-with-keras-tensorflow-and-deep-learning/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "kazuto1011/grad-cam-pytorch",
+          "url": "https://github.com/kazuto1011/grad-cam-pytorch",
+          "source_type": "software_package"
+        },
+        {
+          "title": "A Tutorial on Explainable Image Classification for Dementia Stages Using Convolutional Neural Network and Gradient-weighted Class Activation Mapping",
+          "url": "https://www.semanticscholar.org/paper/8b1139cb06cfe5ba69e2fd05e1450b43df031a02",
+          "source_type": "documentation",
+          "authors": [
+            "Kevin Kam Fung Yuen"
+          ]
+        },
+        {
+          "title": "A Guide to Grad-CAM in Deep Learning - Analytics Vidhya",
+          "url": "https://www.analyticsvidhya.com/blog/2023/12/grad-cam-in-deep-learning/",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "acronym": "Grad-CAM",
+      "related_techniques": [
+        "saliency-maps",
+        "occlusion-sensitivity"
+      ]
+    }
+  ],
+  "count": 2
+}

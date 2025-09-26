@@ -1,0 +1,433 @@
+{
+  "tag": {
+    "name": "assurance-goal-category/explainability/explains/causal-pathways",
+    "slug": "assurance-goal-category-explainability-explains-causal-pathways",
+    "count": 4,
+    "category": "assurance-goal-category"
+  },
+  "techniques": [
+    {
+      "slug": "sobol-indices",
+      "name": "Sobol Indices",
+      "description": "Sobol Indices quantify how much each input feature contributes to the total variance in a model's predictions through global sensitivity analysis. The technique calculates first-order indices (individual feature contributions) and total-order indices (including all interaction effects involving that feature). By systematically sampling the input space and decomposing output variance, Sobol Indices reveal which features drive model uncertainty and which interactions between features are most important for predictions.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/causal-analysis/interaction-effects",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing a climate prediction model to determine which atmospheric parameters (temperature, humidity, pressure) contribute most to rainfall forecast uncertainty, helping meteorologists understand which measurements need the highest precision.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Evaluating a financial risk model to identify which economic indicators (interest rates, inflation, GDP growth) drive the most variability in portfolio value predictions, enabling better risk management strategies.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Analysing a credit scoring model to quantify how much prediction variance stems from zip code (a potential proxy for race), helping identify features that may cause disparate impact across demographic groups.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive, requiring thousands of model evaluations to achieve stable variance estimates, making it impractical for very slow models."
+        },
+        {
+          "description": "Assumes input features are independently distributed, which can lead to misleading results when features are correlated in real data."
+        },
+        {
+          "description": "Curse of dimensionality makes the technique increasingly difficult and expensive to apply as the number of input features grows beyond 10-20."
+        },
+        {
+          "description": "Requires defining appropriate probability distributions for input features, which may not accurately reflect real-world feature distributions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Sobol Tensor Trains for Global Sensitivity Analysis",
+          "url": "http://arxiv.org/pdf/1712.00233v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Rafael Ballester-Ripoll",
+            "Enrique G. Paredes",
+            "Renato Pajarola"
+          ],
+          "publication_date": "2017-12-01"
+        },
+        {
+          "title": "Sobol indices — UQpy v4.2.0 documentation",
+          "url": "https://uqpyproject.readthedocs.io/en/latest/sensitivity/sobol.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Sobol Indices to Measure Feature Importance | Towards Data Science",
+          "url": "https://towardsdatascience.com/sobol-indices-to-measure-feature-importance-54cedc3281bc/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Basics — SALib's documentation",
+          "url": "https://salib.readthedocs.io/en/latest/user_guide/basics.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "UQpy (Uncertainty Quantification with python)",
+          "url": "https://github.com/SURGroup/UQpy",
+          "source_type": "software_package"
+        },
+        {
+          "title": "SALib/SALib",
+          "url": "https://github.com/SALib/SALib",
+          "source_type": "software_package"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "permutation-importance",
+        "mean-decrease-impurity",
+        "coefficient-magnitudes-in-linear-models"
+      ]
+    },
+    {
+      "slug": "influence-functions",
+      "name": "Influence Functions",
+      "description": "Influence functions quantify how much each training example influenced a model's predictions by computing the change in prediction that would occur if that training example were removed and the model retrained. Using calculus and the implicit function theorem, they approximate this 'leave-one-out' effect without actually retraining the model by computing gradients and Hessian information. This mathematical approach reveals which specific training examples were most responsible for pushing the model toward or away from particular predictions, enabling practitioners to trace problematic outputs back to their root causes in the training data.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Privacy"
+      ],
+      "tags": [
+        "applicable-models/agnostic",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/instance-based/influence-analysis",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/property/causality",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/privacy",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Investigating why a medical diagnosis model misclassified a patient by identifying which specific training cases most influenced the incorrect prediction, revealing potential mislabelled examples or problematic patterns in the training data.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Analysing a spam detection system that falsely flagged legitimate emails by tracing the prediction back to influential training examples, discovering that certain training emails contained misleading patterns that caused the model to overfit.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Auditing a loan approval model for discriminatory patterns by identifying which training examples most influenced rejections of minority applicants, revealing whether biased historical decisions are driving current unfair outcomes.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Assessing membership inference risks in a medical model by identifying whether certain patient records have disproportionate influence on predictions, indicating potential data leakage vulnerabilities.",
+          "goal": "Privacy"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally intensive, requiring Hessian matrix computations that become intractable for very large models with millions of parameters."
+        },
+        {
+          "description": "Requires access to the complete training dataset and training process, making it impossible to apply to pre-trained models without access to original training data."
+        },
+        {
+          "description": "Accuracy degrades for highly non-convex models where the linear approximation underlying influence functions breaks down."
+        },
+        {
+          "description": "Results can be sensitive to hyperparameter choices and may not generalise well across different model architectures or training procedures."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Understanding Black-box Predictions via Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/08ad8fad21f6ec4cda4d56be1ca5e146b7c913a1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Pang Wei Koh",
+            "Percy Liang"
+          ]
+        },
+        {
+          "title": "nimarb/pytorch_influence_functions",
+          "url": "https://github.com/nimarb/pytorch_influence_functions",
+          "source_type": "software_package"
+        },
+        {
+          "title": "What is Your Data Worth to GPT? LLM-Scale Data Valuation with Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/f33f3dece9f34c1ec5417dccf9e0acf592d8e8cb",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sang Keun Choe",
+            "Hwijeen Ahn",
+            "Juhan Bae",
+            "Kewen Zhao",
+            "Minsoo Kang",
+            "Youngseog Chung",
+            "Adithya Pratapa",
+            "W. Neiswanger",
+            "Emma Strubell",
+            "Teruko Mitamura",
+            "Jeff G. Schneider",
+            "Eduard H. Hovy",
+            "Roger B. Grosse",
+            "Eric P. Xing"
+          ]
+        },
+        {
+          "title": "Scaling Up Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/ef2a773c3c7848a6cc16b18164be5f8876a310af",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andrea Schioppa",
+            "Polina Zablotskaia",
+            "David Vilar",
+            "Artem Sokolov"
+          ]
+        },
+        {
+          "title": "Welcome to torch-influence's API Reference! — torch-influence 0.1.0 ...",
+          "url": "https://torch-influence.readthedocs.io/",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "contextual-decomposition",
+        "taylor-decomposition"
+      ]
+    },
+    {
+      "slug": "causal-mediation-analysis-in-language-models",
+      "name": "Causal Mediation Analysis in Language Models",
+      "description": "Causal mediation analysis in language models is a mechanistic interpretability technique that systematically investigates how specific internal components (neurons, attention heads, or layers) causally contribute to model outputs. By performing controlled interventions—such as activating, deactivating, or modifying specific components—researchers can trace the causal pathways through which information flows and transforms within the model. This approach goes beyond correlation to establish causal relationships, enabling researchers to understand not just what features influence outputs, but how and why they do so through specific computational pathways.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/llm",
+        "applicable-models/transformer",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-model-internals",
+        "data-type/text",
+        "evidence-type/causal-analysis",
+        "expertise-needed/causal-inference",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/post-deployment",
+        "technique-type/mechanistic-interpretability",
+        "assurance-goal-category/explainability/causal-analysis/mediation-analysis",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/causality",
+        "assurance-goal-category/explainability/property/fidelity"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Investigating causal pathways in content moderation models to understand how specific attention mechanisms contribute to flagging potentially harmful content, enabling verification that safety decisions rely on appropriate features rather than spurious correlations and ensuring robust content filtering.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Identifying specific neurons or attention heads that causally contribute to biased outputs in hiring or lending language models, enabling targeted interventions to reduce discriminatory behaviour whilst preserving model performance on legitimate tasks and ensuring fair treatment across demographics.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Tracing causal pathways in large language models performing mathematical reasoning tasks to understand how intermediate steps are computed and stored, revealing which components are responsible for different aspects of logical inference and enabling validation of reasoning processes.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires sophisticated understanding of model architecture to design meaningful interventions, as poorly chosen intervention points may yield misleading causal conclusions or fail to capture relevant computational pathways."
+        },
+        {
+          "description": "Results are highly dependent on the validity of underlying causal assumptions, which can be difficult to verify in complex, high-dimensional neural network spaces where multiple causal pathways may interact."
+        },
+        {
+          "description": "Comprehensive causal analysis requires extensive computational resources, particularly for large models, as each intervention requires separate forward passes and multiple intervention combinations for robust conclusions."
+        },
+        {
+          "description": "Distinguishing between direct causal effects and indirect effects mediated through other components can be challenging, potentially leading to oversimplified causal narratives that miss important intermediate processes."
+        },
+        {
+          "description": "Causal relationships identified in specific contexts or datasets may not generalise to different domains, tasks, or model versions, requiring careful validation across diverse scenarios to ensure robust findings."
+        }
+      ],
+      "resources": [],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "prompt-sensitivity-analysis",
+        "feature-attribution-with-integrated-gradients-in-nlp"
+      ]
+    },
+    {
+      "slug": "concept-activation-vectors",
+      "name": "Concept Activation Vectors",
+      "description": "Concept Activation Vectors (CAVs), also known as Testing with Concept Activation Vectors (TCAV), identify mathematical directions in neural network representation space that correspond to human-understandable concepts such as 'stripes', 'young', or 'medical equipment'. The technique works by finding linear directions that separate activations of concept examples from non-concept examples, then measuring how much these concept directions influence the model's predictions. This provides quantitative answers to questions like 'How much does the concept of youth affect this model's hiring decisions?' enabling systematic bias detection and model understanding.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/neural-network",
+        "applicable-models/transformer",
+        "applicable-models/cnn",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualization",
+        "explanatory-scope/local",
+        "explanatory-scope/global",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-knowledge",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use/auditing",
+        "technique-type/algorithmic",
+        "assurance-goal-category/explainability/representation-analysis/concept-identification",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/causality"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Auditing a medical imaging model to verify it focuses on diagnostic features (like 'tumour characteristics') rather than irrelevant concepts (like 'scanner type' or 'patient positioning') when classifying chest X-rays, ensuring clinical decisions rely on medically relevant information.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Testing whether a hiring algorithm's resume screening decisions are influenced by concepts related to protected characteristics such as 'gender-associated names', 'prestigious universities', or 'employment gaps', enabling systematic bias detection and compliance verification.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Providing regulatory-compliant explanations for financial lending decisions by quantifying how concepts like 'debt-to-income ratio', 'employment stability', and 'credit history length' influence loan approval models, with precise sensitivity scores for audit documentation.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires clearly defined concept examples and non-concept examples, which can be challenging to obtain for abstract or subjective concepts."
+        },
+        {
+          "description": "Assumes that meaningful concept directions exist as linear separable directions in the model's internal representation space, which may not hold for all concepts."
+        },
+        {
+          "description": "Results depend heavily on which network layer is examined, as different layers capture different levels of abstraction and concept representation."
+        },
+        {
+          "description": "Computational cost grows significantly with model size and number of concepts tested, though recent advances like FastCAV address this limitation."
+        },
+        {
+          "description": "Interpretation requires domain expertise to define meaningful concepts and understand the significance of sensitivity scores in practical contexts."
+        }
+      ],
+      "resources": [
+        {
+          "title": "FastCAV: Efficient Computation of Concept Activation Vectors for Explaining Deep Neural Networks",
+          "url": "http://arxiv.org/pdf/2505.17883v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Laines Schmalwasser",
+            "Niklas Penzel",
+            "Joachim Denzler",
+            "Julia Niebling"
+          ],
+          "publication_date": "2025-05-23"
+        },
+        {
+          "title": "Concept Distillation: Leveraging Human-Centered Explanations for Model Improvement",
+          "url": "http://arxiv.org/pdf/2311.15303v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Avani Gupta",
+            "Saurabh Saini",
+            "P J Narayanan"
+          ],
+          "publication_date": "2023-11-26"
+        },
+        {
+          "title": "Post-Hoc Concept Disentanglement: From Correlated to Isolated Concept Representations",
+          "url": "http://arxiv.org/pdf/2503.05522v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Eren Erogullari",
+            "Sebastian Lapuschkin",
+            "Wojciech Samek",
+            "Frederik Pahde"
+          ],
+          "publication_date": "2025-03-07"
+        },
+        {
+          "title": "Concept Gradient: Concept-based Interpretation Without Linear Assumption",
+          "url": "http://arxiv.org/pdf/2208.14966v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andrew Bai",
+            "Chih-Kuan Yeh",
+            "Pradeep Ravikumar",
+            "Neil Y. C. Lin",
+            "Cho-Jui Hsieh"
+          ],
+          "publication_date": "2022-08-31"
+        },
+        {
+          "title": "SurroCBM: Concept Bottleneck Surrogate Models for Generative Post-hoc Explanation",
+          "url": "http://arxiv.org/pdf/2310.07698v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Bo Pan",
+            "Zhenke Liu",
+            "Yifei Zhang",
+            "Liang Zhao"
+          ],
+          "publication_date": "2023-10-11"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "acronym": "CAVs",
+      "related_techniques": [
+        "prototype-and-criticism-models",
+        "neuron-activation-analysis"
+      ]
+    }
+  ],
+  "count": 4
+}

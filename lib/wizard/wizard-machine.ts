@@ -76,25 +76,60 @@ export class WizardStateMachine {
 
   // Check if a question should be skipped based on current state
   private shouldSkipQuestion(question: WizardQuestion): boolean {
-    // Skip conditional questions that don't meet conditions
-    if (question.conditional) {
-      // Check if there are enough options to display
-      if (question.minOptionsForDisplay) {
-        const availableOptions = this.getAvailableOptionsCount(question);
-        if (availableOptions < question.minOptionsForDisplay) {
-          return true;
-        }
-      }
+    // Skip if we already have ideal number of results
+    if (
+      this.filteredTechniques.length <= wizardConfig.resultsConfig.idealResults
+    ) {
+      return true;
+    }
 
-      // Skip if results are already uniform (for skipIfUniform)
-      if (question.skipIfUniform && this.checkUniformity(question)) {
+    // Handle non-conditional questions
+    if (!question.conditional) {
+      return false;
+    }
+
+    // Check explainability-specific skipping rules
+    if (this.shouldSkipExplainabilityQuestion(question)) {
+      return true;
+    }
+
+    // Check if there are enough options to display
+    if (question.minOptionsForDisplay) {
+      const availableOptions = this.getAvailableOptionsCount(question);
+      if (availableOptions < question.minOptionsForDisplay) {
         return true;
       }
     }
 
-    // Skip if we already have ideal number of results
+    // Skip if results are already uniform (for skipIfUniform)
+    if (question.skipIfUniform && this.checkUniformity(question)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  // Check if explainability-specific questions should be skipped
+  private shouldSkipExplainabilityQuestion(question: WizardQuestion): boolean {
+    const selectedGoal = this.state.answers['assurance-goal'];
+
+    // If no goal selected yet, don't skip (unless it's an explainability question)
+    if (!selectedGoal && question.id.startsWith('explainability-')) {
+      return true; // Skip explainability questions until a goal is selected
+    }
+
+    // Skip explainability-specific questions if Explainability wasn't selected
     if (
-      this.filteredTechniques.length <= wizardConfig.resultsConfig.idealResults
+      question.id.startsWith('explainability-') &&
+      selectedGoal !== 'Explainability'
+    ) {
+      return true;
+    }
+
+    // Skip assurance-subcategory for Explainability (we have better questions)
+    if (
+      question.id === 'assurance-subcategory' &&
+      selectedGoal === 'Explainability'
     ) {
       return true;
     }
@@ -172,6 +207,38 @@ export class WizardStateMachine {
         return technique.tags.filter((tag) =>
           tag.startsWith(`${filterTag}/${goalLower}/`)
         );
+      }
+      case 'explainability-method': {
+        // For explainability methods, extract method categories
+        if (!technique.tags) {
+          return [];
+        }
+        return technique.tags.filter(
+          (tag) =>
+            tag.startsWith('assurance-goal-category/explainability/') &&
+            (tag.includes('/attribution-methods/') ||
+              tag.includes('/surrogate-models/') ||
+              tag.includes('/visualization-methods/') ||
+              tag.includes('/representation-analysis/') ||
+              tag.includes('/instance-based/') ||
+              tag.includes('/uncertainty-analysis/') ||
+              tag.includes('/causal-analysis/') ||
+              tag.includes('/model-simplification/'))
+        );
+      }
+      case 'explainability-target': {
+        // For explainability targets, extract explains/* tags
+        if (!technique.tags) {
+          return [];
+        }
+        return technique.tags.filter((tag) => tag.includes('/explains/'));
+      }
+      case 'explainability-properties': {
+        // For explainability properties, extract property/* tags
+        if (!technique.tags) {
+          return [];
+        }
+        return technique.tags.filter((tag) => tag.includes('/property/'));
       }
       default:
         return [];
@@ -257,6 +324,29 @@ export class WizardStateMachine {
           techniqueValues.length === 0 ||
           techniqueValues.some((tag) => tag.includes('agnostic'))
         );
+      }
+
+      // Special handling for explainability filters
+      if (filterTag.startsWith('explainability-')) {
+        return answers.some((ans) => {
+          if (ans === 'not-sure') {
+            return true;
+          }
+          // For explainability-target, check for /explains/{answer}
+          if (filterTag === 'explainability-target') {
+            return techniqueValues.some((tag) =>
+              tag.includes(`/explains/${ans}`)
+            );
+          }
+          // For explainability-properties, check for /property/{answer}
+          if (filterTag === 'explainability-properties') {
+            return techniqueValues.some((tag) =>
+              tag.includes(`/property/${ans}`)
+            );
+          }
+          // For other explainability filters (like method), check if the tag contains the answer value
+          return techniqueValues.some((tag) => tag.includes(`/${ans}/`));
+        });
       }
 
       // Check if technique matches any of the selected answers

@@ -16,6 +16,12 @@ export function loadDynamicOptions(
       return getAssuranceGoalOptions(techniques);
     case 'assurance-subcategory':
       return getAssuranceSubcategoryOptions(state, techniques);
+    case 'explainability-method':
+      return getExplainabilityMethodOptions(techniques);
+    case 'explainability-target':
+      return getExplainabilityTargetOptions(techniques);
+    case 'explainability-properties':
+      return getExplainabilityPropertiesOptions(techniques);
     default:
       return [];
   }
@@ -235,6 +241,219 @@ function countTechniquesForOption(
       return tagValue === value || tag.endsWith(`/${value}`);
     });
   }).length;
+}
+
+// Get explainability method options
+function getExplainabilityMethodOptions(
+  techniques: Technique[]
+): QuestionOption[] {
+  const methodCategories = [
+    {
+      value: 'attribution-methods',
+      label: 'Attribution Methods',
+      description: 'Assign importance scores to inputs/features',
+      subcategories: ['gradient-based', 'perturbation-based', 'model-specific'],
+    },
+    {
+      value: 'surrogate-models',
+      label: 'Surrogate Models',
+      description: 'Approximate complex models with simpler ones',
+      subcategories: [
+        'local-surrogates',
+        'global-surrogates',
+        'rule-extraction',
+      ],
+    },
+    {
+      value: 'visualization-methods',
+      label: 'Visualization Methods',
+      description: 'Visual representation of model behavior',
+      subcategories: [
+        'feature-relationships',
+        'attention-patterns',
+        'activation-maps',
+      ],
+    },
+    {
+      value: 'representation-analysis',
+      label: 'Representation Analysis',
+      description: 'Analyze internal model representations',
+      subcategories: [
+        'dimensionality-reduction',
+        'concept-identification',
+        'decomposition',
+      ],
+    },
+    {
+      value: 'instance-based',
+      label: 'Instance-Based Methods',
+      description: 'Use examples to explain',
+      subcategories: ['prototypes', 'influence-analysis', 'counterfactual'],
+    },
+    {
+      value: 'uncertainty-analysis',
+      label: 'Uncertainty Analysis',
+      description: 'Quantify confidence and robustness',
+      subcategories: ['prediction-uncertainty', 'sensitivity-testing'],
+    },
+    {
+      value: 'causal-analysis',
+      label: 'Causal Analysis',
+      description: 'Examine causal relationships',
+      subcategories: ['mediation-analysis', 'interaction-effects'],
+    },
+    {
+      value: 'model-simplification',
+      label: 'Model Simplification',
+      description: 'Create simpler, interpretable models',
+      subcategories: ['pruning', 'knowledge-transfer'],
+    },
+  ];
+
+  return methodCategories
+    .map((method) => {
+      // Count techniques that use this method or its subcategories
+      const count = techniques.filter((technique) =>
+        technique.tags?.some((tag) => {
+          const tagPath = tag.replace(
+            'assurance-goal-category/explainability/',
+            ''
+          );
+          return (
+            tagPath.startsWith(`${method.value}/`) ||
+            method.subcategories.some((sub) =>
+              tagPath.startsWith(`${method.value}/${sub}`)
+            )
+          );
+        })
+      ).length;
+
+      return {
+        value: method.value,
+        label: method.label,
+        description: method.description,
+        count: count > 0 ? count : undefined,
+      };
+    })
+    .filter((option) => option.count && option.count > 0);
+}
+
+// Get explainability target options
+function getExplainabilityTargetOptions(
+  techniques: Technique[]
+): QuestionOption[] {
+  const targets = [
+    {
+      value: 'feature-importance',
+      label: 'Feature Importance',
+      description: 'Which inputs matter most for predictions',
+    },
+    {
+      value: 'decision-boundaries',
+      label: 'Decision Boundaries',
+      description: 'How the model separates different outcomes',
+    },
+    {
+      value: 'internal-mechanisms',
+      label: 'Internal Mechanisms',
+      description: 'How the model processes information internally',
+    },
+    {
+      value: 'prediction-confidence',
+      label: 'Prediction Confidence',
+      description: 'How certain/uncertain the model is',
+    },
+    {
+      value: 'data-patterns',
+      label: 'Data Patterns',
+      description: 'Underlying structures and relationships in data',
+    },
+    {
+      value: 'causal-pathways',
+      label: 'Causal Pathways',
+      description: 'How effects propagate through the model',
+    },
+  ];
+
+  return targets
+    .map((target) => {
+      const count = techniques.filter((technique) =>
+        technique.tags?.some((tag) => tag.includes(`/explains/${target.value}`))
+      ).length;
+
+      return {
+        value: target.value,
+        label: target.label,
+        description: target.description,
+        count: count > 0 ? count : undefined,
+      };
+    })
+    .filter((option) => option.count && option.count > 0);
+}
+
+// Get explainability properties options
+function getExplainabilityPropertiesOptions(
+  techniques: Technique[]
+): QuestionOption[] {
+  const properties = [
+    {
+      value: 'completeness',
+      label: 'Completeness',
+      description: 'Explanations fully account for model output',
+    },
+    {
+      value: 'consistency',
+      label: 'Consistency',
+      description: 'Similar inputs produce similar explanations',
+    },
+    {
+      value: 'fidelity',
+      label: 'Fidelity',
+      description: 'Accurately represents true model behavior',
+    },
+    {
+      value: 'sparsity',
+      label: 'Sparsity',
+      description: 'Focuses on few, most important factors',
+    },
+    {
+      value: 'causality',
+      label: 'Causality',
+      description: 'Identifies causal rather than correlational relationships',
+    },
+    {
+      value: 'comprehensibility',
+      label: 'Comprehensibility',
+      description: 'Produces human-understandable formats',
+    },
+    {
+      value: 'efficiency',
+      label: 'Efficiency',
+      description: 'Computationally efficient to generate',
+    },
+    {
+      value: 'counterfactual-validity',
+      label: 'Counterfactual Validity',
+      description: 'Shows what changes would alter outcomes',
+    },
+  ];
+
+  return properties
+    .map((property) => {
+      const count = techniques.filter((technique) =>
+        technique.tags?.some((tag) =>
+          tag.includes(`/property/${property.value}`)
+        )
+      ).length;
+
+      return {
+        value: property.value,
+        label: property.label,
+        description: property.description,
+        count: count > 0 ? count : undefined,
+      };
+    })
+    .filter((option) => option.count && option.count > 0);
 }
 
 // Format question text with context substitutions

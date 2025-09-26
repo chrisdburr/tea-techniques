@@ -36,6 +36,15 @@ function scorePathItem(
   if (pathItem.question === 'technique-type') {
     return scoreTechniqueType(technique, pathItem.answer as string);
   }
+  if (pathItem.question === 'explainability-method') {
+    return scoreExplainabilityMethod(technique, pathItem.answer as string);
+  }
+  if (pathItem.question === 'explainability-target') {
+    return scoreExplainabilityTarget(technique, pathItem.answer as string);
+  }
+  if (pathItem.question === 'explainability-properties') {
+    return scoreExplainabilityProperties(technique, pathItem.answer);
+  }
   return 0;
 }
 
@@ -67,6 +76,71 @@ function scoreTechniqueType(technique: Technique, answer: string): number {
   return answer === 'not-sure' || hasTechniqueTypeMatch(technique, answer)
     ? 100
     : 0;
+}
+
+function scoreExplainabilityMethod(
+  technique: Technique,
+  answer: string
+): number {
+  if (answer === 'not-sure') {
+    return 100;
+  }
+
+  const methodTags =
+    technique.tags?.filter(
+      (tag) =>
+        tag.startsWith('assurance-goal-category/explainability/') &&
+        (tag.includes('/attribution-methods/') ||
+          tag.includes('/surrogate-models/') ||
+          tag.includes('/visualization-methods/') ||
+          tag.includes('/representation-analysis/') ||
+          tag.includes('/instance-based/') ||
+          tag.includes('/uncertainty-analysis/') ||
+          tag.includes('/causal-analysis/') ||
+          tag.includes('/model-simplification/'))
+    ) || [];
+
+  const normalizedAnswer = answer.replace(/-/g, '-');
+  return methodTags.some((tag) => tag.includes(`/${normalizedAnswer}/`))
+    ? 100
+    : 0;
+}
+
+function scoreExplainabilityTarget(
+  technique: Technique,
+  answer: string
+): number {
+  if (answer === 'not-sure') {
+    return 100;
+  }
+
+  const targetTags =
+    technique.tags?.filter((tag) => tag.includes('/explains/')) || [];
+
+  return targetTags.some((tag) => tag.includes(`/explains/${answer}`))
+    ? 100
+    : 0;
+}
+
+function scoreExplainabilityProperties(
+  technique: Technique,
+  answer: string | string[]
+): number {
+  const answers = Array.isArray(answer) ? answer : [answer];
+  if (answers.includes('not-sure')) {
+    return 100;
+  }
+
+  const propertyTags =
+    technique.tags?.filter((tag) => tag.includes('/property/')) || [];
+
+  // For multiple properties, technique should have at least one
+  const matchCount = answers.filter((prop) =>
+    propertyTags.some((tag) => tag.includes(`/property/${prop}`))
+  ).length;
+
+  // Score based on how many requested properties match
+  return matchCount > 0 ? (matchCount / answers.length) * 100 : 0;
 }
 
 // Check if technique matches model type
@@ -218,6 +292,15 @@ function getReasonForPathItem(
   if (pathItem.question === 'technique-type') {
     return getTechniqueTypeReason(technique, pathItem.answer as string);
   }
+  if (pathItem.question === 'explainability-method') {
+    return getExplainabilityMethodReason(technique, pathItem.answer as string);
+  }
+  if (pathItem.question === 'explainability-target') {
+    return getExplainabilityTargetReason(technique, pathItem.answer as string);
+  }
+  if (pathItem.question === 'explainability-properties') {
+    return getExplainabilityPropertiesReason(technique, pathItem.answer);
+  }
   return null;
 }
 
@@ -264,6 +347,95 @@ function getTechniqueTypeReason(
   if (answer !== 'not-sure' && hasTechniqueTypeMatch(technique, answer)) {
     return getTechniqueTypeLabel(answer);
   }
+  return null;
+}
+
+function getExplainabilityMethodReason(
+  technique: Technique,
+  answer: string
+): string | null {
+  if (answer === 'not-sure') {
+    return null;
+  }
+
+  const methodLabels: Record<string, string> = {
+    'attribution-methods': 'Attribution method',
+    'surrogate-models': 'Surrogate model',
+    'visualization-methods': 'Visualization method',
+    'representation-analysis': 'Representation analysis',
+    'instance-based': 'Instance-based method',
+    'uncertainty-analysis': 'Uncertainty analysis',
+    'causal-analysis': 'Causal analysis',
+    'model-simplification': 'Model simplification',
+  };
+
+  const methodTags =
+    technique.tags?.filter(
+      (tag) =>
+        tag.startsWith('assurance-goal-category/explainability/') &&
+        tag.includes(`/${answer}/`)
+    ) || [];
+
+  return methodTags.length > 0 ? methodLabels[answer] || answer : null;
+}
+
+function getExplainabilityTargetReason(
+  technique: Technique,
+  answer: string
+): string | null {
+  if (answer === 'not-sure') {
+    return null;
+  }
+
+  const targetLabels: Record<string, string> = {
+    'feature-importance': 'Explains feature importance',
+    'decision-boundaries': 'Shows decision boundaries',
+    'internal-mechanisms': 'Reveals internal mechanisms',
+    'prediction-confidence': 'Quantifies prediction confidence',
+    'data-patterns': 'Uncovers data patterns',
+    'causal-pathways': 'Traces causal pathways',
+  };
+
+  const targetTags =
+    technique.tags?.filter((tag) => tag.includes(`/explains/${answer}`)) || [];
+
+  return targetTags.length > 0 ? targetLabels[answer] || answer : null;
+}
+
+function getExplainabilityPropertiesReason(
+  technique: Technique,
+  answer: string | string[]
+): string | null {
+  const answers = Array.isArray(answer) ? answer : [answer];
+  if (answers.includes('not-sure')) {
+    return null;
+  }
+
+  const propertyLabels: Record<string, string> = {
+    completeness: 'Complete',
+    consistency: 'Consistent',
+    fidelity: 'High fidelity',
+    sparsity: 'Sparse',
+    causality: 'Causal',
+    comprehensibility: 'Comprehensible',
+    efficiency: 'Efficient',
+    'counterfactual-validity': 'Counterfactual valid',
+  };
+
+  const propertyTags =
+    technique.tags?.filter((tag) => tag.includes('/property/')) || [];
+
+  const matchedProperties = answers.filter((prop) =>
+    propertyTags.some((tag) => tag.includes(`/property/${prop}`))
+  );
+
+  if (matchedProperties.length > 0) {
+    const labels = matchedProperties.map(
+      (prop) => propertyLabels[prop] || prop
+    );
+    return labels.join(', ');
+  }
+
   return null;
 }
 

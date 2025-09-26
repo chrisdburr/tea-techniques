@@ -59,6 +59,71 @@ export const wizardConfig: WizardConfig = {
       minOptionsForDisplay: 3,
     },
 
+    'explainability-method': {
+      id: 'explainability-method',
+      text: 'How should the explanation work?',
+      helpText: 'Select the approach for generating explanations',
+      helpItems: {
+        'Attribution Methods': 'Assign importance scores to inputs/features',
+        'Surrogate Models': 'Approximate complex models with simpler ones',
+        'Visualization Methods': 'Visual representation of model behavior',
+        'Representation Analysis': 'Analyze internal model representations',
+        'Instance-Based Methods': 'Use examples to explain',
+        'Uncertainty Analysis': 'Quantify confidence and robustness',
+        'Causal Analysis': 'Examine causal relationships',
+        'Model Simplification': 'Create simpler, interpretable models',
+      },
+      type: 'single',
+      filterTag: 'explainability-method',
+      options: 'dynamic',
+      allowNotSure: true,
+      notSureLabel: 'Any method is fine',
+      conditional: true,
+    },
+
+    'explainability-target': {
+      id: 'explainability-target',
+      text: 'What aspect do you want to understand?',
+      helpText: 'The specific aspect of model behavior you want to reveal',
+      helpItems: {
+        'Feature Importance': 'Which inputs matter most for predictions',
+        'Decision Boundaries': 'How the model separates different outcomes',
+        'Internal Mechanisms': 'How the model processes information internally',
+        'Prediction Confidence': 'How certain/uncertain the model is',
+        'Data Patterns': 'Underlying structures and relationships in data',
+        'Causal Pathways': 'How effects propagate through the model',
+      },
+      type: 'single',
+      filterTag: 'explainability-target',
+      options: 'dynamic',
+      allowNotSure: true,
+      notSureLabel: 'Multiple aspects',
+      conditional: true,
+    },
+
+    'explainability-properties': {
+      id: 'explainability-properties',
+      text: 'What qualities are important for your explanations?',
+      helpText: 'Select all properties that matter for your use case',
+      helpItems: {
+        Completeness: 'Explanations fully account for model output',
+        Consistency: 'Similar inputs produce similar explanations',
+        Fidelity: 'Accurately represents true model behavior',
+        Sparsity: 'Focuses on few, most important factors',
+        Causality: 'Identifies causal rather than correlational relationships',
+        Comprehensibility: 'Produces human-understandable formats',
+        Efficiency: 'Computationally efficient to generate',
+        'Counterfactual Validity': 'Shows what changes would alter outcomes',
+      },
+      type: 'multi',
+      filterTag: 'explainability-properties',
+      options: 'dynamic',
+      allowNotSure: true,
+      notSureLabel: 'No specific requirements',
+      conditional: true,
+      skipIfUniform: true,
+    },
+
     'model-type': {
       id: 'model-type',
       text: 'What type of model are you using?',
@@ -209,7 +274,10 @@ export const wizardConfig: WizardConfig = {
       id: 'by-goal',
       questions: [
         'assurance-goal',
-        'assurance-subcategory',
+        'explainability-method', // Conditional: only if Explainability selected
+        'explainability-target', // Conditional: only if Explainability selected
+        'explainability-properties', // Conditional: only if Explainability selected
+        'assurance-subcategory', // For non-explainability goals
         'lifecycle-stage',
         'model-type',
         'expertise-level',

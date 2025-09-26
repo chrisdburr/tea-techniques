@@ -31,24 +31,6 @@ export default async function WizardPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Breadcrumbs */}
-      <nav
-        aria-label="Breadcrumb"
-        className="mb-6 text-muted-foreground text-sm"
-      >
-        <ol className="flex items-center space-x-2">
-          <li>
-            <a className="hover:text-foreground" href="/">
-              Home
-            </a>
-          </li>
-          <li>/</li>
-          <li aria-current="page" className="text-foreground">
-            Technique Finder
-          </li>
-        </ol>
-      </nav>
-
       {/* Header */}
       <div className="mb-8 text-center">
         <h1 className="mb-4 font-bold text-3xl">Find the Right Technique</h1>

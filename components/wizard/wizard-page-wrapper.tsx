@@ -30,14 +30,15 @@ export function WizardPageWrapper({ techniques }: WizardPageWrapperProps) {
     const question = wizardMachine.startFlow(flowId);
     setCurrentQuestion(question);
     setProgress(wizardMachine.getProgress());
+    setFilteredTechniques(wizardMachine.getFilteredTechniques());
   };
 
   const submitAnswer = (answer: string | string[]) => {
     const nextQuestion = wizardMachine.submitAnswer(answer);
     setProgress(wizardMachine.getProgress());
+    setFilteredTechniques(wizardMachine.getFilteredTechniques());
 
     if (!nextQuestion || wizardMachine.shouldShowResults()) {
-      setFilteredTechniques(wizardMachine.getFilteredTechniques());
       setShowResults(true);
     } else {
       setCurrentQuestion(nextQuestion);
@@ -57,10 +58,12 @@ export function WizardPageWrapper({ techniques }: WizardPageWrapperProps) {
       if (previousQuestion) {
         setCurrentQuestion(previousQuestion);
         setProgress(wizardMachine.getProgress());
+        setFilteredTechniques(wizardMachine.getFilteredTechniques());
       } else {
         // Back to entry point selection
         setCurrentFlow('');
         setCurrentQuestion(null);
+        setFilteredTechniques([]);
       }
     }
   };
@@ -71,6 +74,7 @@ export function WizardPageWrapper({ techniques }: WizardPageWrapperProps) {
     setCurrentFlow('');
     setShowResults(false);
     setProgress(0);
+    setFilteredTechniques([]);
   };
 
   return (

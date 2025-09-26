@@ -109,6 +109,15 @@ export function QuestionRenderer({
     [question.type, selectedValues, onAnswer]
   );
 
+  const handleSubmit = useCallback(() => {
+    if (question.type === 'multi') {
+      const values = Array.from(selectedValues);
+      if (values.length > 0) {
+        onAnswer(values);
+      }
+    }
+  }, [question.type, selectedValues, onAnswer]);
+
   // Handle arrow key navigation
   const handleArrowKey = useCallback(
     (direction: 'up' | 'down') => {
@@ -128,6 +137,24 @@ export function QuestionRenderer({
     [options, hoveredOption]
   );
 
+  // Handle Enter key separately to reduce complexity
+  const handleEnterKey = useCallback(() => {
+    if (hoveredOption) {
+      handleSelect(hoveredOption);
+    } else if (question.type === 'single' && options.length === 1) {
+      handleSelect(options[0].value);
+    } else if (question.type === 'multi' && selectedValues.size > 0) {
+      handleSubmit();
+    }
+  }, [
+    hoveredOption,
+    handleSelect,
+    question.type,
+    options,
+    selectedValues.size,
+    handleSubmit,
+  ]);
+
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -135,30 +162,34 @@ export function QuestionRenderer({
         return;
       }
 
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        handleArrowKey('down');
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        handleArrowKey('up');
-      } else if ((e.key === ' ' || e.key === 'Enter') && hoveredOption) {
-        e.preventDefault();
-        handleSelect(hoveredOption);
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          handleArrowKey('down');
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          handleArrowKey('up');
+          break;
+        case 'Enter':
+          e.preventDefault();
+          handleEnterKey();
+          break;
+        case ' ':
+          if (hoveredOption) {
+            e.preventDefault();
+            handleSelect(hoveredOption);
+          }
+          break;
+        default:
+          // Allow other keys to pass through
+          break;
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isLoading, hoveredOption, handleArrowKey, handleSelect]);
-
-  const handleSubmit = useCallback(() => {
-    if (question.type === 'multi') {
-      const values = Array.from(selectedValues);
-      if (values.length > 0) {
-        onAnswer(values);
-      }
-    }
-  }, [question.type, selectedValues, onAnswer]);
+  }, [isLoading, hoveredOption, handleArrowKey, handleSelect, handleEnterKey]);
 
   // Animation variants
   const containerVariants = {
@@ -258,8 +289,8 @@ export function QuestionRenderer({
             >
               <button
                 className={cn(
-                  'relative w-full cursor-pointer rounded-lg border-2 p-4 text-left transition-all',
-                  'hover:shadow-md',
+                  'relative w-full cursor-pointer rounded-lg border-2 p-3 text-left transition-all sm:p-4',
+                  'min-h-[60px] hover:shadow-md sm:min-h-[auto]',
                   isSelected
                     ? 'border-primary bg-primary/5'
                     : 'border-border hover:border-primary/50',
@@ -308,9 +339,10 @@ export function QuestionRenderer({
       {/* Footer Actions */}
       <div className="mt-6 flex items-center justify-between">
         <Button
+          className="h-10 px-4 text-sm sm:h-9 sm:px-3"
           disabled={isLoading}
           onClick={onBack}
-          size="sm"
+          size="default"
           variant="outline"
         >
           Back
@@ -324,9 +356,10 @@ export function QuestionRenderer({
               </span>
             )}
             <Button
+              className="h-10 px-4 text-sm sm:h-9 sm:px-3"
               disabled={isLoading || selectedValues.size === 0}
               onClick={handleSubmit}
-              size="sm"
+              size="default"
             >
               Next
             </Button>

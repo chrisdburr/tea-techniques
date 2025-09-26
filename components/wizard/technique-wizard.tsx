@@ -62,16 +62,23 @@ export function TechniqueWizard({
         return;
       }
 
+      // Prevent default for certain keys to avoid conflicts
       if (e.key === 'Escape') {
+        e.preventDefault();
         onClose();
-      } else if (e.key === 'Enter' && !showResults) {
-        // Handle Enter to proceed (will be implemented with question renderer)
+      } else if (e.key === '?' && e.shiftKey) {
+        // Trigger help modal (to be implemented)
+        e.preventDefault();
+        // setShowHelp(true);
+      } else if (e.key === 'Tab') {
+        // Allow natural Tab navigation
+        // The browser handles this by default
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose, showResults]);
+  }, [isOpen, onClose]);
 
   const startFlow = useCallback(
     (flowId: string) => {
@@ -225,7 +232,7 @@ export function TechniqueWizard({
           {/* Modal */}
           <motion.div
             animate="visible"
-            className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
+            className="fixed inset-0 z-[10000] flex items-center justify-center p-0 sm:p-4"
             exit="hidden"
             initial="hidden"
             variants={overlayVariants}
@@ -233,8 +240,9 @@ export function TechniqueWizard({
             <motion.div
               animate="visible"
               className={cn(
-                'relative w-full max-w-2xl rounded-lg bg-background shadow-xl',
-                'overflow-hidden border border-border'
+                'relative w-full bg-background shadow-xl',
+                'overflow-hidden border border-border',
+                'h-full sm:h-auto sm:max-w-2xl sm:rounded-lg'
               )}
               exit="exit"
               initial="hidden"
@@ -242,18 +250,18 @@ export function TechniqueWizard({
               variants={modalVariants}
             >
               {/* Header */}
-              <div className="relative border-border border-b px-6 py-4">
+              <div className="relative border-border border-b px-4 py-3 sm:px-6 sm:py-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="font-semibold text-xl">
+                  <h2 className="font-semibold text-lg sm:text-xl">
                     Find the Right Technique
                   </h2>
                   <Button
-                    className="h-8 w-8 p-0"
+                    className="h-10 w-10 p-0 sm:h-8 sm:w-8"
                     onClick={onClose}
                     size="sm"
                     variant="ghost"
                   >
-                    <X className="h-4 w-4" />
+                    <X className="h-5 w-5 sm:h-4 sm:w-4" />
                   </Button>
                 </div>
 
@@ -271,7 +279,7 @@ export function TechniqueWizard({
               </div>
 
               {/* Content */}
-              <div className="relative max-h-[60vh] min-h-[400px] overflow-y-auto p-6">
+              <div className="relative flex-1 overflow-y-auto p-4 sm:max-h-[60vh] sm:min-h-[400px] sm:p-6">
                 <AnimatePresence custom={direction} mode="wait">
                   <motion.div
                     animate="center"
@@ -331,14 +339,15 @@ export function TechniqueWizard({
               </div>
 
               {/* Footer */}
-              <div className="border-border border-t px-6 py-4">
+              <div className="border-border border-t px-4 py-3 sm:px-6 sm:py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex gap-2">
                     {currentFlow && (
                       <Button
+                        className="h-10 px-3 text-sm sm:h-9 sm:px-3"
                         disabled={isTransitioning}
                         onClick={goBack}
-                        size="sm"
+                        size="default"
                         variant="outline"
                       >
                         <ChevronLeft className="mr-1 h-4 w-4" />
@@ -347,9 +356,10 @@ export function TechniqueWizard({
                     )}
                     {(currentFlow || showResults) && (
                       <Button
+                        className="h-10 px-3 text-sm sm:h-9 sm:px-3"
                         disabled={isTransitioning}
                         onClick={restart}
-                        size="sm"
+                        size="default"
                         variant="ghost"
                       >
                         <RotateCcw className="mr-1 h-4 w-4" />

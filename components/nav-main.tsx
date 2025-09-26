@@ -67,7 +67,7 @@ export function NavMain() {
 
   // Load techniques data
   useEffect(() => {
-    fetch('/data/techniques.json')
+    fetch('/tea-techniques/data/techniques.json')
       .then((res) => res.json())
       .then((data) => setTechniques(data))
       .catch(() => {
@@ -210,8 +210,8 @@ export function NavMain() {
 
   return (
     <>
-      <SidebarGroup>
-        <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+      {/* Search and Wizard Actions - No label, positioned between logo and navigation */}
+      <SidebarGroup className="border-b-0 pb-2">
         <SidebarMenu>
           {/* Search */}
           <SidebarMenuItem>
@@ -221,6 +221,7 @@ export function NavMain() {
           {/* Find Technique Wizard */}
           <SidebarMenuItem>
             <SidebarMenuButton
+              className="bg-primary text-primary-foreground transition-all duration-200 hover:bg-primary/90 hover:text-primary-foreground hover:shadow-md"
               onClick={() => setIsWizardOpen(true)}
               tooltip="Find the Right Technique"
             >
@@ -228,7 +229,13 @@ export function NavMain() {
               <span>Find the Right Technique</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
 
+      {/* Main Navigation */}
+      <SidebarGroup>
+        <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+        <SidebarMenu>
           {/* Navigation Items */}
           {navigationItems.map((item) => (
             <SidebarMenuItem key={item.title}>

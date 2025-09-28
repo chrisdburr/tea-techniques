@@ -1,0 +1,117 @@
+{
+  "tag": {
+    "name": "applicable-models/architecture/linear-models/regression",
+    "slug": "applicable-models-architecture-linear-models-regression",
+    "count": 1,
+    "category": "applicable-models"
+  },
+  "techniques": [
+    {
+      "slug": "quantile-regression",
+      "name": "Quantile Regression",
+      "description": "Quantile regression estimates specific percentiles (quantiles) of the target variable rather than just predicting the average outcome. For example, instead of predicting 'average house price = £300,000', it can predict 'there's a 10% chance the price will be below £250,000, 50% chance below £300,000, and 90% chance below £380,000'. This technique reveals how input features affect different parts of the outcome distribution - perhaps property size strongly influences luxury homes (90th percentile) but barely affects budget properties (10th percentile). By capturing the full conditional distribution, quantile regression provides rich uncertainty information and enables robust prediction intervals.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/linear-models/regression",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/architecture/tree-based/gradient-boosting",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/prediction-interval",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Predicting patient recovery times after surgery by estimating multiple quantiles (e.g., 25th, 50th, 75th percentiles), enabling doctors to communicate realistic timeframes: 'Most patients recover within 2-4 weeks, but some may take up to 8 weeks', providing robust uncertainty estimates for treatment planning.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Revealing how income inequality affects different segments of society by showing how education's impact varies across income quantiles - demonstrating that education benefits high earners much more than low earners, providing transparent insights into systemic inequalities.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring equitable loan amount predictions across demographic groups by verifying that the spread of predicted loan amounts (difference between 90th and 10th percentiles) is consistent across protected groups, preventing discriminatory practices in lending ranges.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally intensive when fitting multiple quantiles simultaneously, especially for large datasets or complex models, as each quantile requires separate optimization."
+        },
+        {
+          "description": "May produce crossing quantiles without proper constraints, where predicted 90th percentile values are lower than 50th percentile values, creating logically inconsistent and unusable prediction intervals."
+        },
+        {
+          "description": "Sensitive to outliers and heavy-tailed distributions, particularly in extreme quantiles (e.g., 5th or 95th percentiles), which can lead to unstable and unreliable estimates."
+        },
+        {
+          "description": "Requires careful selection of quantile levels and may need domain expertise to interpret results meaningfully, as different quantiles may reveal conflicting patterns in feature relationships."
+        },
+        {
+          "description": "Less effective with small datasets where extreme quantiles cannot be reliably estimated due to insufficient data points in the tails of the distribution."
+        }
+      ],
+      "resources": [
+        {
+          "title": "statsmodels/statsmodels",
+          "url": "https://github.com/statsmodels/statsmodels",
+          "source_type": "software_package",
+          "description": "Python package providing comprehensive statistical modeling capabilities including quantile regression alongside descriptive statistics and statistical inference"
+        },
+        {
+          "title": "Quantile Regression in Machine Learning: A Survey",
+          "url": "https://www.semanticscholar.org/paper/01cd143c5a054b85afc9b99d473f84422ace7e05",
+          "source_type": "documentation",
+          "authors": [
+            "Anshul Kumar",
+            "Rajesh Wadhvani",
+            "A. Rasool",
+            "Muktesh Gupta"
+          ],
+          "description": "Comprehensive survey covering quantile regression applications, methods, and developments in machine learning contexts"
+        },
+        {
+          "title": "Tutorial for conformalized quantile regression (CQR) — MAPIE 0.8.5 ...",
+          "url": "https://mapie.readthedocs.io/en/v0.8.5/examples_regression/4-tutorials/plot_cqr_tutorial.html",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Quantile Regression Forest — sklearn_quantile 0.1.1 documentation",
+          "url": "https://sklearn-quantile.readthedocs.io/en/latest/methods.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Quantile machine learning models for python — sklearn_quantile ...",
+          "url": "https://sklearn-quantile.readthedocs.io/",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "monte-carlo-dropout",
+        "prediction-intervals",
+        "conformal-prediction",
+        "deep-ensembles",
+        "bootstrapping",
+        "jackknife-resampling"
+      ]
+    }
+  ],
+  "count": 1
+}

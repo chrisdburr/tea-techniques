@@ -1,0 +1,2530 @@
+{
+  "tag": {
+    "name": "applicable-models/requirements/training-data",
+    "slug": "applicable-models-requirements-training-data",
+    "count": 24,
+    "category": "applicable-models"
+  },
+  "techniques": [
+    {
+      "slug": "prototype-and-criticism-models",
+      "name": "Prototype and Criticism Models",
+      "description": "Prototype and Criticism Models provide data understanding by identifying two complementary sets of examples: prototypes represent the most typical instances that best summarise common patterns in the data, whilst criticisms are outliers or edge cases that are poorly represented by the prototypes. For example, in a dataset of customer transactions, prototypes might be the most representative buying patterns (frequent small purchases, occasional large purchases), whilst criticisms could be unusual behaviors (bulk buyers, one-time high-value customers). This dual approach reveals both what is normal and what is exceptional, helping understand data coverage and model blind spots.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/paradigm/unsupervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/instance-based/prototypes",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/fairness",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/structured-output",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing medical imaging datasets to identify prototype scans that represent typical healthy tissue patterns and criticism examples showing rare disease presentations, helping radiologists understand what the model considers 'normal' versus cases requiring special attention.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Evaluating credit scoring models by finding prototype borrowers who represent typical low-risk profiles and criticism cases showing unusual but legitimate financial patterns that the model might misclassify, ensuring fair treatment of edge cases.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Evaluating representation bias in hiring datasets by examining whether prototypes systematically exclude certain demographic groups and criticisms disproportionately represent minorities, revealing data collection inequities.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Selection of prototypes and criticisms is highly dependent on the choice of distance metric or similarity measure, which may not capture all meaningful relationships in the data."
+        },
+        {
+          "description": "Computational complexity can become prohibitive for very large datasets, as the method often requires pairwise comparisons or optimisation over the entire dataset."
+        },
+        {
+          "description": "The number of prototypes and criticisms to select is typically a hyperparameter that requires domain expertise to set appropriately."
+        },
+        {
+          "description": "Results may not generalise well if the training data distribution differs significantly from the deployment data distribution."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Examples are not Enough, Learn to Criticize! Criticism for Interpretability",
+          "url": "https://proceedings.neurips.cc/paper/2016/file/5680522b8e2bb01943234bce7bf84534-Paper.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Been Kim",
+            "Rajiv Khanna",
+            "Oluwasanmi O. Koyejo"
+          ],
+          "publication_date": "2016-12-05"
+        },
+        {
+          "title": "SeldonIO/alibi",
+          "url": "https://github.com/SeldonIO/alibi",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Prototype Selection for Interpretable Classification",
+          "url": "http://arxiv.org/pdf/1202.5933v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Oscar Reyes",
+            "Carlos Morell",
+            "Sebastian Ventura"
+          ],
+          "publication_date": "2012-02-27"
+        },
+        {
+          "title": "Alibi Explain Documentation",
+          "url": "https://docs.seldon.io/projects/alibi/en/stable/",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "neuron-activation-analysis",
+        "concept-activation-vectors"
+      ]
+    },
+    {
+      "slug": "influence-functions",
+      "name": "Influence Functions",
+      "description": "Influence functions quantify how much each training example influenced a model's predictions by computing the change in prediction that would occur if that training example were removed and the model retrained. Using calculus and the implicit function theorem, they approximate this 'leave-one-out' effect without actually retraining the model by computing gradients and Hessian information. This mathematical approach reveals which specific training examples were most responsible for pushing the model toward or away from particular predictions, enabling practitioners to trace problematic outputs back to their root causes in the training data.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Privacy"
+      ],
+      "tags": [
+        "applicable-models/architecture/linear-models",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/differentiable",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/instance-based/influence-analysis",
+        "assurance-goal-category/explainability/property/causality",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/privacy",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Investigating why a medical diagnosis model misclassified a patient by identifying which specific training cases most influenced the incorrect prediction, revealing potential mislabelled examples or problematic patterns in the training data.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Analysing a spam detection system that falsely flagged legitimate emails by tracing the prediction back to influential training examples, discovering that certain training emails contained misleading patterns that caused the model to overfit.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Auditing a loan approval model for discriminatory patterns by identifying which training examples most influenced rejections of minority applicants, revealing whether biased historical decisions are driving current unfair outcomes.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Assessing membership inference risks in a medical model by identifying whether certain patient records have disproportionate influence on predictions, indicating potential data leakage vulnerabilities.",
+          "goal": "Privacy"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally intensive, requiring Hessian matrix computations that become intractable for very large models with millions of parameters."
+        },
+        {
+          "description": "Requires access to the complete training dataset and training process, making it impossible to apply to pre-trained models without access to original training data."
+        },
+        {
+          "description": "Accuracy degrades for highly non-convex models where the linear approximation underlying influence functions breaks down."
+        },
+        {
+          "description": "Results can be sensitive to hyperparameter choices and may not generalise well across different model architectures or training procedures."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Understanding Black-box Predictions via Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/08ad8fad21f6ec4cda4d56be1ca5e146b7c913a1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Pang Wei Koh",
+            "Percy Liang"
+          ]
+        },
+        {
+          "title": "nimarb/pytorch_influence_functions",
+          "url": "https://github.com/nimarb/pytorch_influence_functions",
+          "source_type": "software_package"
+        },
+        {
+          "title": "What is Your Data Worth to GPT? LLM-Scale Data Valuation with Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/f33f3dece9f34c1ec5417dccf9e0acf592d8e8cb",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sang Keun Choe",
+            "Hwijeen Ahn",
+            "Juhan Bae",
+            "Kewen Zhao",
+            "Minsoo Kang",
+            "Youngseog Chung",
+            "Adithya Pratapa",
+            "W. Neiswanger",
+            "Emma Strubell",
+            "Teruko Mitamura",
+            "Jeff G. Schneider",
+            "Eduard H. Hovy",
+            "Roger B. Grosse",
+            "Eric P. Xing"
+          ]
+        },
+        {
+          "title": "Scaling Up Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/ef2a773c3c7848a6cc16b18164be5f8876a310af",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andrea Schioppa",
+            "Polina Zablotskaia",
+            "David Vilar",
+            "Artem Sokolov"
+          ]
+        },
+        {
+          "title": "Welcome to torch-influence's API Reference! — torch-influence 0.1.0 ...",
+          "url": "https://torch-influence.readthedocs.io/",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "contextual-decomposition",
+        "taylor-decomposition"
+      ]
+    },
+    {
+      "slug": "rulefit",
+      "name": "RuleFit",
+      "description": "RuleFit creates interpretable surrogate models that can explain complex black-box models or serve as interpretable alternatives. It works by learning a sparse linear model that combines automatically extracted decision rules with original features. The technique first builds tree ensembles to generate candidate rules, then uses LASSO regression to select the most important rules and features. The resulting model provides global explanations through human-readable rules (e.g., 'IF age > 50 AND income < 30k THEN ...') combined with linear feature weights, making complex model behavior transparent and auditable.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+        "assurance-goal-category/explainability/surrogate-models/rule-extraction",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Building customer churn prediction models with rules like 'IF contract_length < 12_months AND support_calls > 5 THEN churn_risk = high', allowing marketing teams to understand and act on the key drivers of customer attrition.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating credit scoring models that combine traditional linear factors (income, age) with interpretable rules (IF recent_missed_payments = 0 AND account_age > 2_years THEN creditworthy), providing transparent lending decisions.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Developing regulatory-compliant medical diagnosis models where treatment recommendations combine clinical measurements with clear decision rules (IF blood_pressure > 140 AND diabetes = true THEN high_risk), enabling audit trails for healthcare decisions.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Can generate large numbers of rules even with regularisation, potentially overwhelming users and reducing practical interpretability."
+        },
+        {
+          "description": "Performance may be inferior to complex ensemble methods when rule complexity is constrained for interpretability."
+        },
+        {
+          "description": "Rule extraction quality depends heavily on the underlying tree ensemble, which may miss important feature interactions if not properly configured."
+        },
+        {
+          "description": "Requires careful hyperparameter tuning to balance between model complexity and interpretability, with no universal optimal setting."
+        }
+      ],
+      "resources": [
+        {
+          "title": "christophM/rulefit",
+          "url": "https://github.com/christophM/rulefit",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Tree Ensembles with Rule Structured Horseshoe Regularization",
+          "url": "http://arxiv.org/pdf/1702.05008v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Malte Nalenz",
+            "Mattias Villani"
+          ],
+          "publication_date": "2017-02-16"
+        },
+        {
+          "title": "Safe RuleFit: Learning Optimal Sparse Rule Model by Meta Safe Screening",
+          "url": "http://arxiv.org/pdf/1810.01683v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hiroki Kato",
+            "Hiroyuki Hanada",
+            "Ichiro Takeuchi"
+          ],
+          "publication_date": "2018-10-03"
+        },
+        {
+          "title": "csinva/imodels",
+          "url": "https://github.com/csinva/imodels",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Getting More From Regression Models with RuleFit | Towards Data ...",
+          "url": "https://towardsdatascience.com/getting-more-from-regression-models-with-rulefit-2e6be8d77432/",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "ridge-regression-surrogates",
+        "model-distillation"
+      ]
+    },
+    {
+      "slug": "sensitivity-analysis-for-fairness",
+      "name": "Sensitivity Analysis for Fairness",
+      "description": "Sensitivity Analysis for Fairness systematically evaluates how model predictions change when sensitive attributes or their proxies are perturbed whilst holding other factors constant. The technique involves creating counterfactual instances by modifying potentially discriminatory features (race, gender, age) or their correlates (zip code, names, education institutions) and measuring the resulting prediction differences. This controlled perturbation approach quantifies the degree to which protected characteristics influence model decisions, helping detect both direct discrimination and indirect bias through proxy variables even when sensitive attributes are not explicitly used as model inputs.",
+      "assurance_goals": [
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/local",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing whether a lending model's decisions change significantly when only the applicant's zip code (which may correlate with race) is altered, while keeping all other factors constant.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Evaluating a recruitment algorithm by systematically changing candidate names from stereotypically male to female names (whilst keeping qualifications identical) to measure whether gender bias affects hiring recommendations, revealing discrimination through name-based proxies.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Assessing a healthcare resource allocation model by varying patient zip codes across different socioeconomic areas to determine whether geographic proxies for race and income inappropriately influence treatment recommendations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires domain expertise to identify relevant proxy variables for sensitive attributes, which may not be obvious or comprehensive."
+        },
+        {
+          "description": "Computationally intensive for complex models when testing many feature combinations or perturbation ranges."
+        },
+        {
+          "description": "Choice of perturbation ranges and comparison points involves subjective decisions that can significantly affect results and conclusions."
+        },
+        {
+          "description": "May miss subtle or interaction-based forms of discrimination that only manifest under specific combinations of features."
+        }
+      ],
+      "resources": [
+        {
+          "title": "The Fragility of Fairness: Causal Sensitivity Analysis for Fair Machine Learning",
+          "url": "http://arxiv.org/pdf/2410.09600v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Jake Fawkes",
+            "Nic Fishman",
+            "Mel Andrews",
+            "Zachary C. Lipton"
+          ],
+          "publication_date": "2024-10-12"
+        },
+        {
+          "title": "Fair SA: Sensitivity Analysis for Fairness in Face Recognition",
+          "url": "http://arxiv.org/pdf/2202.03586v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Aparna R. Joshi",
+            "Xavier Suau",
+            "Nivedha Sivakumar",
+            "Luca Zappella",
+            "Nicholas Apostoloff"
+          ],
+          "publication_date": "2022-02-08"
+        },
+        {
+          "title": "fairlearn/fairlearn",
+          "url": "https://github.com/fairlearn/fairlearn",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Aequitas: Bias Audit Toolkit",
+          "url": "https://github.com/dssg/aequitas",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Fairness Through Sensitivity Analysis - Towards Data Science",
+          "url": "https://towardsdatascience.com/fairness-through-sensitivity-analysis-3ea1b4d79e6c",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "User Guide - Fairlearn documentation",
+          "url": "https://fairlearn.org/v0.8.0/user_guide/assessment.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "fairness-gan",
+        "attribute-removal-fairness-through-unawareness",
+        "bayesian-fairness-regularization"
+      ]
+    },
+    {
+      "slug": "synthetic-data-generation",
+      "name": "Synthetic Data Generation",
+      "description": "Synthetic data generation creates artificial datasets that aim to preserve the statistical properties, distributions, and relationships of real data whilst containing no actual records from real individuals. The technique encompasses various approaches including generative adversarial networks (GANs), variational autoencoders (VAEs), statistical sampling methods, and privacy-preserving techniques like differential privacy. Beyond privacy protection, synthetic data serves multiple purposes: augmenting limited datasets, balancing class distributions, testing model robustness, enabling data sharing across organisations, and supporting fairness assessments by generating representative samples for underrepresented groups.",
+      "assurance_goals": [
+        "Privacy",
+        "Fairness",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/generative/gan",
+        "applicable-models/architecture/neural-networks/generative/vae",
+        "applicable-models/architecture/probabilistic",
+        "applicable-models/paradigm/generative",
+        "applicable-models/paradigm/unsupervised",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/structured-output",
+        "expertise-needed/cryptography",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/data-handling",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Creating realistic but synthetic electronic health records for developing and testing medical diagnosis algorithms without exposing real patient data, enabling secure collaboration between healthcare institutions.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Generating synthetic samples for underrepresented demographic groups in a hiring dataset to train fair recruitment models, ensuring all groups have sufficient representation for bias testing and mitigation.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Augmenting limited training data for rare medical conditions by generating synthetic patient records, improving model reliability and performance on edge cases where real data is insufficient.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Creating synthetic financial transaction data for testing fraud detection systems in development environments, avoiding exposure of real customer financial information whilst maintaining realistic attack patterns.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "May not capture all subtle patterns, correlations, and edge cases present in real data, potentially leading to reduced model performance when deployed on actual data with different characteristics."
+        },
+        {
+          "description": "Generating high-quality synthetic data that maintains both statistical fidelity and utility requires sophisticated techniques and substantial computational resources, especially for complex, high-dimensional datasets."
+        },
+        {
+          "description": "Privacy-preserving approaches may still risk information leakage through statistical inference attacks, membership inference, or model inversion, requiring careful privacy budget management and validation."
+        },
+        {
+          "description": "Synthetic data may inadvertently amplify existing biases in the original data or introduce new biases through the generation process, particularly in generative models trained on biased datasets."
+        },
+        {
+          "description": "Validation and quality assessment of synthetic data is challenging, as traditional metrics may not adequately capture whether the synthetic data preserves the relationships and patterns needed for specific downstream tasks."
+        }
+      ],
+      "resources": [
+        {
+          "title": "sdv-dev/SDV",
+          "url": "https://github.com/sdv-dev/SDV",
+          "source_type": "software_package"
+        },
+        {
+          "title": "An evaluation framework for synthetic data generation models",
+          "url": "http://arxiv.org/pdf/2404.08866v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ioannis E. Livieris",
+            "Nikos Alimpertis",
+            "George Domalis",
+            "Dimitris Tsakalidis"
+          ],
+          "publication_date": "2024-04-13"
+        },
+        {
+          "title": "Synthetic Data — SecureML 0.2.2 documentation",
+          "url": "https://secureml.readthedocs.io/en/latest/user_guide/synthetic_data.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "How to Generate Real-World Synthetic Data with CTGAN | Towards ...",
+          "url": "https://towardsdatascience.com/how-to-generate-real-world-synthetic-data-with-ctgan-af41b4d60fde/",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "federated-learning",
+        "differential-privacy",
+        "homomorphic-encryption"
+      ]
+    },
+    {
+      "slug": "deep-ensembles",
+      "name": "Deep Ensembles",
+      "description": "Deep ensembles combine predictions from multiple neural networks trained independently with different random initializations to capture epistemic uncertainty (model uncertainty). By training several models on the same data with different starting points, the ensemble reveals how much the model's predictions depend on training randomness. The disagreement between ensemble members naturally indicates prediction uncertainty - when models agree, confidence is high; when they disagree, uncertainty is revealed. This approach provides more reliable uncertainty estimates, better out-of-distribution detection, and improved calibration compared to single models.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/prediction-interval",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Improving self-driving car safety by using multiple neural networks to detect obstacles, where disagreement between models signals uncertainty and triggers extra caution or human intervention, providing robust uncertainty quantification for critical decisions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Communicating prediction confidence to medical professionals by showing the range of diagnoses from multiple trained models, enabling doctors to understand when the AI system is uncertain and requires additional human expertise or testing.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Detecting out-of-distribution inputs in financial fraud detection systems where ensemble disagreement signals potentially novel attack patterns that require immediate security team review and system safeguards.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive to train and deploy, requiring multiple complete neural networks which increases training time, memory usage, and inference costs proportionally to ensemble size."
+        },
+        {
+          "description": "May still provide overconfident predictions for inputs far from the training distribution, as all ensemble members can be similarly confident about out-of-distribution examples."
+        },
+        {
+          "description": "Requires careful hyperparameter tuning for each ensemble member to ensure diversity, as identical hyperparameters may lead to similar models that reduce uncertainty estimation quality."
+        },
+        {
+          "description": "Storage and deployment overhead increases linearly with ensemble size, making it challenging to deploy large ensembles in resource-constrained environments or real-time applications."
+        },
+        {
+          "description": "Ensemble predictions may be difficult to interpret individually, as the final decision emerges from averaging multiple models rather than from a single explainable pathway."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles",
+          "url": "https://arxiv.org/abs/1612.01474",
+          "source_type": "technical_paper",
+          "authors": [
+            "Balaji Lakshminarayanan",
+            "Alexander Pritzel",
+            "Charles Blundell"
+          ],
+          "publication_date": "2016-12-05",
+          "description": "Foundational paper introducing deep ensembles for uncertainty estimation in neural networks"
+        },
+        {
+          "title": "ENSTA-U2IS-AI/awesome-uncertainty-deeplearning",
+          "url": "https://github.com/ENSTA-U2IS-AI/awesome-uncertainty-deeplearning",
+          "source_type": "documentation",
+          "description": "Comprehensive collection of research papers, surveys, datasets, and code for uncertainty estimation in deep learning"
+        },
+        {
+          "title": "Deep Ensembles: A Loss Landscape Perspective",
+          "url": "http://arxiv.org/pdf/1912.02757v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Stanislav Fort",
+            "Huiyi Hu",
+            "Balaji Lakshminarayanan"
+          ],
+          "publication_date": "2019-12-05",
+          "description": "Analysis of why deep ensembles work well from the perspective of loss landscape geometry and mode connectivity"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "monte-carlo-dropout",
+        "prediction-intervals",
+        "quantile-regression",
+        "conformal-prediction",
+        "bootstrapping",
+        "jackknife-resampling"
+      ]
+    },
+    {
+      "slug": "bootstrapping",
+      "name": "Bootstrapping",
+      "description": "Bootstrapping estimates uncertainty by repeatedly resampling the original dataset with replacement to create many new training sets, training a model on each sample, and analysing the variation in predictions. This approach provides confidence intervals and stability measures without making strong statistical assumptions. By showing how predictions change with different random samples of the data, it reveals how sensitive the model is to the specific training examples and provides robust uncertainty estimates.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Estimating uncertainty in financial risk models by resampling historical data to understand how predictions might vary under different historical scenarios.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing confidence intervals for medical diagnosis predictions to help doctors understand the reliability of AI recommendations and make more informed treatment decisions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Assessing whether prediction uncertainty is consistent across different demographic groups in hiring algorithms, identifying if the model is systematically more uncertain for certain populations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive as it requires training multiple models on resampled datasets."
+        },
+        {
+          "description": "Does not account for uncertainty in model structure or architecture choices."
+        },
+        {
+          "description": "Cannot detect systematically missing data patterns or biases present in the original dataset."
+        },
+        {
+          "description": "Assumes that the original dataset is representative of the population of interest."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Deterministic bootstrapping for a class of bootstrap methods",
+          "url": "http://arxiv.org/pdf/1903.10816v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Thomas Pitschel"
+          ],
+          "publication_date": "2019-03-26"
+        },
+        {
+          "title": "A Gentle Introduction to the Bootstrap Method ...",
+          "url": "https://www.machinelearningmastery.com/a-gentle-introduction-to-the-bootstrap-method/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "scipy.stats.bootstrap",
+          "url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Bootstrapping and bagging — modAL documentation",
+          "url": "https://modal-python.readthedocs.io/en/latest/content/examples/bootstrapping_and_bagging.html",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Machine Learning: What is Bootstrapping? - KDnuggets",
+          "url": "https://www.kdnuggets.com/2023/03/bootstrapping.html",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "monte-carlo-dropout",
+        "prediction-intervals",
+        "quantile-regression",
+        "conformal-prediction",
+        "deep-ensembles",
+        "jackknife-resampling"
+      ]
+    },
+    {
+      "slug": "jackknife-resampling",
+      "name": "Jackknife Resampling",
+      "description": "Jackknife resampling (also called leave-one-out resampling) assesses model stability and uncertainty by systematically removing one data point at a time and retraining the model on the remaining data. Unlike bootstrapping which samples with replacement, jackknife creates n different models by excluding each of the n data points once. This systematic approach reveals how individual points influence results, provides robust estimates of prediction variance, and identifies unusually influential observations that may be outliers or leverage points affecting model reliability.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/prediction-interval",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating how removing individual countries from a global climate model affects predictions, identifying which regions have outsized influence and providing robust uncertainty estimates for climate projections used in policy decisions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing transparent uncertainty estimates in medical risk prediction by showing how individual patient records influence model predictions, enabling clinicians to understand prediction stability and confidence intervals for treatment decisions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring fair model evaluation in hiring algorithms by systematically testing how removing candidates from different demographic groups affects model performance, revealing whether certain populations disproportionately influence the model's behaviour.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Extremely computationally intensive for large datasets, requiring training of n separate models for n data points, making it impractical for datasets with thousands or millions of observations."
+        },
+        {
+          "description": "May underestimate uncertainty compared to bootstrapping or other resampling methods, as it provides only n different samples rather than a broader exploration of the data distribution."
+        },
+        {
+          "description": "Assumes that removing single data points provides meaningful insights into model stability, which may not hold when multiple correlated observations drive model behaviour."
+        },
+        {
+          "description": "Can be sensitive to the choice of performance metric used for evaluation, as different metrics may show different patterns of sensitivity to individual data points."
+        },
+        {
+          "description": "Provides limited insight into model behaviour on truly novel data, as each jackknife sample is only minimally different from the full training set."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn model_selection.LeaveOneOut",
+          "url": "https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.LeaveOneOut.html",
+          "source_type": "documentation",
+          "description": "Scikit-learn implementation of leave-one-out cross-validation for jackknife resampling"
+        },
+        {
+          "title": "Cross-validation: evaluating estimator performance",
+          "url": "https://scikit-learn.org/stable/modules/cross_validation.html",
+          "source_type": "documentation",
+          "description": "Comprehensive guide to cross-validation methods including leave-one-out in scikit-learn"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "monte-carlo-dropout",
+        "prediction-intervals",
+        "quantile-regression",
+        "conformal-prediction",
+        "deep-ensembles",
+        "bootstrapping"
+      ]
+    },
+    {
+      "slug": "cross-validation",
+      "name": "Cross-validation",
+      "description": "Cross-validation evaluates model performance and robustness by systematically partitioning data into multiple subsets (folds) and training/testing repeatedly on different combinations. Common approaches include k-fold (splitting into k equal parts), stratified (preserving class distributions), and leave-one-out variants. By testing on multiple independent holdout sets, it reveals how performance varies across different data subsamples, provides robust estimates of generalisation ability, and helps detect overfitting or model instability that single train-test splits might miss.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Using 10-fold cross-validation to estimate a healthcare prediction model's true accuracy and detect overfitting, ensuring robust performance estimates that generalise beyond the specific training sample to new patient populations.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing transparent model evaluation in regulatory submissions by showing consistent performance across multiple validation folds, demonstrating to auditors that model performance claims are not cherry-picked from a single favourable test set.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring fair model evaluation across demographic groups by using stratified cross-validation that maintains representative proportions of protected classes in each fold, revealing whether performance is consistent across different population segments.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive for large datasets or complex models, requiring multiple training runs that scale linearly with the number of folds."
+        },
+        {
+          "description": "Can provide overly optimistic performance estimates when data has dependencies or structure (e.g., time series, grouped observations) that violate independence assumptions."
+        },
+        {
+          "description": "May not reflect real-world performance if the training data distribution differs significantly from future deployment conditions or population shifts."
+        },
+        {
+          "description": "Choice of fold number (k) involves a bias-variance trade-off: fewer folds reduce computational cost but increase variance in estimates, whilst more folds increase computation but may introduce bias."
+        },
+        {
+          "description": "Standard cross-validation doesn't account for temporal ordering in sequential data, potentially leading to data leakage where future information influences past predictions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn Cross-validation User Guide",
+          "url": "https://scikit-learn.org/stable/modules/cross_validation.html",
+          "source_type": "documentation",
+          "description": "Comprehensive guide to cross-validation methods and implementations in scikit-learn"
+        },
+        {
+          "title": "Cross-validation: what does it estimate and how well does it do it?",
+          "url": "http://arxiv.org/pdf/2104.00673v4",
+          "source_type": "technical_paper",
+          "authors": [
+            "Stephen Bates",
+            "Trevor Hastie",
+            "Robert Tibshirani"
+          ],
+          "publication_date": "2021-04-01",
+          "description": "Theoretical analysis of what cross-validation estimates and its accuracy in practice"
+        },
+        {
+          "title": "A Study of Cross-Validation and Bootstrap for Accuracy Estimation and Model Selection",
+          "url": "https://www.ijcai.org/Proceedings/95-2/Papers/016.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ron Kohavi"
+          ],
+          "publication_date": "1995-01-01",
+          "description": "Classic paper comparing cross-validation with bootstrap for model evaluation and selection"
+        },
+        {
+          "title": "Cross-Validation in Machine Learning: How to Do It Right",
+          "url": "https://neptune.ai/blog/cross-validation-in-machine-learning-how-to-do-it-right",
+          "source_type": "tutorial",
+          "description": "Practical guide covering different cross-validation strategies and common pitfalls to avoid"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "permutation-tests",
+        "area-under-precision-recall-curve"
+      ]
+    },
+    {
+      "slug": "anomaly-detection",
+      "name": "Anomaly Detection",
+      "description": "Anomaly detection identifies unusual behaviours, inputs, or outputs that deviate significantly from established normal patterns using statistical, machine learning, or rule-based methods. Applied to AI/ML systems, it serves as a continuous monitoring mechanism that can flag unexpected model predictions, suspicious input patterns, data drift, adversarial attacks, or operational malfunctions. By establishing baselines of normal system behaviour and alerting when deviations exceed predefined thresholds, organisations can detect potential security threats, model degradation, fairness violations, or system failures before they cause significant harm.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Fairness",
+        "Security"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring/anomaly-detection",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/system-deployment-and-use",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Monitoring a content moderation AI system to detect when it starts flagging significantly more or fewer posts than usual, which could indicate model drift, adversarial attacks, or changes in user behaviour patterns that require immediate investigation to prevent harmful content from appearing.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Implementing anomaly detection on a medical diagnosis AI to identify when prediction confidence scores or feature importance patterns deviate from historical norms, helping catch model degradation or data quality issues that could lead to misdiagnoses before patients are affected.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Deploying anomaly detection on a hiring algorithm to monitor for unusual patterns in how candidates from different demographic groups are scored or rejected, enabling early detection of emerging bias issues or attempts to game the system through demographic manipulation.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Setting appropriate sensitivity thresholds is challenging and requires domain expertise, as overly sensitive settings generate excessive false alarms whilst conservative settings may miss genuine anomalies."
+        },
+        {
+          "description": "May generate false positives for legitimate edge cases or rare but valid system behaviours, potentially causing unnecessary alerts and disrupting normal operations."
+        },
+        {
+          "description": "Limited effectiveness against novel or sophisticated attacks that deliberately mimic normal patterns or gradually shift behaviour to avoid detection thresholds."
+        },
+        {
+          "description": "Requires substantial historical data to establish reliable baselines of normal behaviour, and may struggle with systems that have naturally high variability or seasonal patterns."
+        },
+        {
+          "description": "Detection lag can occur between when an anomaly begins and when it exceeds detection thresholds, potentially allowing harmful behaviour to persist during the detection window."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Anomaly Detection Toolkit (ADTK)",
+          "url": "https://adtk.readthedocs.io/en/stable/",
+          "source_type": "software_package",
+          "description": "Python library for unsupervised and rule-based time series anomaly detection with unified APIs, flexible algorithm combination, and support for feature engineering and ensemble methods"
+        },
+        {
+          "title": "TimeEval: Time Series Anomaly Detection Evaluation Framework",
+          "url": "https://timeeval.readthedocs.io/",
+          "source_type": "software_package",
+          "description": "Comprehensive evaluation tool for comparing time series anomaly detection algorithms across multiple datasets with standardized metrics and distributed execution support"
+        },
+        {
+          "title": "DeepOD: Deep Learning for Outlier Detection",
+          "url": "https://deepod.readthedocs.io/",
+          "source_type": "software_package",
+          "description": "Python library featuring 27 deep learning algorithms for tabular and time-series anomaly detection with unified APIs and diverse network architectures including LSTM, GRU, TCN, and Transformer"
+        },
+        {
+          "title": "A Beginner's Guide to Anomaly Detection Techniques in Data Science",
+          "url": "https://www.kdnuggets.com/2023/05/beginner-guide-anomaly-detection-techniques-data-science.html",
+          "source_type": "tutorial",
+          "description": "Beginner-friendly introduction covering Isolation Forest, Local Outlier Factor, and Autoencoder techniques with explanations of point, contextual, and collective anomaly types"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "out-of-distribution-detector-for-neural-networks"
+      ]
+    },
+    {
+      "slug": "model-distillation",
+      "name": "Model Distillation",
+      "description": "Model distillation transfers knowledge from a large, complex model (teacher) to a smaller, more efficient model (student) by training the student to mimic the teacher's behaviour. The student learns from the teacher's soft predictions and intermediate representations rather than just hard labels, capturing nuanced decision boundaries and uncertainty. This produces models that are faster, require less memory, and are often more interpretable whilst maintaining much of the original performance. Beyond compression, distillation can improve model reliability by regularising training and enable deployment in resource-constrained environments.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/model-simplification/knowledge-transfer",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/deployment",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Compressing a large medical diagnosis model into a smaller student model that can run on edge devices in resource-limited clinics, making the decision process more transparent for healthcare professionals whilst maintaining diagnostic accuracy for critical patient care.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating a compressed fraud detection model from a complex ensemble teacher that maintains detection performance whilst being more robust to adversarial attacks and data drift, ensuring consistent protection of financial transactions across varying conditions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Distilling a large autonomous vehicle perception model into a smaller student model that can run with guaranteed inference times and lower computational requirements, ensuring predictable safety-critical decision-making under real-time constraints.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Student models typically achieve 90-95% of teacher performance, creating a trade-off between model efficiency and predictive accuracy that may be unacceptable for high-stakes applications requiring maximum precision."
+        },
+        {
+          "description": "Distillation process can be computationally expensive, requiring extensive teacher model inference during training and careful hyperparameter tuning to balance knowledge transfer with student model capacity."
+        },
+        {
+          "description": "Knowledge transfer quality depends heavily on teacher-student architecture compatibility and the chosen distillation objectives, with mismatched designs potentially leading to ineffective learning or mode collapse."
+        },
+        {
+          "description": "Student models may inherit teacher model biases and vulnerabilities whilst potentially introducing new failure modes, requiring separate validation for fairness, robustness, and safety properties."
+        },
+        {
+          "description": "Compressed models may lack the teacher's capability to handle edge cases or out-of-distribution inputs, potentially creating safety risks when deployed in environments different from the training distribution."
+        }
+      ],
+      "resources": [
+        {
+          "title": "airaria/TextBrewer",
+          "url": "https://github.com/airaria/TextBrewer",
+          "source_type": "software_package",
+          "description": "PyTorch-based knowledge distillation toolkit for natural language processing with support for transformer models, flexible distillation strategies, and multi-teacher approaches."
+        },
+        {
+          "title": "Main features — TextBrewer 0.2.1.post1 documentation",
+          "url": "https://textbrewer.readthedocs.io/",
+          "source_type": "documentation",
+          "description": "Comprehensive documentation for TextBrewer including tutorials, API reference, configuration guides, and experimental results for knowledge distillation in NLP tasks."
+        },
+        {
+          "title": "A Generic Approach for Reproducible Model Distillation",
+          "url": "http://arxiv.org/abs/2211.12631",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hooker, Giles",
+            "Xu, Peiru",
+            "Zhou, Yunzhe"
+          ],
+          "publication_date": "2023-04-27",
+          "description": "Research paper presenting a framework for reproducible knowledge distillation with standardised evaluation protocols and benchmarking across different model architectures and distillation techniques."
+        },
+        {
+          "title": "dkozlov/awesome-knowledge-distillation",
+          "url": "https://github.com/dkozlov/awesome-knowledge-distillation",
+          "source_type": "software_package",
+          "description": "Curated collection of knowledge distillation resources including academic papers, implementation code across multiple frameworks (PyTorch, TensorFlow, Keras), and educational videos."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "ridge-regression-surrogates",
+        "rulefit",
+        "model-pruning"
+      ]
+    },
+    {
+      "slug": "reweighing",
+      "name": "Reweighing",
+      "description": "Reweighing is a pre-processing technique that mitigates bias by assigning different weights to training examples based on their group membership and class label. The weights are calculated to ensure that privileged and unprivileged groups have equal influence on the model's training process, effectively balancing the dataset without altering the feature values themselves. This helps to train fairer models by correcting for historical imbalances in how different groups are represented in the data.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group/statistical-parity",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-training-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "expertise-needed/low",
+        "fairness-approach/group",
+        "lifecycle-stage/data-handling/preprocessing",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "In a loan application system, if historical data shows that a higher proportion of applicants from a minority group were denied loans (negative outcome), reweighing would assign higher weights to these instances. This forces the model to pay more attention to correctly classifying the underrepresented group, aiming to correct for historical bias and improve fairness metrics like equal opportunity.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "When developing a hiring model, if the training data contains fewer female applicants for senior roles, reweighing can be applied to increase the importance of these instances. This helps to prevent the model from learning a spurious correlation between gender and seniority, ensuring that female candidates are evaluated more equitably during the screening process.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "In a medical diagnosis system, reweighing provides transparency by explicitly showing which demographic groups required adjustment for balanced representation. The computed weights serve as documentation of historical bias patterns in medical data, helping clinicians understand potential disparities and ensuring the model's decisions are based on medical evidence rather than demographic correlations.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "For a credit scoring model deployed across different regions, reweighing improves reliability by ensuring consistent performance across demographic groups. By balancing the training data representation, the model maintains stable accuracy metrics across different population segments, reducing the risk of performance degradation when deployed in areas with different demographic compositions.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "The technique only adjusts the overall influence of demographic groups and does not address biases that may be encoded within the features themselves."
+        },
+        {
+          "description": "Assigning very high weights to a small number of instances from an underrepresented group can increase the model's variance and make it sensitive to outliers, potentially harming generalisation."
+        },
+        {
+          "description": "The effectiveness of reweighing depends on the assumption that the labels in the training data are accurate; it cannot correct for label bias where outcomes were themselves the result of historical discrimination."
+        },
+        {
+          "description": "It may not be effective if the feature distributions for different groups are fundamentally different, as it cannot change the underlying data relationships."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Achieving Fairness at No Utility Cost via Data Reweighing with Influence",
+          "url": "http://arxiv.org/pdf/2202.00787v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Peizhao Li",
+            "Hongfu Liu"
+          ],
+          "publication_date": "2022-02-01",
+          "description": "Presents a novel reweighing approach that computes individual sample weights based on influence functions to achieve fairness without sacrificing model utility"
+        },
+        {
+          "title": "aif360.sklearn.preprocessing.Reweighing — aif360 0.6.1 ...",
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.preprocessing.Reweighing.html",
+          "source_type": "documentation",
+          "description": "Documentation for scikit-learn compatible implementation of the reweighing preprocessing technique in the AI Fairness 360 library"
+        },
+        {
+          "title": "brandeis-machine-learning/influence-fairness",
+          "url": "https://github.com/brandeis-machine-learning/influence-fairness",
+          "source_type": "software_package",
+          "description": "Python implementation of influence-based data reweighing for achieving cost-free fairness with experiments on tabular datasets"
+        },
+        {
+          "title": "Boosting Fair Classifier Generalization through Adaptive Priority Reweighing",
+          "url": "http://arxiv.org/pdf/2309.08375v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Zhihao Hu",
+            "Yiran Xu",
+            "Mengnan Du",
+            "Jindong Gu",
+            "Xinmei Tian",
+            "Fengxiang He"
+          ],
+          "publication_date": "2023-09-15",
+          "description": "Advanced reweighing technique that adaptively prioritises samples near decision boundaries to improve fairness generalisation across different demographic groups"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "disparate-impact-remover",
+        "relabelling",
+        "preferential-sampling"
+      ]
+    },
+    {
+      "slug": "disparate-impact-remover",
+      "name": "Disparate Impact Remover",
+      "description": "Disparate Impact Remover is a preprocessing technique that transforms feature values in a dataset to reduce statistical dependence between features and protected attributes (like race or gender). The method modifies non-protected features through mathematical transformations that preserve the utility of the data whilst reducing correlations that could lead to discriminatory outcomes. This approach specifically targets the '80% rule' disparate impact threshold by adjusting feature distributions to ensure more equitable treatment across demographic groups in downstream model predictions.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/sensitive-attributes",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Transforming features in a credit scoring dataset where variables like 'years of employment' and 'education level' are correlated with race, applying mathematical transformations to reduce these correlations whilst preserving the predictive value for creditworthiness assessment.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Preprocessing a recruitment dataset where features like 'previous job titles' and 'university attended' correlate with gender, modifying these features to ensure the '80% rule' is met whilst maintaining useful information for predicting job performance.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Preprocessing financial lending data to provide transparent bias metrics showing the quantified reduction in correlation between protected attributes and creditworthiness features, enabling institutions to demonstrate compliance with the 80% rule and explain their fairness interventions to regulators.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring consistent model performance across demographic groups in healthcare risk assessment by mathematically transforming features to reduce protected attribute correlations, improving reliability of predictions for minority populations who may have been systematically under-served.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Feature transformations may reduce model accuracy by removing or distorting important predictive information during the debiasing process."
+        },
+        {
+          "description": "Only addresses measured protected attributes and cannot eliminate bias that operates through unmeasured proxy variables."
+        },
+        {
+          "description": "Effectiveness depends on the specific transformation method chosen and may not generalise well to different datasets or domains."
+        },
+        {
+          "description": "May create artificial feature distributions that don't reflect real-world data patterns, potentially causing issues in model deployment."
+        }
+      ],
+      "resources": [
+        {
+          "title": "holistic-ai/holisticai",
+          "url": "https://github.com/holistic-ai/holisticai",
+          "source_type": "software_package",
+          "description": "Comprehensive open-source toolkit for AI fairness with bias measurement, mitigation techniques, and visualisation tools"
+        },
+        {
+          "title": "Disparate Impact Remover — holisticai documentation",
+          "url": "https://holisticai.readthedocs.io/en/latest/getting_started/bias/mitigation/preprocessing/bc_disparate_impact_remover_disparate_impact_remover.html",
+          "source_type": "tutorial",
+          "description": "Comprehensive tutorial covering theoretical background, methodology, and practical implementation of disparate impact removal"
+        },
+        {
+          "title": "Trusted-AI/AIF360",
+          "url": "https://github.com/Trusted-AI/AIF360",
+          "source_type": "software_package",
+          "description": "IBM Research's extensible open-source library for detecting and mitigating algorithmic bias across multiple domains"
+        },
+        {
+          "title": "aif360.algorithms.preprocessing.DisparateImpactRemover — aif360 ...",
+          "url": "https://aif360.readthedocs.io/en/latest/modules/generated/aif360.algorithms.preprocessing.DisparateImpactRemover.html",
+          "source_type": "documentation",
+          "description": "Technical API documentation for AIF360's DisparateImpactRemover class with parameters, methods, and usage examples"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "reweighing",
+        "relabelling",
+        "preferential-sampling"
+      ]
+    },
+    {
+      "slug": "fairness-gan",
+      "name": "Fairness GAN",
+      "description": "A data generation technique that employs Generative Adversarial Networks (GANs) to create fair synthetic datasets by learning to generate data representations that preserve utility whilst obfuscating protected attributes. Unlike traditional GANs, Fairness GANs incorporate fairness constraints into the training objective, ensuring that the generated data maintains statistical parity across demographic groups. The technique can be used for data augmentation to balance underrepresented groups or to create privacy-preserving synthetic datasets that remove demographic bias from training data.",
+      "assurance_goals": [
+        "Fairness",
+        "Privacy",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/generative/gan",
+        "applicable-models/paradigm/generative",
+        "applicable-models/paradigm/unsupervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/reliability",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "evidence-type/synthetic-data",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-augmentation",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Generating balanced synthetic datasets for medical research by creating additional samples from underrepresented demographic groups, ensuring equal representation across ethnicity and gender whilst maintaining the statistical properties needed for robust model training.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Creating privacy-preserving synthetic datasets for financial services that remove demographic identifiers whilst preserving the underlying patterns needed for credit risk assessment, allowing secure data sharing between institutions without exposing sensitive customer information.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Augmenting recruitment datasets by generating synthetic candidate profiles that balance gender and ethnicity representation, ensuring reliable model performance across all demographic groups when real-world data exhibits significant imbalances.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "GAN training is notoriously difficult to stabilise, with potential for mode collapse or failure to converge, especially when additional fairness constraints are imposed."
+        },
+        {
+          "description": "Ensuring fairness in generated data may come at the cost of data utility, potentially reducing the quality or realism of synthetic samples."
+        },
+        {
+          "description": "Requires large datasets to train both generator and discriminator networks effectively, limiting applicability in data-scarce domains."
+        },
+        {
+          "description": "Evaluation complexity is high, as it requires assessing both the quality of generated data and the preservation of fairness properties across demographic groups."
+        },
+        {
+          "description": "May inadvertently introduce new biases if the fairness constraints are not properly specified or if the training data itself contains subtle biases."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Fairness GAN",
+          "url": "http://arxiv.org/pdf/1805.09910v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Prasanna Sattigeri",
+            "Samuel C. Hoffman",
+            "Vijil Chenthamarakshan",
+            "Kush R. Varshney"
+          ],
+          "publication_date": "2018-05-24"
+        },
+        {
+          "title": "Fair GANs through model rebalancing for extremely imbalanced class distributions",
+          "url": "http://arxiv.org/pdf/2308.08638v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Anubhav Jain",
+            "Nasir Memon",
+            "Julian Togelius"
+          ],
+          "publication_date": "2023-08-16"
+        },
+        {
+          "title": "Inclusive GAN: Improving Data and Minority Coverage in Generative Models",
+          "url": "http://arxiv.org/abs/2004.03355",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ning Yu",
+            "Ke Li",
+            "Peng Zhou",
+            "Jitendra Malik",
+            "Larry Davis",
+            "Mario Fritz"
+          ],
+          "publication_date": "2020-04-07"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "sensitivity-analysis-for-fairness",
+        "attribute-removal-fairness-through-unawareness",
+        "bayesian-fairness-regularization"
+      ]
+    },
+    {
+      "slug": "relabelling",
+      "name": "Relabelling",
+      "description": "A preprocessing fairness technique that modifies class labels in training data to achieve equal positive outcome rates across protected groups. Also known as 'data massaging', this method identifies instances that contribute to discriminatory patterns and flips their labels (from positive to negative or vice versa) to balance the proportion of positive outcomes between demographic groups. The technique aims to remove historical bias from training data whilst preserving the overall class distribution, enabling standard classifiers to learn from discrimination-free datasets.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-training-data",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/dataset-analysis",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/domain-knowledge",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-preprocessing",
+        "lifecycle-stage/model-development",
+        "technique-type/procedural"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Preprocessing historical hiring datasets by relabelling borderline cases to ensure equal hiring rates across gender and ethnicity groups, correcting for past discriminatory practices whilst maintaining overall qualification standards for fair recruitment model training.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Creating transparent credit scoring datasets by documenting which loan applications had labels modified to address historical lending discrimination, providing clear audit trails showing how training data bias was systematically corrected before model development.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Improving reliability of medical diagnosis training data by relabelling cases where demographic bias may have influenced historical diagnoses, ensuring models learn from corrected labels that reflect true medical conditions rather than biased historical treatment patterns.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Altering training labels risks introducing new biases or artificial patterns that may not reflect genuine relationships in the data."
+        },
+        {
+          "description": "Deciding which instances to relabel requires careful selection criteria and domain expertise to avoid inappropriate label changes."
+        },
+        {
+          "description": "May reduce prediction accuracy if too many labels are changed, particularly when the modifications conflict with genuine patterns in the data."
+        },
+        {
+          "description": "Requires access to ground truth or expert knowledge to determine whether original labels reflect genuine outcomes or discriminatory bias."
+        },
+        {
+          "description": "Effectiveness depends on accurate identification of discriminatory instances, which can be challenging when bias patterns are subtle or complex."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Data preprocessing techniques for classification without discrimination",
+          "url": "https://link.springer.com/article/10.1007/s10115-011-0463-8",
+          "source_type": "technical_paper",
+          "authors": [
+            "Faisal Kamiran",
+            "Toon Calders"
+          ],
+          "publication_date": "2012-06-01"
+        },
+        {
+          "title": "Classifying without discriminating",
+          "url": "https://www.researchgate.net/publication/224440330_Classifying_without_discriminating",
+          "source_type": "technical_paper",
+          "authors": [
+            "Toon Calders",
+            "Sicco Verwer"
+          ],
+          "publication_date": "2010-02-01"
+        },
+        {
+          "title": "Data Pre-Processing for Discrimination Prevention",
+          "url": "https://krvarshney.github.io/pubs/CalmonWVRV_jstsp2018.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Flavio Calmon",
+            "Dennis Wei",
+            "Bhanukiran Vinzamuri",
+            "Karthikeyan Natesan Ramamurthy",
+            "Kush R. Varshney"
+          ],
+          "publication_date": "2018-01-01"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "reweighing",
+        "disparate-impact-remover",
+        "preferential-sampling"
+      ]
+    },
+    {
+      "slug": "preferential-sampling",
+      "name": "Preferential Sampling",
+      "description": "A preprocessing fairness technique developed by Kamiran and Calders that addresses dataset imbalances by re-sampling training data with preference for underrepresented groups to achieve discrimination-free classification. This method modifies the training distribution by prioritising borderline objects (instances near decision boundaries) from underrepresented groups for duplication whilst potentially removing instances from overrepresented groups. Unlike relabelling approaches, preferential sampling maintains original class labels whilst creating a more balanced dataset that prevents models from learning biased patterns due to skewed group representation.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/dataset-analysis",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/low",
+        "fairness-approach/group",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-preprocessing",
+        "lifecycle-stage/model-development",
+        "technique-type/procedural"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Preprocessing hiring datasets by preferentially sampling candidates from underrepresented gender and ethnic groups, particularly focusing on borderline cases near decision boundaries, to ensure fair representation whilst maintaining original qualifications and labels for unbiased recruitment model training.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Balancing medical training datasets by oversampling patients from underrepresented demographic groups to ensure reliable diagnostic performance across all populations, preventing models from exhibiting reduced accuracy for minority patient groups due to insufficient training examples.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Creating transparent credit scoring datasets by documenting and adjusting the sampling process to ensure equal representation across demographic groups, providing clear evidence to regulators that training data imbalances have been addressed without altering original creditworthiness labels.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Oversampling minority groups can cause overfitting to duplicated examples, particularly when borderline instances are repeatedly sampled, potentially reducing model generalisation."
+        },
+        {
+          "description": "Undersampling majority groups may remove important examples that contain valuable information, potentially degrading overall model performance."
+        },
+        {
+          "description": "Does not address inherent algorithmic bias in the learning process itself, only correcting for representation imbalances in the training data."
+        },
+        {
+          "description": "Selection of borderline objects requires careful threshold tuning and may be sensitive to the choice of distance metrics or similarity measures used."
+        },
+        {
+          "description": "May not address intersectional fairness issues when multiple protected attributes create complex group combinations that require nuanced sampling strategies."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Data preprocessing techniques for classification without discrimination",
+          "url": "https://link.springer.com/article/10.1007/s10115-011-0463-8",
+          "source_type": "technical_paper",
+          "authors": [
+            "Faisal Kamiran",
+            "Toon Calders"
+          ],
+          "publication_date": "2012-06-01"
+        },
+        {
+          "title": "Classification with no discrimination by preferential sampling",
+          "url": "https://research.tue.nl/en/publications/classification-with-no-discrimination-by-preferential-sampling",
+          "source_type": "technical_paper",
+          "authors": [
+            "Faisal Kamiran",
+            "Toon Calders"
+          ],
+          "publication_date": "2010-05-27"
+        },
+        {
+          "title": "A Survey on Bias and Fairness in Machine Learning",
+          "url": "https://arxiv.org/abs/1908.09635",
+          "source_type": "documentation",
+          "authors": [
+            "Ninareh Mehrabi",
+            "Fred Morstatter",
+            "Nripsuta Saxena",
+            "Kristina Lerman",
+            "Aram Galstyan"
+          ],
+          "publication_date": "2019-08-25"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "reweighing",
+        "disparate-impact-remover",
+        "relabelling"
+      ]
+    },
+    {
+      "slug": "attribute-removal-fairness-through-unawareness",
+      "name": "Attribute Removal (Fairness Through Unawareness)",
+      "description": "Attribute Removal (Fairness Through Unawareness) ensures fairness by completely excluding protected attributes such as race, gender, or age from the model's input features. While this approach prevents direct discrimination, it may not eliminate bias if other features are correlated with protected attributes (proxy discrimination). This technique represents the most basic fairness intervention but often needs to be combined with other approaches to address indirect bias through seemingly neutral features.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/transparency",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/low",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Removing gender, race, and age attributes from hiring algorithms to prevent direct discrimination, whilst acknowledging that indirect bias may persist through correlated features like education institution or postal code.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Excluding protected demographic attributes from credit scoring models to comply with fair lending regulations, ensuring no explicit consideration of race, gender, or ethnicity in loan approval decisions.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Building medical diagnosis models that exclude patient race and ethnicity to prevent biased treatment recommendations, whilst ensuring clinical decisions are based solely on medical indicators and symptoms.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Creating transparent regulatory reporting systems that demonstrate compliance by explicitly documenting which protected attributes have been excluded from decision-making algorithms, providing clear audit trails for regulatory review.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Proxy discrimination remains a major concern as seemingly neutral features (education, postal code, previous employment) may strongly correlate with protected attributes, perpetuating indirect bias."
+        },
+        {
+          "description": "Intersectional bias cannot be addressed through simple attribute removal, as complex interactions between multiple demographic characteristics may create compounding discrimination effects."
+        },
+        {
+          "description": "Legal and regulatory compliance may be insufficient, as many jurisdictions require demonstrating disparate impact absence rather than simply removing protected attributes from models."
+        },
+        {
+          "description": "Identifying all potential proxy variables is practically impossible, especially with high-dimensional data where subtle correlations with protected attributes may exist in unexpected features."
+        },
+        {
+          "description": "Performance degradation may occur if removed attributes contain legitimate predictive information, creating tension between fairness objectives and model accuracy requirements."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Fairness Through Awareness",
+          "url": "https://arxiv.org/abs/1104.3913",
+          "source_type": "technical_paper",
+          "description": "Foundational paper introducing fairness through awareness concept and demonstrating limitations of fairness through unawareness",
+          "authors": [
+            "Dwork, Cynthia",
+            "Hardt, Moritz",
+            "Pitassi, Toniann",
+            "Reingold, Omer",
+            "Zemel, Richard"
+          ],
+          "publication_date": "2012-01-01"
+        },
+        {
+          "title": "Fairness Constraints: Mechanisms for Fair Classification",
+          "url": "https://arxiv.org/abs/1507.05259",
+          "source_type": "technical_paper",
+          "description": "Comprehensive analysis of fairness approaches including attribute removal limitations and proxy discrimination challenges",
+          "authors": [
+            "Zafar, Muhammad Bilal",
+            "Valera, Isabel",
+            "Rodriguez, Manuel Gomez",
+            "Gummadi, Krishna P."
+          ],
+          "publication_date": "2015-07-19"
+        },
+        {
+          "title": "Fairlearn: A toolkit for assessing and improving fairness in machine learning",
+          "url": "https://github.com/fairlearn/fairlearn",
+          "source_type": "software_package",
+          "description": "Microsoft's comprehensive fairness toolkit with preprocessing methods including attribute removal and proxy detection tools"
+        },
+        {
+          "title": "The Ethical Algorithm: The Science of Socially Aware Algorithm Design",
+          "url": "https://global.oup.com/academic/product/the-ethical-algorithm-9780190948207",
+          "source_type": "documentation",
+          "description": "Accessible book covering fairness through unawareness concepts and practical considerations for practitioners",
+          "authors": [
+            "Kearns, Michael",
+            "Roth, Aaron"
+          ],
+          "publication_date": "2019-11-01"
+        }
+      ],
+      "complexity_rating": 1,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "sensitivity-analysis-for-fairness",
+        "fairness-gan",
+        "bayesian-fairness-regularization"
+      ]
+    },
+    {
+      "slug": "fair-adversarial-networks",
+      "name": "Fair Adversarial Networks",
+      "description": "An in-processing fairness technique that employs adversarial training with dual neural networks to learn fair representations. The method consists of a predictor network that learns the main task whilst an adversarial discriminator network simultaneously attempts to predict sensitive attributes from the predictor's hidden representations. Through this adversarial min-max game, the predictor is incentivised to learn features that are informative for the task but statistically independent of protected attributes, effectively removing bias at the representation level in deep learning models.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training a facial recognition system that maintains high accuracy for person identification whilst ensuring equal performance across different ethnic groups, using adversarial training to remove race-related features from learned representations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Developing a resume screening neural network that provides transparent evidence of bias mitigation by demonstrating that learned features cannot predict gender, whilst maintaining predictive performance for job suitability assessment.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Creating a medical image analysis model that achieves reliable diagnostic performance across patient demographics by using adversarial debiasing to ensure age and gender information cannot be extracted from diagnostic features.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Implementation complexity is high, requiring careful design of adversarial loss functions and balancing multiple competing objectives during training."
+        },
+        {
+          "description": "Sensitive to hyperparameter choices, particularly the trade-off weights between prediction accuracy and adversarial loss, which require extensive tuning."
+        },
+        {
+          "description": "Adversarial training can be unstable, with potential for mode collapse or failure to converge, especially in complex deep learning architectures."
+        },
+        {
+          "description": "Interpretability of fairness improvements can be limited, as it may be difficult to verify that sensitive attributes are truly removed from learned representations."
+        },
+        {
+          "description": "Computational overhead is significant due to training two networks simultaneously, increasing both training time and resource requirements."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Fair Adversarial Networks",
+          "url": "http://arxiv.org/pdf/2002.12144v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "George Cevora"
+          ],
+          "publication_date": "2020-02-23"
+        },
+        {
+          "title": "Demonstrating Rosa: the fairness solution for any Data Analytic pipeline",
+          "url": "http://arxiv.org/pdf/2003.00899v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Kate Wilkinson",
+            "George Cevora"
+          ],
+          "publication_date": "2020-02-28"
+        },
+        {
+          "title": "Triangular Trade-off between Robustness, Accuracy, and Fairness in Deep Neural Networks: A Survey",
+          "url": "https://www.semanticscholar.org/paper/13b0444d079bea1c8c57a6082200b67ab5f4616e",
+          "source_type": "documentation",
+          "authors": [
+            "Jingyang Li",
+            "Guoqiang Li"
+          ],
+          "publication_date": "2025-02-10"
+        },
+        {
+          "title": "Bt-GAN: Generating Fair Synthetic Healthdata via Bias-transforming Generative Adversarial Networks",
+          "url": "https://www.semanticscholar.org/paper/6995779ac582c5f2436cfb82a3c8cf5ca72bae2f",
+          "source_type": "technical_paper",
+          "authors": [
+            "Resmi Ramachandranpillai",
+            "Md Fahim Sikder",
+            "David Bergström",
+            "Fredrik Heintz"
+          ],
+          "publication_date": "2023-12-14"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "adversarial-debiasing",
+        "prejudice-remover-regulariser",
+        "meta-fair-classifier",
+        "exponentiated-gradient-reduction",
+        "fair-transfer-learning",
+        "adaptive-sensitive-reweighting",
+        "multi-accuracy-boosting"
+      ]
+    },
+    {
+      "slug": "prejudice-remover-regulariser",
+      "name": "Prejudice Remover Regulariser",
+      "description": "An in-processing fairness technique that adds a fairness penalty to machine learning models to reduce bias against protected groups. The method works by minimising 'mutual information' - essentially reducing how much the model's predictions reveal about sensitive attributes like race or gender. By adding this penalty term to the learning objective (typically in logistic regression), the technique ensures predictions become less dependent on protected features. This addresses not only direct discrimination but also indirect bias through correlated features. Practitioners can adjust a tuning parameter to balance between maintaining accuracy and removing prejudice from the model.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/linear-models/logistic",
+        "applicable-models/architecture/probabilistic",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/probabilistic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/tabular",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training credit scoring models with prejudice remover regularisation to ensure loan approval decisions are not influenced by gender or ethnicity, minimising mutual information between predictions and protected attributes whilst maintaining accurate risk assessment.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Developing transparent university admission models that provide clear evidence of bias mitigation by demonstrating reduced statistical dependence between acceptance decisions and protected characteristics, enabling regulatory compliance reporting.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Building reliable recruitment screening models that maintain consistent performance across demographic groups by regularising against indirect prejudice through correlated features like school names or postal codes that might proxy for protected attributes.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires careful tuning of the fairness penalty hyperparameter, where too high values severely degrade accuracy whilst too low values provide insufficient bias mitigation."
+        },
+        {
+          "description": "Primarily applicable to probabilistic discriminative models like logistic regression, limiting its use with other model architectures such as deep neural networks or tree-based methods."
+        },
+        {
+          "description": "Computational complexity increases with the calculation of mutual information between predictions and sensitive attributes, particularly for high-dimensional data."
+        },
+        {
+          "description": "May not fully eliminate all forms of discrimination, particularly when complex interactions between multiple sensitive attributes create intersectional biases."
+        },
+        {
+          "description": "Effectiveness depends on accurate identification and inclusion of all sensitive attributes, potentially missing hidden biases from unobserved protected characteristics."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Fairness-Aware Classifier with Prejudice Remover Regularizer",
+          "url": "https://link.springer.com/chapter/10.1007/978-3-642-33486-3_3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Toshihiro Kamishima",
+            "Shotaro Akaho",
+            "Hideki Asoh",
+            "Jun Sakuma"
+          ],
+          "publication_date": "2012-09-24"
+        },
+        {
+          "title": "Fairness-Aware Machine Learning and Data Mining",
+          "url": "https://www.kamishima.net/faml/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Fairness-aware Classifier (faclass)",
+          "url": "https://www.kamishima.net/faclass/",
+          "source_type": "software_package"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "adversarial-debiasing",
+        "fair-adversarial-networks",
+        "meta-fair-classifier",
+        "exponentiated-gradient-reduction",
+        "fair-transfer-learning",
+        "adaptive-sensitive-reweighting",
+        "multi-accuracy-boosting"
+      ]
+    },
+    {
+      "slug": "exponentiated-gradient-reduction",
+      "name": "Exponentiated Gradient Reduction",
+      "description": "An in-processing fairness technique based on Agarwal et al.'s reductions approach that transforms fair classification into a sequence of cost-sensitive classification problems. The method uses an exponentiated gradient algorithm to iteratively reweight training data, returning a randomised classifier that achieves the lowest empirical error whilst satisfying fairness constraints. This reduction-based framework provides theoretical guarantees about both accuracy and constraint violation, making it suitable for various fairness criteria including demographic parity and equalised odds.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training a hiring algorithm with demographic parity constraints to ensure equal selection rates across gender groups, using iterative reweighting to balance fairness and predictive accuracy whilst maintaining legal compliance.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Developing a loan approval model with equalised odds constraints, providing transparent documentation of the theoretical guarantees about both error rates and fairness constraint violations achieved by the reduction approach.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Creating a medical diagnosis classifier that maintains reliable performance across demographic groups by using randomised prediction averaging, ensuring consistent healthcare delivery whilst monitoring constraint satisfaction over time.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires convex base learners for theoretical guarantees about convergence and optimality, limiting the choice of underlying models."
+        },
+        {
+          "description": "Produces randomised classifiers that may give different predictions for identical inputs, which can be problematic in applications requiring consistent decisions."
+        },
+        {
+          "description": "Convergence can be slow and sensitive to hyperparameter choices, particularly the learning rate and tolerance settings."
+        },
+        {
+          "description": "Involves iterative retraining with adjusted weights, which can be computationally expensive for large datasets or complex models."
+        },
+        {
+          "description": "Fairness constraints may significantly reduce model accuracy, and the trade-off between fairness and performance is not always transparent to practitioners."
+        }
+      ],
+      "resources": [
+        {
+          "title": "A Reductions Approach to Fair Classification",
+          "url": "https://arxiv.org/abs/1803.02453",
+          "source_type": "technical_paper",
+          "description": "Foundational paper by Agarwal et al. introducing the exponentiated gradient reduction approach for fair classification with theoretical guarantees.",
+          "authors": [
+            "Alekh Agarwal",
+            "Alina Beygelzimer",
+            "Miroslav Dudík",
+            "John Langford",
+            "Hanna Wallach"
+          ],
+          "publication_date": "2018-03-06"
+        },
+        {
+          "title": "Fairlearn: ExponentiatedGradient",
+          "url": "https://fairlearn.org/v0.10/api_reference/generated/fairlearn.reductions.ExponentiatedGradient.html",
+          "source_type": "documentation",
+          "description": "Microsoft's Fairlearn implementation of the Agarwal et al. algorithm with comprehensive API documentation and examples."
+        },
+        {
+          "title": "IBM AIF360: ExponentiatedGradientReduction",
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.inprocessing.ExponentiatedGradientReduction.html",
+          "source_type": "documentation",
+          "description": "IBM's AIF360 implementation with scikit-learn compatible API for in-processing fairness constraints during model training."
+        },
+        {
+          "title": "Fairlearn Reductions Guide",
+          "url": "https://fairlearn.org/main/user_guide/mitigation/reductions.html",
+          "source_type": "tutorial",
+          "description": "Comprehensive guide to using reduction-based approaches for fairness, including practical examples of exponentiated gradient methods and fairness constraints."
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "adversarial-debiasing",
+        "fair-adversarial-networks",
+        "prejudice-remover-regulariser",
+        "meta-fair-classifier",
+        "fair-transfer-learning",
+        "adaptive-sensitive-reweighting",
+        "multi-accuracy-boosting"
+      ]
+    },
+    {
+      "slug": "fair-transfer-learning",
+      "name": "Fair Transfer Learning",
+      "description": "An in-processing fairness technique that adapts pre-trained models from one domain to another whilst explicitly preserving fairness constraints across different contexts or populations. The method addresses the challenge that fairness properties may not transfer when adapting models to new domains with different demographic compositions or data distributions. Fair transfer learning typically involves constraint-aware fine-tuning, domain adaptation techniques, or adversarial training that maintains equitable performance across groups in the target domain, ensuring that bias mitigation efforts carry over from source to target domains.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/pre-trained-model",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/fine-tuning",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adapting a hiring algorithm trained on one country's recruitment data to another region whilst maintaining fairness across gender and ethnicity groups, ensuring equitable candidate evaluation despite different local demographic distributions and cultural contexts.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Transferring a medical diagnosis model from urban hospital data to rural clinics whilst providing transparent evidence that fairness constraints are preserved across age, gender, and socioeconomic groups despite different patient populations and healthcare infrastructure.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Adapting a fraud detection system from one financial market to another whilst ensuring reliable performance across customer demographics, maintaining consistent accuracy and fairness even when transaction patterns and customer characteristics differ between markets.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Fairness properties achieved in the source domain may not translate directly to the target domain if demographic distributions or data characteristics differ significantly."
+        },
+        {
+          "description": "Requires careful hyperparameter tuning and constraint specification to balance fairness preservation with model performance in the new domain."
+        },
+        {
+          "description": "Implementation complexity is high, requiring expertise in both transfer learning techniques and fairness constraint optimisation methods."
+        },
+        {
+          "description": "May suffer from negative transfer effects where fairness constraints that worked well in the source domain actually harm performance in the target domain."
+        },
+        {
+          "description": "Evaluation challenges arise from needing to validate fairness across multiple domains and demographic groups simultaneously."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Segmenting across places: The need for fair transfer learning with satellite imagery",
+          "url": "http://arxiv.org/pdf/2204.04358v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Miao Zhang",
+            "Harvineet Singh",
+            "Lazarus Chok",
+            "Rumi Chunara"
+          ],
+          "publication_date": "2022-04-09"
+        },
+        {
+          "title": "Trustworthy Transfer Learning: A Survey",
+          "url": "https://www.semanticscholar.org/paper/7ee5c5b58ed0b4e585e0c30790c206bea07faacf",
+          "source_type": "documentation",
+          "authors": [
+            "Jun Wu",
+            "Jingrui He"
+          ],
+          "publication_date": "2024-12-18"
+        },
+        {
+          "title": "Cross-Institutional Transfer Learning for Educational Models: Implications for Model Performance, Fairness, and Equity",
+          "url": "https://arxiv.org/abs/2305.00927",
+          "source_type": "technical_paper",
+          "authors": [
+            "Josh Gardner",
+            "Renzhe Yu",
+            "Quan Nguyen",
+            "Christopher Brooks",
+            "Rene Kizilcec"
+          ],
+          "publication_date": "2023-05-01"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "adversarial-debiasing",
+        "fair-adversarial-networks",
+        "prejudice-remover-regulariser",
+        "meta-fair-classifier",
+        "exponentiated-gradient-reduction",
+        "adaptive-sensitive-reweighting",
+        "multi-accuracy-boosting"
+      ]
+    },
+    {
+      "slug": "adaptive-sensitive-reweighting",
+      "name": "Adaptive Sensitive Reweighting",
+      "description": "Adaptive Sensitive Reweighting dynamically adjusts the importance of training examples during model training based on real-time performance across different demographic groups. Unlike traditional static reweighting that fixes weights at the start, this technique continuously monitors fairness metrics and automatically increases the weight of examples from underperforming groups whilst decreasing weights for overrepresented groups. The adaptive mechanism prevents models from perpetuating historical biases by ensuring balanced learning across all demographics throughout the training process.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gray-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "data-requirements/access-to-model-internals",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training speech recognition systems that adapt weights during training to ensure consistent accuracy across different accents, dialects, and linguistic backgrounds, preventing models from favouring dominant accent groups in the training data.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Developing hiring algorithms that dynamically adjust training example weights to maintain consistent evaluation performance across demographic groups, ensuring the model doesn't learn to favour candidates from overrepresented backgrounds.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Building medical diagnostic models that adaptively reweight patient examples during training to ensure reliable performance across different age groups, ethnicities, and socioeconomic backgrounds, preventing healthcare disparities.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Training instability can occur when adaptive weight adjustments cause oscillations between demographic groups, potentially preventing convergence if reweighting parameters are not carefully tuned."
+        },
+        {
+          "description": "Computational overhead increases significantly due to continuous monitoring of fairness metrics across groups during training, requiring additional memory and processing time."
+        },
+        {
+          "description": "Risk of overfitting to specific demographic subgroups if the adaptation mechanism becomes too aggressive in correcting for observed performance disparities during training."
+        },
+        {
+          "description": "Requires careful hyperparameter tuning for adaptation rates and fairness thresholds, making the technique sensitive to configuration choices that may not generalise across different datasets."
+        },
+        {
+          "description": "May inadvertently harm overall model performance if the reweighting process prioritises fairness at the expense of learning important patterns that benefit all groups."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Adaptive Sensitive Reweighting to Mitigate Bias in Fairness-aware Classification",
+          "url": "https://dl.acm.org/doi/10.1145/3178876.3186133",
+          "source_type": "technical_paper",
+          "description": "Original paper introducing adaptive sensitive reweighting technique using CULEP model for bias mitigation in classification tasks",
+          "authors": [
+            "Krasanakis, Emmanouil",
+            "Spyromitros-Xioufis, Eleftherios",
+            "Papadopoulos, Symeon",
+            "Kompatsiaris, Yiannis"
+          ],
+          "publication_date": "2018-04-23"
+        },
+        {
+          "title": "AIF360: A comprehensive set of fairness metrics for datasets and machine learning models",
+          "url": "https://github.com/Trusted-AI/AIF360",
+          "source_type": "software_package",
+          "description": "IBM's comprehensive fairness toolkit including implementations of various reweighting techniques and bias mitigation methods"
+        },
+        {
+          "title": "Fairlearn: A toolkit for assessing and improving fairness in machine learning",
+          "url": "https://github.com/fairlearn/fairlearn",
+          "source_type": "software_package",
+          "description": "Microsoft's open-source toolkit providing reweighting and other bias mitigation algorithms with comprehensive documentation"
+        },
+        {
+          "title": "Causal Fairness-Guided Dataset Reweighting using Neural Networks",
+          "url": "https://arxiv.org/abs/2311.10512",
+          "source_type": "technical_paper",
+          "description": "Recent research on causal fairness-guided dataset reweighting using neural networks to address fairness from causal perspective",
+          "authors": [
+            "Zhao, Xuan",
+            "Broelemann, Klaus",
+            "Ruggieri, Salvatore",
+            "Kasneci, Gjergji"
+          ],
+          "publication_date": "2023-11-17"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "adversarial-debiasing",
+        "fair-adversarial-networks",
+        "prejudice-remover-regulariser",
+        "meta-fair-classifier",
+        "exponentiated-gradient-reduction",
+        "fair-transfer-learning",
+        "multi-accuracy-boosting"
+      ]
+    },
+    {
+      "slug": "multi-accuracy-boosting",
+      "name": "Multi-Accuracy Boosting",
+      "description": "An in-processing fairness technique that employs boosting algorithms to improve accuracy uniformly across demographic groups by iteratively correcting errors where the model performs poorly for certain subgroups. The method uses a multi-calibration approach that trains weak learners to focus on prediction errors for underperforming groups, ensuring that no group experiences systematically worse accuracy. This iterative boosting process continues until accuracy parity is achieved across all groups whilst maintaining overall model performance.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/ensemble",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training a medical diagnosis model that achieves equal accuracy across age, gender, and ethnicity groups by using boosting to specifically target prediction errors for underrepresented patient demographics, ensuring equitable healthcare outcomes for all populations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Building a robust fraud detection system that maintains consistent accuracy across different customer segments by iteratively correcting errors where the model performs poorly for specific demographic or geographic groups, ensuring reliable fraud prevention across all user types.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Developing a transparent hiring algorithm that provides clear evidence of equal performance across candidate demographics by using multi-accuracy boosting to systematically address group-specific prediction errors, enabling auditable fair recruitment processes.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires identifying and defining relevant subgroups or error regions, which may be challenging when group boundaries are unclear or overlapping."
+        },
+        {
+          "description": "Could increase model complexity significantly as the boosting process adds multiple weak learners, potentially affecting interpretability and computational efficiency."
+        },
+        {
+          "description": "May overfit to training data if very granular corrections are made, particularly when subgroups are small or the boosting process continues for too many iterations."
+        },
+        {
+          "description": "Performance depends on the quality of subgroup identification, and may fail to achieve fairness if important demographic intersections are not properly captured."
+        },
+        {
+          "description": "Convergence to equal accuracy across groups is not guaranteed, especially when there are fundamental differences in data distributions between groups."
+        }
+      ],
+      "resources": [
+        {
+          "title": "mcboost: Multi-Calibration Boosting for R",
+          "url": "https://joss.theoj.org/papers/10.21105/joss.03453",
+          "source_type": "technical_paper",
+          "authors": [
+            "Bernd Bischl",
+            "Susanne Dandl",
+            "Christoph Kern",
+            "Michael P. Kim",
+            "Florian Pfisterer",
+            "Matthew Sun"
+          ],
+          "publication_date": "2021-08-24"
+        },
+        {
+          "title": "mlr-org/mcboost",
+          "url": "https://github.com/mlr-org/mcboost",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Multigroup Robustness",
+          "url": "http://arxiv.org/abs/2405.00614",
+          "source_type": "technical_paper",
+          "authors": [
+            "Lunjia Hu",
+            "Charlotte Peale",
+            "Judy Hanwen Shen"
+          ],
+          "publication_date": "2024-05-01"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "adversarial-debiasing",
+        "fair-adversarial-networks",
+        "prejudice-remover-regulariser",
+        "meta-fair-classifier",
+        "exponentiated-gradient-reduction",
+        "fair-transfer-learning",
+        "adaptive-sensitive-reweighting"
+      ]
+    },
+    {
+      "slug": "bayesian-fairness-regularization",
+      "name": "Bayesian Fairness Regularization",
+      "description": "Bayesian Fairness Regularization incorporates fairness constraints into machine learning models through Bayesian methods, treating fairness as a prior distribution or regularization term. This approach includes techniques like Fair Bayesian Optimization that use constrained optimization to tune model hyperparameters whilst enforcing fairness constraints, and methods that add regularization terms to objective functions to penalize discriminatory predictions. The technique allows for probabilistic interpretation of fairness constraints and can account for uncertainty in both model parameters and fairness requirements.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Using Fair Bayesian Optimization to tune hyperparameters of credit risk models, automatically balancing predictive accuracy with fairness constraints across different demographic groups whilst accounting for uncertainty in both model performance and fairness requirements.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Implementing Bayesian neural networks with fairness-aware priors for hiring recommendation systems, where uncertainty in fairness constraints is modeled probabilistically to ensure robust fair decision-making across different candidate populations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Applying Bayesian regularization techniques to medical diagnosis models to ensure reliable performance across patient demographics, using probabilistic constraints to maintain consistent diagnostic accuracy whilst preventing algorithmic bias in healthcare delivery.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Developing insurance premium calculation models using Bayesian fairness regularization to ensure actuarially sound pricing that meets regulatory fairness requirements, with probabilistic modeling of both risk assessment accuracy and demographic equity.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Prior selection challenges make it difficult to specify appropriate prior distributions for fairness constraints, requiring domain expertise and potentially leading to suboptimal or biased outcomes if priors are poorly chosen."
+        },
+        {
+          "description": "Computational complexity increases significantly due to Bayesian inference requirements, including sampling methods, variational inference, or optimization over probability distributions, making the approach less scalable for large datasets."
+        },
+        {
+          "description": "Sensitivity to hyperparameters affects both the Bayesian inference process and fairness regularization terms, requiring careful tuning of multiple parameters that control the trade-off between accuracy, fairness, and computational efficiency."
+        },
+        {
+          "description": "Convergence and stability issues may arise in Bayesian optimization with fairness constraints, particularly when fairness objectives conflict with performance objectives or when the constraint space becomes highly complex."
+        },
+        {
+          "description": "Limited theoretical understanding exists for the interaction between Bayesian uncertainty quantification and fairness constraints, making it challenging to provide guarantees about both predictive performance and fairness under uncertainty."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Bayesian fairness",
+          "url": "https://arxiv.org/abs/1706.00119",
+          "source_type": "technical_paper",
+          "description": "Foundational paper introducing Bayesian approaches to fairness under parameter uncertainty, demonstrating how Bayesian perspectives lead to fair decision rules",
+          "authors": [
+            "Dimitrakakis, Christos",
+            "Liu, Yang",
+            "Parkes, David",
+            "Radanovic, Goran"
+          ],
+          "publication_date": "2017-05-31"
+        },
+        {
+          "title": "Fair Bayesian Optimization",
+          "url": "https://arxiv.org/abs/2006.05109",
+          "source_type": "technical_paper",
+          "description": "Constrained Bayesian optimization framework for optimizing ML model performance while enforcing fairness constraints through hyperparameter tuning",
+          "authors": [
+            "Perrone, Valerio",
+            "Donini, Michele",
+            "Zafar, Muhammad Bilal",
+            "Schmucker, Robin",
+            "Kenthapadi, Krishnaram",
+            "Archambeau, Cédric"
+          ],
+          "publication_date": "2020-06-09"
+        },
+        {
+          "title": "Fair Gaussian Processes",
+          "url": "https://github.com/ztanml/fgp",
+          "source_type": "software_package",
+          "description": "MATLAB implementation of Fair Gaussian Processes with multiple fairness criteria support including statistical parity, equality of opportunity, and equalized odds"
+        },
+        {
+          "title": "Fairness-Aware Classifier with Prejudice Remover Regularizer",
+          "url": "https://link.springer.com/chapter/10.1007/978-3-642-33486-3_3",
+          "source_type": "technical_paper",
+          "description": "Seminal paper introducing regularization-based approach to fairness in probabilistic discriminative models with mathematical framework for fairness constraints",
+          "authors": [
+            "Kamishima, Toshihiro",
+            "Akaho, Shotaro",
+            "Asoh, Hideki",
+            "Sakuma, Jun"
+          ],
+          "publication_date": "2012-09-24"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "sensitivity-analysis-for-fairness",
+        "fairness-gan",
+        "attribute-removal-fairness-through-unawareness"
+      ]
+    }
+  ],
+  "count": 24
+}

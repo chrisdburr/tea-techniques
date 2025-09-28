@@ -1,0 +1,3291 @@
+{
+  "tag": {
+    "name": "applicable-models/requirements/white-box",
+    "slug": "applicable-models-requirements-white-box",
+    "count": 31,
+    "category": "applicable-models"
+  },
+  "techniques": [
+    {
+      "slug": "mean-decrease-impurity",
+      "name": "Mean Decrease Impurity",
+      "description": "Mean Decrease Impurity (MDI) quantifies a feature's importance in tree-based models (e.g., Random Forests, Gradient Boosting Machines) by measuring the total reduction in impurity (e.g., Gini impurity, entropy) across all splits where the feature is used. Features that lead to larger, more consistent reductions in impurity are considered more important, indicating their effectiveness in creating homogeneous child nodes and improving predictive accuracy.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability"
+      ],
+      "tags": [
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/model-specific",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic",
+        "applicable-models/architecture/tree-based",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/white-box"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Determining the most influential genetic markers in a decision tree model predicting disease susceptibility, by identifying which markers consistently lead to the purest splits between healthy and diseased patient groups.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Assessing the key factors driving customer purchasing decisions in an e-commerce random forest model, revealing which product attributes or customer demographics are most effective in segmenting buyers.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "MDI is inherently biased towards features with more unique values or those that allow for more splits, potentially overestimating their true importance."
+        },
+        {
+          "description": "It is only applicable to tree-based models and cannot be directly used with other model architectures."
+        },
+        {
+          "description": "The importance scores can be unstable, varying significantly with small changes in the training data or model parameters."
+        },
+        {
+          "description": "MDI does not account for feature interactions, meaning it might not accurately reflect the importance of features that are only relevant when combined with others."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Trees, forests, and impurity-based variable importance",
+          "url": "http://arxiv.org/pdf/2001.04295v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Erwan Scornet"
+          ],
+          "publication_date": "2020-01-13"
+        },
+        {
+          "title": "A Debiased MDI Feature Importance Measure for Random Forests",
+          "url": "http://arxiv.org/pdf/1906.10845v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xiao Li",
+            "Yu Wang",
+            "Sumanta Basu",
+            "Karl Kumbier",
+            "Bin Yu"
+          ],
+          "publication_date": "2019-06-26"
+        },
+        {
+          "title": "Variable Importance in Random Forests | Towards Data Science",
+          "url": "https://towardsdatascience.com/variable-importance-in-random-forests-20c6690e44e0/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Interpreting Deep Forest through Feature Contribution and MDI Feature Importance",
+          "url": "http://arxiv.org/pdf/2305.00805v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yi-Xiao He",
+            "Shen-Huan Lyu",
+            "Yuan Jiang"
+          ],
+          "publication_date": "2023-05-01"
+        },
+        {
+          "title": "optuna.importance.MeanDecreaseImpurityImportanceEvaluator ...",
+          "url": "https://optuna.readthedocs.io/en/stable/reference/generated/optuna.importance.MeanDecreaseImpurityImportanceEvaluator.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "permutation-importance",
+        "coefficient-magnitudes-in-linear-models",
+        "sobol-indices"
+      ]
+    },
+    {
+      "slug": "coefficient-magnitudes-in-linear-models",
+      "name": "Coefficient Magnitudes (in Linear Models)",
+      "description": "Coefficient Magnitudes assess feature influence in linear models by examining the absolute values of their coefficients. Features with larger absolute coefficients are considered to have a stronger impact on the prediction, while the sign of the coefficient indicates the direction of that influence (positive or negative). This technique provides a straightforward and transparent way to understand the direct linear relationship between each input feature and the model's output.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/model-specific",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/low",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/metric",
+        "applicable-models/architecture/linear-models",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/white-box"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Interpreting which features influence housing price predictions in linear regression, such as identifying that 'number of bedrooms' has a larger positive impact than 'distance to city centre' based on coefficient magnitudes.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Explaining the factors contributing to customer lifetime value (CLV) in a linear model, showing how 'average monthly spend' has a strong positive coefficient, making the model transparent for business stakeholders.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Only valid for linear relationships; it cannot capture complex non-linear patterns or interactions between features."
+        },
+        {
+          "description": "Highly sensitive to feature scaling; features with larger numerical ranges can appear more important even if their true impact is smaller."
+        },
+        {
+          "description": "Can be misleading in the presence of multicollinearity, where correlated features may split importance or have unstable coefficients."
+        },
+        {
+          "description": "Does not imply causation; a strong correlation (large coefficient) does not necessarily mean a causal relationship."
+        }
+      ],
+      "resources": [],
+      "complexity_rating": 1,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "permutation-importance",
+        "mean-decrease-impurity",
+        "sobol-indices"
+      ]
+    },
+    {
+      "slug": "deeplift",
+      "name": "DeepLIFT",
+      "description": "DeepLIFT (Deep Learning Important FeaTures) explains neural network predictions by decomposing the difference between the actual output and a reference output back to individual input features. It compares each neuron's activation to a reference activation (typically from a baseline input like all zeros or the dataset mean) and propagates these differences backwards through the network using chain rule modifications. Unlike gradient-based methods, DeepLIFT satisfies the sensitivity property (zero input gets zero attribution) and provides more stable attributions by using discrete differences rather than gradients.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-requirements/reference-dataset",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/requirements/white-box",
+        "applicable-models/requirements/differentiable"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Identifying which genomic sequences contribute to a neural network's prediction of protein binding sites, helping biologists understand regulatory mechanisms by comparing to neutral DNA baselines.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging a deep learning image classifier that misclassifies medical scans by attributing the decision to specific image regions, revealing if the model focuses on irrelevant artifacts rather than pathological features.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations for automated loan approval decisions by showing which financial features (relative to typical applicant profiles) most influenced the neural network's recommendation.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires careful selection of reference baseline, as different choices can lead to substantially different attribution scores."
+        },
+        {
+          "description": "Implementation complexity varies significantly across different neural network architectures and layer types."
+        },
+        {
+          "description": "May produce unintuitive results when the chosen reference is not representative of the decision boundary."
+        },
+        {
+          "description": "Limited to feedforward networks and specific layer types, not suitable for all modern architectures like transformers."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Learning Important Features Through Propagating Activation Differences",
+          "url": "http://arxiv.org/pdf/1704.02685v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Avanti Shrikumar",
+            "Peyton Greenside",
+            "Anshul Kundaje"
+          ],
+          "publication_date": "2017-04-10"
+        },
+        {
+          "title": "pytorch/captum",
+          "url": "https://github.com/pytorch/captum",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Tutorial A3: DeepLIFT/SHAP — tangermeme v0.1.0 documentation",
+          "url": "https://tangermeme.readthedocs.io/en/latest/tutorials/Tutorial_A3_Deep_LIFT_SHAP.html",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "DeepLIFT Documentation - Captum",
+          "url": "https://captum.ai/api/deep_lift.html",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "layer-wise-relevance-propagation",
+        "local-interpretable-model-agnostic-explanations",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "layer-wise-relevance-propagation",
+      "name": "Layer-wise Relevance Propagation",
+      "description": "Layer-wise Relevance Propagation (LRP) explains neural network predictions by working backwards through the network to show how much each input feature contributed to the final decision. It follows a simple conservation rule: the total contribution scores always add up to the original prediction. Starting from the output, LRP distributes 'relevance' backwards through each layer using different rules depending on the layer type. This creates a detailed breakdown showing which input features helped or hindered the prediction, making it easier to understand why the network made a particular decision.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/model-specific",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/requirements/white-box",
+        "applicable-models/requirements/differentiable"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Identifying which pixels in chest X-rays contribute to pneumonia detection, helping radiologists verify AI diagnoses by highlighting anatomical regions the model considers relevant.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging a neural network's misclassification of handwritten digits by tracing relevance through layers to identify which input pixels caused the error and which network layers amplified it.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations for automated credit scoring decisions by showing which financial features received positive or negative relevance scores, enabling clear regulatory reporting.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires different propagation rules for each layer type, making implementation complex for new architectures."
+        },
+        {
+          "description": "Can produce negative relevance scores which may be difficult to interpret intuitively."
+        },
+        {
+          "description": "Rule selection (LRP-ε, LRP-γ, etc.) significantly affects results and requires domain expertise."
+        },
+        {
+          "description": "Limited to feedforward networks and may not work well with modern architectures like transformers without substantial modifications."
+        }
+      ],
+      "resources": [
+        {
+          "title": "rachtibat/LRP-eXplains-Transformers",
+          "url": "https://github.com/rachtibat/LRP-eXplains-Transformers",
+          "source_type": "software_package"
+        },
+        {
+          "title": "sebastian-lapuschkin/lrp_toolbox",
+          "url": "https://github.com/sebastian-lapuschkin/lrp_toolbox",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Getting started — zennit documentation",
+          "url": "https://zennit.readthedocs.io/en/latest/getting-started.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Layer-wise Relevance Propagation eXplains Transformers (LXT) documentation",
+          "url": "https://lxt.readthedocs.io/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "On Pixel-Wise Explanations for Non-Linear Classifier Decisions by Layer-Wise Relevance Propagation",
+          "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0130140",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sebastian Bach",
+            "Alexander Binder",
+            "Grégoire Montavon",
+            "Frederick Klauschen",
+            "Klaus-Robert Müller",
+            "Wojciech Samek"
+          ],
+          "publication_date": "2015-07-10"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 3,
+      "acronym": "LRP",
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "deeplift",
+        "local-interpretable-model-agnostic-explanations",
+        "contrastive-explanation-method",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "contextual-decomposition",
+      "name": "Contextual Decomposition",
+      "description": "Contextual Decomposition explains LSTM and RNN predictions by decomposing the final hidden state into contributions from individual inputs and their interactions. Unlike simpler attribution methods, it separates the direct contribution of specific words or phrases from the contextual effects of surrounding words. This is particularly useful for understanding how sequential models process language, as it can identify whether a word's influence comes from its individual meaning or from its interaction with nearby words in the sequence.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/attribution-methods/model-specific",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic",
+        "applicable-models/architecture/neural-networks/recurrent",
+        "applicable-models/requirements/white-box",
+        "applicable-models/requirements/architecture-specific"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing why an LSTM-based spam filter flagged an email by decomposing contributions from individual words ('free', 'urgent') versus their contextual interactions ('free trial' together).",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Understanding how a medical text classifier diagnoses conditions from clinical notes by separating direct symptom mentions from contextual medical reasoning patterns.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations for automated content moderation decisions by showing which words and phrase interactions contributed to toxicity detection.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Primarily designed for LSTM and simple RNN architectures, not suitable for modern transformers or attention-based models."
+        },
+        {
+          "description": "Not widely implemented in standard machine learning libraries, often requiring custom implementation."
+        },
+        {
+          "description": "Computational overhead increases significantly with sequence length and model depth."
+        },
+        {
+          "description": "May not scale well to very complex models or capture all types of feature interactions in deep networks."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Beyond Word Importance: Contextual Decomposition to Extract Interactions from LSTMs",
+          "url": "http://arxiv.org/pdf/1801.05453v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "W. James Murdoch",
+            "Peter J. Liu",
+            "Bin Yu"
+          ],
+          "publication_date": "2018-01-16"
+        },
+        {
+          "title": "FredericGodin/ContextualDecomposition-NLP",
+          "url": "https://github.com/FredericGodin/ContextualDecomposition-NLP",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Interpreting patient-Specific risk prediction using contextual decomposition of BiLSTMs: Application to children with asthma",
+          "url": "https://core.ac.uk/download/294758884.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Alsaad R.",
+            "Boughorbel S.",
+            "Janahi I.",
+            "Malluhi Q."
+          ],
+          "publication_date": "2019-01-01"
+        },
+        {
+          "title": "Towards Hierarchical Importance Attribution: Explaining Compositional Semantics for Neural Sequence Models",
+          "url": "http://arxiv.org/pdf/1911.06194v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xisen Jin",
+            "Zhongyu Wei",
+            "Junyi Du",
+            "Xiangyang Xue",
+            "Xiang Ren"
+          ],
+          "publication_date": "2019-11-08"
+        },
+        {
+          "title": "Efficient Automated Circuit Discovery in Transformers using Contextual Decomposition",
+          "url": "http://arxiv.org/pdf/2407.00886v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Aliyah R. Hsu",
+            "Georgia Zhou",
+            "Yeshwanth Cherapanamjeri",
+            "Yaxuan Huang",
+            "Anobel Y. Odisho",
+            "Peter R. Carroll",
+            "Bin Yu"
+          ],
+          "publication_date": "2024-07-01"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "taylor-decomposition",
+        "influence-functions"
+      ]
+    },
+    {
+      "slug": "taylor-decomposition",
+      "name": "Taylor Decomposition",
+      "description": "Taylor Decomposition is a mathematical technique that explains neural network predictions by computing first-order and higher-order derivatives of the network's output with respect to input features. It decomposes the prediction into relevance scores that indicate how much each input feature and feature interaction contributes to the final decision. The method uses Layer-wise Relevance Propagation (LRP) principles to trace prediction contributions backwards through the network layers, providing precise mathematical attributions for each input element.",
+      "assurance_goals": [
+        "Explainability"
+      ],
+      "tags": [
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/fidelity",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/differentiable",
+        "applicable-models/requirements/white-box"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analyzing which pixels in an image contribute most to a convolutional neural network's classification decision, showing both positive and negative relevance scores for different regions of the input image.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Understanding how different word embeddings in a sentiment analysis model contribute to the final sentiment score, revealing which terms drive positive vs negative predictions.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Mathematically complex requiring deep understanding of calculus and neural network architectures."
+        },
+        {
+          "description": "Computationally intensive as it requires computing gradients and higher-order derivatives through the entire network."
+        },
+        {
+          "description": "Approximations used in practice may introduce errors that affect attribution accuracy."
+        },
+        {
+          "description": "Limited tooling availability compared to other explainability methods, with most implementations being research-focused rather than production-ready."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Explaining NonLinear Classification Decisions with Deep Taylor Decomposition",
+          "url": "http://arxiv.org/pdf/1512.02479v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Grégoire Montavon",
+            "Sebastian Bach",
+            "Alexander Binder",
+            "Wojciech Samek",
+            "Klaus-Robert Müller"
+          ],
+          "publication_date": "2015-12-08"
+        },
+        {
+          "title": "A Rigorous Study Of The Deep Taylor Decomposition",
+          "url": "http://arxiv.org/pdf/2211.08425v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Leon Sixt",
+            "Tim Landgraf"
+          ],
+          "publication_date": "2022-11-14"
+        },
+        {
+          "title": "sebastian-lapuschkin/lrp_toolbox",
+          "url": "https://github.com/sebastian-lapuschkin/lrp_toolbox",
+          "source_type": "software_package"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "contextual-decomposition",
+        "influence-functions"
+      ]
+    },
+    {
+      "slug": "gradient-weighted-class-activation-mapping",
+      "name": "Gradient-weighted Class Activation Mapping",
+      "description": "Grad-CAM creates visual heatmaps showing which regions of an image a convolutional neural network focuses on when making a specific classification. Unlike pixel-level techniques, Grad-CAM produces coarser region-based explanations by using gradients from the predicted class to weight the CNN's final feature maps, then projecting these weighted activations back to create an overlay on the original image. This provides intuitive visual explanations of where the model is 'looking' for evidence of different classes.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/convolutional",
+        "applicable-models/requirements/architecture-specific",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/visualization-methods/activation-maps",
+        "assurance-goal-category/fairness",
+        "data-requirements/access-to-model-internals",
+        "data-type/image",
+        "evidence-type/visualization",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Validating that a melanoma detection model focuses on the actual skin lesion rather than surrounding healthy skin, medical equipment, or artifacts when making cancer/benign classifications.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging an autonomous vehicle's traffic sign recognition system by visualising whether the model correctly focuses on the sign itself rather than background objects, shadows, or irrelevant visual elements.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Auditing a medical imaging system for racial bias by examining whether diagnostic predictions inappropriately focus on skin tone regions rather than actual pathological features, ensuring equitable healthcare AI deployment.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires access to the CNN's internal feature maps and gradients, limiting use to white-box scenarios."
+        },
+        {
+          "description": "Resolution is constrained by the final convolutional layer's feature map size, producing coarser localisation than pixel-level methods."
+        },
+        {
+          "description": "Only applicable to CNN architectures with clearly defined convolutional layers, not suitable for other neural network types."
+        },
+        {
+          "description": "May highlight regions that correlate with the class but aren't causally important for the model's decision-making process."
+        }
+      ],
+      "resources": [
+        {
+          "title": "jacobgil/pytorch-grad-cam",
+          "url": "https://github.com/jacobgil/pytorch-grad-cam",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Grad-CAM: Visualize class activation maps with Keras, TensorFlow ...",
+          "url": "https://pyimagesearch.com/2020/03/09/grad-cam-visualize-class-activation-maps-with-keras-tensorflow-and-deep-learning/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "kazuto1011/grad-cam-pytorch",
+          "url": "https://github.com/kazuto1011/grad-cam-pytorch",
+          "source_type": "software_package"
+        },
+        {
+          "title": "A Tutorial on Explainable Image Classification for Dementia Stages Using Convolutional Neural Network and Gradient-weighted Class Activation Mapping",
+          "url": "https://www.semanticscholar.org/paper/8b1139cb06cfe5ba69e2fd05e1450b43df031a02",
+          "source_type": "documentation",
+          "authors": [
+            "Kevin Kam Fung Yuen"
+          ]
+        },
+        {
+          "title": "A Guide to Grad-CAM in Deep Learning - Analytics Vidhya",
+          "url": "https://www.analyticsvidhya.com/blog/2023/12/grad-cam-in-deep-learning/",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "acronym": "Grad-CAM",
+      "related_techniques": [
+        "saliency-maps",
+        "occlusion-sensitivity"
+      ]
+    },
+    {
+      "slug": "influence-functions",
+      "name": "Influence Functions",
+      "description": "Influence functions quantify how much each training example influenced a model's predictions by computing the change in prediction that would occur if that training example were removed and the model retrained. Using calculus and the implicit function theorem, they approximate this 'leave-one-out' effect without actually retraining the model by computing gradients and Hessian information. This mathematical approach reveals which specific training examples were most responsible for pushing the model toward or away from particular predictions, enabling practitioners to trace problematic outputs back to their root causes in the training data.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Privacy"
+      ],
+      "tags": [
+        "applicable-models/architecture/linear-models",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/differentiable",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/instance-based/influence-analysis",
+        "assurance-goal-category/explainability/property/causality",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/privacy",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Investigating why a medical diagnosis model misclassified a patient by identifying which specific training cases most influenced the incorrect prediction, revealing potential mislabelled examples or problematic patterns in the training data.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Analysing a spam detection system that falsely flagged legitimate emails by tracing the prediction back to influential training examples, discovering that certain training emails contained misleading patterns that caused the model to overfit.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Auditing a loan approval model for discriminatory patterns by identifying which training examples most influenced rejections of minority applicants, revealing whether biased historical decisions are driving current unfair outcomes.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Assessing membership inference risks in a medical model by identifying whether certain patient records have disproportionate influence on predictions, indicating potential data leakage vulnerabilities.",
+          "goal": "Privacy"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally intensive, requiring Hessian matrix computations that become intractable for very large models with millions of parameters."
+        },
+        {
+          "description": "Requires access to the complete training dataset and training process, making it impossible to apply to pre-trained models without access to original training data."
+        },
+        {
+          "description": "Accuracy degrades for highly non-convex models where the linear approximation underlying influence functions breaks down."
+        },
+        {
+          "description": "Results can be sensitive to hyperparameter choices and may not generalise well across different model architectures or training procedures."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Understanding Black-box Predictions via Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/08ad8fad21f6ec4cda4d56be1ca5e146b7c913a1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Pang Wei Koh",
+            "Percy Liang"
+          ]
+        },
+        {
+          "title": "nimarb/pytorch_influence_functions",
+          "url": "https://github.com/nimarb/pytorch_influence_functions",
+          "source_type": "software_package"
+        },
+        {
+          "title": "What is Your Data Worth to GPT? LLM-Scale Data Valuation with Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/f33f3dece9f34c1ec5417dccf9e0acf592d8e8cb",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sang Keun Choe",
+            "Hwijeen Ahn",
+            "Juhan Bae",
+            "Kewen Zhao",
+            "Minsoo Kang",
+            "Youngseog Chung",
+            "Adithya Pratapa",
+            "W. Neiswanger",
+            "Emma Strubell",
+            "Teruko Mitamura",
+            "Jeff G. Schneider",
+            "Eduard H. Hovy",
+            "Roger B. Grosse",
+            "Eric P. Xing"
+          ]
+        },
+        {
+          "title": "Scaling Up Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/ef2a773c3c7848a6cc16b18164be5f8876a310af",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andrea Schioppa",
+            "Polina Zablotskaia",
+            "David Vilar",
+            "Artem Sokolov"
+          ]
+        },
+        {
+          "title": "Welcome to torch-influence's API Reference! — torch-influence 0.1.0 ...",
+          "url": "https://torch-influence.readthedocs.io/",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "contextual-decomposition",
+        "taylor-decomposition"
+      ]
+    },
+    {
+      "slug": "contrastive-explanation-method",
+      "name": "Contrastive Explanation Method",
+      "description": "The Contrastive Explanation Method (CEM) explains model decisions by generating contrastive examples that reveal what makes a prediction distinctive. It identifies 'pertinent negatives' (minimal features that could be removed to change the prediction) and 'pertinent positives' (minimal features that must be present to maintain the prediction). This approach helps users understand not just what led to a decision, but what would need to change to achieve a different outcome, providing actionable insights for decision-making.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/differentiable",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/instance-based/counterfactual",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/counterfactual-validity",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Explaining loan application rejections by showing that removing recent late payments (pertinent negative) or adding £5,000 more annual income (pertinent positive) would change the decision to approval, giving applicants clear actionable guidance.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Analysing medical diagnosis models by identifying that removing a specific symptom combination would change a high-risk classification to low-risk, helping clinicians understand the critical diagnostic factors.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent hiring decisions by showing job candidates exactly which qualifications (pertinent positives) they need to acquire or which application elements (pertinent negatives) might be hindering their success.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive as it requires solving an optimisation problem for each individual instance to find minimal perturbations."
+        },
+        {
+          "description": "Results can be highly sensitive to hyperparameter settings, requiring careful tuning to produce meaningful explanations."
+        },
+        {
+          "description": "May generate unrealistic or impossible contrastive examples if constraints are not properly specified, leading to impractical recommendations."
+        },
+        {
+          "description": "Limited to scenarios where feature perturbations are meaningful and actionable, making it less suitable for immutable characteristics or highly constrained domains."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Explanations based on the Missing: Towards Contrastive Explanations with Pertinent Negatives",
+          "url": "http://arxiv.org/pdf/1802.07623v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Amit Dhurandhar",
+            "Pin-Yu Chen",
+            "Ronny Luss",
+            "Chun-Chen Tu",
+            "Paishun Ting",
+            "Karthikeyan Shanmugam",
+            "Payel Das"
+          ],
+          "publication_date": "2018-02-21"
+        },
+        {
+          "title": "Interpretable Machine Learning",
+          "url": "https://christophm.github.io/interpretable-ml-book/interpretability.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Benchmarking and survey of explanation methods for black box models",
+          "url": "https://core.ac.uk/download/599106733.pdf",
+          "source_type": "documentation",
+          "authors": [
+            "Bodria Francesco",
+            "Giannotti Fosca",
+            "Guidotti R.",
+            "Naretto Francesca",
+            "Pedreschi Dino",
+            "Rinzivillo S."
+          ],
+          "publication_date": "2023-01-01"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "acronym": "CEM",
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "integrated-gradients",
+        "deeplift",
+        "layer-wise-relevance-propagation",
+        "local-interpretable-model-agnostic-explanations",
+        "anchor"
+      ]
+    },
+    {
+      "slug": "out-of-distribution-detector-for-neural-networks",
+      "name": "Out-of-DIstribution detector for Neural networks",
+      "description": "ODIN (Out-of-Distribution Detector for Neural Networks) identifies when a neural network encounters inputs significantly different from its training distribution. It enhances detection by applying temperature scaling to soften the model's output distribution and adding small, carefully calibrated perturbations to the input that push in-distribution samples towards higher confidence predictions. By measuring the maximum softmax probability after these adjustments, ODIN can effectively distinguish between in-distribution and out-of-distribution inputs, flagging potentially unreliable predictions before they cause downstream errors.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/probabilistic-output",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/prediction-confidence",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Detecting anomalous medical images in diagnostic systems, where ODIN flags X-rays or scans containing rare pathologies or imaging artefacts not present in training data, preventing misdiagnosis and prompting specialist review.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Protecting autonomous vehicle perception systems by identifying novel road scenarios (e.g., unusual weather conditions, rare obstacle types) that fall outside the training distribution, triggering fallback safety mechanisms.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Monitoring production ML systems for data drift by detecting when incoming customer behaviour patterns deviate significantly from training data, helping explain why model performance may degrade over time.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires careful tuning of temperature scaling and perturbation magnitude parameters, which may need adjustment for different types of out-of-distribution data."
+        },
+        {
+          "description": "Performance degrades when out-of-distribution samples are very similar to training data, making near-distribution detection challenging."
+        },
+        {
+          "description": "Vulnerable to adversarial examples specifically crafted to evade detection by mimicking in-distribution characteristics."
+        },
+        {
+          "description": "Computational overhead from input preprocessing and perturbation generation can impact real-time inference applications."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Enhancing The Reliability of Out-of-distribution Image Detection in Neural Networks",
+          "url": "http://arxiv.org/pdf/1706.02690v5",
+          "source_type": "technical_paper",
+          "authors": [
+            "Shiyu Liang",
+            "Yixuan Li",
+            "R. Srikant"
+          ],
+          "publication_date": "2017-06-08"
+        },
+        {
+          "title": "facebookresearch/odin",
+          "url": "https://github.com/facebookresearch/odin",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Generalized ODIN: Detecting Out-of-distribution Image without Learning from Out-of-distribution Data",
+          "url": "http://arxiv.org/pdf/2002.11297v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yen-Chang Hsu",
+            "Yilin Shen",
+            "Hongxia Jin",
+            "Zsolt Kira"
+          ],
+          "publication_date": "2020-02-26"
+        },
+        {
+          "title": "Detection of out-of-distribution samples using binary neuron activation patterns",
+          "url": "http://arxiv.org/abs/2212.14268",
+          "source_type": "technical_paper",
+          "authors": [
+            "Chachuła, Krystian",
+            "Olber, Bartlomiej",
+            "Popowicz, Adam",
+            "Radlak, Krystian",
+            "Szczepankiewicz, Michal"
+          ],
+          "publication_date": "2023-03-24"
+        },
+        {
+          "title": "Out-of-Distribution Detection with ODIN - A Tutorial",
+          "url": "https://medium.com/@abhaypatil2000/out-of-distribution-detection-using-odin-f1a3e9e6b3b8",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "acronym": "ODIN",
+      "related_techniques": [
+        "anomaly-detection"
+      ]
+    },
+    {
+      "slug": "adversarial-debiasing",
+      "name": "Adversarial Debiasing",
+      "description": "Adversarial debiasing reduces bias by training models using a competitive adversarial setup, similar to Generative Adversarial Networks (GANs). The technique involves two neural networks: a predictor that learns to make accurate predictions on the main task, and an adversary (bias detector) that attempts to predict protected attributes (such as race, gender, or age) from the predictor's internal representations. Through adversarial training, the predictor learns to produce representations that retain predictive power for the main task whilst being uninformative about protected characteristics, thereby reducing discriminatory bias.",
+      "assurance_goals": [
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/differentiable",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training a resume screening model for a technology company that evaluates candidates based on skills and experience whilst preventing the internal representations from encoding gender or ethnicity information, ensuring hiring decisions cannot be influenced by protected characteristics even indirectly through correlated features.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Developing a credit scoring model for loan approvals that accurately predicts default risk whilst ensuring the model's internal features cannot be used to infer applicants' race or age, thereby preventing discriminatory lending practices whilst maintaining predictive accuracy.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Creating a medical diagnosis model that makes accurate predictions about patient conditions whilst ensuring that the learned representations cannot reveal sensitive demographic information like gender or ethnicity, protecting patient privacy whilst maintaining clinical effectiveness.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Significantly more complex to implement than standard models, requiring expertise in adversarial training techniques and careful architecture design for both predictor and adversary networks."
+        },
+        {
+          "description": "Requires careful hyperparameter tuning to balance the competing objectives of task performance and bias mitigation, as overly strong adversarial training can harm predictive accuracy."
+        },
+        {
+          "description": "Effectiveness heavily depends on the quality and design of the adversary network - a weak adversary may fail to detect subtle biases, whilst an overly strong adversary may eliminate useful information."
+        },
+        {
+          "description": "Training can be unstable and may suffer from convergence issues common to adversarial training, requiring careful learning rate scheduling and regularisation techniques."
+        },
+        {
+          "description": "Provides no formal guarantees about bias elimination and may not prevent all forms of discrimination, particularly when protected attributes can be inferred from other available features."
+        }
+      ],
+      "resources": [
+        {
+          "title": "AI Fairness 360 (AIF360)",
+          "url": "https://github.com/Trusted-AI/AIF360",
+          "source_type": "software_package",
+          "description": "Comprehensive toolkit for bias detection and mitigation including adversarial debiasing implementations"
+        },
+        {
+          "title": "On the Fairness ROAD: Robust Optimization for Adversarial Debiasing",
+          "url": "https://www.semanticscholar.org/paper/0c887592d781538a1b5c2168eae541b563c0ba9a",
+          "source_type": "technical_paper",
+          "authors": [
+            "Vincent Grari",
+            "Thibault Laugel",
+            "Tatsunori B. Hashimoto",
+            "S. Lamprier",
+            "Marcin Detyniecki"
+          ]
+        },
+        {
+          "title": "aif360.sklearn.inprocessing.AdversarialDebiasing — aif360 0.6.1 ...",
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.inprocessing.AdversarialDebiasing.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Towards Learning an Unbiased Classifier from Biased Data via Conditional Adversarial Debiasing",
+          "url": "http://arxiv.org/pdf/2103.06179v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Christian Reimers",
+            "Paul Bodesheim",
+            "Jakob Runge",
+            "Joachim Denzler"
+          ],
+          "publication_date": "2021-03-10"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "fair-adversarial-networks",
+        "prejudice-remover-regulariser",
+        "meta-fair-classifier",
+        "exponentiated-gradient-reduction",
+        "fair-transfer-learning",
+        "adaptive-sensitive-reweighting",
+        "multi-accuracy-boosting"
+      ]
+    },
+    {
+      "slug": "synthetic-data-generation",
+      "name": "Synthetic Data Generation",
+      "description": "Synthetic data generation creates artificial datasets that aim to preserve the statistical properties, distributions, and relationships of real data whilst containing no actual records from real individuals. The technique encompasses various approaches including generative adversarial networks (GANs), variational autoencoders (VAEs), statistical sampling methods, and privacy-preserving techniques like differential privacy. Beyond privacy protection, synthetic data serves multiple purposes: augmenting limited datasets, balancing class distributions, testing model robustness, enabling data sharing across organisations, and supporting fairness assessments by generating representative samples for underrepresented groups.",
+      "assurance_goals": [
+        "Privacy",
+        "Fairness",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/generative/gan",
+        "applicable-models/architecture/neural-networks/generative/vae",
+        "applicable-models/architecture/probabilistic",
+        "applicable-models/paradigm/generative",
+        "applicable-models/paradigm/unsupervised",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/structured-output",
+        "expertise-needed/cryptography",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/data-handling",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Creating realistic but synthetic electronic health records for developing and testing medical diagnosis algorithms without exposing real patient data, enabling secure collaboration between healthcare institutions.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Generating synthetic samples for underrepresented demographic groups in a hiring dataset to train fair recruitment models, ensuring all groups have sufficient representation for bias testing and mitigation.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Augmenting limited training data for rare medical conditions by generating synthetic patient records, improving model reliability and performance on edge cases where real data is insufficient.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Creating synthetic financial transaction data for testing fraud detection systems in development environments, avoiding exposure of real customer financial information whilst maintaining realistic attack patterns.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "May not capture all subtle patterns, correlations, and edge cases present in real data, potentially leading to reduced model performance when deployed on actual data with different characteristics."
+        },
+        {
+          "description": "Generating high-quality synthetic data that maintains both statistical fidelity and utility requires sophisticated techniques and substantial computational resources, especially for complex, high-dimensional datasets."
+        },
+        {
+          "description": "Privacy-preserving approaches may still risk information leakage through statistical inference attacks, membership inference, or model inversion, requiring careful privacy budget management and validation."
+        },
+        {
+          "description": "Synthetic data may inadvertently amplify existing biases in the original data or introduce new biases through the generation process, particularly in generative models trained on biased datasets."
+        },
+        {
+          "description": "Validation and quality assessment of synthetic data is challenging, as traditional metrics may not adequately capture whether the synthetic data preserves the relationships and patterns needed for specific downstream tasks."
+        }
+      ],
+      "resources": [
+        {
+          "title": "sdv-dev/SDV",
+          "url": "https://github.com/sdv-dev/SDV",
+          "source_type": "software_package"
+        },
+        {
+          "title": "An evaluation framework for synthetic data generation models",
+          "url": "http://arxiv.org/pdf/2404.08866v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ioannis E. Livieris",
+            "Nikos Alimpertis",
+            "George Domalis",
+            "Dimitris Tsakalidis"
+          ],
+          "publication_date": "2024-04-13"
+        },
+        {
+          "title": "Synthetic Data — SecureML 0.2.2 documentation",
+          "url": "https://secureml.readthedocs.io/en/latest/user_guide/synthetic_data.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "How to Generate Real-World Synthetic Data with CTGAN | Towards ...",
+          "url": "https://towardsdatascience.com/how-to-generate-real-world-synthetic-data-with-ctgan-af41b4d60fde/",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "federated-learning",
+        "differential-privacy",
+        "homomorphic-encryption"
+      ]
+    },
+    {
+      "slug": "federated-learning",
+      "name": "Federated Learning",
+      "description": "Federated learning enables collaborative model training across multiple distributed parties (devices, organisations, or data centres) without requiring centralised data sharing. Participants train models locally on their private datasets and only share model updates (gradients, weights, or aggregated statistics) with a central coordinator. This distributed approach serves multiple purposes: preserving data privacy and sovereignty, reducing communication costs, enabling learning from diverse data sources, improving model robustness through heterogeneous training, and facilitating compliance with data protection regulations whilst maintaining model performance comparable to centralised training.",
+      "assurance_goals": [
+        "Privacy",
+        "Reliability",
+        "Safety",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/linear-models",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/software-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Developing a smartphone keyboard prediction model by learning from users' typing patterns without their text ever leaving their devices, enabling personalised predictions whilst maintaining complete data privacy.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Training a medical diagnosis model across multiple hospitals without sharing patient records, ensuring model robustness by learning from diverse patient populations and clinical practices across different institutions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Creating a cybersecurity threat detection model by federating learning across financial institutions without exposing sensitive transaction data, reducing systemic risk whilst maintaining competitive confidentiality.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Building a fair credit scoring model by training across multiple regions and demographics without centralising sensitive financial data, ensuring representation from diverse populations whilst respecting local data sovereignty laws.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Communication overhead can be substantial, especially with frequent model updates and large models, potentially limiting scalability and increasing training time compared to centralised approaches."
+        },
+        {
+          "description": "Statistical heterogeneity across participants (non-IID data distributions) can lead to training instability, slower convergence, and reduced model performance compared to centralised training on pooled data."
+        },
+        {
+          "description": "System heterogeneity in computational capabilities, network connectivity, and availability of participating devices can create bottlenecks and introduce bias towards more capable participants."
+        },
+        {
+          "description": "Privacy vulnerabilities remain through gradient leakage attacks, model inversion, and membership inference attacks that can potentially reconstruct sensitive information from shared model updates."
+        },
+        {
+          "description": "Coordination complexity increases with the number of participants, requiring sophisticated aggregation protocols, fault tolerance mechanisms, and secure communication infrastructure."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Open Federated Learning (OpenFL) Documentation",
+          "url": "https://openfl.readthedocs.io/en/stable/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Federated Learning - DeepLearning.AI",
+          "url": "https://www.deeplearning.ai/short-courses/intro-to-federated-learning/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "A Survey on Federated Learning Systems: Vision, Hype and Reality for Data Privacy and Protection",
+          "url": "http://arxiv.org/pdf/1907.09693v7",
+          "source_type": "documentation",
+          "authors": [
+            "Qinbin Li",
+            "Zeyi Wen",
+            "Zhaomin Wu",
+            "Sixu Hu",
+            "Naibo Wang",
+            "Yuan Li",
+            "Xu Liu",
+            "Bingsheng He"
+          ],
+          "publication_date": "2019-07-23"
+        },
+        {
+          "title": "Federated learning with hybrid differential privacy for secure and reliable cross-IoT platform knowledge sharing",
+          "url": "https://core.ac.uk/download/603345619.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Algburi, S.",
+            "Algburi, S.",
+            "Anupallavi, S.",
+            "Anupallavi, S.",
+            "Ashokkumar, S. R.",
+            "Ashokkumar, S. R.",
+            "Elmedany, W.",
+            "Elmedany, W.",
+            "Khalaf, O. I.",
+            "Khalaf, O. I.",
+            "Selvaraj, D.",
+            "Selvaraj, D.",
+            "Sharif, M. S.",
+            "Sharif, M. S."
+          ],
+          "publication_date": "2024-01-01"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "synthetic-data-generation",
+        "differential-privacy",
+        "homomorphic-encryption"
+      ]
+    },
+    {
+      "slug": "homomorphic-encryption",
+      "name": "Homomorphic Encryption",
+      "description": "Homomorphic encryption allows computation on encrypted data without decrypting it first, producing encrypted results that, when decrypted, match the results of performing the same operations on the plaintext. This enables secure outsourced computation where sensitive data remains encrypted throughout processing. By allowing ML operations on encrypted data, it provides strong privacy guarantees for applications involving highly sensitive information.",
+      "assurance_goals": [
+        "Privacy",
+        "Safety",
+        "Transparency",
+        "Security"
+      ],
+      "tags": [
+        "applicable-models/architecture/linear-models",
+        "applicable-models/architecture/neural-networks/feedforward",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/requirements/differentiable",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/privacy-guarantee",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/cryptography",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Enabling a cloud-based medical diagnosis service to process encrypted patient data and return encrypted results without the cloud provider ever accessing actual medical information, ensuring complete patient privacy during outsourced computation.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Securing financial risk assessment computations by allowing banks to jointly analyse encrypted transaction patterns for fraud detection without exposing individual customer data, reducing systemic security risks.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Enabling transparent audit of algorithmic decision-making by allowing regulators to verify model computations on encrypted data, providing accountability whilst protecting the proprietary nature of both the algorithm and the underlying data.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Extremely computationally expensive, often 100-1000x slower than unencrypted computation, making it impractical for real-time applications or large-scale data processing."
+        },
+        {
+          "description": "Limited range of operations supported efficiently, with complex operations like divisions, comparisons, and non-polynomial functions being particularly challenging or impossible to implement."
+        },
+        {
+          "description": "Implementation requires deep cryptographic expertise to avoid security vulnerabilities, choose appropriate parameters, and optimise performance for specific use cases."
+        },
+        {
+          "description": "Memory and storage requirements are significantly higher than traditional computation, as encrypted data typically requires much more space than plaintext equivalents."
+        },
+        {
+          "description": "Current fully homomorphic encryption schemes have practical limitations on computation depth before noise accumulation requires expensive bootstrapping operations to refresh ciphertexts."
+        }
+      ],
+      "resources": [
+        {
+          "title": "zama-ai/concrete-ml",
+          "url": "https://github.com/zama-ai/concrete-ml",
+          "source_type": "software_package",
+          "description": "Privacy-preserving machine learning library that enables data scientists to run ML models on encrypted data using FHE without cryptography expertise"
+        },
+        {
+          "title": "Survey on Fully Homomorphic Encryption, Theory, and Applications",
+          "url": "https://core.ac.uk/download/579858842.pdf",
+          "source_type": "documentation",
+          "authors": [
+            "Chiara Marcolla",
+            "Frank H.P. Fitzek",
+            "Marc Manzano",
+            "Najwa Aaraj",
+            "Riccardo Bassoli",
+            "Victor Sucasas"
+          ],
+          "publication_date": "2022-10-06",
+          "description": "Comprehensive survey covering FHE theory, cryptographic schemes, and practical applications across different domains"
+        },
+        {
+          "title": "Welcome to OpenFHE's documentation! — OpenFHE documentation",
+          "url": "https://openfhe-development.readthedocs.io/",
+          "source_type": "documentation",
+          "description": "Documentation for open-source C++ library supporting multiple FHE schemes including BFV, BGV, CKKS, and Boolean circuits"
+        },
+        {
+          "title": "Evaluation of Privacy-Preserving Support Vector Machine (SVM) Learning Using Homomorphic Encryption",
+          "url": "https://core.ac.uk/download/656115203.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ali, Hisham",
+            "Buchanan, William J."
+          ],
+          "publication_date": "2025-01-01",
+          "description": "Technical paper evaluating performance overhead of SVM learning with homomorphic encryption for privacy-preserving ML"
+        },
+        {
+          "title": "microsoft/SEAL",
+          "url": "https://github.com/microsoft/SEAL",
+          "source_type": "software_package",
+          "description": "Easy-to-use homomorphic encryption library enabling computations on encrypted integers and real numbers"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "synthetic-data-generation",
+        "federated-learning",
+        "differential-privacy"
+      ]
+    },
+    {
+      "slug": "quantile-regression",
+      "name": "Quantile Regression",
+      "description": "Quantile regression estimates specific percentiles (quantiles) of the target variable rather than just predicting the average outcome. For example, instead of predicting 'average house price = £300,000', it can predict 'there's a 10% chance the price will be below £250,000, 50% chance below £300,000, and 90% chance below £380,000'. This technique reveals how input features affect different parts of the outcome distribution - perhaps property size strongly influences luxury homes (90th percentile) but barely affects budget properties (10th percentile). By capturing the full conditional distribution, quantile regression provides rich uncertainty information and enables robust prediction intervals.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/linear-models/regression",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/architecture/tree-based/gradient-boosting",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/prediction-interval",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Predicting patient recovery times after surgery by estimating multiple quantiles (e.g., 25th, 50th, 75th percentiles), enabling doctors to communicate realistic timeframes: 'Most patients recover within 2-4 weeks, but some may take up to 8 weeks', providing robust uncertainty estimates for treatment planning.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Revealing how income inequality affects different segments of society by showing how education's impact varies across income quantiles - demonstrating that education benefits high earners much more than low earners, providing transparent insights into systemic inequalities.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring equitable loan amount predictions across demographic groups by verifying that the spread of predicted loan amounts (difference between 90th and 10th percentiles) is consistent across protected groups, preventing discriminatory practices in lending ranges.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally intensive when fitting multiple quantiles simultaneously, especially for large datasets or complex models, as each quantile requires separate optimization."
+        },
+        {
+          "description": "May produce crossing quantiles without proper constraints, where predicted 90th percentile values are lower than 50th percentile values, creating logically inconsistent and unusable prediction intervals."
+        },
+        {
+          "description": "Sensitive to outliers and heavy-tailed distributions, particularly in extreme quantiles (e.g., 5th or 95th percentiles), which can lead to unstable and unreliable estimates."
+        },
+        {
+          "description": "Requires careful selection of quantile levels and may need domain expertise to interpret results meaningfully, as different quantiles may reveal conflicting patterns in feature relationships."
+        },
+        {
+          "description": "Less effective with small datasets where extreme quantiles cannot be reliably estimated due to insufficient data points in the tails of the distribution."
+        }
+      ],
+      "resources": [
+        {
+          "title": "statsmodels/statsmodels",
+          "url": "https://github.com/statsmodels/statsmodels",
+          "source_type": "software_package",
+          "description": "Python package providing comprehensive statistical modeling capabilities including quantile regression alongside descriptive statistics and statistical inference"
+        },
+        {
+          "title": "Quantile Regression in Machine Learning: A Survey",
+          "url": "https://www.semanticscholar.org/paper/01cd143c5a054b85afc9b99d473f84422ace7e05",
+          "source_type": "documentation",
+          "authors": [
+            "Anshul Kumar",
+            "Rajesh Wadhvani",
+            "A. Rasool",
+            "Muktesh Gupta"
+          ],
+          "description": "Comprehensive survey covering quantile regression applications, methods, and developments in machine learning contexts"
+        },
+        {
+          "title": "Tutorial for conformalized quantile regression (CQR) — MAPIE 0.8.5 ...",
+          "url": "https://mapie.readthedocs.io/en/v0.8.5/examples_regression/4-tutorials/plot_cqr_tutorial.html",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Quantile Regression Forest — sklearn_quantile 0.1.1 documentation",
+          "url": "https://sklearn-quantile.readthedocs.io/en/latest/methods.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Quantile machine learning models for python — sklearn_quantile ...",
+          "url": "https://sklearn-quantile.readthedocs.io/",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "monte-carlo-dropout",
+        "prediction-intervals",
+        "conformal-prediction",
+        "deep-ensembles",
+        "bootstrapping",
+        "jackknife-resampling"
+      ]
+    },
+    {
+      "slug": "temperature-scaling",
+      "name": "Temperature Scaling",
+      "description": "Temperature scaling adjusts a model's confidence by applying a single parameter (temperature) to its predictions. When a model is too confident in its wrong answers, temperature scaling can fix this by making the predictions more realistic. It works by dividing the model's outputs by the temperature value before converting them to probabilities. Higher temperatures make the model less confident, whilst lower temperatures increase confidence. The technique maintains the model's accuracy whilst ensuring that when it says it's 90% confident, it's actually right about 90% of the time.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/probabilistic-output",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-requirements/calibration-set",
+        "data-requirements/validation-set",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting a deep learning image classifier's confidence scores to be realistic, ensuring that when it's 90% confident, it's right 90% of the time.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Making medical diagnosis model predictions more trustworthy by providing realistic confidence scores that doctors can interpret and use to make informed decisions about patient care.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring fair treatment across patient demographics by calibrating confidence scores equally across different groups, preventing systematic over-confidence in predictions for certain populations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Only addresses calibration at the overall dataset level, not subgroup-specific miscalibration issues."
+        },
+        {
+          "description": "Does not improve the rank ordering or accuracy of predictions, only adjusts confidence levels."
+        },
+        {
+          "description": "Assumes that calibration errors are consistent across different types of inputs and feature values."
+        },
+        {
+          "description": "Requires a separate validation set for temperature parameter optimisation, which may not be available in small datasets."
+        }
+      ],
+      "resources": [
+        {
+          "title": "gpleiss/temperature_scaling",
+          "url": "https://github.com/gpleiss/temperature_scaling",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Exploring the Impact of Temperature Scaling in Softmax for Classification and Adversarial Robustness",
+          "url": "http://arxiv.org/pdf/2502.20604v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hao Xuan",
+            "Bokai Yang",
+            "Xingyu Li"
+          ],
+          "publication_date": "2025-02-28"
+        },
+        {
+          "title": "Neural Clamping: Joint Input Perturbation and Temperature Scaling for Neural Network Calibration",
+          "url": "http://arxiv.org/pdf/2209.11604v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yung-Chen Tang",
+            "Pin-Yu Chen",
+            "Tsung-Yi Ho"
+          ],
+          "publication_date": "2024-07-24"
+        },
+        {
+          "title": "On Calibration of Modern Neural Networks | arXiv",
+          "url": "https://arxiv.org/abs/1706.04599",
+          "source_type": "technical_paper",
+          "authors": [
+            "Chuan Guo",
+            "Geoff Pleiss",
+            "Yu Sun",
+            "Kilian Q. Weinberger"
+          ],
+          "publication_date": "2017-06-14"
+        },
+        {
+          "title": "On the Limitations of Temperature Scaling for Distributions with Overlaps",
+          "url": "http://arxiv.org/pdf/2306.00740v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Muthu Chidambaram",
+            "Rong Ge"
+          ],
+          "publication_date": "2023-06-01"
+        }
+      ],
+      "complexity_rating": 1,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "empirical-calibration"
+      ]
+    },
+    {
+      "slug": "model-distillation",
+      "name": "Model Distillation",
+      "description": "Model distillation transfers knowledge from a large, complex model (teacher) to a smaller, more efficient model (student) by training the student to mimic the teacher's behaviour. The student learns from the teacher's soft predictions and intermediate representations rather than just hard labels, capturing nuanced decision boundaries and uncertainty. This produces models that are faster, require less memory, and are often more interpretable whilst maintaining much of the original performance. Beyond compression, distillation can improve model reliability by regularising training and enable deployment in resource-constrained environments.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/model-simplification/knowledge-transfer",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/deployment",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Compressing a large medical diagnosis model into a smaller student model that can run on edge devices in resource-limited clinics, making the decision process more transparent for healthcare professionals whilst maintaining diagnostic accuracy for critical patient care.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating a compressed fraud detection model from a complex ensemble teacher that maintains detection performance whilst being more robust to adversarial attacks and data drift, ensuring consistent protection of financial transactions across varying conditions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Distilling a large autonomous vehicle perception model into a smaller student model that can run with guaranteed inference times and lower computational requirements, ensuring predictable safety-critical decision-making under real-time constraints.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Student models typically achieve 90-95% of teacher performance, creating a trade-off between model efficiency and predictive accuracy that may be unacceptable for high-stakes applications requiring maximum precision."
+        },
+        {
+          "description": "Distillation process can be computationally expensive, requiring extensive teacher model inference during training and careful hyperparameter tuning to balance knowledge transfer with student model capacity."
+        },
+        {
+          "description": "Knowledge transfer quality depends heavily on teacher-student architecture compatibility and the chosen distillation objectives, with mismatched designs potentially leading to ineffective learning or mode collapse."
+        },
+        {
+          "description": "Student models may inherit teacher model biases and vulnerabilities whilst potentially introducing new failure modes, requiring separate validation for fairness, robustness, and safety properties."
+        },
+        {
+          "description": "Compressed models may lack the teacher's capability to handle edge cases or out-of-distribution inputs, potentially creating safety risks when deployed in environments different from the training distribution."
+        }
+      ],
+      "resources": [
+        {
+          "title": "airaria/TextBrewer",
+          "url": "https://github.com/airaria/TextBrewer",
+          "source_type": "software_package",
+          "description": "PyTorch-based knowledge distillation toolkit for natural language processing with support for transformer models, flexible distillation strategies, and multi-teacher approaches."
+        },
+        {
+          "title": "Main features — TextBrewer 0.2.1.post1 documentation",
+          "url": "https://textbrewer.readthedocs.io/",
+          "source_type": "documentation",
+          "description": "Comprehensive documentation for TextBrewer including tutorials, API reference, configuration guides, and experimental results for knowledge distillation in NLP tasks."
+        },
+        {
+          "title": "A Generic Approach for Reproducible Model Distillation",
+          "url": "http://arxiv.org/abs/2211.12631",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hooker, Giles",
+            "Xu, Peiru",
+            "Zhou, Yunzhe"
+          ],
+          "publication_date": "2023-04-27",
+          "description": "Research paper presenting a framework for reproducible knowledge distillation with standardised evaluation protocols and benchmarking across different model architectures and distillation techniques."
+        },
+        {
+          "title": "dkozlov/awesome-knowledge-distillation",
+          "url": "https://github.com/dkozlov/awesome-knowledge-distillation",
+          "source_type": "software_package",
+          "description": "Curated collection of knowledge distillation resources including academic papers, implementation code across multiple frameworks (PyTorch, TensorFlow, Keras), and educational videos."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "ridge-regression-surrogates",
+        "rulefit",
+        "model-pruning"
+      ]
+    },
+    {
+      "slug": "monotonicity-constraints",
+      "name": "Monotonicity Constraints",
+      "description": "Monotonicity constraints enforce consistent directional relationships between input features and model predictions, ensuring that increasing a feature value either always increases, always decreases, or has no effect on the output. These constraints integrate domain knowledge into model training, preventing counterintuitive relationships that may arise from spurious correlations in data. By maintaining logical feature relationships (e.g., experience always positively influences salary), monotonicity constraints enhance model trustworthiness, interpretability, and alignment with business logic whilst often improving generalisation to new data.",
+      "assurance_goals": [
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/probabilistic/gaussian-processes",
+        "applicable-models/architecture/tree-based",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/labelled-data",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/domain-knowledge",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Enforcing that a mortgage approval model always treats higher income, longer employment history, and higher credit scores as positive factors, making the decision logic transparent and intuitive for loan officers and applicants whilst preventing counterintuitive relationships that could undermine trust in the system.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Constraining a healthcare cost prediction model so that age and number of chronic conditions always increase predicted costs, ensuring the model generalises reliably to new patient populations and maintains logical behaviour even when training data contains sampling biases or unusual correlations.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Implementing monotonic constraints in an insurance premium model where driving experience always reduces premiums and accident history always increases them, creating consistent pricing logic that regulatory authorities can easily validate and customers can understand and trust.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Can reduce model accuracy when real-world relationships are inherently non-monotonic, such as the inverted-U relationship between experience and performance, where constraints force oversimplified linear relationships."
+        },
+        {
+          "description": "Requires substantial domain expertise to identify which features should have monotonic relationships, creating dependency on subject matter experts and potential for incorrect constraint specification."
+        },
+        {
+          "description": "Increases computational complexity during training as optimisation algorithms must respect additional constraints, potentially leading to longer training times and convergence difficulties."
+        },
+        {
+          "description": "May mask important non-linear patterns in data that could be crucial for understanding system behaviour, particularly in exploratory analysis where discovering unexpected relationships is valuable."
+        },
+        {
+          "description": "Limited applicability to certain model types, with implementation varying significantly across algorithms (well-supported in tree-based models, more complex in neural networks), restricting technique flexibility."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Monotonic Constraints — xgboost 3.1.0-dev documentation",
+          "url": "https://xgboost.readthedocs.io/en/latest/tutorials/monotonic.html",
+          "source_type": "documentation",
+          "description": "Comprehensive tutorial on implementing monotonic constraints in XGBoost, including parameter configuration, practical examples, and visual demonstrations of constraint effects on model predictions."
+        },
+        {
+          "title": "NONPARAMETRIC KERNEL REGRESSION SUBJECT TO MONOTONICITY CONSTRAINTS",
+          "url": "https://www.semanticscholar.org/paper/28e2be532d66694d3fe3486671f5c0217f58892d",
+          "source_type": "technical_paper",
+          "authors": [
+            "P. Hall",
+            "Li-Shan Huang"
+          ],
+          "description": "Foundational research paper on implementing monotonicity constraints in nonparametric kernel regression methods, providing theoretical background and algorithmic approaches for enforcing monotonic relationships."
+        },
+        {
+          "title": "scikit-learn Isotonic Regression",
+          "url": "https://scikit-learn.org/stable/modules/isotonic.html",
+          "source_type": "documentation",
+          "description": "Documentation for scikit-learn's isotonic regression implementation, providing alternative approach to monotonic relationships through non-parametric regression that preserves monotonic order."
+        },
+        {
+          "title": "High-dimensional additive Gaussian processes under monotonicity constraints",
+          "url": "https://www.semanticscholar.org/paper/4d4f1e2de3742735dcc47d2e51cc572a4415231e",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andrés F. López-Lopera",
+            "F. Bachoc",
+            "O. Roustant"
+          ],
+          "description": "Advanced research on extending monotonicity constraints to high-dimensional Gaussian process models, addressing scalability challenges and additive model structures for complex constraint applications."
+        },
+        {
+          "title": "cagrell/gp_constr",
+          "url": "https://github.com/cagrell/gp_constr",
+          "source_type": "software_package",
+          "description": "Python implementation of Gaussian process regression with linear operator constraints including boundedness and monotonicity, featuring RBF and Matérn kernels with practical examples."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "intrinsically-interpretable-models",
+        "generalized-additive-models"
+      ]
+    },
+    {
+      "slug": "intrinsically-interpretable-models",
+      "name": "Intrinsically Interpretable Models",
+      "description": "Intrinsically interpretable models are machine learning algorithms that are transparent by design, allowing users to understand their decision-making process without requiring additional explanation techniques. This category includes decision trees and rule lists (which use if-then logic), linear and logistic regression models (which use weighted feature combinations), and other simple algorithms where the model structure itself provides interpretability. These models prioritise transparency over complexity, making them ideal when stakeholder understanding and regulatory compliance are paramount.",
+      "assurance_goals": [
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/linear-models",
+        "applicable-models/architecture/tree-based",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/structured-output",
+        "expertise-needed/low",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/project-design",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Developing a medical diagnosis support system using a decision tree with clear if-then rules based on symptoms and test results, allowing healthcare professionals to trace the reasoning path and explain diagnoses to patients whilst ensuring clinical transparency and accountability.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Creating a fraud detection model using logistic regression with carefully selected features (transaction amount, location, time patterns) where each coefficient's contribution can be understood and validated, ensuring reliable performance that financial institutions can audit and regulatory bodies can approve.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Implementing a hiring decision support tool using rule lists that explicitly state qualification criteria and scoring logic, providing transparent candidate evaluation that can be explained to applicants and reviewed for fairness whilst meeting legal requirements for employment decision documentation.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Generally achieve lower predictive accuracy than complex models (neural networks, ensembles) for difficult problems involving high-dimensional data, non-linear relationships, or complex feature interactions."
+        },
+        {
+          "description": "Linear models cannot capture non-linear relationships or feature interactions without manual feature engineering, limiting their applicability to inherently non-linear domains like image recognition or natural language processing."
+        },
+        {
+          "description": "Decision trees can become unstable with small changes in training data, potentially leading to completely different tree structures and predictions, affecting model reliability in dynamic environments."
+        },
+        {
+          "description": "Deep decision trees may lose interpretability despite being inherently transparent, as human cognitive limits make it difficult to follow complex branching logic with many levels and conditions."
+        },
+        {
+          "description": "Feature selection becomes critical for maintaining interpretability, requiring domain expertise to identify the most relevant variables whilst potentially missing important but subtle predictive signals."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn Decision Trees",
+          "url": "https://scikit-learn.org/stable/modules/tree.html",
+          "source_type": "documentation",
+          "description": "Comprehensive documentation for decision tree implementation in scikit-learn, including classification and regression trees with interpretability guidelines and visualisation tools."
+        },
+        {
+          "title": "scikit-learn Linear Models",
+          "url": "https://scikit-learn.org/stable/modules/linear_model.html",
+          "source_type": "documentation",
+          "description": "Complete guide to linear and logistic regression models in scikit-learn, covering implementation, feature selection, and coefficient interpretation for transparent modeling."
+        },
+        {
+          "title": "Interpretable Machine Learning",
+          "url": "https://christophm.github.io/interpretable-ml-book/",
+          "source_type": "tutorial",
+          "description": "Open-source book providing comprehensive coverage of interpretable machine learning models including decision trees, linear models, and rule-based systems with practical examples."
+        },
+        {
+          "title": "R package 'rpart' for Recursive Partitioning",
+          "url": "https://cran.r-project.org/web/packages/rpart/index.html",
+          "source_type": "software_package",
+          "description": "R implementation of recursive partitioning for classification, regression and survival trees with extensive documentation and plotting capabilities for interpretable tree models."
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "monotonicity-constraints",
+        "generalized-additive-models"
+      ]
+    },
+    {
+      "slug": "generalized-additive-models",
+      "name": "Generalized Additive Models",
+      "description": "An intrinsically interpretable modelling technique that extends linear models by allowing flexible, nonlinear relationships between individual features and the target whilst maintaining the additive structure that preserves transparency. Each feature's effect is modelled separately as a smooth function, visualised as a curve showing how the feature influences predictions across its range. GAMs achieve this through spline functions or other smoothing techniques that capture complex patterns in individual variables without interactions, making them particularly valuable for domains requiring both predictive accuracy and model interpretability.",
+      "assurance_goals": [
+        "Transparency",
+        "Explainability",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/linear-models/gam",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+        "assurance-goal-category/explainability/visualization-methods/feature-relationships",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/labelled-data",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualisation",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/project-design",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Predicting hospital readmission risk with a GAM that provides transparent, auditable risk assessments by showing how readmission probability varies nonlinearly with patient age, blood pressure, and medication adherence, enabling clinicians to understand and trust the model's reasoning for regulatory compliance.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Building a credit scoring model that explains loan decisions to applicants by visualising how income, credit history, and debt-to-income ratio individually affect approval likelihood, providing clear feature attributions that satisfy fair lending requirements and regulatory explainability mandates.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Developing an environmental monitoring system that reliably predicts air quality using GAMs to model the smooth, nonlinear relationships between weather variables, ensuring stable predictions across seasonal variations whilst maintaining interpretable relationships that environmental scientists can validate.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Cannot capture complex interactions between features unless explicitly modelled, limiting their ability to represent relationships where variables influence each other."
+        },
+        {
+          "description": "Setup requires domain expertise to decide which features need nonlinear treatment and appropriate smoothing parameters, making model specification more challenging than linear models."
+        },
+        {
+          "description": "Fitting process is computationally more expensive than linear models, particularly for large datasets with many features requiring smoothing."
+        },
+        {
+          "description": "Risk of overfitting individual feature relationships if smoothing parameters are not properly regularised, potentially reducing generalisation performance."
+        },
+        {
+          "description": "Interpretation complexity increases with the number of nonlinear features, as understanding multiple smooth curves simultaneously becomes cognitively demanding."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Generalized Additive Models",
+          "url": "https://hastie.su.domains/Papers/gam.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Trevor Hastie",
+            "Robert Tibshirani"
+          ],
+          "publication_date": "1986-01-01"
+        },
+        {
+          "title": "pyGAM: Generalized Additive Models in Python",
+          "url": "https://github.com/dswah/pyGAM",
+          "source_type": "software_package"
+        },
+        {
+          "title": "mgcv: Mixed GAM Computation Vehicle with Automatic Smoothness Estimation",
+          "url": "https://cran.r-project.org/web/packages/mgcv/index.html",
+          "source_type": "software_package"
+        },
+        {
+          "title": "A Tour of pyGAM — pyGAM documentation",
+          "url": "https://pygam.readthedocs.io/en/latest/notebooks/tour_of_pygam.html",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "acronym": "GAMs",
+      "related_techniques": [
+        "monotonicity-constraints",
+        "intrinsically-interpretable-models"
+      ]
+    },
+    {
+      "slug": "model-pruning",
+      "name": "Model Pruning",
+      "description": "Model pruning systematically removes less important weights, neurons, or entire layers from neural networks to create smaller, more efficient models whilst maintaining performance. This process involves iterative removal based on importance criteria (weight magnitudes, gradient information, activation patterns) followed by fine-tuning. Pruning can be structured (removing entire neurons/channels) or unstructured (removing individual weights), with structured pruning providing greater computational benefits and interpretability through simplified architectures.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/model-simplification/pruning",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-optimization",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Compressing a medical imaging model from 100MB to 15MB for deployment on edge devices in remote clinics, enabling healthcare professionals to audit the remaining critical feature detectors and understand which anatomical patterns drive diagnoses whilst maintaining diagnostic accuracy.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Pruning a financial fraud detection model by 70% to eliminate redundant pathways that amplify noise, creating a more robust system that maintains consistent predictions across different transaction types and reduces false positives during market volatility.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Reducing an autonomous vehicle perception model to ensure predictable inference times under 50ms for safety-critical decisions, removing non-essential neurons to guarantee consistent computational behaviour whilst maintaining object detection accuracy for pedestrian safety.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Determining optimal pruning ratios requires extensive experimentation as over-pruning can cause dramatic accuracy degradation, whilst under-pruning provides minimal benefits, making the process time-consuming and resource-intensive."
+        },
+        {
+          "description": "Structured pruning often requires specific hardware or software framework support to realise computational benefits, limiting deployment flexibility and potentially necessitating model architecture changes."
+        },
+        {
+          "description": "Pruned models may exhibit reduced robustness to out-of-distribution inputs or adversarial attacks, as removing neurons can eliminate defensive redundancy that helped handle edge cases."
+        },
+        {
+          "description": "The iterative pruning and fine-tuning process can be computationally expensive, sometimes requiring more resources than training the original model, particularly for large-scale networks."
+        },
+        {
+          "description": "Pruning criteria based on weight magnitudes or gradients may not align with interpretability goals, potentially removing neurons that contribute to model transparency whilst retaining complex, opaque pathways."
+        }
+      ],
+      "resources": [
+        {
+          "title": "horseee/LLM-Pruner",
+          "url": "https://github.com/horseee/LLM-Pruner",
+          "source_type": "software_package",
+          "description": "Structural pruning tool for large language models supporting Llama, BLOOM, and other LLMs with three-stage compression process requiring only 50,000 training samples for post-training recovery."
+        },
+        {
+          "title": "Pruning Quickstart — Neural Network Intelligence",
+          "url": "https://nni.readthedocs.io/en/stable/tutorials/pruning_quick_start.html",
+          "source_type": "tutorial",
+          "description": "Step-by-step tutorial for implementing model pruning using Microsoft's NNI toolkit, covering basic usage, pruning algorithms, and practical examples for neural network compression."
+        },
+        {
+          "title": "Overview of NNI Model Pruning — Neural Network Intelligence",
+          "url": "https://nni.readthedocs.io/en/stable/compression/pruning.html",
+          "source_type": "documentation",
+          "description": "Comprehensive documentation for NNI's pruning capabilities covering structured and unstructured pruning strategies, supported algorithms, and integration with popular deep learning frameworks."
+        },
+        {
+          "title": "coldlarry/YOLOv3-complete-pruning",
+          "url": "https://github.com/coldlarry/YOLOv3-complete-pruning",
+          "source_type": "software_package",
+          "description": "Complete pruning implementation for YOLOv3 object detection models demonstrating computer vision model compression with minimal accuracy loss for real-time inference applications."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "model-distillation"
+      ]
+    },
+    {
+      "slug": "neuron-activation-analysis",
+      "name": "Neuron Activation Analysis",
+      "description": "Neuron activation analysis examines the firing patterns of individual neurons in neural networks by probing them with diverse inputs and analysing their activation responses. This technique helps understand what concepts, features, or patterns different neurons have learned to recognise, providing insights into the model's internal representations. For large language models, this can reveal neurons specialised for linguistic concepts, semantic categories, or even potentially harmful patterns, enabling targeted interventions and deeper model understanding.",
+      "assurance_goals": [
+        "Explainability",
+        "Safety",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/representation-analysis/concept-identification",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-model-internals",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualisation",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/global",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/monitoring",
+        "lifecycle-stage/testing",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing GPT-based models to identify specific neurons that activate on toxic or harmful content, enabling targeted interventions to reduce model toxicity whilst preserving general language capabilities for safer AI deployment.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Examining activation patterns in multilingual language models to detect neurons that exhibit systematic biases when processing text from different linguistic communities, revealing implicit representation inequalities that could affect downstream applications.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Investigating individual neurons in medical language models to understand which clinical concepts and medical knowledge representations drive diagnostic suggestions, enabling healthcare professionals to validate the model's medical reasoning pathways.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Many neurons exhibit polysemantic behaviour, representing multiple unrelated concepts simultaneously, making it difficult to assign clear interpretable meanings to individual neural units."
+        },
+        {
+          "description": "Important model behaviours are often distributed across many neurons rather than localised in single units, requiring analysis of neural circuits and interactions that can be exponentially complex."
+        },
+        {
+          "description": "Computational costs scale dramatically with modern large language models containing billions of parameters, making comprehensive neuron-by-neuron analysis prohibitively expensive for complete model understanding."
+        },
+        {
+          "description": "Neuron activation patterns are highly context-dependent, with the same neuron potentially serving different roles based on surrounding input context, complicating consistent interpretation across diverse scenarios."
+        },
+        {
+          "description": "Interpretation of activation patterns often relies on subjective human analysis without rigorous validation methods, potentially leading to confirmation bias or misattribution of neural functions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "jalammar/ecco",
+          "url": "https://github.com/jalammar/ecco",
+          "source_type": "software_package"
+        },
+        {
+          "title": "NeuRel-Attack: Neuron Relearning for Safety Disalignment in Large Language Models",
+          "url": "http://arxiv.org/pdf/2504.21053v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yi Zhou",
+            "Wenpeng Xing",
+            "Dezhang Kong",
+            "Changting Lin",
+            "Meng Han"
+          ],
+          "publication_date": "2025-04-29"
+        },
+        {
+          "title": "On the Value of Labeled Data and Symbolic Methods for Hidden Neuron Activation Analysis",
+          "url": "http://arxiv.org/pdf/2404.13567v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Abhilekha Dalal",
+            "Rushrukh Rayan",
+            "Adrita Barua",
+            "Eugene Y. Vasserman",
+            "Md Kamruzzaman Sarker",
+            "Pascal Hitzler"
+          ],
+          "publication_date": "2024-04-21"
+        },
+        {
+          "title": "On the Value of Labeled Data and Symbolic Methods for Hidden Neuron\n  Activation Analysis",
+          "url": "http://arxiv.org/abs/2404.13567",
+          "source_type": "technical_paper",
+          "authors": [
+            "Barua, Adrita",
+            "Dalal, Abhilekha",
+            "Hitzler, Pascal",
+            "Rayan, Rushrukh",
+            "Sarker, Md Kamruzzaman",
+            "Vasserman, Eugene Y."
+          ],
+          "publication_date": "2024-04-21"
+        },
+        {
+          "title": "Ecco",
+          "url": "https://ecco.readthedocs.io/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Tracing the Thoughts in Language Models",
+          "url": "https://www.anthropic.com/news/tracing-thoughts-language-model",
+          "source_type": "documentation"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "prototype-and-criticism-models",
+        "concept-activation-vectors"
+      ]
+    },
+    {
+      "slug": "causal-mediation-analysis-in-language-models",
+      "name": "Causal Mediation Analysis in Language Models",
+      "description": "Causal mediation analysis in language models is a mechanistic interpretability technique that systematically investigates how specific internal components (neurons, attention heads, or layers) causally contribute to model outputs. By performing controlled interventions—such as activating, deactivating, or modifying specific components—researchers can trace the causal pathways through which information flows and transforms within the model. This approach goes beyond correlation to establish causal relationships, enabling researchers to understand not just what features influence outputs, but how and why they do so through specific computational pathways.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/transformer",
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/paradigm/generative",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/causal-analysis/mediation-analysis",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/causality",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-model-internals",
+        "data-type/text",
+        "evidence-type/causal-analysis",
+        "expertise-needed/causal-inference",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/post-deployment",
+        "technique-type/mechanistic-interpretability"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Investigating causal pathways in content moderation models to understand how specific attention mechanisms contribute to flagging potentially harmful content, enabling verification that safety decisions rely on appropriate features rather than spurious correlations and ensuring robust content filtering.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Identifying specific neurons or attention heads that causally contribute to biased outputs in hiring or lending language models, enabling targeted interventions to reduce discriminatory behaviour whilst preserving model performance on legitimate tasks and ensuring fair treatment across demographics.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Tracing causal pathways in large language models performing mathematical reasoning tasks to understand how intermediate steps are computed and stored, revealing which components are responsible for different aspects of logical inference and enabling validation of reasoning processes.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires sophisticated understanding of model architecture to design meaningful interventions, as poorly chosen intervention points may yield misleading causal conclusions or fail to capture relevant computational pathways."
+        },
+        {
+          "description": "Results are highly dependent on the validity of underlying causal assumptions, which can be difficult to verify in complex, high-dimensional neural network spaces where multiple causal pathways may interact."
+        },
+        {
+          "description": "Comprehensive causal analysis requires extensive computational resources, particularly for large models, as each intervention requires separate forward passes and multiple intervention combinations for robust conclusions."
+        },
+        {
+          "description": "Distinguishing between direct causal effects and indirect effects mediated through other components can be challenging, potentially leading to oversimplified causal narratives that miss important intermediate processes."
+        },
+        {
+          "description": "Causal relationships identified in specific contexts or datasets may not generalise to different domains, tasks, or model versions, requiring careful validation across diverse scenarios to ensure robust findings."
+        }
+      ],
+      "resources": [],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "prompt-sensitivity-analysis",
+        "feature-attribution-with-integrated-gradients-in-nlp"
+      ]
+    },
+    {
+      "slug": "feature-attribution-with-integrated-gradients-in-nlp",
+      "name": "Feature Attribution with Integrated Gradients in NLP",
+      "description": "Applies Integrated Gradients to natural language processing models to attribute prediction importance to individual input tokens, words, or subword units. This technique computes gradients along a straight-line path from a baseline input (typically all-zeros, padding tokens, or neutral text) to the actual input, integrating these gradients to obtain attribution scores. Unlike vanilla gradient methods, Integrated Gradients satisfies axioms of sensitivity and implementation invariance, making it particularly valuable for understanding transformer-based language models where token interactions are complex.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/transformer",
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualisation",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/testing",
+        "technique-type/gradient-based"
+      ],
+      "example_use_cases": [
+        {
+          "description": "In a clinical decision support system processing doctor's notes to predict patient risk, Integrated Gradients identifies which medical terms, symptoms, or phrases most strongly influence risk predictions, enabling clinicians to verify that the model focuses on clinically relevant information rather than spurious correlations and supporting regulatory compliance in healthcare AI.",
+          "goal": "Safety"
+        },
+        {
+          "description": "For automated loan approval systems processing free-text application descriptions, Integrated Gradients reveals which words or phrases drive acceptance decisions, supporting fairness audits by highlighting whether protected characteristics inadvertently influence decisions and enabling transparent explanations to customers about application outcomes.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "In content moderation systems flagging potentially harmful posts, Integrated Gradients identifies which specific words or linguistic patterns trigger safety classifications, enabling platform teams to debug false positives and validate that models focus on genuinely problematic language rather than demographic markers.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computational overhead scales significantly with document length as processing requires computing gradients across many integration steps (typically 20-300), making real-time applications or large-scale document processing challenging."
+        },
+        {
+          "description": "Choice of baseline input (zero embeddings, padding tokens, neutral text, or average embeddings) substantially affects attribution results, but optimal baseline selection remains domain-specific and often requires extensive experimentation."
+        },
+        {
+          "description": "In transformer models with attention mechanisms, importance often spreads across many tokens, making it difficult to identify clear, actionable insights, especially for complex reasoning tasks where multiple tokens contribute collectively."
+        },
+        {
+          "description": "Modern NLP models use subword tokenisation (BPE, WordPiece), making attribution results difficult to interpret at the word level, as single words may split across multiple tokens with varying attribution scores."
+        },
+        {
+          "description": "While Integrated Gradients identifies correlative relationships between tokens and predictions, it cannot establish causal relationships or distinguish between spurious correlations and meaningful semantic dependencies in the input text."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Captum: Model Interpretability for PyTorch",
+          "url": "https://captum.ai/",
+          "source_type": "software_package",
+          "description": "Open-source PyTorch library implementing Integrated Gradients with multi-modal support including text, featuring easy integration with transformer models and comprehensive NLP tutorials (BERT SQUAD, IMDB classification, Llama2 attribution)."
+        },
+        {
+          "title": "Axiomatic Attribution for Deep Networks",
+          "url": "https://arxiv.org/abs/1703.01365",
+          "source_type": "technical_paper",
+          "authors": [
+            "Mukund Sundararajan",
+            "Ankur Taly",
+            "Qiqi Yan"
+          ],
+          "publication_date": "2017-03-19",
+          "description": "Original paper introducing Integrated Gradients method with fundamental axioms of sensitivity and implementation invariance, demonstrating applications across text models and providing theoretical foundations for attribution methods."
+        },
+        {
+          "title": "The Building Blocks of Interpretability",
+          "url": "https://distill.pub/2020/attribution-baselines/",
+          "source_type": "tutorial",
+          "description": "Interactive Distill article providing comprehensive guidance on baseline selection for Integrated Gradients, exploring different baseline types and their impact on feature attribution quality with transferable principles for NLP applications."
+        },
+        {
+          "title": "transformers-interpret",
+          "url": "https://github.com/cdpierse/transformers-interpret",
+          "source_type": "software_package",
+          "description": "Model explainability library designed for Hugging Face transformers, enabling transformer model explanation in two lines of code with HTML visualisations and support for sequence classification, multi-label classification, and computer vision models."
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "prompt-sensitivity-analysis",
+        "causal-mediation-analysis-in-language-models"
+      ]
+    },
+    {
+      "slug": "concept-activation-vectors",
+      "name": "Concept Activation Vectors",
+      "description": "Concept Activation Vectors (CAVs), also known as Testing with Concept Activation Vectors (TCAV), identify mathematical directions in neural network representation space that correspond to human-understandable concepts such as 'stripes', 'young', or 'medical equipment'. The technique works by finding linear directions that separate activations of concept examples from non-concept examples, then measuring how much these concept directions influence the model's predictions. This provides quantitative answers to questions like 'How much does the concept of youth affect this model's hiring decisions?' enabling systematic bias detection and model understanding.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/causality",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/representation-analysis/concept-identification",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualization",
+        "expertise-needed/domain-knowledge",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/global",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use/auditing",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Auditing a medical imaging model to verify it focuses on diagnostic features (like 'tumour characteristics') rather than irrelevant concepts (like 'scanner type' or 'patient positioning') when classifying chest X-rays, ensuring clinical decisions rely on medically relevant information.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Testing whether a hiring algorithm's resume screening decisions are influenced by concepts related to protected characteristics such as 'gender-associated names', 'prestigious universities', or 'employment gaps', enabling systematic bias detection and compliance verification.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Providing regulatory-compliant explanations for financial lending decisions by quantifying how concepts like 'debt-to-income ratio', 'employment stability', and 'credit history length' influence loan approval models, with precise sensitivity scores for audit documentation.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires clearly defined concept examples and non-concept examples, which can be challenging to obtain for abstract or subjective concepts."
+        },
+        {
+          "description": "Assumes that meaningful concept directions exist as linear separable directions in the model's internal representation space, which may not hold for all concepts."
+        },
+        {
+          "description": "Results depend heavily on which network layer is examined, as different layers capture different levels of abstraction and concept representation."
+        },
+        {
+          "description": "Computational cost grows significantly with model size and number of concepts tested, though recent advances like FastCAV address this limitation."
+        },
+        {
+          "description": "Interpretation requires domain expertise to define meaningful concepts and understand the significance of sensitivity scores in practical contexts."
+        }
+      ],
+      "resources": [
+        {
+          "title": "FastCAV: Efficient Computation of Concept Activation Vectors for Explaining Deep Neural Networks",
+          "url": "http://arxiv.org/pdf/2505.17883v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Laines Schmalwasser",
+            "Niklas Penzel",
+            "Joachim Denzler",
+            "Julia Niebling"
+          ],
+          "publication_date": "2025-05-23"
+        },
+        {
+          "title": "Concept Distillation: Leveraging Human-Centered Explanations for Model Improvement",
+          "url": "http://arxiv.org/pdf/2311.15303v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Avani Gupta",
+            "Saurabh Saini",
+            "P J Narayanan"
+          ],
+          "publication_date": "2023-11-26"
+        },
+        {
+          "title": "Post-Hoc Concept Disentanglement: From Correlated to Isolated Concept Representations",
+          "url": "http://arxiv.org/pdf/2503.05522v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Eren Erogullari",
+            "Sebastian Lapuschkin",
+            "Wojciech Samek",
+            "Frederik Pahde"
+          ],
+          "publication_date": "2025-03-07"
+        },
+        {
+          "title": "Concept Gradient: Concept-based Interpretation Without Linear Assumption",
+          "url": "http://arxiv.org/pdf/2208.14966v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andrew Bai",
+            "Chih-Kuan Yeh",
+            "Pradeep Ravikumar",
+            "Neil Y. C. Lin",
+            "Cho-Jui Hsieh"
+          ],
+          "publication_date": "2022-08-31"
+        },
+        {
+          "title": "SurroCBM: Concept Bottleneck Surrogate Models for Generative Post-hoc Explanation",
+          "url": "http://arxiv.org/pdf/2310.07698v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Bo Pan",
+            "Zhenke Liu",
+            "Yifei Zhang",
+            "Liang Zhao"
+          ],
+          "publication_date": "2023-10-11"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "acronym": "CAVs",
+      "related_techniques": [
+        "prototype-and-criticism-models",
+        "neuron-activation-analysis"
+      ]
+    },
+    {
+      "slug": "fairness-gan",
+      "name": "Fairness GAN",
+      "description": "A data generation technique that employs Generative Adversarial Networks (GANs) to create fair synthetic datasets by learning to generate data representations that preserve utility whilst obfuscating protected attributes. Unlike traditional GANs, Fairness GANs incorporate fairness constraints into the training objective, ensuring that the generated data maintains statistical parity across demographic groups. The technique can be used for data augmentation to balance underrepresented groups or to create privacy-preserving synthetic datasets that remove demographic bias from training data.",
+      "assurance_goals": [
+        "Fairness",
+        "Privacy",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/generative/gan",
+        "applicable-models/paradigm/generative",
+        "applicable-models/paradigm/unsupervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/reliability",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "evidence-type/synthetic-data",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-augmentation",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Generating balanced synthetic datasets for medical research by creating additional samples from underrepresented demographic groups, ensuring equal representation across ethnicity and gender whilst maintaining the statistical properties needed for robust model training.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Creating privacy-preserving synthetic datasets for financial services that remove demographic identifiers whilst preserving the underlying patterns needed for credit risk assessment, allowing secure data sharing between institutions without exposing sensitive customer information.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Augmenting recruitment datasets by generating synthetic candidate profiles that balance gender and ethnicity representation, ensuring reliable model performance across all demographic groups when real-world data exhibits significant imbalances.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "GAN training is notoriously difficult to stabilise, with potential for mode collapse or failure to converge, especially when additional fairness constraints are imposed."
+        },
+        {
+          "description": "Ensuring fairness in generated data may come at the cost of data utility, potentially reducing the quality or realism of synthetic samples."
+        },
+        {
+          "description": "Requires large datasets to train both generator and discriminator networks effectively, limiting applicability in data-scarce domains."
+        },
+        {
+          "description": "Evaluation complexity is high, as it requires assessing both the quality of generated data and the preservation of fairness properties across demographic groups."
+        },
+        {
+          "description": "May inadvertently introduce new biases if the fairness constraints are not properly specified or if the training data itself contains subtle biases."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Fairness GAN",
+          "url": "http://arxiv.org/pdf/1805.09910v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Prasanna Sattigeri",
+            "Samuel C. Hoffman",
+            "Vijil Chenthamarakshan",
+            "Kush R. Varshney"
+          ],
+          "publication_date": "2018-05-24"
+        },
+        {
+          "title": "Fair GANs through model rebalancing for extremely imbalanced class distributions",
+          "url": "http://arxiv.org/pdf/2308.08638v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Anubhav Jain",
+            "Nasir Memon",
+            "Julian Togelius"
+          ],
+          "publication_date": "2023-08-16"
+        },
+        {
+          "title": "Inclusive GAN: Improving Data and Minority Coverage in Generative Models",
+          "url": "http://arxiv.org/abs/2004.03355",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ning Yu",
+            "Ke Li",
+            "Peng Zhou",
+            "Jitendra Malik",
+            "Larry Davis",
+            "Mario Fritz"
+          ],
+          "publication_date": "2020-04-07"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "sensitivity-analysis-for-fairness",
+        "attribute-removal-fairness-through-unawareness",
+        "bayesian-fairness-regularization"
+      ]
+    },
+    {
+      "slug": "fair-adversarial-networks",
+      "name": "Fair Adversarial Networks",
+      "description": "An in-processing fairness technique that employs adversarial training with dual neural networks to learn fair representations. The method consists of a predictor network that learns the main task whilst an adversarial discriminator network simultaneously attempts to predict sensitive attributes from the predictor's hidden representations. Through this adversarial min-max game, the predictor is incentivised to learn features that are informative for the task but statistically independent of protected attributes, effectively removing bias at the representation level in deep learning models.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training a facial recognition system that maintains high accuracy for person identification whilst ensuring equal performance across different ethnic groups, using adversarial training to remove race-related features from learned representations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Developing a resume screening neural network that provides transparent evidence of bias mitigation by demonstrating that learned features cannot predict gender, whilst maintaining predictive performance for job suitability assessment.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Creating a medical image analysis model that achieves reliable diagnostic performance across patient demographics by using adversarial debiasing to ensure age and gender information cannot be extracted from diagnostic features.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Implementation complexity is high, requiring careful design of adversarial loss functions and balancing multiple competing objectives during training."
+        },
+        {
+          "description": "Sensitive to hyperparameter choices, particularly the trade-off weights between prediction accuracy and adversarial loss, which require extensive tuning."
+        },
+        {
+          "description": "Adversarial training can be unstable, with potential for mode collapse or failure to converge, especially in complex deep learning architectures."
+        },
+        {
+          "description": "Interpretability of fairness improvements can be limited, as it may be difficult to verify that sensitive attributes are truly removed from learned representations."
+        },
+        {
+          "description": "Computational overhead is significant due to training two networks simultaneously, increasing both training time and resource requirements."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Fair Adversarial Networks",
+          "url": "http://arxiv.org/pdf/2002.12144v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "George Cevora"
+          ],
+          "publication_date": "2020-02-23"
+        },
+        {
+          "title": "Demonstrating Rosa: the fairness solution for any Data Analytic pipeline",
+          "url": "http://arxiv.org/pdf/2003.00899v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Kate Wilkinson",
+            "George Cevora"
+          ],
+          "publication_date": "2020-02-28"
+        },
+        {
+          "title": "Triangular Trade-off between Robustness, Accuracy, and Fairness in Deep Neural Networks: A Survey",
+          "url": "https://www.semanticscholar.org/paper/13b0444d079bea1c8c57a6082200b67ab5f4616e",
+          "source_type": "documentation",
+          "authors": [
+            "Jingyang Li",
+            "Guoqiang Li"
+          ],
+          "publication_date": "2025-02-10"
+        },
+        {
+          "title": "Bt-GAN: Generating Fair Synthetic Healthdata via Bias-transforming Generative Adversarial Networks",
+          "url": "https://www.semanticscholar.org/paper/6995779ac582c5f2436cfb82a3c8cf5ca72bae2f",
+          "source_type": "technical_paper",
+          "authors": [
+            "Resmi Ramachandranpillai",
+            "Md Fahim Sikder",
+            "David Bergström",
+            "Fredrik Heintz"
+          ],
+          "publication_date": "2023-12-14"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "adversarial-debiasing",
+        "prejudice-remover-regulariser",
+        "meta-fair-classifier",
+        "exponentiated-gradient-reduction",
+        "fair-transfer-learning",
+        "adaptive-sensitive-reweighting",
+        "multi-accuracy-boosting"
+      ]
+    },
+    {
+      "slug": "prejudice-remover-regulariser",
+      "name": "Prejudice Remover Regulariser",
+      "description": "An in-processing fairness technique that adds a fairness penalty to machine learning models to reduce bias against protected groups. The method works by minimising 'mutual information' - essentially reducing how much the model's predictions reveal about sensitive attributes like race or gender. By adding this penalty term to the learning objective (typically in logistic regression), the technique ensures predictions become less dependent on protected features. This addresses not only direct discrimination but also indirect bias through correlated features. Practitioners can adjust a tuning parameter to balance between maintaining accuracy and removing prejudice from the model.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/linear-models/logistic",
+        "applicable-models/architecture/probabilistic",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/probabilistic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/tabular",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training credit scoring models with prejudice remover regularisation to ensure loan approval decisions are not influenced by gender or ethnicity, minimising mutual information between predictions and protected attributes whilst maintaining accurate risk assessment.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Developing transparent university admission models that provide clear evidence of bias mitigation by demonstrating reduced statistical dependence between acceptance decisions and protected characteristics, enabling regulatory compliance reporting.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Building reliable recruitment screening models that maintain consistent performance across demographic groups by regularising against indirect prejudice through correlated features like school names or postal codes that might proxy for protected attributes.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires careful tuning of the fairness penalty hyperparameter, where too high values severely degrade accuracy whilst too low values provide insufficient bias mitigation."
+        },
+        {
+          "description": "Primarily applicable to probabilistic discriminative models like logistic regression, limiting its use with other model architectures such as deep neural networks or tree-based methods."
+        },
+        {
+          "description": "Computational complexity increases with the calculation of mutual information between predictions and sensitive attributes, particularly for high-dimensional data."
+        },
+        {
+          "description": "May not fully eliminate all forms of discrimination, particularly when complex interactions between multiple sensitive attributes create intersectional biases."
+        },
+        {
+          "description": "Effectiveness depends on accurate identification and inclusion of all sensitive attributes, potentially missing hidden biases from unobserved protected characteristics."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Fairness-Aware Classifier with Prejudice Remover Regularizer",
+          "url": "https://link.springer.com/chapter/10.1007/978-3-642-33486-3_3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Toshihiro Kamishima",
+            "Shotaro Akaho",
+            "Hideki Asoh",
+            "Jun Sakuma"
+          ],
+          "publication_date": "2012-09-24"
+        },
+        {
+          "title": "Fairness-Aware Machine Learning and Data Mining",
+          "url": "https://www.kamishima.net/faml/",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Fairness-aware Classifier (faclass)",
+          "url": "https://www.kamishima.net/faclass/",
+          "source_type": "software_package"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "adversarial-debiasing",
+        "fair-adversarial-networks",
+        "meta-fair-classifier",
+        "exponentiated-gradient-reduction",
+        "fair-transfer-learning",
+        "adaptive-sensitive-reweighting",
+        "multi-accuracy-boosting"
+      ]
+    },
+    {
+      "slug": "exponentiated-gradient-reduction",
+      "name": "Exponentiated Gradient Reduction",
+      "description": "An in-processing fairness technique based on Agarwal et al.'s reductions approach that transforms fair classification into a sequence of cost-sensitive classification problems. The method uses an exponentiated gradient algorithm to iteratively reweight training data, returning a randomised classifier that achieves the lowest empirical error whilst satisfying fairness constraints. This reduction-based framework provides theoretical guarantees about both accuracy and constraint violation, making it suitable for various fairness criteria including demographic parity and equalised odds.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training a hiring algorithm with demographic parity constraints to ensure equal selection rates across gender groups, using iterative reweighting to balance fairness and predictive accuracy whilst maintaining legal compliance.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Developing a loan approval model with equalised odds constraints, providing transparent documentation of the theoretical guarantees about both error rates and fairness constraint violations achieved by the reduction approach.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Creating a medical diagnosis classifier that maintains reliable performance across demographic groups by using randomised prediction averaging, ensuring consistent healthcare delivery whilst monitoring constraint satisfaction over time.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires convex base learners for theoretical guarantees about convergence and optimality, limiting the choice of underlying models."
+        },
+        {
+          "description": "Produces randomised classifiers that may give different predictions for identical inputs, which can be problematic in applications requiring consistent decisions."
+        },
+        {
+          "description": "Convergence can be slow and sensitive to hyperparameter choices, particularly the learning rate and tolerance settings."
+        },
+        {
+          "description": "Involves iterative retraining with adjusted weights, which can be computationally expensive for large datasets or complex models."
+        },
+        {
+          "description": "Fairness constraints may significantly reduce model accuracy, and the trade-off between fairness and performance is not always transparent to practitioners."
+        }
+      ],
+      "resources": [
+        {
+          "title": "A Reductions Approach to Fair Classification",
+          "url": "https://arxiv.org/abs/1803.02453",
+          "source_type": "technical_paper",
+          "description": "Foundational paper by Agarwal et al. introducing the exponentiated gradient reduction approach for fair classification with theoretical guarantees.",
+          "authors": [
+            "Alekh Agarwal",
+            "Alina Beygelzimer",
+            "Miroslav Dudík",
+            "John Langford",
+            "Hanna Wallach"
+          ],
+          "publication_date": "2018-03-06"
+        },
+        {
+          "title": "Fairlearn: ExponentiatedGradient",
+          "url": "https://fairlearn.org/v0.10/api_reference/generated/fairlearn.reductions.ExponentiatedGradient.html",
+          "source_type": "documentation",
+          "description": "Microsoft's Fairlearn implementation of the Agarwal et al. algorithm with comprehensive API documentation and examples."
+        },
+        {
+          "title": "IBM AIF360: ExponentiatedGradientReduction",
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.inprocessing.ExponentiatedGradientReduction.html",
+          "source_type": "documentation",
+          "description": "IBM's AIF360 implementation with scikit-learn compatible API for in-processing fairness constraints during model training."
+        },
+        {
+          "title": "Fairlearn Reductions Guide",
+          "url": "https://fairlearn.org/main/user_guide/mitigation/reductions.html",
+          "source_type": "tutorial",
+          "description": "Comprehensive guide to using reduction-based approaches for fairness, including practical examples of exponentiated gradient methods and fairness constraints."
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "adversarial-debiasing",
+        "fair-adversarial-networks",
+        "prejudice-remover-regulariser",
+        "meta-fair-classifier",
+        "fair-transfer-learning",
+        "adaptive-sensitive-reweighting",
+        "multi-accuracy-boosting"
+      ]
+    },
+    {
+      "slug": "multi-accuracy-boosting",
+      "name": "Multi-Accuracy Boosting",
+      "description": "An in-processing fairness technique that employs boosting algorithms to improve accuracy uniformly across demographic groups by iteratively correcting errors where the model performs poorly for certain subgroups. The method uses a multi-calibration approach that trains weak learners to focus on prediction errors for underperforming groups, ensuring that no group experiences systematically worse accuracy. This iterative boosting process continues until accuracy parity is achieved across all groups whilst maintaining overall model performance.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/ensemble",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training a medical diagnosis model that achieves equal accuracy across age, gender, and ethnicity groups by using boosting to specifically target prediction errors for underrepresented patient demographics, ensuring equitable healthcare outcomes for all populations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Building a robust fraud detection system that maintains consistent accuracy across different customer segments by iteratively correcting errors where the model performs poorly for specific demographic or geographic groups, ensuring reliable fraud prevention across all user types.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Developing a transparent hiring algorithm that provides clear evidence of equal performance across candidate demographics by using multi-accuracy boosting to systematically address group-specific prediction errors, enabling auditable fair recruitment processes.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires identifying and defining relevant subgroups or error regions, which may be challenging when group boundaries are unclear or overlapping."
+        },
+        {
+          "description": "Could increase model complexity significantly as the boosting process adds multiple weak learners, potentially affecting interpretability and computational efficiency."
+        },
+        {
+          "description": "May overfit to training data if very granular corrections are made, particularly when subgroups are small or the boosting process continues for too many iterations."
+        },
+        {
+          "description": "Performance depends on the quality of subgroup identification, and may fail to achieve fairness if important demographic intersections are not properly captured."
+        },
+        {
+          "description": "Convergence to equal accuracy across groups is not guaranteed, especially when there are fundamental differences in data distributions between groups."
+        }
+      ],
+      "resources": [
+        {
+          "title": "mcboost: Multi-Calibration Boosting for R",
+          "url": "https://joss.theoj.org/papers/10.21105/joss.03453",
+          "source_type": "technical_paper",
+          "authors": [
+            "Bernd Bischl",
+            "Susanne Dandl",
+            "Christoph Kern",
+            "Michael P. Kim",
+            "Florian Pfisterer",
+            "Matthew Sun"
+          ],
+          "publication_date": "2021-08-24"
+        },
+        {
+          "title": "mlr-org/mcboost",
+          "url": "https://github.com/mlr-org/mcboost",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Multigroup Robustness",
+          "url": "http://arxiv.org/abs/2405.00614",
+          "source_type": "technical_paper",
+          "authors": [
+            "Lunjia Hu",
+            "Charlotte Peale",
+            "Judy Hanwen Shen"
+          ],
+          "publication_date": "2024-05-01"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "adversarial-debiasing",
+        "fair-adversarial-networks",
+        "prejudice-remover-regulariser",
+        "meta-fair-classifier",
+        "exponentiated-gradient-reduction",
+        "fair-transfer-learning",
+        "adaptive-sensitive-reweighting"
+      ]
+    },
+    {
+      "slug": "bayesian-fairness-regularization",
+      "name": "Bayesian Fairness Regularization",
+      "description": "Bayesian Fairness Regularization incorporates fairness constraints into machine learning models through Bayesian methods, treating fairness as a prior distribution or regularization term. This approach includes techniques like Fair Bayesian Optimization that use constrained optimization to tune model hyperparameters whilst enforcing fairness constraints, and methods that add regularization terms to objective functions to penalize discriminatory predictions. The technique allows for probabilistic interpretation of fairness constraints and can account for uncertainty in both model parameters and fairness requirements.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Using Fair Bayesian Optimization to tune hyperparameters of credit risk models, automatically balancing predictive accuracy with fairness constraints across different demographic groups whilst accounting for uncertainty in both model performance and fairness requirements.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Implementing Bayesian neural networks with fairness-aware priors for hiring recommendation systems, where uncertainty in fairness constraints is modeled probabilistically to ensure robust fair decision-making across different candidate populations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Applying Bayesian regularization techniques to medical diagnosis models to ensure reliable performance across patient demographics, using probabilistic constraints to maintain consistent diagnostic accuracy whilst preventing algorithmic bias in healthcare delivery.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Developing insurance premium calculation models using Bayesian fairness regularization to ensure actuarially sound pricing that meets regulatory fairness requirements, with probabilistic modeling of both risk assessment accuracy and demographic equity.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Prior selection challenges make it difficult to specify appropriate prior distributions for fairness constraints, requiring domain expertise and potentially leading to suboptimal or biased outcomes if priors are poorly chosen."
+        },
+        {
+          "description": "Computational complexity increases significantly due to Bayesian inference requirements, including sampling methods, variational inference, or optimization over probability distributions, making the approach less scalable for large datasets."
+        },
+        {
+          "description": "Sensitivity to hyperparameters affects both the Bayesian inference process and fairness regularization terms, requiring careful tuning of multiple parameters that control the trade-off between accuracy, fairness, and computational efficiency."
+        },
+        {
+          "description": "Convergence and stability issues may arise in Bayesian optimization with fairness constraints, particularly when fairness objectives conflict with performance objectives or when the constraint space becomes highly complex."
+        },
+        {
+          "description": "Limited theoretical understanding exists for the interaction between Bayesian uncertainty quantification and fairness constraints, making it challenging to provide guarantees about both predictive performance and fairness under uncertainty."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Bayesian fairness",
+          "url": "https://arxiv.org/abs/1706.00119",
+          "source_type": "technical_paper",
+          "description": "Foundational paper introducing Bayesian approaches to fairness under parameter uncertainty, demonstrating how Bayesian perspectives lead to fair decision rules",
+          "authors": [
+            "Dimitrakakis, Christos",
+            "Liu, Yang",
+            "Parkes, David",
+            "Radanovic, Goran"
+          ],
+          "publication_date": "2017-05-31"
+        },
+        {
+          "title": "Fair Bayesian Optimization",
+          "url": "https://arxiv.org/abs/2006.05109",
+          "source_type": "technical_paper",
+          "description": "Constrained Bayesian optimization framework for optimizing ML model performance while enforcing fairness constraints through hyperparameter tuning",
+          "authors": [
+            "Perrone, Valerio",
+            "Donini, Michele",
+            "Zafar, Muhammad Bilal",
+            "Schmucker, Robin",
+            "Kenthapadi, Krishnaram",
+            "Archambeau, Cédric"
+          ],
+          "publication_date": "2020-06-09"
+        },
+        {
+          "title": "Fair Gaussian Processes",
+          "url": "https://github.com/ztanml/fgp",
+          "source_type": "software_package",
+          "description": "MATLAB implementation of Fair Gaussian Processes with multiple fairness criteria support including statistical parity, equality of opportunity, and equalized odds"
+        },
+        {
+          "title": "Fairness-Aware Classifier with Prejudice Remover Regularizer",
+          "url": "https://link.springer.com/chapter/10.1007/978-3-642-33486-3_3",
+          "source_type": "technical_paper",
+          "description": "Seminal paper introducing regularization-based approach to fairness in probabilistic discriminative models with mathematical framework for fairness constraints",
+          "authors": [
+            "Kamishima, Toshihiro",
+            "Akaho, Shotaro",
+            "Asoh, Hideki",
+            "Sakuma, Jun"
+          ],
+          "publication_date": "2012-09-24"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "sensitivity-analysis-for-fairness",
+        "fairness-gan",
+        "attribute-removal-fairness-through-unawareness"
+      ]
+    }
+  ],
+  "count": 31
+}

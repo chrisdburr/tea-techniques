@@ -1,0 +1,127 @@
+{
+  "tag": {
+    "name": "applicable-models/architecture/neural-networks/feedforward",
+    "slug": "applicable-models-architecture-neural-networks-feedforward",
+    "count": 1,
+    "category": "applicable-models"
+  },
+  "techniques": [
+    {
+      "slug": "homomorphic-encryption",
+      "name": "Homomorphic Encryption",
+      "description": "Homomorphic encryption allows computation on encrypted data without decrypting it first, producing encrypted results that, when decrypted, match the results of performing the same operations on the plaintext. This enables secure outsourced computation where sensitive data remains encrypted throughout processing. By allowing ML operations on encrypted data, it provides strong privacy guarantees for applications involving highly sensitive information.",
+      "assurance_goals": [
+        "Privacy",
+        "Safety",
+        "Transparency",
+        "Security"
+      ],
+      "tags": [
+        "applicable-models/architecture/linear-models",
+        "applicable-models/architecture/neural-networks/feedforward",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/requirements/differentiable",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/privacy-guarantee",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/cryptography",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Enabling a cloud-based medical diagnosis service to process encrypted patient data and return encrypted results without the cloud provider ever accessing actual medical information, ensuring complete patient privacy during outsourced computation.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Securing financial risk assessment computations by allowing banks to jointly analyse encrypted transaction patterns for fraud detection without exposing individual customer data, reducing systemic security risks.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Enabling transparent audit of algorithmic decision-making by allowing regulators to verify model computations on encrypted data, providing accountability whilst protecting the proprietary nature of both the algorithm and the underlying data.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Extremely computationally expensive, often 100-1000x slower than unencrypted computation, making it impractical for real-time applications or large-scale data processing."
+        },
+        {
+          "description": "Limited range of operations supported efficiently, with complex operations like divisions, comparisons, and non-polynomial functions being particularly challenging or impossible to implement."
+        },
+        {
+          "description": "Implementation requires deep cryptographic expertise to avoid security vulnerabilities, choose appropriate parameters, and optimise performance for specific use cases."
+        },
+        {
+          "description": "Memory and storage requirements are significantly higher than traditional computation, as encrypted data typically requires much more space than plaintext equivalents."
+        },
+        {
+          "description": "Current fully homomorphic encryption schemes have practical limitations on computation depth before noise accumulation requires expensive bootstrapping operations to refresh ciphertexts."
+        }
+      ],
+      "resources": [
+        {
+          "title": "zama-ai/concrete-ml",
+          "url": "https://github.com/zama-ai/concrete-ml",
+          "source_type": "software_package",
+          "description": "Privacy-preserving machine learning library that enables data scientists to run ML models on encrypted data using FHE without cryptography expertise"
+        },
+        {
+          "title": "Survey on Fully Homomorphic Encryption, Theory, and Applications",
+          "url": "https://core.ac.uk/download/579858842.pdf",
+          "source_type": "documentation",
+          "authors": [
+            "Chiara Marcolla",
+            "Frank H.P. Fitzek",
+            "Marc Manzano",
+            "Najwa Aaraj",
+            "Riccardo Bassoli",
+            "Victor Sucasas"
+          ],
+          "publication_date": "2022-10-06",
+          "description": "Comprehensive survey covering FHE theory, cryptographic schemes, and practical applications across different domains"
+        },
+        {
+          "title": "Welcome to OpenFHE's documentation! — OpenFHE documentation",
+          "url": "https://openfhe-development.readthedocs.io/",
+          "source_type": "documentation",
+          "description": "Documentation for open-source C++ library supporting multiple FHE schemes including BFV, BGV, CKKS, and Boolean circuits"
+        },
+        {
+          "title": "Evaluation of Privacy-Preserving Support Vector Machine (SVM) Learning Using Homomorphic Encryption",
+          "url": "https://core.ac.uk/download/656115203.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ali, Hisham",
+            "Buchanan, William J."
+          ],
+          "publication_date": "2025-01-01",
+          "description": "Technical paper evaluating performance overhead of SVM learning with homomorphic encryption for privacy-preserving ML"
+        },
+        {
+          "title": "microsoft/SEAL",
+          "url": "https://github.com/microsoft/SEAL",
+          "source_type": "software_package",
+          "description": "Easy-to-use homomorphic encryption library enabling computations on encrypted integers and real numbers"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "synthetic-data-generation",
+        "federated-learning",
+        "differential-privacy"
+      ]
+    }
+  ],
+  "count": 1
+}

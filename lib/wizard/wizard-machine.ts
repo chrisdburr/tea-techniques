@@ -76,9 +76,27 @@ export class WizardStateMachine {
 
   // Check if a question should be skipped based on current state
   private shouldSkipQuestion(question: WizardQuestion): boolean {
-    // Skip if we already have ideal number of results
+    // Define essential questions that should never be skipped
+    const essentialQuestions = [
+      'assurance-goal',
+      'model-architecture',
+      'model-access',
+    ];
+
+    // Never skip essential questions
+    if (essentialQuestions.includes(question.id)) {
+      return false;
+    }
+
+    // Check if all essential questions have been answered
+    const essentialQuestionsAnswered = essentialQuestions.every(
+      (q) => this.state.answers[q] !== undefined
+    );
+
+    // If all essential questions answered and we have very few results, skip remaining questions
     if (
-      this.filteredTechniques.length <= wizardConfig.resultsConfig.idealResults
+      essentialQuestionsAnswered &&
+      this.filteredTechniques.length <= wizardConfig.resultsConfig.minResults
     ) {
       return true;
     }
@@ -166,6 +184,7 @@ export class WizardStateMachine {
     );
 
     return this.filteredTechniques.every((technique) => {
+      // filterTag is already checked above, safe to use here
       const values = this.getTechniqueValues(technique, question.filterTag);
       return (
         values.length === firstTechniqueValues.length &&
@@ -183,6 +202,9 @@ export class WizardStateMachine {
       case 'assurance_goals':
         return technique.assurance_goals || [];
       case 'applicable-models':
+      case 'applicable-models/architecture':
+      case 'applicable-models/requirements':
+      case 'applicable-models/paradigm':
       case 'lifecycle-stage':
       case 'technique-type':
       case 'expertise-needed':
@@ -349,7 +371,26 @@ export class WizardStateMachine {
         });
       }
 
-      // Check if technique matches any of the selected answers
+      // Special handling for applicable-models hierarchical tags
+      if (filterTag.startsWith('applicable-models/')) {
+        return answers.some((ans) => {
+          // For model-agnostic, check exact match
+          if (ans === 'architecture/model-agnostic') {
+            return techniqueValues.some(
+              (tag) => tag === 'applicable-models/architecture/model-agnostic'
+            );
+          }
+          // For other architecture/requirements/paradigm tags, check if tag contains the answer
+          // The answer format is like "architecture/tree-based" and tag is "applicable-models/architecture/tree-based"
+          return techniqueValues.some((tag) => {
+            // Build the expected full tag
+            const expectedTag = `applicable-models/${ans}`;
+            return tag === expectedTag || tag.startsWith(`${expectedTag}/`);
+          });
+        });
+      }
+
+      // Check if technique matches any of the selected answers (for non-hierarchical tags)
       return answers.some((ans) =>
         techniqueValues.some((tag) => {
           const tagValue = tag.split('/').pop();
@@ -409,10 +450,8 @@ export class WizardStateMachine {
 
   // Check if should show results
   shouldShowResults(): boolean {
-    return (
-      this.getCurrentQuestion() === null ||
-      this.filteredTechniques.length <= wizardConfig.resultsConfig.maxResults
-    );
+    // Only show results if we have no more questions to ask
+    return this.getCurrentQuestion() === null;
   }
 
   // Get progress percentage

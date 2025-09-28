@@ -1,0 +1,395 @@
+{
+  "tag": {
+    "name": "applicable-models/paradigm/generative",
+    "slug": "applicable-models-paradigm-generative",
+    "count": 4,
+    "category": "applicable-models"
+  },
+  "techniques": [
+    {
+      "slug": "synthetic-data-generation",
+      "name": "Synthetic Data Generation",
+      "description": "Synthetic data generation creates artificial datasets that aim to preserve the statistical properties, distributions, and relationships of real data whilst containing no actual records from real individuals. The technique encompasses various approaches including generative adversarial networks (GANs), variational autoencoders (VAEs), statistical sampling methods, and privacy-preserving techniques like differential privacy. Beyond privacy protection, synthetic data serves multiple purposes: augmenting limited datasets, balancing class distributions, testing model robustness, enabling data sharing across organisations, and supporting fairness assessments by generating representative samples for underrepresented groups.",
+      "assurance_goals": [
+        "Privacy",
+        "Fairness",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/generative/gan",
+        "applicable-models/architecture/neural-networks/generative/vae",
+        "applicable-models/architecture/probabilistic",
+        "applicable-models/paradigm/generative",
+        "applicable-models/paradigm/unsupervised",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/structured-output",
+        "expertise-needed/cryptography",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/data-handling",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Creating realistic but synthetic electronic health records for developing and testing medical diagnosis algorithms without exposing real patient data, enabling secure collaboration between healthcare institutions.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Generating synthetic samples for underrepresented demographic groups in a hiring dataset to train fair recruitment models, ensuring all groups have sufficient representation for bias testing and mitigation.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Augmenting limited training data for rare medical conditions by generating synthetic patient records, improving model reliability and performance on edge cases where real data is insufficient.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Creating synthetic financial transaction data for testing fraud detection systems in development environments, avoiding exposure of real customer financial information whilst maintaining realistic attack patterns.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "May not capture all subtle patterns, correlations, and edge cases present in real data, potentially leading to reduced model performance when deployed on actual data with different characteristics."
+        },
+        {
+          "description": "Generating high-quality synthetic data that maintains both statistical fidelity and utility requires sophisticated techniques and substantial computational resources, especially for complex, high-dimensional datasets."
+        },
+        {
+          "description": "Privacy-preserving approaches may still risk information leakage through statistical inference attacks, membership inference, or model inversion, requiring careful privacy budget management and validation."
+        },
+        {
+          "description": "Synthetic data may inadvertently amplify existing biases in the original data or introduce new biases through the generation process, particularly in generative models trained on biased datasets."
+        },
+        {
+          "description": "Validation and quality assessment of synthetic data is challenging, as traditional metrics may not adequately capture whether the synthetic data preserves the relationships and patterns needed for specific downstream tasks."
+        }
+      ],
+      "resources": [
+        {
+          "title": "sdv-dev/SDV",
+          "url": "https://github.com/sdv-dev/SDV",
+          "source_type": "software_package"
+        },
+        {
+          "title": "An evaluation framework for synthetic data generation models",
+          "url": "http://arxiv.org/pdf/2404.08866v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ioannis E. Livieris",
+            "Nikos Alimpertis",
+            "George Domalis",
+            "Dimitris Tsakalidis"
+          ],
+          "publication_date": "2024-04-13"
+        },
+        {
+          "title": "Synthetic Data — SecureML 0.2.2 documentation",
+          "url": "https://secureml.readthedocs.io/en/latest/user_guide/synthetic_data.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "How to Generate Real-World Synthetic Data with CTGAN | Towards ...",
+          "url": "https://towardsdatascience.com/how-to-generate-real-world-synthetic-data-with-ctgan-af41b4d60fde/",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "federated-learning",
+        "differential-privacy",
+        "homomorphic-encryption"
+      ]
+    },
+    {
+      "slug": "prompt-sensitivity-analysis",
+      "name": "Prompt Sensitivity Analysis",
+      "description": "Prompt Sensitivity Analysis systematically evaluates how variations in input prompts affect large language model outputs, providing insights into model robustness, consistency, and interpretability. This technique involves creating controlled perturbations of prompts whilst maintaining semantic meaning, then measuring how these changes influence model responses. It encompasses various types of prompt modifications including lexical substitutions, syntactic restructuring, formatting changes, and contextual variations. The analysis typically quantifies sensitivity through metrics such as output consistency, semantic similarity, and statistical measures of variance across prompt variations.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/paradigm/generative",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/explains/prediction-confidence",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/uncertainty-analysis/sensitivity-testing",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/experimental-design",
+        "expertise-needed/linguistics",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "technique-type/experimental"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing medical diagnosis LLMs with semantically equivalent but syntactically different symptom descriptions to ensure consistent diagnostic recommendations across different patient communication styles, identifying potential failure modes where slight phrasing changes could lead to dangerous misdiagnoses.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Analysing how variations in candidate descriptions (gendered language, cultural references, educational institution prestige indicators) affect LLM-based CV screening recommendations to identify potential discriminatory patterns and ensure equitable treatment across diverse applicant backgrounds.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Examining how different ways of framing financial questions (formal vs informal language, technical vs layperson terminology) affect investment advice generated by LLMs to improve user understanding and model transparency whilst ensuring consistent advisory quality.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Analysis is inherently limited to the specific prompt variations tested, potentially missing important sensitivity patterns that weren't anticipated during study design, making comprehensive coverage challenging."
+        },
+        {
+          "description": "Systematic exploration of prompt variations can be computationally expensive, particularly for large-scale sensitivity analysis across multiple dimensions of variation, requiring significant resources for thorough evaluation."
+        },
+        {
+          "description": "Ensuring that prompt variations maintain semantic equivalence whilst introducing meaningful perturbations requires careful linguistic expertise and validation, which can be subjective and domain-dependent."
+        },
+        {
+          "description": "Results may reveal sensitivity patterns that are difficult to interpret or act upon, particularly when multiple types of variations interact in complex ways, limiting practical applicability of findings."
+        },
+        {
+          "description": "The meaningfulness of sensitivity measurements depends heavily on the choice of baseline prompts and variation strategies, which can introduce methodological biases and affect the generalisability of conclusions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Quantifying Language Models' Sensitivity to Spurious Features in Prompt Design or: How I learned to start worrying about prompt formatting",
+          "url": "https://www.semanticscholar.org/paper/17a6116e5bbd8b87082cbb2e795885567300c483",
+          "source_type": "technical_paper",
+          "authors": [
+            "Melanie Sclar",
+            "Yejin Choi",
+            "Yulia Tsvetkov",
+            "Alane Suhr"
+          ]
+        },
+        {
+          "title": "PromptPrism: A Linguistically-Inspired Taxonomy for Prompts",
+          "url": "http://arxiv.org/pdf/2505.12592v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sullam Jeoung",
+            "Yueyan Chen",
+            "Yi Zhang",
+            "Shuai Wang",
+            "Haibo Ding",
+            "Lin Lee Cheong"
+          ],
+          "publication_date": "2025-05-19"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "causal-mediation-analysis-in-language-models",
+        "feature-attribution-with-integrated-gradients-in-nlp"
+      ]
+    },
+    {
+      "slug": "causal-mediation-analysis-in-language-models",
+      "name": "Causal Mediation Analysis in Language Models",
+      "description": "Causal mediation analysis in language models is a mechanistic interpretability technique that systematically investigates how specific internal components (neurons, attention heads, or layers) causally contribute to model outputs. By performing controlled interventions—such as activating, deactivating, or modifying specific components—researchers can trace the causal pathways through which information flows and transforms within the model. This approach goes beyond correlation to establish causal relationships, enabling researchers to understand not just what features influence outputs, but how and why they do so through specific computational pathways.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/transformer",
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/paradigm/generative",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/causal-analysis/mediation-analysis",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/causality",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/access-to-model-internals",
+        "data-type/text",
+        "evidence-type/causal-analysis",
+        "expertise-needed/causal-inference",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/post-deployment",
+        "technique-type/mechanistic-interpretability"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Investigating causal pathways in content moderation models to understand how specific attention mechanisms contribute to flagging potentially harmful content, enabling verification that safety decisions rely on appropriate features rather than spurious correlations and ensuring robust content filtering.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Identifying specific neurons or attention heads that causally contribute to biased outputs in hiring or lending language models, enabling targeted interventions to reduce discriminatory behaviour whilst preserving model performance on legitimate tasks and ensuring fair treatment across demographics.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Tracing causal pathways in large language models performing mathematical reasoning tasks to understand how intermediate steps are computed and stored, revealing which components are responsible for different aspects of logical inference and enabling validation of reasoning processes.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires sophisticated understanding of model architecture to design meaningful interventions, as poorly chosen intervention points may yield misleading causal conclusions or fail to capture relevant computational pathways."
+        },
+        {
+          "description": "Results are highly dependent on the validity of underlying causal assumptions, which can be difficult to verify in complex, high-dimensional neural network spaces where multiple causal pathways may interact."
+        },
+        {
+          "description": "Comprehensive causal analysis requires extensive computational resources, particularly for large models, as each intervention requires separate forward passes and multiple intervention combinations for robust conclusions."
+        },
+        {
+          "description": "Distinguishing between direct causal effects and indirect effects mediated through other components can be challenging, potentially leading to oversimplified causal narratives that miss important intermediate processes."
+        },
+        {
+          "description": "Causal relationships identified in specific contexts or datasets may not generalise to different domains, tasks, or model versions, requiring careful validation across diverse scenarios to ensure robust findings."
+        }
+      ],
+      "resources": [],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "prompt-sensitivity-analysis",
+        "feature-attribution-with-integrated-gradients-in-nlp"
+      ]
+    },
+    {
+      "slug": "fairness-gan",
+      "name": "Fairness GAN",
+      "description": "A data generation technique that employs Generative Adversarial Networks (GANs) to create fair synthetic datasets by learning to generate data representations that preserve utility whilst obfuscating protected attributes. Unlike traditional GANs, Fairness GANs incorporate fairness constraints into the training objective, ensuring that the generated data maintains statistical parity across demographic groups. The technique can be used for data augmentation to balance underrepresented groups or to create privacy-preserving synthetic datasets that remove demographic bias from training data.",
+      "assurance_goals": [
+        "Fairness",
+        "Privacy",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/generative/gan",
+        "applicable-models/paradigm/generative",
+        "applicable-models/paradigm/unsupervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/reliability",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "evidence-type/synthetic-data",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-augmentation",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Generating balanced synthetic datasets for medical research by creating additional samples from underrepresented demographic groups, ensuring equal representation across ethnicity and gender whilst maintaining the statistical properties needed for robust model training.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Creating privacy-preserving synthetic datasets for financial services that remove demographic identifiers whilst preserving the underlying patterns needed for credit risk assessment, allowing secure data sharing between institutions without exposing sensitive customer information.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Augmenting recruitment datasets by generating synthetic candidate profiles that balance gender and ethnicity representation, ensuring reliable model performance across all demographic groups when real-world data exhibits significant imbalances.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "GAN training is notoriously difficult to stabilise, with potential for mode collapse or failure to converge, especially when additional fairness constraints are imposed."
+        },
+        {
+          "description": "Ensuring fairness in generated data may come at the cost of data utility, potentially reducing the quality or realism of synthetic samples."
+        },
+        {
+          "description": "Requires large datasets to train both generator and discriminator networks effectively, limiting applicability in data-scarce domains."
+        },
+        {
+          "description": "Evaluation complexity is high, as it requires assessing both the quality of generated data and the preservation of fairness properties across demographic groups."
+        },
+        {
+          "description": "May inadvertently introduce new biases if the fairness constraints are not properly specified or if the training data itself contains subtle biases."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Fairness GAN",
+          "url": "http://arxiv.org/pdf/1805.09910v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Prasanna Sattigeri",
+            "Samuel C. Hoffman",
+            "Vijil Chenthamarakshan",
+            "Kush R. Varshney"
+          ],
+          "publication_date": "2018-05-24"
+        },
+        {
+          "title": "Fair GANs through model rebalancing for extremely imbalanced class distributions",
+          "url": "http://arxiv.org/pdf/2308.08638v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Anubhav Jain",
+            "Nasir Memon",
+            "Julian Togelius"
+          ],
+          "publication_date": "2023-08-16"
+        },
+        {
+          "title": "Inclusive GAN: Improving Data and Minority Coverage in Generative Models",
+          "url": "http://arxiv.org/abs/2004.03355",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ning Yu",
+            "Ke Li",
+            "Peng Zhou",
+            "Jitendra Malik",
+            "Larry Davis",
+            "Mario Fritz"
+          ],
+          "publication_date": "2020-04-07"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "sensitivity-analysis-for-fairness",
+        "attribute-removal-fairness-through-unawareness",
+        "bayesian-fairness-regularization"
+      ]
+    }
+  ],
+  "count": 4
+}

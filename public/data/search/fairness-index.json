@@ -9,7 +9,6 @@
       "Reliability"
     ],
     "tags": [
-      "applicable-models/agnostic",
       "assurance-goal-category/explainability",
       "assurance-goal-category/explainability/attribution-methods/perturbation-based",
       "assurance-goal-category/explainability/explains/feature-importance",
@@ -24,9 +23,11 @@
       "explanatory-scope/global",
       "explanatory-scope/local",
       "lifecycle-stage/model-development",
-      "technique-type/algorithmic"
+      "technique-type/algorithmic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/requirements/black-box"
     ],
-    "searchText": "shapley additive explanations shap explains model predictions by quantifying how much each input feature contributes to the outcome. it assigns an importance score to every feature, indicating whether it pushes the prediction towards or away from the average. the method systematically evaluates how predictions change as features are included or excluded, drawing on game theory concepts to ensure a fair distribution of contributions. explainability fairness reliability applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/attribution-methods/perturbation-based assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/completeness assurance-goal-category/explainability/property/consistency assurance-goal-category/fairness assurance-goal-category/reliability data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/global explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "shapley additive explanations shap explains model predictions by quantifying how much each input feature contributes to the outcome. it assigns an importance score to every feature, indicating whether it pushes the prediction towards or away from the average. the method systematically evaluates how predictions change as features are included or excluded, drawing on game theory concepts to ensure a fair distribution of contributions. explainability fairness reliability assurance-goal-category/explainability assurance-goal-category/explainability/attribution-methods/perturbation-based assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/completeness assurance-goal-category/explainability/property/consistency assurance-goal-category/fairness assurance-goal-category/reliability data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/global explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic applicable-models/architecture/model-agnostic applicable-models/requirements/black-box"
   },
   {
     "slug": "sobol-indices",
@@ -37,7 +38,6 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/agnostic",
       "assurance-goal-category/explainability",
       "assurance-goal-category/explainability/causal-analysis/interaction-effects",
       "assurance-goal-category/explainability/attribution-methods/perturbation-based",
@@ -52,9 +52,11 @@
       "expertise-needed/statistics",
       "explanatory-scope/global",
       "lifecycle-stage/model-development",
-      "technique-type/algorithmic"
+      "technique-type/algorithmic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/requirements/black-box"
     ],
-    "searchText": "sobol indices sobol indices quantify how much each input feature contributes to the total variance in a model's predictions through global sensitivity analysis. the technique calculates first-order indices (individual feature contributions) and total-order indices (including all interaction effects involving that feature). by systematically sampling the input space and decomposing output variance, sobol indices reveal which features drive model uncertainty and which interactions between features are most important for predictions. explainability fairness applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/causal-analysis/interaction-effects assurance-goal-category/explainability/attribution-methods/perturbation-based assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/explains/causal-pathways assurance-goal-category/explainability/property/completeness assurance-goal-category/fairness data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "sobol indices sobol indices quantify how much each input feature contributes to the total variance in a model's predictions through global sensitivity analysis. the technique calculates first-order indices (individual feature contributions) and total-order indices (including all interaction effects involving that feature). by systematically sampling the input space and decomposing output variance, sobol indices reveal which features drive model uncertainty and which interactions between features are most important for predictions. explainability fairness assurance-goal-category/explainability assurance-goal-category/explainability/causal-analysis/interaction-effects assurance-goal-category/explainability/attribution-methods/perturbation-based assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/explains/causal-pathways assurance-goal-category/explainability/property/completeness assurance-goal-category/fairness data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic applicable-models/architecture/model-agnostic applicable-models/requirements/black-box"
   },
   {
     "slug": "saliency-maps",
@@ -65,13 +67,15 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/neural-network",
+      "applicable-models/architecture/neural-networks",
+      "applicable-models/requirements/differentiable",
+      "applicable-models/requirements/gradient-access",
       "assurance-goal-category/explainability",
       "assurance-goal-category/explainability/attribution-methods/gradient-based",
-      "assurance-goal-category/explainability/visualization-methods/activation-maps",
       "assurance-goal-category/explainability/explains/feature-importance",
-      "assurance-goal-category/explainability/property/efficiency",
       "assurance-goal-category/explainability/property/comprehensibility",
+      "assurance-goal-category/explainability/property/efficiency",
+      "assurance-goal-category/explainability/visualization-methods/activation-maps",
       "assurance-goal-category/fairness",
       "data-requirements/access-to-model-internals",
       "data-type/image",
@@ -81,7 +85,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "saliency maps saliency maps are visual explanations for image classification models that highlight which pixels in an image most strongly influence the model's prediction. computed by calculating gradients of the model's output with respect to input pixels, saliency maps produce heatmaps where brighter regions indicate pixels that, when changed, would most significantly affect the prediction. this technique helps users understand which parts of an image the model is 'looking at' when making decisions. explainability fairness applicable-models/neural-network assurance-goal-category/explainability assurance-goal-category/explainability/attribution-methods/gradient-based assurance-goal-category/explainability/visualization-methods/activation-maps assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/efficiency assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/fairness data-requirements/access-to-model-internals data-type/image evidence-type/visualization expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "saliency maps saliency maps are visual explanations for image classification models that highlight which pixels in an image most strongly influence the model's prediction. computed by calculating gradients of the model's output with respect to input pixels, saliency maps produce heatmaps where brighter regions indicate pixels that, when changed, would most significantly affect the prediction. this technique helps users understand which parts of an image the model is 'looking at' when making decisions. explainability fairness applicable-models/architecture/neural-networks applicable-models/requirements/differentiable applicable-models/requirements/gradient-access assurance-goal-category/explainability assurance-goal-category/explainability/attribution-methods/gradient-based assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/explainability/property/efficiency assurance-goal-category/explainability/visualization-methods/activation-maps assurance-goal-category/fairness data-requirements/access-to-model-internals data-type/image evidence-type/visualization expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "gradient-weighted-class-activation-mapping",
@@ -92,15 +96,18 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/cnn",
+      "applicable-models/architecture/neural-networks/convolutional",
+      "applicable-models/requirements/architecture-specific",
+      "applicable-models/requirements/gradient-access",
+      "applicable-models/requirements/white-box",
       "assurance-goal-category/explainability",
-      "assurance-goal-category/explainability/visualization-methods/activation-maps",
       "assurance-goal-category/explainability/attribution-methods/gradient-based",
       "assurance-goal-category/explainability/explains/feature-importance",
       "assurance-goal-category/explainability/explains/internal-mechanisms",
-      "assurance-goal-category/explainability/property/sparsity",
-      "assurance-goal-category/explainability/property/efficiency",
       "assurance-goal-category/explainability/property/comprehensibility",
+      "assurance-goal-category/explainability/property/efficiency",
+      "assurance-goal-category/explainability/property/sparsity",
+      "assurance-goal-category/explainability/visualization-methods/activation-maps",
       "assurance-goal-category/fairness",
       "data-requirements/access-to-model-internals",
       "data-type/image",
@@ -110,7 +117,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "gradient-weighted class activation mapping grad-cam creates visual heatmaps showing which regions of an image a convolutional neural network focuses on when making a specific classification. unlike pixel-level techniques, grad-cam produces coarser region-based explanations by using gradients from the predicted class to weight the cnn's final feature maps, then projecting these weighted activations back to create an overlay on the original image. this provides intuitive visual explanations of where the model is 'looking' for evidence of different classes. explainability fairness applicable-models/cnn assurance-goal-category/explainability assurance-goal-category/explainability/visualization-methods/activation-maps assurance-goal-category/explainability/attribution-methods/gradient-based assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/property/sparsity assurance-goal-category/explainability/property/efficiency assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/fairness data-requirements/access-to-model-internals data-type/image evidence-type/visualization expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "gradient-weighted class activation mapping grad-cam creates visual heatmaps showing which regions of an image a convolutional neural network focuses on when making a specific classification. unlike pixel-level techniques, grad-cam produces coarser region-based explanations by using gradients from the predicted class to weight the cnn's final feature maps, then projecting these weighted activations back to create an overlay on the original image. this provides intuitive visual explanations of where the model is 'looking' for evidence of different classes. explainability fairness applicable-models/architecture/neural-networks/convolutional applicable-models/requirements/architecture-specific applicable-models/requirements/gradient-access applicable-models/requirements/white-box assurance-goal-category/explainability assurance-goal-category/explainability/attribution-methods/gradient-based assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/explainability/property/efficiency assurance-goal-category/explainability/property/sparsity assurance-goal-category/explainability/visualization-methods/activation-maps assurance-goal-category/fairness data-requirements/access-to-model-internals data-type/image evidence-type/visualization expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "prototype-and-criticism-models",
@@ -121,11 +128,15 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/paradigm/unsupervised",
+      "applicable-models/requirements/black-box",
+      "applicable-models/requirements/training-data",
       "assurance-goal-category/explainability",
-      "assurance-goal-category/explainability/instance-based/prototypes",
-      "assurance-goal-category/explainability/explains/decision-boundaries",
       "assurance-goal-category/explainability/explains/data-patterns",
+      "assurance-goal-category/explainability/explains/decision-boundaries",
+      "assurance-goal-category/explainability/instance-based/prototypes",
       "assurance-goal-category/explainability/property/comprehensibility",
       "assurance-goal-category/explainability/property/sparsity",
       "assurance-goal-category/fairness",
@@ -137,7 +148,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "prototype and criticism models prototype and criticism models provide data understanding by identifying two complementary sets of examples: prototypes represent the most typical instances that best summarise common patterns in the data, whilst criticisms are outliers or edge cases that are poorly represented by the prototypes. for example, in a dataset of customer transactions, prototypes might be the most representative buying patterns (frequent small purchases, occasional large purchases), whilst criticisms could be unusual behaviors (bulk buyers, one-time high-value customers). this dual approach reveals both what is normal and what is exceptional, helping understand data coverage and model blind spots. explainability fairness applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/instance-based/prototypes assurance-goal-category/explainability/explains/decision-boundaries assurance-goal-category/explainability/explains/data-patterns assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/explainability/property/sparsity assurance-goal-category/fairness data-requirements/no-special-requirements data-type/any evidence-type/structured-output expertise-needed/ml-engineering explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "prototype and criticism models prototype and criticism models provide data understanding by identifying two complementary sets of examples: prototypes represent the most typical instances that best summarise common patterns in the data, whilst criticisms are outliers or edge cases that are poorly represented by the prototypes. for example, in a dataset of customer transactions, prototypes might be the most representative buying patterns (frequent small purchases, occasional large purchases), whilst criticisms could be unusual behaviors (bulk buyers, one-time high-value customers). this dual approach reveals both what is normal and what is exceptional, helping understand data coverage and model blind spots. explainability fairness applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/paradigm/unsupervised applicable-models/requirements/black-box applicable-models/requirements/training-data assurance-goal-category/explainability assurance-goal-category/explainability/explains/data-patterns assurance-goal-category/explainability/explains/decision-boundaries assurance-goal-category/explainability/instance-based/prototypes assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/explainability/property/sparsity assurance-goal-category/fairness data-requirements/no-special-requirements data-type/any evidence-type/structured-output expertise-needed/ml-engineering explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "influence-functions",
@@ -149,12 +160,19 @@
       "Privacy"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/linear-models",
+      "applicable-models/architecture/neural-networks",
+      "applicable-models/paradigm/parametric",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/differentiable",
+      "applicable-models/requirements/gradient-access",
+      "applicable-models/requirements/training-data",
+      "applicable-models/requirements/white-box",
       "assurance-goal-category/explainability",
-      "assurance-goal-category/explainability/instance-based/influence-analysis",
       "assurance-goal-category/explainability/attribution-methods/gradient-based",
-      "assurance-goal-category/explainability/explains/data-patterns",
       "assurance-goal-category/explainability/explains/causal-pathways",
+      "assurance-goal-category/explainability/explains/data-patterns",
+      "assurance-goal-category/explainability/instance-based/influence-analysis",
       "assurance-goal-category/explainability/property/causality",
       "assurance-goal-category/explainability/property/fidelity",
       "assurance-goal-category/fairness",
@@ -167,7 +185,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "influence functions influence functions quantify how much each training example influenced a model's predictions by computing the change in prediction that would occur if that training example were removed and the model retrained. using calculus and the implicit function theorem, they approximate this 'leave-one-out' effect without actually retraining the model by computing gradients and hessian information. this mathematical approach reveals which specific training examples were most responsible for pushing the model toward or away from particular predictions, enabling practitioners to trace problematic outputs back to their root causes in the training data. explainability fairness privacy applicable-models/agnostic assurance-goal-category/explainability assurance-goal-category/explainability/instance-based/influence-analysis assurance-goal-category/explainability/attribution-methods/gradient-based assurance-goal-category/explainability/explains/data-patterns assurance-goal-category/explainability/explains/causal-pathways assurance-goal-category/explainability/property/causality assurance-goal-category/explainability/property/fidelity assurance-goal-category/fairness assurance-goal-category/privacy data-requirements/access-to-training-data data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "influence functions influence functions quantify how much each training example influenced a model's predictions by computing the change in prediction that would occur if that training example were removed and the model retrained. using calculus and the implicit function theorem, they approximate this 'leave-one-out' effect without actually retraining the model by computing gradients and hessian information. this mathematical approach reveals which specific training examples were most responsible for pushing the model toward or away from particular predictions, enabling practitioners to trace problematic outputs back to their root causes in the training data. explainability fairness privacy applicable-models/architecture/linear-models applicable-models/architecture/neural-networks applicable-models/paradigm/parametric applicable-models/paradigm/supervised applicable-models/requirements/differentiable applicable-models/requirements/gradient-access applicable-models/requirements/training-data applicable-models/requirements/white-box assurance-goal-category/explainability assurance-goal-category/explainability/attribution-methods/gradient-based assurance-goal-category/explainability/explains/causal-pathways assurance-goal-category/explainability/explains/data-patterns assurance-goal-category/explainability/instance-based/influence-analysis assurance-goal-category/explainability/property/causality assurance-goal-category/explainability/property/fidelity assurance-goal-category/fairness assurance-goal-category/privacy data-requirements/access-to-training-data data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering explanatory-scope/local lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "demographic-parity-assessment",
@@ -177,7 +195,9 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
       "assurance-goal-category/fairness",
       "data-requirements/sensitive-attributes",
       "data-type/any",
@@ -188,7 +208,7 @@
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
-    "searchText": "demographic parity assessment demographic parity assessment evaluates whether a model produces equal positive prediction rates across different demographic groups, regardless of underlying differences in qualifications or base rates. it quantifies fairness using metrics like statistical parity difference (the absolute difference in positive outcome rates between groups) or disparate impact ratio (the ratio of positive rates). unlike techniques that modify data or models, this is purely a measurement approach that highlights when protected groups receive favourable outcomes at different rates, helping organisations identify and document potential discrimination. fairness applicable-models/agnostic assurance-goal-category/fairness data-requirements/sensitive-attributes data-type/any evidence-type/fairness-metric expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+    "searchText": "demographic parity assessment demographic parity assessment evaluates whether a model produces equal positive prediction rates across different demographic groups, regardless of underlying differences in qualifications or base rates. it quantifies fairness using metrics like statistical parity difference (the absolute difference in positive outcome rates between groups) or disparate impact ratio (the ratio of positive rates). unlike techniques that modify data or models, this is purely a measurement approach that highlights when protected groups receive favourable outcomes at different rates, helping organisations identify and document potential discrimination. fairness applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box assurance-goal-category/fairness data-requirements/sensitive-attributes data-type/any evidence-type/fairness-metric expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
   },
   {
     "slug": "adversarial-debiasing",
@@ -198,7 +218,12 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/neural-network",
+      "applicable-models/architecture/neural-networks",
+      "applicable-models/paradigm/discriminative",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/differentiable",
+      "applicable-models/requirements/gradient-access",
+      "applicable-models/requirements/white-box",
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/group",
       "data-requirements/sensitive-attributes",
@@ -209,7 +234,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "adversarial debiasing adversarial debiasing reduces bias by training models using a competitive adversarial setup, similar to generative adversarial networks (gans). the technique involves two neural networks: a predictor that learns to make accurate predictions on the main task, and an adversary (bias detector) that attempts to predict protected attributes (such as race, gender, or age) from the predictor's internal representations. through adversarial training, the predictor learns to produce representations that retain predictive power for the main task whilst being uninformative about protected characteristics, thereby reducing discriminatory bias. fairness applicable-models/neural-network assurance-goal-category/fairness assurance-goal-category/fairness/group data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering fairness-approach/group lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "adversarial debiasing adversarial debiasing reduces bias by training models using a competitive adversarial setup, similar to generative adversarial networks (gans). the technique involves two neural networks: a predictor that learns to make accurate predictions on the main task, and an adversary (bias detector) that attempts to predict protected attributes (such as race, gender, or age) from the predictor's internal representations. through adversarial training, the predictor learns to produce representations that retain predictive power for the main task whilst being uninformative about protected characteristics, thereby reducing discriminatory bias. fairness applicable-models/architecture/neural-networks applicable-models/paradigm/discriminative applicable-models/paradigm/supervised applicable-models/requirements/differentiable applicable-models/requirements/gradient-access applicable-models/requirements/white-box assurance-goal-category/fairness assurance-goal-category/fairness/group data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering fairness-approach/group lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "counterfactual-fairness-assessment",
@@ -219,7 +244,9 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
       "assurance-goal-category/fairness",
       "data-requirements/sensitive-attributes",
       "data-type/any",
@@ -231,7 +258,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "counterfactual fairness assessment counterfactual fairness assessment evaluates whether a model's predictions would remain unchanged if an individual's protected attributes (race, gender, age) were different, whilst keeping all other causally legitimate factors constant. the technique requires constructing a causal graph that maps relationships between variables, then using do-calculus or structural causal models to simulate counterfactual scenarios. for example, it asks: 'would this loan application still be approved if the applicant were a different race, holding constant their actual qualifications and economic circumstances?' this individual-level fairness criterion helps identify when decisions depend improperly on protected characteristics. fairness applicable-models/agnostic assurance-goal-category/fairness data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric expertise-needed/causal-inference expertise-needed/ml-engineering explanatory-scope/local fairness-approach/causal lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "counterfactual fairness assessment counterfactual fairness assessment evaluates whether a model's predictions would remain unchanged if an individual's protected attributes (race, gender, age) were different, whilst keeping all other causally legitimate factors constant. the technique requires constructing a causal graph that maps relationships between variables, then using do-calculus or structural causal models to simulate counterfactual scenarios. for example, it asks: 'would this loan application still be approved if the applicant were a different race, holding constant their actual qualifications and economic circumstances?' this individual-level fairness criterion helps identify when decisions depend improperly on protected characteristics. fairness applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box assurance-goal-category/fairness data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric expertise-needed/causal-inference expertise-needed/ml-engineering explanatory-scope/local fairness-approach/causal lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "sensitivity-analysis-for-fairness",
@@ -241,7 +268,10 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
+      "applicable-models/requirements/training-data",
       "assurance-goal-category/fairness",
       "data-requirements/sensitive-attributes",
       "data-type/any",
@@ -252,7 +282,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "sensitivity analysis for fairness sensitivity analysis for fairness systematically evaluates how model predictions change when sensitive attributes or their proxies are perturbed whilst holding other factors constant. the technique involves creating counterfactual instances by modifying potentially discriminatory features (race, gender, age) or their correlates (zip code, names, education institutions) and measuring the resulting prediction differences. this controlled perturbation approach quantifies the degree to which protected characteristics influence model decisions, helping detect both direct discrimination and indirect bias through proxy variables even when sensitive attributes are not explicitly used as model inputs. fairness applicable-models/agnostic assurance-goal-category/fairness data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/local fairness-approach/group lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "sensitivity analysis for fairness sensitivity analysis for fairness systematically evaluates how model predictions change when sensitive attributes or their proxies are perturbed whilst holding other factors constant. the technique involves creating counterfactual instances by modifying potentially discriminatory features (race, gender, age) or their correlates (zip code, names, education institutions) and measuring the resulting prediction differences. this controlled perturbation approach quantifies the degree to which protected characteristics influence model decisions, helping detect both direct discrimination and indirect bias through proxy variables even when sensitive attributes are not explicitly used as model inputs. fairness applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/training-data assurance-goal-category/fairness data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/local fairness-approach/group lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "synthetic-data-generation",
@@ -265,9 +295,15 @@
       "Safety"
     ],
     "tags": [
-      "applicable-models/agnostic",
-      "assurance-goal-category/privacy",
+      "applicable-models/architecture/neural-networks/generative/gan",
+      "applicable-models/architecture/neural-networks/generative/vae",
+      "applicable-models/architecture/probabilistic",
+      "applicable-models/paradigm/generative",
+      "applicable-models/paradigm/unsupervised",
+      "applicable-models/requirements/training-data",
+      "applicable-models/requirements/white-box",
       "assurance-goal-category/fairness",
+      "assurance-goal-category/privacy",
       "assurance-goal-category/reliability",
       "assurance-goal-category/safety",
       "data-requirements/no-special-requirements",
@@ -280,7 +316,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "synthetic data generation synthetic data generation creates artificial datasets that aim to preserve the statistical properties, distributions, and relationships of real data whilst containing no actual records from real individuals. the technique encompasses various approaches including generative adversarial networks (gans), variational autoencoders (vaes), statistical sampling methods, and privacy-preserving techniques like differential privacy. beyond privacy protection, synthetic data serves multiple purposes: augmenting limited datasets, balancing class distributions, testing model robustness, enabling data sharing across organisations, and supporting fairness assessments by generating representative samples for underrepresented groups. privacy fairness reliability safety applicable-models/agnostic assurance-goal-category/privacy assurance-goal-category/fairness assurance-goal-category/reliability assurance-goal-category/safety data-requirements/no-special-requirements data-type/any evidence-type/structured-output expertise-needed/cryptography expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/data-handling lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "synthetic data generation synthetic data generation creates artificial datasets that aim to preserve the statistical properties, distributions, and relationships of real data whilst containing no actual records from real individuals. the technique encompasses various approaches including generative adversarial networks (gans), variational autoencoders (vaes), statistical sampling methods, and privacy-preserving techniques like differential privacy. beyond privacy protection, synthetic data serves multiple purposes: augmenting limited datasets, balancing class distributions, testing model robustness, enabling data sharing across organisations, and supporting fairness assessments by generating representative samples for underrepresented groups. privacy fairness reliability safety applicable-models/architecture/neural-networks/generative/gan applicable-models/architecture/neural-networks/generative/vae applicable-models/architecture/probabilistic applicable-models/paradigm/generative applicable-models/paradigm/unsupervised applicable-models/requirements/training-data applicable-models/requirements/white-box assurance-goal-category/fairness assurance-goal-category/privacy assurance-goal-category/reliability assurance-goal-category/safety data-requirements/no-special-requirements data-type/any evidence-type/structured-output expertise-needed/cryptography expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/data-handling lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "federated-learning",
@@ -293,11 +329,16 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/linear-models",
+      "applicable-models/architecture/neural-networks",
+      "applicable-models/paradigm/parametric",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/gradient-access",
+      "applicable-models/requirements/white-box",
+      "assurance-goal-category/fairness",
       "assurance-goal-category/privacy",
       "assurance-goal-category/reliability",
       "assurance-goal-category/safety",
-      "assurance-goal-category/fairness",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/quantitative-metric",
@@ -307,7 +348,7 @@
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
-    "searchText": "federated learning federated learning enables collaborative model training across multiple distributed parties (devices, organisations, or data centres) without requiring centralised data sharing. participants train models locally on their private datasets and only share model updates (gradients, weights, or aggregated statistics) with a central coordinator. this distributed approach serves multiple purposes: preserving data privacy and sovereignty, reducing communication costs, enabling learning from diverse data sources, improving model robustness through heterogeneous training, and facilitating compliance with data protection regulations whilst maintaining model performance comparable to centralised training. privacy reliability safety fairness applicable-models/agnostic assurance-goal-category/privacy assurance-goal-category/reliability assurance-goal-category/safety assurance-goal-category/fairness data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/software-engineering lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+    "searchText": "federated learning federated learning enables collaborative model training across multiple distributed parties (devices, organisations, or data centres) without requiring centralised data sharing. participants train models locally on their private datasets and only share model updates (gradients, weights, or aggregated statistics) with a central coordinator. this distributed approach serves multiple purposes: preserving data privacy and sovereignty, reducing communication costs, enabling learning from diverse data sources, improving model robustness through heterogeneous training, and facilitating compliance with data protection regulations whilst maintaining model performance comparable to centralised training. privacy reliability safety fairness applicable-models/architecture/linear-models applicable-models/architecture/neural-networks applicable-models/paradigm/parametric applicable-models/paradigm/supervised applicable-models/requirements/gradient-access applicable-models/requirements/white-box assurance-goal-category/fairness assurance-goal-category/privacy assurance-goal-category/reliability assurance-goal-category/safety data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/software-engineering lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
   },
   {
     "slug": "differential-privacy",
@@ -319,15 +360,16 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/requirements/black-box",
+      "assurance-goal-category/fairness",
       "assurance-goal-category/privacy",
       "assurance-goal-category/privacy/formal-guarantee/differential-privacy",
       "assurance-goal-category/transparency",
-      "assurance-goal-category/fairness",
       "data-requirements/no-special-requirements",
       "data-type/any",
-      "evidence-type/quantitative-metric",
       "evidence-type/privacy-guarantee",
+      "evidence-type/quantitative-metric",
       "expertise-needed/cryptography",
       "expertise-needed/ml-engineering",
       "expertise-needed/statistics",
@@ -336,7 +378,7 @@
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
-    "searchText": "differential privacy differential privacy provides mathematically rigorous privacy protection by adding carefully calibrated random noise to data queries, statistical computations, or machine learning outputs. the technique works by ensuring that the presence or absence of any individual's data has minimal impact on the results - specifically, any query result should be nearly indistinguishable whether or not a particular person's data is included. this is achieved through controlled noise addition that scales with the query's sensitivity and a privacy budget (epsilon) that quantifies the privacy-utility trade-off. the smaller the epsilon, the more noise is added and the stronger the privacy guarantee, but at the cost of reduced accuracy. privacy transparency fairness applicable-models/agnostic assurance-goal-category/privacy assurance-goal-category/privacy/formal-guarantee/differential-privacy assurance-goal-category/transparency assurance-goal-category/fairness data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric evidence-type/privacy-guarantee expertise-needed/cryptography expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/data-handling lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+    "searchText": "differential privacy differential privacy provides mathematically rigorous privacy protection by adding carefully calibrated random noise to data queries, statistical computations, or machine learning outputs. the technique works by ensuring that the presence or absence of any individual's data has minimal impact on the results - specifically, any query result should be nearly indistinguishable whether or not a particular person's data is included. this is achieved through controlled noise addition that scales with the query's sensitivity and a privacy budget (epsilon) that quantifies the privacy-utility trade-off. the smaller the epsilon, the more noise is added and the stronger the privacy guarantee, but at the cost of reduced accuracy. privacy transparency fairness applicable-models/architecture/model-agnostic applicable-models/requirements/black-box assurance-goal-category/fairness assurance-goal-category/privacy assurance-goal-category/privacy/formal-guarantee/differential-privacy assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/privacy-guarantee evidence-type/quantitative-metric expertise-needed/cryptography expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/data-handling lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
   },
   {
     "slug": "prediction-intervals",
@@ -348,21 +390,23 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
+      "assurance-goal-category/fairness",
       "assurance-goal-category/reliability",
       "assurance-goal-category/reliability/uncertainty-quantification",
       "assurance-goal-category/transparency",
-      "assurance-goal-category/fairness",
       "data-requirements/no-special-requirements",
       "data-type/any",
-      "evidence-type/quantitative-metric",
       "evidence-type/prediction-interval",
+      "evidence-type/quantitative-metric",
       "expertise-needed/statistics",
       "lifecycle-stage/model-development",
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
-    "searchText": "prediction intervals prediction intervals provide a range of plausible values around a model's prediction, expressing uncertainty as 'the true value will likely fall between x and y with z% confidence'. for example, instead of predicting 'house price: £300,000', a prediction interval might say 'house price: £280,000 to £320,000 with 95% confidence'. this technique works by calculating upper and lower bounds that account for both model uncertainty (how confident the model is) and inherent randomness in the data. prediction intervals are crucial for informed decision-making, as they help users understand the reliability and precision of predictions, enabling better risk assessment and planning. reliability transparency fairness applicable-models/agnostic assurance-goal-category/reliability assurance-goal-category/reliability/uncertainty-quantification assurance-goal-category/transparency assurance-goal-category/fairness data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric evidence-type/prediction-interval expertise-needed/statistics lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+    "searchText": "prediction intervals prediction intervals provide a range of plausible values around a model's prediction, expressing uncertainty as 'the true value will likely fall between x and y with z% confidence'. for example, instead of predicting 'house price: £300,000', a prediction interval might say 'house price: £280,000 to £320,000 with 95% confidence'. this technique works by calculating upper and lower bounds that account for both model uncertainty (how confident the model is) and inherent randomness in the data. prediction intervals are crucial for informed decision-making, as they help users understand the reliability and precision of predictions, enabling better risk assessment and planning. reliability transparency fairness applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box assurance-goal-category/fairness assurance-goal-category/reliability assurance-goal-category/reliability/uncertainty-quantification assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/prediction-interval evidence-type/quantitative-metric expertise-needed/statistics lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
   },
   {
     "slug": "quantile-regression",
@@ -374,21 +418,26 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/linear-models/regression",
+      "applicable-models/architecture/neural-networks",
+      "applicable-models/architecture/tree-based/gradient-boosting",
+      "applicable-models/paradigm/parametric",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/white-box",
+      "assurance-goal-category/fairness",
       "assurance-goal-category/reliability",
       "assurance-goal-category/reliability/uncertainty-quantification",
       "assurance-goal-category/transparency",
-      "assurance-goal-category/fairness",
       "data-requirements/no-special-requirements",
       "data-type/any",
-      "evidence-type/quantitative-metric",
       "evidence-type/prediction-interval",
+      "evidence-type/quantitative-metric",
       "expertise-needed/statistics",
       "lifecycle-stage/model-development",
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
-    "searchText": "quantile regression quantile regression estimates specific percentiles (quantiles) of the target variable rather than just predicting the average outcome. for example, instead of predicting 'average house price = £300,000', it can predict 'there's a 10% chance the price will be below £250,000, 50% chance below £300,000, and 90% chance below £380,000'. this technique reveals how input features affect different parts of the outcome distribution - perhaps property size strongly influences luxury homes (90th percentile) but barely affects budget properties (10th percentile). by capturing the full conditional distribution, quantile regression provides rich uncertainty information and enables robust prediction intervals. reliability transparency fairness applicable-models/agnostic assurance-goal-category/reliability assurance-goal-category/reliability/uncertainty-quantification assurance-goal-category/transparency assurance-goal-category/fairness data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric evidence-type/prediction-interval expertise-needed/statistics lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+    "searchText": "quantile regression quantile regression estimates specific percentiles (quantiles) of the target variable rather than just predicting the average outcome. for example, instead of predicting 'average house price = £300,000', it can predict 'there's a 10% chance the price will be below £250,000, 50% chance below £300,000, and 90% chance below £380,000'. this technique reveals how input features affect different parts of the outcome distribution - perhaps property size strongly influences luxury homes (90th percentile) but barely affects budget properties (10th percentile). by capturing the full conditional distribution, quantile regression provides rich uncertainty information and enables robust prediction intervals. reliability transparency fairness applicable-models/architecture/linear-models/regression applicable-models/architecture/neural-networks applicable-models/architecture/tree-based/gradient-boosting applicable-models/paradigm/parametric applicable-models/paradigm/supervised applicable-models/requirements/white-box assurance-goal-category/fairness assurance-goal-category/reliability assurance-goal-category/reliability/uncertainty-quantification assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/prediction-interval evidence-type/quantitative-metric expertise-needed/statistics lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
   },
   {
     "slug": "conformal-prediction",
@@ -400,22 +449,23 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/requirements/black-box",
+      "assurance-goal-category/fairness",
       "assurance-goal-category/reliability",
       "assurance-goal-category/reliability/uncertainty-quantification",
       "assurance-goal-category/transparency",
-      "assurance-goal-category/fairness",
       "data-requirements/calibration-set",
       "data-type/any",
-      "evidence-type/quantitative-metric",
       "evidence-type/prediction-interval",
+      "evidence-type/quantitative-metric",
       "expertise-needed/ml-engineering",
       "expertise-needed/statistics",
       "lifecycle-stage/model-development",
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
-    "searchText": "conformal prediction conformal prediction provides mathematically guaranteed uncertainty quantification by creating prediction sets that contain the true outcome with a specified probability (e.g., exactly 95% coverage). the technique works by measuring how 'strange' or 'nonconforming' new predictions are compared to calibration data - if a prediction seems unusual, it gets wider intervals. for example, in medical diagnosis, instead of saying 'likely cancer', it might say 'possible diagnoses: {cancer, benign tumour} with 95% confidence'. this distribution-free method works with any underlying model (neural networks, random forests, etc.) and requires no assumptions about data distribution, making it a robust framework for reliable uncertainty estimates in high-stakes applications. reliability transparency fairness applicable-models/agnostic assurance-goal-category/reliability assurance-goal-category/reliability/uncertainty-quantification assurance-goal-category/transparency assurance-goal-category/fairness data-requirements/calibration-set data-type/any evidence-type/quantitative-metric evidence-type/prediction-interval expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+    "searchText": "conformal prediction conformal prediction provides mathematically guaranteed uncertainty quantification by creating prediction sets that contain the true outcome with a specified probability (e.g., exactly 95% coverage). the technique works by measuring how 'strange' or 'nonconforming' new predictions are compared to calibration data - if a prediction seems unusual, it gets wider intervals. for example, in medical diagnosis, instead of saying 'likely cancer', it might say 'possible diagnoses: {cancer, benign tumour} with 95% confidence'. this distribution-free method works with any underlying model (neural networks, random forests, etc.) and requires no assumptions about data distribution, making it a robust framework for reliable uncertainty estimates in high-stakes applications. reliability transparency fairness applicable-models/architecture/model-agnostic applicable-models/requirements/black-box assurance-goal-category/fairness assurance-goal-category/reliability assurance-goal-category/reliability/uncertainty-quantification assurance-goal-category/transparency data-requirements/calibration-set data-type/any evidence-type/prediction-interval evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
   },
   {
     "slug": "empirical-calibration",
@@ -427,10 +477,13 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
+      "applicable-models/requirements/probabilistic-output",
+      "assurance-goal-category/fairness",
       "assurance-goal-category/reliability",
       "assurance-goal-category/transparency",
-      "assurance-goal-category/fairness",
       "data-requirements/calibration-set",
       "data-type/any",
       "evidence-type/quantitative-metric",
@@ -439,7 +492,7 @@
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
-    "searchText": "empirical calibration empirical calibration adjusts a model's predicted probabilities to match observed frequencies. for example, if events predicted with 80% confidence only occur 60% of the time, calibration would correct this overconfidence. common techniques include platt scaling and isotonic regression, which learn transformations that map the model's raw scores to well-calibrated probabilities, improving the reliability of confidence measures for downstream decisions. reliability transparency fairness applicable-models/agnostic assurance-goal-category/reliability assurance-goal-category/transparency assurance-goal-category/fairness data-requirements/calibration-set data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/global lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+    "searchText": "empirical calibration empirical calibration adjusts a model's predicted probabilities to match observed frequencies. for example, if events predicted with 80% confidence only occur 60% of the time, calibration would correct this overconfidence. common techniques include platt scaling and isotonic regression, which learn transformations that map the model's raw scores to well-calibrated probabilities, improving the reliability of confidence measures for downstream decisions. reliability transparency fairness applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/probabilistic-output assurance-goal-category/fairness assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/calibration-set data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/global lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
   },
   {
     "slug": "temperature-scaling",
@@ -451,21 +504,25 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/neural-network",
+      "applicable-models/architecture/neural-networks",
+      "applicable-models/paradigm/discriminative",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/probabilistic-output",
+      "applicable-models/requirements/white-box",
+      "assurance-goal-category/fairness",
       "assurance-goal-category/reliability",
       "assurance-goal-category/transparency",
-      "assurance-goal-category/fairness",
       "data-requirements/access-to-model-internals",
       "data-requirements/calibration-set",
       "data-requirements/validation-set",
       "data-type/any",
       "evidence-type/quantitative-metric",
-      "explanatory-scope/global",
       "expertise-needed/statistics",
+      "explanatory-scope/global",
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "temperature scaling temperature scaling adjusts a model's confidence by applying a single parameter (temperature) to its predictions. when a model is too confident in its wrong answers, temperature scaling can fix this by making the predictions more realistic. it works by dividing the model's outputs by the temperature value before converting them to probabilities. higher temperatures make the model less confident, whilst lower temperatures increase confidence. the technique maintains the model's accuracy whilst ensuring that when it says it's 90% confident, it's actually right about 90% of the time. reliability transparency fairness applicable-models/neural-network assurance-goal-category/reliability assurance-goal-category/transparency assurance-goal-category/fairness data-requirements/access-to-model-internals data-requirements/calibration-set data-requirements/validation-set data-type/any evidence-type/quantitative-metric explanatory-scope/global expertise-needed/statistics lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "temperature scaling temperature scaling adjusts a model's confidence by applying a single parameter (temperature) to its predictions. when a model is too confident in its wrong answers, temperature scaling can fix this by making the predictions more realistic. it works by dividing the model's outputs by the temperature value before converting them to probabilities. higher temperatures make the model less confident, whilst lower temperatures increase confidence. the technique maintains the model's accuracy whilst ensuring that when it says it's 90% confident, it's actually right about 90% of the time. reliability transparency fairness applicable-models/architecture/neural-networks applicable-models/paradigm/discriminative applicable-models/paradigm/supervised applicable-models/requirements/probabilistic-output applicable-models/requirements/white-box assurance-goal-category/fairness assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/access-to-model-internals data-requirements/calibration-set data-requirements/validation-set data-type/any evidence-type/quantitative-metric expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "bootstrapping",
@@ -477,20 +534,23 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
+      "applicable-models/requirements/training-data",
+      "assurance-goal-category/fairness",
       "assurance-goal-category/reliability",
       "assurance-goal-category/transparency",
-      "assurance-goal-category/fairness",
       "data-requirements/access-to-training-data",
       "data-type/any",
       "evidence-type/quantitative-metric",
-      "explanatory-scope/global",
       "expertise-needed/ml-engineering",
       "expertise-needed/statistics",
+      "explanatory-scope/global",
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "bootstrapping bootstrapping estimates uncertainty by repeatedly resampling the original dataset with replacement to create many new training sets, training a model on each sample, and analysing the variation in predictions. this approach provides confidence intervals and stability measures without making strong statistical assumptions. by showing how predictions change with different random samples of the data, it reveals how sensitive the model is to the specific training examples and provides robust uncertainty estimates. reliability transparency fairness applicable-models/agnostic assurance-goal-category/reliability assurance-goal-category/transparency assurance-goal-category/fairness data-requirements/access-to-training-data data-type/any evidence-type/quantitative-metric explanatory-scope/global expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "bootstrapping bootstrapping estimates uncertainty by repeatedly resampling the original dataset with replacement to create many new training sets, training a model on each sample, and analysing the variation in predictions. this approach provides confidence intervals and stability measures without making strong statistical assumptions. by showing how predictions change with different random samples of the data, it reveals how sensitive the model is to the specific training examples and provides robust uncertainty estimates. reliability transparency fairness applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/training-data assurance-goal-category/fairness assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/access-to-training-data data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics explanatory-scope/global lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "jackknife-resampling",
@@ -502,22 +562,25 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
+      "applicable-models/requirements/training-data",
+      "assurance-goal-category/fairness",
       "assurance-goal-category/reliability",
       "assurance-goal-category/reliability/uncertainty-quantification",
       "assurance-goal-category/transparency",
-      "assurance-goal-category/fairness",
       "data-requirements/access-to-training-data",
       "data-type/any",
-      "evidence-type/quantitative-metric",
       "evidence-type/prediction-interval",
+      "evidence-type/quantitative-metric",
       "expertise-needed/ml-engineering",
       "expertise-needed/statistics",
       "lifecycle-stage/model-development",
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
-    "searchText": "jackknife resampling jackknife resampling (also called leave-one-out resampling) assesses model stability and uncertainty by systematically removing one data point at a time and retraining the model on the remaining data. unlike bootstrapping which samples with replacement, jackknife creates n different models by excluding each of the n data points once. this systematic approach reveals how individual points influence results, provides robust estimates of prediction variance, and identifies unusually influential observations that may be outliers or leverage points affecting model reliability. reliability transparency fairness applicable-models/agnostic assurance-goal-category/reliability assurance-goal-category/reliability/uncertainty-quantification assurance-goal-category/transparency assurance-goal-category/fairness data-requirements/access-to-training-data data-type/any evidence-type/quantitative-metric evidence-type/prediction-interval expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+    "searchText": "jackknife resampling jackknife resampling (also called leave-one-out resampling) assesses model stability and uncertainty by systematically removing one data point at a time and retraining the model on the remaining data. unlike bootstrapping which samples with replacement, jackknife creates n different models by excluding each of the n data points once. this systematic approach reveals how individual points influence results, provides robust estimates of prediction variance, and identifies unusually influential observations that may be outliers or leverage points affecting model reliability. reliability transparency fairness applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/training-data assurance-goal-category/fairness assurance-goal-category/reliability assurance-goal-category/reliability/uncertainty-quantification assurance-goal-category/transparency data-requirements/access-to-training-data data-type/any evidence-type/prediction-interval evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
   },
   {
     "slug": "cross-validation",
@@ -529,10 +592,13 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
+      "applicable-models/requirements/training-data",
+      "assurance-goal-category/fairness",
       "assurance-goal-category/reliability",
       "assurance-goal-category/transparency",
-      "assurance-goal-category/fairness",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/quantitative-metric",
@@ -542,7 +608,7 @@
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
-    "searchText": "cross-validation cross-validation evaluates model performance and robustness by systematically partitioning data into multiple subsets (folds) and training/testing repeatedly on different combinations. common approaches include k-fold (splitting into k equal parts), stratified (preserving class distributions), and leave-one-out variants. by testing on multiple independent holdout sets, it reveals how performance varies across different data subsamples, provides robust estimates of generalisation ability, and helps detect overfitting or model instability that single train-test splits might miss. reliability transparency fairness applicable-models/agnostic assurance-goal-category/reliability assurance-goal-category/transparency assurance-goal-category/fairness data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+    "searchText": "cross-validation cross-validation evaluates model performance and robustness by systematically partitioning data into multiple subsets (folds) and training/testing repeatedly on different combinations. common approaches include k-fold (splitting into k equal parts), stratified (preserving class distributions), and leave-one-out variants. by testing on multiple independent holdout sets, it reveals how performance varies across different data subsamples, provides robust estimates of generalisation ability, and helps detect overfitting or model instability that single train-test splits might miss. reliability transparency fairness applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/training-data assurance-goal-category/fairness assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
   },
   {
     "slug": "area-under-precision-recall-curve",
@@ -554,10 +620,13 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
+      "applicable-models/requirements/probabilistic-output",
+      "assurance-goal-category/fairness",
       "assurance-goal-category/reliability",
       "assurance-goal-category/transparency",
-      "assurance-goal-category/fairness",
       "data-requirements/labelled-data",
       "data-type/any",
       "evidence-type/quantitative-metric",
@@ -567,7 +636,7 @@
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
-    "searchText": "area under precision-recall curve area under precision-recall curve (auprc) measures model performance by plotting precision (the proportion of positive predictions that are correct) against recall (the proportion of actual positives that are correctly identified) at various classification thresholds, then calculating the area under the resulting curve. unlike accuracy or auc-roc, auprc is particularly valuable for imbalanced datasets where the minority class is of primary interest---a perfect score is 1.0, whilst random performance equals the positive class proportion. by focusing on the precision-recall trade-off, it provides a more informative assessment than overall accuracy for scenarios where false positives and false negatives have different costs, especially when positive examples are rare. reliability transparency fairness applicable-models/agnostic assurance-goal-category/reliability assurance-goal-category/transparency assurance-goal-category/fairness data-requirements/labelled-data data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
+    "searchText": "area under precision-recall curve area under precision-recall curve (auprc) measures model performance by plotting precision (the proportion of positive predictions that are correct) against recall (the proportion of actual positives that are correctly identified) at various classification thresholds, then calculating the area under the resulting curve. unlike accuracy or auc-roc, auprc is particularly valuable for imbalanced datasets where the minority class is of primary interest---a perfect score is 1.0, whilst random performance equals the positive class proportion. by focusing on the precision-recall trade-off, it provides a more informative assessment than overall accuracy for scenarios where false positives and false negatives have different costs, especially when positive examples are rare. reliability transparency fairness applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/probabilistic-output assurance-goal-category/fairness assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/labelled-data data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic"
   },
   {
     "slug": "internal-review-boards",
@@ -579,23 +648,24 @@
       "Transparency"
     ],
     "tags": [
-      "applicable-models/agnostic",
-      "assurance-goal-category/safety",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/requirements/black-box",
       "assurance-goal-category/fairness",
+      "assurance-goal-category/safety",
       "assurance-goal-category/transparency",
       "data-requirements/no-special-requirements",
       "data-type/any",
-      "evidence-type/qualitative-report",
       "evidence-type/governance-framework",
+      "evidence-type/qualitative-report",
+      "expertise-needed/domain-expertise",
       "expertise-needed/ethics",
       "expertise-needed/legal",
-      "expertise-needed/domain-expertise",
-      "lifecycle-stage/project-planning",
       "lifecycle-stage/model-development",
+      "lifecycle-stage/project-planning",
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/process"
     ],
-    "searchText": "internal review boards internal review boards (irbs) provide independent, systematic evaluation of ai/ml projects throughout their lifecycle to identify ethical, safety, and societal risks before they materialise. typically composed of multidisciplinary experts including ethicists, domain specialists, legal counsel, community representatives, and technical staff, irbs review project proposals, assess potential harms to individuals and communities, evaluate mitigation strategies, and establish ongoing monitoring requirements. unlike traditional research ethics committees, ai-focused irbs address algorithmic bias, fairness concerns, privacy implications, and societal impact at scale, providing essential governance for responsible ai development and deployment. safety fairness transparency applicable-models/agnostic assurance-goal-category/safety assurance-goal-category/fairness assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/qualitative-report evidence-type/governance-framework expertise-needed/ethics expertise-needed/legal expertise-needed/domain-expertise lifecycle-stage/project-planning lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/process"
+    "searchText": "internal review boards internal review boards (irbs) provide independent, systematic evaluation of ai/ml projects throughout their lifecycle to identify ethical, safety, and societal risks before they materialise. typically composed of multidisciplinary experts including ethicists, domain specialists, legal counsel, community representatives, and technical staff, irbs review project proposals, assess potential harms to individuals and communities, evaluate mitigation strategies, and establish ongoing monitoring requirements. unlike traditional research ethics committees, ai-focused irbs address algorithmic bias, fairness concerns, privacy implications, and societal impact at scale, providing essential governance for responsible ai development and deployment. safety fairness transparency applicable-models/architecture/model-agnostic applicable-models/requirements/black-box assurance-goal-category/fairness assurance-goal-category/safety assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/governance-framework evidence-type/qualitative-report expertise-needed/domain-expertise expertise-needed/ethics expertise-needed/legal lifecycle-stage/model-development lifecycle-stage/project-planning lifecycle-stage/system-deployment-and-use technique-type/process"
   },
   {
     "slug": "red-teaming",
@@ -608,19 +678,20 @@
       "Security"
     ],
     "tags": [
-      "applicable-models/agnostic",
-      "assurance-goal-category/safety",
-      "assurance-goal-category/reliability",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/requirements/black-box",
       "assurance-goal-category/fairness",
+      "assurance-goal-category/reliability",
+      "assurance-goal-category/safety",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/qualitative-report",
-      "expertise-needed/security",
       "expertise-needed/ml-engineering",
+      "expertise-needed/security",
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/procedural"
     ],
-    "searchText": "red teaming red teaming involves systematic adversarial testing of ai/ml systems by dedicated specialists who attempt to identify flaws, vulnerabilities, harmful outputs, and ways to circumvent safety measures. drawing from cybersecurity practices, red teams employ diverse attack vectors including prompt injection, adversarial examples, edge case exploitation, social engineering scenarios, and goal misalignment probes. unlike standard testing that validates expected behaviour, red teaming specifically seeks to break systems through creative and adversarial approaches, revealing non-obvious risks and failure modes that could be exploited maliciously or cause harm in deployment. safety reliability fairness security applicable-models/agnostic assurance-goal-category/safety assurance-goal-category/reliability assurance-goal-category/fairness data-requirements/no-special-requirements data-type/any evidence-type/qualitative-report expertise-needed/security expertise-needed/ml-engineering lifecycle-stage/system-deployment-and-use technique-type/procedural"
+    "searchText": "red teaming red teaming involves systematic adversarial testing of ai/ml systems by dedicated specialists who attempt to identify flaws, vulnerabilities, harmful outputs, and ways to circumvent safety measures. drawing from cybersecurity practices, red teams employ diverse attack vectors including prompt injection, adversarial examples, edge case exploitation, social engineering scenarios, and goal misalignment probes. unlike standard testing that validates expected behaviour, red teaming specifically seeks to break systems through creative and adversarial approaches, revealing non-obvious risks and failure modes that could be exploited maliciously or cause harm in deployment. safety reliability fairness security applicable-models/architecture/model-agnostic applicable-models/requirements/black-box assurance-goal-category/fairness assurance-goal-category/reliability assurance-goal-category/safety data-requirements/no-special-requirements data-type/any evidence-type/qualitative-report expertise-needed/ml-engineering expertise-needed/security lifecycle-stage/system-deployment-and-use technique-type/procedural"
   },
   {
     "slug": "anomaly-detection",
@@ -633,21 +704,23 @@
       "Security"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/requirements/black-box",
+      "applicable-models/requirements/training-data",
+      "assurance-goal-category/fairness",
+      "assurance-goal-category/reliability",
       "assurance-goal-category/safety",
       "assurance-goal-category/safety/monitoring/anomaly-detection",
-      "assurance-goal-category/reliability",
-      "assurance-goal-category/fairness",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/quantitative-metric",
-      "expertise-needed/statistics",
       "expertise-needed/ml-engineering",
+      "expertise-needed/statistics",
       "lifecycle-stage/system-deployment-and-use",
       "lifecycle-stage/system-deployment-and-use/monitoring",
       "technique-type/algorithmic"
     ],
-    "searchText": "anomaly detection anomaly detection identifies unusual behaviours, inputs, or outputs that deviate significantly from established normal patterns using statistical, machine learning, or rule-based methods. applied to ai/ml systems, it serves as a continuous monitoring mechanism that can flag unexpected model predictions, suspicious input patterns, data drift, adversarial attacks, or operational malfunctions. by establishing baselines of normal system behaviour and alerting when deviations exceed predefined thresholds, organisations can detect potential security threats, model degradation, fairness violations, or system failures before they cause significant harm. safety reliability fairness security applicable-models/agnostic assurance-goal-category/safety assurance-goal-category/safety/monitoring/anomaly-detection assurance-goal-category/reliability assurance-goal-category/fairness data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/statistics expertise-needed/ml-engineering lifecycle-stage/system-deployment-and-use lifecycle-stage/system-deployment-and-use/monitoring technique-type/algorithmic"
+    "searchText": "anomaly detection anomaly detection identifies unusual behaviours, inputs, or outputs that deviate significantly from established normal patterns using statistical, machine learning, or rule-based methods. applied to ai/ml systems, it serves as a continuous monitoring mechanism that can flag unexpected model predictions, suspicious input patterns, data drift, adversarial attacks, or operational malfunctions. by establishing baselines of normal system behaviour and alerting when deviations exceed predefined thresholds, organisations can detect potential security threats, model degradation, fairness violations, or system failures before they cause significant harm. safety reliability fairness security applicable-models/architecture/model-agnostic applicable-models/requirements/black-box applicable-models/requirements/training-data assurance-goal-category/fairness assurance-goal-category/reliability assurance-goal-category/safety assurance-goal-category/safety/monitoring/anomaly-detection data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/system-deployment-and-use lifecycle-stage/system-deployment-and-use/monitoring technique-type/algorithmic"
   },
   {
     "slug": "human-in-the-loop-safeguards",
@@ -659,10 +732,11 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/requirements/black-box",
+      "assurance-goal-category/fairness",
       "assurance-goal-category/safety",
       "assurance-goal-category/transparency",
-      "assurance-goal-category/fairness",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/qualitative-report",
@@ -671,7 +745,7 @@
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/process"
     ],
-    "searchText": "human-in-the-loop safeguards human-in-the-loop safeguards establish systematic checkpoints where human experts review, validate, or override ai/ml system decisions before they take effect. this governance approach combines automated efficiency with human judgement by defining clear intervention criteria (such as uncertainty thresholds, risk levels, or sensitive contexts) that trigger mandatory human oversight. by incorporating domain expertise, ethical considerations, and contextual understanding that machines may lack, these safeguards help ensure that critical decisions maintain appropriate human accountability whilst preserving the benefits of automated processing for routine cases. safety transparency fairness applicable-models/agnostic assurance-goal-category/safety assurance-goal-category/transparency assurance-goal-category/fairness data-requirements/no-special-requirements data-type/any evidence-type/qualitative-report expertise-needed/domain-knowledge expertise-needed/stakeholder-engagement lifecycle-stage/system-deployment-and-use technique-type/process"
+    "searchText": "human-in-the-loop safeguards human-in-the-loop safeguards establish systematic checkpoints where human experts review, validate, or override ai/ml system decisions before they take effect. this governance approach combines automated efficiency with human judgement by defining clear intervention criteria (such as uncertainty thresholds, risk levels, or sensitive contexts) that trigger mandatory human oversight. by incorporating domain expertise, ethical considerations, and contextual understanding that machines may lack, these safeguards help ensure that critical decisions maintain appropriate human accountability whilst preserving the benefits of automated processing for routine cases. safety transparency fairness applicable-models/architecture/model-agnostic applicable-models/requirements/black-box assurance-goal-category/fairness assurance-goal-category/safety assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/qualitative-report expertise-needed/domain-knowledge expertise-needed/stakeholder-engagement lifecycle-stage/system-deployment-and-use technique-type/process"
   },
   {
     "slug": "model-cards",
@@ -683,11 +757,12 @@
       "Safety"
     ],
     "tags": [
-      "applicable-models/agnostic",
-      "assurance-goal-category/transparency",
-      "assurance-goal-category/transparency/documentation/model-card",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/requirements/black-box",
       "assurance-goal-category/fairness",
       "assurance-goal-category/safety",
+      "assurance-goal-category/transparency",
+      "assurance-goal-category/transparency/documentation/model-card",
       "data-requirements/access-to-training-data",
       "data-requirements/sensitive-attributes",
       "data-type/any",
@@ -699,7 +774,7 @@
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/documentation"
     ],
-    "searchText": "model cards model cards are standardised documentation frameworks that systematically document machine learning models through structured templates. the templates cover intended use cases, performance metrics across different demographic groups and operating conditions, training data characteristics, evaluation procedures, limitations, and ethical considerations. they serve as comprehensive technical specifications that enable informed model selection, prevent inappropriate deployment, support regulatory compliance, and facilitate fair assessment by providing transparent reporting of model capabilities and constraints across diverse populations and scenarios. transparency fairness safety applicable-models/agnostic assurance-goal-category/transparency assurance-goal-category/transparency/documentation/model-card assurance-goal-category/fairness assurance-goal-category/safety data-requirements/access-to-training-data data-requirements/sensitive-attributes data-type/any evidence-type/documentation expertise-needed/ml-engineering expertise-needed/regulatory-compliance expertise-needed/statistics lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/documentation"
+    "searchText": "model cards model cards are standardised documentation frameworks that systematically document machine learning models through structured templates. the templates cover intended use cases, performance metrics across different demographic groups and operating conditions, training data characteristics, evaluation procedures, limitations, and ethical considerations. they serve as comprehensive technical specifications that enable informed model selection, prevent inappropriate deployment, support regulatory compliance, and facilitate fair assessment by providing transparent reporting of model capabilities and constraints across diverse populations and scenarios. transparency fairness safety applicable-models/architecture/model-agnostic applicable-models/requirements/black-box assurance-goal-category/fairness assurance-goal-category/safety assurance-goal-category/transparency assurance-goal-category/transparency/documentation/model-card data-requirements/access-to-training-data data-requirements/sensitive-attributes data-type/any evidence-type/documentation expertise-needed/ml-engineering expertise-needed/regulatory-compliance expertise-needed/statistics lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/documentation"
   },
   {
     "slug": "datasheets-for-datasets",
@@ -711,10 +786,11 @@
       "Privacy"
     ],
     "tags": [
-      "applicable-models/agnostic",
-      "assurance-goal-category/transparency",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/requirements/black-box",
       "assurance-goal-category/fairness",
       "assurance-goal-category/privacy",
+      "assurance-goal-category/transparency",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/documentation",
@@ -725,7 +801,7 @@
       "lifecycle-stage/data-handling/preparation",
       "technique-type/documentation"
     ],
-    "searchText": "datasheets for datasets datasheets for datasets establish comprehensive documentation standards for datasets, systematically recording creation methodology, data composition, collection procedures, preprocessing transformations, intended applications, potential biases, privacy considerations, and maintenance protocols. these structured documents enhance dataset transparency by providing essential context for appropriate usage, enabling informed decisions about dataset suitability for specific tasks, supporting bias detection and mitigation efforts, ensuring compliance with data protection regulations, and promoting responsible data stewardship throughout the entire data lifecycle from collection to disposal. transparency fairness privacy applicable-models/agnostic assurance-goal-category/transparency assurance-goal-category/fairness assurance-goal-category/privacy data-requirements/no-special-requirements data-type/any evidence-type/documentation expertise-needed/domain-knowledge expertise-needed/regulatory-compliance lifecycle-stage/data-handling lifecycle-stage/data-handling/collection lifecycle-stage/data-handling/preparation technique-type/documentation"
+    "searchText": "datasheets for datasets datasheets for datasets establish comprehensive documentation standards for datasets, systematically recording creation methodology, data composition, collection procedures, preprocessing transformations, intended applications, potential biases, privacy considerations, and maintenance protocols. these structured documents enhance dataset transparency by providing essential context for appropriate usage, enabling informed decisions about dataset suitability for specific tasks, supporting bias detection and mitigation efforts, ensuring compliance with data protection regulations, and promoting responsible data stewardship throughout the entire data lifecycle from collection to disposal. transparency fairness privacy applicable-models/architecture/model-agnostic applicable-models/requirements/black-box assurance-goal-category/fairness assurance-goal-category/privacy assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/documentation expertise-needed/domain-knowledge expertise-needed/regulatory-compliance lifecycle-stage/data-handling lifecycle-stage/data-handling/collection lifecycle-stage/data-handling/preparation technique-type/documentation"
   },
   {
     "slug": "neuron-activation-analysis",
@@ -737,29 +813,29 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/neural-network",
-      "applicable-models/llm",
-      "applicable-models/transformer",
+      "applicable-models/architecture/neural-networks",
+      "applicable-models/requirements/model-internals",
+      "applicable-models/requirements/white-box",
       "assurance-goal-category/explainability",
-      "assurance-goal-category/safety",
+      "assurance-goal-category/explainability/explains/data-patterns",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/property/comprehensibility",
+      "assurance-goal-category/explainability/representation-analysis/concept-identification",
       "assurance-goal-category/fairness",
+      "assurance-goal-category/safety",
       "data-requirements/access-to-model-internals",
       "data-type/text",
       "evidence-type/quantitative-metric",
       "evidence-type/visualisation",
-      "explanatory-scope/local",
-      "explanatory-scope/global",
       "expertise-needed/ml-engineering",
+      "explanatory-scope/global",
+      "explanatory-scope/local",
       "lifecycle-stage/model-development",
-      "lifecycle-stage/testing",
       "lifecycle-stage/monitoring",
-      "technique-type/algorithmic",
-      "assurance-goal-category/explainability/representation-analysis/concept-identification",
-      "assurance-goal-category/explainability/explains/internal-mechanisms",
-      "assurance-goal-category/explainability/explains/data-patterns",
-      "assurance-goal-category/explainability/property/comprehensibility"
+      "lifecycle-stage/testing",
+      "technique-type/algorithmic"
     ],
-    "searchText": "neuron activation analysis neuron activation analysis examines the firing patterns of individual neurons in neural networks by probing them with diverse inputs and analysing their activation responses. this technique helps understand what concepts, features, or patterns different neurons have learned to recognise, providing insights into the model's internal representations. for large language models, this can reveal neurons specialised for linguistic concepts, semantic categories, or even potentially harmful patterns, enabling targeted interventions and deeper model understanding. explainability safety fairness applicable-models/neural-network applicable-models/llm applicable-models/transformer assurance-goal-category/explainability assurance-goal-category/safety assurance-goal-category/fairness data-requirements/access-to-model-internals data-type/text evidence-type/quantitative-metric evidence-type/visualisation explanatory-scope/local explanatory-scope/global expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/testing lifecycle-stage/monitoring technique-type/algorithmic assurance-goal-category/explainability/representation-analysis/concept-identification assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/explains/data-patterns assurance-goal-category/explainability/property/comprehensibility"
+    "searchText": "neuron activation analysis neuron activation analysis examines the firing patterns of individual neurons in neural networks by probing them with diverse inputs and analysing their activation responses. this technique helps understand what concepts, features, or patterns different neurons have learned to recognise, providing insights into the model's internal representations. for large language models, this can reveal neurons specialised for linguistic concepts, semantic categories, or even potentially harmful patterns, enabling targeted interventions and deeper model understanding. explainability safety fairness applicable-models/architecture/neural-networks applicable-models/requirements/model-internals applicable-models/requirements/white-box assurance-goal-category/explainability assurance-goal-category/explainability/explains/data-patterns assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/explainability/representation-analysis/concept-identification assurance-goal-category/fairness assurance-goal-category/safety data-requirements/access-to-model-internals data-type/text evidence-type/quantitative-metric evidence-type/visualisation expertise-needed/ml-engineering explanatory-scope/global explanatory-scope/local lifecycle-stage/model-development lifecycle-stage/monitoring lifecycle-stage/testing technique-type/algorithmic"
   },
   {
     "slug": "feature-attribution-with-integrated-gradients-in-nlp",
@@ -771,9 +847,16 @@
       "Safety"
     ],
     "tags": [
-      "applicable-models/transformer",
-      "applicable-models/llm",
+      "applicable-models/architecture/neural-networks/transformer",
+      "applicable-models/architecture/neural-networks/transformer/llm",
+      "applicable-models/paradigm/discriminative",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/gradient-access",
+      "applicable-models/requirements/white-box",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/attribution-methods/gradient-based",
+      "assurance-goal-category/explainability/explains/feature-importance",
+      "assurance-goal-category/explainability/property/completeness",
       "assurance-goal-category/fairness",
       "assurance-goal-category/safety",
       "data-requirements/no-special-requirements",
@@ -783,12 +866,9 @@
       "expertise-needed/ml-engineering",
       "lifecycle-stage/model-development",
       "lifecycle-stage/testing",
-      "technique-type/gradient-based",
-      "assurance-goal-category/explainability/attribution-methods/gradient-based",
-      "assurance-goal-category/explainability/explains/feature-importance",
-      "assurance-goal-category/explainability/property/completeness"
+      "technique-type/gradient-based"
     ],
-    "searchText": "feature attribution with integrated gradients in nlp applies integrated gradients to natural language processing models to attribute prediction importance to individual input tokens, words, or subword units. this technique computes gradients along a straight-line path from a baseline input (typically all-zeros, padding tokens, or neutral text) to the actual input, integrating these gradients to obtain attribution scores. unlike vanilla gradient methods, integrated gradients satisfies axioms of sensitivity and implementation invariance, making it particularly valuable for understanding transformer-based language models where token interactions are complex. explainability fairness safety applicable-models/transformer applicable-models/llm assurance-goal-category/explainability assurance-goal-category/fairness assurance-goal-category/safety data-requirements/no-special-requirements data-type/text evidence-type/quantitative-metric evidence-type/visualisation expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/testing technique-type/gradient-based assurance-goal-category/explainability/attribution-methods/gradient-based assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/completeness"
+    "searchText": "feature attribution with integrated gradients in nlp applies integrated gradients to natural language processing models to attribute prediction importance to individual input tokens, words, or subword units. this technique computes gradients along a straight-line path from a baseline input (typically all-zeros, padding tokens, or neutral text) to the actual input, integrating these gradients to obtain attribution scores. unlike vanilla gradient methods, integrated gradients satisfies axioms of sensitivity and implementation invariance, making it particularly valuable for understanding transformer-based language models where token interactions are complex. explainability fairness safety applicable-models/architecture/neural-networks/transformer applicable-models/architecture/neural-networks/transformer/llm applicable-models/paradigm/discriminative applicable-models/paradigm/supervised applicable-models/requirements/gradient-access applicable-models/requirements/white-box assurance-goal-category/explainability assurance-goal-category/explainability/attribution-methods/gradient-based assurance-goal-category/explainability/explains/feature-importance assurance-goal-category/explainability/property/completeness assurance-goal-category/fairness assurance-goal-category/safety data-requirements/no-special-requirements data-type/text evidence-type/quantitative-metric evidence-type/visualisation expertise-needed/ml-engineering lifecycle-stage/model-development lifecycle-stage/testing technique-type/gradient-based"
   },
   {
     "slug": "concept-activation-vectors",
@@ -800,30 +880,31 @@
       "Transparency"
     ],
     "tags": [
-      "applicable-models/neural-network",
-      "applicable-models/transformer",
-      "applicable-models/cnn",
+      "applicable-models/architecture/neural-networks",
+      "applicable-models/requirements/gradient-access",
+      "applicable-models/requirements/model-internals",
+      "applicable-models/requirements/white-box",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/explains/causal-pathways",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
+      "assurance-goal-category/explainability/property/causality",
+      "assurance-goal-category/explainability/property/comprehensibility",
+      "assurance-goal-category/explainability/representation-analysis/concept-identification",
       "assurance-goal-category/fairness",
       "assurance-goal-category/transparency",
       "data-requirements/access-to-model-internals",
       "data-type/any",
       "evidence-type/quantitative-metric",
       "evidence-type/visualization",
-      "explanatory-scope/local",
-      "explanatory-scope/global",
-      "expertise-needed/ml-engineering",
       "expertise-needed/domain-knowledge",
+      "expertise-needed/ml-engineering",
+      "explanatory-scope/global",
+      "explanatory-scope/local",
       "lifecycle-stage/model-development",
       "lifecycle-stage/system-deployment-and-use/auditing",
-      "technique-type/algorithmic",
-      "assurance-goal-category/explainability/representation-analysis/concept-identification",
-      "assurance-goal-category/explainability/explains/internal-mechanisms",
-      "assurance-goal-category/explainability/explains/causal-pathways",
-      "assurance-goal-category/explainability/property/comprehensibility",
-      "assurance-goal-category/explainability/property/causality"
+      "technique-type/algorithmic"
     ],
-    "searchText": "concept activation vectors concept activation vectors (cavs), also known as testing with concept activation vectors (tcav), identify mathematical directions in neural network representation space that correspond to human-understandable concepts such as 'stripes', 'young', or 'medical equipment'. the technique works by finding linear directions that separate activations of concept examples from non-concept examples, then measuring how much these concept directions influence the model's predictions. this provides quantitative answers to questions like 'how much does the concept of youth affect this model's hiring decisions?' enabling systematic bias detection and model understanding. explainability fairness transparency applicable-models/neural-network applicable-models/transformer applicable-models/cnn assurance-goal-category/explainability assurance-goal-category/fairness assurance-goal-category/transparency data-requirements/access-to-model-internals data-type/any evidence-type/quantitative-metric evidence-type/visualization explanatory-scope/local explanatory-scope/global expertise-needed/ml-engineering expertise-needed/domain-knowledge lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use/auditing technique-type/algorithmic assurance-goal-category/explainability/representation-analysis/concept-identification assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/explains/causal-pathways assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/explainability/property/causality"
+    "searchText": "concept activation vectors concept activation vectors (cavs), also known as testing with concept activation vectors (tcav), identify mathematical directions in neural network representation space that correspond to human-understandable concepts such as 'stripes', 'young', or 'medical equipment'. the technique works by finding linear directions that separate activations of concept examples from non-concept examples, then measuring how much these concept directions influence the model's predictions. this provides quantitative answers to questions like 'how much does the concept of youth affect this model's hiring decisions?' enabling systematic bias detection and model understanding. explainability fairness transparency applicable-models/architecture/neural-networks applicable-models/requirements/gradient-access applicable-models/requirements/model-internals applicable-models/requirements/white-box assurance-goal-category/explainability assurance-goal-category/explainability/explains/causal-pathways assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/property/causality assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/explainability/representation-analysis/concept-identification assurance-goal-category/fairness assurance-goal-category/transparency data-requirements/access-to-model-internals data-type/any evidence-type/quantitative-metric evidence-type/visualization expertise-needed/domain-knowledge expertise-needed/ml-engineering explanatory-scope/global explanatory-scope/local lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use/auditing technique-type/algorithmic"
   },
   {
     "slug": "attention-visualisation-in-transformers",
@@ -835,29 +916,31 @@
       "Transparency"
     ],
     "tags": [
-      "applicable-models/transformer",
+      "applicable-models/architecture/neural-networks/transformer",
+      "applicable-models/requirements/architecture-specific",
+      "applicable-models/requirements/model-internals",
       "assurance-goal-category/explainability",
+      "assurance-goal-category/explainability/explains/data-patterns",
+      "assurance-goal-category/explainability/explains/internal-mechanisms",
       "assurance-goal-category/explainability/feature-analysis",
       "assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
+      "assurance-goal-category/explainability/property/comprehensibility",
+      "assurance-goal-category/explainability/property/efficiency",
+      "assurance-goal-category/explainability/visualization-methods/attention-patterns",
       "assurance-goal-category/fairness",
       "assurance-goal-category/transparency",
       "data-requirements/access-to-model-internals",
-      "data-type/text",
       "data-type/image",
+      "data-type/text",
       "evidence-type/visualization",
       "expertise-needed/ml-engineering",
-      "explanatory-scope/local",
       "explanatory-scope/global",
+      "explanatory-scope/local",
       "lifecycle-stage/model-development",
       "lifecycle-stage/testing",
-      "technique-type/algorithmic",
-      "assurance-goal-category/explainability/visualization-methods/attention-patterns",
-      "assurance-goal-category/explainability/explains/internal-mechanisms",
-      "assurance-goal-category/explainability/explains/data-patterns",
-      "assurance-goal-category/explainability/property/comprehensibility",
-      "assurance-goal-category/explainability/property/efficiency"
+      "technique-type/algorithmic"
     ],
-    "searchText": "attention visualisation in transformers attention visualisation in transformers analyses the multi-head self-attention mechanisms that enable transformers to process sequences by attending to different positions simultaneously. the technique visualises attention weights as heatmaps showing how strongly each token attends to every other token across different heads and layers. by examining these attention patterns, practitioners can understand how models like bert, gpt, and t5 build contextual representations, identify which tokens influence predictions most strongly, and detect potential biases in how the model processes different types of input. this provides insights into positional encoding effects, head specialisation patterns, and the evolution of attention from local to global context across layers. explainability fairness transparency applicable-models/transformer assurance-goal-category/explainability assurance-goal-category/explainability/feature-analysis assurance-goal-category/explainability/feature-analysis/importance-and-attribution assurance-goal-category/fairness assurance-goal-category/transparency data-requirements/access-to-model-internals data-type/text data-type/image evidence-type/visualization expertise-needed/ml-engineering explanatory-scope/local explanatory-scope/global lifecycle-stage/model-development lifecycle-stage/testing technique-type/algorithmic assurance-goal-category/explainability/visualization-methods/attention-patterns assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/explains/data-patterns assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/explainability/property/efficiency"
+    "searchText": "attention visualisation in transformers attention visualisation in transformers analyses the multi-head self-attention mechanisms that enable transformers to process sequences by attending to different positions simultaneously. the technique visualises attention weights as heatmaps showing how strongly each token attends to every other token across different heads and layers. by examining these attention patterns, practitioners can understand how models like bert, gpt, and t5 build contextual representations, identify which tokens influence predictions most strongly, and detect potential biases in how the model processes different types of input. this provides insights into positional encoding effects, head specialisation patterns, and the evolution of attention from local to global context across layers. explainability fairness transparency applicable-models/architecture/neural-networks/transformer applicable-models/requirements/architecture-specific applicable-models/requirements/model-internals assurance-goal-category/explainability assurance-goal-category/explainability/explains/data-patterns assurance-goal-category/explainability/explains/internal-mechanisms assurance-goal-category/explainability/feature-analysis assurance-goal-category/explainability/feature-analysis/importance-and-attribution assurance-goal-category/explainability/property/comprehensibility assurance-goal-category/explainability/property/efficiency assurance-goal-category/explainability/visualization-methods/attention-patterns assurance-goal-category/fairness assurance-goal-category/transparency data-requirements/access-to-model-internals data-type/image data-type/text evidence-type/visualization expertise-needed/ml-engineering explanatory-scope/global explanatory-scope/local lifecycle-stage/model-development lifecycle-stage/testing technique-type/algorithmic"
   },
   {
     "slug": "reweighing",
@@ -869,11 +952,14 @@
       "Reliability"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
+      "applicable-models/requirements/training-data",
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/group/statistical-parity",
-      "assurance-goal-category/transparency",
       "assurance-goal-category/reliability",
+      "assurance-goal-category/transparency",
       "data-requirements/access-to-training-data",
       "data-requirements/sensitive-attributes",
       "data-type/any",
@@ -884,7 +970,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "reweighing reweighing is a pre-processing technique that mitigates bias by assigning different weights to training examples based on their group membership and class label. the weights are calculated to ensure that privileged and unprivileged groups have equal influence on the model's training process, effectively balancing the dataset without altering the feature values themselves. this helps to train fairer models by correcting for historical imbalances in how different groups are represented in the data. fairness transparency reliability applicable-models/agnostic assurance-goal-category/fairness assurance-goal-category/fairness/group/statistical-parity assurance-goal-category/transparency assurance-goal-category/reliability data-requirements/access-to-training-data data-requirements/sensitive-attributes data-type/any evidence-type/fairness-metric expertise-needed/low fairness-approach/group lifecycle-stage/data-handling/preprocessing lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "reweighing reweighing is a pre-processing technique that mitigates bias by assigning different weights to training examples based on their group membership and class label. the weights are calculated to ensure that privileged and unprivileged groups have equal influence on the model's training process, effectively balancing the dataset without altering the feature values themselves. this helps to train fairer models by correcting for historical imbalances in how different groups are represented in the data. fairness transparency reliability applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/training-data assurance-goal-category/fairness assurance-goal-category/fairness/group/statistical-parity assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/access-to-training-data data-requirements/sensitive-attributes data-type/any evidence-type/fairness-metric expertise-needed/low fairness-approach/group lifecycle-stage/data-handling/preprocessing lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "disparate-impact-remover",
@@ -896,10 +982,13 @@
       "Reliability"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
+      "applicable-models/requirements/training-data",
       "assurance-goal-category/fairness",
-      "assurance-goal-category/transparency",
       "assurance-goal-category/reliability",
+      "assurance-goal-category/transparency",
       "data-requirements/sensitive-attributes",
       "data-type/tabular",
       "evidence-type/quantitative-metric",
@@ -908,7 +997,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "disparate impact remover disparate impact remover is a preprocessing technique that transforms feature values in a dataset to reduce statistical dependence between features and protected attributes (like race or gender). the method modifies non-protected features through mathematical transformations that preserve the utility of the data whilst reducing correlations that could lead to discriminatory outcomes. this approach specifically targets the '80% rule' disparate impact threshold by adjusting feature distributions to ensure more equitable treatment across demographic groups in downstream model predictions. fairness transparency reliability applicable-models/agnostic assurance-goal-category/fairness assurance-goal-category/transparency assurance-goal-category/reliability data-requirements/sensitive-attributes data-type/tabular evidence-type/quantitative-metric expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "disparate impact remover disparate impact remover is a preprocessing technique that transforms feature values in a dataset to reduce statistical dependence between features and protected attributes (like race or gender). the method modifies non-protected features through mathematical transformations that preserve the utility of the data whilst reducing correlations that could lead to discriminatory outcomes. this approach specifically targets the '80% rule' disparate impact threshold by adjusting feature distributions to ensure more equitable treatment across demographic groups in downstream model predictions. fairness transparency reliability applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/training-data assurance-goal-category/fairness assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/sensitive-attributes data-type/tabular evidence-type/quantitative-metric expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "fairness-gan",
@@ -920,16 +1009,21 @@
       "Reliability"
     ],
     "tags": [
-      "applicable-models/gan",
+      "applicable-models/architecture/neural-networks/generative/gan",
+      "applicable-models/paradigm/generative",
+      "applicable-models/paradigm/unsupervised",
+      "applicable-models/requirements/gradient-access",
+      "applicable-models/requirements/training-data",
+      "applicable-models/requirements/white-box",
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/group",
       "assurance-goal-category/privacy",
       "assurance-goal-category/reliability",
-      "data-requirements/sensitive-attributes",
       "data-requirements/labelled-data",
+      "data-requirements/sensitive-attributes",
       "data-type/any",
-      "evidence-type/quantitative-metric",
       "evidence-type/fairness-metric",
+      "evidence-type/quantitative-metric",
       "evidence-type/synthetic-data",
       "expertise-needed/ml-engineering",
       "expertise-needed/statistics",
@@ -939,7 +1033,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "fairness gan a data generation technique that employs generative adversarial networks (gans) to create fair synthetic datasets by learning to generate data representations that preserve utility whilst obfuscating protected attributes. unlike traditional gans, fairness gans incorporate fairness constraints into the training objective, ensuring that the generated data maintains statistical parity across demographic groups. the technique can be used for data augmentation to balance underrepresented groups or to create privacy-preserving synthetic datasets that remove demographic bias from training data. fairness privacy reliability applicable-models/gan assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/privacy assurance-goal-category/reliability data-requirements/sensitive-attributes data-requirements/labelled-data data-type/any evidence-type/quantitative-metric evidence-type/fairness-metric evidence-type/synthetic-data expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/data-collection lifecycle-stage/data-collection/data-augmentation lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "fairness gan a data generation technique that employs generative adversarial networks (gans) to create fair synthetic datasets by learning to generate data representations that preserve utility whilst obfuscating protected attributes. unlike traditional gans, fairness gans incorporate fairness constraints into the training objective, ensuring that the generated data maintains statistical parity across demographic groups. the technique can be used for data augmentation to balance underrepresented groups or to create privacy-preserving synthetic datasets that remove demographic bias from training data. fairness privacy reliability applicable-models/architecture/neural-networks/generative/gan applicable-models/paradigm/generative applicable-models/paradigm/unsupervised applicable-models/requirements/gradient-access applicable-models/requirements/training-data applicable-models/requirements/white-box assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/privacy assurance-goal-category/reliability data-requirements/labelled-data data-requirements/sensitive-attributes data-type/any evidence-type/fairness-metric evidence-type/quantitative-metric evidence-type/synthetic-data expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/data-collection lifecycle-stage/data-collection/data-augmentation lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "relabelling",
@@ -951,26 +1045,29 @@
       "Reliability"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
+      "applicable-models/requirements/training-data",
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/group",
-      "assurance-goal-category/transparency",
       "assurance-goal-category/reliability",
+      "assurance-goal-category/transparency",
       "data-requirements/access-to-training-data",
-      "data-requirements/sensitive-attributes",
       "data-requirements/labelled-data",
+      "data-requirements/sensitive-attributes",
       "data-type/any",
-      "evidence-type/quantitative-metric",
       "evidence-type/dataset-analysis",
-      "expertise-needed/statistics",
+      "evidence-type/quantitative-metric",
       "expertise-needed/domain-knowledge",
+      "expertise-needed/statistics",
       "fairness-approach/group",
       "lifecycle-stage/data-collection",
       "lifecycle-stage/data-collection/data-preprocessing",
       "lifecycle-stage/model-development",
       "technique-type/procedural"
     ],
-    "searchText": "relabelling a preprocessing fairness technique that modifies class labels in training data to achieve equal positive outcome rates across protected groups. also known as 'data massaging', this method identifies instances that contribute to discriminatory patterns and flips their labels (from positive to negative or vice versa) to balance the proportion of positive outcomes between demographic groups. the technique aims to remove historical bias from training data whilst preserving the overall class distribution, enabling standard classifiers to learn from discrimination-free datasets. fairness transparency reliability applicable-models/agnostic assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/transparency assurance-goal-category/reliability data-requirements/access-to-training-data data-requirements/sensitive-attributes data-requirements/labelled-data data-type/any evidence-type/quantitative-metric evidence-type/dataset-analysis expertise-needed/statistics expertise-needed/domain-knowledge fairness-approach/group lifecycle-stage/data-collection lifecycle-stage/data-collection/data-preprocessing lifecycle-stage/model-development technique-type/procedural"
+    "searchText": "relabelling a preprocessing fairness technique that modifies class labels in training data to achieve equal positive outcome rates across protected groups. also known as 'data massaging', this method identifies instances that contribute to discriminatory patterns and flips their labels (from positive to negative or vice versa) to balance the proportion of positive outcomes between demographic groups. the technique aims to remove historical bias from training data whilst preserving the overall class distribution, enabling standard classifiers to learn from discrimination-free datasets. fairness transparency reliability applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/training-data assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/access-to-training-data data-requirements/labelled-data data-requirements/sensitive-attributes data-type/any evidence-type/dataset-analysis evidence-type/quantitative-metric expertise-needed/domain-knowledge expertise-needed/statistics fairness-approach/group lifecycle-stage/data-collection lifecycle-stage/data-collection/data-preprocessing lifecycle-stage/model-development technique-type/procedural"
   },
   {
     "slug": "preferential-sampling",
@@ -982,16 +1079,19 @@
       "Transparency"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
+      "applicable-models/requirements/training-data",
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/group",
       "assurance-goal-category/reliability",
       "assurance-goal-category/transparency",
-      "data-requirements/sensitive-attributes",
       "data-requirements/labelled-data",
+      "data-requirements/sensitive-attributes",
       "data-type/any",
-      "evidence-type/quantitative-metric",
       "evidence-type/dataset-analysis",
+      "evidence-type/quantitative-metric",
       "expertise-needed/low",
       "fairness-approach/group",
       "lifecycle-stage/data-collection",
@@ -999,7 +1099,7 @@
       "lifecycle-stage/model-development",
       "technique-type/procedural"
     ],
-    "searchText": "preferential sampling a preprocessing fairness technique developed by kamiran and calders that addresses dataset imbalances by re-sampling training data with preference for underrepresented groups to achieve discrimination-free classification. this method modifies the training distribution by prioritising borderline objects (instances near decision boundaries) from underrepresented groups for duplication whilst potentially removing instances from overrepresented groups. unlike relabelling approaches, preferential sampling maintains original class labels whilst creating a more balanced dataset that prevents models from learning biased patterns due to skewed group representation. fairness reliability transparency applicable-models/agnostic assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/sensitive-attributes data-requirements/labelled-data data-type/any evidence-type/quantitative-metric evidence-type/dataset-analysis expertise-needed/low fairness-approach/group lifecycle-stage/data-collection lifecycle-stage/data-collection/data-preprocessing lifecycle-stage/model-development technique-type/procedural"
+    "searchText": "preferential sampling a preprocessing fairness technique developed by kamiran and calders that addresses dataset imbalances by re-sampling training data with preference for underrepresented groups to achieve discrimination-free classification. this method modifies the training distribution by prioritising borderline objects (instances near decision boundaries) from underrepresented groups for duplication whilst potentially removing instances from overrepresented groups. unlike relabelling approaches, preferential sampling maintains original class labels whilst creating a more balanced dataset that prevents models from learning biased patterns due to skewed group representation. fairness reliability transparency applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/training-data assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/labelled-data data-requirements/sensitive-attributes data-type/any evidence-type/dataset-analysis evidence-type/quantitative-metric expertise-needed/low fairness-approach/group lifecycle-stage/data-collection lifecycle-stage/data-collection/data-preprocessing lifecycle-stage/model-development technique-type/procedural"
   },
   {
     "slug": "attribute-removal-fairness-through-unawareness",
@@ -1010,7 +1110,10 @@
       "Transparency"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
+      "applicable-models/requirements/training-data",
       "assurance-goal-category/fairness",
       "assurance-goal-category/transparency",
       "data-requirements/sensitive-attributes",
@@ -1021,7 +1124,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "attribute removal (fairness through unawareness) attribute removal (fairness through unawareness) ensures fairness by completely excluding protected attributes such as race, gender, or age from the model's input features. while this approach prevents direct discrimination, it may not eliminate bias if other features are correlated with protected attributes (proxy discrimination). this technique represents the most basic fairness intervention but often needs to be combined with other approaches to address indirect bias through seemingly neutral features. fairness transparency applicable-models/agnostic assurance-goal-category/fairness assurance-goal-category/transparency data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric expertise-needed/low fairness-approach/group lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "attribute removal (fairness through unawareness) attribute removal (fairness through unawareness) ensures fairness by completely excluding protected attributes such as race, gender, or age from the model's input features. while this approach prevents direct discrimination, it may not eliminate bias if other features are correlated with protected attributes (proxy discrimination). this technique represents the most basic fairness intervention but often needs to be combined with other approaches to address indirect bias through seemingly neutral features. fairness transparency applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/training-data assurance-goal-category/fairness assurance-goal-category/transparency data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric expertise-needed/low fairness-approach/group lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "fair-adversarial-networks",
@@ -1033,18 +1136,23 @@
       "Reliability"
     ],
     "tags": [
-      "applicable-models/neural-network",
-      "applicable-models/cnn",
-      "applicable-models/gan",
+      "applicable-models/architecture/neural-networks",
+      "applicable-models/paradigm/discriminative",
+      "applicable-models/paradigm/parametric",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/gradient-access",
+      "applicable-models/requirements/model-internals",
+      "applicable-models/requirements/training-data",
+      "applicable-models/requirements/white-box",
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/group",
-      "assurance-goal-category/transparency",
       "assurance-goal-category/reliability",
-      "data-requirements/sensitive-attributes",
+      "assurance-goal-category/transparency",
       "data-requirements/labelled-data",
+      "data-requirements/sensitive-attributes",
       "data-type/any",
-      "evidence-type/quantitative-metric",
       "evidence-type/fairness-metric",
+      "evidence-type/quantitative-metric",
       "expertise-needed/ml-engineering",
       "expertise-needed/statistics",
       "fairness-approach/group",
@@ -1052,7 +1160,7 @@
       "lifecycle-stage/model-development/training",
       "technique-type/algorithmic"
     ],
-    "searchText": "fair adversarial networks an in-processing fairness technique that employs adversarial training with dual neural networks to learn fair representations. the method consists of a predictor network that learns the main task whilst an adversarial discriminator network simultaneously attempts to predict sensitive attributes from the predictor's hidden representations. through this adversarial min-max game, the predictor is incentivised to learn features that are informative for the task but statistically independent of protected attributes, effectively removing bias at the representation level in deep learning models. fairness transparency reliability applicable-models/neural-network applicable-models/cnn applicable-models/gan assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/transparency assurance-goal-category/reliability data-requirements/sensitive-attributes data-requirements/labelled-data data-type/any evidence-type/quantitative-metric evidence-type/fairness-metric expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development lifecycle-stage/model-development/training technique-type/algorithmic"
+    "searchText": "fair adversarial networks an in-processing fairness technique that employs adversarial training with dual neural networks to learn fair representations. the method consists of a predictor network that learns the main task whilst an adversarial discriminator network simultaneously attempts to predict sensitive attributes from the predictor's hidden representations. through this adversarial min-max game, the predictor is incentivised to learn features that are informative for the task but statistically independent of protected attributes, effectively removing bias at the representation level in deep learning models. fairness transparency reliability applicable-models/architecture/neural-networks applicable-models/paradigm/discriminative applicable-models/paradigm/parametric applicable-models/paradigm/supervised applicable-models/requirements/gradient-access applicable-models/requirements/model-internals applicable-models/requirements/training-data applicable-models/requirements/white-box assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/labelled-data data-requirements/sensitive-attributes data-type/any evidence-type/fairness-metric evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development lifecycle-stage/model-development/training technique-type/algorithmic"
   },
   {
     "slug": "prejudice-remover-regulariser",
@@ -1064,25 +1172,30 @@
       "Reliability"
     ],
     "tags": [
-      "applicable-models/logistic-regression",
-      "applicable-models/probabilistic",
+      "applicable-models/architecture/linear-models/logistic",
+      "applicable-models/architecture/probabilistic",
+      "applicable-models/paradigm/discriminative",
+      "applicable-models/paradigm/probabilistic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/training-data",
+      "applicable-models/requirements/white-box",
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/group",
-      "assurance-goal-category/transparency",
       "assurance-goal-category/reliability",
-      "data-requirements/sensitive-attributes",
+      "assurance-goal-category/transparency",
       "data-requirements/labelled-data",
+      "data-requirements/sensitive-attributes",
       "data-type/tabular",
-      "evidence-type/quantitative-metric",
       "evidence-type/fairness-metric",
-      "expertise-needed/statistics",
+      "evidence-type/quantitative-metric",
       "expertise-needed/ml-engineering",
+      "expertise-needed/statistics",
       "fairness-approach/group",
       "lifecycle-stage/model-development",
       "lifecycle-stage/model-development/training",
       "technique-type/algorithmic"
     ],
-    "searchText": "prejudice remover regulariser an in-processing fairness technique that adds a fairness penalty to machine learning models to reduce bias against protected groups. the method works by minimising 'mutual information' - essentially reducing how much the model's predictions reveal about sensitive attributes like race or gender. by adding this penalty term to the learning objective (typically in logistic regression), the technique ensures predictions become less dependent on protected features. this addresses not only direct discrimination but also indirect bias through correlated features. practitioners can adjust a tuning parameter to balance between maintaining accuracy and removing prejudice from the model. fairness transparency reliability applicable-models/logistic-regression applicable-models/probabilistic assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/transparency assurance-goal-category/reliability data-requirements/sensitive-attributes data-requirements/labelled-data data-type/tabular evidence-type/quantitative-metric evidence-type/fairness-metric expertise-needed/statistics expertise-needed/ml-engineering fairness-approach/group lifecycle-stage/model-development lifecycle-stage/model-development/training technique-type/algorithmic"
+    "searchText": "prejudice remover regulariser an in-processing fairness technique that adds a fairness penalty to machine learning models to reduce bias against protected groups. the method works by minimising 'mutual information' - essentially reducing how much the model's predictions reveal about sensitive attributes like race or gender. by adding this penalty term to the learning objective (typically in logistic regression), the technique ensures predictions become less dependent on protected features. this addresses not only direct discrimination but also indirect bias through correlated features. practitioners can adjust a tuning parameter to balance between maintaining accuracy and removing prejudice from the model. fairness transparency reliability applicable-models/architecture/linear-models/logistic applicable-models/architecture/probabilistic applicable-models/paradigm/discriminative applicable-models/paradigm/probabilistic applicable-models/paradigm/supervised applicable-models/requirements/training-data applicable-models/requirements/white-box assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/labelled-data data-requirements/sensitive-attributes data-type/tabular evidence-type/fairness-metric evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development lifecycle-stage/model-development/training technique-type/algorithmic"
   },
   {
     "slug": "meta-fair-classifier",
@@ -1094,16 +1207,19 @@
       "Reliability"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/gradient-access",
+      "applicable-models/requirements/gray-box",
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/group",
-      "assurance-goal-category/transparency",
       "assurance-goal-category/reliability",
-      "data-requirements/sensitive-attributes",
+      "assurance-goal-category/transparency",
       "data-requirements/labelled-data",
+      "data-requirements/sensitive-attributes",
       "data-type/any",
-      "evidence-type/quantitative-metric",
       "evidence-type/fairness-metric",
+      "evidence-type/quantitative-metric",
       "expertise-needed/ml-engineering",
       "expertise-needed/statistics",
       "fairness-approach/group",
@@ -1112,7 +1228,7 @@
       "lifecycle-stage/model-optimization",
       "technique-type/algorithmic"
     ],
-    "searchText": "meta fair classifier an in-processing fairness technique that employs meta-learning to modify any existing classifier for optimising fairness metrics whilst maintaining predictive performance. the method learns how to adjust model parameters or decision boundaries to satisfy fairness constraints such as demographic parity or equalised odds through iterative optimisation. this approach is particularly valuable when retrofitting fairness to pre-trained models that perform well but exhibit bias, as it can incorporate fairness without requiring complete retraining from scratch. fairness transparency reliability applicable-models/agnostic assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/transparency assurance-goal-category/reliability data-requirements/sensitive-attributes data-requirements/labelled-data data-type/any evidence-type/quantitative-metric evidence-type/fairness-metric expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development lifecycle-stage/model-development/training lifecycle-stage/model-optimization technique-type/algorithmic"
+    "searchText": "meta fair classifier an in-processing fairness technique that employs meta-learning to modify any existing classifier for optimising fairness metrics whilst maintaining predictive performance. the method learns how to adjust model parameters or decision boundaries to satisfy fairness constraints such as demographic parity or equalised odds through iterative optimisation. this approach is particularly valuable when retrofitting fairness to pre-trained models that perform well but exhibit bias, as it can incorporate fairness without requiring complete retraining from scratch. fairness transparency reliability applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/gradient-access applicable-models/requirements/gray-box assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/labelled-data data-requirements/sensitive-attributes data-type/any evidence-type/fairness-metric evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development lifecycle-stage/model-development/training lifecycle-stage/model-optimization technique-type/algorithmic"
   },
   {
     "slug": "exponentiated-gradient-reduction",
@@ -1124,16 +1240,22 @@
       "Reliability"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/discriminative",
+      "applicable-models/paradigm/parametric",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/gradient-access",
+      "applicable-models/requirements/training-data",
+      "applicable-models/requirements/white-box",
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/group",
-      "assurance-goal-category/transparency",
       "assurance-goal-category/reliability",
+      "assurance-goal-category/transparency",
       "data-requirements/labelled-data",
       "data-requirements/sensitive-attributes",
       "data-type/any",
-      "evidence-type/quantitative-metric",
       "evidence-type/fairness-metric",
+      "evidence-type/quantitative-metric",
       "expertise-needed/ml-engineering",
       "expertise-needed/statistics",
       "fairness-approach/group",
@@ -1141,7 +1263,7 @@
       "lifecycle-stage/model-development/training",
       "technique-type/algorithmic"
     ],
-    "searchText": "exponentiated gradient reduction an in-processing fairness technique based on agarwal et al.'s reductions approach that transforms fair classification into a sequence of cost-sensitive classification problems. the method uses an exponentiated gradient algorithm to iteratively reweight training data, returning a randomised classifier that achieves the lowest empirical error whilst satisfying fairness constraints. this reduction-based framework provides theoretical guarantees about both accuracy and constraint violation, making it suitable for various fairness criteria including demographic parity and equalised odds. fairness transparency reliability applicable-models/agnostic assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/transparency assurance-goal-category/reliability data-requirements/labelled-data data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric evidence-type/fairness-metric expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development lifecycle-stage/model-development/training technique-type/algorithmic"
+    "searchText": "exponentiated gradient reduction an in-processing fairness technique based on agarwal et al.'s reductions approach that transforms fair classification into a sequence of cost-sensitive classification problems. the method uses an exponentiated gradient algorithm to iteratively reweight training data, returning a randomised classifier that achieves the lowest empirical error whilst satisfying fairness constraints. this reduction-based framework provides theoretical guarantees about both accuracy and constraint violation, making it suitable for various fairness criteria including demographic parity and equalised odds. fairness transparency reliability applicable-models/architecture/model-agnostic applicable-models/paradigm/discriminative applicable-models/paradigm/parametric applicable-models/paradigm/supervised applicable-models/requirements/gradient-access applicable-models/requirements/training-data applicable-models/requirements/white-box assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/labelled-data data-requirements/sensitive-attributes data-type/any evidence-type/fairness-metric evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development lifecycle-stage/model-development/training technique-type/algorithmic"
   },
   {
     "slug": "fair-transfer-learning",
@@ -1153,25 +1275,30 @@
       "Reliability"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/neural-networks",
+      "applicable-models/paradigm/parametric",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/gradient-access",
+      "applicable-models/requirements/model-internals",
+      "applicable-models/requirements/training-data",
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/group",
-      "assurance-goal-category/transparency",
       "assurance-goal-category/reliability",
-      "data-requirements/sensitive-attributes",
+      "assurance-goal-category/transparency",
       "data-requirements/pre-trained-model",
+      "data-requirements/sensitive-attributes",
       "data-type/any",
-      "evidence-type/quantitative-metric",
       "evidence-type/fairness-metric",
+      "evidence-type/quantitative-metric",
       "expertise-needed/ml-engineering",
       "expertise-needed/statistics",
       "fairness-approach/group",
       "lifecycle-stage/model-development",
-      "lifecycle-stage/model-development/training",
       "lifecycle-stage/model-development/fine-tuning",
+      "lifecycle-stage/model-development/training",
       "technique-type/algorithmic"
     ],
-    "searchText": "fair transfer learning an in-processing fairness technique that adapts pre-trained models from one domain to another whilst explicitly preserving fairness constraints across different contexts or populations. the method addresses the challenge that fairness properties may not transfer when adapting models to new domains with different demographic compositions or data distributions. fair transfer learning typically involves constraint-aware fine-tuning, domain adaptation techniques, or adversarial training that maintains equitable performance across groups in the target domain, ensuring that bias mitigation efforts carry over from source to target domains. fairness transparency reliability applicable-models/agnostic assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/transparency assurance-goal-category/reliability data-requirements/sensitive-attributes data-requirements/pre-trained-model data-type/any evidence-type/quantitative-metric evidence-type/fairness-metric expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development lifecycle-stage/model-development/training lifecycle-stage/model-development/fine-tuning technique-type/algorithmic"
+    "searchText": "fair transfer learning an in-processing fairness technique that adapts pre-trained models from one domain to another whilst explicitly preserving fairness constraints across different contexts or populations. the method addresses the challenge that fairness properties may not transfer when adapting models to new domains with different demographic compositions or data distributions. fair transfer learning typically involves constraint-aware fine-tuning, domain adaptation techniques, or adversarial training that maintains equitable performance across groups in the target domain, ensuring that bias mitigation efforts carry over from source to target domains. fairness transparency reliability applicable-models/architecture/neural-networks applicable-models/paradigm/parametric applicable-models/paradigm/supervised applicable-models/requirements/gradient-access applicable-models/requirements/model-internals applicable-models/requirements/training-data assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/pre-trained-model data-requirements/sensitive-attributes data-type/any evidence-type/fairness-metric evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development lifecycle-stage/model-development/fine-tuning lifecycle-stage/model-development/training technique-type/algorithmic"
   },
   {
     "slug": "adaptive-sensitive-reweighting",
@@ -1182,7 +1309,11 @@
       "Reliability"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/parametric",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/gray-box",
+      "applicable-models/requirements/training-data",
       "assurance-goal-category/fairness",
       "assurance-goal-category/reliability",
       "data-requirements/access-to-model-internals",
@@ -1194,7 +1325,7 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "adaptive sensitive reweighting adaptive sensitive reweighting dynamically adjusts the importance of training examples during model training based on real-time performance across different demographic groups. unlike traditional static reweighting that fixes weights at the start, this technique continuously monitors fairness metrics and automatically increases the weight of examples from underperforming groups whilst decreasing weights for overrepresented groups. the adaptive mechanism prevents models from perpetuating historical biases by ensuring balanced learning across all demographics throughout the training process. fairness reliability applicable-models/agnostic assurance-goal-category/fairness assurance-goal-category/reliability data-requirements/access-to-model-internals data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering fairness-approach/group lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "adaptive sensitive reweighting adaptive sensitive reweighting dynamically adjusts the importance of training examples during model training based on real-time performance across different demographic groups. unlike traditional static reweighting that fixes weights at the start, this technique continuously monitors fairness metrics and automatically increases the weight of examples from underperforming groups whilst decreasing weights for overrepresented groups. the adaptive mechanism prevents models from perpetuating historical biases by ensuring balanced learning across all demographics throughout the training process. fairness reliability applicable-models/architecture/model-agnostic applicable-models/paradigm/parametric applicable-models/paradigm/supervised applicable-models/requirements/gray-box applicable-models/requirements/training-data assurance-goal-category/fairness assurance-goal-category/reliability data-requirements/access-to-model-internals data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering fairness-approach/group lifecycle-stage/model-development technique-type/algorithmic"
   },
   {
     "slug": "multi-accuracy-boosting",
@@ -1206,17 +1337,20 @@
       "Transparency"
     ],
     "tags": [
-      "applicable-models/agnostic",
-      "applicable-models/ensemble",
+      "applicable-models/architecture/ensemble",
+      "applicable-models/paradigm/discriminative",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/training-data",
+      "applicable-models/requirements/white-box",
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/group",
       "assurance-goal-category/reliability",
       "assurance-goal-category/transparency",
-      "data-requirements/sensitive-attributes",
       "data-requirements/labelled-data",
+      "data-requirements/sensitive-attributes",
       "data-type/any",
-      "evidence-type/quantitative-metric",
       "evidence-type/fairness-metric",
+      "evidence-type/quantitative-metric",
       "expertise-needed/ml-engineering",
       "expertise-needed/statistics",
       "fairness-approach/group",
@@ -1224,7 +1358,7 @@
       "lifecycle-stage/model-development/training",
       "technique-type/algorithmic"
     ],
-    "searchText": "multi-accuracy boosting an in-processing fairness technique that employs boosting algorithms to improve accuracy uniformly across demographic groups by iteratively correcting errors where the model performs poorly for certain subgroups. the method uses a multi-calibration approach that trains weak learners to focus on prediction errors for underperforming groups, ensuring that no group experiences systematically worse accuracy. this iterative boosting process continues until accuracy parity is achieved across all groups whilst maintaining overall model performance. fairness reliability transparency applicable-models/agnostic applicable-models/ensemble assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/sensitive-attributes data-requirements/labelled-data data-type/any evidence-type/quantitative-metric evidence-type/fairness-metric expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development lifecycle-stage/model-development/training technique-type/algorithmic"
+    "searchText": "multi-accuracy boosting an in-processing fairness technique that employs boosting algorithms to improve accuracy uniformly across demographic groups by iteratively correcting errors where the model performs poorly for certain subgroups. the method uses a multi-calibration approach that trains weak learners to focus on prediction errors for underperforming groups, ensuring that no group experiences systematically worse accuracy. this iterative boosting process continues until accuracy parity is achieved across all groups whilst maintaining overall model performance. fairness reliability transparency applicable-models/architecture/ensemble applicable-models/paradigm/discriminative applicable-models/paradigm/supervised applicable-models/requirements/training-data applicable-models/requirements/white-box assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/labelled-data data-requirements/sensitive-attributes data-type/any evidence-type/fairness-metric evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development lifecycle-stage/model-development/training technique-type/algorithmic"
   },
   {
     "slug": "equalised-odds-post-processing",
@@ -1236,25 +1370,29 @@
       "Reliability"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/discriminative",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
+      "applicable-models/requirements/probabilistic-output",
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/group",
-      "assurance-goal-category/transparency",
       "assurance-goal-category/reliability",
+      "assurance-goal-category/transparency",
       "data-requirements/labelled-data",
       "data-requirements/sensitive-attributes",
       "data-type/any",
-      "evidence-type/quantitative-metric",
       "evidence-type/fairness-metric",
-      "expertise-needed/statistics",
+      "evidence-type/quantitative-metric",
       "expertise-needed/ml-engineering",
+      "expertise-needed/statistics",
       "fairness-approach/group",
       "lifecycle-stage/model-development",
       "lifecycle-stage/model-development/testing",
       "lifecycle-stage/system-deployment-and-use/monitoring",
       "technique-type/algorithmic"
     ],
-    "searchText": "equalised odds post-processing a post-processing fairness technique based on hardt et al.'s seminal work that adjusts classification thresholds after model training to achieve equal true positive rates and false positive rates across demographic groups. the method uses group-specific decision thresholds, potentially with randomisation, to satisfy the equalised odds constraint whilst preserving model utility. this approach enables fairness mitigation without retraining, making it applicable to existing deployed models or when training data access is restricted. fairness transparency reliability applicable-models/agnostic assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/transparency assurance-goal-category/reliability data-requirements/labelled-data data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric evidence-type/fairness-metric expertise-needed/statistics expertise-needed/ml-engineering fairness-approach/group lifecycle-stage/model-development lifecycle-stage/model-development/testing lifecycle-stage/system-deployment-and-use/monitoring technique-type/algorithmic"
+    "searchText": "equalised odds post-processing a post-processing fairness technique based on hardt et al.'s seminal work that adjusts classification thresholds after model training to achieve equal true positive rates and false positive rates across demographic groups. the method uses group-specific decision thresholds, potentially with randomisation, to satisfy the equalised odds constraint whilst preserving model utility. this approach enables fairness mitigation without retraining, making it applicable to existing deployed models or when training data access is restricted. fairness transparency reliability applicable-models/architecture/model-agnostic applicable-models/paradigm/discriminative applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/probabilistic-output assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/labelled-data data-requirements/sensitive-attributes data-type/any evidence-type/fairness-metric evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development lifecycle-stage/model-development/testing lifecycle-stage/system-deployment-and-use/monitoring technique-type/algorithmic"
   },
   {
     "slug": "threshold-optimiser",
@@ -1264,7 +1402,11 @@
       "Fairness"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/discriminative",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
+      "applicable-models/requirements/probabilistic-output",
       "assurance-goal-category/fairness",
       "data-requirements/sensitive-attributes",
       "data-type/any",
@@ -1274,7 +1416,7 @@
       "lifecycle-stage/post-processing",
       "technique-type/algorithmic"
     ],
-    "searchText": "threshold optimiser threshold optimiser adjusts decision thresholds for different demographic groups after model training to satisfy specific fairness constraints. this post-processing technique optimises group-specific thresholds by analysing the probability distribution of model outputs, allowing practitioners to achieve fairness goals like demographic parity or equalised opportunity without modifying the underlying model. the optimiser finds optimal threshold values for each group that balance fairness requirements with overall model performance, making it particularly useful when fairness considerations arise after model deployment. fairness applicable-models/agnostic assurance-goal-category/fairness data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric expertise-needed/statistics fairness-approach/group lifecycle-stage/post-processing technique-type/algorithmic"
+    "searchText": "threshold optimiser threshold optimiser adjusts decision thresholds for different demographic groups after model training to satisfy specific fairness constraints. this post-processing technique optimises group-specific thresholds by analysing the probability distribution of model outputs, allowing practitioners to achieve fairness goals like demographic parity or equalised opportunity without modifying the underlying model. the optimiser finds optimal threshold values for each group that balance fairness requirements with overall model performance, making it particularly useful when fairness considerations arise after model deployment. fairness applicable-models/architecture/model-agnostic applicable-models/paradigm/discriminative applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/probabilistic-output assurance-goal-category/fairness data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric expertise-needed/statistics fairness-approach/group lifecycle-stage/post-processing technique-type/algorithmic"
   },
   {
     "slug": "reject-option-classification",
@@ -1286,24 +1428,27 @@
       "Transparency"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
+      "applicable-models/requirements/probabilistic-output",
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/group",
       "assurance-goal-category/reliability",
       "assurance-goal-category/transparency",
-      "data-requirements/sensitive-attributes",
       "data-requirements/labelled-data",
       "data-requirements/prediction-probabilities",
+      "data-requirements/sensitive-attributes",
       "data-type/any",
-      "evidence-type/quantitative-metric",
       "evidence-type/fairness-metric",
-      "expertise-needed/statistics",
+      "evidence-type/quantitative-metric",
       "expertise-needed/ml-engineering",
+      "expertise-needed/statistics",
       "fairness-approach/group",
       "lifecycle-stage/post-processing",
       "technique-type/algorithmic"
     ],
-    "searchText": "reject option classification a post-processing fairness technique that modifies predictions in regions of high uncertainty to favour disadvantaged groups and achieve fairness objectives. the method identifies a 'rejection region' where the model's confidence is low (typically near the decision boundary) and reassigns predictions within this region to benefit underrepresented groups. by leveraging model uncertainty, this approach can improve fairness metrics like demographic parity or equalised odds whilst minimising changes to confident predictions, thus preserving overall accuracy for cases where the model is certain. fairness reliability transparency applicable-models/agnostic assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/sensitive-attributes data-requirements/labelled-data data-requirements/prediction-probabilities data-type/any evidence-type/quantitative-metric evidence-type/fairness-metric expertise-needed/statistics expertise-needed/ml-engineering fairness-approach/group lifecycle-stage/post-processing technique-type/algorithmic"
+    "searchText": "reject option classification a post-processing fairness technique that modifies predictions in regions of high uncertainty to favour disadvantaged groups and achieve fairness objectives. the method identifies a 'rejection region' where the model's confidence is low (typically near the decision boundary) and reassigns predictions within this region to benefit underrepresented groups. by leveraging model uncertainty, this approach can improve fairness metrics like demographic parity or equalised odds whilst minimising changes to confident predictions, thus preserving overall accuracy for cases where the model is certain. fairness reliability transparency applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/probabilistic-output assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/labelled-data data-requirements/prediction-probabilities data-requirements/sensitive-attributes data-type/any evidence-type/fairness-metric evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/post-processing technique-type/algorithmic"
   },
   {
     "slug": "calibration-with-equality-of-opportunity",
@@ -1315,17 +1460,20 @@
       "Reliability"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
+      "applicable-models/requirements/probabilistic-output",
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/group",
-      "assurance-goal-category/transparency",
       "assurance-goal-category/reliability",
+      "assurance-goal-category/transparency",
       "data-requirements/calibration-set",
-      "data-requirements/sensitive-attributes",
       "data-requirements/labelled-data",
+      "data-requirements/sensitive-attributes",
       "data-type/any",
-      "evidence-type/quantitative-metric",
       "evidence-type/fairness-metric",
+      "evidence-type/quantitative-metric",
       "expertise-needed/ml-engineering",
       "expertise-needed/statistics",
       "fairness-approach/group",
@@ -1333,7 +1481,7 @@
       "lifecycle-stage/model-development/testing",
       "technique-type/algorithmic"
     ],
-    "searchText": "calibration with equality of opportunity a post-processing fairness technique that adjusts model predictions to achieve equal true positive rates across protected groups whilst maintaining calibration within each group. the method addresses fairness by ensuring that qualified individuals from different demographic groups have equal chances of receiving positive predictions, whilst preserving the meaning of probability scores within each group. this technique attempts to balance the competing objectives of group fairness and accurate probability estimation. fairness transparency reliability applicable-models/agnostic assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/transparency assurance-goal-category/reliability data-requirements/calibration-set data-requirements/sensitive-attributes data-requirements/labelled-data data-type/any evidence-type/quantitative-metric evidence-type/fairness-metric expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development lifecycle-stage/model-development/testing technique-type/algorithmic"
+    "searchText": "calibration with equality of opportunity a post-processing fairness technique that adjusts model predictions to achieve equal true positive rates across protected groups whilst maintaining calibration within each group. the method addresses fairness by ensuring that qualified individuals from different demographic groups have equal chances of receiving positive predictions, whilst preserving the meaning of probability scores within each group. this technique attempts to balance the competing objectives of group fairness and accurate probability estimation. fairness transparency reliability applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/probabilistic-output assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/calibration-set data-requirements/labelled-data data-requirements/sensitive-attributes data-type/any evidence-type/fairness-metric evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development lifecycle-stage/model-development/testing technique-type/algorithmic"
   },
   {
     "slug": "equal-opportunity-difference",
@@ -1345,16 +1493,18 @@
       "Reliability"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/group",
-      "assurance-goal-category/transparency",
       "assurance-goal-category/reliability",
-      "data-requirements/sensitive-attributes",
+      "assurance-goal-category/transparency",
       "data-requirements/labelled-data",
+      "data-requirements/sensitive-attributes",
       "data-type/any",
-      "evidence-type/quantitative-metric",
       "evidence-type/fairness-metric",
+      "evidence-type/quantitative-metric",
       "expertise-needed/low",
       "fairness-approach/group",
       "lifecycle-stage/model-development",
@@ -1362,7 +1512,7 @@
       "lifecycle-stage/system-deployment-and-use/monitoring",
       "technique-type/metric"
     ],
-    "searchText": "equal opportunity difference a fairness metric that quantifies discrimination by measuring the difference in true positive rates (recall) between protected and privileged groups. based on hardt et al.'s equality of opportunity framework, this metric computes the maximum difference in tpr across demographic groups, with a value of 0 indicating perfect fairness. the technique provides a mathematical measure of whether qualified individuals from different groups have equal chances of receiving positive predictions. fairness transparency reliability applicable-models/agnostic assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/transparency assurance-goal-category/reliability data-requirements/sensitive-attributes data-requirements/labelled-data data-type/any evidence-type/quantitative-metric evidence-type/fairness-metric expertise-needed/low fairness-approach/group lifecycle-stage/model-development lifecycle-stage/model-development/testing lifecycle-stage/system-deployment-and-use/monitoring technique-type/metric"
+    "searchText": "equal opportunity difference a fairness metric that quantifies discrimination by measuring the difference in true positive rates (recall) between protected and privileged groups. based on hardt et al.'s equality of opportunity framework, this metric computes the maximum difference in tpr across demographic groups, with a value of 0 indicating perfect fairness. the technique provides a mathematical measure of whether qualified individuals from different groups have equal chances of receiving positive predictions. fairness transparency reliability applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/labelled-data data-requirements/sensitive-attributes data-type/any evidence-type/fairness-metric evidence-type/quantitative-metric expertise-needed/low fairness-approach/group lifecycle-stage/model-development lifecycle-stage/model-development/testing lifecycle-stage/system-deployment-and-use/monitoring technique-type/metric"
   },
   {
     "slug": "average-odds-difference",
@@ -1373,7 +1523,9 @@
       "Reliability"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
       "assurance-goal-category/fairness",
       "assurance-goal-category/reliability",
       "data-requirements/sensitive-attributes",
@@ -1385,7 +1537,7 @@
       "lifecycle-stage/testing",
       "technique-type/metric"
     ],
-    "searchText": "average odds difference average odds difference measures fairness by calculating the average difference in both false positive rates and true positive rates between different demographic groups. this metric captures how consistently a model performs across groups for both positive and negative predictions. a value of 0 indicates perfect fairness under the equalized odds criterion, while larger absolute values indicate greater disparities in model performance between groups. fairness reliability applicable-models/agnostic assurance-goal-category/fairness assurance-goal-category/reliability data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric expertise-needed/low fairness-approach/group lifecycle-stage/model-development lifecycle-stage/testing technique-type/metric"
+    "searchText": "average odds difference average odds difference measures fairness by calculating the average difference in both false positive rates and true positive rates between different demographic groups. this metric captures how consistently a model performs across groups for both positive and negative predictions. a value of 0 indicates perfect fairness under the equalized odds criterion, while larger absolute values indicate greater disparities in model performance between groups. fairness reliability applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box assurance-goal-category/fairness assurance-goal-category/reliability data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric expertise-needed/low fairness-approach/group lifecycle-stage/model-development lifecycle-stage/testing technique-type/metric"
   },
   {
     "slug": "path-specific-counterfactual-fairness-assessment",
@@ -1397,25 +1549,27 @@
       "Reliability"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/causal",
-      "assurance-goal-category/transparency",
       "assurance-goal-category/reliability",
-      "data-requirements/sensitive-attributes",
+      "assurance-goal-category/transparency",
       "data-requirements/causal-graph",
+      "data-requirements/sensitive-attributes",
       "data-type/tabular",
-      "evidence-type/quantitative-metric",
       "evidence-type/causal-analysis",
+      "evidence-type/quantitative-metric",
       "expertise-needed/causal-inference",
-      "expertise-needed/statistics",
       "expertise-needed/ml-engineering",
+      "expertise-needed/statistics",
       "fairness-approach/causal",
       "lifecycle-stage/model-development",
       "lifecycle-stage/model-evaluation",
       "technique-type/metric"
     ],
-    "searchText": "path-specific counterfactual fairness assessment a causal fairness evaluation technique that assesses algorithmic discrimination by examining specific causal pathways in a model's decision-making process. unlike general counterfactual fairness, this approach enables practitioners to identify and intervene on particular causal paths that may introduce bias whilst preserving other legitimate pathways. the method uses causal graphs to distinguish between direct discrimination (through protected attributes) and indirect discrimination (through seemingly neutral factors that correlate with protected attributes), allowing for more nuanced fairness assessments in complex causal settings. fairness transparency reliability applicable-models/agnostic assurance-goal-category/fairness assurance-goal-category/fairness/causal assurance-goal-category/transparency assurance-goal-category/reliability data-requirements/sensitive-attributes data-requirements/causal-graph data-type/tabular evidence-type/quantitative-metric evidence-type/causal-analysis expertise-needed/causal-inference expertise-needed/statistics expertise-needed/ml-engineering fairness-approach/causal lifecycle-stage/model-development lifecycle-stage/model-evaluation technique-type/metric"
+    "searchText": "path-specific counterfactual fairness assessment a causal fairness evaluation technique that assesses algorithmic discrimination by examining specific causal pathways in a model's decision-making process. unlike general counterfactual fairness, this approach enables practitioners to identify and intervene on particular causal paths that may introduce bias whilst preserving other legitimate pathways. the method uses causal graphs to distinguish between direct discrimination (through protected attributes) and indirect discrimination (through seemingly neutral factors that correlate with protected attributes), allowing for more nuanced fairness assessments in complex causal settings. fairness transparency reliability applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box assurance-goal-category/fairness assurance-goal-category/fairness/causal assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/causal-graph data-requirements/sensitive-attributes data-type/tabular evidence-type/causal-analysis evidence-type/quantitative-metric expertise-needed/causal-inference expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/causal lifecycle-stage/model-development lifecycle-stage/model-evaluation technique-type/metric"
   },
   {
     "slug": "bayesian-fairness-regularization",
@@ -1426,7 +1580,12 @@
       "Reliability"
     ],
     "tags": [
-      "applicable-models/agnostic",
+      "applicable-models/architecture/model-agnostic",
+      "applicable-models/paradigm/parametric",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/gradient-access",
+      "applicable-models/requirements/training-data",
+      "applicable-models/requirements/white-box",
       "assurance-goal-category/fairness",
       "assurance-goal-category/reliability",
       "data-requirements/sensitive-attributes",
@@ -1438,6 +1597,6 @@
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "bayesian fairness regularization bayesian fairness regularization incorporates fairness constraints into machine learning models through bayesian methods, treating fairness as a prior distribution or regularization term. this approach includes techniques like fair bayesian optimization that use constrained optimization to tune model hyperparameters whilst enforcing fairness constraints, and methods that add regularization terms to objective functions to penalize discriminatory predictions. the technique allows for probabilistic interpretation of fairness constraints and can account for uncertainty in both model parameters and fairness requirements. fairness reliability applicable-models/agnostic assurance-goal-category/fairness assurance-goal-category/reliability data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development technique-type/algorithmic"
+    "searchText": "bayesian fairness regularization bayesian fairness regularization incorporates fairness constraints into machine learning models through bayesian methods, treating fairness as a prior distribution or regularization term. this approach includes techniques like fair bayesian optimization that use constrained optimization to tune model hyperparameters whilst enforcing fairness constraints, and methods that add regularization terms to objective functions to penalize discriminatory predictions. the technique allows for probabilistic interpretation of fairness constraints and can account for uncertainty in both model parameters and fairness requirements. fairness reliability applicable-models/architecture/model-agnostic applicable-models/paradigm/parametric applicable-models/paradigm/supervised applicable-models/requirements/gradient-access applicable-models/requirements/training-data applicable-models/requirements/white-box assurance-goal-category/fairness assurance-goal-category/reliability data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development technique-type/algorithmic"
   }
 ]

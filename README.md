@@ -13,10 +13,10 @@ assurance methods.
 
 ## ✨ Features
 
-- **92 Comprehensive Techniques**: Detailed catalogue of responsible AI
-  techniques
-- **6 Assurance Goals**: Organised by explainability, fairness, privacy,
-  reliability, safety, and transparency
+- **Approximately 100 Comprehensive Techniques**: Detailed catalogue of
+  responsible AI techniques
+- **7 Assurance Goals**: Organised by explainability, fairness, privacy,
+  reliability, safety, security, and transparency
 - **Tag Filtering**: Filter by tags, such as `#expertise-level`,
   `#lifecycle-stage`, `#applicable-models`, and more
 - **Static Site Generation**: Fast deployment via GitHub Pages
@@ -91,7 +91,7 @@ pnpm dev
 # Type checking
 pnpm type-check
 
-# Linting
+# Linting (with ultracite)
 pnpm lint
 
 # Format code
@@ -106,15 +106,30 @@ pnpm serve
 ```
 tea-techniques/
 ├── app/                  # Next.js App Router pages
+│   ├── about/            # About pages (project info, evaluation)
+│   ├── categories/       # Assurance goal category pages
+│   ├── docs/             # Documentation pages
+│   ├── filters/          # Filter-based browsing pages
+│   ├── techniques/       # Individual technique pages
+│   └── wizard/           # Interactive technique finder
 ├── components/           # React components
 │   ├── ui/               # shadcn/ui components
 │   ├── layout/           # Layout components
 │   └── technique/        # Technique-specific components
-├── lib/                  # Utility functions and types
+├── lib/                  # Core utilities and logic
+│   ├── data/             # Data access and definitions
+│   └── wizard/           # Wizard state machine (XState)
 ├── public/
 │   └── data/             # Static JSON data files
-├── scripts/              # Build and validation scripts
-└── docs/                 # Project documentation
+│       ├── categories/   # Assurance goal hierarchies
+│       ├── filters/      # Filter combinations (~184 files)
+│       ├── search/       # Pre-built search indices
+│       └── techniques/   # Individual technique data (92 files)
+├── scripts/              # Build and data generation
+│   ├── generate-static-data.js  # Generate filter/category JSONs
+│   ├── validate-data.js         # Data validation
+│   └── generate-sitemap.js      # Sitemap generation
+└── schemas/              # JSON schemas for data validation
 ```
 
 ## 🤝 Contributing

@@ -16,7 +16,6 @@
         "Reliability"
       ],
       "tags": [
-        "applicable-models/agnostic",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/attribution-methods/perturbation-based",
         "assurance-goal-category/explainability/explains/feature-importance",
@@ -31,7 +30,9 @@
         "explanatory-scope/global",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box"
       ],
       "example_use_cases": [
         {
@@ -117,7 +118,6 @@
         "Reliability"
       ],
       "tags": [
-        "applicable-models/tree-based",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/attribution-methods/model-specific",
         "assurance-goal-category/explainability/explains/feature-importance",
@@ -130,7 +130,10 @@
         "expertise-needed/statistics",
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/tree-based",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/white-box"
       ],
       "example_use_cases": [
         {
@@ -217,7 +220,6 @@
         "Explainability"
       ],
       "tags": [
-        "applicable-models/neural-network",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/attribution-methods/gradient-based",
         "assurance-goal-category/explainability/explains/feature-importance",
@@ -232,7 +234,12 @@
         "expertise-needed/statistics",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/differentiable"
       ],
       "example_use_cases": [
         {
@@ -317,7 +324,6 @@
         "Transparency"
       ],
       "tags": [
-        "applicable-models/neural-network",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/attribution-methods/gradient-based",
         "assurance-goal-category/explainability/representation-analysis/decomposition",
@@ -333,7 +339,10 @@
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/requirements/white-box",
+        "applicable-models/requirements/differentiable"
       ],
       "example_use_cases": [
         {
@@ -411,7 +420,6 @@
         "Transparency"
       ],
       "tags": [
-        "applicable-models/neural-network",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/attribution-methods/model-specific",
         "assurance-goal-category/explainability/representation-analysis/decomposition",
@@ -428,7 +436,11 @@
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/requirements/white-box",
+        "applicable-models/requirements/differentiable"
       ],
       "example_use_cases": [
         {
@@ -515,7 +527,6 @@
         "Transparency"
       ],
       "tags": [
-        "applicable-models/recurrent-neural-network",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/representation-analysis/decomposition",
         "assurance-goal-category/explainability/attribution-methods/model-specific",
@@ -531,7 +542,10 @@
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/neural-networks/recurrent",
+        "applicable-models/requirements/white-box",
+        "applicable-models/requirements/architecture-specific"
       ],
       "example_use_cases": [
         {
@@ -634,8 +648,6 @@
         "Explainability"
       ],
       "tags": [
-        "applicable-models/neural-network",
-        "applicable-models/cnn",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/representation-analysis/decomposition",
         "assurance-goal-category/explainability/attribution-methods/gradient-based",
@@ -649,7 +661,11 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/differentiable",
+        "applicable-models/requirements/white-box"
       ],
       "example_use_cases": [
         {
@@ -721,7 +737,6 @@
         "Fairness"
       ],
       "tags": [
-        "applicable-models/agnostic",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/causal-analysis/interaction-effects",
         "assurance-goal-category/explainability/attribution-methods/perturbation-based",
@@ -736,7 +751,9 @@
         "expertise-needed/statistics",
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box"
       ],
       "example_use_cases": [
         {
@@ -822,9 +839,16 @@
         "Safety"
       ],
       "tags": [
-        "applicable-models/transformer",
-        "applicable-models/llm",
+        "applicable-models/architecture/neural-networks/transformer",
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/white-box",
         "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/fairness",
         "assurance-goal-category/safety",
         "data-requirements/no-special-requirements",
@@ -834,10 +858,7 @@
         "expertise-needed/ml-engineering",
         "lifecycle-stage/model-development",
         "lifecycle-stage/testing",
-        "technique-type/gradient-based",
-        "assurance-goal-category/explainability/attribution-methods/gradient-based",
-        "assurance-goal-category/explainability/explains/feature-importance",
-        "assurance-goal-category/explainability/property/completeness"
+        "technique-type/gradient-based"
       ],
       "example_use_cases": [
         {

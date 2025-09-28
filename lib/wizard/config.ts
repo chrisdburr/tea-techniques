@@ -14,7 +14,7 @@ export const wizardConfig: WizardConfig = {
       title: 'I know my model type',
       description: 'Start with your AI/ML model',
       icon: '🤖',
-      startQuestion: 'model-type',
+      startQuestion: 'model-architecture',
     },
     {
       id: 'by-technique',
@@ -124,40 +124,90 @@ export const wizardConfig: WizardConfig = {
       skipIfUniform: true,
     },
 
-    'model-type': {
-      id: 'model-type',
+    'model-architecture': {
+      id: 'model-architecture',
       text: 'What type of model are you using?',
       helpText: 'Select the AI/ML model architecture',
       helpItems: {
-        'Neural Networks': 'Deep learning models (CNN, RNN, Transformer)',
-        'Large Language Models': 'GPT, Claude, Gemini, LLaMA, etc.',
-        'Traditional ML': 'Random forests, SVM, linear models',
-        'Probabilistic Models': 'Bayesian networks, Gaussian processes',
-        'Other Models': 'GANs, reinforcement learning, etc.',
+        'Model-Agnostic': 'Works with any model (black-box techniques)',
+        'Neural Networks': 'Deep learning models (CNN, RNN, Transformer, LLM)',
+        'Tree-Based': 'Decision trees, Random Forests, XGBoost',
+        'Linear Models': 'Linear/Logistic regression, GAMs',
+        Probabilistic: 'Bayesian networks, Gaussian processes',
+        Ensemble: 'Combinations of multiple models',
       },
       type: 'single',
-      filterTag: 'applicable-models',
+      filterTag: 'applicable-models/architecture',
       options: [
         {
-          value: 'neural-network',
+          value: 'architecture/model-agnostic',
+          label: 'Any Model / Not Sure',
+          description: 'Works with any model type',
+        },
+        {
+          value: 'architecture/neural-networks',
           label: 'Neural Networks',
-          description: 'CNN, RNN, Transformer',
+          description: 'Deep learning models',
         },
         {
-          value: 'llm',
+          value: 'architecture/neural-networks/transformer/llm',
           label: 'Large Language Models',
-          description: 'GPT, Claude, etc.',
+          description: 'GPT, Claude, Gemini, etc.',
         },
         {
-          value: 'traditional',
-          label: 'Traditional ML',
-          description: 'Tree-based, linear models',
+          value: 'architecture/tree-based',
+          label: 'Tree-Based Models',
+          description: 'Decision trees, Random Forests, XGBoost',
         },
-        { value: 'probabilistic', label: 'Probabilistic Models' },
-        { value: 'other', label: 'Other specific models' },
-        { value: 'agnostic', label: "Not sure / Doesn't matter" },
+        {
+          value: 'architecture/linear-models',
+          label: 'Linear Models',
+          description: 'Linear/Logistic regression',
+        },
+        {
+          value: 'architecture/probabilistic',
+          label: 'Probabilistic Models',
+          description: 'Bayesian networks, GPs',
+        },
+        {
+          value: 'architecture/ensemble',
+          label: 'Ensemble Methods',
+          description: 'Multiple model combinations',
+        },
       ],
       allowNotSure: false,
+    },
+
+    'model-access': {
+      id: 'model-access',
+      text: 'What level of access do you have to the model?',
+      helpText: 'How much visibility into the model internals',
+      helpItems: {
+        'Black-box': 'Only input/output access, no internals visible',
+        'Gray-box': 'Partial access (predictions, some parameters)',
+        'White-box': 'Full transparency (weights, gradients, architecture)',
+      },
+      type: 'single',
+      filterTag: 'applicable-models/requirements',
+      options: [
+        {
+          value: 'requirements/black-box',
+          label: 'Black-box',
+          description: 'Input/output only',
+        },
+        {
+          value: 'requirements/gray-box',
+          label: 'Gray-box',
+          description: 'Partial internal access',
+        },
+        {
+          value: 'requirements/white-box',
+          label: 'White-box',
+          description: 'Full transparency',
+        },
+      ],
+      allowNotSure: true,
+      notSureLabel: 'Not sure about access level',
     },
 
     'lifecycle-stage': {
@@ -279,7 +329,8 @@ export const wizardConfig: WizardConfig = {
         'explainability-properties', // Conditional: only if Explainability selected
         'assurance-subcategory', // For non-explainability goals
         'lifecycle-stage',
-        'model-type',
+        'model-architecture',
+        'model-access',
         'expertise-level',
       ],
       adaptiveOrdering: true,
@@ -287,7 +338,8 @@ export const wizardConfig: WizardConfig = {
     'by-model': {
       id: 'by-model',
       questions: [
-        'model-type',
+        'model-architecture',
+        'model-access',
         'assurance-goal',
         'lifecycle-stage',
         'technique-type',
@@ -299,7 +351,8 @@ export const wizardConfig: WizardConfig = {
       questions: [
         'technique-type',
         'assurance-goal',
-        'model-type',
+        'model-architecture',
+        'model-access',
         'lifecycle-stage',
       ],
       adaptiveOrdering: false,
@@ -308,7 +361,7 @@ export const wizardConfig: WizardConfig = {
 
   resultsConfig: {
     minResults: 3,
-    idealResults: 8,
+    idealResults: 5, // Lowered to ensure more questions are asked
     maxResults: 15,
   },
 };

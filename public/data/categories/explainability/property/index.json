@@ -22,7 +22,6 @@
         "Reliability"
       ],
       "tags": [
-        "applicable-models/agnostic",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/attribution-methods/perturbation-based",
         "assurance-goal-category/explainability/explains/feature-importance",
@@ -37,7 +36,9 @@
         "explanatory-scope/global",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box"
       ],
       "example_use_cases": [
         {
@@ -123,7 +124,6 @@
         "Reliability"
       ],
       "tags": [
-        "applicable-models/tree-based",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/attribution-methods/model-specific",
         "assurance-goal-category/explainability/explains/feature-importance",
@@ -136,7 +136,10 @@
         "expertise-needed/statistics",
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/tree-based",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/white-box"
       ],
       "example_use_cases": [
         {
@@ -223,7 +226,6 @@
         "Explainability"
       ],
       "tags": [
-        "applicable-models/neural-network",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/attribution-methods/gradient-based",
         "assurance-goal-category/explainability/explains/feature-importance",
@@ -238,7 +240,12 @@
         "expertise-needed/statistics",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/differentiable"
       ],
       "example_use_cases": [
         {
@@ -323,7 +330,6 @@
         "Transparency"
       ],
       "tags": [
-        "applicable-models/neural-network",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/attribution-methods/gradient-based",
         "assurance-goal-category/explainability/representation-analysis/decomposition",
@@ -339,7 +345,10 @@
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/requirements/white-box",
+        "applicable-models/requirements/differentiable"
       ],
       "example_use_cases": [
         {
@@ -417,7 +426,6 @@
         "Transparency"
       ],
       "tags": [
-        "applicable-models/neural-network",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/attribution-methods/model-specific",
         "assurance-goal-category/explainability/representation-analysis/decomposition",
@@ -434,7 +442,11 @@
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/requirements/white-box",
+        "applicable-models/requirements/differentiable"
       ],
       "example_use_cases": [
         {
@@ -521,7 +533,6 @@
         "Transparency"
       ],
       "tags": [
-        "applicable-models/recurrent-neural-network",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/representation-analysis/decomposition",
         "assurance-goal-category/explainability/attribution-methods/model-specific",
@@ -537,7 +548,10 @@
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/neural-networks/recurrent",
+        "applicable-models/requirements/white-box",
+        "applicable-models/requirements/architecture-specific"
       ],
       "example_use_cases": [
         {
@@ -640,8 +654,6 @@
         "Explainability"
       ],
       "tags": [
-        "applicable-models/neural-network",
-        "applicable-models/cnn",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/representation-analysis/decomposition",
         "assurance-goal-category/explainability/attribution-methods/gradient-based",
@@ -655,7 +667,11 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/differentiable",
+        "applicable-models/requirements/white-box"
       ],
       "example_use_cases": [
         {
@@ -727,7 +743,6 @@
         "Fairness"
       ],
       "tags": [
-        "applicable-models/agnostic",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/causal-analysis/interaction-effects",
         "assurance-goal-category/explainability/attribution-methods/perturbation-based",
@@ -742,7 +757,9 @@
         "expertise-needed/statistics",
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box"
       ],
       "example_use_cases": [
         {
@@ -828,9 +845,16 @@
         "Safety"
       ],
       "tags": [
-        "applicable-models/transformer",
-        "applicable-models/llm",
+        "applicable-models/architecture/neural-networks/transformer",
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/white-box",
         "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/fairness",
         "assurance-goal-category/safety",
         "data-requirements/no-special-requirements",
@@ -840,10 +864,7 @@
         "expertise-needed/ml-engineering",
         "lifecycle-stage/model-development",
         "lifecycle-stage/testing",
-        "technique-type/gradient-based",
-        "assurance-goal-category/explainability/attribution-methods/gradient-based",
-        "assurance-goal-category/explainability/explains/feature-importance",
-        "assurance-goal-category/explainability/property/completeness"
+        "technique-type/gradient-based"
       ],
       "example_use_cases": [
         {
@@ -924,7 +945,6 @@
         "Reliability"
       ],
       "tags": [
-        "applicable-models/agnostic",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/attribution-methods/perturbation-based",
         "assurance-goal-category/explainability/explains/feature-importance",
@@ -937,7 +957,9 @@
         "expertise-needed/statistics",
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box"
       ],
       "example_use_cases": [
         {
@@ -1018,12 +1040,17 @@
         "Reliability"
       ],
       "tags": [
-        "applicable-models/neural-network",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/probabilistic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/architecture-specific",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/probabilistic-output",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
         "assurance-goal-category/explainability/explains/prediction-confidence",
         "assurance-goal-category/explainability/property/consistency",
         "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
         "assurance-goal-category/reliability",
         "data-requirements/no-special-requirements",
         "data-type/any",
@@ -1121,14 +1148,18 @@
         "Safety"
       ],
       "tags": [
-        "applicable-models/neural-network",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/probabilistic-output",
+        "applicable-models/requirements/white-box",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
         "assurance-goal-category/explainability/attribution-methods/perturbation-based",
-        "assurance-goal-category/explainability/explains/prediction-confidence",
         "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/prediction-confidence",
         "assurance-goal-category/explainability/property/consistency",
         "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
         "assurance-goal-category/reliability",
         "assurance-goal-category/safety",
         "data-requirements/no-special-requirements",
@@ -1232,7 +1263,8 @@
         "Reliability"
       ],
       "tags": [
-        "applicable-models/agnostic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/attribution-methods/perturbation-based",
         "assurance-goal-category/explainability/explains/feature-importance",
@@ -1333,25 +1365,27 @@
         "Safety"
       ],
       "tags": [
-        "applicable-models/llm",
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/paradigm/generative",
+        "applicable-models/requirements/black-box",
         "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/explains/prediction-confidence",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/uncertainty-analysis/sensitivity-testing",
         "assurance-goal-category/reliability",
         "assurance-goal-category/safety",
         "data-requirements/no-special-requirements",
         "data-type/text",
         "evidence-type/quantitative-metric",
-        "expertise-needed/statistics",
-        "expertise-needed/linguistics",
         "expertise-needed/experimental-design",
+        "expertise-needed/linguistics",
+        "expertise-needed/statistics",
         "lifecycle-stage/model-development",
         "lifecycle-stage/model-evaluation",
-        "technique-type/experimental",
-        "assurance-goal-category/explainability/uncertainty-analysis/sensitivity-testing",
-        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
-        "assurance-goal-category/explainability/explains/internal-mechanisms",
-        "assurance-goal-category/explainability/explains/prediction-confidence",
-        "assurance-goal-category/explainability/property/consistency",
-        "assurance-goal-category/explainability/property/fidelity"
+        "technique-type/experimental"
       ],
       "example_use_cases": [
         {
@@ -1427,7 +1461,6 @@
         "Transparency"
       ],
       "tags": [
-        "applicable-models/linear-model",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/attribution-methods/model-specific",
         "assurance-goal-category/explainability/explains/feature-importance",
@@ -1441,7 +1474,11 @@
         "expertise-needed/low",
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
-        "technique-type/metric"
+        "technique-type/metric",
+        "applicable-models/architecture/linear-models",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/white-box"
       ],
       "example_use_cases": [
         {
@@ -1485,7 +1522,6 @@
         "Transparency"
       ],
       "tags": [
-        "applicable-models/agnostic",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/surrogate-models/local-surrogates",
         "assurance-goal-category/explainability/attribution-methods/perturbation-based",
@@ -1501,7 +1537,9 @@
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box"
       ],
       "example_use_cases": [
         {
@@ -1590,7 +1628,6 @@
         "Transparency"
       ],
       "tags": [
-        "applicable-models/agnostic",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/surrogate-models/global-surrogates",
         "assurance-goal-category/explainability/explains/feature-importance",
@@ -1604,7 +1641,9 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box"
       ],
       "example_use_cases": [
         {
@@ -1661,14 +1700,15 @@
         "Explainability"
       ],
       "tags": [
-        "applicable-models/agnostic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/explainability/visualization-methods/feature-relationships",
         "assurance-goal-category/explainability/attribution-methods/perturbation-based",
-        "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/property/comprehensibility",
         "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/visualization-methods/feature-relationships",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/visualization",
@@ -1762,18 +1802,19 @@
         "Explainability"
       ],
       "tags": [
-        "applicable-models/agnostic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/explainability/visualization-methods/feature-relationships",
-        "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/visualization-methods/feature-relationships",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/visualization",
         "expertise-needed/low",
-        "explanatory-scope/local",
         "explanatory-scope/global",
+        "explanatory-scope/local",
         "lifecycle-stage/model-development",
         "technique-type/visualization"
       ],
@@ -1855,14 +1896,15 @@
         "Explainability"
       ],
       "tags": [
-        "applicable-models/rnn",
-        "applicable-models/cnn",
+        "applicable-models/architecture/neural-networks/recurrent",
+        "applicable-models/requirements/architecture-specific",
+        "applicable-models/requirements/model-internals",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/explainability/visualization-methods/attention-patterns",
-        "assurance-goal-category/explainability/representation-analysis/decomposition",
-        "assurance-goal-category/explainability/explains/internal-mechanisms",
         "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
         "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/visualization-methods/attention-patterns",
         "data-requirements/access-to-model-internals",
         "data-type/any",
         "evidence-type/visualization",
@@ -1954,11 +1996,12 @@
         "Explainability"
       ],
       "tags": [
-        "applicable-models/agnostic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/explainability/representation-analysis/dimensionality-reduction",
         "assurance-goal-category/explainability/explains/data-patterns",
         "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/representation-analysis/dimensionality-reduction",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/visualization",
@@ -2044,12 +2087,19 @@
         "Privacy"
       ],
       "tags": [
-        "applicable-models/agnostic",
+        "applicable-models/architecture/linear-models",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/differentiable",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/explainability/instance-based/influence-analysis",
         "assurance-goal-category/explainability/attribution-methods/gradient-based",
-        "assurance-goal-category/explainability/explains/data-patterns",
         "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/instance-based/influence-analysis",
         "assurance-goal-category/explainability/property/causality",
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/fairness",
@@ -2163,14 +2213,15 @@
         "Transparency"
       ],
       "tags": [
-        "applicable-models/agnostic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/explainability/surrogate-models/rule-extraction",
         "assurance-goal-category/explainability/explains/decision-boundaries",
         "assurance-goal-category/explainability/explains/feature-importance",
-        "assurance-goal-category/explainability/property/sparsity",
-        "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/surrogate-models/rule-extraction",
         "assurance-goal-category/transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
@@ -2250,21 +2301,23 @@
     {
       "slug": "rulefit",
       "name": "RuleFit",
-      "description": "RuleFit is a method that creates an interpretable model by combining linear terms with decision rules. It first extracts potential rules from ensemble trees, then builds a sparse linear model where those rules (binary conditions) and original features are used as predictors, with regularization to keep the model simple. The final model is a linear combination of a small set of rules and original features, balancing interpretability with predictive power.",
+      "description": "RuleFit creates interpretable surrogate models that can explain complex black-box models or serve as interpretable alternatives. It works by learning a sparse linear model that combines automatically extracted decision rules with original features. The technique first builds tree ensembles to generate candidate rules, then uses LASSO regression to select the most important rules and features. The resulting model provides global explanations through human-readable rules (e.g., 'IF age > 50 AND income < 30k THEN ...') combined with linear feature weights, making complex model behavior transparent and auditable.",
       "assurance_goals": [
         "Explainability",
         "Transparency"
       ],
       "tags": [
-        "applicable-models/agnostic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/training-data",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/explainability/surrogate-models/rule-extraction",
-        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
-        "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/explains/decision-boundaries",
-        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/property/comprehensibility",
         "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+        "assurance-goal-category/explainability/surrogate-models/rule-extraction",
         "assurance-goal-category/transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
@@ -2357,22 +2410,26 @@
         "Safety"
       ],
       "tags": [
-        "applicable-models/neural-network",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/explainability/model-simplification/knowledge-transfer",
-        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
-        "assurance-goal-category/explainability/explains/internal-mechanisms",
         "assurance-goal-category/explainability/explains/decision-boundaries",
-        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/model-simplification/knowledge-transfer",
         "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
         "assurance-goal-category/reliability",
         "assurance-goal-category/safety",
         "data-requirements/access-to-training-data",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
-        "lifecycle-stage/model-development",
         "lifecycle-stage/deployment",
+        "lifecycle-stage/model-development",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -2456,26 +2513,28 @@
         "Reliability"
       ],
       "tags": [
-        "applicable-models/gam",
-        "applicable-models/linear-model",
-        "assurance-goal-category/transparency",
+        "applicable-models/architecture/linear-models/gam",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/white-box",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
-        "assurance-goal-category/explainability/visualization-methods/feature-relationships",
-        "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/property/comprehensibility",
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+        "assurance-goal-category/explainability/visualization-methods/feature-relationships",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
         "data-requirements/labelled-data",
         "data-type/tabular",
         "evidence-type/quantitative-metric",
         "evidence-type/visualisation",
         "expertise-needed/statistics",
         "explanatory-scope/global",
-        "lifecycle-stage/project-design",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/project-design",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -2554,9 +2613,17 @@
         "Safety"
       ],
       "tags": [
-        "applicable-models/llm",
-        "applicable-models/transformer",
+        "applicable-models/architecture/neural-networks/transformer",
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/paradigm/generative",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/white-box",
         "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/causal-analysis/mediation-analysis",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/causality",
+        "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/reliability",
         "assurance-goal-category/safety",
         "data-requirements/access-to-model-internals",
@@ -2566,12 +2633,7 @@
         "expertise-needed/ml-engineering",
         "lifecycle-stage/model-development",
         "lifecycle-stage/post-deployment",
-        "technique-type/mechanistic-interpretability",
-        "assurance-goal-category/explainability/causal-analysis/mediation-analysis",
-        "assurance-goal-category/explainability/explains/causal-pathways",
-        "assurance-goal-category/explainability/explains/internal-mechanisms",
-        "assurance-goal-category/explainability/property/causality",
-        "assurance-goal-category/explainability/property/fidelity"
+        "technique-type/mechanistic-interpretability"
       ],
       "example_use_cases": [
         {
@@ -2621,13 +2683,15 @@
         "Fairness"
       ],
       "tags": [
-        "applicable-models/neural-network",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/requirements/differentiable",
+        "applicable-models/requirements/gradient-access",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/attribution-methods/gradient-based",
-        "assurance-goal-category/explainability/visualization-methods/activation-maps",
         "assurance-goal-category/explainability/explains/feature-importance",
-        "assurance-goal-category/explainability/property/efficiency",
         "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/explainability/visualization-methods/activation-maps",
         "assurance-goal-category/fairness",
         "data-requirements/access-to-model-internals",
         "data-type/image",
@@ -2698,15 +2762,18 @@
         "Fairness"
       ],
       "tags": [
-        "applicable-models/cnn",
+        "applicable-models/architecture/neural-networks/convolutional",
+        "applicable-models/requirements/architecture-specific",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/white-box",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/explainability/visualization-methods/activation-maps",
         "assurance-goal-category/explainability/attribution-methods/gradient-based",
         "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/explains/internal-mechanisms",
-        "assurance-goal-category/explainability/property/sparsity",
-        "assurance-goal-category/explainability/property/efficiency",
         "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/visualization-methods/activation-maps",
         "assurance-goal-category/fairness",
         "data-requirements/access-to-model-internals",
         "data-type/image",
@@ -2792,27 +2859,29 @@
         "Transparency"
       ],
       "tags": [
-        "applicable-models/transformer",
+        "applicable-models/architecture/neural-networks/transformer",
+        "applicable-models/requirements/architecture-specific",
+        "applicable-models/requirements/model-internals",
         "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
         "assurance-goal-category/explainability/feature-analysis",
         "assurance-goal-category/explainability/feature-analysis/importance-and-attribution",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/explainability/visualization-methods/attention-patterns",
         "assurance-goal-category/fairness",
         "assurance-goal-category/transparency",
         "data-requirements/access-to-model-internals",
-        "data-type/text",
         "data-type/image",
+        "data-type/text",
         "evidence-type/visualization",
         "expertise-needed/ml-engineering",
-        "explanatory-scope/local",
         "explanatory-scope/global",
+        "explanatory-scope/local",
         "lifecycle-stage/model-development",
         "lifecycle-stage/testing",
-        "technique-type/algorithmic",
-        "assurance-goal-category/explainability/visualization-methods/attention-patterns",
-        "assurance-goal-category/explainability/explains/internal-mechanisms",
-        "assurance-goal-category/explainability/explains/data-patterns",
-        "assurance-goal-category/explainability/property/comprehensibility",
-        "assurance-goal-category/explainability/property/efficiency"
+        "technique-type/algorithmic"
       ],
       "example_use_cases": [
         {
@@ -2897,12 +2966,14 @@
         "Transparency"
       ],
       "tags": [
-        "applicable-models/agnostic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/unsupervised",
+        "applicable-models/requirements/black-box",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/explainability/representation-analysis/dimensionality-reduction",
         "assurance-goal-category/explainability/explains/data-patterns",
         "assurance-goal-category/explainability/explains/internal-mechanisms",
         "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/representation-analysis/dimensionality-reduction",
         "assurance-goal-category/transparency",
         "data-requirements/no-special-requirements",
         "data-type/tabular",
@@ -2986,11 +3057,13 @@
         "Explainability"
       ],
       "tags": [
-        "applicable-models/agnostic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/unsupervised",
+        "applicable-models/requirements/black-box",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/explainability/representation-analysis/dimensionality-reduction",
         "assurance-goal-category/explainability/explains/data-patterns",
         "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/representation-analysis/dimensionality-reduction",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -3068,13 +3141,14 @@
         "Explainability"
       ],
       "tags": [
-        "applicable-models/agnostic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/explainability/representation-analysis/dimensionality-reduction",
-        "assurance-goal-category/explainability/visualization-methods/feature-relationships",
         "assurance-goal-category/explainability/explains/data-patterns",
         "assurance-goal-category/explainability/explains/internal-mechanisms",
         "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/representation-analysis/dimensionality-reduction",
+        "assurance-goal-category/explainability/visualization-methods/feature-relationships",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/visualization",
@@ -3146,11 +3220,15 @@
         "Fairness"
       ],
       "tags": [
-        "applicable-models/agnostic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/paradigm/unsupervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/explainability/instance-based/prototypes",
-        "assurance-goal-category/explainability/explains/decision-boundaries",
         "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/instance-based/prototypes",
         "assurance-goal-category/explainability/property/comprehensibility",
         "assurance-goal-category/explainability/property/sparsity",
         "assurance-goal-category/fairness",
@@ -3240,15 +3318,20 @@
         "Transparency"
       ],
       "tags": [
-        "applicable-models/agnostic",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/differentiable",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/white-box",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/explainability/instance-based/counterfactual",
         "assurance-goal-category/explainability/attribution-methods/perturbation-based",
         "assurance-goal-category/explainability/explains/decision-boundaries",
         "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/instance-based/counterfactual",
+        "assurance-goal-category/explainability/property/comprehensibility",
         "assurance-goal-category/explainability/property/counterfactual-validity",
         "assurance-goal-category/explainability/property/sparsity",
-        "assurance-goal-category/explainability/property/comprehensibility",
         "assurance-goal-category/transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
@@ -3344,13 +3427,18 @@
         "Safety"
       ],
       "tags": [
-        "applicable-models/neural-network",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/white-box",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/explainability/model-simplification/pruning",
-        "assurance-goal-category/explainability/explains/internal-mechanisms",
         "assurance-goal-category/explainability/explains/feature-importance",
-        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/model-simplification/pruning",
         "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/sparsity",
         "assurance-goal-category/reliability",
         "assurance-goal-category/safety",
         "data-requirements/access-to-model-internals",
@@ -3434,27 +3522,27 @@
         "Fairness"
       ],
       "tags": [
-        "applicable-models/neural-network",
-        "applicable-models/llm",
-        "applicable-models/transformer",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/white-box",
         "assurance-goal-category/explainability",
-        "assurance-goal-category/safety",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/representation-analysis/concept-identification",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/safety",
         "data-requirements/access-to-model-internals",
         "data-type/text",
         "evidence-type/quantitative-metric",
         "evidence-type/visualisation",
-        "explanatory-scope/local",
-        "explanatory-scope/global",
         "expertise-needed/ml-engineering",
+        "explanatory-scope/global",
+        "explanatory-scope/local",
         "lifecycle-stage/model-development",
-        "lifecycle-stage/testing",
         "lifecycle-stage/monitoring",
-        "technique-type/algorithmic",
-        "assurance-goal-category/explainability/representation-analysis/concept-identification",
-        "assurance-goal-category/explainability/explains/internal-mechanisms",
-        "assurance-goal-category/explainability/explains/data-patterns",
-        "assurance-goal-category/explainability/property/comprehensibility"
+        "lifecycle-stage/testing",
+        "technique-type/algorithmic"
       ],
       "example_use_cases": [
         {
@@ -3562,28 +3650,29 @@
         "Transparency"
       ],
       "tags": [
-        "applicable-models/neural-network",
-        "applicable-models/transformer",
-        "applicable-models/cnn",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/white-box",
         "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/causality",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/representation-analysis/concept-identification",
         "assurance-goal-category/fairness",
         "assurance-goal-category/transparency",
         "data-requirements/access-to-model-internals",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "evidence-type/visualization",
-        "explanatory-scope/local",
-        "explanatory-scope/global",
-        "expertise-needed/ml-engineering",
         "expertise-needed/domain-knowledge",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/global",
+        "explanatory-scope/local",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use/auditing",
-        "technique-type/algorithmic",
-        "assurance-goal-category/explainability/representation-analysis/concept-identification",
-        "assurance-goal-category/explainability/explains/internal-mechanisms",
-        "assurance-goal-category/explainability/explains/causal-pathways",
-        "assurance-goal-category/explainability/property/comprehensibility",
-        "assurance-goal-category/explainability/property/causality"
+        "technique-type/algorithmic"
       ],
       "example_use_cases": [
         {
@@ -3694,7 +3783,8 @@
         "Explainability"
       ],
       "tags": [
-        "applicable-models/agnostic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/attribution-methods/perturbation-based",
         "assurance-goal-category/explainability/explains/feature-importance",

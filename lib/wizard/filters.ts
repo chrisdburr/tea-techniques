@@ -27,8 +27,11 @@ function scorePathItem(
   if (pathItem.question === 'assurance-goal') {
     return scoreAssuranceGoal(technique, pathItem.answer);
   }
-  if (pathItem.question === 'model-type') {
-    return scoreModelType(technique, pathItem.answer as string);
+  if (pathItem.question === 'model-architecture') {
+    return scoreModelArchitecture(technique, pathItem.answer as string);
+  }
+  if (pathItem.question === 'model-access') {
+    return scoreModelAccess(technique, pathItem.answer as string);
   }
   if (pathItem.question === 'lifecycle-stage') {
     return scoreLifecycleStage(technique, pathItem.answer);
@@ -58,8 +61,20 @@ function scoreAssuranceGoal(
     : 0;
 }
 
-function scoreModelType(technique: Technique, answer: string): number {
-  return answer === 'agnostic' || hasModelMatch(technique, answer) ? 100 : 0;
+function scoreModelArchitecture(technique: Technique, answer: string): number {
+  if (answer === 'architecture/model-agnostic') {
+    // Model-agnostic matches all techniques
+    return 100;
+  }
+  return hasModelArchitectureMatch(technique, answer) ? 100 : 0;
+}
+
+function scoreModelAccess(technique: Technique, answer: string): number {
+  if (answer === 'not-sure') {
+    // If unsure, give partial score
+    return 50;
+  }
+  return hasModelAccessMatch(technique, answer) ? 100 : 0;
 }
 
 function scoreLifecycleStage(
@@ -143,31 +158,74 @@ function scoreExplainabilityProperties(
   return matchCount > 0 ? (matchCount / answers.length) * 100 : 0;
 }
 
-// Check if technique matches model type
-function hasModelMatch(technique: Technique, modelType: string): boolean {
+// Check if technique matches model architecture
+function hasModelArchitectureMatch(
+  technique: Technique,
+  architecture: string
+): boolean {
   const modelTags =
     technique.tags?.filter((tag) => tag.startsWith('applicable-models/')) || [];
 
-  if (modelType === 'neural-network') {
+  // Check for model-agnostic techniques
+  if (
+    modelTags.some(
+      (tag) => tag === 'applicable-models/architecture/model-agnostic'
+    )
+  ) {
+    return true;
+  }
+
+  // Direct match on the architecture path
+  if (modelTags.some((tag) => tag.includes(architecture))) {
+    return true;
+  }
+
+  // Handle parent/child relationships
+  // e.g., if user selects "neural-networks", match all neural network subtypes
+  if (architecture === 'architecture/neural-networks') {
     return modelTags.some((tag) =>
-      ['neural-network', 'cnn', 'rnn', 'transformer'].some((type) =>
-        tag.includes(type)
-      )
+      tag.includes('/architecture/neural-networks')
+    );
+  }
+  if (architecture === 'architecture/tree-based') {
+    return modelTags.some((tag) => tag.includes('/architecture/tree-based'));
+  }
+  if (architecture === 'architecture/linear-models') {
+    return modelTags.some((tag) => tag.includes('/architecture/linear-models'));
+  }
+  if (architecture === 'architecture/probabilistic') {
+    return modelTags.some((tag) => tag.includes('/architecture/probabilistic'));
+  }
+
+  return false;
+}
+
+// Check if technique matches model access requirements
+function hasModelAccessMatch(technique: Technique, access: string): boolean {
+  const requirementTags =
+    technique.tags?.filter((tag) =>
+      tag.startsWith('applicable-models/requirements/')
+    ) || [];
+
+  // Map user's access level to compatible requirement tags
+  if (access === 'requirements/black-box') {
+    // Black-box access can use black-box techniques
+    return requirementTags.some((tag) => tag.includes('/black-box'));
+  }
+
+  if (access === 'requirements/gray-box') {
+    // Gray-box can use black-box or gray-box techniques
+    return requirementTags.some(
+      (tag) => tag.includes('/black-box') || tag.includes('/gray-box')
     );
   }
 
-  if (modelType === 'traditional') {
-    return modelTags.some((tag) =>
-      ['tree-based', 'linear', 'logistic-regression', 'ensemble'].some((type) =>
-        tag.includes(type)
-      )
-    );
+  if (access === 'requirements/white-box') {
+    // White-box can use any technique
+    return true;
   }
 
-  return (
-    modelTags.some((tag) => tag.includes(modelType)) ||
-    modelTags.some((tag) => tag.includes('agnostic'))
-  );
+  return false;
 }
 
 // Check if technique matches lifecycle stage
@@ -204,17 +262,39 @@ export function sortTechniquesByRelevance(
   return techniquesWithScores.map((item) => item.technique);
 }
 
-// Helper function to get label for model type
-function getModelTypeLabel(answer: string): string {
+// Helper function to get label for model architecture
+function getModelArchitectureLabel(answer: string): string {
   switch (answer) {
-    case 'neural-network':
+    case 'architecture/model-agnostic':
+      return 'Model-agnostic';
+    case 'architecture/neural-networks':
       return 'Neural Networks';
-    case 'llm':
+    case 'architecture/neural-networks/transformer/llm':
       return 'Large Language Models';
-    case 'traditional':
-      return 'Traditional ML';
+    case 'architecture/tree-based':
+      return 'Tree-based Models';
+    case 'architecture/linear-models':
+      return 'Linear Models';
+    case 'architecture/probabilistic':
+      return 'Probabilistic Models';
+    case 'architecture/ensemble':
+      return 'Ensemble Methods';
     default:
-      return answer;
+      return answer.split('/').pop() || answer;
+  }
+}
+
+// Helper function to get label for model access
+function getModelAccessLabel(answer: string): string {
+  switch (answer) {
+    case 'requirements/black-box':
+      return 'Black-box access';
+    case 'requirements/gray-box':
+      return 'Gray-box access';
+    case 'requirements/white-box':
+      return 'White-box access';
+    default:
+      return answer.split('/').pop() || answer;
   }
 }
 
@@ -266,7 +346,7 @@ export function getMatchReasons(
 
   // Add versatility indicator
   const modelAgnostic = technique.tags?.some((tag) =>
-    tag.includes('applicable-models/agnostic')
+    tag.includes('applicable-models/architecture/model-agnostic')
   );
   if (modelAgnostic && !reasons.some((r) => r.includes('model'))) {
     reasons.push('Works across contexts');
@@ -283,8 +363,11 @@ function getReasonForPathItem(
   if (pathItem.question === 'assurance-goal') {
     return getAssuranceGoalReason(technique, pathItem.answer);
   }
-  if (pathItem.question === 'model-type') {
-    return getModelTypeReason(technique, pathItem.answer as string);
+  if (pathItem.question === 'model-architecture') {
+    return getModelArchitectureReason(technique, pathItem.answer as string);
+  }
+  if (pathItem.question === 'model-access') {
+    return getModelAccessReason(technique, pathItem.answer as string);
   }
   if (pathItem.question === 'lifecycle-stage') {
     return getLifecycleStageReason(technique, pathItem.answer);
@@ -315,15 +398,28 @@ function getAssuranceGoalReason(
   return matchedGoals.length > 0 ? matchedGoals.join(', ') : null;
 }
 
-function getModelTypeReason(
+function getModelArchitectureReason(
   technique: Technique,
   answer: string
 ): string | null {
-  if (answer === 'agnostic') {
+  if (answer === 'architecture/model-agnostic') {
     return 'Works with any model';
   }
-  if (hasModelMatch(technique, answer)) {
-    return getModelTypeLabel(answer);
+  if (hasModelArchitectureMatch(technique, answer)) {
+    return getModelArchitectureLabel(answer);
+  }
+  return null;
+}
+
+function getModelAccessReason(
+  technique: Technique,
+  answer: string
+): string | null {
+  if (answer === 'not-sure') {
+    return null;
+  }
+  if (hasModelAccessMatch(technique, answer)) {
+    return getModelAccessLabel(answer);
   }
   return null;
 }
@@ -442,7 +538,7 @@ function getExplainabilityPropertiesReason(
 // Check if technique is versatile (works in multiple contexts)
 export function isVersatileTechnique(technique: Technique): boolean {
   const modelAgnostic = technique.tags?.some((tag) =>
-    tag.includes('applicable-models/agnostic')
+    tag.includes('applicable-models/architecture/model-agnostic')
   );
 
   const multipleGoals = (technique.assurance_goals?.length || 0) > 2;

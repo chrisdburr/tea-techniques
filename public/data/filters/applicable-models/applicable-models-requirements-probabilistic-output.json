@@ -1,0 +1,1066 @@
+{
+  "tag": {
+    "name": "applicable-models/requirements/probabilistic-output",
+    "slug": "applicable-models-requirements-probabilistic-output",
+    "count": 10,
+    "category": "applicable-models"
+  },
+  "techniques": [
+    {
+      "slug": "monte-carlo-dropout",
+      "name": "Monte Carlo Dropout",
+      "description": "Monte Carlo Dropout estimates prediction uncertainty by applying dropout (randomly setting neural network weights to zero) during inference rather than just training. It performs multiple forward passes through the network with different random dropout patterns and collects the resulting predictions to form a distribution. Low variance across predictions indicates epistemic certainty (the model is confident), while high variance suggests epistemic uncertainty (the model is unsure). This technique transforms any dropout-trained neural network into a Bayesian approximation for uncertainty quantification.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/probabilistic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/architecture-specific",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/probabilistic-output",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/prediction-confidence",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
+        "assurance-goal-category/reliability",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Quantifying diagnostic uncertainty in medical imaging models by running 50+ Monte Carlo forward passes to detect when a chest X-ray classification is highly uncertain, prompting radiologist review for borderline cases.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Estimating prediction confidence in autonomous vehicle perception systems, where high uncertainty in object detection (e.g., variance > 0.3 across MC samples) triggers more conservative driving behaviour or human handover.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing uncertainty estimates in financial fraud detection models, where high epistemic uncertainty (wide prediction variance) indicates the model lacks sufficient training data for similar transaction patterns, requiring manual review.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Only captures epistemic (model) uncertainty, not aleatoric (data) uncertainty, providing an incomplete picture of total prediction uncertainty."
+        },
+        {
+          "description": "Computationally expensive as it requires multiple forward passes (typically 50-100) for each prediction, significantly increasing inference time."
+        },
+        {
+          "description": "Results depend critically on dropout rate matching the training configuration, and poorly calibrated dropout can lead to misleading uncertainty estimates."
+        },
+        {
+          "description": "Approximation quality varies with network architecture and dropout placement, with some configurations providing poor uncertainty calibration despite theoretical foundations."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning",
+          "url": "http://arxiv.org/pdf/1506.02142v6",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yarin Gal",
+            "Zoubin Ghahramani"
+          ],
+          "publication_date": "2016-06-06"
+        },
+        {
+          "title": "mattiasegu/uncertainty_estimation_deep_learning",
+          "url": "https://github.com/mattiasegu/uncertainty_estimation_deep_learning",
+          "source_type": "software_package"
+        },
+        {
+          "title": "uzh-rpg/deep_uncertainty_estimation",
+          "url": "https://github.com/uzh-rpg/deep_uncertainty_estimation",
+          "source_type": "software_package"
+        },
+        {
+          "title": "How certain are tansformers in image classification: uncertainty analysis with Monte Carlo dropout",
+          "url": "https://www.semanticscholar.org/paper/d7ff734c5b62a4a140fd560373d890e43d5b36cf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Md. Farhadul Islam",
+            "Sarah Zabeen",
+            "Md. Azharul Islam",
+            "Fardin Bin Rahman",
+            "Anushua Ahmed",
+            "Dewan Ziaul Karim",
+            "Annajiat Alim Rasel",
+            "Meem Arafat Manab"
+          ]
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "prediction-intervals",
+        "quantile-regression",
+        "conformal-prediction",
+        "deep-ensembles",
+        "bootstrapping",
+        "jackknife-resampling"
+      ]
+    },
+    {
+      "slug": "out-of-distribution-detector-for-neural-networks",
+      "name": "Out-of-DIstribution detector for Neural networks",
+      "description": "ODIN (Out-of-Distribution Detector for Neural Networks) identifies when a neural network encounters inputs significantly different from its training distribution. It enhances detection by applying temperature scaling to soften the model's output distribution and adding small, carefully calibrated perturbations to the input that push in-distribution samples towards higher confidence predictions. By measuring the maximum softmax probability after these adjustments, ODIN can effectively distinguish between in-distribution and out-of-distribution inputs, flagging potentially unreliable predictions before they cause downstream errors.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/probabilistic-output",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/prediction-confidence",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Detecting anomalous medical images in diagnostic systems, where ODIN flags X-rays or scans containing rare pathologies or imaging artefacts not present in training data, preventing misdiagnosis and prompting specialist review.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Protecting autonomous vehicle perception systems by identifying novel road scenarios (e.g., unusual weather conditions, rare obstacle types) that fall outside the training distribution, triggering fallback safety mechanisms.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Monitoring production ML systems for data drift by detecting when incoming customer behaviour patterns deviate significantly from training data, helping explain why model performance may degrade over time.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires careful tuning of temperature scaling and perturbation magnitude parameters, which may need adjustment for different types of out-of-distribution data."
+        },
+        {
+          "description": "Performance degrades when out-of-distribution samples are very similar to training data, making near-distribution detection challenging."
+        },
+        {
+          "description": "Vulnerable to adversarial examples specifically crafted to evade detection by mimicking in-distribution characteristics."
+        },
+        {
+          "description": "Computational overhead from input preprocessing and perturbation generation can impact real-time inference applications."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Enhancing The Reliability of Out-of-distribution Image Detection in Neural Networks",
+          "url": "http://arxiv.org/pdf/1706.02690v5",
+          "source_type": "technical_paper",
+          "authors": [
+            "Shiyu Liang",
+            "Yixuan Li",
+            "R. Srikant"
+          ],
+          "publication_date": "2017-06-08"
+        },
+        {
+          "title": "facebookresearch/odin",
+          "url": "https://github.com/facebookresearch/odin",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Generalized ODIN: Detecting Out-of-distribution Image without Learning from Out-of-distribution Data",
+          "url": "http://arxiv.org/pdf/2002.11297v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yen-Chang Hsu",
+            "Yilin Shen",
+            "Hongxia Jin",
+            "Zsolt Kira"
+          ],
+          "publication_date": "2020-02-26"
+        },
+        {
+          "title": "Detection of out-of-distribution samples using binary neuron activation patterns",
+          "url": "http://arxiv.org/abs/2212.14268",
+          "source_type": "technical_paper",
+          "authors": [
+            "Chachuła, Krystian",
+            "Olber, Bartlomiej",
+            "Popowicz, Adam",
+            "Radlak, Krystian",
+            "Szczepankiewicz, Michal"
+          ],
+          "publication_date": "2023-03-24"
+        },
+        {
+          "title": "Out-of-Distribution Detection with ODIN - A Tutorial",
+          "url": "https://medium.com/@abhaypatil2000/out-of-distribution-detection-using-odin-f1a3e9e6b3b8",
+          "source_type": "tutorial"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "acronym": "ODIN",
+      "related_techniques": [
+        "anomaly-detection"
+      ]
+    },
+    {
+      "slug": "empirical-calibration",
+      "name": "Empirical Calibration",
+      "description": "Empirical calibration adjusts a model's predicted probabilities to match observed frequencies. For example, if events predicted with 80% confidence only occur 60% of the time, calibration would correct this overconfidence. Common techniques include Platt scaling and isotonic regression, which learn transformations that map the model's raw scores to well-calibrated probabilities, improving the reliability of confidence measures for downstream decisions.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/probabilistic-output",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/calibration-set",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting a credit default prediction model's probabilities to ensure that loan applicants with a predicted 30% default risk actually default 30% of the time, improving decision-making.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Calibrating a medical diagnosis model's confidence scores so that stakeholders can meaningfully interpret probability outputs, enabling doctors to make informed decisions about treatment urgency based on reliable confidence estimates.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring that a hiring algorithm's confidence scores are equally well-calibrated across different demographic groups, preventing systematically overconfident predictions for certain populations that could lead to biased decision-making.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires a separate held-out calibration dataset, which reduces the amount of data available for model training."
+        },
+        {
+          "description": "Calibration performance can degrade over time if the underlying data distribution shifts, requiring periodic recalibration."
+        },
+        {
+          "description": "May sacrifice some discriminative power in favour of calibration, potentially reducing the model's ability to distinguish between classes."
+        },
+        {
+          "description": "Calibration methods assume that the calibration set is representative of future data, which may not hold in dynamic environments."
+        }
+      ],
+      "resources": [
+        {
+          "title": "google/empirical_calibration",
+          "url": "https://github.com/google/empirical_calibration",
+          "source_type": "software_package"
+        },
+        {
+          "title": "A Python Library For Empirical Calibration",
+          "url": "http://arxiv.org/pdf/1906.11920v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xiaojing Wang",
+            "Jingang Miao",
+            "Yunting Sun"
+          ],
+          "publication_date": "2019-07-25"
+        },
+        {
+          "title": "Assessing the effectiveness of empirical calibration under different bias scenarios",
+          "url": "http://arxiv.org/pdf/2111.04233v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hon Hwang",
+            "Juan C Quiroz",
+            "Blanca Gallego"
+          ],
+          "publication_date": "2021-11-08"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "temperature-scaling"
+      ]
+    },
+    {
+      "slug": "temperature-scaling",
+      "name": "Temperature Scaling",
+      "description": "Temperature scaling adjusts a model's confidence by applying a single parameter (temperature) to its predictions. When a model is too confident in its wrong answers, temperature scaling can fix this by making the predictions more realistic. It works by dividing the model's outputs by the temperature value before converting them to probabilities. Higher temperatures make the model less confident, whilst lower temperatures increase confidence. The technique maintains the model's accuracy whilst ensuring that when it says it's 90% confident, it's actually right about 90% of the time.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/probabilistic-output",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-requirements/calibration-set",
+        "data-requirements/validation-set",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting a deep learning image classifier's confidence scores to be realistic, ensuring that when it's 90% confident, it's right 90% of the time.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Making medical diagnosis model predictions more trustworthy by providing realistic confidence scores that doctors can interpret and use to make informed decisions about patient care.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring fair treatment across patient demographics by calibrating confidence scores equally across different groups, preventing systematic over-confidence in predictions for certain populations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Only addresses calibration at the overall dataset level, not subgroup-specific miscalibration issues."
+        },
+        {
+          "description": "Does not improve the rank ordering or accuracy of predictions, only adjusts confidence levels."
+        },
+        {
+          "description": "Assumes that calibration errors are consistent across different types of inputs and feature values."
+        },
+        {
+          "description": "Requires a separate validation set for temperature parameter optimisation, which may not be available in small datasets."
+        }
+      ],
+      "resources": [
+        {
+          "title": "gpleiss/temperature_scaling",
+          "url": "https://github.com/gpleiss/temperature_scaling",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Exploring the Impact of Temperature Scaling in Softmax for Classification and Adversarial Robustness",
+          "url": "http://arxiv.org/pdf/2502.20604v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hao Xuan",
+            "Bokai Yang",
+            "Xingyu Li"
+          ],
+          "publication_date": "2025-02-28"
+        },
+        {
+          "title": "Neural Clamping: Joint Input Perturbation and Temperature Scaling for Neural Network Calibration",
+          "url": "http://arxiv.org/pdf/2209.11604v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yung-Chen Tang",
+            "Pin-Yu Chen",
+            "Tsung-Yi Ho"
+          ],
+          "publication_date": "2024-07-24"
+        },
+        {
+          "title": "On Calibration of Modern Neural Networks | arXiv",
+          "url": "https://arxiv.org/abs/1706.04599",
+          "source_type": "technical_paper",
+          "authors": [
+            "Chuan Guo",
+            "Geoff Pleiss",
+            "Yu Sun",
+            "Kilian Q. Weinberger"
+          ],
+          "publication_date": "2017-06-14"
+        },
+        {
+          "title": "On the Limitations of Temperature Scaling for Distributions with Overlaps",
+          "url": "http://arxiv.org/pdf/2306.00740v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Muthu Chidambaram",
+            "Rong Ge"
+          ],
+          "publication_date": "2023-06-01"
+        }
+      ],
+      "complexity_rating": 1,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "empirical-calibration"
+      ]
+    },
+    {
+      "slug": "area-under-precision-recall-curve",
+      "name": "Area Under Precision-Recall Curve",
+      "description": "Area Under Precision-Recall Curve (AUPRC) measures model performance by plotting precision (the proportion of positive predictions that are correct) against recall (the proportion of actual positives that are correctly identified) at various classification thresholds, then calculating the area under the resulting curve. Unlike accuracy or AUC-ROC, AUPRC is particularly valuable for imbalanced datasets where the minority class is of primary interest---a perfect score is 1.0, whilst random performance equals the positive class proportion. By focusing on the precision-recall trade-off, it provides a more informative assessment than overall accuracy for scenarios where false positives and false negatives have different costs, especially when positive examples are rare.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/probabilistic-output",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/labelled-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating fraud detection models where genuine transactions far outnumber fraudulent ones, using AUPRC to optimise the balance between catching fraud (high recall) and minimising false alarms (high precision) for cost-effective operations.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing transparent performance metrics for rare disease detection systems to medical regulators, where AUPRC clearly shows model effectiveness on the minority positive class rather than being masked by high accuracy on negative cases.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring fair evaluation of loan default prediction across demographic groups by comparing AUPRC scores, revealing whether models perform equally well at identifying high-risk borrowers regardless of protected characteristics.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "More sensitive to class distribution than ROC curves, making it difficult to compare models across datasets with different positive class proportions or to set universal performance thresholds."
+        },
+        {
+          "description": "Can be overly optimistic on extremely imbalanced datasets where even random predictions may achieve seemingly high AUPRC scores due to the small positive class size."
+        },
+        {
+          "description": "Provides limited insight into performance at specific operating points, requiring additional analysis to determine optimal threshold selection for deployment."
+        },
+        {
+          "description": "Interpolation methods for calculating the area under the curve can vary between implementations, potentially leading to slightly different scores for the same model."
+        },
+        {
+          "description": "Less interpretable than simple metrics like precision or recall at a fixed threshold, making it harder to communicate performance to non-technical stakeholders."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn Precision-Recall",
+          "url": "https://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html",
+          "source_type": "documentation",
+          "description": "Comprehensive guide to precision-recall curves and AUPRC calculation in scikit-learn with practical examples"
+        },
+        {
+          "title": "Stochastic Optimization of Areas Under Precision-Recall Curves with Provable Convergence",
+          "url": "https://www.semanticscholar.org/paper/c1b5b9dfc7d6e024097f63947aa5db06e1c192d8",
+          "source_type": "technical_paper",
+          "authors": [
+            "Qi Qi",
+            "Youzhi Luo",
+            "Zhao Xu",
+            "Shuiwang Ji",
+            "Tianbao Yang"
+          ],
+          "description": "Technical paper on optimising AUPRC directly during model training with convergence guarantees"
+        },
+        {
+          "title": "A Closer Look at AUROC and AUPRC under Class Imbalance",
+          "url": "http://arxiv.org/pdf/2401.06091v4",
+          "source_type": "technical_paper",
+          "authors": [
+            "Matthew B. A. McDermott",
+            "Haoran Zhang",
+            "Lasse Hyldig Hansen",
+            "Giovanni Angelotti",
+            "Jack Gallifant"
+          ],
+          "publication_date": "2024-01-11",
+          "description": "Recent analysis of AUPRC behaviour under extreme class imbalance with practical recommendations"
+        },
+        {
+          "title": "DominikRafacz/auprc",
+          "url": "https://github.com/DominikRafacz/auprc",
+          "source_type": "software_package",
+          "description": "R package for calculating AUPRC with functions for plotting precision-recall curves and mlr3 integration"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 2,
+      "acronym": "AUPRC",
+      "related_techniques": [
+        "permutation-tests",
+        "cross-validation"
+      ]
+    },
+    {
+      "slug": "confidence-thresholding",
+      "name": "Confidence Thresholding",
+      "description": "Confidence thresholding creates decision boundaries based on model uncertainty scores, routing predictions into different handling workflows depending on their confidence levels. High-confidence predictions (e.g., above 95%) proceed automatically, whilst medium-confidence cases (e.g., 70-95%) may trigger additional validation or human review, and low-confidence predictions (below 70%) receive extensive oversight or default to conservative fallback actions. This technique enables organisations to maintain automated efficiency for clear-cut cases whilst ensuring appropriate human intervention for uncertain decisions, balancing operational speed with risk management across safety-critical applications.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/probabilistic-output",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Implementing tiered confidence thresholds in autonomous vehicle decision-making where high-confidence lane changes (>98%) execute automatically, medium-confidence decisions (85-98%) trigger additional sensor verification, and low-confidence situations (<85%) engage conservative defensive driving modes or request human takeover.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Deploying confidence thresholding in fraud detection systems where high-confidence legitimate transactions (>90%) process immediately, medium-confidence cases (70-90%) undergo additional automated checks, and low-confidence transactions (<70%) require human analyst review, ensuring system reliability through graduated response mechanisms.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Using confidence thresholds in automated loan decisions to provide clear explanations to applicants, where high-confidence approvals include simple explanations, medium-confidence decisions provide detailed reasoning about key factors, and low-confidence cases receive comprehensive explanations with guidance on potential improvements.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Many models produce poorly calibrated confidence scores that don't accurately reflect true prediction uncertainty, leading to overconfident predictions for incorrect outputs or underconfident scores for correct predictions."
+        },
+        {
+          "description": "Threshold selection requires careful calibration and domain expertise, as inappropriate thresholds can either overwhelm human reviewers with too many cases or miss genuinely uncertain decisions that need oversight."
+        },
+        {
+          "description": "High-confidence predictions may still be incorrect or harmful, particularly when models encounter adversarial inputs, out-of-distribution data, or systematic biases that the confidence mechanism doesn't detect."
+        },
+        {
+          "description": "Static thresholds may become inappropriate over time as model performance degrades, data distribution shifts occur, or operational contexts change, requiring ongoing monitoring and adjustment."
+        },
+        {
+          "description": "Implementation complexity increases significantly when managing multiple confidence levels and routing mechanisms, potentially introducing system failures or inconsistencies in how different confidence ranges are handled."
+        }
+      ],
+      "resources": [
+        {
+          "title": "A Novel Dynamic Confidence Threshold Estimation AI Algorithm for Enhanced Object Detection",
+          "url": "https://www.semanticscholar.org/paper/93cda7adfa043c969639e094d6c27b1c4d507208",
+          "source_type": "technical_paper",
+          "authors": [
+            "Mounika Thatikonda",
+            "M. Pk",
+            "Fathi H. Amsaad"
+          ]
+        },
+        {
+          "title": "Improving speech recognition accuracy with multi-confidence thresholding",
+          "url": "https://www.semanticscholar.org/paper/bef1c8668115675f786e5a3c6d165f268e399e9d",
+          "source_type": "technical_paper",
+          "authors": [
+            "Shuangyu Chang"
+          ]
+        },
+        {
+          "title": "Improving the Robustness and Generalization of Deep Neural Network with Confidence Threshold Reduction",
+          "url": "http://arxiv.org/pdf/2206.00913v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xiangyuan Yang",
+            "Jie Lin",
+            "Hanlin Zhang",
+            "Xinyu Yang",
+            "Peng Zhao"
+          ],
+          "publication_date": "2022-06-02"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "internal-review-boards",
+        "red-teaming",
+        "human-in-the-loop-safeguards",
+        "runtime-monitoring-and-circuit-breakers"
+      ]
+    },
+    {
+      "slug": "equalised-odds-post-processing",
+      "name": "Equalised Odds Post-Processing",
+      "description": "A post-processing fairness technique based on Hardt et al.'s seminal work that adjusts classification thresholds after model training to achieve equal true positive rates and false positive rates across demographic groups. The method uses group-specific decision thresholds, potentially with randomisation, to satisfy the equalised odds constraint whilst preserving model utility. This approach enables fairness mitigation without retraining, making it applicable to existing deployed models or when training data access is restricted.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/probabilistic-output",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/testing",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Post-processing a criminal recidivism risk assessment model to ensure equal error rates across racial groups, using group-specific thresholds to achieve equal TPR and FPR whilst maintaining predictive accuracy for judicial decision support.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Adjusting a hiring algorithm's decision thresholds to ensure equal opportunities for qualified candidates across gender groups, providing transparent evidence that the screening process treats all demographics equitably.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Calibrating a medical diagnosis model's outputs to maintain equal detection rates across age groups, ensuring reliable performance monitoring and consistent healthcare delivery regardless of patient demographics.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "May require randomisation in decision-making, leading to inconsistent outcomes for similar individuals to achieve group-level fairness constraints."
+        },
+        {
+          "description": "Post-processing can reduce overall model accuracy or confidence scores, particularly when group-specific ROC curves do not intersect favourably."
+        },
+        {
+          "description": "Violates calibration properties of the original model, creating a trade-off between equalised odds and predictive rate parity."
+        },
+        {
+          "description": "Limited to combinations of error rates that lie on the intersection of group-specific ROC curves, which may represent poor trade-offs."
+        },
+        {
+          "description": "Requires access to sensitive attributes during deployment, which may not be available or legally permissible in all contexts."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Equality of Opportunity in Supervised Learning",
+          "url": "https://arxiv.org/abs/1610.02413",
+          "source_type": "technical_paper",
+          "description": "Foundational paper by Hardt et al. introducing the equalised odds post-processing algorithm and mathematical framework for fairness constraints.",
+          "authors": [
+            "Moritz Hardt",
+            "Eric Price",
+            "Nathan Srebro"
+          ],
+          "publication_date": "2016-10-07"
+        },
+        {
+          "title": "Equalized odds postprocessing under imperfect group information",
+          "url": "https://arxiv.org/abs/1906.03284",
+          "source_type": "technical_paper",
+          "description": "Extension of Hardt et al.'s method examining robustness when protected attribute information is imperfect or noisy.",
+          "authors": [
+            "Pranjal Awasthi",
+            "Matthäus Kleindessner",
+            "Jamie Morgenstern"
+          ],
+          "publication_date": "2019-06-07"
+        },
+        {
+          "title": "Fairlearn: ThresholdOptimizer",
+          "url": "https://fairlearn.org/v0.10/api_reference/generated/fairlearn.postprocessing.ThresholdOptimizer.html",
+          "source_type": "documentation",
+          "description": "Microsoft's Fairlearn implementation of the Hardt et al. algorithm with API documentation and usage examples for equalised odds constraints."
+        },
+        {
+          "title": "IBM AIF360",
+          "url": "https://github.com/Trusted-AI/AIF360",
+          "source_type": "software_package",
+          "description": "Comprehensive fairness toolkit including EqualizedOddsPostprocessing implementation based on Hardt et al.'s original algorithm."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "threshold-optimiser",
+        "reject-option-classification",
+        "calibration-with-equality-of-opportunity"
+      ]
+    },
+    {
+      "slug": "threshold-optimiser",
+      "name": "Threshold Optimiser",
+      "description": "Threshold Optimiser adjusts decision thresholds for different demographic groups after model training to satisfy specific fairness constraints. This post-processing technique optimises group-specific thresholds by analysing the probability distribution of model outputs, allowing practitioners to achieve fairness goals like demographic parity or equalised opportunity without modifying the underlying model. The optimiser finds optimal threshold values for each group that balance fairness requirements with overall model performance, making it particularly useful when fairness considerations arise after model deployment.",
+      "assurance_goals": [
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/probabilistic-output",
+        "assurance-goal-category/fairness",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/post-processing",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting hiring decision thresholds in a recruitment system to ensure equal opportunity rates across gender and ethnicity groups, where the model outputs probability scores but different demographic groups require different thresholds to achieve equitable outcomes.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Optimising credit approval thresholds for different demographic groups in loan applications to satisfy regulatory requirements for equal treatment whilst maintaining acceptable default rates across all groups.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Calibrating medical diagnosis thresholds across age and gender groups to ensure diagnostic accuracy is maintained whilst preventing systematic over-diagnosis or under-diagnosis in specific populations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires a held-out dataset with known group memberships to determine optimal thresholds for each demographic group."
+        },
+        {
+          "description": "Threshold values may need recalibration when input data distributions shift or model performance changes over time."
+        },
+        {
+          "description": "Using different decision thresholds per group can raise legal or ethical concerns in deployment contexts where equal treatment is mandated."
+        },
+        {
+          "description": "Performance depends on the quality and representativeness of the calibration dataset for each demographic group."
+        },
+        {
+          "description": "May lead to reduced overall accuracy as the optimisation trades off individual accuracy for group fairness."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Group-Aware Threshold Adaptation for Fair Classification",
+          "url": "https://arxiv.org/abs/2111.04271",
+          "source_type": "technical_paper",
+          "authors": [
+            "Jang, Taeuk",
+            "Shi, Pengyi",
+            "Wang, Xiaoqian"
+          ],
+          "publication_date": "2021-11-08",
+          "description": "Introduces a novel post-processing method for learning adaptive classification thresholds for each demographic group by optimising confusion matrices estimated from model probability distributions."
+        },
+        {
+          "title": "Equality of Opportunity in Supervised Learning",
+          "url": "https://arxiv.org/abs/1610.02413",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hardt, Moritz",
+            "Price, Eric",
+            "Srebro, Nathan"
+          ],
+          "publication_date": "2016-10-07",
+          "description": "Foundational work introducing threshold optimisation techniques to achieve equalized opportunity and demographic parity in supervised learning."
+        },
+        {
+          "title": "AIF360: A comprehensive set of fairness metrics and algorithms",
+          "url": "https://github.com/Trusted-AI/AIF360",
+          "source_type": "software_package",
+          "description": "Open-source library containing threshold optimisation implementations for various fairness constraints including equalized odds and demographic parity."
+        },
+        {
+          "title": "Fairlearn: A toolkit for assessing and improving fairness in AI",
+          "url": "https://github.com/fairlearn/fairlearn",
+          "source_type": "software_package",
+          "description": "Python library providing threshold optimisation methods and post-processing algorithms for achieving fairness in machine learning models."
+        },
+        {
+          "title": "HolisticAI: Randomized Threshold Optimizer",
+          "url": "https://holisticai.readthedocs.io/en/latest/getting_started/bias/mitigation/postprocessing/bc_ml_debiaser_rto.html",
+          "source_type": "documentation",
+          "description": "Documentation for the Randomized Threshold Optimizer implementation that achieves statistical parity through group-aware threshold adjustment with randomization."
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "equalised-odds-post-processing",
+        "reject-option-classification",
+        "calibration-with-equality-of-opportunity"
+      ]
+    },
+    {
+      "slug": "reject-option-classification",
+      "name": "Reject Option Classification",
+      "description": "A post-processing fairness technique that modifies predictions in regions of high uncertainty to favour disadvantaged groups and achieve fairness objectives. The method identifies a 'rejection region' where the model's confidence is low (typically near the decision boundary) and reassigns predictions within this region to benefit underrepresented groups. By leveraging model uncertainty, this approach can improve fairness metrics like demographic parity or equalised odds whilst minimising changes to confident predictions, thus preserving overall accuracy for cases where the model is certain.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/probabilistic-output",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/labelled-data",
+        "data-requirements/prediction-probabilities",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/post-processing",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting hiring algorithm predictions in the uncertainty region where candidate scores are close to the threshold, reassigning borderline cases to ensure equal selection rates across gender and ethnicity groups whilst maintaining decisions for clearly qualified or unqualified candidates.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Improving reliability of loan approval systems by identifying applications where the model is uncertain and adjusting these edge cases to ensure consistent approval rates across demographic groups, reducing the risk of systematic discrimination in borderline creditworthiness assessments.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Creating transparent bail decision systems that clearly document which predictions fall within the rejection region and how adjustments are made, providing courts with explainable fairness interventions that show exactly when and why decisions were modified for equity.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires models that provide reliable uncertainty estimates or probability scores, limiting applicability to deterministic classifiers without confidence outputs."
+        },
+        {
+          "description": "Selection of the rejection region threshold is subjective and requires careful tuning to balance fairness improvements with accuracy preservation."
+        },
+        {
+          "description": "May reject too many instances if tuned conservatively, potentially affecting a large portion of predictions and reducing the model's practical utility."
+        },
+        {
+          "description": "Cannot address bias in confident predictions outside the rejection region, limiting effectiveness when discrimination occurs in high-certainty cases."
+        },
+        {
+          "description": "Performance depends on the quality of uncertainty estimates, which may be poorly calibrated in some models, leading to inappropriate rejection regions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Machine Learning with a Reject Option: A survey",
+          "url": "https://www.semanticscholar.org/paper/24864a7f899718477c04ede9c0bea906c5dc2667",
+          "source_type": "documentation",
+          "authors": [
+            "Kilian Hendrickx",
+            "Lorenzo Perini",
+            "Dries Van der Plas",
+            "Wannes Meert",
+            "Jesse Davis"
+          ]
+        },
+        {
+          "title": "aif360.algorithms.postprocessing.RejectOptionClassification ...",
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.algorithms.postprocessing.RejectOptionClassification.html",
+          "source_type": "documentation"
+        },
+        {
+          "title": "Survey on Leveraging Uncertainty Estimation Towards Trustworthy Deep Neural Networks: The Case of Reject Option and Post-training Processing",
+          "url": "https://www.semanticscholar.org/paper/e939c6ac58e08b539ae8a7dc54216bceb775b085",
+          "source_type": "documentation",
+          "authors": [
+            "M. Hasan",
+            "Moloud Abdar",
+            "A. Khosravi",
+            "U. Aickelin",
+            "Pietro Lio'",
+            "Ibrahim Hossain",
+            "Ashikur Rahman",
+            "Saeid Nahavandi"
+          ]
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "equalised-odds-post-processing",
+        "threshold-optimiser",
+        "calibration-with-equality-of-opportunity"
+      ]
+    },
+    {
+      "slug": "calibration-with-equality-of-opportunity",
+      "name": "Calibration with Equality of Opportunity",
+      "description": "A post-processing fairness technique that adjusts model predictions to achieve equal true positive rates across protected groups whilst maintaining calibration within each group. The method addresses fairness by ensuring that qualified individuals from different demographic groups have equal chances of receiving positive predictions, whilst preserving the meaning of probability scores within each group. This technique attempts to balance the competing objectives of group fairness and accurate probability estimation.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/probabilistic-output",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/calibration-set",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/testing",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting a loan approval model to ensure that qualified applicants from different ethnic backgrounds have equal approval rates, whilst maintaining that a 70% predicted repayment probability means the same thing for each ethnic group in practice.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Post-processing a university admissions algorithm to equalise acceptance rates for qualified students across gender groups, whilst ensuring the predicted success scores remain well-calibrated within each gender to support transparent decision-making.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Calibrating a medical diagnosis model to maintain equal detection rates for a disease across different age groups whilst preserving the reliability of risk scores, ensuring that a 30% risk prediction accurately reflects actual disease occurrence within each age group.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Fundamental mathematical incompatibility exists between perfect calibration and exact equality of opportunity, except in highly constrained special cases."
+        },
+        {
+          "description": "May reduce overall model accuracy or calibration when forcing equal true positive rates across groups with genuinely different base rates."
+        },
+        {
+          "description": "Requires access to sensitive attributes during post-processing, which may not be available or legally permissible in all contexts."
+        },
+        {
+          "description": "The technique only addresses one aspect of fairness (true positive rates) and may allow disparities in false positive rates between groups."
+        },
+        {
+          "description": "Post-processing approaches cannot address biases inherent in the training data or model architecture, only adjust final predictions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "On Fairness and Calibration",
+          "url": "https://arxiv.org/abs/1709.02012",
+          "source_type": "technical_paper",
+          "description": "Foundational paper demonstrating the mathematical tension between calibration and equalised odds fairness constraints.",
+          "authors": [
+            "Geoff Pleiss",
+            "Manish Raghavan",
+            "Felix Wu",
+            "Jon Kleinberg",
+            "Kilian Q. Weinberger"
+          ],
+          "publication_date": "2017-09-06"
+        },
+        {
+          "title": "equalized_odds_and_calibration",
+          "url": "https://github.com/gpleiss/equalized_odds_and_calibration",
+          "source_type": "software_package",
+          "description": "Python implementation of post-processing methods for achieving calibration with equality of opportunity constraints."
+        },
+        {
+          "title": "Equality of Opportunity in Supervised Learning",
+          "url": "https://arxiv.org/abs/1610.02413",
+          "source_type": "technical_paper",
+          "description": "Original paper introducing the equality of opportunity fairness criterion and post-processing algorithms.",
+          "authors": [
+            "Moritz Hardt",
+            "Eric Price",
+            "Nathan Srebro"
+          ],
+          "publication_date": "2016-10-07"
+        },
+        {
+          "title": "Fairlearn: Postprocessing Methods",
+          "url": "https://fairlearn.org/v0.10/user_guide/mitigation/postprocessing.html",
+          "source_type": "documentation",
+          "description": "Documentation for implementing threshold optimisation and calibration methods to achieve fairness constraints."
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "equalised-odds-post-processing",
+        "threshold-optimiser",
+        "reject-option-classification"
+      ]
+    }
+  ],
+  "count": 10
+}

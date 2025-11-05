@@ -1,0 +1,37 @@
+{
+  "name": "Tool Use Safety Verification",
+  "description": "Tool use safety verification tests AI agents that interact with external tools, APIs, and systems to ensure they use capabilities safely and as intended. This technique evaluates whether agents correctly understand tool specifications, respect usage constraints, handle errors gracefully, and avoid unintended side effects. Testing includes boundary condition validation (extreme parameters, edge cases), permission verification (ensuring agents don't exceed authorized actions), and cascade failure analysis (how tool errors propagate through multi-step agent workflows).",
+  "assurance_goals": [
+    "Safety",
+    "Security",
+    "Reliability"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Testing an AI agent with database access to ensure it only executes safe read queries and cannot be manipulated into running destructive operations like deletions or schema modifications.",
+      "goal": "Safety"
+    },
+    {
+      "description": "Verifying that a customer service agent using payment APIs correctly validates transaction amounts and cannot be tricked into processing unauthorized charges through prompt manipulation.",
+      "goal": "Security"
+    },
+    {
+      "description": "Ensuring a code generation agent using file system tools reliably handles permission errors and path traversal edge cases without crashing or corrupting data.",
+      "goal": "Reliability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Comprehensive testing of all possible tool interactions and parameter combinations is often infeasible for agents with access to many tools."
+    },
+    {
+      "description": "Agents may exhibit unexpected emergent behaviors when composing multiple tools in novel ways not anticipated during testing."
+    },
+    {
+      "description": "Difficult to test for all possible security vulnerabilities, especially when tools themselves may have undiscovered vulnerabilities."
+    },
+    {
+      "description": "Testing in sandboxed environments may not capture all real-world failure modes and integration issues."
+    }
+  ]
+}

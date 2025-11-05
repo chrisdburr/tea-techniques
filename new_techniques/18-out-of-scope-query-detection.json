@@ -1,0 +1,37 @@
+{
+  "name": "Out-of-Scope Query Detection",
+  "description": "Out-of-scope query detection identifies user inputs that fall outside an AI system's intended domain or capabilities, enabling graceful handling rather than generating unreliable responses. This technique trains classifiers or uses embedding-based methods to recognize when queries require knowledge or capabilities the system doesn't possess. Detection enables systems to explicitly decline, redirect, or request clarification rather than hallucinating answers or applying inappropriate reasoning to unfamiliar domains.",
+  "assurance_goals": [
+    "Reliability",
+    "Safety",
+    "Transparency"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Enabling a medical chatbot specialized in diabetes management to recognize and deflect questions about unrelated conditions, avoiding potentially dangerous medical advice outside its training domain.",
+      "goal": "Safety"
+    },
+    {
+      "description": "Ensuring a customer service bot reliably identifies questions it cannot answer and escalates to human agents rather than providing incorrect information that damages customer trust.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Transparently communicating system limitations by explicitly informing users when queries exceed the AI's scope rather than silently providing low-quality responses.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Defining precise scope boundaries can be challenging, especially for general-purpose systems or domains with fuzzy edges."
+    },
+    {
+      "description": "May produce false positives that reject legitimate queries at the boundary of the system's capabilities, degrading user experience."
+    },
+    {
+      "description": "Users may rephrase out-of-scope queries to bypass detection, requiring robust handling of paraphrases and edge cases."
+    },
+    {
+      "description": "Difficult to maintain accurate scope detection as systems are updated and capabilities expand or shift over time."
+    }
+  ]
+}

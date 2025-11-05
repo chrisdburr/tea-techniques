@@ -1,0 +1,37 @@
+{
+  "name": "Retrieval-Augmented Generation Evaluation",
+  "description": "RAG evaluation assesses systems that combine retrieval mechanisms with generative models by measuring retrieval quality, generation faithfulness, and overall system performance. This technique evaluates whether retrieved context is relevant and accurate, whether generated responses faithfully represent retrieved information without hallucination, and whether the system appropriately handles cases where sufficient context cannot be retrieved. Metrics include retrieval precision and recall, answer relevance, faithfulness scores, and citation accuracy.",
+  "assurance_goals": [
+    "Reliability",
+    "Transparency",
+    "Explainability"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Evaluating an enterprise knowledge management system to ensure it retrieves relevant documents and generates accurate answers without hallucinating information not present in the company's knowledge base.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Assessing whether a legal research assistant properly cites source documents when generating case summaries, enabling lawyers to verify information and trace conclusions back to authoritative sources.",
+      "goal": "Transparency"
+    },
+    {
+      "description": "Testing a medical literature review system to verify that its generated summaries accurately reflect retrieved research papers and clearly indicate when evidence is insufficient or conflicting.",
+      "goal": "Explainability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Evaluation requires high-quality ground truth datasets with known correct retrievals and answers, which may be expensive or impossible to create for specialized domains."
+    },
+    {
+      "description": "Faithfulness assessment can be subjective and difficult to automate, often requiring human judgment to determine whether responses accurately represent retrieved context."
+    },
+    {
+      "description": "Trade-offs between retrieval precision and recall mean optimizing for one metric may degrade the other, requiring domain-specific balancing decisions."
+    },
+    {
+      "description": "Metrics may not capture subtle quality issues like incomplete answers, misleading emphasis, or failure to synthesize information from multiple retrieved sources."
+    }
+  ]
+}

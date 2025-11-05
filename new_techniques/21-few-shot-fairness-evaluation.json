@@ -1,0 +1,37 @@
+{
+  "name": "Few-Shot Fairness Evaluation",
+  "description": "Few-shot fairness evaluation assesses whether in-context learning with few-shot examples introduces or amplifies biases in model predictions. This technique systematically varies demographic characteristics in few-shot examples and measures how these variations affect model outputs for different groups. Evaluation includes testing prompt sensitivity (how example selection impacts fairness), stereotype amplification (whether biased examples disproportionately affect outputs), and consistency (whether similar inputs receive equitable treatment regardless of example composition).",
+  "assurance_goals": [
+    "Fairness",
+    "Reliability",
+    "Transparency"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Testing whether a resume screening LLM's few-shot examples inadvertently introduce gender bias by showing more male examples for technical positions, affecting how it evaluates subsequent applicants.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Ensuring a customer service classifier maintains reliable performance across demographic groups regardless of which few-shot examples users or developers choose to include in prompts.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Documenting how few-shot example selection affects fairness metrics, transparently reporting sensitivity to example composition in deployment guidelines.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Vast number of possible few-shot example combinations makes exhaustive testing infeasible, requiring sampling strategies that may miss important configurations."
+    },
+    {
+      "description": "Fairness may be highly sensitive to subtle differences in example wording or formatting, making it difficult to provide robust guarantees."
+    },
+    {
+      "description": "Trade-offs between example diversity and task performance may force choices between fairness and accuracy."
+    },
+    {
+      "description": "Users may be unaware of fairness implications when constructing few-shot prompts, leading to inadvertent bias introduction in deployment."
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "name": "Adversarial Training Verification",
+  "description": "Adversarial training verification evaluates whether models trained with adversarial examples have genuinely improved robustness rather than merely overfitting to specific attack methods. This technique tests robustness against diverse attack algorithms including those not used during training, measures certified robustness bounds, and evaluates whether adversarial training creates exploitable trade-offs in clean accuracy or introduces new vulnerabilities. Verification ensures adversarial training provides genuine security benefits rather than superficial improvements.",
+  "assurance_goals": [
+    "Security",
+    "Reliability",
+    "Transparency"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Verifying that an adversarially-trained facial recognition system demonstrates genuine robustness against diverse attack types beyond those used in training, preventing false confidence in security.",
+      "goal": "Security"
+    },
+    {
+      "description": "Ensuring adversarial training of a spam filter improves reliable detection of adversarial emails without significantly degrading performance on normal messages.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Transparently reporting both robustness improvements and clean accuracy trade-offs from adversarial training, enabling informed deployment decisions based on application requirements.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Models may overfit to adversarial examples in training data without generalizing to fundamentally different attack strategies."
+    },
+    {
+      "description": "Adversarial training typically reduces clean accuracy, creating trade-offs that must be carefully evaluated for specific applications."
+    },
+    {
+      "description": "Computational cost of generating adversarial examples during training is high, limiting the scale and diversity of adversarial training."
+    },
+    {
+      "description": "Difficult to achieve certified robustness guarantees that hold against all possible attacks within a specified threat model."
+    }
+  ]
+}

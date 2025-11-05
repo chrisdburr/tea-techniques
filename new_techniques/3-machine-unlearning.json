@@ -1,0 +1,37 @@
+{
+  "name": "Machine Unlearning",
+  "description": "Machine unlearning enables removal of specific training data's influence from trained models without complete retraining. This technique addresses privacy rights like GDPR's right to be forgotten by selectively erasing learned patterns associated with particular data points, individuals, or sensitive attributes. Methods include exact unlearning (provably equivalent to retraining without the data), approximate unlearning (efficient algorithms that closely approximate retraining), and certified unlearning (providing formal guarantees about information removal).",
+  "assurance_goals": [
+    "Privacy",
+    "Fairness",
+    "Transparency"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Responding to user deletion requests in a recommendation system by removing all influence of that user's historical interactions from the model, ensuring compliance with privacy regulations like GDPR.",
+      "goal": "Privacy"
+    },
+    {
+      "description": "Removing biased or problematic training examples after deployment to mitigate discovered fairness issues without requiring complete model retraining on cleaned data.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Providing verifiable evidence that specific data has been removed from a model, enabling transparent compliance with data deletion requests and regulatory audits.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Exact unlearning for complex models like deep neural networks is computationally expensive, often nearly as costly as full retraining."
+    },
+    {
+      "description": "Approximate unlearning methods may not provide strong guarantees that information has been fully removed, potentially leaving residual influence."
+    },
+    {
+      "description": "Difficult to verify unlearning effectiveness, as adversaries might extract information about supposedly removed data through membership inference or other attacks."
+    },
+    {
+      "description": "Repeated unlearning requests can degrade model performance significantly, especially if many data points are removed from the training distribution."
+    }
+  ]
+}

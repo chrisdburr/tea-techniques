@@ -1,0 +1,37 @@
+{
+  "name": "Prompt Brittleness Testing",
+  "description": "Prompt brittleness testing evaluates how sensitive model outputs are to minor variations in prompt wording, formatting, or structure. This technique systematically paraphrases prompts, reorders elements, changes formatting (capitalization, punctuation), and tests semantically equivalent variations to measure output consistency. Testing identifies brittle behaviors where superficial prompt changes cause dramatic performance swings, helping developers create robust prompt templates and understand model reliability boundaries.",
+  "assurance_goals": [
+    "Reliability",
+    "Fairness",
+    "Explainability"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Testing whether a medical triage chatbot gives consistent urgency assessments when patients describe symptoms using different phrasings, ensuring reliable advice regardless of communication style.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Verifying that a resume screening LLM doesn't exhibit demographic bias based on minor prompt variations in candidate descriptions, maintaining fair evaluation across applicants.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Identifying which prompt elements are critical for desired behavior and which are superficial, enabling better understanding and documentation of how to effectively interact with the model.",
+      "goal": "Explainability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Vast space of possible prompt variations makes exhaustive testing infeasible, requiring sampling strategies that may miss important edge cases."
+    },
+    {
+      "description": "Defining 'semantically equivalent' prompts can be subjective, especially for complex or nuanced instructions."
+    },
+    {
+      "description": "Some brittleness may be unavoidable due to fundamental model limitations rather than fixable through prompt engineering."
+    },
+    {
+      "description": "Testing reveals brittleness but doesn't necessarily provide clear paths to mitigation beyond avoiding problematic variations."
+    }
+  ]
+}

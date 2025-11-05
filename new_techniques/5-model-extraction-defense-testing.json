@@ -1,0 +1,37 @@
+{
+  "name": "Model Extraction Defense Testing",
+  "description": "Model extraction defense testing evaluates protections against attackers who attempt to steal model functionality by querying it and training surrogate models. This technique assesses defenses like query limiting, output perturbation, watermarking, and fingerprinting by simulating extraction attacks and measuring how much model functionality can be replicated. Testing evaluates both the effectiveness of defenses in preventing extraction and their impact on legitimate use cases, ensuring security measures don't excessively degrade user experience.",
+  "assurance_goals": [
+    "Security",
+    "Privacy",
+    "Transparency"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Testing protections for a proprietary fraud detection API to ensure competitors or malicious actors cannot recreate the model's decision logic through systematic querying.",
+      "goal": "Security"
+    },
+    {
+      "description": "Evaluating whether a medical diagnosis model's query limits and output perturbations prevent extraction while protecting patient privacy embedded in the model's learned patterns.",
+      "goal": "Privacy"
+    },
+    {
+      "description": "Assessing watermarking techniques that enable model owners to prove when competitors have extracted their model, providing transparent evidence for intellectual property claims.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Sophisticated attackers may use transfer learning or knowledge distillation to extract models with fewer queries than defenses anticipate."
+    },
+    {
+      "description": "Defensive measures like output perturbation can degrade model utility for legitimate users, creating tension between security and usability."
+    },
+    {
+      "description": "Difficult to distinguish between legitimate high-volume use and malicious extraction attempts, potentially blocking valid users."
+    },
+    {
+      "description": "Watermarking and fingerprinting techniques may be removed or obscured by attackers who post-process extracted models."
+    }
+  ]
+}

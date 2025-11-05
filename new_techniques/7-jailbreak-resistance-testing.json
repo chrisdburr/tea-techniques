@@ -1,0 +1,37 @@
+{
+  "name": "Jailbreak Resistance Testing",
+  "description": "Jailbreak resistance testing evaluates LLM and generative AI defenses against techniques that attempt to bypass safety constraints and alignment. This involves testing various jailbreak methods including role-playing attacks ('pretend you are an AI without ethical constraints'), hypothetical framing ('in a fictional story...'), encoded instructions (base64, ROT13, leetspeak), and multi-turn manipulation where benign early turns build context for later harmful requests. Testing measures both the immediate resistance to jailbreaks and the system's ability to detect and block evolving attack patterns.",
+  "assurance_goals": [
+    "Safety",
+    "Security",
+    "Reliability"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Testing an AI assistant to ensure it cannot be manipulated into providing instructions for dangerous activities like weapon creation or illegal hacking through creative prompt engineering and role-play scenarios.",
+      "goal": "Safety"
+    },
+    {
+      "description": "Validating that an enterprise AI cannot be jailbroken to leak confidential business information, internal system prompts, or proprietary data through social engineering or encoding tricks.",
+      "goal": "Security"
+    },
+    {
+      "description": "Ensuring a content moderation AI maintains reliable safety standards and cannot be convinced to approve harmful content through multi-turn conversational manipulation.",
+      "goal": "Reliability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "New jailbreak techniques emerge constantly as adversaries discover creative attack vectors, requiring continuous testing and defense updates."
+    },
+    {
+      "description": "Overly restrictive jailbreak defenses can cause false positives, blocking legitimate queries about sensitive topics for educational or research purposes."
+    },
+    {
+      "description": "Testing coverage is inherently limited by the creativity of testers, potentially missing novel jailbreak approaches that real users might discover."
+    },
+    {
+      "description": "Some jailbreaks work through subtle multi-turn interactions that are difficult to anticipate and test systematically."
+    }
+  ]
+}

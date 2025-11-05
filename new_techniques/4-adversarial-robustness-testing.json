@@ -1,0 +1,37 @@
+{
+  "name": "Adversarial Robustness Testing",
+  "description": "Adversarial robustness testing evaluates model resilience against intentionally crafted inputs designed to cause misclassification or malfunction. This technique generates adversarial examples through methods like FGSM, PGD, C&W attacks, and autoattacks to measure model vulnerability. Testing assesses both white-box scenarios (where attackers have full model access) and black-box scenarios (where attackers only observe inputs and outputs), measuring metrics like robust accuracy, attack success rates, and perturbation budgets required for successful attacks.",
+  "assurance_goals": [
+    "Security",
+    "Reliability",
+    "Safety"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Testing an autonomous vehicle's perception system against adversarial perturbations to road signs or traffic signals, ensuring the vehicle cannot be fooled by maliciously modified visual inputs.",
+      "goal": "Safety"
+    },
+    {
+      "description": "Evaluating a spam filter's robustness to adversarial text manipulations where attackers intentionally craft emails to evade detection while remaining readable to humans.",
+      "goal": "Security"
+    },
+    {
+      "description": "Assessing whether a medical imaging classifier maintains reliable performance when images are slightly corrupted or manipulated, preventing misdiagnosis from low-quality or tampered inputs.",
+      "goal": "Reliability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Adversarial examples often transfer poorly between different models or architectures, making it difficult to comprehensively test against all possible attacks."
+    },
+    {
+      "description": "Focus on worst-case perturbations may not reflect realistic threat models, as some adversarial examples require unrealistic levels of control over inputs."
+    },
+    {
+      "description": "Computationally expensive to generate strong adversarial examples, especially for large models or high-dimensional inputs like images or text."
+    },
+    {
+      "description": "Trade-off between robustness and accuracy means improving adversarial robustness often reduces performance on clean, unperturbed data."
+    }
+  ]
+}

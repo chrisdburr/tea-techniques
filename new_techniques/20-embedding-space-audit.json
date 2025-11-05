@@ -1,0 +1,37 @@
+{
+  "name": "Embedding Space Audit",
+  "description": "Embedding space audit analyzes learned representations to identify biases, spurious correlations, and problematic clustering patterns in vector embeddings. This technique uses dimensionality reduction, clustering analysis, and geometric fairness metrics to examine whether embeddings encode sensitive attributes, place certain groups in disadvantaged regions of representation space, or learn stereotypical associations. Auditing reveals whether embeddings used for retrieval, recommendation, or downstream tasks contain fairness issues that will propagate to applications.",
+  "assurance_goals": [
+    "Fairness",
+    "Explainability",
+    "Transparency"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Auditing word embeddings for biased gender associations like 'doctor' being closer to 'male' than 'female', identifying problematic stereotypes that could affect downstream NLP applications.",
+      "goal": "Fairness"
+    },
+    {
+      "description": "Analyzing face recognition embeddings to understand whether certain demographic groups are clustered more tightly (enabling easier discrimination) or more dispersed (enabling easier misidentification).",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Transparently documenting embedding space properties including which attributes are encoded and what associations exist, enabling informed decisions about appropriate use cases.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Defining ground truth for 'fair' or 'unbiased' embedding geometries is challenging and may depend on application-specific requirements."
+    },
+    {
+      "description": "Debiasing embeddings can reduce performance on downstream tasks or remove useful information along with unwanted biases."
+    },
+    {
+      "description": "High-dimensional embedding spaces are difficult to visualize and interpret comprehensively, potentially missing subtle bias patterns."
+    },
+    {
+      "description": "Embeddings may encode bias in complex, non-linear ways that simple geometric metrics fail to capture."
+    }
+  ]
+}

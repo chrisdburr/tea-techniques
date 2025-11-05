@@ -1,0 +1,37 @@
+{
+  "name": "Continual Learning Stability Testing",
+  "description": "Continual learning stability testing evaluates whether models that learn from streaming data maintain performance on previously learned tasks while acquiring new capabilities. This technique measures catastrophic forgetting (performance degradation on old tasks), forward transfer (whether old knowledge helps new learning), and backward transfer (whether new learning damages old performance). Testing includes challenging scenarios where data distributions shift significantly and evaluates whether stability techniques like experience replay or regularization effectively preserve knowledge.",
+  "assurance_goals": [
+    "Reliability",
+    "Safety",
+    "Fairness"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Testing whether a content moderation model updated with new harmful content patterns maintains reliable detection of previously learned violation types without catastrophic forgetting.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Ensuring a medical diagnosis AI that continuously learns from new clinical cases doesn't forget how to recognize previously mastered conditions, preventing safety regressions.",
+      "goal": "Safety"
+    },
+    {
+      "description": "Verifying that fairness improvements from continual learning don't introduce new biases or degrade performance for previously well-served demographic groups.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Comprehensive testing requires maintaining evaluation datasets for all previously learned tasks, which becomes burdensome as systems learn continuously."
+    },
+    {
+      "description": "Trade-offs between plasticity (learning new tasks well) and stability (retaining old knowledge) are fundamental and difficult to optimize simultaneously."
+    },
+    {
+      "description": "Techniques that prevent catastrophic forgetting often require storing samples of old data, raising privacy and storage concerns."
+    },
+    {
+      "description": "Defining acceptable forgetting levels is application-dependent and may conflict with the need to adapt to changing environments."
+    }
+  ]
+}

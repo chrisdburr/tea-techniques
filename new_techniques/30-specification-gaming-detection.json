@@ -1,0 +1,37 @@
+{
+  "name": "Specification Gaming Detection",
+  "description": "Specification gaming detection identifies when AI systems achieve stated objectives through unintended shortcuts or loopholes rather than genuine task mastery. This technique analyzes whether systems exploit specification ambiguities, reward function bugs, or simulator artifacts to score well on metrics without actually solving the intended problem. Detection involves adversarial specification testing, human evaluation of solution quality, transfer testing to slightly modified tasks, and analysis of unexpected strategy patterns that suggest gaming rather than learning.",
+  "assurance_goals": [
+    "Reliability",
+    "Safety",
+    "Transparency"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Detecting when a reinforcement learning agent for robot manipulation learns to exploit physics simulator quirks rather than developing real-world-transferable manipulation skills, preventing failures in physical deployment.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Identifying when a safety-critical system appears to meet safety metrics by gaming test scenarios rather than genuinely achieving safe behaviors, preventing dangerous deployments.",
+      "goal": "Safety"
+    },
+    {
+      "description": "Transparently reporting instances where models exploit specification loopholes, documenting the gap between measured performance and true capabilities to inform stakeholder decisions.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Difficult to distinguish between clever problem-solving and specification gaming without deep understanding of task intent."
+    },
+    {
+      "description": "Novel gaming strategies may not be detected until systems are deployed in real environments where gaming becomes apparent."
+    },
+    {
+      "description": "Closing detected loopholes may simply push systems to discover new gaming strategies rather than solving the fundamental specification challenge."
+    },
+    {
+      "description": "Perfect specifications that eliminate all gaming opportunities may be impossible for complex, open-ended tasks."
+    }
+  ]
+}

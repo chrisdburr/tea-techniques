@@ -1,0 +1,37 @@
+{
+  "name": "Model Behavioral Cloning Detection",
+  "description": "Model behavioral cloning detection identifies whether a model's behavior has been replicated by an unauthorized third party through knowledge distillation or imitation learning. This technique uses fingerprinting methods that embed detectable signatures in model outputs, statistical testing to identify suspiciously similar prediction patterns, and watermarking schemes that survive the distillation process. Detection enables model owners to prove intellectual property theft and protect proprietary AI systems from unauthorized replication.",
+  "assurance_goals": [
+    "Security",
+    "Transparency",
+    "Fairness"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Protecting a proprietary language model by embedding statistical signatures that persist in distilled copies, enabling detection when competitors deploy cloned models.",
+      "goal": "Security"
+    },
+    {
+      "description": "Providing transparent proof of model theft through watermark verification, enabling legitimate intellectual property claims with verifiable evidence in legal proceedings.",
+      "goal": "Transparency"
+    },
+    {
+      "description": "Ensuring fair competition in AI services markets by detecting when providers use behavioral cloning to unfairly replicate competitors' expensive model development work.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Watermarks may be removed or degraded through post-processing, fine-tuning, or adversarial training by sophisticated attackers."
+    },
+    {
+      "description": "Difficult to distinguish between independent development of similar capabilities and actual behavioral cloning, especially for simple tasks."
+    },
+    {
+      "description": "Detection methods may produce false positives when models trained on similar data naturally develop comparable behaviors."
+    },
+    {
+      "description": "Watermarking can slightly degrade model performance or be detectable by attackers, creating trade-offs between protection strength and model quality."
+    }
+  ]
+}

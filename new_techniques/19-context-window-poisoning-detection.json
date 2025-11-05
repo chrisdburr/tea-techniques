@@ -1,0 +1,37 @@
+{
+  "name": "Context Window Poisoning Detection",
+  "description": "Context window poisoning detection identifies attempts to manipulate LLM behavior by injecting malicious content into conversation history or retrieved context. This technique monitors for suspicious patterns in context including contradictory instructions, formatting anomalies, encoded attacks, and attempts to override system prompts. Detection involves analyzing context provenance, validating formatting consistency, and identifying semantic anomalies that indicate manipulation attempts rather than legitimate user interaction.",
+  "assurance_goals": [
+    "Security",
+    "Reliability",
+    "Safety"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Protecting a RAG-based chatbot from adversarial retrieved documents that contain hidden instructions designed to manipulate the model into leaking information or bypassing safety constraints.",
+      "goal": "Security"
+    },
+    {
+      "description": "Ensuring conversation history in a multi-turn dialogue system hasn't been tampered with to inject malicious context that could compromise reliable operation or cause harmful outputs.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Detecting attempts to poison an AI assistant's context window with content designed to make it generate dangerous or harmful information by exploiting its tendency to follow patterns in context.",
+      "goal": "Safety"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Sophisticated attacks may use subtle poisoning that mimics legitimate context patterns, making detection difficult without false positives."
+    },
+    {
+      "description": "Legitimate context may sometimes appear anomalous, especially in domains with unusual formatting or technical jargon, creating false positives."
+    },
+    {
+      "description": "Detection adds latency and computational overhead to process and validate context before generation."
+    },
+    {
+      "description": "Attackers aware of detection mechanisms may craft attacks specifically designed to evade known detection patterns."
+    }
+  ]
+}

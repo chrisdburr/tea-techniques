@@ -1,0 +1,37 @@
+{
+  "name": "Knowledge Boundary Identification",
+  "description": "Knowledge boundary identification systematically maps what a model knows, partially knows, and doesn't know across different domains and topics. This technique uses probing datasets, confidence calibration analysis, and consistency testing to identify areas where model knowledge is reliable versus areas prone to hallucination or low-confidence speculation. Boundary mapping enables appropriate deployment scoping, uncertainty communication, and identification of knowledge gaps requiring additional training or human oversight.",
+  "assurance_goals": [
+    "Transparency",
+    "Reliability",
+    "Safety"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Mapping a medical AI's knowledge boundaries to identify conditions it diagnoses reliably versus conditions requiring specialist referral, enabling safe deployment with appropriate scope limitations.",
+      "goal": "Safety"
+    },
+    {
+      "description": "Identifying knowledge gaps in a legal research assistant to ensure it provides reliable information about well-covered topics while appropriately disclaiming uncertainty about niche or recent legal developments.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Transparently documenting model knowledge boundaries in user-facing applications, helping users understand when to trust AI outputs versus seek additional verification.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Comprehensive knowledge mapping across all possible domains and topics is infeasible, requiring prioritization of important knowledge areas."
+    },
+    {
+      "description": "Knowledge boundaries may be fuzzy rather than discrete, making it difficult to establish clear cutoffs between known and unknown."
+    },
+    {
+      "description": "Models may be confidently wrong in some areas, making calibration and confidence signals unreliable indicators of actual knowledge."
+    },
+    {
+      "description": "Knowledge boundaries shift as models are updated or fine-tuned, requiring continuous remapping to maintain accuracy."
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "name": "Data Poisoning Detection",
+  "description": "Data poisoning detection identifies malicious training data designed to compromise model behavior. This technique detects various poisoning attacks including backdoor injection (triggers causing specific behaviors), availability attacks (degrading overall performance), and targeted attacks (causing errors on specific inputs). Detection methods include statistical outlier analysis, influence function analysis to identify high-impact training points, and validation-based approaches that test for suspicious model behaviors indicative of poisoning.",
+  "assurance_goals": [
+    "Security",
+    "Reliability",
+    "Safety"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Scanning training data for an autonomous driving system to detect images that might contain backdoor triggers designed to cause unsafe behavior when specific objects appear in the environment.",
+      "goal": "Safety"
+    },
+    {
+      "description": "Protecting a collaborative learning system from malicious participants who might inject poisoned data to degrade model performance or create exploitable vulnerabilities.",
+      "goal": "Security"
+    },
+    {
+      "description": "Ensuring a content moderation model hasn't been poisoned with data designed to make it fail on specific types of harmful content, maintaining reliable safety filtering.",
+      "goal": "Reliability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Sophisticated poisoning attacks can be designed to evade statistical detection by mimicking benign data distributions closely."
+    },
+    {
+      "description": "High false positive rates may lead to incorrectly filtering legitimate but unusual training examples, reducing training data quality and diversity."
+    },
+    {
+      "description": "Computationally expensive to apply influence function analysis or deep inspection to very large training datasets."
+    },
+    {
+      "description": "Difficult to detect poisoning in scenarios where attackers have knowledge of detection methods and can adapt attacks accordingly."
+    }
+  ]
+}

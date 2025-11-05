@@ -1,0 +1,37 @@
+{
+  "name": "Membership Inference Attack Testing",
+  "description": "Membership inference attack testing evaluates whether adversaries can determine if specific data points were included in a model's training set. This technique simulates attacks where adversaries use model confidence scores, prediction patterns, or loss values to distinguish training data from non-training data. Testing measures privacy leakage by calculating attack success rates, precision-recall trade-offs, and advantage over random guessing. Results inform decisions about privacy-enhancing techniques like differential privacy or regularization.",
+  "assurance_goals": [
+    "Privacy",
+    "Security",
+    "Transparency"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Testing a healthcare prediction model to ensure attackers cannot determine which patients' medical records were used in training, protecting sensitive health information from privacy breaches.",
+      "goal": "Privacy"
+    },
+    {
+      "description": "Evaluating whether a facial recognition system leaks information about whose faces were in the training set, preventing unauthorized identification of individuals in training data.",
+      "goal": "Security"
+    },
+    {
+      "description": "Measuring and reporting membership inference vulnerability as part of model documentation, providing transparent disclosure of privacy risks to stakeholders and regulators.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Attack success rates vary significantly depending on model architecture, training procedures, and data characteristics, making it difficult to establish universal thresholds for acceptable privacy."
+    },
+    {
+      "description": "Sophisticated attackers may develop stronger attacks than those tested, potentially underestimating real-world privacy risks."
+    },
+    {
+      "description": "Trade-off between model utility and privacy protection means defending against membership inference often reduces model accuracy."
+    },
+    {
+      "description": "Testing requires access to both training and non-training data from the same distribution, which may not always be available for realistic evaluation."
+    }
+  ]
+}

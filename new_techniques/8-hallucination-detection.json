@@ -1,0 +1,37 @@
+{
+  "name": "Hallucination Detection",
+  "description": "Hallucination detection identifies when generative models produce outputs that are factually incorrect, fabricated, or not grounded in source data. This technique combines automated consistency checking (comparing outputs against knowledge bases or retrieved documents), self-consistency methods (checking if models give consistent answers to equivalent questions), uncertainty quantification, and human evaluation. Detection distinguishes between intrinsic hallucinations (contradicting source material) and extrinsic hallucinations (unverifiable claims not supported by sources).",
+  "assurance_goals": [
+    "Reliability",
+    "Transparency",
+    "Safety"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Monitoring a medical information system to detect when it generates unsupported clinical claims or fabricates research citations, preventing patients from receiving incorrect health advice.",
+      "goal": "Safety"
+    },
+    {
+      "description": "Evaluating a document summarization tool to ensure summaries accurately reflect source content without adding fabricated details or misrepresenting key facts.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Implementing confidence scoring and uncertainty indicators in AI assistants that transparently signal when responses may contain hallucinated information versus verified facts.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Automated detection methods may miss subtle hallucinations or flag correct but unusual information as potentially fabricated."
+    },
+    {
+      "description": "Requires access to reliable ground truth knowledge sources for fact-checking, which may not exist for many domains or recent events."
+    },
+    {
+      "description": "Self-consistency methods assume inconsistency indicates hallucination, but models can consistently hallucinate the same false information."
+    },
+    {
+      "description": "Human evaluation is expensive and subjective, with annotators potentially disagreeing about what constitutes hallucination versus interpretation."
+    }
+  ]
+}

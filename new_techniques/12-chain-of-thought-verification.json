@@ -1,0 +1,37 @@
+{
+  "name": "Chain-of-Thought Verification",
+  "description": "Chain-of-thought verification evaluates the quality and faithfulness of step-by-step reasoning produced by language models. This technique assesses whether intermediate reasoning steps are logically valid, factually accurate, and actually responsible for final answers (rather than post-hoc rationalizations). Verification methods include consistency checking (whether altered reasoning changes answers), counterfactual testing (injecting errors in reasoning chains), and comparison between reasoning paths for equivalent problems to ensure systematic rather than spurious reasoning.",
+  "assurance_goals": [
+    "Explainability",
+    "Reliability",
+    "Transparency"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Validating that a mathematical problem-solving AI's step-by-step solutions are logically sound and actually lead to correct answers, rather than generating plausible-looking but flawed reasoning.",
+      "goal": "Explainability"
+    },
+    {
+      "description": "Ensuring a legal reasoning assistant produces reliable analysis by verifying that its chain-of-thought explanations correctly apply relevant statutes and precedents without logical gaps.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Testing whether diagnostic reasoning in a medical AI reflects genuine clinical logic that experts can audit and trust, with transparent connections between symptoms, tests, and conclusions.",
+      "goal": "Transparency"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Models may generate reasoning that appears valid but is actually post-hoc rationalization rather than the actual computational process leading to answers."
+    },
+    {
+      "description": "Difficult to establish ground truth for complex reasoning tasks where multiple valid reasoning paths may exist."
+    },
+    {
+      "description": "Verification requires domain expertise to judge whether reasoning steps are genuinely valid or merely superficially plausible."
+    },
+    {
+      "description": "Computationally expensive to generate and verify multiple reasoning paths for comprehensive consistency checking."
+    }
+  ]
+}

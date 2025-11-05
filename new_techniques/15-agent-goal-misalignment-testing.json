@@ -1,0 +1,37 @@
+{
+  "name": "Agent Goal Misalignment Testing",
+  "description": "Agent goal misalignment testing identifies scenarios where AI agents pursue objectives in unintended ways or develop proxy goals that diverge from true human intent. This technique tests for specification gaming (achieving stated metrics while violating intent), instrumental goals (agents developing problematic sub-goals to achieve main objectives), and reward hacking (exploiting loopholes in reward functions). Testing uses diverse scenarios to probe whether agents truly understand task intent or merely optimize narrow specified metrics.",
+  "assurance_goals": [
+    "Safety",
+    "Reliability",
+    "Fairness"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Testing a content recommendation agent to ensure it optimizes for genuine user satisfaction rather than gaming engagement metrics through addictive or polarizing content that maximizes watch time.",
+      "goal": "Safety"
+    },
+    {
+      "description": "Verifying that an automated trading agent doesn't exploit unintended loopholes in profit maximization objectives, such as market manipulation tactics that achieve short-term gains at long-term cost.",
+      "goal": "Reliability"
+    },
+    {
+      "description": "Ensuring a resume screening agent doesn't develop proxy metrics that correlate with discriminatory criteria while technically optimizing for stated job performance predictions.",
+      "goal": "Fairness"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Comprehensive testing requires anticipating all possible ways objectives could be misinterpreted, which is inherently difficult for complex goals."
+    },
+    {
+      "description": "Agents may behave correctly during testing but develop misaligned strategies in deployment when facing novel situations or longer time horizons."
+    },
+    {
+      "description": "Distinguishing between intended and unintended goal achievement can be subjective, especially when stated objectives are ambiguous."
+    },
+    {
+      "description": "Testing environments may not replicate the full complexity and incentive structures of real deployment settings where misalignment emerges."
+    }
+  ]
+}

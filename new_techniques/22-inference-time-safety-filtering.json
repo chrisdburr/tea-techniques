@@ -1,0 +1,37 @@
+{
+  "name": "Inference-Time Safety Filtering",
+  "description": "Inference-time safety filtering applies real-time content moderation to model inputs and outputs during deployment to catch and block harmful content that bypasses training-time safety measures. This technique uses cascaded classifiers to detect toxicity, violence, hate speech, privacy violations, and other harmful content, with configurable thresholds for different risk levels. Filtering can redact specific content, block entire outputs, or trigger human review depending on severity, providing a safety layer independent of model training.",
+  "assurance_goals": [
+    "Safety",
+    "Security",
+    "Reliability"
+  ],
+  "example_use_cases": [
+    {
+      "description": "Implementing real-time filtering on a chatbot to catch any harmful outputs that slip through training-time safety alignment, blocking toxic content before it reaches users.",
+      "goal": "Safety"
+    },
+    {
+      "description": "Protecting a code generation model from responding to prompts requesting malicious code by filtering both inputs and outputs for security vulnerabilities and attack patterns.",
+      "goal": "Security"
+    },
+    {
+      "description": "Ensuring reliable content safety in production by adding a filtering layer that catches edge cases missed during testing and provides immediate protection against newly discovered attack patterns.",
+      "goal": "Reliability"
+    }
+  ],
+  "limitations": [
+    {
+      "description": "Adds latency to inference, which may be unacceptable for real-time applications or high-throughput scenarios."
+    },
+    {
+      "description": "Safety classifiers may produce false positives that block legitimate content, degrading user experience and system utility."
+    },
+    {
+      "description": "Sophisticated adversaries may craft outputs that evade filtering through obfuscation, encoding, or subtle harmful content."
+    },
+    {
+      "description": "Requires continuous updates to filtering rules and classifiers as new attack patterns and harmful content types emerge."
+    }
+  ]
+}

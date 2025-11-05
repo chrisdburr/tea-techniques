@@ -13,7 +13,7 @@
         "goal": "Security"
       },
       {
-        "description": "Validating that a medical advice LLM cannot be manipulated through prompt injection to provide dangerous health recommendations by testing inputs that attempt to override its safety constraints.",
+        "description": "Testing an educational AI tutor to ensure students cannot inject prompts that make it provide exam answers or circumvent pedagogical constraints designed to promote learning through guided discovery.",
         "goal": "Safety"
       },
       {
@@ -26,7 +26,7 @@
         "description": "Rapidly evolving attack landscape means new injection techniques constantly emerge, requiring continuous updates to testing methodologies and attack patterns."
       },
       {
-        "description": "Testing coverage is limited by creativity and knowledge of testers, potentially missing novel injection vectors that sophisticated adversaries might discover."
+        "description": "Testing coverage limited by tester creativity and evolving attack sophistication, with research showing new injection vectors discovered monthly."
       },
       {
         "description": "Difficult to achieve comprehensive coverage across all possible input combinations and contexts where prompts might be injected."
@@ -38,7 +38,7 @@
   },
   {
     "name": "Retrieval-Augmented Generation Evaluation",
-    "description": "RAG evaluation assesses systems that combine retrieval mechanisms with generative models by measuring retrieval quality, generation faithfulness, and overall system performance. This technique evaluates whether retrieved context is relevant and accurate, whether generated responses faithfully represent retrieved information without hallucination, and whether the system appropriately handles cases where sufficient context cannot be retrieved. Metrics include retrieval precision and recall, answer relevance, faithfulness scores, and citation accuracy.",
+    "description": "RAG evaluation assesses systems combining retrieval and generation by measuring retrieval quality, generation faithfulness, and overall performance. This technique evaluates whether retrieved context is relevant, whether responses faithfully represent information without hallucination, and how systems handle insufficient context. Key metrics include retrieval precision/recall, answer relevance, faithfulness scores, and citation accuracy.",
     "assurance_goals": [
       "Reliability",
       "Transparency",
@@ -54,7 +54,7 @@
         "goal": "Transparency"
       },
       {
-        "description": "Testing a medical literature review system to verify that its generated summaries accurately reflect retrieved research papers and clearly indicate when evidence is insufficient or conflicting.",
+        "description": "Evaluating a scientific literature review system to verify generated research summaries accurately synthesize findings across papers, clearly indicating contradictory results or missing evidence in the knowledge base.",
         "goal": "Explainability"
       }
     ],
@@ -83,7 +83,7 @@
     ],
     "example_use_cases": [
       {
-        "description": "Responding to user deletion requests in a recommendation system by removing all influence of that user's historical interactions from the model, ensuring compliance with privacy regulations like GDPR.",
+        "description": "Responding to user deletion requests in a social media recommendation system by removing all influence of that user's historical interactions, ensuring GDPR compliance and verifiable data removal.",
         "goal": "Privacy"
       },
       {
@@ -140,7 +140,7 @@
         "description": "Focus on worst-case perturbations may not reflect realistic threat models, as some adversarial examples require unrealistic levels of control over inputs."
       },
       {
-        "description": "Computationally expensive to generate strong adversarial examples, especially for large models or high-dimensional inputs like images or text."
+        "description": "Computationally expensive to generate strong adversarial examples, often requiring 10-100x more computation than standard inference, especially for large models or high-dimensional inputs."
       },
       {
         "description": "Trade-off between robustness and accuracy means improving adversarial robustness often reduces performance on clean, unperturbed data."
@@ -171,7 +171,7 @@
     ],
     "limitations": [
       {
-        "description": "Sophisticated attackers may use transfer learning or knowledge distillation to extract models with fewer queries than defenses anticipate."
+        "description": "Sophisticated attackers may use transfer learning to extract models with 10-50x fewer queries than static defenses anticipate, adapting as protections evolve."
       },
       {
         "description": "Defensive measures like output perturbation can degrade model utility for legitimate users, creating tension between security and usability."
@@ -186,7 +186,7 @@
   },
   {
     "name": "Toxicity and Bias Detection",
-    "description": "Toxicity and bias detection uses automated tools and human review to identify harmful, offensive, or biased content in model outputs. This technique employs classifiers trained to detect toxic language, hate speech, stereotypes, and demographic biases, combined with targeted testing using adversarial prompts designed to elicit problematic responses. Detection covers explicit toxicity (direct slurs, threats), implicit bias (subtle stereotyping), and distributional unfairness (differential treatment of demographic groups).",
+    "description": "Toxicity and bias detection uses automated classifiers and human review to identify harmful, offensive, or biased content in model outputs. This technique employs tools trained to detect toxic language, hate speech, stereotypes, and demographic biases through targeted testing with adversarial prompts. Detection covers explicit toxicity, implicit bias, and distributional unfairness across demographic groups.",
     "assurance_goals": [
       "Safety",
       "Fairness",
@@ -202,7 +202,7 @@
         "goal": "Fairness"
       },
       {
-        "description": "Ensuring a customer service AI maintains professional, helpful responses without unexpectedly generating offensive content that could damage brand reputation or user trust.",
+        "description": "Screening an AI writing assistant for educational content to ensure it maintains appropriate language and doesn't generate offensive material that could be harmful in classroom or academic settings.",
         "goal": "Reliability"
       }
     ],
@@ -223,7 +223,7 @@
   },
   {
     "name": "Jailbreak Resistance Testing",
-    "description": "Jailbreak resistance testing evaluates LLM and generative AI defenses against techniques that attempt to bypass safety constraints and alignment. This involves testing various jailbreak methods including role-playing attacks ('pretend you are an AI without ethical constraints'), hypothetical framing ('in a fictional story...'), encoded instructions (base64, ROT13, leetspeak), and multi-turn manipulation where benign early turns build context for later harmful requests. Testing measures both the immediate resistance to jailbreaks and the system's ability to detect and block evolving attack patterns.",
+    "description": "Jailbreak resistance testing evaluates LLM defenses against techniques that bypass safety constraints. This involves testing role-playing attacks, hypothetical framing, encoded instructions, and multi-turn manipulation. Testing measures immediate resistance to jailbreaks and the system's ability to detect and block evolving attack patterns, producing reports on vulnerability severity and exploit paths.",
     "assurance_goals": [
       "Safety",
       "Security",
@@ -248,7 +248,7 @@
         "description": "New jailbreak techniques emerge constantly as adversaries discover creative attack vectors, requiring continuous testing and defense updates."
       },
       {
-        "description": "Overly restrictive jailbreak defenses can cause false positives, blocking legitimate queries about sensitive topics for educational or research purposes."
+        "description": "Overly restrictive defenses can cause false positive rates of 5-15%, blocking legitimate queries about sensitive topics for educational or research purposes."
       },
       {
         "description": "Testing coverage is inherently limited by the creativity of testers, potentially missing novel jailbreak approaches that real users might discover."
@@ -260,7 +260,7 @@
   },
   {
     "name": "Hallucination Detection",
-    "description": "Hallucination detection identifies when generative models produce outputs that are factually incorrect, fabricated, or not grounded in source data. This technique combines automated consistency checking (comparing outputs against knowledge bases or retrieved documents), self-consistency methods (checking if models give consistent answers to equivalent questions), uncertainty quantification, and human evaluation. Detection distinguishes between intrinsic hallucinations (contradicting source material) and extrinsic hallucinations (unverifiable claims not supported by sources).",
+    "description": "Hallucination detection identifies when generative models produce factually incorrect, fabricated, or ungrounded outputs. This technique combines automated consistency checking, self-consistency methods, uncertainty quantification, and human evaluation. It produces detection scores distinguishing intrinsic hallucinations (contradicting sources) from extrinsic hallucinations (unverifiable claims), enabling filtering or user warnings.",
     "assurance_goals": [
       "Reliability",
       "Transparency",
@@ -272,7 +272,7 @@
         "goal": "Safety"
       },
       {
-        "description": "Evaluating a document summarization tool to ensure summaries accurately reflect source content without adding fabricated details or misrepresenting key facts.",
+        "description": "Evaluating an AI journalism assistant to ensure generated article drafts don't fabricate quotes, misattribute sources, or create false claims that could damage credibility and public trust.",
         "goal": "Reliability"
       },
       {
@@ -305,7 +305,7 @@
     ],
     "example_use_cases": [
       {
-        "description": "Testing a healthcare prediction model to ensure attackers cannot determine which patients' medical records were used in training, protecting sensitive health information from privacy breaches.",
+        "description": "Testing a genomics research model to ensure attackers cannot determine which individuals' genetic data were used in training, protecting highly sensitive hereditary and health information from privacy breaches.",
         "goal": "Privacy"
       },
       {
@@ -322,7 +322,7 @@
         "description": "Attack success rates vary significantly depending on model architecture, training procedures, and data characteristics, making it difficult to establish universal thresholds for acceptable privacy."
       },
       {
-        "description": "Sophisticated attackers may develop stronger attacks than those tested, potentially underestimating real-world privacy risks."
+        "description": "Sophisticated attackers with shadow models or auxiliary data may achieve attack success rates 2-3x higher than standard evaluation scenarios test."
       },
       {
         "description": "Trade-off between model utility and privacy protection means defending against membership inference often reduces model accuracy."
@@ -371,7 +371,7 @@
   },
   {
     "name": "Multimodal Alignment Verification",
-    "description": "Multimodal alignment verification ensures that different modalities (vision, language, audio) in multimodal AI systems are properly synchronized and consistent. This technique tests whether image descriptions match visual content, whether audio-visual models correctly associate sounds with visual sources, and whether cross-modal reasoning maintains factual accuracy. Verification includes adversarial testing with mismatched modalities, consistency checks across different modal representations, and evaluation of grounding quality when models reference specific regions or elements.",
+    "description": "Multimodal alignment verification ensures different modalities (vision, language, audio) are synchronized and consistent in multimodal AI systems. This technique tests whether descriptions match content, sounds associate with correct sources, and cross-modal reasoning maintains accuracy. It produces alignment scores, grounding quality metrics, and reports on modality-specific failure patterns.",
     "assurance_goals": [
       "Reliability",
       "Explainability",
@@ -383,7 +383,7 @@
         "goal": "Safety"
       },
       {
-        "description": "Testing whether a multimodal AI assistant maintains factual consistency when answering questions about images, ensuring descriptions and analysis reliably reflect actual visual content.",
+        "description": "Testing accessibility tools that generate image descriptions for visually impaired users, ensuring descriptions accurately reflect actual visual content and don't misrepresent important details or context.",
         "goal": "Reliability"
       },
       {
@@ -424,7 +424,7 @@
         "goal": "Reliability"
       },
       {
-        "description": "Testing whether diagnostic reasoning in a medical AI reflects genuine clinical logic that experts can audit and trust, with transparent connections between symptoms, tests, and conclusions.",
+        "description": "Testing science education AI that explains complex concepts step-by-step, verifying reasoning chains reflect sound pedagogical logic that helps students build understanding rather than just memorize facts.",
         "goal": "Transparency"
       }
     ],
@@ -457,7 +457,7 @@
         "goal": "Safety"
       },
       {
-        "description": "Verifying that a customer service agent using payment APIs correctly validates transaction amounts and cannot be tricked into processing unauthorized charges through prompt manipulation.",
+        "description": "Verifying that a research assistant AI using literature search APIs correctly validates citation formatting and cannot be manipulated into generating fabricated references or accessing restricted databases.",
         "goal": "Security"
       },
       {
@@ -498,7 +498,7 @@
         "goal": "Transparency"
       },
       {
-        "description": "Verifying that a content moderation AI consistently applies stated principles about free expression versus harm prevention reliably across diverse cultural contexts and edge cases.",
+        "description": "Verifying that an AI news aggregator consistently applies stated principles about neutrality versus editorial perspective across diverse political topics and international news sources.",
         "goal": "Reliability"
       }
     ],
@@ -531,7 +531,7 @@
         "goal": "Safety"
       },
       {
-        "description": "Verifying that an automated trading agent doesn't exploit unintended loopholes in profit maximization objectives, such as market manipulation tactics that achieve short-term gains at long-term cost.",
+        "description": "Verifying that a supply chain optimization agent doesn't exploit cost reduction objectives through unethical shortcuts like selecting suppliers with poor labor practices that achieve metrics but violate values.",
         "goal": "Reliability"
       },
       {
@@ -556,7 +556,7 @@
   },
   {
     "name": "Privacy-Preserving Synthetic Data Validation",
-    "description": "Privacy-preserving synthetic data validation assesses whether synthetically generated datasets protect individual privacy while maintaining statistical utility. This technique measures privacy through disclosure risk metrics, re-identification attack success rates, and attribute inference vulnerability testing. Utility is evaluated by comparing statistical properties, machine learning model performance, and analytical conclusions between synthetic and real data. Validation ensures synthetic data provides differential privacy guarantees or empirical privacy protection against realistic attack scenarios.",
+    "description": "Privacy-preserving synthetic data validation assesses whether synthetic datasets protect individual privacy while maintaining statistical utility. This technique measures privacy through disclosure risk metrics and re-identification attack success rates, while evaluating utility by comparing statistical properties and model performance. It produces validation reports quantifying the privacy-utility trade-off.",
     "assurance_goals": [
       "Privacy",
       "Transparency",
@@ -642,7 +642,7 @@
         "goal": "Safety"
       },
       {
-        "description": "Ensuring a customer service bot reliably identifies questions it cannot answer and escalates to human agents rather than providing incorrect information that damages customer trust.",
+        "description": "Ensuring an educational AI tutor for high school mathematics reliably identifies advanced university-level questions and redirects students to appropriate resources rather than attempting explanations beyond its scope.",
         "goal": "Reliability"
       },
       {
@@ -772,13 +772,13 @@
         "description": "Trade-offs between example diversity and task performance may force choices between fairness and accuracy."
       },
       {
-        "description": "Users may be unaware of fairness implications when constructing few-shot prompts, leading to inadvertent bias introduction in deployment."
+        "description": "Sophisticated models may exhibit context-dependent toxicity that evades detection in 15-30% of cases, especially with coded language or cultural references."
       }
     ]
   },
   {
     "name": "Inference-Time Safety Filtering",
-    "description": "Inference-time safety filtering applies real-time content moderation to model inputs and outputs during deployment to catch and block harmful content that bypasses training-time safety measures. This technique uses cascaded classifiers to detect toxicity, violence, hate speech, privacy violations, and other harmful content, with configurable thresholds for different risk levels. Filtering can redact specific content, block entire outputs, or trigger human review depending on severity, providing a safety layer independent of model training.",
+    "description": "Inference-time safety filtering applies real-time content moderation during deployment, generating evidence of safety violations and filtering effectiveness. This technique produces detailed logs of blocked content, safety incident reports, violation pattern analysis, and filtering performance metrics. Evidence includes categorized threat taxonomies, false positive/negative rates, and temporal trends in attack patterns, supporting assurance claims about deployed system safety.",
     "assurance_goals": [
       "Safety",
       "Security",
@@ -800,7 +800,7 @@
     ],
     "limitations": [
       {
-        "description": "Adds latency to inference, which may be unacceptable for real-time applications or high-throughput scenarios."
+        "description": "Adds 50-200ms latency to inference depending on filter complexity, which may be unacceptable for real-time applications requiring sub-100ms response times."
       },
       {
         "description": "Safety classifiers may produce false positives that block legitimate content, degrading user experience and system utility."
@@ -877,10 +877,10 @@
         "description": "Models may overfit to adversarial examples in training data without generalizing to fundamentally different attack strategies."
       },
       {
-        "description": "Adversarial training typically reduces clean accuracy, creating trade-offs that must be carefully evaluated for specific applications."
+        "description": "Adversarial training typically reduces clean accuracy by 2-10 percentage points, requiring careful evaluation of security-accuracy trade-offs for each application."
       },
       {
-        "description": "Computational cost of generating adversarial examples during training is high, limiting the scale and diversity of adversarial training."
+        "description": "Adversarial training typically reduces clean accuracy by 2-10 percentage points, creating trade-offs that must be carefully evaluated for specific applications."
       },
       {
         "description": "Difficult to achieve certified robustness guarantees that hold against all possible attacks within a specified threat model."
@@ -938,7 +938,7 @@
         "goal": "Reliability"
       },
       {
-        "description": "Verifying that a resume screening LLM doesn't exhibit demographic bias based on minor prompt variations in candidate descriptions, maintaining fair evaluation across applicants.",
+        "description": "Verifying that a climate modeling AI produces consistent environmental risk assessments regardless of minor variations in how scenarios are described, maintaining fair analysis across different reporting styles.",
         "goal": "Fairness"
       },
       {
@@ -963,7 +963,7 @@
   },
   {
     "name": "API Usage Pattern Monitoring",
-    "description": "API usage pattern monitoring analyzes how AI model APIs are being used in production to detect anomalies, abuse, and emerging risks. This technique tracks request patterns, input distributions, error rates, and usage velocity to identify potential model extraction attempts, adversarial probing, automated abuse, or unexpected deployment contexts. Monitoring enables real-time threat detection, informs model improvement priorities, and provides visibility into how systems are actually being used versus intended use cases.",
+    "description": "API usage pattern monitoring analyzes AI model API usage to detect anomalies and generate evidence of secure operation. This technique tracks request patterns, input distributions, and usage velocity to produce security reports, anomaly detection evidence, and usage compliance documentation. Monitoring generates quantitative metrics on extraction attempt frequency, adversarial probing patterns, and deviation from intended use, creating auditable evidence for assurance cases.",
     "assurance_goals": [
       "Security",
       "Safety",
@@ -994,13 +994,13 @@
         "description": "Privacy concerns may limit the extent to which usage data can be collected and analyzed, especially for sensitive applications."
       },
       {
-        "description": "High false positive rates in anomaly detection can create alert fatigue, reducing the effectiveness of human review processes."
+        "description": "High false positive rates (often 20-40% in anomaly detection) can create alert fatigue, reducing the effectiveness of human review processes."
       }
     ]
   },
   {
     "name": "Multi-Agent System Verification",
-    "description": "Multi-agent system verification tests the safety and reliability of systems where multiple AI agents interact, coordinate, or compete. This technique evaluates emergent behaviors, communication protocol adherence, conflict resolution mechanisms, and whether agents maintain individual and collective objectives appropriately. Verification includes testing edge cases where agent goals conflict, communication fails, or unexpected coalitions form, ensuring the overall system behaves safely even when individual agent behaviors combine in complex ways.",
+    "description": "Multi-agent system verification tests safety and reliability of systems where multiple AI agents interact, coordinate, or compete. This technique evaluates emergent behaviors, communication protocols, conflict resolution, and whether agents maintain objectives appropriately. Verification produces reports on agent interaction patterns, coalition formation, failure cascade analysis, and safety property violations in multi-agent scenarios.",
     "assurance_goals": [
       "Safety",
       "Reliability",
@@ -1049,7 +1049,7 @@
         "goal": "Safety"
       },
       {
-        "description": "Identifying knowledge gaps in a legal research assistant to ensure it provides reliable information about well-covered topics while appropriately disclaiming uncertainty about niche or recent legal developments.",
+        "description": "Identifying knowledge gaps in a public policy analysis AI to ensure it provides reliable information about well-researched policy areas while disclaiming uncertainty about emerging policy domains or local contexts.",
         "goal": "Reliability"
       },
       {
@@ -1086,7 +1086,7 @@
         "goal": "Reliability"
       },
       {
-        "description": "Identifying when a safety-critical system appears to meet safety metrics by gaming test scenarios rather than genuinely achieving safe behaviors, preventing dangerous deployments.",
+        "description": "Identifying when an environmental monitoring system appears to meet pollution reduction metrics by gaming sensor placement or timing rather than genuinely improving air quality, preventing ineffective environmental interventions.",
         "goal": "Safety"
       },
       {

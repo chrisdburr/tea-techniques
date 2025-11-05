@@ -1,6 +1,6 @@
 {
   "name": "Inference-Time Safety Filtering",
-  "description": "Inference-time safety filtering applies real-time content moderation to model inputs and outputs during deployment to catch and block harmful content that bypasses training-time safety measures. This technique uses cascaded classifiers to detect toxicity, violence, hate speech, privacy violations, and other harmful content, with configurable thresholds for different risk levels. Filtering can redact specific content, block entire outputs, or trigger human review depending on severity, providing a safety layer independent of model training.",
+  "description": "Inference-time safety filtering applies real-time content moderation during deployment, generating evidence of safety violations and filtering effectiveness. This technique produces detailed logs of blocked content, safety incident reports, violation pattern analysis, and filtering performance metrics. Evidence includes categorized threat taxonomies, false positive/negative rates, and temporal trends in attack patterns, supporting assurance claims about deployed system safety.",
   "assurance_goals": [
     "Safety",
     "Security",
@@ -22,7 +22,7 @@
   ],
   "limitations": [
     {
-      "description": "Adds latency to inference, which may be unacceptable for real-time applications or high-throughput scenarios."
+      "description": "Adds 50-200ms latency to inference depending on filter complexity, which may be unacceptable for real-time applications requiring sub-100ms response times."
     },
     {
       "description": "Safety classifiers may produce false positives that block legitimate content, degrading user experience and system utility."

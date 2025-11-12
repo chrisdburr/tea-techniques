@@ -116,7 +116,6 @@ export function WizardPageWrapper({ techniques }: WizardPageWrapperProps) {
                 <QuestionRenderer
                   filteredTechniques={filteredTechniques}
                   onAnswer={submitAnswer}
-                  onBack={goBack}
                   previousAnswer={
                     wizardMachine.getState().path.length > 0
                       ? String(wizardMachine.getState().path.at(-1)?.answer)

@@ -72,7 +72,7 @@ export function WizardResults({
       opacity: 1,
       y: 0,
       transition: {
-        type: 'spring',
+        type: 'spring' as const,
         stiffness: 100,
         damping: 15,
       },
@@ -123,7 +123,6 @@ export function WizardResults({
           <WizardResultCard
             matchReasons={singleResult.reasons}
             matchScore={singleResult.score}
-            state={state}
             technique={singleResult.technique}
           />
           <div className="mt-4">
@@ -210,7 +209,6 @@ export function WizardResults({
                     <WizardResultCard
                       matchReasons={item.reasons}
                       matchScore={item.score}
-                      state={state}
                       technique={item.technique}
                     />
                   </motion.div>
@@ -231,7 +229,6 @@ export function WizardResults({
                     <WizardResultCard
                       matchReasons={item.reasons}
                       matchScore={item.score}
-                      state={state}
                       technique={item.technique}
                     />
                   </motion.div>

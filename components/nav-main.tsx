@@ -190,6 +190,10 @@ export function NavMain() {
       icon: BookOpen,
       items: [
         {
+          title: 'Technique Finder Wizard',
+          url: '/docs/technique-finder-wizard',
+        },
+        {
           title: 'Data Serving (API)',
           url: '/docs/api-data-serving',
         },

@@ -22,7 +22,6 @@ import type { QuestionOption, WizardQuestion } from '@/lib/wizard/types';
 interface QuestionRendererProps {
   question: WizardQuestion;
   onAnswer: (answer: string | string[]) => void;
-  onBack: () => void;
   filteredTechniques: Technique[];
   previousAnswer?: string;
   isLoading?: boolean;
@@ -31,7 +30,6 @@ interface QuestionRendererProps {
 export function QuestionRenderer({
   question,
   onAnswer,
-  onBack,
   filteredTechniques,
   previousAnswer,
   isLoading = false,
@@ -39,6 +37,7 @@ export function QuestionRenderer({
   const [selectedValues, setSelectedValues] = useState<Set<string>>(new Set());
   const [options, setOptions] = useState<QuestionOption[]>([]);
   const [hoveredOption, setHoveredOption] = useState<string | null>(null);
+  const [showAllOptions, setShowAllOptions] = useState(false);
 
   // Load and enrich options
   useEffect(() => {
@@ -118,31 +117,43 @@ export function QuestionRenderer({
     }
   }, [question.type, selectedValues, onAnswer]);
 
+  // Filter options based on showAllOptions toggle
+  const visibleOptions = showAllOptions
+    ? options
+    : options.filter(
+        (opt) =>
+          opt.value === 'not-sure' || // Always show "not sure" option
+          (opt.count !== undefined && opt.count > 0) // Show options with results
+      );
+
+  // Check if there are any hidden options
+  const hasHiddenOptions = options.length > visibleOptions.length;
+
   // Handle arrow key navigation
   const handleArrowKey = useCallback(
     (direction: 'up' | 'down') => {
       const currentIndex = hoveredOption
-        ? options.findIndex((opt) => opt.value === hoveredOption)
+        ? visibleOptions.findIndex((opt) => opt.value === hoveredOption)
         : -1;
 
       if (direction === 'down') {
-        const nextIndex = (currentIndex + 1) % options.length;
-        setHoveredOption(options[nextIndex].value);
+        const nextIndex = (currentIndex + 1) % visibleOptions.length;
+        setHoveredOption(visibleOptions[nextIndex].value);
       } else {
         const prevIndex =
-          currentIndex <= 0 ? options.length - 1 : currentIndex - 1;
-        setHoveredOption(options[prevIndex].value);
+          currentIndex <= 0 ? visibleOptions.length - 1 : currentIndex - 1;
+        setHoveredOption(visibleOptions[prevIndex].value);
       }
     },
-    [options, hoveredOption]
+    [visibleOptions, hoveredOption]
   );
 
   // Handle Enter key separately to reduce complexity
   const handleEnterKey = useCallback(() => {
     if (hoveredOption) {
       handleSelect(hoveredOption);
-    } else if (question.type === 'single' && options.length === 1) {
-      handleSelect(options[0].value);
+    } else if (question.type === 'single' && visibleOptions.length === 1) {
+      handleSelect(visibleOptions[0].value);
     } else if (question.type === 'multi' && selectedValues.size > 0) {
       handleSubmit();
     }
@@ -150,7 +161,7 @@ export function QuestionRenderer({
     hoveredOption,
     handleSelect,
     question.type,
-    options,
+    visibleOptions,
     selectedValues.size,
     handleSubmit,
   ]);
@@ -211,7 +222,7 @@ export function QuestionRenderer({
       opacity: 1,
       y: 0,
       transition: {
-        type: 'spring',
+        type: 'spring' as const,
         stiffness: 100,
         damping: 15,
       },
@@ -265,6 +276,24 @@ export function QuestionRenderer({
         )}
       </div>
 
+      {/* Toggle for showing all options */}
+      {hasHiddenOptions && (
+        <div className="mb-4 flex items-center gap-2">
+          <label className="flex cursor-pointer items-center gap-2 text-sm">
+            <input
+              checked={showAllOptions}
+              className="h-4 w-4 cursor-pointer rounded border-gray-300 text-primary focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              onChange={(e) => setShowAllOptions(e.target.checked)}
+              type="checkbox"
+            />
+            <span className="text-muted-foreground">
+              Show options with no results (
+              {options.length - visibleOptions.length} hidden)
+            </span>
+          </label>
+        </div>
+      )}
+
       {/* Options */}
       <motion.div
         animate="visible"
@@ -272,7 +301,7 @@ export function QuestionRenderer({
         initial="hidden"
         variants={containerVariants}
       >
-        {options.map((option) => {
+        {visibleOptions.map((option) => {
           const isSelected =
             question.type === 'single'
               ? false
@@ -337,35 +366,23 @@ export function QuestionRenderer({
       </motion.div>
 
       {/* Footer Actions */}
-      <div className="mt-6 flex items-center justify-between">
-        <Button
-          className="h-10 px-4 text-sm sm:h-9 sm:px-3"
-          disabled={isLoading}
-          onClick={onBack}
-          size="default"
-          variant="outline"
-        >
-          Back
-        </Button>
-
-        {question.type === 'multi' && (
-          <div className="flex items-center gap-2">
-            {selectedValues.size > 0 && (
-              <span className="text-muted-foreground text-sm">
-                {selectedValues.size} selected
-              </span>
-            )}
-            <Button
-              className="h-10 px-4 text-sm sm:h-9 sm:px-3"
-              disabled={isLoading || selectedValues.size === 0}
-              onClick={handleSubmit}
-              size="default"
-            >
-              Next
-            </Button>
-          </div>
-        )}
-      </div>
+      {question.type === 'multi' && (
+        <div className="mt-6 flex items-center justify-end gap-2">
+          {selectedValues.size > 0 && (
+            <span className="text-muted-foreground text-sm">
+              {selectedValues.size} selected
+            </span>
+          )}
+          <Button
+            className="h-10 px-4 text-sm sm:h-9 sm:px-3"
+            disabled={isLoading || selectedValues.size === 0}
+            onClick={handleSubmit}
+            size="default"
+          >
+            Next
+          </Button>
+        </div>
+      )}
 
       {/* Helper Info */}
       {options.length === 0 && !isLoading && (

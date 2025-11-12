@@ -124,23 +124,22 @@ export function TechniqueWizard({
     setIsTransitioning(true);
 
     setTimeout(() => {
+      // Hide results if we're currently showing them
       if (showResults) {
         setShowResults(false);
-        const state = wizardMachine.getState();
-        if (state.path.length > 0) {
-          const question = wizardMachine.getCurrentQuestion();
-          setCurrentQuestion(question);
-        }
+      }
+
+      // Always call goBack to remove the last answer and re-filter
+      const previousQuestion = wizardMachine.goBack();
+      if (previousQuestion) {
+        setCurrentQuestion(previousQuestion);
+        setProgress(wizardMachine.getProgress());
+        setFilteredTechniques(wizardMachine.getFilteredTechniques());
       } else {
-        const previousQuestion = wizardMachine.goBack();
-        if (previousQuestion) {
-          setCurrentQuestion(previousQuestion);
-          setProgress(wizardMachine.getProgress());
-        } else {
-          // Back to entry point selection
-          setCurrentFlow('');
-          setCurrentQuestion(null);
-        }
+        // Back to entry point selection
+        setCurrentFlow('');
+        setCurrentQuestion(null);
+        setFilteredTechniques(wizardMachine.getFilteredTechniques());
       }
       setIsTransitioning(false);
     }, 300);
@@ -177,7 +176,7 @@ export function TechniqueWizard({
       scale: 1,
       y: 0,
       transition: {
-        type: 'spring',
+        type: 'spring' as const,
         duration: 0.5,
         bounce: 0.3,
       },
@@ -201,7 +200,7 @@ export function TechniqueWizard({
       x: 0,
       opacity: 1,
       transition: {
-        x: { type: 'spring', stiffness: 300, damping: 30 },
+        x: { type: 'spring' as const, stiffness: 300, damping: 30 },
         opacity: { duration: 0.2 },
       },
     },
@@ -209,7 +208,7 @@ export function TechniqueWizard({
       x: dir === 'forward' ? -300 : 300,
       opacity: 0,
       transition: {
-        x: { type: 'spring', stiffness: 300, damping: 30 },
+        x: { type: 'spring' as const, stiffness: 300, damping: 30 },
         opacity: { duration: 0.2 },
       },
     }),
@@ -322,7 +321,6 @@ export function TechniqueWizard({
                             filteredTechniques={filteredTechniques}
                             isLoading={isTransitioning}
                             onAnswer={submitAnswer}
-                            onBack={goBack}
                             previousAnswer={
                               wizardState.path.length > 0
                                 ? String(wizardState.path.at(-1)?.answer)

@@ -178,14 +178,14 @@ export class WizardStateMachine {
       return false;
     }
 
+    const filterTag = question.filterTag; // Store in variable for TypeScript narrowing
     const firstTechniqueValues = this.getTechniqueValues(
       this.filteredTechniques[0],
-      question.filterTag
+      filterTag
     );
 
     return this.filteredTechniques.every((technique) => {
-      // filterTag is already checked above, safe to use here
-      const values = this.getTechniqueValues(technique, question.filterTag);
+      const values = this.getTechniqueValues(technique, filterTag);
       return (
         values.length === firstTechniqueValues.length &&
         values.every((v) => firstTechniqueValues.includes(v))

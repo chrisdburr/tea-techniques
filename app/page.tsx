@@ -1,4 +1,3 @@
-import { Compass } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Database, FileText, Globe } from '@/components/icons';
@@ -31,12 +30,6 @@ export default function Home() {
             <div className="flex flex-wrap gap-4 pt-4">
               <Button asChild size="lg">
                 <Link href="/techniques">Explore Techniques</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <Link href="/wizard">
-                  <Compass className="mr-2 h-5 w-5" />
-                  Find the Right Technique
-                </Link>
               </Button>
               <Button asChild size="lg" variant="outline">
                 <Link href="https://assuranceplatform.azurewebsites.net/">
@@ -98,7 +91,9 @@ export default function Home() {
             <CardContent>
               <p className="text-muted-foreground">
                 Filter by assurance goals, categories, and specific criteria to
-                discover appropriate techniques for your project.
+                discover appropriate techniques for your project. Use our
+                interactive wizard to answer guided questions and receive
+                personalised technique recommendations.
               </p>
             </CardContent>
           </Card>

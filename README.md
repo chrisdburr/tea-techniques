@@ -17,6 +17,8 @@ assurance methods.
   responsible AI techniques
 - **7 Assurance Goals**: Organised by explainability, fairness, privacy,
   reliability, safety, security, and transparency
+- **Interactive Technique Finder**: Guided wizard to help identify suitable
+  techniques based on your specific requirements
 - **Tag Filtering**: Filter by tags, such as `#expertise-level`,
   `#lifecycle-stage`, `#applicable-models`, and more
 - **Static Site Generation**: Fast deployment via GitHub Pages

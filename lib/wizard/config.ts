@@ -180,7 +180,7 @@ export const wizardConfig: WizardConfig = {
 
     'model-access': {
       id: 'model-access',
-      text: 'What level of access do you have to the model?',
+      text: 'What level of access do you have to the model internals?',
       helpText: 'How much visibility into the model internals',
       helpItems: {
         'Black-box': 'Only input/output access, no internals visible',

@@ -45,6 +45,7 @@ import {
   Users,
 } from 'lucide-react';
 import Link from 'next/link';
+import type { ReactElement } from 'react';
 import { Badge } from '@/components/ui/badge';
 import {
   Tooltip,
@@ -305,7 +306,7 @@ function buildFlatSections(
   tagsByCategory: Record<string, string[]>,
   technique: Technique
 ) {
-  const sections: JSX.Element[] = [];
+  const sections: ReactElement[] = [];
   const hasExplainability = technique.assurance_goals
     .map((g) => g.toLowerCase())
     .includes('explainability');
@@ -347,7 +348,7 @@ export function TechniqueTagsHierarchical({
   const hierarchicalSections = technique.assurance_goals
     .filter((goal) => hasHierarchicalTags(goal.toLowerCase()))
     .map((goal) => buildHierarchicalSection(goal, technique))
-    .filter(Boolean) as JSX.Element[];
+    .filter(Boolean) as ReactElement[];
 
   // Build flat tag sections
   const flatSections = buildFlatSections(tagsByCategory, technique);

@@ -14,20 +14,17 @@ import {
 } from '@/components/ui/card';
 import type { Technique } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import type { WizardState } from '@/lib/wizard/types';
 
 interface WizardResultCardProps {
   technique: Technique;
   matchScore: number;
   matchReasons: string[];
-  state: WizardState;
 }
 
 export function WizardResultCard({
   technique,
   matchScore,
   matchReasons,
-  state,
 }: WizardResultCardProps) {
   // Parse match reasons into more user-friendly format
   const formatReason = (reason: string) => {
@@ -75,11 +72,11 @@ export function WizardResultCard({
         <Badge
           className={cn(
             'px-3 py-1 font-semibold',
-            matchScore === 100
-              ? 'bg-green-500 text-white hover:bg-green-600'
-              : matchScore >= 75
-                ? 'bg-blue-500 text-white hover:bg-blue-600'
-                : 'bg-gray-500 text-white hover:bg-gray-600'
+            matchScore === 100 && 'bg-green-500 text-white hover:bg-green-600',
+            matchScore >= 75 &&
+              matchScore < 100 &&
+              'bg-blue-500 text-white hover:bg-blue-600',
+            matchScore < 75 && 'bg-gray-500 text-white hover:bg-gray-600'
           )}
         >
           {matchScore}% match
@@ -109,10 +106,10 @@ export function WizardResultCard({
             Why this technique matches:
           </h4>
           <ul className="space-y-1">
-            {formattedReasons.map((reason, idx) => (
+            {formattedReasons.map((reason) => (
               <li
                 className="flex items-start gap-2 text-muted-foreground text-sm"
-                key={idx}
+                key={reason}
               >
                 <span className="mt-0.5 text-green-500">•</span>
                 <span>{reason}</span>
@@ -127,13 +124,13 @@ export function WizardResultCard({
             {technique.tags
               .filter(
                 (tag) =>
-                  tag.category === 'applicable-models' ||
-                  tag.category === 'lifecycle-stage'
+                  tag.startsWith('applicable-models/') ||
+                  tag.startsWith('lifecycle-stage/')
               )
               .slice(0, 4)
               .map((tag) => (
-                <Badge className="text-xs" key={tag.slug} variant="outline">
-                  {tag.name}
+                <Badge className="text-xs" key={tag} variant="outline">
+                  {tag.split('/').pop()?.replace(/-/g, ' ')}
                 </Badge>
               ))}
           </div>

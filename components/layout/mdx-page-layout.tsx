@@ -29,10 +29,10 @@ export function MDXPageLayout({
     '6xl': 'max-w-6xl',
   };
 
-  // Determine if ToC should be shown
+  // Determine if ToC should be shown (default: true)
   const showToC =
-    tableOfContents === true ||
-    (typeof tableOfContents === 'object' && tableOfContents.enabled !== false);
+    tableOfContents !== false &&
+    !(typeof tableOfContents === 'object' && tableOfContents.enabled === false);
 
   // Extract ToC config if it's an object
   const tocConfig = typeof tableOfContents === 'object' ? tableOfContents : {};
@@ -66,7 +66,7 @@ export function MDXPageLayout({
         }
       >
         {/* Main Content */}
-        <div className={cn('mx-auto', !showToC && maxWidthClasses[maxWidth])}>
+        <div className={cn('mx-auto w-full', maxWidthClasses[maxWidth])}>
           {/* Page Header */}
           <header className="mb-8">
             <h1 className="mb-4 font-bold text-3xl text-foreground">{title}</h1>
@@ -79,6 +79,7 @@ export function MDXPageLayout({
           <main
             className={cn(
               'prose prose-neutral dark:prose-invert max-w-none',
+              '[&_button]:not-prose [&_a>button]:not-prose',
               className
             )}
           >

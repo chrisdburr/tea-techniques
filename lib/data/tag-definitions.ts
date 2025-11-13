@@ -25,80 +25,167 @@ export const tagDefinitions: Record<string, string> = {
   'fairness-approach':
     'Underlying approach to fairness for fairness-related techniques',
 
-  // Applicable Models
-  'applicable-models/agnostic':
-    'Techniques that work with any type of machine learning model',
-  'applicable-models/cnn':
-    'Techniques specifically designed for Convolutional Neural Networks',
-  'applicable-models/ensemble':
-    'Techniques for models that combine multiple base learners',
-  'applicable-models/gam': 'Techniques for Generalized Additive Models',
-  'applicable-models/gan': 'Techniques for Generative Adversarial Networks',
-  'applicable-models/gaussian-process':
-    'Techniques for Gaussian Process models',
-  'applicable-models/linear':
-    'Techniques for linear models including linear regression',
-  'applicable-models/linear-model':
-    'Techniques for linear and logistic regression models',
-  'applicable-models/llm': 'Techniques designed for Large Language Models',
-  'applicable-models/logistic-regression':
-    'Techniques specifically for logistic regression models',
-  'applicable-models/neural-network':
+  // Applicable Models - Architecture Dimension
+  'applicable-models/architecture/model-agnostic':
+    'Works with any model type without requiring specific architecture (black-box techniques)',
+  'applicable-models/architecture/neural-networks':
     'Techniques for general neural network architectures',
-  'applicable-models/probabilistic':
-    'Techniques for probabilistic and Bayesian models',
-  'applicable-models/recurrent-neural-network':
-    'Techniques for RNN architectures',
-  'applicable-models/rnn':
-    'Techniques for Recurrent Neural Networks including LSTM and GRU',
-  'applicable-models/transformer':
+  'applicable-models/architecture/neural-networks/feedforward':
+    'Techniques for standard feedforward networks (MLPs)',
+  'applicable-models/architecture/neural-networks/convolutional':
+    'Techniques for CNNs and vision models',
+  'applicable-models/architecture/neural-networks/recurrent':
+    'Techniques for RNNs, LSTMs, and GRUs',
+  'applicable-models/architecture/neural-networks/transformer':
     'Techniques for transformer-based architectures',
-  'applicable-models/tree-based':
-    'Techniques for decision trees, random forests, and gradient boosting',
+  'applicable-models/architecture/neural-networks/transformer/llm':
+    'Techniques for Large Language Models (GPT, BERT, etc.)',
+  'applicable-models/architecture/neural-networks/generative/gan':
+    'Techniques for Generative Adversarial Networks',
+  'applicable-models/architecture/neural-networks/generative/vae':
+    'Techniques for Variational Autoencoders',
+  'applicable-models/architecture/tree-based':
+    'Techniques for tree-based algorithms (decision trees, random forests, gradient boosting)',
+  'applicable-models/architecture/tree-based/gradient-boosting':
+    'Techniques for XGBoost, LightGBM, CatBoost, and similar models',
+  'applicable-models/architecture/linear-models':
+    'Techniques for linear and generalized linear models',
+  'applicable-models/architecture/linear-models/regression':
+    'Techniques for linear regression models',
+  'applicable-models/architecture/linear-models/logistic':
+    'Techniques for logistic regression models',
+  'applicable-models/architecture/linear-models/gam':
+    'Techniques for Generalized Additive Models',
+  'applicable-models/architecture/probabilistic':
+    'Techniques for explicitly probabilistic models',
+  'applicable-models/architecture/probabilistic/gaussian-processes':
+    'Techniques for Gaussian Process models',
+  'applicable-models/architecture/ensemble':
+    'Techniques for ensemble methods that combine multiple base learners',
 
-  // Lifecycle Stage
+  // Applicable Models - Paradigm Dimension
+  'applicable-models/paradigm/parametric':
+    'Models with a fixed number of parameters',
+  'applicable-models/paradigm/discriminative':
+    'Models that learn decision boundaries directly',
+  'applicable-models/paradigm/generative':
+    'Models that learn data distributions',
+  'applicable-models/paradigm/supervised': 'Requires labeled training data',
+  'applicable-models/paradigm/unsupervised': 'Works with unlabeled data',
+  'applicable-models/paradigm/probabilistic':
+    'Models that provide probabilistic outputs and reasoning',
+
+  // Applicable Models - Requirements Dimension
+  'applicable-models/requirements/gradient-access':
+    'Requires access to model gradients',
+  'applicable-models/requirements/model-internals':
+    'Requires access to weights, neurons, or internal representations',
+  'applicable-models/requirements/training-data':
+    'Requires access to the original training dataset',
+  'applicable-models/requirements/architecture-specific':
+    'Requires specific architectural components to function',
+  'applicable-models/requirements/white-box':
+    'Requires full model transparency and access',
+  'applicable-models/requirements/gray-box':
+    'Requires partial model access (between black-box and white-box)',
+  'applicable-models/requirements/black-box':
+    'Only requires input-output access, no internal model access needed',
+  'applicable-models/requirements/differentiable':
+    'Model must be differentiable',
+  'applicable-models/requirements/probabilistic-output':
+    'Model must provide probability distributions as output',
+
+  // Lifecycle Stage - Category Level Tags
   'lifecycle-stage/project-design':
-    'Techniques used during initial project planning and design',
-  'lifecycle-stage/project-planning':
-    'Techniques for early project planning and requirement gathering',
-  'lifecycle-stage/data-handling':
-    'Techniques for data collection, preparation, and preprocessing',
-  'lifecycle-stage/data-collection':
-    'Techniques specific to gathering and collecting data',
-  'lifecycle-stage/data-collection/data-augmentation':
-    'Techniques for expanding or enhancing datasets',
-  'lifecycle-stage/data-collection/data-preprocessing':
-    'Techniques for cleaning and preparing collected data',
-  'lifecycle-stage/data-handling/collection':
-    'Techniques for the data collection phase',
-  'lifecycle-stage/data-handling/preparation':
-    'Techniques for preparing data for model training',
-  'lifecycle-stage/data-handling/preprocessing':
-    'Techniques for data transformation and cleaning',
+    'Early-stage activities focused on scoping, planning, problem formulation, data procurement, and analysis',
   'lifecycle-stage/model-development':
-    'Techniques used during model building and training',
+    'Activities focused on preparing data, building, training, testing, and documenting the AI model',
+  'lifecycle-stage/system-deployment':
+    'Activities focused on deploying, operating, maintaining, and monitoring the AI system in production',
+
+  // Lifecycle Stage - Project Design Category (Specific Stages)
+  'lifecycle-stage/project-design/project-planning':
+    'Preliminary activities designed to help scope out the aims, objectives, and processes involved with the project, including potential risks and benefits',
+  'lifecycle-stage/project-design/problem-formulation':
+    'The formulation of a clear statement about the overarching problem the system or project addresses (e.g. a research statement or system specification) and a lower level description of the computational procedure that instantiates it',
+  'lifecycle-stage/project-design/data-extraction-or-procurement':
+    'The design of an experimental method or decisions about data gathering and collection, based on the planning and problem formulation from the previous steps',
+  'lifecycle-stage/project-design/data-analysis':
+    'Stages of exploratory and confirmatory data analysis designed to help researchers or developers identify relevant associations between input variables and target variables',
+
+  // Lifecycle Stage - Model Development Category (Specific Stages)
+  'lifecycle-stage/model-development/preprocessing-and-feature-engineering':
+    'A process of cleaning, normalising, and refactoring data into the features that will be used in model training and testing, as well as the features that may be used in the final system',
+  'lifecycle-stage/model-development/model-selection-and-training':
+    'The selection of a particular algorithm (or multiple algorithms) for training the model',
+  'lifecycle-stage/model-development/model-testing-and-validation':
+    'Testing the model against a variety of metrics, which may include those that assess how accurate a model is for different sub-groups of a population. This is important where issues of fairness or equality may arise',
+  'lifecycle-stage/model-development/model-documentation':
+    'A process of documenting both the formal and non-formal properties of both the model and the processes by which it was developed (e.g. source of data, algorithms used and evaluation metrics)',
+
+  // Lifecycle Stage - System Deployment Category (Specific Stages)
+  'lifecycle-stage/system-deployment/system-implementation':
+    "The process of putting a model into production, and implementing the operational system, which enables and structures interaction with the model, within the respective environment (e.g. a recommender system that converts a user's existing movie ratings into recommendations for future watches)",
+  'lifecycle-stage/system-deployment/user-training':
+    'Training for those individuals or groups who are either required to operate a data-driven system (perhaps in a safety-critical context) or who are likely to use the system (e.g. consumers)',
+  'lifecycle-stage/system-deployment/system-use-and-monitoring':
+    'Ongoing monitoring and feedback from the system, either automated or probed, to ensure that issues such as model drift have not affected performance or resulted in harms to individuals or groups',
+  'lifecycle-stage/system-deployment/model-updating-or-deprovisioning':
+    'An algorithmic model that adapts its behaviour over time or context may require updating or deprovisioning (i.e. removing from the production environment)',
+
+  // Lifecycle Stage - Other Category
+  'lifecycle-stage/other/cross-cutting':
+    'Techniques that apply across multiple lifecycle stages',
+  'lifecycle-stage/other/governance':
+    'Ongoing governance and oversight activities',
+  'lifecycle-stage/other/continuous':
+    'Continuous processes that operate throughout the lifecycle',
+
+  // Legacy lifecycle-stage tags (kept for backward compatibility during migration)
+  // Note: lifecycle-stage/project-design, /model-development, and /system-deployment
+  // are now primary tags (not legacy) as they're valid category-level tags
+  'lifecycle-stage/project-planning':
+    'Legacy: Techniques for early project planning and requirement gathering',
+  'lifecycle-stage/data-handling':
+    'Legacy: Techniques for data collection, preparation, and preprocessing',
+  'lifecycle-stage/data-collection':
+    'Legacy: Techniques specific to gathering and collecting data',
+  'lifecycle-stage/data-collection/data-augmentation':
+    'Legacy: Techniques for expanding or enhancing datasets',
+  'lifecycle-stage/data-collection/data-preprocessing':
+    'Legacy: Techniques for cleaning and preparing collected data',
+  'lifecycle-stage/data-handling/collection':
+    'Legacy: Techniques for the data collection phase',
+  'lifecycle-stage/data-handling/preparation':
+    'Legacy: Techniques for preparing data for model training',
+  'lifecycle-stage/data-handling/preprocessing':
+    'Legacy: Techniques for data transformation and cleaning',
   'lifecycle-stage/model-development/training':
-    'Techniques applied during the model training process',
+    'Legacy: Techniques applied during the model training process',
   'lifecycle-stage/model-development/testing':
-    'Techniques for testing model performance',
+    'Legacy: Techniques for testing model performance',
   'lifecycle-stage/model-development/fine-tuning':
-    'Techniques for optimizing model parameters',
+    'Legacy: Techniques for optimizing model parameters',
   'lifecycle-stage/model-evaluation':
-    'Techniques for assessing model performance and behavior',
+    'Legacy: Techniques for assessing model performance and behavior',
   'lifecycle-stage/model-optimization':
-    'Techniques for improving model efficiency and performance',
-  'lifecycle-stage/deployment': 'Techniques for deploying models to production',
+    'Legacy: Techniques for improving model efficiency and performance',
+  'lifecycle-stage/deployment':
+    'Legacy: Techniques for deploying models to production',
   'lifecycle-stage/system-deployment-and-use':
-    'Techniques for deployed systems in production',
+    'Legacy: Techniques for deployed systems in production',
   'lifecycle-stage/system-deployment-and-use/monitoring':
-    'Techniques for monitoring deployed models',
+    'Legacy: Techniques for monitoring deployed models',
   'lifecycle-stage/system-deployment-and-use/auditing':
-    'Techniques for auditing deployed systems',
-  'lifecycle-stage/monitoring': 'Techniques for continuous model monitoring',
+    'Legacy: Techniques for auditing deployed systems',
+  'lifecycle-stage/monitoring':
+    'Legacy: Techniques for continuous model monitoring',
   'lifecycle-stage/post-deployment':
-    'Techniques applied after model deployment',
-  'lifecycle-stage/post-processing': 'Techniques for processing model outputs',
-  'lifecycle-stage/testing': 'Techniques for testing models and systems',
+    'Legacy: Techniques applied after model deployment',
+  'lifecycle-stage/post-processing':
+    'Legacy: Techniques for processing model outputs',
+  'lifecycle-stage/testing':
+    'Legacy: Techniques for testing models and systems',
 
   // Expertise Needed
   'expertise-needed/statistics':

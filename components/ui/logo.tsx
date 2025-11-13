@@ -39,6 +39,7 @@ export function Logo({ className, size = 32 }: LogoProps) {
           ? getAssetPath('/logo-dark-mode.png')
           : getAssetPath('/logo-light-mode.png')
       }
+      unoptimized
       width={size}
     />
   );

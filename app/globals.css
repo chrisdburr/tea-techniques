@@ -315,6 +315,19 @@ pre[class*="language-"].line-numbers {
   @apply no-underline;
 }
 
+/* Prevent link text color from cascading to buttons */
+.prose a:has(button) {
+  color: inherit;
+}
+
+/* Ensure button text color is not overridden by child elements */
+.prose button p,
+.prose button span,
+.prose button div {
+  color: inherit;
+  margin-bottom: 0;
+}
+
 /* Fix code block styling in prose */
 .prose pre {
   @apply bg-transparent p-0 m-0;

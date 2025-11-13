@@ -154,6 +154,102 @@ export const TAG_HIERARCHIES: Record<string, HierarchyConfig> = {
   },
 
   /**
+   * APPLICABLE MODELS HIERARCHY
+   * Three-dimensional classification system for model applicability:
+   * 1. Architecture - MODEL FAMILY (what type of model)
+   * 2. Paradigm - COMPUTATIONAL APPROACH (how it learns)
+   * 3. Requirements - TECHNICAL PREREQUISITES (what access is needed)
+   *
+   * Note: Unlike assurance goals, this hierarchy applies to the 'applicable-models'
+   * category directly, not through 'assurance-goal-category'.
+   */
+  'applicable-models': {
+    dimensions: {
+      // ARCHITECTURE DIMENSION - Model family/type
+      architecture: {
+        name: 'Architecture',
+        order: 1,
+        description:
+          'The fundamental architectural pattern or learning paradigm of the model',
+        icon: 'cpu',
+      },
+
+      // PARADIGM DIMENSION - Computational approach
+      paradigm: {
+        name: 'Paradigm',
+        order: 2,
+        description: 'The computational paradigm or learning approach',
+        icon: 'git-branch',
+      },
+
+      // REQUIREMENTS DIMENSION - Technical prerequisites
+      requirements: {
+        name: 'Requirements',
+        order: 3,
+        description: 'Technical requirements or access levels needed',
+        icon: 'shield',
+      },
+    },
+    defaultOrder: ['Architecture', 'Paradigm', 'Requirements'],
+    showEmptyDimensions: false,
+  },
+
+  /**
+   * LIFECYCLE STAGE HIERARCHY
+   * 12-stage project lifecycle model organized into three main categories:
+   * 1. Project Design - Planning, formulation, data procurement, and analysis
+   * 2. Model Development - Preprocessing, training, testing, and documentation
+   * 3. System Deployment - Implementation, training, monitoring, and deprovisioning
+   * Plus an "Other" category for cross-cutting concerns
+   */
+  'lifecycle-stage': {
+    dimensions: {
+      // PROJECT DESIGN - Early-stage planning and data work
+      'project-design': {
+        name: 'Project Design',
+        order: 1,
+        description:
+          'Early-stage activities focused on scoping, planning, and understanding the problem domain and data landscape',
+        icon: 'clipboard',
+      },
+
+      // MODEL DEVELOPMENT - Building and validating the model
+      'model-development': {
+        name: 'Model Development',
+        order: 2,
+        description:
+          'Activities focused on preparing data, building, training, testing, and documenting the AI model',
+        icon: 'cpu',
+      },
+
+      // SYSTEM DEPLOYMENT - Production deployment and operations
+      'system-deployment': {
+        name: 'System Deployment',
+        order: 3,
+        description:
+          'Activities focused on deploying, operating, maintaining, and monitoring the AI system in production',
+        icon: 'rocket',
+      },
+
+      // OTHER - Cross-cutting concerns
+      other: {
+        name: 'Other',
+        order: 4,
+        description:
+          'Cross-cutting techniques and governance activities that span multiple lifecycle stages',
+        icon: 'more-horizontal',
+      },
+    },
+    defaultOrder: [
+      'Project Design',
+      'Model Development',
+      'System Deployment',
+      'Other',
+    ],
+    showEmptyDimensions: false,
+  },
+
+  /**
    * PLACEHOLDER FOR FUTURE HIERARCHIES
    * Uncomment and modify when implementing hierarchical tagging for other goals
    */
@@ -195,24 +291,13 @@ export const TAG_HIERARCHIES: Record<string, HierarchyConfig> = {
 };
 
 /**
- * Helper function to get dimension info for a tag
- * @param tag - The full tag path (e.g., 'assurance-goal-category/explainability/property/completeness')
- * @returns The dimension configuration if found, null otherwise
+ * Helper to get dimension config from a hierarchy
  */
-export function getDimensionForTag(
-  tag: string
+function getDimensionConfig(
+  hierarchyKey: string,
+  dimensionKey: string
 ): { dimension: string; config: DimensionConfig } | null {
-  const parts = tag.split('/');
-
-  // Check if this is an assurance-goal-category tag with hierarchy
-  if (parts[0] !== 'assurance-goal-category' || parts.length < 3) {
-    return null;
-  }
-
-  const goal = parts[1]; // e.g., 'explainability'
-  const dimensionKey = parts[2]; // e.g., 'property'
-
-  const hierarchy = TAG_HIERARCHIES[goal];
+  const hierarchy = TAG_HIERARCHIES[hierarchyKey];
   if (!hierarchy) {
     return null;
   }
@@ -223,6 +308,44 @@ export function getDimensionForTag(
   }
 
   return { dimension: dimensionKey, config };
+}
+
+/**
+ * Helper function to get dimension info for a tag
+ * @param tag - The full tag path (e.g., 'assurance-goal-category/explainability/property/completeness' or 'applicable-models/architecture/model-agnostic')
+ * @returns The dimension configuration if found, null otherwise
+ */
+export function getDimensionForTag(
+  tag: string
+): { dimension: string; config: DimensionConfig } | null {
+  const parts = tag.split('/');
+
+  if (parts.length < 2) {
+    return null;
+  }
+
+  const category = parts[0];
+
+  // Handle assurance-goal-category tags (e.g., explainability, fairness)
+  if (category === 'assurance-goal-category' && parts.length >= 3) {
+    const goal = parts[1];
+    const dimensionKey = parts[2];
+    return getDimensionConfig(goal, dimensionKey);
+  }
+
+  // Handle applicable-models tags
+  if (category === 'applicable-models' && parts.length >= 2) {
+    const dimensionKey = parts[1];
+    return getDimensionConfig('applicable-models', dimensionKey);
+  }
+
+  // Handle lifecycle-stage tags
+  if (category === 'lifecycle-stage' && parts.length >= 2) {
+    const dimensionKey = parts[1];
+    return getDimensionConfig('lifecycle-stage', dimensionKey);
+  }
+
+  return null;
 }
 
 /**
@@ -261,9 +384,46 @@ function handleSpecialTag(
 }
 
 /**
+ * Process a single tag for categorized hierarchies (applicable-models, lifecycle-stage)
+ */
+function processCategorizedTag(
+  tag: string,
+  goal: string,
+  grouped: Record<string, { config: DimensionConfig; tags: string[] }>
+): boolean {
+  if (
+    (goal === 'applicable-models' && tag.startsWith('applicable-models/')) ||
+    (goal === 'lifecycle-stage' && tag.startsWith('lifecycle-stage/'))
+  ) {
+    const dimensionInfo = getDimensionForTag(tag);
+    if (dimensionInfo) {
+      const { dimension, config } = dimensionInfo;
+      addTagToGroup(grouped, dimension, config, tag);
+    }
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Process a single tag for assurance goal hierarchies
+ */
+function processAssuranceGoalTag(
+  tag: string,
+  goal: string,
+  grouped: Record<string, { config: DimensionConfig; tags: string[] }>
+): void {
+  const dimensionInfo = getDimensionForTag(tag);
+  if (dimensionInfo && tag.includes(`assurance-goal-category/${goal}/`)) {
+    const { dimension, config } = dimensionInfo;
+    addTagToGroup(grouped, dimension, config, tag);
+  }
+}
+
+/**
  * Groups hierarchical tags by their dimensions
  * @param tags - Array of tag strings
- * @param goal - The assurance goal to group tags for
+ * @param goal - The assurance goal to group tags for (or 'applicable-models' or 'lifecycle-stage')
  * @returns Object with dimension names as keys and arrays of tags as values
  */
 export function groupTagsByDimension(
@@ -279,17 +439,18 @@ export function groupTagsByDimension(
     {};
 
   for (const tag of tags) {
-    // Check for special case tags first
+    // Handle categorized tags (applicable-models, lifecycle-stage)
+    if (processCategorizedTag(tag, goal, grouped)) {
+      continue;
+    }
+
+    // Handle special case tags (for assurance goals)
     if (handleSpecialTag(tag, goal, hierarchy, grouped)) {
       continue;
     }
 
-    // Regular hierarchical tag handling
-    const dimensionInfo = getDimensionForTag(tag);
-    if (dimensionInfo && tag.includes(`assurance-goal-category/${goal}/`)) {
-      const { dimension, config } = dimensionInfo;
-      addTagToGroup(grouped, dimension, config, tag);
-    }
+    // Handle regular assurance goal tags
+    processAssuranceGoalTag(tag, goal, grouped);
   }
 
   return grouped;

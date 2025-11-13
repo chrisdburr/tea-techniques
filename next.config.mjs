@@ -40,9 +40,13 @@ const nextConfig = {
   // Disable powered by header
   poweredByHeader: false,
 
-  // Configure for GitHub Pages deployment
-  basePath: '/tea-techniques',
-  assetPrefix: '/tea-techniques',
+  // Configure for GitHub Pages deployment (skip for local builds)
+  ...(process.env.SKIP_BASE_PATH
+    ? {}
+    : {
+        basePath: '/tea-techniques',
+        assetPrefix: '/tea-techniques',
+      }),
 
   // Performance budgets and optimizations
   experimental: {

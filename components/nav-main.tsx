@@ -95,8 +95,8 @@ export function NavMain() {
           url: '/about/technique-evaluation',
         },
         {
-          title: 'Tag Definitions',
-          url: '/about/tag-definitions',
+          title: 'Community Contributions',
+          url: '/about/community-contributions',
         },
       ],
     },
@@ -196,6 +196,18 @@ export function NavMain() {
         {
           title: 'Data Serving (API)',
           url: '/docs/api-data-serving',
+        },
+        {
+          title: 'Data Schema',
+          url: '/docs/data-schema',
+        },
+        {
+          title: 'Tag System',
+          url: '/docs/tags',
+        },
+        {
+          title: 'Tag Reference',
+          url: '/docs/tag-reference',
         },
         {
           title: 'Community Contributions',

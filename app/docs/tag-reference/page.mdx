@@ -1,0 +1,38 @@
+import {
+  MDXPageLayout,
+  generateMetadataFromFrontmatter,
+} from '@/components/layout/mdx-page-layout';
+import { AllTagCategories } from '@/components/tags/all-tag-categories';
+
+export const frontmatter = {
+  title: 'Tag Reference',
+  description: 'Comprehensive reference of all tags used in the TEA Techniques database, including hierarchical structures and definitions.',
+  breadcrumbs: [
+    { label: 'Home', href: '/' },
+    { label: 'Docs', href: '/docs' },
+    { label: 'Tag Reference', href: '/docs/tag-reference' }
+  ],
+  publishedAt: '2024-01-01',
+  updatedAt: '2025-01-13'
+};
+
+export const dynamic = 'force-static';
+export const metadata = generateMetadataFromFrontmatter(frontmatter);
+
+export default function TagReferencePage({ children }) {
+  return <MDXPageLayout frontmatter={frontmatter}>{children}</MDXPageLayout>;
+}
+
+# Tag Reference
+
+This page provides a comprehensive reference of all tags used in the TEA Techniques database. Tags are organized by category, with hierarchical tags automatically grouped by their dimensions.
+
+## About This Reference
+
+- **Hierarchical tags** (e.g., Applicable Models, Lifecycle Stages, Explainability Categories) are organized by dimensions with nested structures
+- **Flat tags** (e.g., Expertise Needed, Evidence Types) are displayed as simple lists
+- All definitions are loaded directly from the source data and are always up-to-date
+
+Click on any category below to expand and view its tags and definitions.
+
+<AllTagCategories />

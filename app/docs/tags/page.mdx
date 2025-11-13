@@ -3,7 +3,6 @@ import {
   generateMetadataFromFrontmatter,
 } from '@/components/layout/mdx-page-layout';
 import Link from 'next/link';
-import { AllTagDefinitions } from '@/components/about/tag-definitions-table';
 import {
   Table,
   TableBody,
@@ -12,18 +11,19 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { ArrowRight } from '@/components/icons';
 
 export const frontmatter = {
   title: 'Tag Definitions',
   description: 'Learn about the tag system used by TEA Techniques and how it helps you find the right techniques for your needs.',
   breadcrumbs: [
     { label: 'Home', href: '/' },
-    { label: 'About', href: '/about' },
-    { label: 'Tag Definitions', href: '/about/tag-definitions' }
+    { label: 'Docs', href: '/docs' },
+    { label: 'Tag Definitions', href: '/docs/tags' }
   ],
   publishedAt: '2024-01-01',
-  updatedAt: '2024-07-25',
-  tableOfContents: true
+  updatedAt: '2025-01-13'
 };
 
 export const dynamic = 'force-static';
@@ -67,7 +67,7 @@ These tags can also be used to find similar techniques, in case the first one yo
 
 ## Tag Categories
 
-The tag system is organized into 8 main categories (i.e. prefixes), each serving a specific purpose in classifying techniques:
+The tag system is organized into 10 categories (i.e. prefixes), each serving a specific purpose in classifying techniques:
 
 <Table>
   <TableHeader>
@@ -120,30 +120,20 @@ The tag system is organized into 8 main categories (i.e. prefixes), each serving
   </TableBody>
 </Table>
 
-There are also 2 additional categories that are applicable only to a subset of techniques:
+## Complete Tag Reference
 
-<Table>
-  <TableHeader>
-    <TableRow>
-      <TableHead>Category</TableHead>
-      <TableHead>Purpose</TableHead>
-    </TableRow>
-  </TableHeader>
-  <TableBody>
-    <TableRow>
-      <TableCell className="font-mono">explanatory-scope</TableCell>
-      <TableCell>Whether the explanation is instance-specific (local) or model-wide (global)</TableCell>
-    </TableRow>
-    <TableRow>
-      <TableCell className="font-mono">fairness-approach</TableCell>
-      <TableCell>Underlying approach to fairness for fairness-related techniques</TableCell>
-    </TableRow>
-  </TableBody>
-</Table>
+For a comprehensive reference of all tags with their definitions, organized by category:
 
-## All Tag Definitions
+<div className="my-6">
+  <Link href="/docs/tag-reference">
+    <Button variant="default" className="gap-2">
+      View Complete Tag Reference
+      <ArrowRight className="h-4 w-4" />
+    </Button>
+  </Link>
+</div>
 
-<AllTagDefinitions />
+The reference page includes all tag categories with their hierarchical structures and definitions, dynamically loaded from the source data to ensure it's always up-to-date.
 
 ## Benefits of Tags
 

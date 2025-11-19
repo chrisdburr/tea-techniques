@@ -46,7 +46,7 @@ export function TechniqueResources({ technique }: TechniqueResourcesProps) {
                   {/* Metadata line */}
                   <div className="flex flex-wrap items-center gap-2 text-muted-foreground text-sm">
                     {resource.source_type && (
-                      <Badge variant="outline" className="capitalize">
+                      <Badge className="capitalize" variant="outline">
                         {getResourceTypeLabel(resource.source_type)}
                       </Badge>
                     )}
@@ -77,7 +77,11 @@ export function TechniqueResources({ technique }: TechniqueResourcesProps) {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <Button size="sm" variant="secondary" className="group-hover:bg-background">
+                <Button
+                  className="group-hover:bg-background"
+                  size="sm"
+                  variant="secondary"
+                >
                   View Resource
                   <ExternalLink className="ml-2 h-3 w-3" />
                 </Button>

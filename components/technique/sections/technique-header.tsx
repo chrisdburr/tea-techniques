@@ -17,7 +17,7 @@ export function TechniqueHeader({ technique }: TechniqueHeaderProps) {
       <div className="flex flex-wrap items-center gap-3">
         {technique.assurance_goals?.map((goal) => (
           <Link
-            className="inline-flex items-center gap-2 rounded-full bg-secondary/50 px-4 py-2 text-sm font-medium transition-colors hover:bg-secondary"
+            className="inline-flex items-center gap-2 rounded-full bg-secondary/50 px-4 py-2 font-medium text-sm transition-colors hover:bg-secondary"
             href={`/categories/${goal.toLowerCase().replace(/\s+/g, '-')}`}
             key={goal}
             title={`View all ${goal} techniques`}

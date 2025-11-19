@@ -133,7 +133,10 @@ function TagBadge({ tag, category }: { tag: string; category: string }) {
   const tooltipContent = tagDefinitions[tag];
 
   const badge = (
-    <Badge className="cursor-pointer transition-all hover:bg-primary hover:text-primary-foreground" variant="secondary">
+    <Badge
+      className="cursor-pointer transition-all hover:bg-primary hover:text-primary-foreground"
+      variant="secondary"
+    >
       {displayName}
     </Badge>
   );

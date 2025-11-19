@@ -2,7 +2,7 @@
   "tag": {
     "name": "evidence-type/quantitative-metric",
     "slug": "evidence-type-quantitative-metric",
-    "count": 95,
+    "count": 98,
     "category": "evidence-type"
   },
   "techniques": [
@@ -411,7 +411,7 @@
         "data-requirements/reference-dataset",
         "data-type/any",
         "evidence-type/quantitative-metric",
-        "evidence-type/visualization",
+        "evidence-type/visualisation",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
         "explanatory-scope/local",
@@ -1325,7 +1325,7 @@
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
-        "evidence-type/visualization",
+        "evidence-type/visualisation",
         "expertise-needed/statistics",
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
@@ -4276,7 +4276,7 @@
         "data-requirements/labelled-data",
         "data-type/tabular",
         "evidence-type/quantitative-metric",
-        "expertise-needed/domain-knowledge",
+        "expertise-needed/domain-expertise",
         "expertise-needed/statistics",
         "lifecycle-stage/model-development",
         "technique-type/algorithmic"
@@ -5007,8 +5007,8 @@
         "data-requirements/access-to-model-internals",
         "data-type/any",
         "evidence-type/quantitative-metric",
-        "evidence-type/visualization",
-        "expertise-needed/domain-knowledge",
+        "evidence-type/visualisation",
+        "expertise-needed/domain-expertise",
         "expertise-needed/ml-engineering",
         "explanatory-scope/global",
         "explanatory-scope/local",
@@ -5348,7 +5348,7 @@
         "data-type/any",
         "evidence-type/dataset-analysis",
         "evidence-type/quantitative-metric",
-        "expertise-needed/domain-knowledge",
+        "expertise-needed/domain-expertise",
         "expertise-needed/statistics",
         "fairness-approach/group",
         "lifecycle-stage/data-collection",
@@ -7240,7 +7240,6 @@
         "data-type/text",
         "data-type/tabular",
         "evidence-type/quantitative-metric",
-        "evidence-type/test-results",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
         "lifecycle-stage/model-evaluation",
@@ -7354,13 +7353,12 @@
         "assurance-goal-category/reliability",
         "assurance-goal-category/transparency",
         "data-type/any",
-        "data-requirements/labeled-data-required",
+        "data-requirements/labelled-data",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
-        "technique-type/analytical",
+        "technique-type/algorithmic",
         "evidence-type/quantitative-metric",
-        "evidence-type/test-results",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise"
       ],
@@ -7453,6 +7451,122 @@
       ]
     },
     {
+      "slug": "agent-goal-misalignment-testing",
+      "name": "Agent Goal Misalignment Testing",
+      "description": "Agent goal misalignment testing identifies scenarios where AI agents pursue objectives in unintended ways or develop proxy goals that diverge from true human intent. This technique tests for specification gaming (achieving stated metrics while violating intent), instrumental goals (agents developing problematic sub-goals to achieve main objectives), and reward hacking (exploiting loopholes in reward functions). Testing uses diverse scenarios to probe whether agents truly understand task intent or merely optimise narrow specified metrics.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/reinforcement",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/fairness",
+        "data-type/any",
+        "data-requirements/no-special-requirements",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "technique-type/testing",
+        "evidence-type/quantitative-metric",
+        "evidence-type/qualitative-report",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-expertise"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing an autonomous vehicle routing agent in a ride-sharing service to ensure it optimizes for passenger safety and comfort rather than gaming metrics through risky driving behaviors that minimize journey time while technically meeting safety thresholds.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Verifying that a healthcare resource allocation agent distributes medical supplies based on genuine patient need rather than exploiting proxy metrics that could systematically disadvantage certain demographic groups or facilities.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Ensuring a resume screening agent doesn't develop proxy metrics that correlate with discriminatory criteria while technically optimizing for stated job performance predictions.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Evaluating a criminal justice risk assessment agent to ensure it optimizes for genuine recidivism prediction rather than learning proxies that correlate with protected characteristics while appearing to achieve stated accuracy objectives.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Comprehensive testing requires anticipating all possible ways objectives could be misinterpreted, which is inherently difficult for complex goals."
+        },
+        {
+          "description": "Agents may behave correctly during testing but develop misaligned strategies in deployment when facing novel situations or longer time horizons."
+        },
+        {
+          "description": "Distinguishing between intended and unintended goal achievement can be subjective, especially when stated objectives are ambiguous."
+        },
+        {
+          "description": "Testing environments may not replicate the full complexity and incentive structures of real deployment settings where misalignment emerges."
+        },
+        {
+          "description": "Requires domain expertise to define appropriate value-aligned objectives and identify subtle forms of misalignment, which may not be available for novel or cross-domain applications."
+        },
+        {
+          "description": "Quantifying the severity and likelihood of different misalignment scenarios requires subjective judgments and risk assessment capabilities that vary across organizations."
+        }
+      ],
+      "resources": [
+        {
+          "title": "The Urgent Need for Intrinsic Alignment Technologies for ...",
+          "url": "https://towardsdatascience.com/the-urgent-need-for-intrinsic-alignment-technologies-for-responsible-agentic-ai/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "A Survey of Process Reward Models: From Outcome Signals to Process Supervisions for Large Language Models",
+          "url": "https://www.semanticscholar.org/paper/b670078b724938874a233687b5c53848df527a60",
+          "source_type": "technical_paper",
+          "authors": [
+            "Congmin Zheng",
+            "Jiachen Zhu",
+            "Zhuoying Ou",
+            "Yuxiang Chen",
+            "Kangning Zhang",
+            "Rong Shan",
+            "Zeyu Zheng",
+            "Mengyue Yang",
+            "Jianghao Lin",
+            "Yong Yu",
+            "Weinan Zhang"
+          ]
+        },
+        {
+          "title": "Large Language Model Safety: A Holistic Survey",
+          "url": "https://www.semanticscholar.org/paper/a0d2a54ed05a424f5eee35ea579cf54ef0f2c2aa",
+          "source_type": "technical_paper",
+          "authors": [
+            "Dan Shi",
+            "Tianhao Shen",
+            "Yufei Huang",
+            "Zhigen Li",
+            "Yongqi Leng",
+            "Renren Jin",
+            "Chuang Liu",
+            "Xinwei Wu",
+            "Zishan Guo",
+            "Linhao Yu",
+            "Ling Shi",
+            "Bojian Jiang",
+            "Deyi Xiong"
+          ]
+        }
+      ],
+      "related_techniques": [
+        "reward-hacking-detection",
+        "multi-agent-system-testing",
+        "ai-agent-safety-testing",
+        "path-specific-counterfactual-fairness-assessment"
+      ]
+    },
+    {
       "slug": "api-usage-pattern-monitoring",
       "name": "API Usage Pattern Monitoring",
       "description": "API usage pattern monitoring analyses AI model API usage to detect anomalies and generate evidence of secure operation. This technique tracks request patterns, input distributions, and usage velocity to produce security reports, anomaly detection evidence, and usage compliance documentation. Monitoring generates quantitative metrics on extraction attempt frequency, adversarial probing patterns, and deviation from intended use, creating auditable evidence for assurance cases.",
@@ -7470,15 +7584,14 @@
         "data-type/any",
         "data-requirements/no-special-requirements",
         "lifecycle-stage/post-deployment",
-        "lifecycle-stage/system-deployment-and-use-monitoring",
-        "technique-type/analytical",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring",
+        "technique-type/algorithmic",
         "technique-type/procedural",
         "evidence-type/quantitative-metric",
         "evidence-type/documentation",
-        "evidence-type/test-results",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
-        "expertise-needed/statistical-knowledge"
+        "expertise-needed/statistics"
       ],
       "example_use_cases": [
         {
@@ -7567,18 +7680,17 @@
         "assurance-goal-category/reliability",
         "assurance-goal-category/transparency",
         "data-type/text",
-        "data-requirements/labeled-data-required",
-        "evidence-type/qualitative-assessment",
-        "evidence-type/test-results",
+        "data-requirements/labelled-data",
+        "evidence-type/qualitative-report",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
-        "expertise-needed/statistical-knowledge",
+        "expertise-needed/statistics",
         "explanatory-scope/local",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
-        "technique-type/analytical"
+        "technique-type/algorithmic"
       ],
       "example_use_cases": [
         {
@@ -7651,15 +7763,14 @@
         "assurance-goal-category/transparency",
         "assurance-goal-category/reliability",
         "data-type/text",
-        "data-requirements/labeled-data-required",
-        "data-requirements/training-data-required",
+        "data-requirements/labelled-data",
+        "data-requirements/access-to-training-data",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
-        "technique-type/analytical",
+        "technique-type/algorithmic",
         "evidence-type/quantitative-metric",
-        "evidence-type/qualitative-assessment",
-        "evidence-type/test-results",
+        "evidence-type/qualitative-report",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise"
       ],
@@ -7761,15 +7872,14 @@
         "assurance-goal-category/reliability",
         "assurance-goal-category/safety",
         "assurance-goal-category/fairness",
-        "data-requirements/training-data-required",
+        "data-requirements/access-to-training-data",
         "data-type/any",
         "evidence-type/quantitative-metric",
-        "evidence-type/test-results",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
-        "lifecycle-stage/system-deployment-and-use-monitoring",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring",
         "technique-type/testing"
       ],
       "example_use_cases": [
@@ -7872,15 +7982,14 @@
         "assurance-goal-category/security",
         "assurance-goal-category/reliability",
         "assurance-goal-category/safety",
-        "data-requirements/training-data-required",
+        "data-requirements/access-to-training-data",
         "data-type/any",
         "lifecycle-stage/data-collection",
         "lifecycle-stage/model-development",
         "lifecycle-stage/model-evaluation",
-        "technique-type/analytical",
+        "technique-type/algorithmic",
         "technique-type/testing",
         "evidence-type/quantitative-metric",
-        "evidence-type/test-results",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise"
       ],
@@ -8000,18 +8109,18 @@
         "assurance-goal-category/transparency",
         "data-type/text",
         "data-type/image",
-        "data-requirements/training-data-required",
+        "data-requirements/access-to-training-data",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
-        "technique-type/analytical",
+        "technique-type/algorithmic",
         "technique-type/testing",
         "evidence-type/quantitative-metric",
-        "evidence-type/visual-artifact",
-        "evidence-type/qualitative-assessment",
+        "evidence-type/visualisation",
+        "evidence-type/qualitative-report",
         "expertise-needed/ml-engineering",
-        "expertise-needed/statistical-knowledge",
+        "expertise-needed/statistics",
         "explanatory-scope/global",
-        "fairness-approach/fairness-metrics"
+        "evidence-type/fairness-metric"
       ],
       "example_use_cases": [
         {
@@ -8110,21 +8219,20 @@
         "applicable-models/paradigm/generative",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/fairness",
-        "assurance-goal-category/fairness/fairness-metrics",
+        "evidence-type/fairness-metric",
         "assurance-goal-category/reliability",
         "assurance-goal-category/transparency",
-        "data-requirements/labeled-data-required",
+        "data-requirements/labelled-data",
         "data-type/text",
         "evidence-type/quantitative-metric",
-        "evidence-type/test-results",
         "evidence-type/documentation",
         "expertise-needed/ml-engineering",
-        "expertise-needed/statistical-knowledge",
+        "expertise-needed/statistics",
         "expertise-needed/domain-expertise",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
-        "technique-type/analytical"
+        "technique-type/algorithmic"
       ],
       "example_use_cases": [
         {
@@ -8231,16 +8339,15 @@
         "assurance-goal-category/transparency",
         "assurance-goal-category/safety",
         "data-type/text",
-        "data-requirements/training-data-required",
+        "data-requirements/access-to-training-data",
         "evidence-type/quantitative-metric",
-        "evidence-type/test-results",
-        "evidence-type/qualitative-assessment",
+        "evidence-type/qualitative-report",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
-        "technique-type/analytical"
+        "technique-type/algorithmic"
       ],
       "example_use_cases": [
         {
@@ -8356,16 +8463,15 @@
         "data-requirements/no-special-requirements",
         "lifecycle-stage/deployment",
         "lifecycle-stage/post-deployment",
-        "lifecycle-stage/system-deployment-and-use-monitoring",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring",
         "technique-type/algorithmic",
         "technique-type/procedural",
         "evidence-type/quantitative-metric",
-        "evidence-type/test-results",
         "evidence-type/documentation",
-        "evidence-type/visual-artifact",
+        "evidence-type/visualisation",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
-        "expertise-needed/basic-technical"
+        "expertise-needed/low"
       ],
       "example_use_cases": [
         {
@@ -8463,7 +8569,6 @@
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
-        "evidence-type/test-results",
         "evidence-type/quantitative-metric",
         "evidence-type/documentation",
         "expertise-needed/ml-engineering",
@@ -8557,17 +8662,17 @@
         "assurance-goal-category/transparency",
         "assurance-goal-category/reliability",
         "assurance-goal-category/safety",
-        "data-requirements/labeled-data-required",
+        "data-requirements/labelled-data",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "evidence-type/documentation",
-        "evidence-type/visual-artifact",
+        "evidence-type/visualisation",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
-        "expertise-needed/statistical-knowledge",
+        "expertise-needed/statistics",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
-        "technique-type/analytical",
+        "technique-type/algorithmic",
         "technique-type/testing"
       ],
       "example_use_cases": [
@@ -8663,13 +8768,12 @@
         "assurance-goal-category/privacy",
         "assurance-goal-category/fairness",
         "assurance-goal-category/transparency",
-        "data-requirements/training-data-required",
+        "data-requirements/access-to-training-data",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "evidence-type/documentation",
-        "evidence-type/test-results",
         "expertise-needed/ml-engineering",
-        "expertise-needed/statistical-knowledge",
+        "expertise-needed/statistics",
         "lifecycle-stage/model-development",
         "lifecycle-stage/post-deployment",
         "technique-type/algorithmic"
@@ -8758,12 +8862,11 @@
         "assurance-goal-category/privacy",
         "assurance-goal-category/transparency",
         "data-type/any",
-        "data-requirements/training-data-required",
+        "data-requirements/access-to-training-data",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
         "evidence-type/quantitative-metric",
-        "evidence-type/test-results",
         "expertise-needed/ml-engineering",
         "expertise-needed/software-engineering"
       ],
@@ -8842,6 +8945,130 @@
       ]
     },
     {
+      "slug": "multi-agent-system-testing",
+      "name": "Multi-Agent System Testing",
+      "description": "Multi-agent system testing evaluates safety and reliability of systems where multiple AI agents interact, coordinate, or compete. This technique assesses emergent behaviours, communication protocols, conflict resolution, and whether agents maintain objectives appropriately. Testing produces reports on agent interaction patterns, coalition formation, failure cascade analysis, and safety property violations in multi-agent scenarios.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Security"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/security",
+        "data-type/any",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring",
+        "technique-type/testing",
+        "technique-type/algorithmic",
+        "evidence-type/quantitative-metric",
+        "evidence-type/documentation",
+        "evidence-type/qualitative-report",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/software-engineering",
+        "data-requirements/no-special-requirements"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing a warehouse management system with multiple autonomous robots to ensure they coordinate safely without collisions, deadlocks, or inefficient resource contention.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Verifying that a multi-agent traffic management system maintains reliable traffic flow and emergency vehicle prioritisation even when individual intersection agents face sensor failures or conflicting optimisation objectives.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Testing a collaborative diagnostic system where multiple AI agents analyze medical images, ensuring they reach reliable consensus without one dominant agent's biases propagating through the system or creating security vulnerabilities in patient data handling.",
+          "goal": "Security"
+        },
+        {
+          "description": "Evaluating a multi-agent algorithmic trading system to ensure coordinated agents don't inadvertently create market manipulation patterns or cascade failures during high-volatility conditions.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Combinatorial explosion of possible agent interactions makes comprehensive testing infeasible beyond small numbers of agents."
+        },
+        {
+          "description": "Emergent behaviors may only appear in specific scenarios that are difficult to anticipate and test systematically."
+        },
+        {
+          "description": "Formal verification methods don't scale well to complex multi-agent systems with learning components that adapt their behavior over time, requiring hybrid approaches combining testing and monitoring."
+        },
+        {
+          "description": "Testing environments may not capture all real-world complexities of agent deployment, communication delays, and failure modes."
+        },
+        {
+          "description": "Simulating realistic multi-agent environments requires significant computational resources and domain-specific modeling expertise, particularly for systems with complex physical or social dynamics."
+        },
+        {
+          "description": "Continuous monitoring in deployed systems is essential but challenging, as agents may develop new interaction patterns over time that weren't observed during initial testing phases."
+        }
+      ],
+      "resources": [
+        {
+          "title": "chaosync-org/awesome-ai-agent-testing",
+          "url": "https://github.com/chaosync-org/awesome-ai-agent-testing",
+          "source_type": "software_package"
+        },
+        {
+          "title": "RV4JaCa - Towards Runtime Verification of Multi-Agent Systems and Robotic Applications",
+          "url": "https://www.semanticscholar.org/paper/c1091bd2ca87d3de1a8b152fb6ba0af944fcfe73",
+          "source_type": "technical_paper",
+          "authors": [
+            "D. Engelmann",
+            "Angelo Ferrando",
+            "Alison R. Panisson",
+            "D. Ancona",
+            "Rafael Heitor Bordini",
+            "V. Mascardi"
+          ]
+        },
+        {
+          "title": "A synergistic and extensible framework for multi-agent system verification",
+          "url": "https://www.semanticscholar.org/paper/922ff8eb6a98b86402990c4a1df68a6a8be685c0",
+          "source_type": "technical_paper",
+          "authors": [
+            "J. Hunter",
+            "F. Raimondi",
+            "Neha Rungta",
+            "Richard Stocker"
+          ]
+        },
+        {
+          "title": "Distributed Control Design and Safety Verification for Multi-Agent Systems",
+          "url": "https://www.semanticscholar.org/paper/da353344f00519d4ea1672da2a84154473a07647",
+          "source_type": "technical_paper",
+          "authors": [
+            "Han Wang",
+            "Antonis Papachristodoulou",
+            "Kostas Margellos"
+          ]
+        },
+        {
+          "title": "Applying process mining approach to support the verification of a multi-agent system",
+          "url": "https://www.semanticscholar.org/paper/de3d883dcf0a0f0d0bc3a5285484ba0f8150b8ba",
+          "source_type": "technical_paper",
+          "authors": [
+            "C. Ou-Yang",
+            "Y. Juan"
+          ]
+        }
+      ],
+      "related_techniques": [
+        "ai-agent-safety-testing",
+        "agent-goal-misalignment-testing",
+        "prompt-injection-testing",
+        "chain-of-thought-faithfulness-evaluation"
+      ]
+    },
+    {
       "slug": "membership-inference-attack-testing",
       "name": "Membership Inference Attack Testing",
       "description": "Membership inference attack testing evaluates whether adversaries can determine if specific data points were included in a model's training set. This technique simulates attacks where adversaries use model confidence scores, prediction patterns, or loss values to distinguish training data from non-training data. Testing measures privacy leakage by calculating attack success rates, precision-recall trade-offs, and advantage over random guessing. Results inform decisions about privacy-enhancing techniques like differential privacy or regularisation.",
@@ -8856,16 +9083,15 @@
         "assurance-goal-category/privacy",
         "assurance-goal-category/security",
         "assurance-goal-category/transparency",
-        "data-requirements/training-data-required",
+        "data-requirements/access-to-training-data",
         "data-type/any",
         "evidence-type/quantitative-metric",
-        "evidence-type/test-results",
         "expertise-needed/ml-engineering",
-        "expertise-needed/security-expertise",
+        "expertise-needed/security",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
-        "technique-type/analytical"
+        "technique-type/algorithmic"
       ],
       "example_use_cases": [
         {
@@ -8976,14 +9202,13 @@
         "assurance-goal-category/safety",
         "data-type/image",
         "data-type/text",
-        "data-requirements/labeled-data-required",
+        "data-requirements/labelled-data",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
-        "technique-type/analytical",
+        "technique-type/algorithmic",
         "evidence-type/quantitative-metric",
-        "evidence-type/qualitative-assessment",
-        "evidence-type/test-results",
+        "evidence-type/qualitative-report",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise"
       ],
@@ -9101,11 +9326,10 @@
         "lifecycle-stage/model-development",
         "lifecycle-stage/deployment",
         "lifecycle-stage/post-deployment",
-        "lifecycle-stage/system-deployment-and-use-monitoring",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring",
         "technique-type/algorithmic",
         "technique-type/testing",
         "evidence-type/quantitative-metric",
-        "evidence-type/test-results",
         "evidence-type/documentation",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise"
@@ -9205,11 +9429,10 @@
         "assurance-goal-category/reliability",
         "assurance-goal-category/safety",
         "assurance-goal-category/transparency",
-        "data-requirements/training-data-required",
-        "data-requirements/labeled-data-required",
+        "data-requirements/access-to-training-data",
+        "data-requirements/labelled-data",
         "data-type/text",
         "evidence-type/quantitative-metric",
-        "evidence-type/test-results",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
         "lifecycle-stage/model-development",
@@ -9317,18 +9540,17 @@
         "assurance-goal-category/privacy",
         "assurance-goal-category/transparency",
         "assurance-goal-category/reliability",
-        "data-requirements/training-data-required",
+        "data-requirements/access-to-training-data",
         "data-type/tabular",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "evidence-type/documentation",
-        "evidence-type/test-results",
-        "expertise-needed/statistical-knowledge",
+        "expertise-needed/statistics",
         "expertise-needed/domain-expertise",
         "expertise-needed/ml-engineering",
         "lifecycle-stage/data-collection",
         "lifecycle-stage/model-evaluation",
-        "technique-type/analytical",
+        "technique-type/algorithmic",
         "technique-type/testing"
       ],
       "example_use_cases": [
@@ -9438,7 +9660,6 @@
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
         "evidence-type/quantitative-metric",
-        "evidence-type/test-results",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
         "explanatory-scope/global"
@@ -9534,17 +9755,16 @@
         "assurance-goal-category/reliability",
         "data-requirements/no-special-requirements",
         "data-type/text",
-        "evidence-type/test-results",
-        "evidence-type/qualitative-assessment",
         "evidence-type/quantitative-metric",
+        "evidence-type/qualitative-report",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/deployment",
         "lifecycle-stage/post-deployment",
-        "lifecycle-stage/system-deployment-and-use-monitoring",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring",
         "technique-type/testing",
-        "technique-type/analytical"
+        "technique-type/algorithmic"
       ],
       "example_use_cases": [
         {
@@ -9660,17 +9880,16 @@
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/explains/internal-mechanisms",
         "assurance-goal-category/explainability/property/fidelity",
-        "data-requirements/labeled-data-required",
+        "data-requirements/labelled-data",
         "data-type/text",
         "evidence-type/quantitative-metric",
-        "evidence-type/qualitative-assessment",
-        "evidence-type/test-results",
+        "evidence-type/qualitative-report",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
-        "technique-type/analytical"
+        "technique-type/algorithmic"
       ],
       "example_use_cases": [
         {
@@ -9763,6 +9982,113 @@
       ]
     },
     {
+      "slug": "reward-hacking-detection",
+      "name": "Reward Hacking Detection",
+      "description": "Reward hacking detection identifies when AI systems achieve stated objectives through unintended shortcuts or loopholes rather than genuine task mastery. This technique analyses whether systems exploit reward specification ambiguities, reward function bugs, or simulator artifacts to maximise rewards without actually solving the intended problem. Detection involves adversarial specification testing, human evaluation of solution quality, transfer testing to slightly modified tasks, and analysis of unexpected strategy patterns that suggest reward hacking rather than genuine learning.",
+      "assurance_goals": [
+        "Reliability",
+        "Safety",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/reinforcement",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/transparency",
+        "data-type/any",
+        "data-requirements/no-special-requirements",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "technique-type/testing",
+        "technique-type/algorithmic",
+        "evidence-type/qualitative-report",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-expertise"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Detecting when a reinforcement learning agent for robot manipulation learns to exploit physics simulator quirks rather than developing real-world-transferable manipulation skills, preventing failures in physical deployment.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Identifying when an AI-based healthcare scheduling system appears to optimize patient wait times by gaming appointment classifications or encouraging cancellations rather than genuinely improving clinic efficiency, preventing patient care degradation.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Detecting when a loan approval system achieves target approval rates by exploiting specification loopholes in creditworthiness definitions rather than accurately assessing borrower risk, ensuring reliable lending decisions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Verifying that an educational content recommendation system optimizes for genuine learning outcomes rather than gaming engagement metrics through strategies like repeatedly presenting easier content that inflates measured progress.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Difficult to distinguish between clever problem-solving and specification gaming without deep understanding of task intent."
+        },
+        {
+          "description": "Novel gaming strategies may not be detected until systems are deployed in real environments where gaming becomes apparent."
+        },
+        {
+          "description": "Closing detected loopholes may simply push systems to discover new gaming strategies rather than solving the fundamental specification challenge."
+        },
+        {
+          "description": "Perfect specifications that eliminate all gaming opportunities may be impossible for complex, open-ended tasks."
+        },
+        {
+          "description": "Requires domain expertise and clear articulation of task intent to distinguish between legitimate optimization strategies and gaming behaviors, which can be subjective in complex domains."
+        },
+        {
+          "description": "Detection often requires access to detailed behavioral logs and environment state information that may not be available in black-box deployment scenarios."
+        },
+        {
+          "description": "Establishing ground truth for 'correct' task completion without gaming requires independent verification methods that may be as resource-intensive as the original task."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Detecting and Mitigating Reward Hacking in Reinforcement Learning Systems: A Comprehensive Empirical Study",
+          "url": "https://www.semanticscholar.org/paper/f71379b765f01c333ebaab5736dbf7f1005b19c9",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ibne Farabi Shihab",
+            "Sanjeda Akter",
+            "Anuj Sharma"
+          ]
+        },
+        {
+          "title": "Preventing Reward Hacking with Occupancy Measure Regularization",
+          "url": "https://www.semanticscholar.org/paper/878e2c80a9247b6106b479bf8d74c02427947176",
+          "source_type": "technical_paper",
+          "authors": [
+            "Cassidy Laidlaw",
+            "Shivam Singhal",
+            "A. Dragan"
+          ]
+        },
+        {
+          "title": "Fine-tuning & RL for LLMs: Intro to Post-training - DeepLearning.AI",
+          "url": "https://learn.deeplearning.ai/courses/fine-tuning-and-reinforcement-learning-for-llms-intro-to-post-training/lesson/wr7ye4/evals-for-post-training:-test-sets-and-metrics",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "How to Make a Reward Function in Reinforcement Learning ...",
+          "url": "https://www.geeksforgeeks.org/machine-learning/how-to-make-a-reward-function-in-reinforcement-learning/",
+          "source_type": "tutorial"
+        }
+      ],
+      "related_techniques": [
+        "hallucination-detection",
+        "adversarial-training-evaluation",
+        "constitutional-ai-evaluation",
+        "epistemic-uncertainty-quantification"
+      ]
+    },
+    {
       "slug": "ai-agent-safety-testing",
       "name": "AI Agent Safety Testing",
       "description": "AI agent safety testing evaluates autonomous AI agents that interact with external tools, APIs, and systems to ensure they operate safely and as intended. This technique assesses whether agents correctly understand tool specifications, respect usage constraints, handle errors gracefully, avoid unintended side effects, and make safe decisions during multi-step reasoning. Testing includes boundary condition validation (extreme parameters, edge cases), permission verification (ensuring agents don't exceed authorized actions), and cascade failure analysis (how tool errors propagate through agent workflows).",
@@ -9783,7 +10109,6 @@
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
-        "evidence-type/test-results",
         "evidence-type/quantitative-metric",
         "evidence-type/documentation",
         "expertise-needed/ml-engineering",
@@ -9881,18 +10206,17 @@
         "applicable-models/paradigm/generative",
         "assurance-goal-category/safety",
         "assurance-goal-category/fairness",
-        "assurance-goal-category/fairness-metrics",
+        "evidence-type/fairness-metric",
         "assurance-goal-category/reliability",
         "data-type/text",
-        "data-requirements/labeled-data-required",
+        "data-requirements/labelled-data",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
-        "lifecycle-stage/system-deployment-and-use-monitoring",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring",
         "technique-type/testing",
-        "technique-type/analytical",
+        "technique-type/algorithmic",
         "evidence-type/quantitative-metric",
-        "evidence-type/qualitative-assessment",
-        "evidence-type/test-results",
+        "evidence-type/qualitative-report",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise"
       ],
@@ -9987,5 +10311,5 @@
       ]
     }
   ],
-  "count": 95
+  "count": 98
 }

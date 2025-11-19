@@ -2,7 +2,7 @@
   "tag": {
     "name": "evidence-type/fairness-metric",
     "slug": "evidence-type-fairness-metric",
-    "count": 13,
+    "count": 16,
     "category": "evidence-type"
   },
   "techniques": [
@@ -1394,7 +1394,361 @@
         "attribute-removal-fairness-through-unawareness",
         "calibration-with-equality-of-opportunity"
       ]
+    },
+    {
+      "slug": "embedding-bias-analysis",
+      "name": "Embedding Bias Analysis",
+      "description": "Embedding bias analysis examines learned representations to identify biases, spurious correlations, and problematic clustering patterns in vector embeddings. This technique uses dimensionality reduction, clustering analysis, and geometric fairness metrics to examine whether embeddings encode sensitive attributes, place certain groups in disadvantaged regions of representation space, or learn stereotypical associations. Analysis reveals whether embeddings used for retrieval, recommendation, or downstream tasks contain fairness issues that will propagate to applications.",
+      "assurance_goals": [
+        "Fairness",
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/architecture/neural-networks/transformer",
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/architecture/neural-networks/convolutional",
+        "applicable-models/requirements/model-internals",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/visualization-methods/activation-maps",
+        "assurance-goal-category/transparency",
+        "data-type/text",
+        "data-type/image",
+        "data-requirements/access-to-training-data",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "technique-type/algorithmic",
+        "technique-type/testing",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualisation",
+        "evidence-type/qualitative-report",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "evidence-type/fairness-metric"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Auditing word embeddings for biased gender associations like 'doctor' being closer to 'male' than 'female', identifying problematic stereotypes that could affect downstream NLP applications.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Analyzing face recognition embeddings to understand whether certain demographic groups are clustered more tightly (enabling easier discrimination) or more dispersed (enabling easier misidentification).",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Transparently documenting embedding space properties including which attributes are encoded and what associations exist, enabling informed decisions about appropriate use cases.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Analyzing clinical note embeddings in a medical diagnosis support system to detect whether disease associations cluster along demographic lines (e.g., certain conditions being systematically closer to particular age or ethnic groups in the embedding space), which could lead to biased treatment recommendations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Examining embeddings in a legal document analysis system to identify whether risk assessment features encode problematic associations between demographic attributes and recidivism concepts, revealing bias that could affect sentencing or parole decisions.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Auditing loan application embeddings to detect whether protected characteristics (ethnicity, gender, age) cluster near creditworthiness concepts in ways that could enable indirect discrimination in lending decisions.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Defining ground truth for 'fair' or 'unbiased' embedding geometries is challenging and may depend on application-specific requirements."
+        },
+        {
+          "description": "Debiasing embeddings can reduce performance on downstream tasks or remove useful information along with unwanted biases."
+        },
+        {
+          "description": "High-dimensional embedding spaces are difficult to visualize and interpret comprehensively, potentially missing subtle bias patterns."
+        },
+        {
+          "description": "Embeddings may encode bias in complex, non-linear ways that simple geometric metrics fail to capture."
+        },
+        {
+          "description": "Requires access to model internals and training data to extract and analyze embeddings, making this technique infeasible for black-box commercial models or systems where proprietary data cannot be shared."
+        },
+        {
+          "description": "Analyzing large-scale embedding spaces can be computationally expensive and requires sophisticated understanding of both vector space geometry and the specific domain to interpret results meaningfully."
+        },
+        {
+          "description": "Effective bias analysis requires representative test datasets covering relevant demographic groups and attributes, which may be difficult to obtain for sensitive domains or protected characteristics."
+        }
+      ],
+      "resources": [
+        {
+          "title": "lmcinnes/umap",
+          "url": "https://github.com/lmcinnes/umap",
+          "source_type": "software_package"
+        },
+        {
+          "title": "harveyslash/TSNE-UMAP-Embedding-Visualisation",
+          "url": "https://github.com/harveyslash/TSNE-UMAP-Embedding-Visualisation",
+          "source_type": "software_package"
+        },
+        {
+          "title": "A new embedding quality assessment method for manifold learning",
+          "url": "https://www.sciencedirect.com/science/article/pii/S092523121200389X",
+          "source_type": "technical_paper"
+        },
+        {
+          "title": "Unsupervised embedding quality evaluation",
+          "url": "https://proceedings.mlr.press/v221/tsitsulin23a.html",
+          "source_type": "technical_paper"
+        },
+        {
+          "title": "Semantic Certainty Assessment in Vector Retrieval Systems: A Novel Framework for Embedding Quality Evaluation",
+          "url": "https://arxiv.org/abs/2507.05933",
+          "source_type": "technical_paper"
+        }
+      ],
+      "related_techniques": [
+        "attention-visualisation-in-transformers",
+        "concept-activation-vectors",
+        "chain-of-thought-faithfulness-evaluation",
+        "few-shot-fairness-evaluation"
+      ]
+    },
+    {
+      "slug": "few-shot-fairness-evaluation",
+      "name": "Few-Shot Fairness Evaluation",
+      "description": "Few-shot fairness evaluation assesses whether in-context learning with few-shot examples introduces or amplifies biases in model predictions. This technique systematically varies demographic characteristics in few-shot examples and measures how these variations affect model outputs for different groups. Evaluation includes testing prompt sensitivity (how example selection impacts fairness), stereotype amplification (whether biased examples disproportionately affect outputs), and consistency (whether similar inputs receive equitable treatment regardless of example composition).",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/paradigm/generative",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/fairness",
+        "evidence-type/fairness-metric",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "data-requirements/labelled-data",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "evidence-type/documentation",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "expertise-needed/domain-expertise",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "technique-type/testing",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing whether a resume screening LLM's few-shot examples inadvertently introduce gender bias by showing more male examples for technical positions, affecting how it evaluates subsequent applicants.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Ensuring a customer service classifier maintains reliable performance across demographic groups regardless of which few-shot examples users or developers choose to include in prompts.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Documenting how few-shot example selection affects fairness metrics, transparently reporting sensitivity to example composition in deployment guidelines.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Evaluating whether a medical triage LLM's few-shot examples for symptom assessment inadvertently encode demographic biases (e.g., more examples of cardiac symptoms in male patients), leading to differential urgency assessments across patient populations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Testing whether few-shot examples used in a legal case summarization system introduce racial or socioeconomic bias in how defendant backgrounds or case circumstances are characterized, affecting case outcome predictions.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Assessing whether few-shot examples in a loan application review assistant systematically present more favourable examples for certain demographic profiles, biasing the model's assessment of creditworthiness for subsequent applications.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Verifying that an automated essay grading system maintains consistent standards across student demographics when few-shot examples inadvertently represent particular writing styles, dialects, or cultural references more prominently.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Vast number of possible few-shot example combinations makes exhaustive testing infeasible, requiring sampling strategies that may miss important configurations."
+        },
+        {
+          "description": "Fairness may be highly sensitive to subtle differences in example wording or formatting, making it difficult to provide robust guarantees."
+        },
+        {
+          "description": "Trade-offs between example diversity and task performance may force choices between fairness and accuracy."
+        },
+        {
+          "description": "Results may not generalise across different prompt templates or instruction formats, requiring separate evaluation for each prompting strategy."
+        },
+        {
+          "description": "Requires carefully labeled datasets with demographic annotations to measure fairness across groups, which may be unavailable, expensive to create, or raise privacy concerns in sensitive domains."
+        },
+        {
+          "description": "Designing representative test sets that capture realistic few-shot example distributions requires deep domain expertise and understanding of how the system will be used in practice."
+        },
+        {
+          "description": "Evaluating fairness across multiple demographic groups with various few-shot configurations can be computationally expensive, particularly for large language models with high inference costs."
+        }
+      ],
+      "resources": [
+        {
+          "title": "tensorflow/fairness-indicators",
+          "url": "https://github.com/tensorflow/fairness-indicators",
+          "source_type": "software_package"
+        },
+        {
+          "title": "AI4Bharat/indic-bias",
+          "url": "https://github.com/AI4Bharat/indic-bias",
+          "source_type": "software_package"
+        },
+        {
+          "title": "Fairness-guided few-shot prompting for large language models",
+          "url": "https://scholar.google.com/scholar?q=fairness+guided+few+shot+prompting",
+          "source_type": "technical_paper"
+        },
+        {
+          "title": "Few-shot fairness: Unveiling LLM's potential for fairness-aware classification",
+          "url": "https://scholar.google.com/scholar?q=few+shot+fairness+unveiling+llm",
+          "source_type": "technical_paper"
+        },
+        {
+          "title": "Selecting shots for demographic fairness in few-shot learning with large language models",
+          "url": "https://scholar.google.com/scholar?q=selecting+shots+demographic+fairness",
+          "source_type": "technical_paper"
+        }
+      ],
+      "related_techniques": [
+        "prompt-robustness-testing",
+        "toxicity-and-bias-detection",
+        "sensitivity-analysis-for-fairness",
+        "path-specific-counterfactual-fairness-assessment"
+      ]
+    },
+    {
+      "slug": "toxicity-and-bias-detection",
+      "name": "Toxicity and Bias Detection",
+      "description": "Toxicity and bias detection uses automated classifiers and human review to identify harmful, offensive, or biased content in model outputs. This technique employs tools trained to detect toxic language, hate speech, stereotypes, and demographic biases through targeted testing with adversarial prompts. Detection covers explicit toxicity, implicit bias, and distributional unfairness across demographic groups.",
+      "assurance_goals": [
+        "Safety",
+        "Fairness",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/requirements/black-box",
+        "applicable-models/paradigm/generative",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/fairness",
+        "evidence-type/fairness-metric",
+        "assurance-goal-category/reliability",
+        "data-type/text",
+        "data-requirements/labelled-data",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring",
+        "technique-type/testing",
+        "technique-type/algorithmic",
+        "evidence-type/quantitative-metric",
+        "evidence-type/qualitative-report",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-expertise"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Screening a chatbot's responses for toxic language, hate speech, and harmful content before deployment in public-facing applications where vulnerable users including children might interact with it.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Testing whether a content generation model produces stereotypical or discriminatory outputs when prompted with queries about different demographic groups, professions, or social characteristics.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Screening an AI writing assistant for educational content to ensure it maintains appropriate language and doesn't generate offensive material that could be harmful in classroom or academic settings.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Screening a mental health support chatbot to ensure it doesn't generate stigmatising language about mental health conditions, substance use, or marginalised communities, which could cause harm to vulnerable patients seeking help.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Monitoring a banking chatbot's responses to detect bias in how it addresses customers from different demographic groups, ensuring equitable treatment in explaining financial products, fees, or denial reasons.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Testing a content moderation assistant to ensure it consistently identifies hate speech, harassment, and discriminatory content across different demographic targets without over-flagging minority language patterns or dialect variations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Evaluating an AI interview scheduling assistant to verify it doesn't generate biased language or make stereotypical assumptions when communicating with candidates from diverse backgrounds or with non-traditional career paths.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Toxicity classifiers themselves may have biases, potentially flagging legitimate discussions of sensitive topics or minority language patterns as toxic."
+        },
+        {
+          "description": "Context-dependent nature of toxicity makes automated detection challenging, as the same phrase may be harmful or harmless depending on usage context."
+        },
+        {
+          "description": "Evolving language and cultural differences mean toxicity definitions change over time and vary across communities, requiring constant updating."
+        },
+        {
+          "description": "Sophisticated models may generate subtle bias or coded language that evades automated detection while still being harmful."
+        },
+        {
+          "description": "Comprehensive toxicity detection often requires human review to validate automated findings and handle edge cases, which is resource-intensive and may not scale to high-volume applications or real-time content generation."
+        },
+        {
+          "description": "Toxicity classifiers require large labeled datasets of harmful content for training and validation, which are expensive to create, emotionally taxing for annotators, and raise ethical concerns about exposing people to harmful material."
+        },
+        {
+          "description": "Configuring detection thresholds involves tradeoffs between false positives (over-censoring legitimate content) and false negatives (missing harmful content), with different stakeholders often disagreeing on acceptable balance points."
+        },
+        {
+          "description": "Detection performance often degrades significantly for non-English languages, code-switching, dialects, and internet slang, limiting effectiveness for global or multilingual applications."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Evaluating Toxicity in Large Language Models",
+          "url": "https://www.analyticsvidhya.com/blog/2025/03/evaluating-toxicity-in-large-language-models/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "What are Guardrails AI?",
+          "url": "https://www.analyticsvidhya.com/blog/2024/05/building-responsible-ai-with-guardrails-ai/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Toxic Comment Classification using BERT - GeeksforGeeks",
+          "url": "https://www.geeksforgeeks.org/machine-learning/toxic-comment-classification-using-bert/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Episode #188: Measuring Bias, Toxicity, and Truthfulness in LLMs ...",
+          "url": "https://realpython.com/podcasts/rpp/188/",
+          "source_type": "tutorial"
+        },
+        {
+          "title": "Responsible AI in the Era of Generative AI",
+          "url": "https://www.analyticsvidhya.com/blog/2024/09/responsible-generative-ai/",
+          "source_type": "tutorial"
+        }
+      ],
+      "related_techniques": [
+        "few-shot-fairness-evaluation",
+        "demographic-parity-assessment",
+        "counterfactual-fairness-assessment",
+        "sensitivity-analysis-for-fairness"
+      ]
     }
   ],
-  "count": 13
+  "count": 16
 }

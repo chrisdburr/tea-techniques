@@ -42,8 +42,13 @@ interface Technique {
   tags: string[];                  // Categorisation tags
   example_use_cases: UseCase[];    // Real-world examples
   limitations: Limitation[];       // Known constraints
+
   relevant_standards?: Standard[]; // Industry standards
-  references?: Reference[];        // Academic/industry sources
+  resources?: Resource[];          // Academic/industry sources
+  complexity_rating?: number;      // 1-5 scale
+  computational_cost_rating?: number; // 1-5 scale
+  acronym?: string;               // Short identifier
+  related_techniques?: string[];   // Slugs of related techniques
 }
 
 interface UseCase {
@@ -61,9 +66,12 @@ interface Standard {
   url?: string;          // Link to standard documentation
 }
 
-interface Reference {
-  text: string;          // Citation text
-  url?: string;          // Link to source
+interface Resource {
+  title: string;
+  url: string;
+  source_type: string;   // e.g., "technical_paper", "tutorial"
+  authors?: string[];
+  publication_date?: string;
 }
 ```
 
@@ -138,8 +146,11 @@ interface FilterResponse {
 - **tags**: Hierarchical tags following the pattern `category/value` (e.g., "lifecycle-stage/deployment")
 - **example_use_cases**: Real-world applications demonstrating how the technique addresses specific goals
 - **limitations**: Known constraints, assumptions, or scenarios where the technique may not be suitable
-- **relevant_standards**: Industry or regulatory standards that reference or require the technique
-- **references**: Academic papers, documentation, or other sources for further reading
+- **resources**: Optional. Academic papers, documentation, tutorials, or software packages
+- **complexity_rating**: Optional. A 1-5 rating indicating implementation difficulty
+- **computational_cost_rating**: Optional. A 1-5 rating indicating resource requirements
+- **acronym**: Optional. Common abbreviation for the technique
+- **related_techniques**: Optional. List of slugs for conceptually similar techniques
 
 ### Metadata Fields
 

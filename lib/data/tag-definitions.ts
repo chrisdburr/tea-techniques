@@ -70,10 +70,12 @@ export const tagDefinitions: Record<string, string> = {
     'Models that learn decision boundaries directly',
   'applicable-models/paradigm/generative':
     'Models that learn data distributions',
-  'applicable-models/paradigm/supervised': 'Requires labeled training data',
+  'applicable-models/paradigm/supervised': 'Requires labelled training data',
   'applicable-models/paradigm/unsupervised': 'Works with unlabeled data',
   'applicable-models/paradigm/probabilistic':
     'Models that provide probabilistic outputs and reasoning',
+  'applicable-models/paradigm/reinforcement':
+    'Models that learn through interaction with an environment',
 
   // Applicable Models - Requirements Dimension
   'applicable-models/requirements/gradient-access':
@@ -165,7 +167,7 @@ export const tagDefinitions: Record<string, string> = {
   'lifecycle-stage/model-development/testing':
     'Legacy: Techniques for testing model performance',
   'lifecycle-stage/model-development/fine-tuning':
-    'Legacy: Techniques for optimizing model parameters',
+    'Legacy: Techniques for optimising model parameters',
   'lifecycle-stage/model-evaluation':
     'Legacy: Techniques for assessing model performance and behavior',
   'lifecycle-stage/model-optimization':
@@ -224,10 +226,8 @@ export const tagDefinitions: Record<string, string> = {
   // Evidence Type
   'evidence-type/quantitative-metric':
     'Produces numerical scores, coefficients, or measurements',
-  'evidence-type/visualization':
-    'Creates visual representations like plots, charts, or heatmaps',
   'evidence-type/visualisation':
-    'Creates visual representations of data or model behavior',
+    'Creates visual representations of data or model behaviour',
   'evidence-type/qualitative-report':
     'Generates textual analysis or narrative documentation',
   'evidence-type/structured-output':
@@ -241,11 +241,11 @@ export const tagDefinitions: Record<string, string> = {
   'evidence-type/prediction-interval':
     'Produces uncertainty ranges for predictions',
   'evidence-type/boundary-analysis':
-    'Analyzes decision boundaries and edge cases',
+    'Analyses decision boundaries and edge cases',
   'evidence-type/causal-analysis':
     'Provides insights into causal relationships',
   'evidence-type/dataset-analysis':
-    'Analyzes characteristics and quality of datasets',
+    'Analyses characteristics and quality of datasets',
   'evidence-type/synthetic-data': 'Generates synthetic or simulated data',
   'evidence-type/governance-framework':
     'Establishes governance structures and processes',
@@ -263,7 +263,7 @@ export const tagDefinitions: Record<string, string> = {
   'data-requirements/calibration-set':
     'Requires a calibration dataset for adjustment',
   'data-requirements/sensitive-attributes':
-    'Needs data labeled with protected attributes',
+    'Needs data labelled with protected attributes',
   'data-requirements/causal-graph':
     'Requires a predefined causal structure or graph',
   'data-requirements/reference-dataset':
@@ -298,7 +298,7 @@ export const tagDefinitions: Record<string, string> = {
 
   // Assurance Goal Categories
   'assurance-goal-category/explainability':
-    'Techniques that help understand model decisions and behavior',
+    'Techniques that help understand model decisions and behaviour',
 
   // EXPLAINABILITY - METHOD DIMENSION
   // Attribution Methods
@@ -315,17 +315,17 @@ export const tagDefinitions: Record<string, string> = {
   'assurance-goal-category/explainability/surrogate-models':
     'Techniques that approximate complex models with interpretable ones',
   'assurance-goal-category/explainability/surrogate-models/local-surrogates':
-    'Approximates model behavior around specific instances (e.g., LIME)',
+    'Approximates model behaviour around specific instances (e.g., LIME)',
   'assurance-goal-category/explainability/surrogate-models/global-surrogates':
-    'Approximates entire model behavior with simpler model (e.g., GAMs, Model Distillation)',
+    'Approximates entire model behaviour with simpler model (e.g., GAMs, Model Distillation)',
   'assurance-goal-category/explainability/surrogate-models/rule-extraction':
     'Extracts interpretable rules from complex models (e.g., ANCHOR, RuleFit)',
 
   // Visualization Methods
   'assurance-goal-category/explainability/visualization-methods':
-    'Techniques focused on visual representation of model behavior',
+    'Techniques focused on visual representation of model behaviour',
   'assurance-goal-category/explainability/visualization-methods/feature-relationships':
-    'Visualizes how features affect predictions (e.g., PDP, ICE Plots)',
+    'Visualises how features affect predictions (e.g., PDP, ICE Plots)',
   'assurance-goal-category/explainability/visualization-methods/attention-patterns':
     'Displays attention mechanisms in models (e.g., Attention Visualization in Transformers)',
   'assurance-goal-category/explainability/visualization-methods/activation-maps':
@@ -333,7 +333,7 @@ export const tagDefinitions: Record<string, string> = {
 
   // Representation Analysis
   'assurance-goal-category/explainability/representation-analysis':
-    'Techniques analyzing internal model representations',
+    'Techniques analysing internal model representations',
   'assurance-goal-category/explainability/representation-analysis/dimensionality-reduction':
     'Reduces complexity for understanding (e.g., PCA, t-SNE, UMAP)',
   'assurance-goal-category/explainability/representation-analysis/concept-identification':
@@ -365,7 +365,7 @@ export const tagDefinitions: Record<string, string> = {
   'assurance-goal-category/explainability/causal-analysis/mediation-analysis':
     'Traces causal pathways through model (e.g., Causal Mediation Analysis)',
   'assurance-goal-category/explainability/causal-analysis/interaction-effects':
-    'Analyzes feature interactions and their effects (e.g., Sobol Indices, Factor Analysis)',
+    'Analyses feature interactions and their effects (e.g., Sobol Indices, Factor Analysis)',
 
   // Model Simplification
   'assurance-goal-category/explainability/model-simplification':
@@ -377,7 +377,7 @@ export const tagDefinitions: Record<string, string> = {
 
   // EXPLAINABILITY - TARGET DIMENSION
   'assurance-goal-category/explainability/explains':
-    'The aspect of model behavior or data that the technique reveals',
+    'The aspect of model behaviour or data that the technique reveals',
   'assurance-goal-category/explainability/explains/feature-importance':
     'Identifies which inputs matter most for predictions',
   'assurance-goal-category/explainability/explains/decision-boundaries':
@@ -399,7 +399,7 @@ export const tagDefinitions: Record<string, string> = {
   'assurance-goal-category/explainability/property/consistency':
     'Similar inputs produce similar explanations',
   'assurance-goal-category/explainability/property/fidelity':
-    'Accurately represents true model behavior',
+    'Accurately represents true model behaviour',
   'assurance-goal-category/explainability/property/sparsity':
     'Focuses on few, most important factors',
   'assurance-goal-category/explainability/property/causality':
@@ -413,7 +413,7 @@ export const tagDefinitions: Record<string, string> = {
 
   // Legacy feature analysis tags (kept for compatibility)
   'assurance-goal-category/explainability/feature-analysis':
-    'Analyzes the role and importance of features',
+    'Analyses the role and importance of features',
   'assurance-goal-category/explainability/feature-analysis/importance-and-attribution':
     'Attributes model decisions to specific features',
   'assurance-goal-category/fairness':
@@ -437,18 +437,20 @@ export const tagDefinitions: Record<string, string> = {
   'assurance-goal-category/safety':
     'Techniques that prevent harmful or dangerous outcomes',
   'assurance-goal-category/safety/monitoring/anomaly-detection':
-    'Detects unusual or potentially unsafe behavior',
+    'Detects unusual or potentially unsafe behaviour',
   'assurance-goal-category/transparency':
     'Techniques that increase system openness and clarity',
   'assurance-goal-category/transparency/documentation':
-    'Creates clear documentation of system behavior',
+    'Creates clear documentation of system behaviour',
   'assurance-goal-category/transparency/documentation/model-card':
     'Standardized model documentation format',
+  'assurance-goal-category/security':
+    'Techniques that protect the system from malicious attacks or unauthorized access',
 
   // Explanatory Scope
   'explanatory-scope/local': 'Provides explanations for individual predictions',
   'explanatory-scope/global':
-    'Provides explanations for overall model behavior',
+    'Provides explanations for overall model behaviour',
 
   // Fairness Approach
   'fairness-approach/group': 'Focuses on statistical parity between groups',

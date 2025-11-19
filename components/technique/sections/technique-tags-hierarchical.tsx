@@ -121,6 +121,7 @@ function TagBadge({ tag, category }: { tag: string; category: string }) {
   const urlPart = getTagUrlPart(tag, category);
 
   // For hierarchical assurance-goal-category tags, use categories route
+
   // For flat tags, use filters route
   const isHierarchical =
     tagParts.length >= 3 && category === 'assurance-goal-category';
@@ -132,7 +133,7 @@ function TagBadge({ tag, category }: { tag: string; category: string }) {
   const tooltipContent = tagDefinitions[tag];
 
   const badge = (
-    <Badge className="cursor-pointer hover:bg-secondary/80" variant="secondary">
+    <Badge className="cursor-pointer transition-all hover:bg-primary hover:text-primary-foreground" variant="secondary">
       {displayName}
     </Badge>
   );

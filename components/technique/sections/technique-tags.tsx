@@ -69,14 +69,14 @@ export function TechniqueTags({ technique }: TechniqueTagsProps) {
                   // For assurance-goal-category subcategories, link to categories instead of filters
                   const href =
                     category === 'assurance-goal-category' &&
-                    tagParts.length >= 3
+                      tagParts.length >= 3
                       ? `/categories/${tagParts[1]}/${tagParts.slice(2).join('/')}`
                       : `/filters/${category}/${urlPart}`;
 
                   return (
                     <Link href={href} key={tag}>
                       <Badge
-                        className="cursor-pointer hover:bg-secondary/80"
+                        className="cursor-pointer transition-all hover:bg-primary hover:text-primary-foreground"
                         variant="secondary"
                       >
                         {displayName}

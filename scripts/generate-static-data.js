@@ -19,8 +19,50 @@ async function generateStaticData() {
       await fs.readFile(techniquesPath, 'utf-8')
     );
 
-    // Generate lightweight techniques metadata
-    const techniquesMetadata = techniquesData.map((technique) => ({
+    // Read Zotero resources
+    const zoteroPath = path.join(dataDir, 'zotero-resources.json');
+    let zoteroItems = [];
+    try {
+      const zoteroData = JSON.parse(await fs.readFile(zoteroPath, 'utf-8'));
+      zoteroItems = zoteroData.items || [];
+    } catch (error) {
+      console.warn('Warning: Could not load zotero-resources.json', error.message);
+    }
+
+    // Create Zotero lookup map
+    const zoteroLookup = new Map(
+      zoteroItems.map((item) => [item.citationKey, item])
+    );
+
+    // Hydrate techniques with Zotero resources
+    const hydratedTechniques = techniquesData.map((technique) => {
+      const hydrated = { ...technique };
+      if (hydrated.resources && Array.isArray(hydrated.resources)) {
+        hydrated.resources = hydrated.resources
+          .map((resource) => {
+            if (typeof resource === 'string') {
+              // Resolve citekey
+              const item = zoteroLookup.get(resource);
+              if (item) {
+                return mapZoteroItemToResource(item);
+              }
+              console.warn(
+                `Warning: Citekey "${resource}" not found in Zotero library for technique "${technique.slug}"`
+              );
+              return null;
+            }
+            // Return existing object as-is (legacy support)
+            return resource;
+          })
+          .filter(Boolean);
+      }
+      return hydrated;
+    });
+
+    // Generate lightweight techniques metadata (using hydrated data? No, metadata doesn't need resources)
+    // Actually, if we want to search by resource title, we might need it.
+    // But metadata is usually for lists.
+    const techniquesMetadata = hydratedTechniques.map((technique) => ({
       slug: technique.slug,
       name: technique.name,
       description: technique.description,
@@ -33,14 +75,14 @@ async function generateStaticData() {
     );
 
     // Generate assurance goals data
-    const assuranceGoals = extractAssuranceGoals(techniquesData);
+    const assuranceGoals = extractAssuranceGoals(hydratedTechniques);
     await fs.writeFile(
       path.join(dataDir, 'assurance-goals.json'),
       JSON.stringify(assuranceGoals, null, 2)
     );
 
     // Generate tags data
-    const tags = extractTags(techniquesData);
+    const tags = extractTags(hydratedTechniques);
     await fs.writeFile(
       path.join(dataDir, 'tags.json'),
       JSON.stringify(tags, null, 2)
@@ -51,7 +93,7 @@ async function generateStaticData() {
     await fs.mkdir(techniquesDir, { recursive: true });
 
     await Promise.all(
-      techniquesData.map((technique) =>
+      hydratedTechniques.map((technique) =>
         fs.writeFile(
           path.join(techniquesDir, `${technique.slug}.json`),
           JSON.stringify(technique, null, 2)
@@ -60,20 +102,20 @@ async function generateStaticData() {
     );
 
     // Generate search index
-    const searchIndex = generateSearchIndex(techniquesData);
+    const searchIndex = generateSearchIndex(hydratedTechniques);
     await fs.writeFile(
       path.join(dataDir, 'search-index.json'),
       JSON.stringify(searchIndex, null, 2)
     );
 
     // Generate category-specific search indices
-    await generateCategorySearchIndices(techniquesData, assuranceGoals);
+    await generateCategorySearchIndices(hydratedTechniques, assuranceGoals);
 
     // Generate category pages data
-    await generateCategoryData(techniquesData, assuranceGoals);
+    await generateCategoryData(hydratedTechniques, assuranceGoals);
 
     // Generate filter combinations
-    await generateFilterData(techniquesData, tags);
+    await generateFilterData(hydratedTechniques, tags);
   } catch (_error) {
     process.exit(1);
   }
@@ -381,6 +423,58 @@ function getGoalDescription(goal) {
       'Making AI systems and their decision-making processes open and understandable.',
   };
   return descriptions[goal] || `Techniques related to ${goal.toLowerCase()}.`;
+}
+
+function mapZoteroItemToResource(item) {
+  // Check for type override tag
+  const typeTag = item.tags?.find((t) => t.tag.startsWith('type:'));
+  let sourceType;
+
+  if (typeTag) {
+    // Convert tag format (e.g. type:technical-paper) to enum format (technical_paper)
+    sourceType = typeTag.tag.replace('type:', '').replace(/-/g, '_');
+  } else {
+    // Fallback to itemType mapping
+    const typeMapping = {
+      journalArticle: 'technical_paper',
+      preprint: 'technical_paper',
+      conferencePaper: 'technical_paper',
+      report: 'technical_paper',
+      thesis: 'technical_paper',
+      book: 'technical_paper',
+      bookSection: 'technical_paper',
+      computerProgram: 'software_package',
+      software: 'software_package',
+      webpage: 'documentation',
+      blogPost: 'tutorial',
+      presentation: 'tutorial',
+      videoRecording: 'tutorial',
+    };
+    sourceType = typeMapping[item.itemType] || 'other';
+  }
+
+  // Extract authors
+  let authors = [];
+  if (item.creators) {
+    authors = item.creators
+      .filter((c) => c.creatorType === 'author')
+      .map((c) => {
+        if (c.firstName && c.lastName) {
+          return `${c.firstName} ${c.lastName}`;
+        }
+        return c.name || `${c.firstName || ''} ${c.lastName || ''}`.trim();
+      });
+  }
+
+  return {
+    title: item.title || 'Untitled',
+    url: item.url || '',
+    source_type: sourceType,
+    authors: authors.length > 0 ? authors : undefined,
+    publication_date: item.date,
+    citationKey: item.citationKey,
+    abstract: item.abstractNote,
+  };
 }
 
 // Run the script

@@ -81,12 +81,18 @@
           "authors": [
             "Pang Wei Koh",
             "Percy Liang"
-          ]
+          ],
+          "publication_date": "2017",
+          "citationKey": "weikohUnderstandingBlackboxPredictions2017",
+          "abstract": "How can we explain the predictions of a black-box model? In this paper, we use influence functions — a classic technique from robust statistics — to trace a model's prediction through the learning algorithm and back to its training data, thereby identifying training points most responsible for a given prediction. To scale up influence functions to modern machine learning settings, we develop a simple, efficient implementation that requires only oracle access to gradients and Hessian-vector products. We show that even on non-convex and non-differentiable models where the theory breaks down, approximations to influence functions can still provide valuable information. On linear models and convolutional neural networks, we demonstrate that influence functions are useful for multiple purposes: understanding model behavior, debugging models, detecting dataset errors, and even creating visually-indistinguishable training-set attacks."
         },
         {
-          "title": "nimarb/pytorch_influence_functions",
+          "title": "pytorch_influence_functions",
           "url": "https://github.com/nimarb/pytorch_influence_functions",
-          "source_type": "software_package"
+          "source_type": "software_package",
+          "publication_date": "2019-11-30",
+          "citationKey": "nimarbPytorch_influence_functions2019",
+          "abstract": "This is a PyTorch reimplementation of Influence Functions from the ICML2017 best paper: Understanding Black-box Predictions via Influence Functions by Pang Wei Koh and Percy Liang."
         },
         {
           "title": "What is Your Data Worth to GPT? LLM-Scale Data Valuation with Influence Functions",
@@ -100,14 +106,17 @@
             "Minsoo Kang",
             "Youngseog Chung",
             "Adithya Pratapa",
-            "W. Neiswanger",
+            "Willie Neiswanger",
             "Emma Strubell",
             "Teruko Mitamura",
             "Jeff G. Schneider",
             "Eduard H. Hovy",
             "Roger B. Grosse",
             "Eric P. Xing"
-          ]
+          ],
+          "publication_date": "2024",
+          "citationKey": "keunchoeWhatYourData2024",
+          "abstract": "Large language models (LLMs) are trained on a vast amount of human-written data, but data providers often remain uncredited. In response to this issue, data valuation (or data attribution), which quantifies the contribution or value of each data to the model output, has been discussed as a potential solution. Nevertheless, applying existing data valuation methods to recent LLMs and their vast training datasets has been largely limited by prohibitive compute and memory costs. In this work, we focus on influence functions, a popular gradient-based data valuation method, and significantly improve its scalability with an efficient gradient projection strategy called LoGra that leverages the gradient structure in backpropagation. We then provide a theoretical motivation of gradient projection approaches to influence functions to promote trust in the data valuation process. Lastly, we lower the barrier to implementing data valuation systems by introducing LogIX, a software package that can transform existing training code into data valuation code with minimal effort. In our data valuation experiments, LoGra achieves competitive accuracy against more expensive baselines while showing up to 6,500x improvement in throughput and 5x reduction in GPU memory usage when applied to Llama3-8B-Instruct and the 1B-token dataset."
         },
         {
           "title": "Scaling Up Influence Functions",
@@ -118,12 +127,20 @@
             "Polina Zablotskaia",
             "David Vilar",
             "Artem Sokolov"
-          ]
+          ],
+          "publication_date": "2021",
+          "citationKey": "schioppaScalingInfluenceFunctions2021",
+          "abstract": "We address efficient calculation of influence functions for tracking predictions back to the training data. We propose and analyze a new approach to speeding up the inverse Hessian calculation based on Arnoldi iteration. With this improvement, we achieve, to the best of our knowledge, the first successful implementation of influence functions that scales to full-size (language and vision) Transformer models with several hundreds of millions of parameters. We evaluate our approach in image classification and sequence-to-sequence tasks with tens to a hundred of millions of training examples. Our code is available at https://github.com/google-research/jax-influence."
         },
         {
           "title": "Welcome to torch-influence's API Reference! — torch-influence 0.1.0 ...",
-          "url": "https://torch-influence.readthedocs.io/",
-          "source_type": "documentation"
+          "url": "https://torch-influence.readthedocs.io",
+          "source_type": "documentation",
+          "authors": [
+            "Torch-influence Developers"
+          ],
+          "publication_date": "2023",
+          "citationKey": "torch-influencedevelopersWelcomeTorchinfluencesAPI2023"
         }
       ],
       "complexity_rating": 5,
@@ -198,28 +215,7 @@
           "description": "Causal relationships identified in specific contexts or datasets may not generalise to different domains, tasks, or model versions, requiring careful validation across diverse scenarios to ensure robust findings."
         }
       ],
-      "resources": [
-        {
-          "title": "Causal Mediation Analysis for Interpreting Neural NLP Models",
-          "url": "https://arxiv.org/abs/2004.12265",
-          "source_type": "technical_paper",
-          "authors": [
-            "Jesse Vig",
-            "Sebastian Gehrmann",
-            "Yonatan Belinkov",
-            "Sharon Qian",
-            "Daniel Nevo",
-            "Yaron Singer",
-            "Stuart Shieber"
-          ],
-          "publication_date": "2020-04-25"
-        },
-        {
-          "title": "Causal Mediation Analysis Explained",
-          "url": "http://arxiv.org/pdf/2004.12265v2",
-          "source_type": "tutorial"
-        }
-      ],
+      "resources": [],
       "complexity_rating": 5,
       "computational_cost_rating": 4,
       "related_techniques": [
@@ -297,7 +293,7 @@
       "resources": [
         {
           "title": "FastCAV: Efficient Computation of Concept Activation Vectors for Explaining Deep Neural Networks",
-          "url": "http://arxiv.org/pdf/2505.17883v1",
+          "url": "http://arxiv.org/abs/2505.17883v1",
           "source_type": "technical_paper",
           "authors": [
             "Laines Schmalwasser",
@@ -305,22 +301,26 @@
             "Joachim Denzler",
             "Julia Niebling"
           ],
-          "publication_date": "2025-05-23"
+          "publication_date": "2025-05-23",
+          "citationKey": "schmalwasserFastCAVEfficientComputation2025",
+          "abstract": "Concepts such as objects, patterns, and shapes are how humans understand the world. Building on this intuition, concept-based explainability methods aim to study representations learned by deep neural networks in relation to human-understandable concepts. Here, Concept Activation Vectors (CAVs) are an important tool and can identify whether a model learned a concept or not. However, the computational cost and time requirements of existing CAV computation pose a significant challenge, particularly in large-scale, high-dimensional architectures. To address this limitation, we introduce FastCAV, a novel approach that accelerates the extraction of CAVs by up to 63.6x (on average 46.4x). We provide a theoretical foundation for our approach and give concrete assumptions under which it is equivalent to established SVM-based methods. Our empirical results demonstrate that CAVs calculated with FastCAV maintain similar performance while being more efficient and stable. In downstream applications, i.e., concept-based explanation methods, we show that FastCAV can act as a replacement leading to equivalent insights. Hence, our approach enables previously infeasible investigations of deep models, which we demonstrate by tracking the evolution of concepts during model training."
         },
         {
           "title": "Concept Distillation: Leveraging Human-Centered Explanations for Model Improvement",
-          "url": "http://arxiv.org/pdf/2311.15303v1",
+          "url": "http://arxiv.org/abs/2311.15303v1",
           "source_type": "technical_paper",
           "authors": [
             "Avani Gupta",
             "Saurabh Saini",
             "P J Narayanan"
           ],
-          "publication_date": "2023-11-26"
+          "publication_date": "2023-11-26",
+          "citationKey": "guptaConceptDistillationLeveraging2023",
+          "abstract": "Humans use abstract concepts for understanding instead of hard features. Recent interpretability research has focused on human-centered concept explanations of neural networks. Concept Activation Vectors (CAVs) estimate a model's sensitivity and possible biases to a given concept. In this paper, we extend CAVs from post-hoc analysis to ante-hoc training in order to reduce model bias through fine-tuning using an additional Concept Loss. Concepts were defined on the final layer of the network in the past. We generalize it to intermediate layers using class prototypes. This facilitates class learning in the last convolution layer, which is known to be most informative. We also introduce Concept Distillation to create richer concepts using a pre-trained knowledgeable model as the teacher. Our method can sensitize or desensitize a model towards concepts. We show applications of concept-sensitive training to debias several classification problems. We also use concepts to induce prior knowledge into IID, a reconstruction problem. Concept-sensitive training can improve model interpretability, reduce biases, and induce prior knowledge. Please visit https://avani17101.github.io/Concept-Distilllation/ for code and more details."
         },
         {
           "title": "Post-Hoc Concept Disentanglement: From Correlated to Isolated Concept Representations",
-          "url": "http://arxiv.org/pdf/2503.05522v1",
+          "url": "http://arxiv.org/abs/2503.05522v1",
           "source_type": "technical_paper",
           "authors": [
             "Eren Erogullari",
@@ -328,11 +328,13 @@
             "Wojciech Samek",
             "Frederik Pahde"
           ],
-          "publication_date": "2025-03-07"
+          "publication_date": "2025-03-07",
+          "citationKey": "erogullariPostHocConceptDisentanglement2025",
+          "abstract": "Concept Activation Vectors (CAVs) are widely used to model human-understandable concepts as directions within the latent space of neural networks. They are trained by identifying directions from the activations of concept samples to those of non-concept samples. However, this method often produces similar, non-orthogonal directions for correlated concepts, such as \"beard\" and \"necktie\" within the CelebA dataset, which frequently co-occur in images of men. This entanglement complicates the interpretation of concepts in isolation and can lead to undesired effects in CAV applications, such as activation steering. To address this issue, we introduce a post-hoc concept disentanglement method that employs a non-orthogonality loss, facilitating the identification of orthogonal concept directions while preserving directional correctness. We evaluate our approach with real-world and controlled correlated concepts in CelebA and a synthetic FunnyBirds dataset with VGG16 and ResNet18 architectures. We further demonstrate the superiority of orthogonalized concept representations in activation steering tasks, allowing (1) the insertion of isolated concepts into input images through generative models and (2) the removal of concepts for effective shortcut suppression with reduced impact on correlated concepts in comparison to baseline CAVs."
         },
         {
           "title": "Concept Gradient: Concept-based Interpretation Without Linear Assumption",
-          "url": "http://arxiv.org/pdf/2208.14966v2",
+          "url": "http://arxiv.org/abs/2208.14966v2",
           "source_type": "technical_paper",
           "authors": [
             "Andrew Bai",
@@ -341,11 +343,13 @@
             "Neil Y. C. Lin",
             "Cho-Jui Hsieh"
           ],
-          "publication_date": "2022-08-31"
+          "publication_date": "2022-08-31",
+          "citationKey": "baiConceptGradientConceptbased2022",
+          "abstract": "Concept-based interpretations of black-box models are often more intuitive for humans to understand. The most widely adopted approach for concept-based interpretation is Concept Activation Vector (CAV). CAV relies on learning a linear relation between some latent representation of a given model and concepts. The linear separability is usually implicitly assumed but does not hold true in general. In this work, we started from the original intent of concept-based interpretation and proposed Concept Gradient (CG), extending concept-based interpretation beyond linear concept functions. We showed that for a general (potentially non-linear) concept, we can mathematically evaluate how a small change of concept affecting the model's prediction, which leads to an extension of gradient-based interpretation to the concept space. We demonstrated empirically that CG outperforms CAV in both toy examples and real world datasets."
         },
         {
           "title": "SurroCBM: Concept Bottleneck Surrogate Models for Generative Post-hoc Explanation",
-          "url": "http://arxiv.org/pdf/2310.07698v1",
+          "url": "http://arxiv.org/abs/2310.07698v1",
           "source_type": "technical_paper",
           "authors": [
             "Bo Pan",
@@ -353,7 +357,9 @@
             "Yifei Zhang",
             "Liang Zhao"
           ],
-          "publication_date": "2023-10-11"
+          "publication_date": "2023-10-11",
+          "citationKey": "panSurroCBMConceptBottleneck2023",
+          "abstract": "Explainable AI seeks to bring light to the decision-making processes of black-box models. Traditional saliency-based methods, while highlighting influential data segments, often lack semantic understanding. Recent advancements, such as Concept Activation Vectors (CAVs) and Concept Bottleneck Models (CBMs), offer concept-based explanations but necessitate human-defined concepts. However, human-annotated concepts are expensive to attain. This paper introduces the Concept Bottleneck Surrogate Models (SurroCBM), a novel framework that aims to explain the black-box models with automatically discovered concepts. SurroCBM identifies shared and unique concepts across various black-box models and employs an explainable surrogate model for post-hoc explanations. An effective training strategy using self-generated data is proposed to enhance explanation quality continuously. Through extensive experiments, we demonstrate the efficacy of SurroCBM in concept discovery and explanation, underscoring its potential in advancing the field of explainable AI."
         }
       ],
       "complexity_rating": 4,

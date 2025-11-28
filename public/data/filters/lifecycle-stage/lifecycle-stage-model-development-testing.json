@@ -74,37 +74,45 @@
           "title": "Equality of Opportunity in Supervised Learning",
           "url": "https://arxiv.org/abs/1610.02413",
           "source_type": "technical_paper",
-          "description": "Foundational paper by Hardt et al. introducing the equalised odds post-processing algorithm and mathematical framework for fairness constraints.",
           "authors": [
             "Moritz Hardt",
             "Eric Price",
             "Nathan Srebro"
           ],
-          "publication_date": "2016-10-07"
+          "publication_date": "2016-10-07",
+          "citationKey": "hardtEqualityOpportunitySupervised2016",
+          "abstract": "We propose a criterion for discrimination against a specified sensitive attribute in supervised learning, where the goal is to predict some target based on available features. Assuming data about the predictor, target, and membership in the protected group are available, we show how to optimally adjust any learned predictor so as to remove discrimination according to our definition. Our framework also improves incentives by shifting the cost of poor classification from disadvantaged groups to the decision maker, who can respond by improving the classification accuracy.   In line with other studies, our notion is oblivious: it depends only on the joint statistics of the predictor, the target and the protected attribute, but not on interpretation of individualfeatures. We study the inherent limits of defining and identifying biases based on such oblivious measures, outlining what can and cannot be inferred from different oblivious tests.   We illustrate our notion using a case study of FICO credit scores."
         },
         {
           "title": "Equalized odds postprocessing under imperfect group information",
           "url": "https://arxiv.org/abs/1906.03284",
           "source_type": "technical_paper",
-          "description": "Extension of Hardt et al.'s method examining robustness when protected attribute information is imperfect or noisy.",
           "authors": [
             "Pranjal Awasthi",
             "Matthäus Kleindessner",
             "Jamie Morgenstern"
           ],
-          "publication_date": "2019-06-07"
+          "publication_date": "2019-06-07",
+          "citationKey": "awasthiEqualizedOddsPostprocessing2019",
+          "abstract": "Most approaches aiming to ensure a model's fairness with respect to a protected attribute (such as gender or race) assume to know the true value of the attribute for every data point. In this paper, we ask to what extent fairness interventions can be effective even when only imperfect information about the protected attribute is available. In particular, we study the prominent equalized odds postprocessing method of Hardt et al. (2016) under a perturbation of the attribute. We identify conditions on the perturbation that guarantee that the bias of a classifier is reduced even by running equalized odds with the perturbed attribute. We also study the error of the resulting classifier. We empirically observe that under our identified conditions most often the error does not suffer from a perturbation of the protected attribute. For a special case, we formally prove this observation to be true."
         },
         {
           "title": "Fairlearn: ThresholdOptimizer",
           "url": "https://fairlearn.org/v0.10/api_reference/generated/fairlearn.postprocessing.ThresholdOptimizer.html",
           "source_type": "documentation",
-          "description": "Microsoft's Fairlearn implementation of the Hardt et al. algorithm with API documentation and usage examples for equalised odds constraints."
+          "authors": [
+            "Fairlearn Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "fairlearndevelopersFairlearnThresholdOptimizer2018"
         },
         {
-          "title": "IBM AIF360",
+          "title": "AIF360",
           "url": "https://github.com/Trusted-AI/AIF360",
           "source_type": "software_package",
-          "description": "Comprehensive fairness toolkit including EqualizedOddsPostprocessing implementation based on Hardt et al.'s original algorithm."
+          "publication_date": "2018-08-22",
+          "citationKey": "trusted-aiAIF3602018",
+          "abstract": "A comprehensive set of fairness metrics for datasets and machine learning models, explanations for these metrics, and algorithms to mitigate bias in datasets and models."
         }
       ],
       "complexity_rating": 3,
@@ -183,7 +191,6 @@
           "title": "On Fairness and Calibration",
           "url": "https://arxiv.org/abs/1709.02012",
           "source_type": "technical_paper",
-          "description": "Foundational paper demonstrating the mathematical tension between calibration and equalised odds fairness constraints.",
           "authors": [
             "Geoff Pleiss",
             "Manish Raghavan",
@@ -191,31 +198,40 @@
             "Jon Kleinberg",
             "Kilian Q. Weinberger"
           ],
-          "publication_date": "2017-09-06"
+          "publication_date": "2017-09-06",
+          "citationKey": "pleissFairnessCalibration2017",
+          "abstract": "The machine learning community has become increasingly concerned with the potential for bias and discrimination in predictive models. This has motivated a growing line of work on what it means for a classification procedure to be \"fair.\" In this paper, we investigate the tension between minimizing error disparity across different population groups while maintaining calibrated probability estimates. We show that calibration is compatible only with a single error constraint (i.e. equal false-negatives rates across groups), and show that any algorithm that satisfies this relaxation is no better than randomizing a percentage of predictions for an existing classifier. These unsettling findings, which extend and generalize existing results, are empirically confirmed on several datasets."
         },
         {
           "title": "equalized_odds_and_calibration",
           "url": "https://github.com/gpleiss/equalized_odds_and_calibration",
           "source_type": "software_package",
-          "description": "Python implementation of post-processing methods for achieving calibration with equality of opportunity constraints."
+          "publication_date": "2017-11-03",
+          "citationKey": "gpleissEqualized_odds_and_calibration2017",
+          "abstract": "Code and data for the experiments in \"On Fairness and Calibration\""
         },
         {
           "title": "Equality of Opportunity in Supervised Learning",
           "url": "https://arxiv.org/abs/1610.02413",
           "source_type": "technical_paper",
-          "description": "Original paper introducing the equality of opportunity fairness criterion and post-processing algorithms.",
           "authors": [
             "Moritz Hardt",
             "Eric Price",
             "Nathan Srebro"
           ],
-          "publication_date": "2016-10-07"
+          "publication_date": "2016-10-07",
+          "citationKey": "hardtEqualityOpportunitySupervised2016",
+          "abstract": "We propose a criterion for discrimination against a specified sensitive attribute in supervised learning, where the goal is to predict some target based on available features. Assuming data about the predictor, target, and membership in the protected group are available, we show how to optimally adjust any learned predictor so as to remove discrimination according to our definition. Our framework also improves incentives by shifting the cost of poor classification from disadvantaged groups to the decision maker, who can respond by improving the classification accuracy.   In line with other studies, our notion is oblivious: it depends only on the joint statistics of the predictor, the target and the protected attribute, but not on interpretation of individualfeatures. We study the inherent limits of defining and identifying biases based on such oblivious measures, outlining what can and cannot be inferred from different oblivious tests.   We illustrate our notion using a case study of FICO credit scores."
         },
         {
           "title": "Fairlearn: Postprocessing Methods",
           "url": "https://fairlearn.org/v0.10/user_guide/mitigation/postprocessing.html",
           "source_type": "documentation",
-          "description": "Documentation for implementing threshold optimisation and calibration methods to achieve fairness constraints."
+          "authors": [
+            "Fairlearn Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "fairlearndevelopersFairlearnPostprocessingMethods2018"
         }
       ],
       "complexity_rating": 4,
@@ -291,27 +307,50 @@
         {
           "title": "aif360.sklearn.metrics.equal_opportunity_difference — aif360 0.6.1 ...",
           "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.metrics.equal_opportunity_difference.html",
-          "source_type": "documentation"
+          "source_type": "documentation",
+          "authors": [
+            "Aif360 Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "aif360developersAif360sklearnmetricsequal_opportunity_differenceAif3600612018"
         },
         {
           "title": "Welcome to TransparentAI's documentation! — TransparentAI 0.1.0 ...",
-          "url": "https://transparentai.readthedocs.io/en/latest/",
-          "source_type": "documentation"
+          "url": "https://transparentai.readthedocs.io/en/latest",
+          "source_type": "documentation",
+          "authors": [
+            "Transparentai Developers"
+          ],
+          "publication_date": "2023",
+          "citationKey": "transparentaidevelopersWelcomeTransparentAIsDocumentation2023"
         },
         {
           "title": "lale.lib.aif360.util module — LALE 0.9.0-dev documentation",
           "url": "https://lale.readthedocs.io/en/latest/modules/lale.lib.aif360.util.html",
-          "source_type": "documentation"
+          "source_type": "documentation",
+          "authors": [
+            "Lale Developers"
+          ],
+          "publication_date": "2024",
+          "citationKey": "laledevelopersLalelibaif360utilModuleLALE2024"
         },
         {
-          "title": "IBM/bias-mitigation-of-machine-learning-models-using-aif360",
+          "title": "bias-mitigation-of-machine-learning-models-using-aif360",
           "url": "https://github.com/IBM/bias-mitigation-of-machine-learning-models-using-aif360",
-          "source_type": "software_package"
+          "source_type": "software_package",
+          "publication_date": "2020-11-23",
+          "citationKey": "ibmBiasmitigationofmachinelearningmodelsusingaif3602020",
+          "abstract": "\"' '\""
         },
         {
           "title": "aif360.algorithms.postprocessing.RejectOptionClassification ...",
-          "url": "https://aif360.readthedocs.io/en/latest/modules/generated/aif360.algorithms.postprocessing.RejectOptionClassification.html",
-          "source_type": "documentation"
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.algorithms.postprocessing.RejectOptionClassification.html",
+          "source_type": "documentation",
+          "authors": [
+            "Aif360 Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "aif360developersAif360algorithmspostprocessingRejectOptionClassification2018"
         }
       ],
       "complexity_rating": 2,

@@ -74,44 +74,52 @@
       "resources": [
         {
           "title": "Fair Adversarial Networks",
-          "url": "http://arxiv.org/pdf/2002.12144v1",
+          "url": "http://arxiv.org/abs/2002.12144v1",
           "source_type": "technical_paper",
           "authors": [
             "George Cevora"
           ],
-          "publication_date": "2020-02-23"
+          "publication_date": "2020-02-23",
+          "citationKey": "cevoraFairAdversarialNetworks2020",
+          "abstract": "The influence of human judgement is ubiquitous in datasets used across the analytics industry, yet humans are known to be sub-optimal decision makers prone to various biases. Analysing biased datasets then leads to biased outcomes of the analysis. Bias by protected characteristics (e.g. race) is of particular interest as it may not only make the output of analytical process sub-optimal, but also illegal. Countering the bias by constraining the analytical outcomes to be fair is problematic because A) fairness lacks a universally accepted definition, while at the same time some definitions are mutually exclusive, and B) the use of optimisation constraints ensuring fairness is incompatible with most analytical pipelines. Both problems are solved by methods which remove bias from the data and returning an altered dataset. This approach aims to not only remove the actual bias variable (e.g. race), but also alter all proxy variables (e.g. postcode) so the bias variable is not detectable from the rest of the data. The advantage of using this approach is that the definition of fairness as a lack of detectable bias in the data (as opposed to the output of analysis) is universal and therefore solves problem (A). Furthermore, as the data is altered to remove bias the problem (B) disappears because the analytical pipelines can remain unchanged. This approach has been adopted by several technical solutions. None of them, however, seems to be satisfactory in terms of ability to remove multivariate, non-linear and non-binary biases. Therefore, in this paper I propose the concept of Fair Adversarial Networks as an easy-to-implement general method for removing bias from data. This paper demonstrates that Fair Adversarial Networks achieve this aim."
         },
         {
           "title": "Demonstrating Rosa: the fairness solution for any Data Analytic pipeline",
-          "url": "http://arxiv.org/pdf/2003.00899v2",
+          "url": "http://arxiv.org/abs/2003.00899v2",
           "source_type": "technical_paper",
           "authors": [
             "Kate Wilkinson",
             "George Cevora"
           ],
-          "publication_date": "2020-02-28"
+          "publication_date": "2020-02-28",
+          "citationKey": "wilkinsonDemonstratingRosaFairness2020",
+          "abstract": "Most datasets of interest to the analytics industry are impacted by various forms of human bias. The outcomes of Data Analytics [DA] or Machine Learning [ML] on such data are therefore prone to replicating the bias. As a result, a large number of biased decision-making systems based on DA/ML have recently attracted attention. In this paper we introduce Rosa, a free, web-based tool to easily de-bias datasets with respect to a chosen characteristic. Rosa is based on the principles of Fair Adversarial Networks, developed by illumr Ltd., and can therefore remove interactive, non-linear, and non-binary bias. Rosa is stand-alone pre-processing step / API, meaning it can be used easily with any DA/ML pipeline. We test the efficacy of Rosa in removing bias from data-driven decision making systems by performing standard DA tasks on five real-world datasets, selected for their relevance to current DA problems, and also their high potential for bias. We use simple ML models to model a characteristic of analytical interest, and compare the level of bias in the model output both with and without Rosa as a pre-processing step. We find that in all cases there is a substantial decrease in bias of the data-driven decision making systems when the data is pre-processed with Rosa."
         },
         {
           "title": "Triangular Trade-off between Robustness, Accuracy, and Fairness in Deep Neural Networks: A Survey",
           "url": "https://www.semanticscholar.org/paper/13b0444d079bea1c8c57a6082200b67ab5f4616e",
-          "source_type": "documentation",
+          "source_type": "technical_paper",
           "authors": [
             "Jingyang Li",
             "Guoqiang Li"
           ],
-          "publication_date": "2025-02-10"
+          "publication_date": "2024",
+          "citationKey": "liTriangularTradeoffRobustness2024",
+          "abstract": "With the rapid development of deep learning, AI systems are being used more in complex and important domains and necessitates the simultaneous fulfillment of multiple constraints: accurate, robust, and fair. Accuracy measures how well a DNN can generalize to new data. Robustness demonstrates how well the network can withstand minor perturbations without changing the results. Fairness focuses on treating different groups equally. This survey provides an overview of the triangular trade-off among robustness, accuracy, and fairness in neural networks. This trade-off makes it difficult for AI systems to achieve true intelligence and is connected to generalization, robustness, and fairness in deep learning. The survey explores these trade-offs and their relationships to adversarial examples, adversarial training, and fair machine learning. The trade-offs between accuracy and robustness, accuracy and fairness, and robustness and fairness have been studied to different extents. However, there is a lack of taxonomy and analysis of these trade-offs. The accuracy-robustness trade-off is inherent in Gaussian models, but it varies when classes are not closely distributed. The accuracy-fairness and robustness-fairness trade-offs have been assessed empirically, but their theoretical nature needs more investigation. This survey aims to explore the origins, evolution, influencing factors, and future research directions of these trade-offs."
         },
         {
           "title": "Bt-GAN: Generating Fair Synthetic Healthdata via Bias-transforming Generative Adversarial Networks",
           "url": "https://www.semanticscholar.org/paper/6995779ac582c5f2436cfb82a3c8cf5ca72bae2f",
           "source_type": "technical_paper",
           "authors": [
-            "Resmi Ramachandranpillai",
+            "R. Ramachandranpillai",
             "Md Fahim Sikder",
-            "David Bergström",
+            "David Bergstrom",
             "Fredrik Heintz"
           ],
-          "publication_date": "2023-12-14"
+          "publication_date": "2024",
+          "citationKey": "ramachandranpillaiBtGANGeneratingFair2024",
+          "abstract": "Synthetic data generation offers a promising solution to enhance the usefulness of Electronic Healthcare Records (EHR) by generating realistic de-identified data. However, the existing literature primarily focuses on the quality of synthetic health data, neglecting the crucial aspect of fairness in downstream predictions. Consequently, models trained on synthetic EHR have faced criticism for producing biased outcomes in target tasks. These biases can arise from either spurious correlations between features or the failure of models to accurately represent sub-groups. To address these concerns, we present Bias-transforming Generative Adversarial Networks (Bt-GAN), a GAN-based synthetic data generator specifically designed for the healthcare domain. In order to tackle spurious correlations (i), we propose an information-constrained Data Generation Process (DGP) that enables the generator to learn a fair deterministic transformation based on a well-defined notion of algorithmic fairness. To overcome the challenge of capturing exact sub-group representations (ii), we incentivize the generator to preserve sub-group densities through score-based weighted sampling. This approach compels the generator to learn from underrepresented regions of the data manifold. To evaluate the effectiveness of our proposed method, we conduct extensive experiments using the Medical Information Mart for Intensive Care (MIMIC-III) database. Our results demonstrate that Bt-GAN achieves state-of-the-art accuracy while significantly improving fairness and minimizing bias amplification. Furthermore, we perform an in-depth explainability analysis to provide additional evidence supporting the validity of our study. In conclusion, our research introduces a novel and professional approach to addressing the limitations of synthetic data generation in the healthcare domain. By incorporating fairness considerations and leveraging advanced techniques such as GANs, we pave the way for more reliable and unbiased predictions in healthcare applications."
         }
       ],
       "complexity_rating": 5,
@@ -198,17 +206,25 @@
             "Hideki Asoh",
             "Jun Sakuma"
           ],
-          "publication_date": "2012-09-24"
+          "publication_date": "2012-09-24",
+          "citationKey": "kamishimaFairnessAwareClassifierPrejudice2012"
         },
         {
           "title": "Fairness-Aware Machine Learning and Data Mining",
-          "url": "https://www.kamishima.net/faml/",
-          "source_type": "documentation"
+          "url": "https://www.kamishima.net/faml",
+          "source_type": "documentation",
+          "authors": [
+            "Toshihiro Kamishima"
+          ],
+          "publication_date": "2012",
+          "citationKey": "kamishimaFairnessAwareMachineLearning2012"
         },
         {
           "title": "Fairness-aware Classifier (faclass)",
-          "url": "https://www.kamishima.net/faclass/",
-          "source_type": "software_package"
+          "url": "https://www.kamishima.net/faclass",
+          "source_type": "software_package",
+          "publication_date": "2012",
+          "citationKey": "kamishimaFairnessawareClassifierFaclass2012"
         }
       ],
       "complexity_rating": 3,
@@ -286,38 +302,57 @@
         {
           "title": "ρ-Fair Method — holisticai documentation",
           "url": "https://holisticai.readthedocs.io/en/latest/getting_started/bias/mitigation/inprocessing/bc_meta_fair_classifier_rho_fair.html",
-          "source_type": "documentation"
+          "source_type": "documentation",
+          "authors": [
+            "Holisticai Developers"
+          ],
+          "publication_date": "2024",
+          "citationKey": "holisticaidevelopersRFairMethodHolisticai2024"
         },
         {
           "title": "aif360.algorithms.inprocessing — aif360 0.1.0 documentation",
           "url": "https://aif360.readthedocs.io/en/v0.2.3/modules/inprocessing.html",
-          "source_type": "documentation"
+          "source_type": "documentation",
+          "authors": [
+            "Aif360 Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "aif360developersAif360algorithmsinprocessingAif3600102018"
         },
         {
           "title": "Welcome to AI Fairness 360's documentation! — aif360 0.1.0 ...",
-          "url": "https://aif360.readthedocs.io/en/v0.2.3/",
-          "source_type": "documentation"
+          "url": "https://aif360.readthedocs.io/en/v0.2.3",
+          "source_type": "documentation",
+          "authors": [
+            "Aif360 Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "aif360developersWelcomeAIFairness2018"
         },
         {
           "title": "Algorithmic decision making methods for fair credit scoring",
           "url": "http://arxiv.org/abs/2209.07912",
           "source_type": "technical_paper",
           "authors": [
-            "Moldovan, Darie"
+            "Darie Moldovan"
           ],
-          "publication_date": "2022-09-16"
+          "publication_date": "2022-09-16",
+          "citationKey": "moldovanAlgorithmicDecisionMaking2022",
+          "abstract": "The effectiveness of machine learning in evaluating the creditworthiness of loan applicants has been demonstrated for a long time. However, there is concern that the use of automated decision-making processes may result in unequal treatment of groups or individuals, potentially leading to discriminatory outcomes. This paper seeks to address this issue by evaluating the effectiveness of 12 leading bias mitigation methods across 5 different fairness metrics, as well as assessing their accuracy and potential profitability for financial institutions. Through our analysis, we have identified the challenges associated with achieving fairness while maintaining accuracy and profitabiliy, and have highlighted both the most successful and least successful mitigation methods. Ultimately, our research serves to bridge the gap between experimental machine learning and its practical applications in the finance industry."
         },
         {
-          "title": "The Importance of Modeling Data Missingness in Algorithmic Fairness: A\n  Causal Perspective",
+          "title": "The Importance of Modeling Data Missingness in Algorithmic Fairness: A Causal Perspective",
           "url": "http://arxiv.org/abs/2012.11448",
           "source_type": "technical_paper",
           "authors": [
-            "Amayuelas, Alfonso",
-            "Deshpande, Amit",
-            "Goel, Naman",
-            "Sharma, Amit"
+            "Naman Goel",
+            "Alfonso Amayuelas",
+            "Amit Deshpande",
+            "Amit Sharma"
           ],
-          "publication_date": "2020-12-21"
+          "publication_date": "2020-12-21",
+          "citationKey": "goelImportanceModelingData2020",
+          "abstract": "Training datasets for machine learning often have some form of missingness. For example, to learn a model for deciding whom to give a loan, the available training data includes individuals who were given a loan in the past, but not those who were not. This missingness, if ignored, nullifies any fairness guarantee of the training procedure when the model is deployed. Using causal graphs, we characterize the missingness mechanisms in different real-world scenarios. We show conditions under which various distributions, used in popular fairness algorithms, can or can not be recovered from the training data. Our theoretical results imply that many of these algorithms can not guarantee fairness in practice. Modeling missingness also helps to identify correct design principles for fair algorithms. For example, in multi-stage settings where decisions are made in multiple screening rounds, we use our framework to derive the minimal distributions required to design a fair algorithm. Our proposed algorithm decentralizes the decision-making process and still achieves similar performance to the optimal algorithm that requires centralization and non-recoverable distributions."
         }
       ],
       "complexity_rating": 5,
@@ -398,7 +433,6 @@
           "title": "A Reductions Approach to Fair Classification",
           "url": "https://arxiv.org/abs/1803.02453",
           "source_type": "technical_paper",
-          "description": "Foundational paper by Agarwal et al. introducing the exponentiated gradient reduction approach for fair classification with theoretical guarantees.",
           "authors": [
             "Alekh Agarwal",
             "Alina Beygelzimer",
@@ -406,25 +440,39 @@
             "John Langford",
             "Hanna Wallach"
           ],
-          "publication_date": "2018-03-06"
+          "publication_date": "2018-03-06",
+          "citationKey": "agarwalReductionsApproachFair2018",
+          "abstract": "We present a systematic approach for achieving fairness in a binary classification setting. While we focus on two well-known quantitative definitions of fairness, our approach encompasses many other previously studied definitions as special cases. The key idea is to reduce fair classification to a sequence of cost-sensitive classification problems, whose solutions yield a randomized classifier with the lowest (empirical) error subject to the desired constraints. We introduce two reductions that work for any representation of the cost-sensitive classifier and compare favorably to prior baselines on a variety of data sets, while overcoming several of their disadvantages."
         },
         {
           "title": "Fairlearn: ExponentiatedGradient",
           "url": "https://fairlearn.org/v0.10/api_reference/generated/fairlearn.reductions.ExponentiatedGradient.html",
           "source_type": "documentation",
-          "description": "Microsoft's Fairlearn implementation of the Agarwal et al. algorithm with comprehensive API documentation and examples."
+          "authors": [
+            "Fairlearn Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "fairlearndevelopersFairlearnExponentiatedGradient2018"
         },
         {
           "title": "IBM AIF360: ExponentiatedGradientReduction",
           "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.inprocessing.ExponentiatedGradientReduction.html",
           "source_type": "documentation",
-          "description": "IBM's AIF360 implementation with scikit-learn compatible API for in-processing fairness constraints during model training."
+          "authors": [
+            "Aif360 Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "aif360developersIBMAIF360ExponentiatedGradientReduction2018"
         },
         {
           "title": "Fairlearn Reductions Guide",
           "url": "https://fairlearn.org/main/user_guide/mitigation/reductions.html",
           "source_type": "tutorial",
-          "description": "Comprehensive guide to using reduction-based approaches for fairness, including practical examples of exponentiated gradient methods and fairness constraints."
+          "authors": [
+            "Fairlearn Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "fairlearndevelopersFairlearnReductionsGuide2018"
         }
       ],
       "complexity_rating": 4,
@@ -503,7 +551,7 @@
       "resources": [
         {
           "title": "Segmenting across places: The need for fair transfer learning with satellite imagery",
-          "url": "http://arxiv.org/pdf/2204.04358v3",
+          "url": "http://arxiv.org/abs/2204.04358v3",
           "source_type": "technical_paper",
           "authors": [
             "Miao Zhang",
@@ -511,17 +559,21 @@
             "Lazarus Chok",
             "Rumi Chunara"
           ],
-          "publication_date": "2022-04-09"
+          "publication_date": "2022-04-09",
+          "citationKey": "zhangSegmentingPlacesNeed2022",
+          "abstract": "The increasing availability of high-resolution satellite imagery has enabled the use of machine learning to support land-cover measurement and inform policy-making. However, labelling satellite images is expensive and is available for only some locations. This prompts the use of transfer learning to adapt models from data-rich locations to others. Given the potential for high-impact applications of satellite imagery across geographies, a systematic assessment of transfer learning implications is warranted. In this work, we consider the task of land-cover segmentation and study the fairness implications of transferring models across locations. We leverage a large satellite image segmentation benchmark with 5987 images from 18 districts (9 urban and 9 rural). Via fairness metrics we quantify disparities in model performance along two axes -- across urban-rural locations and across land-cover classes. Findings show that state-of-the-art models have better overall accuracy in rural areas compared to urban areas, through unsupervised domain adaptation methods transfer learning better to urban versus rural areas and enlarge fairness gaps. In analysis of reasons for these findings, we show that raw satellite images are overall more dissimilar between source and target districts for rural than for urban locations. This work highlights the need to conduct fairness analysis for satellite imagery segmentation models and motivates the development of methods for fair transfer learning in order not to introduce disparities between places, particularly urban and rural locations."
         },
         {
           "title": "Trustworthy Transfer Learning: A Survey",
           "url": "https://www.semanticscholar.org/paper/7ee5c5b58ed0b4e585e0c30790c206bea07faacf",
-          "source_type": "documentation",
+          "source_type": "technical_paper",
           "authors": [
             "Jun Wu",
             "Jingrui He"
           ],
-          "publication_date": "2024-12-18"
+          "publication_date": "2024",
+          "citationKey": "wuTrustworthyTransferLearning2024",
+          "abstract": "Transfer learning aims to transfer knowledge or information from a source domain to a relevant target domain. In this paper, we understand transfer learning from the perspectives of knowledge transferability and trustworthiness. This involves two research questions: How is knowledge transferability quantitatively measured and enhanced across domains? Can we trust the transferred knowledge in the transfer learning process? To answer these questions, this paper provides a comprehensive review of trustworthy transfer learning from various aspects, including problem definitions, theoretical analysis, empirical algorithms, and real-world applications. Specifically, we summarize recent theories and algorithms for understanding knowledge transferability under (within-domain) IID and non-IID assumptions. In addition to knowledge transferability, we review the impact of trustworthiness on transfer learning, e.g., whether the transferred knowledge is adversarially robust or algorithmically fair, how to transfer the knowledge under privacy-preserving constraints, etc. Beyond discussing the current advancements, we highlight the open questions and future directions for understanding transfer learning in a reliable and trustworthy manner."
         },
         {
           "title": "Cross-Institutional Transfer Learning for Educational Models: Implications for Model Performance, Fairness, and Equity",
@@ -534,7 +586,9 @@
             "Christopher Brooks",
             "Rene Kizilcec"
           ],
-          "publication_date": "2023-05-01"
+          "publication_date": "2023-05-01",
+          "citationKey": "gardnerCrossInstitutionalTransferLearning2023",
+          "abstract": "Modern machine learning increasingly supports paradigms that are multi-institutional (using data from multiple institutions during training) or cross-institutional (using models from multiple institutions for inference), but the empirical effects of these paradigms are not well understood. This study investigates cross-institutional learning via an empirical case study in higher education. We propose a framework and metrics for assessing the utility and fairness of student dropout prediction models that are transferred across institutions. We examine the feasibility of cross-institutional transfer under real-world data- and model-sharing constraints, quantifying model biases for intersectional student identities, characterizing potential disparate impact due to these biases, and investigating the impact of various cross-institutional ensembling approaches on fairness and overall model performance. We perform this analysis on data representing over 200,000 enrolled students annually from four universities without sharing training data between institutions.   We find that a simple zero-shot cross-institutional transfer procedure can achieve similar performance to locally-trained models for all institutions in our study, without sacrificing model fairness. We also find that stacked ensembling provides no additional benefits to overall performance or fairness compared to either a local model or the zero-shot transfer procedure we tested. We find no evidence of a fairness-accuracy tradeoff across dozens of models and transfer schemes evaluated. Our auditing procedure also highlights the importance of intersectional fairness analysis, revealing performance disparities at the intersection of sensitive identity groups that are concealed under one-dimensional analysis."
         }
       ],
       "complexity_rating": 5,
@@ -621,12 +675,16 @@
             "Florian Pfisterer",
             "Matthew Sun"
           ],
-          "publication_date": "2021-08-24"
+          "publication_date": "2021-08-24",
+          "citationKey": "bischlMcboostMultiCalibrationBoosting2021"
         },
         {
-          "title": "mlr-org/mcboost",
+          "title": "mcboost",
           "url": "https://github.com/mlr-org/mcboost",
-          "source_type": "software_package"
+          "source_type": "software_package",
+          "publication_date": "2020-12-28",
+          "citationKey": "mlr-orgMcboost2020",
+          "abstract": "Multi-Calibration & Multi-Accuracy Boosting for R"
         },
         {
           "title": "Multigroup Robustness",
@@ -637,7 +695,9 @@
             "Charlotte Peale",
             "Judy Hanwen Shen"
           ],
-          "publication_date": "2024-05-01"
+          "publication_date": "2024-05-01",
+          "citationKey": "huMultigroupRobustness2024",
+          "abstract": "To address the shortcomings of real-world datasets, robust learning algorithms have been designed to overcome arbitrary and indiscriminate data corruption. However, practical processes of gathering data may lead to patterns of data corruption that are localized to specific partitions of the training dataset. Motivated by critical applications where the learned model is deployed to make predictions about people from a rich collection of overlapping subpopulations, we initiate the study of multigroup robust algorithms whose robustness guarantees for each subpopulation only degrade with the amount of data corruption inside that subpopulation. When the data corruption is not distributed uniformly over subpopulations, our algorithms provide more meaningful robustness guarantees than standard guarantees that are oblivious to how the data corruption and the affected subpopulations are related. Our techniques establish a new connection between multigroup fairness and robustness."
         }
       ],
       "complexity_rating": 5,

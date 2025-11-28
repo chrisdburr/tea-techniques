@@ -68,23 +68,31 @@
       "resources": [
         {
           "title": "Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning",
-          "url": "http://arxiv.org/pdf/1506.02142v6",
+          "url": "http://arxiv.org/abs/1506.02142v6",
           "source_type": "technical_paper",
           "authors": [
             "Yarin Gal",
             "Zoubin Ghahramani"
           ],
-          "publication_date": "2016-06-06"
+          "publication_date": "2015-06-06",
+          "citationKey": "galDropoutBayesianApproximation2015",
+          "abstract": "Deep learning tools have gained tremendous attention in applied machine learning. However such tools for regression and classification do not capture model uncertainty. In comparison, Bayesian models offer a mathematically grounded framework to reason about model uncertainty, but usually come with a prohibitive computational cost. In this paper we develop a new theoretical framework casting dropout training in deep neural networks (NNs) as approximate Bayesian inference in deep Gaussian processes. A direct result of this theory gives us tools to model uncertainty with dropout NNs -- extracting information from existing models that has been thrown away so far. This mitigates the problem of representing uncertainty in deep learning without sacrificing either computational complexity or test accuracy. We perform an extensive study of the properties of dropout's uncertainty. Various network architectures and non-linearities are assessed on tasks of regression and classification, using MNIST as an example. We show a considerable improvement in predictive log-likelihood and RMSE compared to existing state-of-the-art methods, and finish by using dropout's uncertainty in deep reinforcement learning."
         },
         {
-          "title": "mattiasegu/uncertainty_estimation_deep_learning",
+          "title": "uncertainty_estimation_deep_learning",
           "url": "https://github.com/mattiasegu/uncertainty_estimation_deep_learning",
-          "source_type": "software_package"
+          "source_type": "software_package",
+          "publication_date": "2019-06-12",
+          "citationKey": "mattiaseguUncertainty_estimation_deep_learning2019",
+          "abstract": "This repository provides the code used to implement the framework to provide deep learning models with total uncertainty estimates as described in \"A General Framework for Uncertainty Estimation in Deep Learning\" (Loquercio, Segù, Scaramuzza. RA-L 2020)."
         },
         {
-          "title": "uzh-rpg/deep_uncertainty_estimation",
+          "title": "deep_uncertainty_estimation",
           "url": "https://github.com/uzh-rpg/deep_uncertainty_estimation",
-          "source_type": "software_package"
+          "source_type": "software_package",
+          "publication_date": "2020-03-06",
+          "citationKey": "uzh-rpgDeep_uncertainty_estimation2020",
+          "abstract": "This repository provides the code used to implement the framework to provide deep learning models with total uncertainty estimates as described in \"A General Framework for Uncertainty Estimation in Deep Learning\" (Loquercio, Segù, Scaramuzza. RA-L 2020)."
         },
         {
           "title": "How certain are tansformers in image classification: uncertainty analysis with Monte Carlo dropout",
@@ -99,7 +107,10 @@
             "Dewan Ziaul Karim",
             "Annajiat Alim Rasel",
             "Meem Arafat Manab"
-          ]
+          ],
+          "publication_date": "2023",
+          "citationKey": "farhadulislamHowCertainAre2023",
+          "abstract": "Researchers have been inspired to implement transformer models in solving machine vision problems after their tremendous success with natural language tasks. Using the straightforward architecture and swift performance of transformers, a variety of computer vision problems can be solved with more ease and effectiveness. However, a comparative evaluation of their uncertainty in prediction has not been done yet. As we know, real world applications require a measure of uncertainty to produce accurate predictions, which allows researchers to handle uncertain inputs and special cases, in order to successfully prevent overfitting. Our study approaches the unexplored issue of uncertainty estimation among three popular and effective transformer models employed in computer vision, such as Vision Transformers (ViT), Swin Transformers (SWT), and Compact Convolutional Transformers (CCT). We conduct a comparative experiment to determine which particular architecture is the most reliable in image classification. We use dropouts at the inference phase in order to measure the uncertainty of these transformer models. This approach, commonly known as Monte Carlo Dropout (MCD), works well as a low-complexity estimation to compute uncertainty. The MCD-based CCT model is the least uncertain architecture in this classification task. Our proposed MCD-infused CCT model also yields the best results with 78.4% accuracy, while the SWT model with embedded MCD exhibits Pmaximum performance gain where the accuracy increased by almost 3% with the final result being 71.4%."
         }
       ],
       "complexity_rating": 3,
@@ -175,23 +186,28 @@
       "resources": [
         {
           "title": "Enhancing The Reliability of Out-of-distribution Image Detection in Neural Networks",
-          "url": "http://arxiv.org/pdf/1706.02690v5",
+          "url": "http://arxiv.org/abs/1706.02690v5",
           "source_type": "technical_paper",
           "authors": [
             "Shiyu Liang",
             "Yixuan Li",
             "R. Srikant"
           ],
-          "publication_date": "2017-06-08"
+          "publication_date": "2017-06-08",
+          "citationKey": "liangEnhancingReliabilityOutofdistribution2017",
+          "abstract": "We consider the problem of detecting out-of-distribution images in neural networks. We propose ODIN, a simple and effective method that does not require any change to a pre-trained neural network. Our method is based on the observation that using temperature scaling and adding small perturbations to the input can separate the softmax score distributions between in- and out-of-distribution images, allowing for more effective detection. We show in a series of experiments that ODIN is compatible with diverse network architectures and datasets. It consistently outperforms the baseline approach by a large margin, establishing a new state-of-the-art performance on this task. For example, ODIN reduces the false positive rate from the baseline 34.7% to 4.3% on the DenseNet (applied to CIFAR-10) when the true positive rate is 95%."
         },
         {
-          "title": "facebookresearch/odin",
+          "title": "odin",
           "url": "https://github.com/facebookresearch/odin",
-          "source_type": "software_package"
+          "source_type": "software_package",
+          "publication_date": "2018-02-10",
+          "citationKey": "Odin2018",
+          "abstract": "A simple and effective method for detecting out-of-distribution images in neural networks."
         },
         {
           "title": "Generalized ODIN: Detecting Out-of-distribution Image without Learning from Out-of-distribution Data",
-          "url": "http://arxiv.org/pdf/2002.11297v2",
+          "url": "http://arxiv.org/abs/2002.11297v2",
           "source_type": "technical_paper",
           "authors": [
             "Yen-Chang Hsu",
@@ -199,25 +215,24 @@
             "Hongxia Jin",
             "Zsolt Kira"
           ],
-          "publication_date": "2020-02-26"
+          "publication_date": "2020-02-26",
+          "citationKey": "hsuGeneralizedODINDetecting2020",
+          "abstract": "Deep neural networks have attained remarkable performance when applied to data that comes from the same distribution as that of the training set, but can significantly degrade otherwise. Therefore, detecting whether an example is out-of-distribution (OoD) is crucial to enable a system that can reject such samples or alert users. Recent works have made significant progress on OoD benchmarks consisting of small image datasets. However, many recent methods based on neural networks rely on training or tuning with both in-distribution and out-of-distribution data. The latter is generally hard to define a-priori, and its selection can easily bias the learning. We base our work on a popular method ODIN, proposing two strategies for freeing it from the needs of tuning with OoD data, while improving its OoD detection performance. We specifically propose to decompose confidence scoring as well as a modified input pre-processing method. We show that both of these significantly help in detection performance. Our further analysis on a larger scale image dataset shows that the two types of distribution shifts, specifically semantic shift and non-semantic shift, present a significant difference in the difficulty of the problem, providing an analysis of when ODIN-like strategies do or do not work."
         },
         {
           "title": "Detection of out-of-distribution samples using binary neuron activation patterns",
           "url": "http://arxiv.org/abs/2212.14268",
           "source_type": "technical_paper",
           "authors": [
-            "Chachuła, Krystian",
-            "Olber, Bartlomiej",
-            "Popowicz, Adam",
-            "Radlak, Krystian",
-            "Szczepankiewicz, Michal"
+            "Bartlomiej Olber",
+            "Krystian Radlak",
+            "Adam Popowicz",
+            "Michal Szczepankiewicz",
+            "Krystian Chachuła"
           ],
-          "publication_date": "2023-03-24"
-        },
-        {
-          "title": "Out-of-Distribution Detection with ODIN - A Tutorial",
-          "url": "https://medium.com/@abhaypatil2000/out-of-distribution-detection-using-odin-f1a3e9e6b3b8",
-          "source_type": "tutorial"
+          "publication_date": "2022-12-29",
+          "citationKey": "olberDetectionOutofdistributionSamples2022",
+          "abstract": "Deep neural networks (DNN) have outstanding performance in various applications. Despite numerous efforts of the research community, out-of-distribution (OOD) samples remain a significant limitation of DNN classifiers. The ability to identify previously unseen inputs as novel is crucial in safety-critical applications such as self-driving cars, unmanned aerial vehicles, and robots. Existing approaches to detect OOD samples treat a DNN as a black box and evaluate the confidence score of the output predictions. Unfortunately, this method frequently fails, because DNNs are not trained to reduce their confidence for OOD inputs. In this work, we introduce a novel method for OOD detection. Our method is motivated by theoretical analysis of neuron activation patterns (NAP) in ReLU-based architectures. The proposed method does not introduce a high computational overhead due to the binary representation of the activation patterns extracted from convolutional layers. The extensive empirical evaluation proves its high performance on various DNN architectures and seven image datasets."
         }
       ],
       "complexity_rating": 4,
@@ -303,11 +318,14 @@
             "Yejin Choi",
             "Yulia Tsvetkov",
             "Alane Suhr"
-          ]
+          ],
+          "publication_date": "2023",
+          "citationKey": "sclarQuantifyingLanguageModels2023",
+          "abstract": "As large language models (LLMs) are adopted as a fundamental component of language technologies, it is crucial to accurately characterize their performance. Because choices in prompt design can strongly influence model behavior, this design process is critical in effectively using any modern pre-trained generative language model. In this work, we focus on LLM sensitivity to a quintessential class of meaning-preserving design choices: prompt formatting. We find that several widely used open-source LLMs are extremely sensitive to subtle changes in prompt formatting in few-shot settings, with performance differences of up to 76 accuracy points when evaluated using LLaMA-2-13B. Sensitivity remains even when increasing model size, the number of few-shot examples, or performing instruction tuning. Our analysis suggests that work evaluating LLMs with prompting-based methods would benefit from reporting a range of performance across plausible prompt formats, instead of the currently-standard practice of reporting performance on a single format. We also show that format performance only weakly correlates between models, which puts into question the methodological validity of comparing models with an arbitrarily chosen, fixed prompt format. To facilitate systematic analysis we propose FormatSpread, an algorithm that rapidly evaluates a sampled set of plausible prompt formats for a given task, and reports the interval of expected performance without accessing model weights. Furthermore, we present a suite of analyses that characterize the nature of this sensitivity, including exploring the influence of particular atomic perturbations and the internal representation of particular formats."
         },
         {
           "title": "PromptPrism: A Linguistically-Inspired Taxonomy for Prompts",
-          "url": "http://arxiv.org/pdf/2505.12592v1",
+          "url": "http://arxiv.org/abs/2505.12592v1",
           "source_type": "technical_paper",
           "authors": [
             "Sullam Jeoung",
@@ -317,7 +335,9 @@
             "Haibo Ding",
             "Lin Lee Cheong"
           ],
-          "publication_date": "2025-05-19"
+          "publication_date": "2025-05-19",
+          "citationKey": "jeoungPromptPrismLinguisticallyInspiredTaxonomy2025",
+          "abstract": "Prompts are the interface for eliciting the capabilities of large language models (LLMs). Understanding their structure and components is critical for analyzing LLM behavior and optimizing performance. However, the field lacks a comprehensive framework for systematic prompt analysis and understanding. We introduce PromptPrism, a linguistically-inspired taxonomy that enables prompt analysis across three hierarchical levels: functional structure, semantic component, and syntactic pattern. We show the practical utility of PromptPrism by applying it to three applications: (1) a taxonomy-guided prompt refinement approach that automatically improves prompt quality and enhances model performance across a range of tasks; (2) a multi-dimensional dataset profiling method that extracts and aggregates structural, semantic, and syntactic characteristics from prompt datasets, enabling comprehensive analysis of prompt distributions and patterns; (3) a controlled experimental framework for prompt sensitivity analysis by quantifying the impact of semantic reordering and delimiter modifications on LLM performance. Our experimental results validate the effectiveness of our taxonomy across these applications, demonstrating that PromptPrism provides a foundation for refining, profiling, and analyzing prompts."
         }
       ],
       "complexity_rating": 3,

@@ -3,20 +3,32 @@
   "title": "TEA Technique",
   "description": "Schema for a single technique in the TEA Techniques database",
   "type": "object",
-  "required": ["slug", "name", "description", "assurance_goals", "tags"],
+  "required": [
+    "slug",
+    "name",
+    "description",
+    "assurance_goals",
+    "tags"
+  ],
   "properties": {
     "slug": {
       "type": "string",
       "description": "URL-friendly unique identifier for the technique",
       "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
-      "examples": ["shapley-additive-explanations", "permutation-importance"]
+      "examples": [
+        "shapley-additive-explanations",
+        "permutation-importance"
+      ]
     },
     "name": {
       "type": "string",
       "description": "Human-readable name of the technique",
       "minLength": 3,
       "maxLength": 100,
-      "examples": ["SHapley Additive exPlanations", "Permutation Importance"]
+      "examples": [
+        "SHapley Additive exPlanations",
+        "Permutation Importance"
+      ]
     },
     "description": {
       "type": "string",
@@ -62,7 +74,10 @@
       "description": "Real-world examples of how this technique can be applied",
       "items": {
         "type": "object",
-        "required": ["description", "goal"],
+        "required": [
+          "description",
+          "goal"
+        ],
         "properties": {
           "description": {
             "type": "string",
@@ -91,7 +106,9 @@
       "description": "Known limitations or considerations when using this technique",
       "items": {
         "type": "object",
-        "required": ["description"],
+        "required": [
+          "description"
+        ],
         "properties": {
           "description": {
             "type": "string",
@@ -104,46 +121,65 @@
     },
     "resources": {
       "type": "array",
-      "description": "External resources for learning more about this technique",
+      "description": "External resources for learning more about this technique. Can be a Zotero citekey (string) or a full resource object.",
       "items": {
-        "type": "object",
-        "required": ["title", "url"],
-        "properties": {
-          "title": {
+        "oneOf": [
+          {
             "type": "string",
-            "description": "Title of the resource",
-            "minLength": 3,
-            "maxLength": 200
+            "description": "Zotero citation key",
+            "minLength": 1
           },
-          "url": {
-            "type": "string",
-            "description": "URL to the resource",
-            "format": "uri",
-            "pattern": "^https?://"
-          },
-          "source_type": {
-            "type": "string",
-            "description": "Type of resource",
-            "enum": [
-              "technical_paper",
-              "software_package",
-              "documentation",
-              "tutorial"
-            ]
-          },
-          "authors": {
-            "type": "array",
-            "description": "Authors of the resource (for papers)",
-            "items": {
-              "type": "string"
+          {
+            "type": "object",
+            "required": [
+              "title",
+              "url"
+            ],
+            "properties": {
+              "title": {
+                "type": "string",
+                "description": "Title of the resource",
+                "minLength": 3,
+                "maxLength": 200
+              },
+              "url": {
+                "type": "string",
+                "description": "URL to the resource",
+                "format": "uri",
+                "pattern": "^https?://"
+              },
+              "source_type": {
+                "type": "string",
+                "description": "Type of resource",
+                "enum": [
+                  "technical_paper",
+                  "software_package",
+                  "documentation",
+                  "tutorial"
+                ]
+              },
+              "authors": {
+                "type": "array",
+                "description": "Authors of the resource (for papers)",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "publication_date": {
+                "type": "string",
+                "description": "Publication date"
+              },
+              "citationKey": {
+                "type": "string",
+                "description": "Zotero citation key"
+              },
+              "abstract": {
+                "type": "string",
+                "description": "Abstract or summary of the resource"
+              }
             }
-          },
-          "publication_date": {
-            "type": "string",
-            "description": "Publication date in ISO format",
-            "format": "date"
           }
-        }
+        ]
       }
     },
     "complexity_rating": {
@@ -162,7 +198,13 @@
       "type": "string",
       "description": "Common acronym for the technique",
       "pattern": "^[A-Za-z0-9-]+$",
-      "examples": ["SHAP", "LIME", "t-SNE", "CAM", "IRBs"]
+      "examples": [
+        "SHAP",
+        "LIME",
+        "t-SNE",
+        "CAM",
+        "IRBs"
+      ]
     },
     "related_techniques": {
       "type": "array",

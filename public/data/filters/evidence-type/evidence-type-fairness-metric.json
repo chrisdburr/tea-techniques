@@ -57,27 +57,37 @@
       ],
       "resources": [
         {
-          "title": "Fairness through awareness",
-          "url": "http://arxiv.org/pdf/1104.3913v1",
+          "title": "Fairness Through Awareness",
+          "url": "https://arxiv.org/abs/1104.3913",
           "source_type": "technical_paper",
           "authors": [
             "Cynthia Dwork",
             "Moritz Hardt",
             "Toniann Pitassi",
             "Omer Reingold",
-            "Richard Zemel"
+            "Rich Zemel"
           ],
-          "publication_date": "2011-04-20"
+          "publication_date": "2011-04-20",
+          "citationKey": "dworkFairnessAwareness2011",
+          "abstract": "We study fairness in classification, where individuals are classified, e.g., admitted to a university, and the goal is to prevent discrimination against individuals based on their membership in some group, while maintaining utility for the classifier (the university). The main conceptual contribution of this paper is a framework for fair classification comprising (1) a (hypothetical) task-specific metric for determining the degree to which individuals are similar with respect to the classification task at hand; (2) an algorithm for maximizing utility subject to the fairness constraint, that similar individuals are treated similarly. We also present an adaptation of our approach to achieve the complementary goal of \"fair affirmative action,\" which guarantees statistical parity (i.e., the demographics of the set of individuals receiving any classification are the same as the demographics of the underlying population), while treating similar individuals as similarly as possible. Finally, we discuss the relationship of fairness to privacy: when fairness implies privacy, and how tools developed in the context of differential privacy may be applied to fairness."
         },
         {
-          "title": "AI Fairness 360 Toolkit",
+          "title": "AIF360",
           "url": "https://github.com/Trusted-AI/AIF360",
-          "source_type": "software_package"
+          "source_type": "software_package",
+          "publication_date": "2018-08-22",
+          "citationKey": "trusted-aiAIF3602018",
+          "abstract": "A comprehensive set of fairness metrics for datasets and machine learning models, explanations for these metrics, and algorithms to mitigate bias in datasets and models."
         },
         {
           "title": "Fairlearn - Demographic Parity",
-          "url": "https://fairlearn.org/main/user_guide/fairness_in_machine_learning.html#demographic-parity",
-          "source_type": "documentation"
+          "url": "https://fairlearn.org/main/user_guide/fairness_in_machine_learning.html",
+          "source_type": "documentation",
+          "authors": [
+            "Fairlearn Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "fairlearndevelopersFairlearnDemographicParity2018"
         },
         {
           "title": "A Data-Centric Approach to Detecting and Mitigating Demographic Bias in Pediatric Mental Health Text: A Case Study in Anxiety Detection",
@@ -97,7 +107,10 @@
             "Mayanka Chandrashekar",
             "Anuj J. Kapadia",
             "J. Pestian"
-          ]
+          ],
+          "publication_date": "2024",
+          "citationKey": "iveDataCentricApproachDetecting2024",
+          "abstract": "Introduction: Healthcare AI models often inherit biases from their training data. While efforts have primarily targeted bias in structured data, mental health heavily depends on unstructured data. This study aims to detect and mitigate linguistic differences related to non-biological differences in the training data of AI models designed to assist in pediatric mental health screening. Our objectives are: (1) to assess the presence of bias by evaluating outcome parity across sex subgroups, (2) to identify bias sources through textual distribution analysis, and (3) to develop a de-biasing method for mental health text data. Methods: We examined classification parity across demographic groups and assessed how gendered language influences model predictions. A data-centric de-biasing method was applied, focusing on neutralizing biased terms while retaining salient clinical information. This methodology was tested on a model for automatic anxiety detection in pediatric patients. Results: Our findings revealed a systematic under-diagnosis of female adolescent patients, with a 4% lower accuracy and a 9% higher False Negative Rate (FNR) compared to male patients, likely due to disparities in information density and linguistic differences in patient notes. Notes for male patients were on average 500 words longer, and linguistic similarity metrics indicated distinct word distributions between genders. Implementing our de-biasing approach reduced diagnostic bias by up to 27%, demonstrating its effectiveness in enhancing equity across demographic groups. Discussion: We developed a data-centric de-biasing framework to address gender-based content disparities within clinical text. By neutralizing biased language and enhancing focus on clinically essential information, our approach demonstrates an effective strategy for mitigating bias in AI healthcare models trained on text."
         }
       ],
       "complexity_rating": 1,
@@ -172,30 +185,37 @@
       "resources": [
         {
           "title": "Achieving Fairness at No Utility Cost via Data Reweighing with Influence",
-          "url": "http://arxiv.org/pdf/2202.00787v2",
+          "url": "http://arxiv.org/abs/2202.00787v2",
           "source_type": "technical_paper",
           "authors": [
             "Peizhao Li",
             "Hongfu Liu"
           ],
           "publication_date": "2022-02-01",
-          "description": "Presents a novel reweighing approach that computes individual sample weights based on influence functions to achieve fairness without sacrificing model utility"
+          "citationKey": "liAchievingFairnessNo2022",
+          "abstract": "With the fast development of algorithmic governance, fairness has become a compulsory property for machine learning models to suppress unintentional discrimination. In this paper, we focus on the pre-processing aspect for achieving fairness, and propose a data reweighing approach that only adjusts the weight for samples in the training phase. Different from most previous reweighing methods which usually assign a uniform weight for each (sub)group, we granularly model the influence of each training sample with regard to fairness-related quantity and predictive utility, and compute individual weights based on influence under the constraints from both fairness and utility. Experimental results reveal that previous methods achieve fairness at a non-negligible cost of utility, while as a significant advantage, our approach can empirically release the tradeoff and obtain cost-free fairness for equal opportunity. We demonstrate the cost-free fairness through vanilla classifiers and standard training processes, compared to baseline methods on multiple real-world tabular datasets. Code available at https://github.com/brandeis-machine-learning/influence-fairness."
         },
         {
           "title": "aif360.sklearn.preprocessing.Reweighing — aif360 0.6.1 ...",
           "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.preprocessing.Reweighing.html",
           "source_type": "documentation",
-          "description": "Documentation for scikit-learn compatible implementation of the reweighing preprocessing technique in the AI Fairness 360 library"
+          "authors": [
+            "Aif360 Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "aif360developersAif360sklearnpreprocessingReweighingAif3600612018"
         },
         {
-          "title": "brandeis-machine-learning/influence-fairness",
+          "title": "influence-fairness",
           "url": "https://github.com/brandeis-machine-learning/influence-fairness",
           "source_type": "software_package",
-          "description": "Python implementation of influence-based data reweighing for achieving cost-free fairness with experiments on tabular datasets"
+          "publication_date": "2022-06-14",
+          "citationKey": "brandeis-machine-learningInfluencefairness2022",
+          "abstract": "Code for ICML 2022 paper: Achieving Fairness at No Utility Cost via Data Reweighing with Influence"
         },
         {
           "title": "Boosting Fair Classifier Generalization through Adaptive Priority Reweighing",
-          "url": "http://arxiv.org/pdf/2309.08375v3",
+          "url": "http://arxiv.org/abs/2309.08375v3",
           "source_type": "technical_paper",
           "authors": [
             "Zhihao Hu",
@@ -206,7 +226,8 @@
             "Fengxiang He"
           ],
           "publication_date": "2023-09-15",
-          "description": "Advanced reweighing technique that adaptively prioritises samples near decision boundaries to improve fairness generalisation across different demographic groups"
+          "citationKey": "huBoostingFairClassifier2023",
+          "abstract": "With the increasing penetration of machine learning applications in critical decision-making areas, calls for algorithmic fairness are more prominent. Although there have been various modalities to improve algorithmic fairness through learning with fairness constraints, their performance does not generalize well in the test set. A performance-promising fair algorithm with better generalizability is needed. This paper proposes a novel adaptive reweighing method to eliminate the impact of the distribution shifts between training and test data on model generalizability. Most previous reweighing methods propose to assign a unified weight for each (sub)group. Rather, our method granularly models the distance from the sample predictions to the decision boundary. Our adaptive reweighing method prioritizes samples closer to the decision boundary and assigns a higher weight to improve the generalizability of fair classifiers. Extensive experiments are performed to validate the generalizability of our adaptive priority reweighing method for accuracy and fairness measures (i.e., equal opportunity, equalized odds, and demographic parity) in tabular benchmarks. We also highlight the performance of our method in improving the fairness of language and vision models. The code is available at https://github.com/che2198/APW."
         }
       ],
       "complexity_rating": 2,
@@ -286,7 +307,7 @@
       "resources": [
         {
           "title": "Fairness GAN",
-          "url": "http://arxiv.org/pdf/1805.09910v1",
+          "url": "http://arxiv.org/abs/1805.09910v1",
           "source_type": "technical_paper",
           "authors": [
             "Prasanna Sattigeri",
@@ -294,18 +315,22 @@
             "Vijil Chenthamarakshan",
             "Kush R. Varshney"
           ],
-          "publication_date": "2018-05-24"
+          "publication_date": "2018-05-24",
+          "citationKey": "sattigeriFairnessGAN2018",
+          "abstract": "In this paper, we introduce the Fairness GAN, an approach for generating a dataset that is plausibly similar to a given multimedia dataset, but is more fair with respect to protected attributes in allocative decision making. We propose a novel auxiliary classifier GAN that strives for demographic parity or equality of opportunity and show empirical results on several datasets, including the CelebFaces Attributes (CelebA) dataset, the Quick, Draw!\\ dataset, and a dataset of soccer player images and the offenses they were called for. The proposed formulation is well-suited to absorbing unlabeled data; we leverage this to augment the soccer dataset with the much larger CelebA dataset. The methodology tends to improve demographic parity and equality of opportunity while generating plausible images."
         },
         {
           "title": "Fair GANs through model rebalancing for extremely imbalanced class distributions",
-          "url": "http://arxiv.org/pdf/2308.08638v2",
+          "url": "http://arxiv.org/abs/2308.08638v2",
           "source_type": "technical_paper",
           "authors": [
             "Anubhav Jain",
             "Nasir Memon",
             "Julian Togelius"
           ],
-          "publication_date": "2023-08-16"
+          "publication_date": "2023-08-16",
+          "citationKey": "jainFairGANsModel2023",
+          "abstract": "Deep generative models require large amounts of training data. This often poses a problem as the collection of datasets can be expensive and difficult, in particular datasets that are representative of the appropriate underlying distribution (e.g. demographic). This introduces biases in datasets which are further propagated in the models. We present an approach to construct an unbiased generative adversarial network (GAN) from an existing biased GAN by rebalancing the model distribution. We do so by generating balanced data from an existing imbalanced deep generative model using an evolutionary algorithm and then using this data to train a balanced generative model. Additionally, we propose a bias mitigation loss function that minimizes the deviation of the learned class distribution from being equiprobable. We show results for the StyleGAN2 models while training on the Flickr Faces High Quality (FFHQ) dataset for racial fairness and see that the proposed approach improves on the fairness metric by almost 5 times, whilst maintaining image quality. We further validate our approach by applying it to an imbalanced CIFAR10 dataset where we show that we can obtain comparable fairness and image quality as when training on a balanced CIFAR10 dataset which is also twice as large. Lastly, we argue that the traditionally used image quality metrics such as Frechet inception distance (FID) are unsuitable for scenarios where the class distributions are imbalanced and a balanced reference set is not available."
         },
         {
           "title": "Inclusive GAN: Improving Data and Minority Coverage in Generative Models",
@@ -319,7 +344,9 @@
             "Larry Davis",
             "Mario Fritz"
           ],
-          "publication_date": "2020-04-07"
+          "publication_date": "2020-04-07",
+          "citationKey": "yuInclusiveGANImproving2020",
+          "abstract": "Generative Adversarial Networks (GANs) have brought about rapid progress towards generating photorealistic images. Yet the equitable allocation of their modeling capacity among subgroups has received less attention, which could lead to potential biases against underrepresented minorities if left uncontrolled. In this work, we first formalize the problem of minority inclusion as one of data coverage, and then propose to improve data coverage by harmonizing adversarial training with reconstructive generation. The experiments show that our method outperforms the existing state-of-the-art methods in terms of data coverage on both seen and unseen data. We develop an extension that allows explicit control over the minority subgroups that the model should ensure to include, and validate its effectiveness at little compromise from the overall performance on the entire dataset. Code, models, and supplemental videos are available at GitHub."
         }
       ],
       "complexity_rating": 5,
@@ -399,44 +426,52 @@
       "resources": [
         {
           "title": "Fair Adversarial Networks",
-          "url": "http://arxiv.org/pdf/2002.12144v1",
+          "url": "http://arxiv.org/abs/2002.12144v1",
           "source_type": "technical_paper",
           "authors": [
             "George Cevora"
           ],
-          "publication_date": "2020-02-23"
+          "publication_date": "2020-02-23",
+          "citationKey": "cevoraFairAdversarialNetworks2020",
+          "abstract": "The influence of human judgement is ubiquitous in datasets used across the analytics industry, yet humans are known to be sub-optimal decision makers prone to various biases. Analysing biased datasets then leads to biased outcomes of the analysis. Bias by protected characteristics (e.g. race) is of particular interest as it may not only make the output of analytical process sub-optimal, but also illegal. Countering the bias by constraining the analytical outcomes to be fair is problematic because A) fairness lacks a universally accepted definition, while at the same time some definitions are mutually exclusive, and B) the use of optimisation constraints ensuring fairness is incompatible with most analytical pipelines. Both problems are solved by methods which remove bias from the data and returning an altered dataset. This approach aims to not only remove the actual bias variable (e.g. race), but also alter all proxy variables (e.g. postcode) so the bias variable is not detectable from the rest of the data. The advantage of using this approach is that the definition of fairness as a lack of detectable bias in the data (as opposed to the output of analysis) is universal and therefore solves problem (A). Furthermore, as the data is altered to remove bias the problem (B) disappears because the analytical pipelines can remain unchanged. This approach has been adopted by several technical solutions. None of them, however, seems to be satisfactory in terms of ability to remove multivariate, non-linear and non-binary biases. Therefore, in this paper I propose the concept of Fair Adversarial Networks as an easy-to-implement general method for removing bias from data. This paper demonstrates that Fair Adversarial Networks achieve this aim."
         },
         {
           "title": "Demonstrating Rosa: the fairness solution for any Data Analytic pipeline",
-          "url": "http://arxiv.org/pdf/2003.00899v2",
+          "url": "http://arxiv.org/abs/2003.00899v2",
           "source_type": "technical_paper",
           "authors": [
             "Kate Wilkinson",
             "George Cevora"
           ],
-          "publication_date": "2020-02-28"
+          "publication_date": "2020-02-28",
+          "citationKey": "wilkinsonDemonstratingRosaFairness2020",
+          "abstract": "Most datasets of interest to the analytics industry are impacted by various forms of human bias. The outcomes of Data Analytics [DA] or Machine Learning [ML] on such data are therefore prone to replicating the bias. As a result, a large number of biased decision-making systems based on DA/ML have recently attracted attention. In this paper we introduce Rosa, a free, web-based tool to easily de-bias datasets with respect to a chosen characteristic. Rosa is based on the principles of Fair Adversarial Networks, developed by illumr Ltd., and can therefore remove interactive, non-linear, and non-binary bias. Rosa is stand-alone pre-processing step / API, meaning it can be used easily with any DA/ML pipeline. We test the efficacy of Rosa in removing bias from data-driven decision making systems by performing standard DA tasks on five real-world datasets, selected for their relevance to current DA problems, and also their high potential for bias. We use simple ML models to model a characteristic of analytical interest, and compare the level of bias in the model output both with and without Rosa as a pre-processing step. We find that in all cases there is a substantial decrease in bias of the data-driven decision making systems when the data is pre-processed with Rosa."
         },
         {
           "title": "Triangular Trade-off between Robustness, Accuracy, and Fairness in Deep Neural Networks: A Survey",
           "url": "https://www.semanticscholar.org/paper/13b0444d079bea1c8c57a6082200b67ab5f4616e",
-          "source_type": "documentation",
+          "source_type": "technical_paper",
           "authors": [
             "Jingyang Li",
             "Guoqiang Li"
           ],
-          "publication_date": "2025-02-10"
+          "publication_date": "2024",
+          "citationKey": "liTriangularTradeoffRobustness2024",
+          "abstract": "With the rapid development of deep learning, AI systems are being used more in complex and important domains and necessitates the simultaneous fulfillment of multiple constraints: accurate, robust, and fair. Accuracy measures how well a DNN can generalize to new data. Robustness demonstrates how well the network can withstand minor perturbations without changing the results. Fairness focuses on treating different groups equally. This survey provides an overview of the triangular trade-off among robustness, accuracy, and fairness in neural networks. This trade-off makes it difficult for AI systems to achieve true intelligence and is connected to generalization, robustness, and fairness in deep learning. The survey explores these trade-offs and their relationships to adversarial examples, adversarial training, and fair machine learning. The trade-offs between accuracy and robustness, accuracy and fairness, and robustness and fairness have been studied to different extents. However, there is a lack of taxonomy and analysis of these trade-offs. The accuracy-robustness trade-off is inherent in Gaussian models, but it varies when classes are not closely distributed. The accuracy-fairness and robustness-fairness trade-offs have been assessed empirically, but their theoretical nature needs more investigation. This survey aims to explore the origins, evolution, influencing factors, and future research directions of these trade-offs."
         },
         {
           "title": "Bt-GAN: Generating Fair Synthetic Healthdata via Bias-transforming Generative Adversarial Networks",
           "url": "https://www.semanticscholar.org/paper/6995779ac582c5f2436cfb82a3c8cf5ca72bae2f",
           "source_type": "technical_paper",
           "authors": [
-            "Resmi Ramachandranpillai",
+            "R. Ramachandranpillai",
             "Md Fahim Sikder",
-            "David Bergström",
+            "David Bergstrom",
             "Fredrik Heintz"
           ],
-          "publication_date": "2023-12-14"
+          "publication_date": "2024",
+          "citationKey": "ramachandranpillaiBtGANGeneratingFair2024",
+          "abstract": "Synthetic data generation offers a promising solution to enhance the usefulness of Electronic Healthcare Records (EHR) by generating realistic de-identified data. However, the existing literature primarily focuses on the quality of synthetic health data, neglecting the crucial aspect of fairness in downstream predictions. Consequently, models trained on synthetic EHR have faced criticism for producing biased outcomes in target tasks. These biases can arise from either spurious correlations between features or the failure of models to accurately represent sub-groups. To address these concerns, we present Bias-transforming Generative Adversarial Networks (Bt-GAN), a GAN-based synthetic data generator specifically designed for the healthcare domain. In order to tackle spurious correlations (i), we propose an information-constrained Data Generation Process (DGP) that enables the generator to learn a fair deterministic transformation based on a well-defined notion of algorithmic fairness. To overcome the challenge of capturing exact sub-group representations (ii), we incentivize the generator to preserve sub-group densities through score-based weighted sampling. This approach compels the generator to learn from underrepresented regions of the data manifold. To evaluate the effectiveness of our proposed method, we conduct extensive experiments using the Medical Information Mart for Intensive Care (MIMIC-III) database. Our results demonstrate that Bt-GAN achieves state-of-the-art accuracy while significantly improving fairness and minimizing bias amplification. Furthermore, we perform an in-depth explainability analysis to provide additional evidence supporting the validity of our study. In conclusion, our research introduces a novel and professional approach to addressing the limitations of synthetic data generation in the healthcare domain. By incorporating fairness considerations and leveraging advanced techniques such as GANs, we pave the way for more reliable and unbiased predictions in healthcare applications."
         }
       ],
       "complexity_rating": 5,
@@ -523,17 +558,25 @@
             "Hideki Asoh",
             "Jun Sakuma"
           ],
-          "publication_date": "2012-09-24"
+          "publication_date": "2012-09-24",
+          "citationKey": "kamishimaFairnessAwareClassifierPrejudice2012"
         },
         {
           "title": "Fairness-Aware Machine Learning and Data Mining",
-          "url": "https://www.kamishima.net/faml/",
-          "source_type": "documentation"
+          "url": "https://www.kamishima.net/faml",
+          "source_type": "documentation",
+          "authors": [
+            "Toshihiro Kamishima"
+          ],
+          "publication_date": "2012",
+          "citationKey": "kamishimaFairnessAwareMachineLearning2012"
         },
         {
           "title": "Fairness-aware Classifier (faclass)",
-          "url": "https://www.kamishima.net/faclass/",
-          "source_type": "software_package"
+          "url": "https://www.kamishima.net/faclass",
+          "source_type": "software_package",
+          "publication_date": "2012",
+          "citationKey": "kamishimaFairnessawareClassifierFaclass2012"
         }
       ],
       "complexity_rating": 3,
@@ -611,38 +654,57 @@
         {
           "title": "ρ-Fair Method — holisticai documentation",
           "url": "https://holisticai.readthedocs.io/en/latest/getting_started/bias/mitigation/inprocessing/bc_meta_fair_classifier_rho_fair.html",
-          "source_type": "documentation"
+          "source_type": "documentation",
+          "authors": [
+            "Holisticai Developers"
+          ],
+          "publication_date": "2024",
+          "citationKey": "holisticaidevelopersRFairMethodHolisticai2024"
         },
         {
           "title": "aif360.algorithms.inprocessing — aif360 0.1.0 documentation",
           "url": "https://aif360.readthedocs.io/en/v0.2.3/modules/inprocessing.html",
-          "source_type": "documentation"
+          "source_type": "documentation",
+          "authors": [
+            "Aif360 Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "aif360developersAif360algorithmsinprocessingAif3600102018"
         },
         {
           "title": "Welcome to AI Fairness 360's documentation! — aif360 0.1.0 ...",
-          "url": "https://aif360.readthedocs.io/en/v0.2.3/",
-          "source_type": "documentation"
+          "url": "https://aif360.readthedocs.io/en/v0.2.3",
+          "source_type": "documentation",
+          "authors": [
+            "Aif360 Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "aif360developersWelcomeAIFairness2018"
         },
         {
           "title": "Algorithmic decision making methods for fair credit scoring",
           "url": "http://arxiv.org/abs/2209.07912",
           "source_type": "technical_paper",
           "authors": [
-            "Moldovan, Darie"
+            "Darie Moldovan"
           ],
-          "publication_date": "2022-09-16"
+          "publication_date": "2022-09-16",
+          "citationKey": "moldovanAlgorithmicDecisionMaking2022",
+          "abstract": "The effectiveness of machine learning in evaluating the creditworthiness of loan applicants has been demonstrated for a long time. However, there is concern that the use of automated decision-making processes may result in unequal treatment of groups or individuals, potentially leading to discriminatory outcomes. This paper seeks to address this issue by evaluating the effectiveness of 12 leading bias mitigation methods across 5 different fairness metrics, as well as assessing their accuracy and potential profitability for financial institutions. Through our analysis, we have identified the challenges associated with achieving fairness while maintaining accuracy and profitabiliy, and have highlighted both the most successful and least successful mitigation methods. Ultimately, our research serves to bridge the gap between experimental machine learning and its practical applications in the finance industry."
         },
         {
-          "title": "The Importance of Modeling Data Missingness in Algorithmic Fairness: A\n  Causal Perspective",
+          "title": "The Importance of Modeling Data Missingness in Algorithmic Fairness: A Causal Perspective",
           "url": "http://arxiv.org/abs/2012.11448",
           "source_type": "technical_paper",
           "authors": [
-            "Amayuelas, Alfonso",
-            "Deshpande, Amit",
-            "Goel, Naman",
-            "Sharma, Amit"
+            "Naman Goel",
+            "Alfonso Amayuelas",
+            "Amit Deshpande",
+            "Amit Sharma"
           ],
-          "publication_date": "2020-12-21"
+          "publication_date": "2020-12-21",
+          "citationKey": "goelImportanceModelingData2020",
+          "abstract": "Training datasets for machine learning often have some form of missingness. For example, to learn a model for deciding whom to give a loan, the available training data includes individuals who were given a loan in the past, but not those who were not. This missingness, if ignored, nullifies any fairness guarantee of the training procedure when the model is deployed. Using causal graphs, we characterize the missingness mechanisms in different real-world scenarios. We show conditions under which various distributions, used in popular fairness algorithms, can or can not be recovered from the training data. Our theoretical results imply that many of these algorithms can not guarantee fairness in practice. Modeling missingness also helps to identify correct design principles for fair algorithms. For example, in multi-stage settings where decisions are made in multiple screening rounds, we use our framework to derive the minimal distributions required to design a fair algorithm. Our proposed algorithm decentralizes the decision-making process and still achieves similar performance to the optimal algorithm that requires centralization and non-recoverable distributions."
         }
       ],
       "complexity_rating": 5,
@@ -723,7 +785,6 @@
           "title": "A Reductions Approach to Fair Classification",
           "url": "https://arxiv.org/abs/1803.02453",
           "source_type": "technical_paper",
-          "description": "Foundational paper by Agarwal et al. introducing the exponentiated gradient reduction approach for fair classification with theoretical guarantees.",
           "authors": [
             "Alekh Agarwal",
             "Alina Beygelzimer",
@@ -731,25 +792,39 @@
             "John Langford",
             "Hanna Wallach"
           ],
-          "publication_date": "2018-03-06"
+          "publication_date": "2018-03-06",
+          "citationKey": "agarwalReductionsApproachFair2018",
+          "abstract": "We present a systematic approach for achieving fairness in a binary classification setting. While we focus on two well-known quantitative definitions of fairness, our approach encompasses many other previously studied definitions as special cases. The key idea is to reduce fair classification to a sequence of cost-sensitive classification problems, whose solutions yield a randomized classifier with the lowest (empirical) error subject to the desired constraints. We introduce two reductions that work for any representation of the cost-sensitive classifier and compare favorably to prior baselines on a variety of data sets, while overcoming several of their disadvantages."
         },
         {
           "title": "Fairlearn: ExponentiatedGradient",
           "url": "https://fairlearn.org/v0.10/api_reference/generated/fairlearn.reductions.ExponentiatedGradient.html",
           "source_type": "documentation",
-          "description": "Microsoft's Fairlearn implementation of the Agarwal et al. algorithm with comprehensive API documentation and examples."
+          "authors": [
+            "Fairlearn Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "fairlearndevelopersFairlearnExponentiatedGradient2018"
         },
         {
           "title": "IBM AIF360: ExponentiatedGradientReduction",
           "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.inprocessing.ExponentiatedGradientReduction.html",
           "source_type": "documentation",
-          "description": "IBM's AIF360 implementation with scikit-learn compatible API for in-processing fairness constraints during model training."
+          "authors": [
+            "Aif360 Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "aif360developersIBMAIF360ExponentiatedGradientReduction2018"
         },
         {
           "title": "Fairlearn Reductions Guide",
           "url": "https://fairlearn.org/main/user_guide/mitigation/reductions.html",
           "source_type": "tutorial",
-          "description": "Comprehensive guide to using reduction-based approaches for fairness, including practical examples of exponentiated gradient methods and fairness constraints."
+          "authors": [
+            "Fairlearn Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "fairlearndevelopersFairlearnReductionsGuide2018"
         }
       ],
       "complexity_rating": 4,
@@ -828,7 +903,7 @@
       "resources": [
         {
           "title": "Segmenting across places: The need for fair transfer learning with satellite imagery",
-          "url": "http://arxiv.org/pdf/2204.04358v3",
+          "url": "http://arxiv.org/abs/2204.04358v3",
           "source_type": "technical_paper",
           "authors": [
             "Miao Zhang",
@@ -836,17 +911,21 @@
             "Lazarus Chok",
             "Rumi Chunara"
           ],
-          "publication_date": "2022-04-09"
+          "publication_date": "2022-04-09",
+          "citationKey": "zhangSegmentingPlacesNeed2022",
+          "abstract": "The increasing availability of high-resolution satellite imagery has enabled the use of machine learning to support land-cover measurement and inform policy-making. However, labelling satellite images is expensive and is available for only some locations. This prompts the use of transfer learning to adapt models from data-rich locations to others. Given the potential for high-impact applications of satellite imagery across geographies, a systematic assessment of transfer learning implications is warranted. In this work, we consider the task of land-cover segmentation and study the fairness implications of transferring models across locations. We leverage a large satellite image segmentation benchmark with 5987 images from 18 districts (9 urban and 9 rural). Via fairness metrics we quantify disparities in model performance along two axes -- across urban-rural locations and across land-cover classes. Findings show that state-of-the-art models have better overall accuracy in rural areas compared to urban areas, through unsupervised domain adaptation methods transfer learning better to urban versus rural areas and enlarge fairness gaps. In analysis of reasons for these findings, we show that raw satellite images are overall more dissimilar between source and target districts for rural than for urban locations. This work highlights the need to conduct fairness analysis for satellite imagery segmentation models and motivates the development of methods for fair transfer learning in order not to introduce disparities between places, particularly urban and rural locations."
         },
         {
           "title": "Trustworthy Transfer Learning: A Survey",
           "url": "https://www.semanticscholar.org/paper/7ee5c5b58ed0b4e585e0c30790c206bea07faacf",
-          "source_type": "documentation",
+          "source_type": "technical_paper",
           "authors": [
             "Jun Wu",
             "Jingrui He"
           ],
-          "publication_date": "2024-12-18"
+          "publication_date": "2024",
+          "citationKey": "wuTrustworthyTransferLearning2024",
+          "abstract": "Transfer learning aims to transfer knowledge or information from a source domain to a relevant target domain. In this paper, we understand transfer learning from the perspectives of knowledge transferability and trustworthiness. This involves two research questions: How is knowledge transferability quantitatively measured and enhanced across domains? Can we trust the transferred knowledge in the transfer learning process? To answer these questions, this paper provides a comprehensive review of trustworthy transfer learning from various aspects, including problem definitions, theoretical analysis, empirical algorithms, and real-world applications. Specifically, we summarize recent theories and algorithms for understanding knowledge transferability under (within-domain) IID and non-IID assumptions. In addition to knowledge transferability, we review the impact of trustworthiness on transfer learning, e.g., whether the transferred knowledge is adversarially robust or algorithmically fair, how to transfer the knowledge under privacy-preserving constraints, etc. Beyond discussing the current advancements, we highlight the open questions and future directions for understanding transfer learning in a reliable and trustworthy manner."
         },
         {
           "title": "Cross-Institutional Transfer Learning for Educational Models: Implications for Model Performance, Fairness, and Equity",
@@ -859,7 +938,9 @@
             "Christopher Brooks",
             "Rene Kizilcec"
           ],
-          "publication_date": "2023-05-01"
+          "publication_date": "2023-05-01",
+          "citationKey": "gardnerCrossInstitutionalTransferLearning2023",
+          "abstract": "Modern machine learning increasingly supports paradigms that are multi-institutional (using data from multiple institutions during training) or cross-institutional (using models from multiple institutions for inference), but the empirical effects of these paradigms are not well understood. This study investigates cross-institutional learning via an empirical case study in higher education. We propose a framework and metrics for assessing the utility and fairness of student dropout prediction models that are transferred across institutions. We examine the feasibility of cross-institutional transfer under real-world data- and model-sharing constraints, quantifying model biases for intersectional student identities, characterizing potential disparate impact due to these biases, and investigating the impact of various cross-institutional ensembling approaches on fairness and overall model performance. We perform this analysis on data representing over 200,000 enrolled students annually from four universities without sharing training data between institutions.   We find that a simple zero-shot cross-institutional transfer procedure can achieve similar performance to locally-trained models for all institutions in our study, without sacrificing model fairness. We also find that stacked ensembling provides no additional benefits to overall performance or fairness compared to either a local model or the zero-shot transfer procedure we tested. We find no evidence of a fairness-accuracy tradeoff across dozens of models and transfer schemes evaluated. Our auditing procedure also highlights the importance of intersectional fairness analysis, revealing performance disparities at the intersection of sensitive identity groups that are concealed under one-dimensional analysis."
         }
       ],
       "complexity_rating": 5,
@@ -946,12 +1027,16 @@
             "Florian Pfisterer",
             "Matthew Sun"
           ],
-          "publication_date": "2021-08-24"
+          "publication_date": "2021-08-24",
+          "citationKey": "bischlMcboostMultiCalibrationBoosting2021"
         },
         {
-          "title": "mlr-org/mcboost",
+          "title": "mcboost",
           "url": "https://github.com/mlr-org/mcboost",
-          "source_type": "software_package"
+          "source_type": "software_package",
+          "publication_date": "2020-12-28",
+          "citationKey": "mlr-orgMcboost2020",
+          "abstract": "Multi-Calibration & Multi-Accuracy Boosting for R"
         },
         {
           "title": "Multigroup Robustness",
@@ -962,7 +1047,9 @@
             "Charlotte Peale",
             "Judy Hanwen Shen"
           ],
-          "publication_date": "2024-05-01"
+          "publication_date": "2024-05-01",
+          "citationKey": "huMultigroupRobustness2024",
+          "abstract": "To address the shortcomings of real-world datasets, robust learning algorithms have been designed to overcome arbitrary and indiscriminate data corruption. However, practical processes of gathering data may lead to patterns of data corruption that are localized to specific partitions of the training dataset. Motivated by critical applications where the learned model is deployed to make predictions about people from a rich collection of overlapping subpopulations, we initiate the study of multigroup robust algorithms whose robustness guarantees for each subpopulation only degrade with the amount of data corruption inside that subpopulation. When the data corruption is not distributed uniformly over subpopulations, our algorithms provide more meaningful robustness guarantees than standard guarantees that are oblivious to how the data corruption and the affected subpopulations are related. Our techniques establish a new connection between multigroup fairness and robustness."
         }
       ],
       "complexity_rating": 5,
@@ -1042,37 +1129,45 @@
           "title": "Equality of Opportunity in Supervised Learning",
           "url": "https://arxiv.org/abs/1610.02413",
           "source_type": "technical_paper",
-          "description": "Foundational paper by Hardt et al. introducing the equalised odds post-processing algorithm and mathematical framework for fairness constraints.",
           "authors": [
             "Moritz Hardt",
             "Eric Price",
             "Nathan Srebro"
           ],
-          "publication_date": "2016-10-07"
+          "publication_date": "2016-10-07",
+          "citationKey": "hardtEqualityOpportunitySupervised2016",
+          "abstract": "We propose a criterion for discrimination against a specified sensitive attribute in supervised learning, where the goal is to predict some target based on available features. Assuming data about the predictor, target, and membership in the protected group are available, we show how to optimally adjust any learned predictor so as to remove discrimination according to our definition. Our framework also improves incentives by shifting the cost of poor classification from disadvantaged groups to the decision maker, who can respond by improving the classification accuracy.   In line with other studies, our notion is oblivious: it depends only on the joint statistics of the predictor, the target and the protected attribute, but not on interpretation of individualfeatures. We study the inherent limits of defining and identifying biases based on such oblivious measures, outlining what can and cannot be inferred from different oblivious tests.   We illustrate our notion using a case study of FICO credit scores."
         },
         {
           "title": "Equalized odds postprocessing under imperfect group information",
           "url": "https://arxiv.org/abs/1906.03284",
           "source_type": "technical_paper",
-          "description": "Extension of Hardt et al.'s method examining robustness when protected attribute information is imperfect or noisy.",
           "authors": [
             "Pranjal Awasthi",
             "Matthäus Kleindessner",
             "Jamie Morgenstern"
           ],
-          "publication_date": "2019-06-07"
+          "publication_date": "2019-06-07",
+          "citationKey": "awasthiEqualizedOddsPostprocessing2019",
+          "abstract": "Most approaches aiming to ensure a model's fairness with respect to a protected attribute (such as gender or race) assume to know the true value of the attribute for every data point. In this paper, we ask to what extent fairness interventions can be effective even when only imperfect information about the protected attribute is available. In particular, we study the prominent equalized odds postprocessing method of Hardt et al. (2016) under a perturbation of the attribute. We identify conditions on the perturbation that guarantee that the bias of a classifier is reduced even by running equalized odds with the perturbed attribute. We also study the error of the resulting classifier. We empirically observe that under our identified conditions most often the error does not suffer from a perturbation of the protected attribute. For a special case, we formally prove this observation to be true."
         },
         {
           "title": "Fairlearn: ThresholdOptimizer",
           "url": "https://fairlearn.org/v0.10/api_reference/generated/fairlearn.postprocessing.ThresholdOptimizer.html",
           "source_type": "documentation",
-          "description": "Microsoft's Fairlearn implementation of the Hardt et al. algorithm with API documentation and usage examples for equalised odds constraints."
+          "authors": [
+            "Fairlearn Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "fairlearndevelopersFairlearnThresholdOptimizer2018"
         },
         {
-          "title": "IBM AIF360",
+          "title": "AIF360",
           "url": "https://github.com/Trusted-AI/AIF360",
           "source_type": "software_package",
-          "description": "Comprehensive fairness toolkit including EqualizedOddsPostprocessing implementation based on Hardt et al.'s original algorithm."
+          "publication_date": "2018-08-22",
+          "citationKey": "trusted-aiAIF3602018",
+          "abstract": "A comprehensive set of fairness metrics for datasets and machine learning models, explanations for these metrics, and algorithms to mitigate bias in datasets and models."
         }
       ],
       "complexity_rating": 3,
@@ -1147,36 +1242,47 @@
       ],
       "resources": [
         {
-          "title": "Machine Learning with a Reject Option: A survey",
+          "title": "Machine learning with a reject option: a survey",
           "url": "https://www.semanticscholar.org/paper/24864a7f899718477c04ede9c0bea906c5dc2667",
-          "source_type": "documentation",
+          "source_type": "technical_paper",
           "authors": [
             "Kilian Hendrickx",
             "Lorenzo Perini",
             "Dries Van der Plas",
             "Wannes Meert",
             "Jesse Davis"
-          ]
+          ],
+          "publication_date": "2021",
+          "citationKey": "hendrickxMachineLearningReject2021",
+          "abstract": "Machine learning models always make a prediction, even when it is likely to be inaccurate. This behavior should be avoided in many decision support applications, where mistakes can have severe consequences. Albeit already studied in 1970, machine learning with rejection recently gained interest. This machine learning subfield enables machine learning models to abstain from making a prediction when likely to make a mistake. This survey aims to provide an overview on machine learning with rejection. We introduce the conditions leading to two types of rejection, ambiguity and novelty rejection, which we carefully formalize. Moreover, we review and categorize strategies to evaluate a model’s predictive and rejective quality. Additionally, we define the existing architectures for models with rejection and describe the standard techniques for learning such models. Finally, we provide examples of relevant application domains and show how machine learning with rejection relates to other machine learning research areas."
         },
         {
           "title": "aif360.algorithms.postprocessing.RejectOptionClassification ...",
           "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.algorithms.postprocessing.RejectOptionClassification.html",
-          "source_type": "documentation"
+          "source_type": "documentation",
+          "authors": [
+            "Aif360 Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "aif360developersAif360algorithmspostprocessingRejectOptionClassification2018"
         },
         {
           "title": "Survey on Leveraging Uncertainty Estimation Towards Trustworthy Deep Neural Networks: The Case of Reject Option and Post-training Processing",
           "url": "https://www.semanticscholar.org/paper/e939c6ac58e08b539ae8a7dc54216bceb775b085",
-          "source_type": "documentation",
+          "source_type": "technical_paper",
           "authors": [
             "M. Hasan",
             "Moloud Abdar",
             "A. Khosravi",
             "U. Aickelin",
-            "Pietro Lio'",
+            "Pietro Lio’",
             "Ibrahim Hossain",
             "Ashikur Rahman",
             "Saeid Nahavandi"
-          ]
+          ],
+          "publication_date": "2023",
+          "citationKey": "hasanSurveyLeveragingUncertainty2023",
+          "abstract": "Although neural networks (especially deep neural networks) have achieved better-than-human performance in many fields, their real-world deployment is still questionable due to the lack of awareness about the limitations in their knowledge. To incorporate such awareness in the machine learning model, prediction with reject option (also known as selective classification or classification with abstention) has been proposed in the literature. In this article, we present a systematic review of the prediction with the reject option in the context of various neural networks. To the best of our knowledge, this is the first study focusing on this aspect of neural networks. Moreover, we discuss different novel loss functions related to the reject option and post-training processing (if any) of network output for generating suitable measurements for knowledge awareness of the model. Finally, we address the application of the rejection option in reducing the prediction time for real-time problems and present a comprehensive summary of the techniques related to the reject option in the context of a wide variety of neural networks. Our code is available on GitHub: https://github.com/MehediHasanTutul/Reject_option."
         }
       ],
       "complexity_rating": 3,
@@ -1255,7 +1361,6 @@
           "title": "On Fairness and Calibration",
           "url": "https://arxiv.org/abs/1709.02012",
           "source_type": "technical_paper",
-          "description": "Foundational paper demonstrating the mathematical tension between calibration and equalised odds fairness constraints.",
           "authors": [
             "Geoff Pleiss",
             "Manish Raghavan",
@@ -1263,31 +1368,40 @@
             "Jon Kleinberg",
             "Kilian Q. Weinberger"
           ],
-          "publication_date": "2017-09-06"
+          "publication_date": "2017-09-06",
+          "citationKey": "pleissFairnessCalibration2017",
+          "abstract": "The machine learning community has become increasingly concerned with the potential for bias and discrimination in predictive models. This has motivated a growing line of work on what it means for a classification procedure to be \"fair.\" In this paper, we investigate the tension between minimizing error disparity across different population groups while maintaining calibrated probability estimates. We show that calibration is compatible only with a single error constraint (i.e. equal false-negatives rates across groups), and show that any algorithm that satisfies this relaxation is no better than randomizing a percentage of predictions for an existing classifier. These unsettling findings, which extend and generalize existing results, are empirically confirmed on several datasets."
         },
         {
           "title": "equalized_odds_and_calibration",
           "url": "https://github.com/gpleiss/equalized_odds_and_calibration",
           "source_type": "software_package",
-          "description": "Python implementation of post-processing methods for achieving calibration with equality of opportunity constraints."
+          "publication_date": "2017-11-03",
+          "citationKey": "gpleissEqualized_odds_and_calibration2017",
+          "abstract": "Code and data for the experiments in \"On Fairness and Calibration\""
         },
         {
           "title": "Equality of Opportunity in Supervised Learning",
           "url": "https://arxiv.org/abs/1610.02413",
           "source_type": "technical_paper",
-          "description": "Original paper introducing the equality of opportunity fairness criterion and post-processing algorithms.",
           "authors": [
             "Moritz Hardt",
             "Eric Price",
             "Nathan Srebro"
           ],
-          "publication_date": "2016-10-07"
+          "publication_date": "2016-10-07",
+          "citationKey": "hardtEqualityOpportunitySupervised2016",
+          "abstract": "We propose a criterion for discrimination against a specified sensitive attribute in supervised learning, where the goal is to predict some target based on available features. Assuming data about the predictor, target, and membership in the protected group are available, we show how to optimally adjust any learned predictor so as to remove discrimination according to our definition. Our framework also improves incentives by shifting the cost of poor classification from disadvantaged groups to the decision maker, who can respond by improving the classification accuracy.   In line with other studies, our notion is oblivious: it depends only on the joint statistics of the predictor, the target and the protected attribute, but not on interpretation of individualfeatures. We study the inherent limits of defining and identifying biases based on such oblivious measures, outlining what can and cannot be inferred from different oblivious tests.   We illustrate our notion using a case study of FICO credit scores."
         },
         {
           "title": "Fairlearn: Postprocessing Methods",
           "url": "https://fairlearn.org/v0.10/user_guide/mitigation/postprocessing.html",
           "source_type": "documentation",
-          "description": "Documentation for implementing threshold optimisation and calibration methods to achieve fairness constraints."
+          "authors": [
+            "Fairlearn Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "fairlearndevelopersFairlearnPostprocessingMethods2018"
         }
       ],
       "complexity_rating": 4,
@@ -1363,27 +1477,50 @@
         {
           "title": "aif360.sklearn.metrics.equal_opportunity_difference — aif360 0.6.1 ...",
           "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.metrics.equal_opportunity_difference.html",
-          "source_type": "documentation"
+          "source_type": "documentation",
+          "authors": [
+            "Aif360 Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "aif360developersAif360sklearnmetricsequal_opportunity_differenceAif3600612018"
         },
         {
           "title": "Welcome to TransparentAI's documentation! — TransparentAI 0.1.0 ...",
-          "url": "https://transparentai.readthedocs.io/en/latest/",
-          "source_type": "documentation"
+          "url": "https://transparentai.readthedocs.io/en/latest",
+          "source_type": "documentation",
+          "authors": [
+            "Transparentai Developers"
+          ],
+          "publication_date": "2023",
+          "citationKey": "transparentaidevelopersWelcomeTransparentAIsDocumentation2023"
         },
         {
           "title": "lale.lib.aif360.util module — LALE 0.9.0-dev documentation",
           "url": "https://lale.readthedocs.io/en/latest/modules/lale.lib.aif360.util.html",
-          "source_type": "documentation"
+          "source_type": "documentation",
+          "authors": [
+            "Lale Developers"
+          ],
+          "publication_date": "2024",
+          "citationKey": "laledevelopersLalelibaif360utilModuleLALE2024"
         },
         {
-          "title": "IBM/bias-mitigation-of-machine-learning-models-using-aif360",
+          "title": "bias-mitigation-of-machine-learning-models-using-aif360",
           "url": "https://github.com/IBM/bias-mitigation-of-machine-learning-models-using-aif360",
-          "source_type": "software_package"
+          "source_type": "software_package",
+          "publication_date": "2020-11-23",
+          "citationKey": "ibmBiasmitigationofmachinelearningmodelsusingaif3602020",
+          "abstract": "\"' '\""
         },
         {
           "title": "aif360.algorithms.postprocessing.RejectOptionClassification ...",
-          "url": "https://aif360.readthedocs.io/en/latest/modules/generated/aif360.algorithms.postprocessing.RejectOptionClassification.html",
-          "source_type": "documentation"
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.algorithms.postprocessing.RejectOptionClassification.html",
+          "source_type": "documentation",
+          "authors": [
+            "Aif360 Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "aif360developersAif360algorithmspostprocessingRejectOptionClassification2018"
         }
       ],
       "complexity_rating": 2,
@@ -1481,29 +1618,56 @@
       ],
       "resources": [
         {
-          "title": "lmcinnes/umap",
+          "title": "umap",
           "url": "https://github.com/lmcinnes/umap",
-          "source_type": "software_package"
+          "source_type": "software_package",
+          "publication_date": "2017-07-02",
+          "citationKey": "lmcinnesUmap2017",
+          "abstract": "Uniform Manifold Approximation and Projection"
         },
         {
-          "title": "harveyslash/TSNE-UMAP-Embedding-Visualisation",
+          "title": "TSNE-UMAP-Embedding-Visualisation",
           "url": "https://github.com/harveyslash/TSNE-UMAP-Embedding-Visualisation",
-          "source_type": "software_package"
+          "source_type": "software_package",
+          "publication_date": "2017-11-30",
+          "citationKey": "harveyslashTSNEUMAPEmbeddingVisualisation2017",
+          "abstract": "A Simple and easy to use way to Visualise Embeddings!"
         },
         {
           "title": "A new embedding quality assessment method for manifold learning",
           "url": "https://www.sciencedirect.com/science/article/pii/S092523121200389X",
-          "source_type": "technical_paper"
+          "source_type": "technical_paper",
+          "authors": [
+            "Peng Zhang",
+            "Yuanyuan Ren",
+            "Bo Zhang"
+          ],
+          "publication_date": "2012-11-15",
+          "citationKey": "zhangNewEmbeddingQuality2012",
+          "abstract": "Manifold learning is a hot research topic in the field of computer science. A crucial issue with current manifold learning methods is that they lack a natural quantitative measure to assess the quality of learned embeddings, which greatly limits their applications to real-world problems. In this paper, a new embedding quality assessment method for manifold learning, named as normalization independent embedding quality assessment (NIEQA) is proposed. Compared with current assessment methods which are limited to isometric embeddings, the NIEQA method has a much larger application range due to two features. First, it is based on a new measure which can effectively evaluate how well local neighborhood geometry is preserved under normalization, hence it can be applied to both isometric and normalized embeddings. Second, it can provide both local and global evaluations to output an overall assessment. Therefore, NIEQA can serve as a natural tool in model selection and evaluation tasks for manifold learning. Experimental results on benchmark data sets validate the effectiveness of the proposed method."
         },
         {
           "title": "Unsupervised embedding quality evaluation",
           "url": "https://proceedings.mlr.press/v221/tsitsulin23a.html",
-          "source_type": "technical_paper"
+          "source_type": "technical_paper",
+          "authors": [
+            "Anton Tsitsulin",
+            "Marina Munkhoeva",
+            "Bryan Perozzi"
+          ],
+          "publication_date": "2023-09-27",
+          "citationKey": "tsitsulinUnsupervisedEmbeddingQuality2023"
         },
         {
           "title": "Semantic Certainty Assessment in Vector Retrieval Systems: A Novel Framework for Embedding Quality Evaluation",
           "url": "https://arxiv.org/abs/2507.05933",
-          "source_type": "technical_paper"
+          "source_type": "technical_paper",
+          "authors": [
+            "Y. Du"
+          ],
+          "publication_date": "2025-07-08",
+          "citationKey": "duSemanticCertaintyAssessment2025",
+          "abstract": "Vector retrieval systems exhibit significant performance variance across queries due to heterogeneous embedding quality. We propose a lightweight framework for predicting retrieval performance at the query level by combining quantization robustness and neighborhood density metrics. Our approach is motivated by the observation that high-quality embeddings occupy geometrically stable regions in the embedding space and exhibit consistent neighborhood structures. We evaluate our method on 4 standard retrieval datasets, showing consistent improvements of 9.4$\\pm$1.2\\% in Recall@10 over competitive baselines. The framework requires minimal computational overhead (less than 5\\% of retrieval time) and enables adaptive retrieval strategies. Our analysis reveals systematic patterns in embedding quality across different query types, providing insights for targeted training data augmentation."
         }
       ],
       "related_techniques": [
@@ -1597,29 +1761,27 @@
       ],
       "resources": [
         {
-          "title": "tensorflow/fairness-indicators",
+          "title": "fairness-indicators",
           "url": "https://github.com/tensorflow/fairness-indicators",
-          "source_type": "software_package"
+          "source_type": "software_package",
+          "publication_date": "2019-09-30",
+          "citationKey": "tensorflowFairnessindicators2019",
+          "abstract": "Tensorflow's Fairness Evaluation and Visualization Toolkit"
         },
         {
-          "title": "AI4Bharat/indic-bias",
+          "title": "indic-bias",
           "url": "https://github.com/AI4Bharat/indic-bias",
-          "source_type": "software_package"
+          "source_type": "software_package",
+          "publication_date": "2024-12-20",
+          "citationKey": "ai4bharatIndicbias2024",
+          "abstract": "Indic-Bias is a comprehensive benchmark to evaluate the fairness of LLMs in Indian Contexts."
         },
         {
           "title": "Fairness-guided few-shot prompting for large language models",
-          "url": "https://scholar.google.com/scholar?q=fairness+guided+few+shot+prompting",
-          "source_type": "technical_paper"
-        },
-        {
-          "title": "Few-shot fairness: Unveiling LLM's potential for fairness-aware classification",
-          "url": "https://scholar.google.com/scholar?q=few+shot+fairness+unveiling+llm",
-          "source_type": "technical_paper"
-        },
-        {
-          "title": "Selecting shots for demographic fairness in few-shot learning with large language models",
-          "url": "https://scholar.google.com/scholar?q=selecting+shots+demographic+fairness",
-          "source_type": "technical_paper"
+          "url": "https://arxiv.org/abs/2303.13217",
+          "source_type": "technical_paper",
+          "publication_date": "2023",
+          "citationKey": "FairnessguidedFewshotPrompting2023"
         }
       ],
       "related_techniques": [
@@ -1718,28 +1880,47 @@
       "resources": [
         {
           "title": "Evaluating Toxicity in Large Language Models",
-          "url": "https://www.analyticsvidhya.com/blog/2025/03/evaluating-toxicity-in-large-language-models/",
-          "source_type": "tutorial"
+          "url": "https://www.analyticsvidhya.com/blog/2025/03/evaluating-toxicity-in-large-language-models",
+          "source_type": "tutorial",
+          "authors": [
+            "Riya Bansal"
+          ],
+          "publication_date": "2025-03-27",
+          "citationKey": "bansalEvaluatingToxicityLarge2025"
         },
         {
           "title": "What are Guardrails AI?",
-          "url": "https://www.analyticsvidhya.com/blog/2024/05/building-responsible-ai-with-guardrails-ai/",
-          "source_type": "tutorial"
+          "url": "https://www.analyticsvidhya.com/blog/2024/05/building-responsible-ai-with-guardrails-ai",
+          "source_type": "tutorial",
+          "authors": [
+            "Ajay"
+          ],
+          "publication_date": "2024-05-03",
+          "citationKey": "ajayWhatAreGuardrails2024"
         },
         {
           "title": "Toxic Comment Classification using BERT - GeeksforGeeks",
-          "url": "https://www.geeksforgeeks.org/machine-learning/toxic-comment-classification-using-bert/",
-          "source_type": "tutorial"
+          "url": "https://www.geeksforgeeks.org/machine-learning/toxic-comment-classification-using-bert",
+          "source_type": "tutorial",
+          "publication_date": "2023-07-31",
+          "citationKey": "ToxicCommentClassification2023"
         },
         {
           "title": "Episode #188: Measuring Bias, Toxicity, and Truthfulness in LLMs ...",
-          "url": "https://realpython.com/podcasts/rpp/188/",
-          "source_type": "tutorial"
+          "url": "https://realpython.com/podcasts/rpp/188",
+          "source_type": "tutorial",
+          "publication_date": "2024-01-19",
+          "citationKey": "Episode188Measuring2024"
         },
         {
           "title": "Responsible AI in the Era of Generative AI",
-          "url": "https://www.analyticsvidhya.com/blog/2024/09/responsible-generative-ai/",
-          "source_type": "tutorial"
+          "url": "https://www.analyticsvidhya.com/blog/2024/09/responsible-generative-ai",
+          "source_type": "tutorial",
+          "authors": [
+            "K.C. Sabreena Basheer"
+          ],
+          "publication_date": "2024-09-13",
+          "citationKey": "basheerResponsibleAIEra2024"
         }
       ],
       "related_techniques": [

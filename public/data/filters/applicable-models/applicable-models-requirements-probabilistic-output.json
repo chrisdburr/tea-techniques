@@ -68,23 +68,31 @@
       "resources": [
         {
           "title": "Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning",
-          "url": "http://arxiv.org/pdf/1506.02142v6",
+          "url": "http://arxiv.org/abs/1506.02142v6",
           "source_type": "technical_paper",
           "authors": [
             "Yarin Gal",
             "Zoubin Ghahramani"
           ],
-          "publication_date": "2016-06-06"
+          "publication_date": "2015-06-06",
+          "citationKey": "galDropoutBayesianApproximation2015",
+          "abstract": "Deep learning tools have gained tremendous attention in applied machine learning. However such tools for regression and classification do not capture model uncertainty. In comparison, Bayesian models offer a mathematically grounded framework to reason about model uncertainty, but usually come with a prohibitive computational cost. In this paper we develop a new theoretical framework casting dropout training in deep neural networks (NNs) as approximate Bayesian inference in deep Gaussian processes. A direct result of this theory gives us tools to model uncertainty with dropout NNs -- extracting information from existing models that has been thrown away so far. This mitigates the problem of representing uncertainty in deep learning without sacrificing either computational complexity or test accuracy. We perform an extensive study of the properties of dropout's uncertainty. Various network architectures and non-linearities are assessed on tasks of regression and classification, using MNIST as an example. We show a considerable improvement in predictive log-likelihood and RMSE compared to existing state-of-the-art methods, and finish by using dropout's uncertainty in deep reinforcement learning."
         },
         {
-          "title": "mattiasegu/uncertainty_estimation_deep_learning",
+          "title": "uncertainty_estimation_deep_learning",
           "url": "https://github.com/mattiasegu/uncertainty_estimation_deep_learning",
-          "source_type": "software_package"
+          "source_type": "software_package",
+          "publication_date": "2019-06-12",
+          "citationKey": "mattiaseguUncertainty_estimation_deep_learning2019",
+          "abstract": "This repository provides the code used to implement the framework to provide deep learning models with total uncertainty estimates as described in \"A General Framework for Uncertainty Estimation in Deep Learning\" (Loquercio, Segù, Scaramuzza. RA-L 2020)."
         },
         {
-          "title": "uzh-rpg/deep_uncertainty_estimation",
+          "title": "deep_uncertainty_estimation",
           "url": "https://github.com/uzh-rpg/deep_uncertainty_estimation",
-          "source_type": "software_package"
+          "source_type": "software_package",
+          "publication_date": "2020-03-06",
+          "citationKey": "uzh-rpgDeep_uncertainty_estimation2020",
+          "abstract": "This repository provides the code used to implement the framework to provide deep learning models with total uncertainty estimates as described in \"A General Framework for Uncertainty Estimation in Deep Learning\" (Loquercio, Segù, Scaramuzza. RA-L 2020)."
         },
         {
           "title": "How certain are tansformers in image classification: uncertainty analysis with Monte Carlo dropout",
@@ -99,7 +107,10 @@
             "Dewan Ziaul Karim",
             "Annajiat Alim Rasel",
             "Meem Arafat Manab"
-          ]
+          ],
+          "publication_date": "2023",
+          "citationKey": "farhadulislamHowCertainAre2023",
+          "abstract": "Researchers have been inspired to implement transformer models in solving machine vision problems after their tremendous success with natural language tasks. Using the straightforward architecture and swift performance of transformers, a variety of computer vision problems can be solved with more ease and effectiveness. However, a comparative evaluation of their uncertainty in prediction has not been done yet. As we know, real world applications require a measure of uncertainty to produce accurate predictions, which allows researchers to handle uncertain inputs and special cases, in order to successfully prevent overfitting. Our study approaches the unexplored issue of uncertainty estimation among three popular and effective transformer models employed in computer vision, such as Vision Transformers (ViT), Swin Transformers (SWT), and Compact Convolutional Transformers (CCT). We conduct a comparative experiment to determine which particular architecture is the most reliable in image classification. We use dropouts at the inference phase in order to measure the uncertainty of these transformer models. This approach, commonly known as Monte Carlo Dropout (MCD), works well as a low-complexity estimation to compute uncertainty. The MCD-based CCT model is the least uncertain architecture in this classification task. Our proposed MCD-infused CCT model also yields the best results with 78.4% accuracy, while the SWT model with embedded MCD exhibits Pmaximum performance gain where the accuracy increased by almost 3% with the final result being 71.4%."
         }
       ],
       "complexity_rating": 3,
@@ -175,23 +186,28 @@
       "resources": [
         {
           "title": "Enhancing The Reliability of Out-of-distribution Image Detection in Neural Networks",
-          "url": "http://arxiv.org/pdf/1706.02690v5",
+          "url": "http://arxiv.org/abs/1706.02690v5",
           "source_type": "technical_paper",
           "authors": [
             "Shiyu Liang",
             "Yixuan Li",
             "R. Srikant"
           ],
-          "publication_date": "2017-06-08"
+          "publication_date": "2017-06-08",
+          "citationKey": "liangEnhancingReliabilityOutofdistribution2017",
+          "abstract": "We consider the problem of detecting out-of-distribution images in neural networks. We propose ODIN, a simple and effective method that does not require any change to a pre-trained neural network. Our method is based on the observation that using temperature scaling and adding small perturbations to the input can separate the softmax score distributions between in- and out-of-distribution images, allowing for more effective detection. We show in a series of experiments that ODIN is compatible with diverse network architectures and datasets. It consistently outperforms the baseline approach by a large margin, establishing a new state-of-the-art performance on this task. For example, ODIN reduces the false positive rate from the baseline 34.7% to 4.3% on the DenseNet (applied to CIFAR-10) when the true positive rate is 95%."
         },
         {
-          "title": "facebookresearch/odin",
+          "title": "odin",
           "url": "https://github.com/facebookresearch/odin",
-          "source_type": "software_package"
+          "source_type": "software_package",
+          "publication_date": "2018-02-10",
+          "citationKey": "Odin2018",
+          "abstract": "A simple and effective method for detecting out-of-distribution images in neural networks."
         },
         {
           "title": "Generalized ODIN: Detecting Out-of-distribution Image without Learning from Out-of-distribution Data",
-          "url": "http://arxiv.org/pdf/2002.11297v2",
+          "url": "http://arxiv.org/abs/2002.11297v2",
           "source_type": "technical_paper",
           "authors": [
             "Yen-Chang Hsu",
@@ -199,25 +215,24 @@
             "Hongxia Jin",
             "Zsolt Kira"
           ],
-          "publication_date": "2020-02-26"
+          "publication_date": "2020-02-26",
+          "citationKey": "hsuGeneralizedODINDetecting2020",
+          "abstract": "Deep neural networks have attained remarkable performance when applied to data that comes from the same distribution as that of the training set, but can significantly degrade otherwise. Therefore, detecting whether an example is out-of-distribution (OoD) is crucial to enable a system that can reject such samples or alert users. Recent works have made significant progress on OoD benchmarks consisting of small image datasets. However, many recent methods based on neural networks rely on training or tuning with both in-distribution and out-of-distribution data. The latter is generally hard to define a-priori, and its selection can easily bias the learning. We base our work on a popular method ODIN, proposing two strategies for freeing it from the needs of tuning with OoD data, while improving its OoD detection performance. We specifically propose to decompose confidence scoring as well as a modified input pre-processing method. We show that both of these significantly help in detection performance. Our further analysis on a larger scale image dataset shows that the two types of distribution shifts, specifically semantic shift and non-semantic shift, present a significant difference in the difficulty of the problem, providing an analysis of when ODIN-like strategies do or do not work."
         },
         {
           "title": "Detection of out-of-distribution samples using binary neuron activation patterns",
           "url": "http://arxiv.org/abs/2212.14268",
           "source_type": "technical_paper",
           "authors": [
-            "Chachuła, Krystian",
-            "Olber, Bartlomiej",
-            "Popowicz, Adam",
-            "Radlak, Krystian",
-            "Szczepankiewicz, Michal"
+            "Bartlomiej Olber",
+            "Krystian Radlak",
+            "Adam Popowicz",
+            "Michal Szczepankiewicz",
+            "Krystian Chachuła"
           ],
-          "publication_date": "2023-03-24"
-        },
-        {
-          "title": "Out-of-Distribution Detection with ODIN - A Tutorial",
-          "url": "https://medium.com/@abhaypatil2000/out-of-distribution-detection-using-odin-f1a3e9e6b3b8",
-          "source_type": "tutorial"
+          "publication_date": "2022-12-29",
+          "citationKey": "olberDetectionOutofdistributionSamples2022",
+          "abstract": "Deep neural networks (DNN) have outstanding performance in various applications. Despite numerous efforts of the research community, out-of-distribution (OOD) samples remain a significant limitation of DNN classifiers. The ability to identify previously unseen inputs as novel is crucial in safety-critical applications such as self-driving cars, unmanned aerial vehicles, and robots. Existing approaches to detect OOD samples treat a DNN as a black box and evaluate the confidence score of the output predictions. Unfortunately, this method frequently fails, because DNNs are not trained to reduce their confidence for OOD inputs. In this work, we introduce a novel method for OOD detection. Our method is motivated by theoretical analysis of neuron activation patterns (NAP) in ReLU-based architectures. The proposed method does not introduce a high computational overhead due to the binary representation of the activation patterns extracted from convolutional layers. The extensive empirical evaluation proves its high performance on various DNN architectures and seven image datasets."
         }
       ],
       "complexity_rating": 4,
@@ -285,31 +300,37 @@
       ],
       "resources": [
         {
-          "title": "google/empirical_calibration",
+          "title": "empirical_calibration",
           "url": "https://github.com/google/empirical_calibration",
-          "source_type": "software_package"
+          "source_type": "software_package",
+          "publication_date": "2019-02-01",
+          "citationKey": "googleEmpirical_calibration2019"
         },
         {
           "title": "A Python Library For Empirical Calibration",
-          "url": "http://arxiv.org/pdf/1906.11920v2",
+          "url": "http://arxiv.org/abs/1906.11920v2",
           "source_type": "technical_paper",
           "authors": [
             "Xiaojing Wang",
             "Jingang Miao",
             "Yunting Sun"
           ],
-          "publication_date": "2019-07-25"
+          "publication_date": "2019-06-27",
+          "citationKey": "wangPythonLibraryEmpirical2019",
+          "abstract": "Dealing with biased data samples is a common task across many statistical fields. In survey sampling, bias often occurs due to unrepresentative samples. In causal studies with observational data, the treated versus untreated group assignment is often correlated with covariates, i.e., not random. Empirical calibration is a generic weighting method that presents a unified view on correcting or reducing the data biases for the tasks mentioned above. We provide a Python library EC to compute the empirical calibration weights. The problem is formulated as convex optimization and solved efficiently in the dual form. Compared to existing software, EC is both more efficient and robust. EC also accommodates different optimization objectives, supports weight clipping, and allows inexact calibration, which improves usability. We demonstrate its usage across various experiments with both simulated and real-world data."
         },
         {
           "title": "Assessing the effectiveness of empirical calibration under different bias scenarios",
-          "url": "http://arxiv.org/pdf/2111.04233v2",
+          "url": "http://arxiv.org/abs/2111.04233v2",
           "source_type": "technical_paper",
           "authors": [
             "Hon Hwang",
             "Juan C Quiroz",
             "Blanca Gallego"
           ],
-          "publication_date": "2021-11-08"
+          "publication_date": "2021-11-08",
+          "citationKey": "hwangAssessingEffectivenessEmpirical2021",
+          "abstract": "Background: Estimations of causal effects from observational data are subject to various sources of bias. One method of adjusting for the residual biases in the estimation of a treatment effect is through negative control outcomes, where the treatment does not affect the outcome. The empirical calibration procedure is a technique that uses negative controls to calibrate p-values. An extension of empirical calibration calibrates the coverage of the 95% confidence interval of a treatment effect estimate by using negative control outcomes as well as positive control outcomes (where treatment affects the outcome).   Methods: The effect of empirical calibration of confidence intervals was analyzed using simulated datasets with known treatment effects. The simulations consisted of binary treatment and binary outcome, with biases resulting from unmeasured confounder, model misspecification, measurement error, and lack of positivity. The performance of the empirical calibration was evaluated by determining the change in the coverage of the confidence interval and the bias in the treatment effect estimate.   Results: Empirical calibration increased coverage of the 95% confidence interval of the treatment effect estimate under most bias scenarios but was inconsistent in adjusting the bias in the treatment effect estimate. Empirical calibration of confidence intervals was most effective when adjusting for the unmeasured confounding bias. Suitable negative controls had a large impact on the adjustment made by empirical calibration, but small improvements in the coverage of the outcome of interest were also observable when using unsuitable negative controls."
         }
       ],
       "complexity_rating": 2,
@@ -379,34 +400,41 @@
       ],
       "resources": [
         {
-          "title": "gpleiss/temperature_scaling",
+          "title": "temperature_scaling",
           "url": "https://github.com/gpleiss/temperature_scaling",
-          "source_type": "software_package"
+          "source_type": "software_package",
+          "publication_date": "2017-08-03",
+          "citationKey": "gpleissTemperature_scaling2017",
+          "abstract": "A simple way to calibrate your neural network."
         },
         {
           "title": "Exploring the Impact of Temperature Scaling in Softmax for Classification and Adversarial Robustness",
-          "url": "http://arxiv.org/pdf/2502.20604v1",
+          "url": "http://arxiv.org/abs/2502.20604v1",
           "source_type": "technical_paper",
           "authors": [
             "Hao Xuan",
             "Bokai Yang",
             "Xingyu Li"
           ],
-          "publication_date": "2025-02-28"
+          "publication_date": "2025-02-28",
+          "citationKey": "xuanExploringImpactTemperature2025",
+          "abstract": "The softmax function is a fundamental component in deep learning. This study delves into the often-overlooked parameter within the softmax function, known as \"temperature,\" providing novel insights into the practical and theoretical aspects of temperature scaling for image classification. Our empirical studies, adopting convolutional neural networks and transformers on multiple benchmark datasets, reveal that moderate temperatures generally introduce better overall performance. Through extensive experiments and rigorous theoretical analysis, we explore the role of temperature scaling in model training and unveil that temperature not only influences learning step size but also shapes the model's optimization direction. Moreover, for the first time, we discover a surprising benefit of elevated temperatures: enhanced model robustness against common corruption, natural perturbation, and non-targeted adversarial attacks like Projected Gradient Descent. We extend our discoveries to adversarial training, demonstrating that, compared to the standard softmax function with the default temperature value, higher temperatures have the potential to enhance adversarial training. The insights of this work open new avenues for improving model performance and security in deep learning applications."
         },
         {
           "title": "Neural Clamping: Joint Input Perturbation and Temperature Scaling for Neural Network Calibration",
-          "url": "http://arxiv.org/pdf/2209.11604v2",
+          "url": "http://arxiv.org/abs/2209.11604v2",
           "source_type": "technical_paper",
           "authors": [
             "Yung-Chen Tang",
             "Pin-Yu Chen",
             "Tsung-Yi Ho"
           ],
-          "publication_date": "2024-07-24"
+          "publication_date": "2022-09-23",
+          "citationKey": "tangNeuralClampingJoint2022",
+          "abstract": "Neural network calibration is an essential task in deep learning to ensure consistency between the confidence of model prediction and the true correctness likelihood. In this paper, we propose a new post-processing calibration method called Neural Clamping, which employs a simple joint input-output transformation on a pre-trained classifier via a learnable universal input perturbation and an output temperature scaling parameter. Moreover, we provide theoretical explanations on why Neural Clamping is provably better than temperature scaling. Evaluated on BloodMNIST, CIFAR-100, and ImageNet image recognition datasets and a variety of deep neural network models, our empirical results show that Neural Clamping significantly outperforms state-of-the-art post-processing calibration methods. The code is available at github.com/yungchentang/NCToolkit, and the demo is available at huggingface.co/spaces/TrustSafeAI/NCTV."
         },
         {
-          "title": "On Calibration of Modern Neural Networks | arXiv",
+          "title": "On Calibration of Modern Neural Networks",
           "url": "https://arxiv.org/abs/1706.04599",
           "source_type": "technical_paper",
           "authors": [
@@ -415,17 +443,21 @@
             "Yu Sun",
             "Kilian Q. Weinberger"
           ],
-          "publication_date": "2017-06-14"
+          "publication_date": "2017-06-14",
+          "citationKey": "guoCalibrationModernNeural2017",
+          "abstract": "Confidence calibration -- the problem of predicting probability estimates representative of the true correctness likelihood -- is important for classification models in many applications. We discover that modern neural networks, unlike those from a decade ago, are poorly calibrated. Through extensive experiments, we observe that depth, width, weight decay, and Batch Normalization are important factors influencing calibration. We evaluate the performance of various post-processing calibration methods on state-of-the-art architectures with image and document classification datasets. Our analysis and experiments not only offer insights into neural network learning, but also provide a simple and straightforward recipe for practical settings: on most datasets, temperature scaling -- a single-parameter variant of Platt Scaling -- is surprisingly effective at calibrating predictions."
         },
         {
           "title": "On the Limitations of Temperature Scaling for Distributions with Overlaps",
-          "url": "http://arxiv.org/pdf/2306.00740v3",
+          "url": "http://arxiv.org/abs/2306.00740v3",
           "source_type": "technical_paper",
           "authors": [
             "Muthu Chidambaram",
             "Rong Ge"
           ],
-          "publication_date": "2023-06-01"
+          "publication_date": "2023-06-01",
+          "citationKey": "chidambaramLimitationsTemperatureScaling2023",
+          "abstract": "Despite the impressive generalization capabilities of deep neural networks, they have been repeatedly shown to be overconfident when they are wrong. Fixing this issue is known as model calibration, and has consequently received much attention in the form of modified training schemes and post-training calibration procedures such as temperature scaling. While temperature scaling is frequently used because of its simplicity, it is often outperformed by modified training schemes. In this work, we identify a specific bottleneck for the performance of temperature scaling. We show that for empirical risk minimizers for a general set of distributions in which the supports of classes have overlaps, the performance of temperature scaling degrades with the amount of overlap between classes, and asymptotically becomes no better than random when there are a large number of classes. On the other hand, we prove that optimizing a modified form of the empirical risk induced by the Mixup data augmentation technique can in fact lead to reasonably good calibration performance, showing that training-time calibration may be necessary in some situations. We also verify that our theoretical results reflect practice by showing that Mixup significantly outperforms empirical risk minimization (with respect to multiple calibration metrics) on image classification benchmarks with class overlaps introduced in the form of label noise."
         }
       ],
       "complexity_rating": 1,
@@ -499,7 +531,11 @@
           "title": "scikit-learn Precision-Recall",
           "url": "https://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html",
           "source_type": "documentation",
-          "description": "Comprehensive guide to precision-recall curves and AUPRC calculation in scikit-learn with practical examples"
+          "authors": [
+            "Scikit-learn Developers"
+          ],
+          "publication_date": "2007",
+          "citationKey": "scikit-learndevelopersScikitlearnPrecisionRecall2007"
         },
         {
           "title": "Stochastic Optimization of Areas Under Precision-Recall Curves with Provable Convergence",
@@ -512,11 +548,13 @@
             "Shuiwang Ji",
             "Tianbao Yang"
           ],
-          "description": "Technical paper on optimising AUPRC directly during model training with convergence guarantees"
+          "publication_date": "2021",
+          "citationKey": "qiStochasticOptimizationAreas2021",
+          "abstract": "Areas under ROC (AUROC) and precision-recall curves (AUPRC) are common metrics for evaluating classification performance for imbalanced problems. Compared with AUROC, AUPRC is a more appropriate metric for highly imbalanced datasets. While stochastic optimization of AUROC has been studied extensively, principled stochastic optimization of AUPRC has been rarely explored. In this work, we propose a principled technical method to optimize AUPRC for deep learning. Our approach is based on maximizing the averaged precision (AP), which is an unbiased point estimator of AUPRC. We cast the objective into a sum of {\\it dependent compositional functions} with inner functions dependent on random variables of the outer level. We propose efficient adaptive and non-adaptive stochastic algorithms named SOAP with {\\it provable convergence guarantee under mild conditions} by leveraging recent advances in stochastic compositional optimization. Extensive experimental results on image and graph datasets demonstrate that our proposed method outperforms prior methods on imbalanced problems in terms of AUPRC. To the best of our knowledge, our work represents the first attempt to optimize AUPRC with provable convergence. The SOAP has been implemented in the libAUC library at~\\url{https://libauc.org/}."
         },
         {
           "title": "A Closer Look at AUROC and AUPRC under Class Imbalance",
-          "url": "http://arxiv.org/pdf/2401.06091v4",
+          "url": "http://arxiv.org/abs/2401.06091v4",
           "source_type": "technical_paper",
           "authors": [
             "Matthew B. A. McDermott",
@@ -526,13 +564,16 @@
             "Jack Gallifant"
           ],
           "publication_date": "2024-01-11",
-          "description": "Recent analysis of AUPRC behaviour under extreme class imbalance with practical recommendations"
+          "citationKey": "b.a.mcdermottCloserLookAUROC2024",
+          "abstract": "In machine learning (ML), a widespread claim is that the area under the precision-recall curve (AUPRC) is a superior metric for model comparison to the area under the receiver operating characteristic (AUROC) for tasks with class imbalance. This paper refutes this notion on two fronts. First, we theoretically characterize the behavior of AUROC and AUPRC in the presence of model mistakes, establishing clearly that AUPRC is not generally superior in cases of class imbalance. We further show that AUPRC can be a harmful metric as it can unduly favor model improvements in subpopulations with more frequent positive labels, heightening algorithmic disparities. Next, we empirically support our theory using experiments on both semi-synthetic and real-world fairness datasets. Prompted by these insights, we conduct a review of over 1.5 million scientific papers to understand the origin of this invalid claim, finding that it is often made without citation, misattributed to papers that do not argue this point, and aggressively over-generalized from source arguments. Our findings represent a dual contribution: a significant technical advancement in understanding the relationship between AUROC and AUPRC and a stark warning about unchecked assumptions in the ML community."
         },
         {
-          "title": "DominikRafacz/auprc",
+          "title": "auprc",
           "url": "https://github.com/DominikRafacz/auprc",
           "source_type": "software_package",
-          "description": "R package for calculating AUPRC with functions for plotting precision-recall curves and mlr3 integration"
+          "publication_date": "2020-04-14",
+          "citationKey": "dominikrafaczAuprc2020",
+          "abstract": "Package for calculating AUPRC (Area Under Precision-Recall Curve) in R"
         }
       ],
       "complexity_rating": 2,
@@ -610,7 +651,10 @@
             "Mounika Thatikonda",
             "M. Pk",
             "Fathi H. Amsaad"
-          ]
+          ],
+          "publication_date": "2024",
+          "citationKey": "thatikondaNovelDynamicConfidence2024",
+          "abstract": "Object detection (OD) is a significant component in the field of computer vision applications, ranging from autonomous vehicles to ensuring security in Department of Defense (DoD) systems. Despite the huge progress that has been made, the accuracy of the models in various situations is limited to static detection parameters like confidence threshold and NMS threshold. The static method of deciding the thresholds may lessen the effect of detections, thereby impacting the mean average precision (mAP) score and the overall efficacy of OD models in real-world scenarios. To overcome this drawback, this study introduced a novel approach that dynamically adjusts the confidence threshold and NMS threshold based on statistical measures of the entire object representation in a data plane. The COCO Dataset was chosen to evaluate the performance of dynamic threshold techniques across five different pre-trained state-of-the-art models like YOLO v5, Faster R-CNN, FCOS, RetinaNet, and SSD300. Among all the models, Faster R-CNN outperformed others with a mAP of 56.11 %. This dynamic approach makes the OD models more reliable by improving the adaptability and robustness of object detection models."
         },
         {
           "title": "Improving speech recognition accuracy with multi-confidence thresholding",
@@ -618,11 +662,13 @@
           "source_type": "technical_paper",
           "authors": [
             "Shuangyu Chang"
-          ]
+          ],
+          "publication_date": "2006",
+          "citationKey": "changImprovingSpeechRecognition2006"
         },
         {
           "title": "Improving the Robustness and Generalization of Deep Neural Network with Confidence Threshold Reduction",
-          "url": "http://arxiv.org/pdf/2206.00913v2",
+          "url": "http://arxiv.org/abs/2206.00913v2",
           "source_type": "technical_paper",
           "authors": [
             "Xiangyuan Yang",
@@ -631,7 +677,9 @@
             "Xinyu Yang",
             "Peng Zhao"
           ],
-          "publication_date": "2022-06-02"
+          "publication_date": "2022-06-02",
+          "citationKey": "yangImprovingRobustnessGeneralization2022",
+          "abstract": "Deep neural networks are easily attacked by imperceptible perturbation. Presently, adversarial training (AT) is the most effective method to enhance the robustness of the model against adversarial examples. However, because adversarial training solved a min-max value problem, in comparison with natural training, the robustness and generalization are contradictory, i.e., the robustness improvement of the model will decrease the generalization of the model. To address this issue, in this paper, a new concept, namely confidence threshold (CT), is introduced and the reducing of the confidence threshold, known as confidence threshold reduction (CTR), is proven to improve both the generalization and robustness of the model. Specifically, to reduce the CT for natural training (i.e., for natural training with CTR), we propose a mask-guided divergence loss function (MDL) consisting of a cross-entropy loss term and an orthogonal term. The empirical and theoretical analysis demonstrates that the MDL loss improves the robustness and generalization of the model simultaneously for natural training. However, the model robustness improvement of natural training with CTR is not comparable to that of adversarial training. Therefore, for adversarial training, we propose a standard deviation loss function (STD), which minimizes the difference in the probabilities of the wrong categories, to reduce the CT by being integrated into the loss function of adversarial training. The empirical and theoretical analysis demonstrates that the STD based loss function can further improve the robustness of the adversarially trained model on basis of guaranteeing the changeless or slight improvement of the natural accuracy."
         }
       ],
       "complexity_rating": 2,
@@ -711,37 +759,45 @@
           "title": "Equality of Opportunity in Supervised Learning",
           "url": "https://arxiv.org/abs/1610.02413",
           "source_type": "technical_paper",
-          "description": "Foundational paper by Hardt et al. introducing the equalised odds post-processing algorithm and mathematical framework for fairness constraints.",
           "authors": [
             "Moritz Hardt",
             "Eric Price",
             "Nathan Srebro"
           ],
-          "publication_date": "2016-10-07"
+          "publication_date": "2016-10-07",
+          "citationKey": "hardtEqualityOpportunitySupervised2016",
+          "abstract": "We propose a criterion for discrimination against a specified sensitive attribute in supervised learning, where the goal is to predict some target based on available features. Assuming data about the predictor, target, and membership in the protected group are available, we show how to optimally adjust any learned predictor so as to remove discrimination according to our definition. Our framework also improves incentives by shifting the cost of poor classification from disadvantaged groups to the decision maker, who can respond by improving the classification accuracy.   In line with other studies, our notion is oblivious: it depends only on the joint statistics of the predictor, the target and the protected attribute, but not on interpretation of individualfeatures. We study the inherent limits of defining and identifying biases based on such oblivious measures, outlining what can and cannot be inferred from different oblivious tests.   We illustrate our notion using a case study of FICO credit scores."
         },
         {
           "title": "Equalized odds postprocessing under imperfect group information",
           "url": "https://arxiv.org/abs/1906.03284",
           "source_type": "technical_paper",
-          "description": "Extension of Hardt et al.'s method examining robustness when protected attribute information is imperfect or noisy.",
           "authors": [
             "Pranjal Awasthi",
             "Matthäus Kleindessner",
             "Jamie Morgenstern"
           ],
-          "publication_date": "2019-06-07"
+          "publication_date": "2019-06-07",
+          "citationKey": "awasthiEqualizedOddsPostprocessing2019",
+          "abstract": "Most approaches aiming to ensure a model's fairness with respect to a protected attribute (such as gender or race) assume to know the true value of the attribute for every data point. In this paper, we ask to what extent fairness interventions can be effective even when only imperfect information about the protected attribute is available. In particular, we study the prominent equalized odds postprocessing method of Hardt et al. (2016) under a perturbation of the attribute. We identify conditions on the perturbation that guarantee that the bias of a classifier is reduced even by running equalized odds with the perturbed attribute. We also study the error of the resulting classifier. We empirically observe that under our identified conditions most often the error does not suffer from a perturbation of the protected attribute. For a special case, we formally prove this observation to be true."
         },
         {
           "title": "Fairlearn: ThresholdOptimizer",
           "url": "https://fairlearn.org/v0.10/api_reference/generated/fairlearn.postprocessing.ThresholdOptimizer.html",
           "source_type": "documentation",
-          "description": "Microsoft's Fairlearn implementation of the Hardt et al. algorithm with API documentation and usage examples for equalised odds constraints."
+          "authors": [
+            "Fairlearn Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "fairlearndevelopersFairlearnThresholdOptimizer2018"
         },
         {
-          "title": "IBM AIF360",
+          "title": "AIF360",
           "url": "https://github.com/Trusted-AI/AIF360",
           "source_type": "software_package",
-          "description": "Comprehensive fairness toolkit including EqualizedOddsPostprocessing implementation based on Hardt et al.'s original algorithm."
+          "publication_date": "2018-08-22",
+          "citationKey": "trusted-aiAIF3602018",
+          "abstract": "A comprehensive set of fairness metrics for datasets and machine learning models, explanations for these metrics, and algorithms to mitigate bias in datasets and models."
         }
       ],
       "complexity_rating": 3,
@@ -812,42 +868,52 @@
           "url": "https://arxiv.org/abs/2111.04271",
           "source_type": "technical_paper",
           "authors": [
-            "Jang, Taeuk",
-            "Shi, Pengyi",
-            "Wang, Xiaoqian"
+            "Taeuk Jang",
+            "Pengyi Shi",
+            "Xiaoqian Wang"
           ],
           "publication_date": "2021-11-08",
-          "description": "Introduces a novel post-processing method for learning adaptive classification thresholds for each demographic group by optimising confusion matrices estimated from model probability distributions."
+          "citationKey": "jangGroupAwareThresholdAdaptation2021",
+          "abstract": "The fairness in machine learning is getting increasing attention, as its applications in different fields continue to expand and diversify. To mitigate the discriminated model behaviors between different demographic groups, we introduce a novel post-processing method to optimize over multiple fairness constraints through group-aware threshold adaptation. We propose to learn adaptive classification thresholds for each demographic group by optimizing the confusion matrix estimated from the probability distribution of a classification model output. As we only need an estimated probability distribution of model output instead of the classification model structure, our post-processing model can be applied to a wide range of classification models and improve fairness in a model-agnostic manner and ensure privacy. This even allows us to post-process existing fairness methods to further improve the trade-off between accuracy and fairness. Moreover, our model has low computational cost. We provide rigorous theoretical analysis on the convergence of our optimization algorithm and the trade-off between accuracy and fairness of our method. Our method theoretically enables a better upper bound in near optimality than existing method under same condition. Experimental results demonstrate that our method outperforms state-of-the-art methods and obtains the result that is closest to the theoretical accuracy-fairness trade-off boundary."
         },
         {
           "title": "Equality of Opportunity in Supervised Learning",
           "url": "https://arxiv.org/abs/1610.02413",
           "source_type": "technical_paper",
           "authors": [
-            "Hardt, Moritz",
-            "Price, Eric",
-            "Srebro, Nathan"
+            "Moritz Hardt",
+            "Eric Price",
+            "Nathan Srebro"
           ],
           "publication_date": "2016-10-07",
-          "description": "Foundational work introducing threshold optimisation techniques to achieve equalized opportunity and demographic parity in supervised learning."
+          "citationKey": "hardtEqualityOpportunitySupervised2016",
+          "abstract": "We propose a criterion for discrimination against a specified sensitive attribute in supervised learning, where the goal is to predict some target based on available features. Assuming data about the predictor, target, and membership in the protected group are available, we show how to optimally adjust any learned predictor so as to remove discrimination according to our definition. Our framework also improves incentives by shifting the cost of poor classification from disadvantaged groups to the decision maker, who can respond by improving the classification accuracy.   In line with other studies, our notion is oblivious: it depends only on the joint statistics of the predictor, the target and the protected attribute, but not on interpretation of individualfeatures. We study the inherent limits of defining and identifying biases based on such oblivious measures, outlining what can and cannot be inferred from different oblivious tests.   We illustrate our notion using a case study of FICO credit scores."
         },
         {
-          "title": "AIF360: A comprehensive set of fairness metrics and algorithms",
+          "title": "AIF360",
           "url": "https://github.com/Trusted-AI/AIF360",
           "source_type": "software_package",
-          "description": "Open-source library containing threshold optimisation implementations for various fairness constraints including equalized odds and demographic parity."
+          "publication_date": "2018-08-22",
+          "citationKey": "trusted-aiAIF3602018",
+          "abstract": "A comprehensive set of fairness metrics for datasets and machine learning models, explanations for these metrics, and algorithms to mitigate bias in datasets and models."
         },
         {
-          "title": "Fairlearn: A toolkit for assessing and improving fairness in AI",
+          "title": "fairlearn",
           "url": "https://github.com/fairlearn/fairlearn",
           "source_type": "software_package",
-          "description": "Python library providing threshold optimisation methods and post-processing algorithms for achieving fairness in machine learning models."
+          "publication_date": "2018-05-15",
+          "citationKey": "fairlearnFairlearn2018",
+          "abstract": "A Python package to assess and improve fairness of machine learning models."
         },
         {
           "title": "HolisticAI: Randomized Threshold Optimizer",
           "url": "https://holisticai.readthedocs.io/en/latest/getting_started/bias/mitigation/postprocessing/bc_ml_debiaser_rto.html",
           "source_type": "documentation",
-          "description": "Documentation for the Randomized Threshold Optimizer implementation that achieves statistical parity through group-aware threshold adjustment with randomization."
+          "authors": [
+            "Holisticai Developers"
+          ],
+          "publication_date": "2023",
+          "citationKey": "holisticaidevelopersHolisticAIRandomizedThreshold2023"
         }
       ],
       "complexity_rating": 2,
@@ -922,36 +988,47 @@
       ],
       "resources": [
         {
-          "title": "Machine Learning with a Reject Option: A survey",
+          "title": "Machine learning with a reject option: a survey",
           "url": "https://www.semanticscholar.org/paper/24864a7f899718477c04ede9c0bea906c5dc2667",
-          "source_type": "documentation",
+          "source_type": "technical_paper",
           "authors": [
             "Kilian Hendrickx",
             "Lorenzo Perini",
             "Dries Van der Plas",
             "Wannes Meert",
             "Jesse Davis"
-          ]
+          ],
+          "publication_date": "2021",
+          "citationKey": "hendrickxMachineLearningReject2021",
+          "abstract": "Machine learning models always make a prediction, even when it is likely to be inaccurate. This behavior should be avoided in many decision support applications, where mistakes can have severe consequences. Albeit already studied in 1970, machine learning with rejection recently gained interest. This machine learning subfield enables machine learning models to abstain from making a prediction when likely to make a mistake. This survey aims to provide an overview on machine learning with rejection. We introduce the conditions leading to two types of rejection, ambiguity and novelty rejection, which we carefully formalize. Moreover, we review and categorize strategies to evaluate a model’s predictive and rejective quality. Additionally, we define the existing architectures for models with rejection and describe the standard techniques for learning such models. Finally, we provide examples of relevant application domains and show how machine learning with rejection relates to other machine learning research areas."
         },
         {
           "title": "aif360.algorithms.postprocessing.RejectOptionClassification ...",
           "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.algorithms.postprocessing.RejectOptionClassification.html",
-          "source_type": "documentation"
+          "source_type": "documentation",
+          "authors": [
+            "Aif360 Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "aif360developersAif360algorithmspostprocessingRejectOptionClassification2018"
         },
         {
           "title": "Survey on Leveraging Uncertainty Estimation Towards Trustworthy Deep Neural Networks: The Case of Reject Option and Post-training Processing",
           "url": "https://www.semanticscholar.org/paper/e939c6ac58e08b539ae8a7dc54216bceb775b085",
-          "source_type": "documentation",
+          "source_type": "technical_paper",
           "authors": [
             "M. Hasan",
             "Moloud Abdar",
             "A. Khosravi",
             "U. Aickelin",
-            "Pietro Lio'",
+            "Pietro Lio’",
             "Ibrahim Hossain",
             "Ashikur Rahman",
             "Saeid Nahavandi"
-          ]
+          ],
+          "publication_date": "2023",
+          "citationKey": "hasanSurveyLeveragingUncertainty2023",
+          "abstract": "Although neural networks (especially deep neural networks) have achieved better-than-human performance in many fields, their real-world deployment is still questionable due to the lack of awareness about the limitations in their knowledge. To incorporate such awareness in the machine learning model, prediction with reject option (also known as selective classification or classification with abstention) has been proposed in the literature. In this article, we present a systematic review of the prediction with the reject option in the context of various neural networks. To the best of our knowledge, this is the first study focusing on this aspect of neural networks. Moreover, we discuss different novel loss functions related to the reject option and post-training processing (if any) of network output for generating suitable measurements for knowledge awareness of the model. Finally, we address the application of the rejection option in reducing the prediction time for real-time problems and present a comprehensive summary of the techniques related to the reject option in the context of a wide variety of neural networks. Our code is available on GitHub: https://github.com/MehediHasanTutul/Reject_option."
         }
       ],
       "complexity_rating": 3,
@@ -1030,7 +1107,6 @@
           "title": "On Fairness and Calibration",
           "url": "https://arxiv.org/abs/1709.02012",
           "source_type": "technical_paper",
-          "description": "Foundational paper demonstrating the mathematical tension between calibration and equalised odds fairness constraints.",
           "authors": [
             "Geoff Pleiss",
             "Manish Raghavan",
@@ -1038,31 +1114,40 @@
             "Jon Kleinberg",
             "Kilian Q. Weinberger"
           ],
-          "publication_date": "2017-09-06"
+          "publication_date": "2017-09-06",
+          "citationKey": "pleissFairnessCalibration2017",
+          "abstract": "The machine learning community has become increasingly concerned with the potential for bias and discrimination in predictive models. This has motivated a growing line of work on what it means for a classification procedure to be \"fair.\" In this paper, we investigate the tension between minimizing error disparity across different population groups while maintaining calibrated probability estimates. We show that calibration is compatible only with a single error constraint (i.e. equal false-negatives rates across groups), and show that any algorithm that satisfies this relaxation is no better than randomizing a percentage of predictions for an existing classifier. These unsettling findings, which extend and generalize existing results, are empirically confirmed on several datasets."
         },
         {
           "title": "equalized_odds_and_calibration",
           "url": "https://github.com/gpleiss/equalized_odds_and_calibration",
           "source_type": "software_package",
-          "description": "Python implementation of post-processing methods for achieving calibration with equality of opportunity constraints."
+          "publication_date": "2017-11-03",
+          "citationKey": "gpleissEqualized_odds_and_calibration2017",
+          "abstract": "Code and data for the experiments in \"On Fairness and Calibration\""
         },
         {
           "title": "Equality of Opportunity in Supervised Learning",
           "url": "https://arxiv.org/abs/1610.02413",
           "source_type": "technical_paper",
-          "description": "Original paper introducing the equality of opportunity fairness criterion and post-processing algorithms.",
           "authors": [
             "Moritz Hardt",
             "Eric Price",
             "Nathan Srebro"
           ],
-          "publication_date": "2016-10-07"
+          "publication_date": "2016-10-07",
+          "citationKey": "hardtEqualityOpportunitySupervised2016",
+          "abstract": "We propose a criterion for discrimination against a specified sensitive attribute in supervised learning, where the goal is to predict some target based on available features. Assuming data about the predictor, target, and membership in the protected group are available, we show how to optimally adjust any learned predictor so as to remove discrimination according to our definition. Our framework also improves incentives by shifting the cost of poor classification from disadvantaged groups to the decision maker, who can respond by improving the classification accuracy.   In line with other studies, our notion is oblivious: it depends only on the joint statistics of the predictor, the target and the protected attribute, but not on interpretation of individualfeatures. We study the inherent limits of defining and identifying biases based on such oblivious measures, outlining what can and cannot be inferred from different oblivious tests.   We illustrate our notion using a case study of FICO credit scores."
         },
         {
           "title": "Fairlearn: Postprocessing Methods",
           "url": "https://fairlearn.org/v0.10/user_guide/mitigation/postprocessing.html",
           "source_type": "documentation",
-          "description": "Documentation for implementing threshold optimisation and calibration methods to achieve fairness constraints."
+          "authors": [
+            "Fairlearn Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "fairlearndevelopersFairlearnPostprocessingMethods2018"
         }
       ],
       "complexity_rating": 4,

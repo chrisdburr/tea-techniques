@@ -219,6 +219,14 @@ export function NavMain() {
           title: 'Community Contributions',
           url: '/docs/community-contributions',
         },
+        {
+          title: 'Knowledge Graph',
+          url: '/docs/knowledge-graph',
+        },
+        {
+          title: 'MCP Server',
+          url: '/docs/knowledge-graph/mcp-server',
+        },
       ],
     },
   ];

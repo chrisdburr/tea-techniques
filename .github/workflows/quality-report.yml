@@ -105,11 +105,13 @@ jobs:
 
       - name: Create or update issue
         uses: actions/github-script@v7
+        env:
+          REPORT_BODY: ${{ steps.summary.outputs.body }}
         with:
           script: |
             const title = '📊 Data Quality Report';
             const labels = ['data-quality', 'automated'];
-            const body = `${{ steps.summary.outputs.body }}`;
+            const body = process.env.REPORT_BODY;
 
             // Find existing open issue
             const { data: issues } = await github.rest.issues.listForRepo({

@@ -3,32 +3,20 @@
   "title": "TEA Technique",
   "description": "Schema for a single technique in the TEA Techniques database",
   "type": "object",
-  "required": [
-    "slug",
-    "name",
-    "description",
-    "assurance_goals",
-    "tags"
-  ],
+  "required": ["slug", "name", "description", "assurance_goals", "tags"],
   "properties": {
     "slug": {
       "type": "string",
       "description": "URL-friendly unique identifier for the technique",
       "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
-      "examples": [
-        "shapley-additive-explanations",
-        "permutation-importance"
-      ]
+      "examples": ["shapley-additive-explanations", "permutation-importance"]
     },
     "name": {
       "type": "string",
       "description": "Human-readable name of the technique",
       "minLength": 3,
       "maxLength": 100,
-      "examples": [
-        "SHapley Additive exPlanations",
-        "Permutation Importance"
-      ]
+      "examples": ["SHapley Additive exPlanations", "Permutation Importance"]
     },
     "description": {
       "type": "string",
@@ -74,10 +62,7 @@
       "description": "Real-world examples of how this technique can be applied",
       "items": {
         "type": "object",
-        "required": [
-          "description",
-          "goal"
-        ],
+        "required": ["description", "goal"],
         "properties": {
           "description": {
             "type": "string",
@@ -106,9 +91,7 @@
       "description": "Known limitations or considerations when using this technique",
       "items": {
         "type": "object",
-        "required": [
-          "description"
-        ],
+        "required": ["description"],
         "properties": {
           "description": {
             "type": "string",
@@ -131,10 +114,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "title",
-              "url"
-            ],
+            "required": ["title", "url"],
             "properties": {
               "title": {
                 "type": "string",
@@ -198,13 +178,7 @@
       "type": "string",
       "description": "Common acronym for the technique",
       "pattern": "^[A-Za-z0-9-]+$",
-      "examples": [
-        "SHAP",
-        "LIME",
-        "t-SNE",
-        "CAM",
-        "IRBs"
-      ]
+      "examples": ["SHAP", "LIME", "t-SNE", "CAM", "IRBs"]
     },
     "related_techniques": {
       "type": "array",

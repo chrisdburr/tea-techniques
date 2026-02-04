@@ -1,5 +1,4 @@
 import { ExternalLink } from '@/components/icons';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   formatAuthors,
@@ -7,7 +6,7 @@ import {
   getResourceIcon,
   getResourceTypeLabel,
 } from '@/lib/resource-utils';
-import type { Technique } from '@/lib/types';
+import type { Resource, Technique } from '@/lib/types';
 
 interface TechniqueResourcesProps {
   technique: Technique;
@@ -20,7 +19,7 @@ export function TechniqueResources({ technique }: TechniqueResourcesProps) {
 
   // Ensure resources are objects (hydrated)
   const resources = technique.resources.filter(
-    (r): r is import('@/lib/types').Resource => typeof r !== 'string'
+    (r): r is Resource => typeof r !== 'string'
   );
 
   if (resources.length === 0) {
@@ -55,12 +54,14 @@ export function TechniqueResources({ technique }: TechniqueResourcesProps) {
       <div className="space-y-8">
         {typeOrder.map((type) => {
           const typeResources = groupedResources[type];
-          if (!typeResources || typeResources.length === 0) return null;
+          if (!typeResources || typeResources.length === 0) {
+            return null;
+          }
 
           return (
-            <div key={type} className="space-y-4">
+            <div className="space-y-4" key={type}>
               <h3 className="font-medium text-lg text-muted-foreground capitalize">
-                {getResourceTypeLabel(type as any)}s
+                {getResourceTypeLabel(type as Resource['source_type'])}s
               </h3>
               <div className="grid gap-4">
                 {typeResources.map((resource, index) => {
@@ -89,12 +90,10 @@ export function TechniqueResources({ technique }: TechniqueResourcesProps) {
                             {authors && (
                               <>
                                 <span>{authors}</span>
-                                {(date) && <span className="text-xs">•</span>}
+                                {date && <span className="text-xs">•</span>}
                               </>
                             )}
-                            {date && (
-                              <span>{date}</span>
-                            )}
+                            {date && <span>{date}</span>}
                           </div>
 
                           {resource.description && (

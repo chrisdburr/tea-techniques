@@ -30,10 +30,10 @@ export interface Resource {
   title: string;
   url: string;
   source_type?:
-  | 'technical_paper'
-  | 'software_package'
-  | 'documentation'
-  | 'tutorial';
+    | 'technical_paper'
+    | 'software_package'
+    | 'documentation'
+    | 'tutorial';
   description?: string;
   authors?: string[];
   publication_date?: string;

@@ -26,7 +26,11 @@ async function generateStaticData() {
       const zoteroData = JSON.parse(await fs.readFile(zoteroPath, 'utf-8'));
       zoteroItems = zoteroData.items || [];
     } catch (error) {
-      console.warn('Warning: Could not load zotero-resources.json', error.message);
+      // biome-ignore lint/suspicious/noConsole: build script warning output
+      console.warn(
+        'Warning: Could not load zotero-resources.json',
+        error.message
+      );
     }
 
     // Create Zotero lookup map
@@ -46,6 +50,7 @@ async function generateStaticData() {
               if (item) {
                 return mapZoteroItemToResource(item);
               }
+              // biome-ignore lint/suspicious/noConsole: build script warning output
               console.warn(
                 `Warning: Citekey "${resource}" not found in Zotero library for technique "${technique.slug}"`
               );

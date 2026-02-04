@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "TEA Techniques Quality Report",
+  "description": "Schema for the data quality report produced by the quality scoring system",
+  "type": "object",
+  "required": [
+    "generated_at",
+    "dataset_version",
+    "summary",
+    "tag_coverage",
+    "cross_references",
+    "completeness_scores"
+  ],
+  "properties": {
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of report generation"
+    },
+    "dataset_version": {
+      "type": "object",
+      "required": ["technique_count", "tag_count"],
+      "properties": {
+        "technique_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tag_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "total_techniques",
+        "techniques_by_goal",
+        "avg_tags_per_technique",
+        "avg_completeness_score",
+        "techniques_with_issues",
+        "total_issues"
+      ],
+      "properties": {
+        "total_techniques": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "techniques_by_goal": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "avg_tags_per_technique": {
+          "type": "number",
+          "minimum": 0
+        },
+        "avg_completeness_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "techniques_with_issues": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total_issues": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "tag_coverage": {
+      "type": "object",
+      "required": [
+        "universal_gaps",
+        "goal_conditional_gaps",
+        "statistical_outliers"
+      ],
+      "properties": {
+        "universal_gaps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["slug", "name", "missing_categories"],
+            "properties": {
+              "slug": { "type": "string" },
+              "name": { "type": "string" },
+              "missing_categories": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "goal_conditional_gaps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["slug", "name", "goal", "missing", "level"],
+            "properties": {
+              "slug": { "type": "string" },
+              "name": { "type": "string" },
+              "goal": { "type": "string" },
+              "missing": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "level": {
+                "type": "string",
+                "enum": ["must", "should"]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "statistical_outliers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "slug",
+              "name",
+              "goal",
+              "missing_tag_category",
+              "peer_coverage_pct"
+            ],
+            "properties": {
+              "slug": { "type": "string" },
+              "name": { "type": "string" },
+              "goal": { "type": "string" },
+              "missing_tag_category": { "type": "string" },
+              "peer_coverage_pct": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "cross_references": {
+      "type": "object",
+      "required": [
+        "invalid_slugs",
+        "asymmetric_relationships",
+        "orphan_techniques"
+      ],
+      "properties": {
+        "invalid_slugs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["slug", "invalid_related"],
+            "properties": {
+              "slug": { "type": "string" },
+              "invalid_related": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "asymmetric_relationships": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["source", "target", "direction"],
+            "properties": {
+              "source": { "type": "string" },
+              "target": { "type": "string" },
+              "direction": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "orphan_techniques": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "completeness_scores": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["slug", "name", "score", "breakdown", "issues"],
+        "properties": {
+          "slug": { "type": "string" },
+          "name": { "type": "string" },
+          "score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "breakdown": {
+            "type": "object",
+            "required": [
+              "tag_coverage",
+              "description_quality",
+              "use_cases",
+              "limitations",
+              "resources",
+              "related_techniques",
+              "goal_tag_depth"
+            ],
+            "properties": {
+              "tag_coverage": { "type": "number", "minimum": 0, "maximum": 1 },
+              "description_quality": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "use_cases": { "type": "number", "minimum": 0, "maximum": 1 },
+              "limitations": { "type": "number", "minimum": 0, "maximum": 1 },
+              "resources": { "type": "number", "minimum": 0, "maximum": 1 },
+              "related_techniques": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "goal_tag_depth": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "additionalProperties": false
+          },
+          "issues": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

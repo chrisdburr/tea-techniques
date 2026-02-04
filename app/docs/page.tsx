@@ -1,4 +1,4 @@
-import { Code, Users } from '@/components/icons';
+import { Code, Network, Users } from '@/components/icons';
 import {
   type IndexPageChildItem,
   IndexPageLayout,
@@ -19,6 +19,13 @@ export default function DocsPage() {
         'Technical documentation for developers working with the TEA Techniques platform.',
       icon: Code,
       href: '/docs/developer-instructions',
+    },
+    {
+      title: 'Knowledge Graph',
+      description:
+        'Explore the TEA Techniques knowledge graph, JSON-LD vocabulary, and MCP server for AI-powered technique discovery.',
+      icon: Network,
+      href: '/docs/knowledge-graph',
     },
   ];
 

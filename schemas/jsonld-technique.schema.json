@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "TEA Technique JSON-LD",
+  "description": "Schema for a JSON-LD technique document in the TEA knowledge graph",
+  "type": "object",
+  "required": [
+    "@context",
+    "@id",
+    "@type",
+    "name",
+    "slug",
+    "description",
+    "addressesGoal",
+    "hasTag"
+  ],
+  "properties": {
+    "@context": {
+      "description": "JSON-LD context reference",
+      "oneOf": [{ "type": "string", "format": "uri" }, { "type": "object" }]
+    },
+    "@id": {
+      "type": "string",
+      "description": "IRI for this technique",
+      "pattern": "^tea:technique/"
+    },
+    "@type": {
+      "const": "Technique"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 100
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 50,
+      "maxLength": 2000
+    },
+    "acronym": {
+      "type": "string"
+    },
+    "addressesGoal": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^tea:goal/"
+      }
+    },
+    "hasTag": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^tea:tag/"
+      }
+    },
+    "relatedTo": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^tea:technique/"
+      }
+    },
+    "citesResource": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^tea:resource/"
+      }
+    },
+    "complexityRating": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "computationalCostRating": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "exampleUseCases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["description", "goal"],
+        "properties": {
+          "description": { "type": "string" },
+          "goal": { "type": "string" }
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["description"],
+        "properties": {
+          "description": { "type": "string" }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

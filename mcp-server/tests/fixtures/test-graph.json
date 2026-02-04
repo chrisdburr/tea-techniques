@@ -1,0 +1,700 @@
+{
+  "@context": "https://alan-turing-institute.github.io/tea-techniques/data/ld/context.jsonld",
+  "@graph": [
+    {
+      "@id": "tea:technique/shapley-additive-explanations",
+      "@type": "Technique",
+      "name": "SHapley Additive exPlanations",
+      "slug": "shapley-additive-explanations",
+      "description": "SHAP explains model predictions by quantifying how much each input feature contributes to the outcome. It assigns an importance score to every feature, indicating whether it pushes the prediction towards or away from the average. The method systematically evaluates how predictions change as features are included or excluded, drawing on game theory concepts to ensure a fair distribution of contributions.",
+      "addressesGoal": [
+        "tea:goal/explainability",
+        "tea:goal/fairness",
+        "tea:goal/reliability"
+      ],
+      "hasTag": [
+        "tea:tag/assurance-goal-category/explainability",
+        "tea:tag/assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "tea:tag/assurance-goal-category/explainability/explains/feature-importance",
+        "tea:tag/assurance-goal-category/explainability/property/completeness",
+        "tea:tag/assurance-goal-category/explainability/property/consistency",
+        "tea:tag/assurance-goal-category/fairness",
+        "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/data-requirements/no-special-requirements",
+        "tea:tag/data-type/any",
+        "tea:tag/evidence-type/quantitative-metric",
+        "tea:tag/expertise-needed/statistics",
+        "tea:tag/explanatory-scope/global",
+        "tea:tag/explanatory-scope/local",
+        "tea:tag/lifecycle-stage/model-development",
+        "tea:tag/technique-type/algorithmic",
+        "tea:tag/applicable-models/architecture/model-agnostic",
+        "tea:tag/applicable-models/requirements/black-box"
+      ],
+      "acronym": "SHAP",
+      "complexityRating": 3,
+      "computationalCostRating": 4,
+      "relatedTo": [
+        "tea:technique/local-interpretable-model-agnostic-explanations",
+        "tea:technique/permutation-importance",
+        "tea:technique/sobol-indices",
+        "tea:technique/partial-dependence-plots"
+      ],
+      "citesResource": [
+        "tea:resource/shapShap2016",
+        "tea:resource/xai-tutorialsdevelopersIntroductionSHapleyAdditive2023",
+        "tea:resource/yuanEmpiricalStudyEffect2022",
+        "tea:resource/lopezSHAPShapleyAdditive2021",
+        "tea:resource/maifShapash2020"
+      ],
+      "exampleUseCases": [
+        {
+          "description": "Analysing a customer churn prediction model to understand why a specific high-value customer was flagged as likely to leave, revealing that recent support ticket interactions and declining purchase frequency were the main drivers.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Auditing a loan approval model by comparing SHAP values for applicants from different demographic groups, ensuring that protected characteristics like race or gender do not have an undue influence on credit decisions.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Validating a medical diagnosis model by confirming that its predictions are based on relevant clinical features (e.g., blood pressure, cholesterol levels) rather than spurious correlations (e.g., patient ID or appointment time), thereby improving model reliability.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Assumes feature independence, which can produce misleading explanations when features are highly correlated, as the model may attribute importance to features that are merely proxies for others."
+        },
+        {
+          "description": "Computationally expensive for models with many features or large datasets, as the number of required predictions grows exponentially with the number of features."
+        },
+        {
+          "description": "The choice of background dataset for generating explanations can significantly influence the results, requiring careful selection to ensure a representative baseline."
+        },
+        {
+          "description": "Global explanations derived from averaging local SHAP values may obscure important heterogeneous effects where features impact subgroups of the population differently."
+        }
+      ]
+    },
+    {
+      "@id": "tea:technique/permutation-importance",
+      "@type": "Technique",
+      "name": "Permutation Importance",
+      "slug": "permutation-importance",
+      "description": "Permutation Importance quantifies a feature's contribution to a model's performance by randomly shuffling its values and measuring the resulting drop in predictive accuracy. If shuffling a feature significantly degrades the model's performance, that feature is considered important. This model-agnostic technique helps identify which inputs are genuinely driving predictions, rather than just being correlated with the outcome.",
+      "addressesGoal": ["tea:goal/explainability", "tea:goal/reliability"],
+      "hasTag": [
+        "tea:tag/assurance-goal-category/explainability",
+        "tea:tag/assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "tea:tag/assurance-goal-category/explainability/explains/feature-importance",
+        "tea:tag/assurance-goal-category/explainability/property/consistency",
+        "tea:tag/assurance-goal-category/explainability/property/fidelity",
+        "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/data-requirements/no-special-requirements",
+        "tea:tag/data-type/any",
+        "tea:tag/evidence-type/quantitative-metric",
+        "tea:tag/expertise-needed/statistics",
+        "tea:tag/explanatory-scope/global",
+        "tea:tag/lifecycle-stage/model-development",
+        "tea:tag/technique-type/algorithmic",
+        "tea:tag/applicable-models/architecture/model-agnostic",
+        "tea:tag/applicable-models/requirements/black-box"
+      ],
+      "complexityRating": 2,
+      "computationalCostRating": 3,
+      "relatedTo": [
+        "tea:technique/shapley-additive-explanations",
+        "tea:technique/permutation-tests",
+        "tea:technique/mean-decrease-impurity",
+        "tea:technique/sobol-indices"
+      ],
+      "citesResource": [
+        "tea:resource/ramosajAsymptoticUnbiasednessPermutation2019",
+        "tea:resource/eli5developersEli5permutation_importanceELI501502016",
+        "tea:resource/permutationimportancedevelopersPermutationImportancePermutationImportance2019",
+        "tea:resource/parrtRandomforestimportances2018",
+        "tea:resource/chammaStatisticallyValidVariable2023"
+      ],
+      "exampleUseCases": [
+        {
+          "description": "Assessing which patient characteristics (e.g., age, blood pressure, cholesterol) are most critical for a medical diagnosis model by observing the performance drop when each characteristic's values are randomly shuffled, ensuring the model relies on clinically relevant factors.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Validating the robustness of a fraud detection model by permuting features like transaction amount or location, and confirming that the model's ability to detect fraud significantly decreases only for truly important features, thereby improving confidence in its reliability.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Can be misleading when features are highly correlated, as shuffling one feature might indirectly affect others, leading to an overestimation of its importance."
+        },
+        {
+          "description": "Computationally expensive for large datasets or complex models, as it requires re-evaluating the model many times for each feature."
+        },
+        {
+          "description": "Does not account for interactions between features; it measures the marginal importance of a feature, assuming other features remain unchanged."
+        },
+        {
+          "description": "The choice of metric for evaluating performance drop (e.g., accuracy, F1-score) can influence the perceived importance of features."
+        }
+      ]
+    },
+    {
+      "@id": "tea:technique/mean-decrease-impurity",
+      "@type": "Technique",
+      "name": "Mean Decrease Impurity",
+      "slug": "mean-decrease-impurity",
+      "description": "Mean Decrease Impurity (MDI) quantifies a feature's importance in tree-based models (e.g., Random Forests, Gradient Boosting Machines) by measuring the total reduction in impurity (e.g., Gini impurity, entropy) across all splits where the feature is used. Features that lead to larger, more consistent reductions in impurity are considered more important, indicating their effectiveness in creating homogeneous child nodes and improving predictive accuracy. This makes MDI a computationally efficient method for feature selection and model validation in tree-based ensembles.",
+      "addressesGoal": ["tea:goal/explainability", "tea:goal/reliability"],
+      "hasTag": [
+        "tea:tag/assurance-goal-category/explainability",
+        "tea:tag/assurance-goal-category/explainability/attribution-methods/model-specific",
+        "tea:tag/assurance-goal-category/explainability/explains/feature-importance",
+        "tea:tag/assurance-goal-category/explainability/property/efficiency",
+        "tea:tag/assurance-goal-category/explainability/property/completeness",
+        "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/data-requirements/no-special-requirements",
+        "tea:tag/data-type/tabular",
+        "tea:tag/evidence-type/quantitative-metric",
+        "tea:tag/expertise-needed/statistics",
+        "tea:tag/explanatory-scope/global",
+        "tea:tag/lifecycle-stage/model-development",
+        "tea:tag/technique-type/algorithmic",
+        "tea:tag/applicable-models/architecture/tree-based",
+        "tea:tag/applicable-models/paradigm/supervised",
+        "tea:tag/applicable-models/requirements/white-box"
+      ],
+      "complexityRating": 2,
+      "computationalCostRating": 1,
+      "relatedTo": [
+        "tea:technique/permutation-importance",
+        "tea:technique/shapley-additive-explanations",
+        "tea:technique/partial-dependence-plots",
+        "tea:technique/local-interpretable-model-agnostic-explanations"
+      ],
+      "citesResource": [
+        "tea:resource/scornetTreesForestsImpuritybased2020",
+        "tea:resource/liDebiasedMDIFeature2019",
+        "tea:resource/nafVariableImportanceRandom2023",
+        "tea:resource/heInterpretingDeepForest2023",
+        "tea:resource/optunadevelopersOptunaimportanceMeanDecreaseImpurityImportanceEvaluator2018"
+      ],
+      "exampleUseCases": [
+        {
+          "description": "Determining the most influential genetic markers in a decision tree model predicting disease susceptibility, by identifying which markers consistently lead to the purest splits between healthy and diseased patient groups.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Assessing the key factors driving customer purchasing decisions in an e-commerce random forest model, revealing which product attributes or customer demographics are most effective in segmenting buyers.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Validating the robustness of a fraud detection model by identifying which transaction features contribute most to reliable predictions, enabling feature selection to improve model stability and reduce overfitting to spurious patterns.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "MDI is inherently biased towards features with more unique values or those that allow for more splits, potentially overestimating their true importance."
+        },
+        {
+          "description": "It is only applicable to tree-based models and cannot be directly used with other model architectures."
+        },
+        {
+          "description": "The importance scores can be unstable, varying significantly with small changes in the training data or model parameters."
+        },
+        {
+          "description": "MDI does not account for feature interactions, meaning it might not accurately reflect the importance of features that are only relevant when combined with others."
+        }
+      ]
+    },
+    {
+      "@id": "tea:goal/explainability",
+      "@type": "AssuranceGoal",
+      "name": "Explainability",
+      "slug": "explainability",
+      "description": "Understanding how AI systems make decisions and what factors influence their outputs.",
+      "techniqueCount": 44,
+      "hasTechnique": [
+        "tea:technique/shapley-additive-explanations",
+        "tea:technique/permutation-importance",
+        "tea:technique/mean-decrease-impurity",
+        "tea:technique/coefficient-magnitudes-in-linear-models",
+        "tea:technique/integrated-gradients",
+        "tea:technique/deeplift",
+        "tea:technique/layer-wise-relevance-propagation",
+        "tea:technique/contextual-decomposition",
+        "tea:technique/taylor-decomposition",
+        "tea:technique/sobol-indices",
+        "tea:technique/local-interpretable-model-agnostic-explanations",
+        "tea:technique/ridge-regression-surrogates",
+        "tea:technique/partial-dependence-plots",
+        "tea:technique/individual-conditional-expectation-plots",
+        "tea:technique/saliency-maps",
+        "tea:technique/gradient-weighted-class-activation-mapping",
+        "tea:technique/occlusion-sensitivity",
+        "tea:technique/classical-attention-analysis-in-neural-networks",
+        "tea:technique/factor-analysis",
+        "tea:technique/principal-component-analysis",
+        "tea:technique/t-sne",
+        "tea:technique/umap",
+        "tea:technique/prototype-and-criticism-models",
+        "tea:technique/influence-functions",
+        "tea:technique/contrastive-explanation-method",
+        "tea:technique/anchor",
+        "tea:technique/rulefit",
+        "tea:technique/monte-carlo-dropout",
+        "tea:technique/out-of-distribution-detector-for-neural-networks",
+        "tea:technique/permutation-tests",
+        "tea:technique/model-distillation",
+        "tea:technique/generalized-additive-models",
+        "tea:technique/model-pruning",
+        "tea:technique/neuron-activation-analysis",
+        "tea:technique/prompt-sensitivity-analysis",
+        "tea:technique/causal-mediation-analysis-in-language-models",
+        "tea:technique/feature-attribution-with-integrated-gradients-in-nlp",
+        "tea:technique/concept-activation-vectors",
+        "tea:technique/attention-visualisation-in-transformers",
+        "tea:technique/chain-of-thought-faithfulness-evaluation",
+        "tea:technique/embedding-bias-analysis",
+        "tea:technique/multimodal-alignment-evaluation",
+        "tea:technique/prompt-robustness-testing",
+        "tea:technique/retrieval-augmented-generation-evaluation"
+      ]
+    },
+    {
+      "@id": "tea:goal/fairness",
+      "@type": "AssuranceGoal",
+      "name": "Fairness",
+      "slug": "fairness",
+      "description": "Ensuring AI systems treat different groups and individuals equitably.",
+      "techniqueCount": 61,
+      "hasTechnique": [
+        "tea:technique/shapley-additive-explanations",
+        "tea:technique/sobol-indices",
+        "tea:technique/saliency-maps",
+        "tea:technique/gradient-weighted-class-activation-mapping",
+        "tea:technique/prototype-and-criticism-models",
+        "tea:technique/influence-functions",
+        "tea:technique/demographic-parity-assessment",
+        "tea:technique/adversarial-debiasing",
+        "tea:technique/counterfactual-fairness-assessment",
+        "tea:technique/sensitivity-analysis-for-fairness",
+        "tea:technique/synthetic-data-generation",
+        "tea:technique/federated-learning",
+        "tea:technique/differential-privacy",
+        "tea:technique/prediction-intervals",
+        "tea:technique/quantile-regression",
+        "tea:technique/conformal-prediction",
+        "tea:technique/empirical-calibration",
+        "tea:technique/temperature-scaling",
+        "tea:technique/bootstrapping",
+        "tea:technique/jackknife-resampling",
+        "tea:technique/cross-validation",
+        "tea:technique/area-under-precision-recall-curve",
+        "tea:technique/internal-review-boards",
+        "tea:technique/red-teaming",
+        "tea:technique/anomaly-detection",
+        "tea:technique/human-in-the-loop-safeguards",
+        "tea:technique/model-cards",
+        "tea:technique/datasheets-for-datasets",
+        "tea:technique/neuron-activation-analysis",
+        "tea:technique/feature-attribution-with-integrated-gradients-in-nlp",
+        "tea:technique/concept-activation-vectors",
+        "tea:technique/attention-visualisation-in-transformers",
+        "tea:technique/reweighing",
+        "tea:technique/disparate-impact-remover",
+        "tea:technique/fairness-gan",
+        "tea:technique/relabelling",
+        "tea:technique/preferential-sampling",
+        "tea:technique/attribute-removal-fairness-through-unawareness",
+        "tea:technique/fair-adversarial-networks",
+        "tea:technique/prejudice-remover-regulariser",
+        "tea:technique/meta-fair-classifier",
+        "tea:technique/exponentiated-gradient-reduction",
+        "tea:technique/fair-transfer-learning",
+        "tea:technique/adaptive-sensitive-reweighting",
+        "tea:technique/multi-accuracy-boosting",
+        "tea:technique/equalised-odds-post-processing",
+        "tea:technique/threshold-optimiser",
+        "tea:technique/reject-option-classification",
+        "tea:technique/calibration-with-equality-of-opportunity",
+        "tea:technique/equal-opportunity-difference",
+        "tea:technique/average-odds-difference",
+        "tea:technique/path-specific-counterfactual-fairness-assessment",
+        "tea:technique/bayesian-fairness-regularization",
+        "tea:technique/agent-goal-misalignment-testing",
+        "tea:technique/continual-learning-stability-testing",
+        "tea:technique/embedding-bias-analysis",
+        "tea:technique/few-shot-fairness-evaluation",
+        "tea:technique/machine-unlearning",
+        "tea:technique/model-watermarking-and-theft-detection",
+        "tea:technique/prompt-robustness-testing",
+        "tea:technique/toxicity-and-bias-detection"
+      ]
+    },
+    {
+      "@id": "tea:goal/reliability",
+      "@type": "AssuranceGoal",
+      "name": "Reliability",
+      "slug": "reliability",
+      "description": "Building AI systems that perform consistently and predictably.",
+      "techniqueCount": 75,
+      "hasTechnique": [
+        "tea:technique/shapley-additive-explanations",
+        "tea:technique/permutation-importance",
+        "tea:technique/mean-decrease-impurity",
+        "tea:technique/monte-carlo-dropout",
+        "tea:technique/out-of-distribution-detector-for-neural-networks",
+        "tea:technique/permutation-tests",
+        "tea:technique/synthetic-data-generation",
+        "tea:technique/federated-learning",
+        "tea:technique/prediction-intervals",
+        "tea:technique/quantile-regression",
+        "tea:technique/conformal-prediction",
+        "tea:technique/empirical-calibration",
+        "tea:technique/temperature-scaling",
+        "tea:technique/deep-ensembles",
+        "tea:technique/bootstrapping",
+        "tea:technique/jackknife-resampling",
+        "tea:technique/cross-validation",
+        "tea:technique/area-under-precision-recall-curve",
+        "tea:technique/safety-envelope-testing",
+        "tea:technique/red-teaming",
+        "tea:technique/anomaly-detection",
+        "tea:technique/confidence-thresholding",
+        "tea:technique/runtime-monitoring-and-circuit-breakers",
+        "tea:technique/mlflow-experiment-tracking",
+        "tea:technique/data-version-control",
+        "tea:technique/automated-documentation-generation",
+        "tea:technique/model-distillation",
+        "tea:technique/monotonicity-constraints",
+        "tea:technique/intrinsically-interpretable-models",
+        "tea:technique/generalized-additive-models",
+        "tea:technique/model-pruning",
+        "tea:technique/prompt-sensitivity-analysis",
+        "tea:technique/causal-mediation-analysis-in-language-models",
+        "tea:technique/reweighing",
+        "tea:technique/disparate-impact-remover",
+        "tea:technique/fairness-gan",
+        "tea:technique/relabelling",
+        "tea:technique/preferential-sampling",
+        "tea:technique/fair-adversarial-networks",
+        "tea:technique/prejudice-remover-regulariser",
+        "tea:technique/meta-fair-classifier",
+        "tea:technique/exponentiated-gradient-reduction",
+        "tea:technique/fair-transfer-learning",
+        "tea:technique/adaptive-sensitive-reweighting",
+        "tea:technique/multi-accuracy-boosting",
+        "tea:technique/equalised-odds-post-processing",
+        "tea:technique/reject-option-classification",
+        "tea:technique/calibration-with-equality-of-opportunity",
+        "tea:technique/equal-opportunity-difference",
+        "tea:technique/average-odds-difference",
+        "tea:technique/path-specific-counterfactual-fairness-assessment",
+        "tea:technique/bayesian-fairness-regularization",
+        "tea:technique/model-development-audit-trails",
+        "tea:technique/adversarial-robustness-testing",
+        "tea:technique/adversarial-training-evaluation",
+        "tea:technique/agent-goal-misalignment-testing",
+        "tea:technique/chain-of-thought-faithfulness-evaluation",
+        "tea:technique/constitutional-ai-evaluation",
+        "tea:technique/continual-learning-stability-testing",
+        "tea:technique/data-poisoning-detection",
+        "tea:technique/few-shot-fairness-evaluation",
+        "tea:technique/hallucination-detection",
+        "tea:technique/safety-guardrails",
+        "tea:technique/jailbreak-resistance-testing",
+        "tea:technique/epistemic-uncertainty-quantification",
+        "tea:technique/multi-agent-system-testing",
+        "tea:technique/multimodal-alignment-evaluation",
+        "tea:technique/out-of-domain-detection",
+        "tea:technique/synthetic-data-evaluation",
+        "tea:technique/prompt-robustness-testing",
+        "tea:technique/prompt-injection-testing",
+        "tea:technique/retrieval-augmented-generation-evaluation",
+        "tea:technique/reward-hacking-detection",
+        "tea:technique/ai-agent-safety-testing",
+        "tea:technique/toxicity-and-bias-detection"
+      ]
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/explainability",
+      "@type": "Tag",
+      "prefLabel": "explainability",
+      "path": "assurance-goal-category/explainability",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category",
+      "narrower": [
+        "tea:tag/assurance-goal-category/explainability/attribution-methods",
+        "tea:tag/assurance-goal-category/explainability/explains",
+        "tea:tag/assurance-goal-category/explainability/property",
+        "tea:tag/assurance-goal-category/explainability/representation-analysis",
+        "tea:tag/assurance-goal-category/explainability/causal-analysis",
+        "tea:tag/assurance-goal-category/explainability/surrogate-models",
+        "tea:tag/assurance-goal-category/explainability/visualization-methods",
+        "tea:tag/assurance-goal-category/explainability/instance-based",
+        "tea:tag/assurance-goal-category/explainability/uncertainty-analysis",
+        "tea:tag/assurance-goal-category/explainability/model-simplification",
+        "tea:tag/assurance-goal-category/explainability/feature-analysis"
+      ]
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/explainability/attribution-methods/perturbation-based",
+      "@type": "Tag",
+      "prefLabel": "perturbation based",
+      "path": "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/explainability/attribution-methods"
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/explainability/explains/feature-importance",
+      "@type": "Tag",
+      "prefLabel": "feature importance",
+      "path": "assurance-goal-category/explainability/explains/feature-importance",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/explainability/explains"
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/explainability/property/completeness",
+      "@type": "Tag",
+      "prefLabel": "completeness",
+      "path": "assurance-goal-category/explainability/property/completeness",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/explainability/property"
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/explainability/property/consistency",
+      "@type": "Tag",
+      "prefLabel": "consistency",
+      "path": "assurance-goal-category/explainability/property/consistency",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/explainability/property"
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/fairness",
+      "@type": "Tag",
+      "prefLabel": "fairness",
+      "path": "assurance-goal-category/fairness",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category",
+      "narrower": [
+        "tea:tag/assurance-goal-category/fairness/group",
+        "tea:tag/assurance-goal-category/fairness/causal"
+      ]
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/reliability",
+      "@type": "Tag",
+      "prefLabel": "reliability",
+      "path": "assurance-goal-category/reliability",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category",
+      "narrower": [
+        "tea:tag/assurance-goal-category/reliability/uncertainty-quantification"
+      ]
+    },
+    {
+      "@id": "tea:tag/data-requirements/no-special-requirements",
+      "@type": "Tag",
+      "prefLabel": "no special requirements",
+      "path": "data-requirements/no-special-requirements",
+      "category": "data-requirements",
+      "broader": "tea:tag/data-requirements"
+    },
+    {
+      "@id": "tea:tag/data-type/any",
+      "@type": "Tag",
+      "prefLabel": "any",
+      "path": "data-type/any",
+      "category": "data-type",
+      "broader": "tea:tag/data-type"
+    },
+    {
+      "@id": "tea:tag/evidence-type/quantitative-metric",
+      "@type": "Tag",
+      "prefLabel": "quantitative metric",
+      "path": "evidence-type/quantitative-metric",
+      "category": "evidence-type",
+      "broader": "tea:tag/evidence-type"
+    },
+    {
+      "@id": "tea:tag/expertise-needed/statistics",
+      "@type": "Tag",
+      "prefLabel": "statistics",
+      "path": "expertise-needed/statistics",
+      "category": "expertise-needed",
+      "broader": "tea:tag/expertise-needed"
+    },
+    {
+      "@id": "tea:tag/explanatory-scope/global",
+      "@type": "Tag",
+      "prefLabel": "global",
+      "path": "explanatory-scope/global",
+      "category": "explanatory-scope",
+      "broader": "tea:tag/explanatory-scope"
+    },
+    {
+      "@id": "tea:tag/explanatory-scope/local",
+      "@type": "Tag",
+      "prefLabel": "local",
+      "path": "explanatory-scope/local",
+      "category": "explanatory-scope",
+      "broader": "tea:tag/explanatory-scope"
+    },
+    {
+      "@id": "tea:tag/lifecycle-stage/model-development",
+      "@type": "Tag",
+      "prefLabel": "model development",
+      "path": "lifecycle-stage/model-development",
+      "category": "lifecycle-stage",
+      "broader": "tea:tag/lifecycle-stage",
+      "narrower": [
+        "tea:tag/lifecycle-stage/model-development/training",
+        "tea:tag/lifecycle-stage/model-development/fine-tuning",
+        "tea:tag/lifecycle-stage/model-development/testing"
+      ]
+    },
+    {
+      "@id": "tea:tag/technique-type/algorithmic",
+      "@type": "Tag",
+      "prefLabel": "algorithmic",
+      "path": "technique-type/algorithmic",
+      "category": "technique-type",
+      "broader": "tea:tag/technique-type"
+    },
+    {
+      "@id": "tea:tag/applicable-models/architecture/model-agnostic",
+      "@type": "Tag",
+      "prefLabel": "model agnostic",
+      "path": "applicable-models/architecture/model-agnostic",
+      "category": "applicable-models",
+      "broader": "tea:tag/applicable-models/architecture"
+    },
+    {
+      "@id": "tea:tag/applicable-models/requirements/black-box",
+      "@type": "Tag",
+      "prefLabel": "black box",
+      "path": "applicable-models/requirements/black-box",
+      "category": "applicable-models",
+      "broader": "tea:tag/applicable-models/requirements"
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/explainability/property/fidelity",
+      "@type": "Tag",
+      "prefLabel": "fidelity",
+      "path": "assurance-goal-category/explainability/property/fidelity",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/explainability/property"
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/explainability/attribution-methods/model-specific",
+      "@type": "Tag",
+      "prefLabel": "model specific",
+      "path": "assurance-goal-category/explainability/attribution-methods/model-specific",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/explainability/attribution-methods"
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/explainability/property/efficiency",
+      "@type": "Tag",
+      "prefLabel": "efficiency",
+      "path": "assurance-goal-category/explainability/property/efficiency",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/explainability/property"
+    },
+    {
+      "@id": "tea:tag/data-type/tabular",
+      "@type": "Tag",
+      "prefLabel": "tabular",
+      "path": "data-type/tabular",
+      "category": "data-type",
+      "broader": "tea:tag/data-type"
+    },
+    {
+      "@id": "tea:tag/applicable-models/architecture/tree-based",
+      "@type": "Tag",
+      "prefLabel": "tree based",
+      "path": "applicable-models/architecture/tree-based",
+      "category": "applicable-models",
+      "broader": "tea:tag/applicable-models/architecture",
+      "narrower": [
+        "tea:tag/applicable-models/architecture/tree-based/gradient-boosting"
+      ]
+    },
+    {
+      "@id": "tea:tag/applicable-models/paradigm/supervised",
+      "@type": "Tag",
+      "prefLabel": "supervised",
+      "path": "applicable-models/paradigm/supervised",
+      "category": "applicable-models",
+      "broader": "tea:tag/applicable-models/paradigm"
+    },
+    {
+      "@id": "tea:tag/applicable-models/requirements/white-box",
+      "@type": "Tag",
+      "prefLabel": "white box",
+      "path": "applicable-models/requirements/white-box",
+      "category": "applicable-models",
+      "broader": "tea:tag/applicable-models/requirements"
+    },
+    {
+      "@id": "tea:resource/shapShap2016",
+      "@type": "Resource",
+      "name": "shap",
+      "citationKey": "shapShap2016",
+      "url": "https://github.com/shap/shap",
+      "sourceType": "software_package",
+      "publicationDate": "2016-11-22",
+      "abstract": "A game theoretic approach to explain the output of any machine learning model."
+    },
+    {
+      "@id": "tea:resource/xai-tutorialsdevelopersIntroductionSHapleyAdditive2023",
+      "@type": "Resource",
+      "name": "Introduction to SHapley Additive exPlanations (SHAP) — XAI Tutorials",
+      "citationKey": "xai-tutorialsdevelopersIntroductionSHapleyAdditive2023",
+      "url": "https://xai-tutorials.readthedocs.io/en/latest/_model_agnostic_xai/shap.html",
+      "sourceType": "documentation",
+      "authors": ["Xai-tutorials Developers"],
+      "publicationDate": "2023"
+    },
+    {
+      "@id": "tea:resource/yuanEmpiricalStudyEffect2022",
+      "@type": "Resource",
+      "name": "An empirical study of the effect of background data size on the stability of SHapley Additive exPlanations (SHAP) for deep learning models",
+      "citationKey": "yuanEmpiricalStudyEffect2022",
+      "url": "http://arxiv.org/abs/2204.11351v3",
+      "sourceType": "technical_paper",
+      "authors": [
+        "Han Yuan",
+        "Mingxuan Liu",
+        "Lican Kang",
+        "Chenkui Miao",
+        "Ying Wu"
+      ],
+      "publicationDate": "2022-04-24",
+      "abstract": "Nowadays, the interpretation of why a machine learning (ML) model makes certain inferences is as crucial as the accuracy of such inferences. Some ML models like the decision tree possess inherent interpretability that can be directly comprehended by humans. Others like artificial neural networks (ANN), however, rely on external methods to uncover the deduction mechanism. SHapley Additive exPlanations (SHAP) is one of such external methods, which requires a background dataset when interpreting ANNs. Generally, a background dataset consists of instances randomly sampled from the training dataset. However, the sampling size and its effect on SHAP remain to be unexplored. In our empirical study on the MIMIC-III dataset, we show that the two core explanations - SHAP values and variable rankings fluctuate when using different background datasets acquired from random sampling, indicating that users cannot unquestioningly trust the one-shot interpretation from SHAP. Luckily, such fluctuation decreases with the increase of the background dataset size. Also, we notice an U-shape in the stability assessment of SHAP variable rankings, demonstrating that SHAP is more reliable in ranking the most and least important variables compared to moderately important ones. Overall, our results suggest that users should take into account how background data affects SHAP results, with improved SHAP stability as the background sample size increases."
+    },
+    {
+      "@id": "tea:resource/lopezSHAPShapleyAdditive2021",
+      "@type": "Resource",
+      "name": "SHAP: Shapley Additive Explanations | Towards Data Science",
+      "citationKey": "lopezSHAPShapleyAdditive2021",
+      "url": "https://towardsdatascience.com/shap-shapley-additive-explanations-5a2a271ed9c3",
+      "sourceType": "tutorial",
+      "authors": ["Fernando López"],
+      "publicationDate": "2021-07-11"
+    },
+    {
+      "@id": "tea:resource/maifShapash2020",
+      "@type": "Resource",
+      "name": "shapash",
+      "citationKey": "maifShapash2020",
+      "url": "https://github.com/MAIF/shapash",
+      "sourceType": "software_package",
+      "publicationDate": "2020-04-29",
+      "abstract": "🔅 Shapash: User-friendly Explainability and Interpretability to Develop Reliable and Transparent Machine Learning Models"
+    }
+  ]
+}

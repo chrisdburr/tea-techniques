@@ -1,0 +1,120 @@
+import {
+MDXPageLayout,
+generateMetadataFromFrontmatter,
+} from '@/components/layout/mdx-page-layout';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from 'next/link';
+
+export const frontmatter = {
+  title: 'Knowledge Graph',
+  description: 'The TEA Techniques dataset as a structured knowledge graph with JSON-LD vocabulary and MCP server',
+  breadcrumbs: [
+    { label: 'Home', href: '/' },
+    { label: 'Docs', href: '/docs' },
+    { label: 'Knowledge Graph', href: '/docs/knowledge-graph' }
+  ],
+  publishedAt: '2025-02-04',
+  updatedAt: '2025-02-04'
+};
+
+export const dynamic = 'force-static';
+export const metadata = generateMetadataFromFrontmatter(frontmatter);
+
+export default function KnowledgeGraphPage({ children }) {
+  return <MDXPageLayout frontmatter={frontmatter}>{children}</MDXPageLayout>;
+}
+
+<Callout variant="info" title="About">
+  The TEA Techniques knowledge graph formalises the dataset as a linked data structure, enabling structured queries, AI-powered discovery, and integration with the TEA Platform.
+</Callout>
+
+## Overview
+
+The TEA Techniques knowledge graph represents techniques, assurance goals, tags, and academic resources as interconnected entities. It is available in two forms:
+
+- **Static JSON-LD files** served via GitHub Pages for programmatic access
+- **MCP server** for AI-powered technique discovery via Claude and other LLM tools
+
+### Entity Types
+
+| Entity | Count | Description |
+|--------|-------|-------------|
+| **Technique** | 121 | AI assurance techniques with metadata, ratings, and relationships |
+| **Assurance Goal** | 7 | High-level goals: Explainability, Fairness, Privacy, Reliability, Safety, Security, Transparency |
+| **Tag** | 194 | Hierarchical taxonomy covering model types, data types, lifecycle stages, and more |
+| **Resource** | 456 | Academic papers, software packages, and documentation |
+
+### Relationships
+
+The knowledge graph captures four types of relationships between entities:
+
+- **Technique → Goal** — Which assurance goals a technique addresses
+- **Technique → Tag** — Classification tags from the hierarchical taxonomy
+- **Technique → Technique** — Explicit relatedness links between techniques
+- **Technique → Resource** — Academic citations and software references
+
+## JSON-LD Vocabulary
+
+The graph uses a custom namespace with mappings to established vocabularies:
+
+| Prefix | Namespace | Usage |
+|--------|-----------|-------|
+| `tea:` | `https://alan-turing-institute.github.io/tea-techniques/ns/` | Entity IRIs and custom predicates |
+| `schema:` | `https://schema.org/` | Standard properties (name, description, url) |
+| `skos:` | `http://www.w3.org/2004/02/skos/core#` | Tag taxonomy hierarchy (broader, narrower) |
+
+### Entity IRI Patterns
+
+```
+tea:technique/{slug}              e.g. tea:technique/shapley-additive-explanations
+tea:goal/{slug}                   e.g. tea:goal/explainability
+tea:tag/{category}/{path}         e.g. tea:tag/applicable-models/architecture/model-agnostic
+tea:resource/{citationKey}        e.g. tea:resource/shapShap2016
+```
+
+## Static JSON-LD Endpoints
+
+All JSON-LD files are served from GitHub Pages at:
+
+```
+https://alan-turing-institute.github.io/tea-techniques/data/ld/
+```
+
+| Endpoint | Description |
+|----------|-------------|
+| `graph.jsonld` | Complete knowledge graph (all entities in a single `@graph` array) |
+| `techniques.jsonld` | All techniques collection |
+| `techniques/{slug}.jsonld` | Individual technique documents |
+| `goals.jsonld` | All assurance goals |
+| `goals/{slug}.jsonld` | Individual goal documents |
+| `tags.jsonld` | Full tag taxonomy |
+| `resources.jsonld` | All academic resources |
+| `context.jsonld` | JSON-LD `@context` document |
+| `index.json` | API discovery document with entity counts |
+
+## MCP Server
+
+The TEA Techniques MCP server provides 10 tools for AI-powered technique discovery, comparison, and research queries. It runs locally and fetches data from the public GitHub Pages endpoint.
+
+<Link href="/docs/knowledge-graph/mcp-server">
+  View MCP Server setup guide and tool reference →
+</Link>
+
+### Tool Categories
+
+**Discovery tools** — Find and explore techniques:
+- `find_techniques` — Multi-dimensional search and filter
+- `get_technique` — Full technique details by slug
+- `compare_techniques` — Side-by-side comparison of 2-5 techniques
+- `find_related` — Explore technique relationships
+
+**Platform tools** — TEA Platform integration:
+- `suggest_techniques_for_claim` — Match assurance claims to relevant techniques
+- `find_evidence_types` — Explore evidence types and producing techniques
+
+**Research tools** — Dataset analysis:
+- `explore_taxonomy` — Navigate the hierarchical tag taxonomy
+- `coverage_statistics` — Analyse coverage across dimensions
+- `search_resources` — Search academic resources
+- `get_knowledge_graph_summary` — High-level graph statistics

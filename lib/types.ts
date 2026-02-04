@@ -9,12 +9,10 @@ export interface Technique {
   example_use_cases?: ExampleUseCase[];
   limitations?: Limitation[];
   resources?: Resource[] | string[];
-  ratings?: {
-    complexity?: number;
-    computational_cost?: number;
-  };
-  implementation_details?: string;
-  related_technique_ids?: string[];
+  complexity_rating?: number;
+  computational_cost_rating?: number;
+  acronym?: string;
+  related_techniques?: string[];
 }
 
 export interface ExampleUseCase {

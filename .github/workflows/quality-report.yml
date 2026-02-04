@@ -1,0 +1,141 @@
+name: Data Quality Report
+
+on:
+  schedule:
+    # Run fortnightly on Monday at 09:00 UTC
+    - cron: '0 9 1,15 * *'
+  workflow_dispatch: # Allow manual triggering
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  quality-report:
+    name: Generate Quality Report
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate quality report
+        run: pnpm quality-report --output reports/quality-report.json
+
+      - name: Build summary for issue
+        id: summary
+        run: |
+          node -e "
+            import fs from 'node:fs/promises';
+            const r = JSON.parse(await fs.readFile('reports/quality-report.json', 'utf-8'));
+            const s = r.summary;
+
+            const goalRows = Object.entries(s.techniques_by_goal)
+              .sort(([,a],[,b]) => b - a)
+              .map(([g, c]) => '| ' + g + ' | ' + c + ' |')
+              .join('\n');
+
+            const bottom10 = r.completeness_scores.slice(0, 10)
+              .map(t => '| ' + t.name + ' | ' + t.score.toFixed(1) + ' | ' + t.issues.length + ' |')
+              .join('\n');
+
+            const body = [
+              '## Data Quality Report',
+              '',
+              '**Generated:** ' + r.generated_at,
+              '**Dataset:** ' + r.dataset_version.technique_count + ' techniques, ' + r.dataset_version.tag_count + ' unique tags',
+              '',
+              '### Summary',
+              '',
+              '| Metric | Value |',
+              '|---|---|',
+              '| Average completeness score | ' + s.avg_completeness_score + '/100 |',
+              '| Techniques with issues | ' + s.techniques_with_issues + '/' + s.total_techniques + ' |',
+              '| Total issues | ' + s.total_issues + ' |',
+              '| Universal tag gaps | ' + r.tag_coverage.universal_gaps.length + ' |',
+              '| Goal-conditional gaps | ' + r.tag_coverage.goal_conditional_gaps.length + ' |',
+              '| Statistical outliers | ' + r.tag_coverage.statistical_outliers.length + ' |',
+              '| Asymmetric relationships | ' + r.cross_references.asymmetric_relationships.length + ' |',
+              '| Orphan techniques | ' + r.cross_references.orphan_techniques.length + ' |',
+              '',
+              '### Techniques by Goal',
+              '',
+              '| Goal | Count |',
+              '|---|---|',
+              goalRows,
+              '',
+              '### Lowest Scoring Techniques',
+              '',
+              '| Technique | Score | Issues |',
+              '|---|---|---|',
+              bottom10,
+              '',
+              '---',
+              '*Full report committed to \`reports/quality-report.json\`*',
+            ].join('\n');
+
+            // Write to GitHub Actions output file
+            const outputFile = process.env.GITHUB_OUTPUT;
+            if (outputFile) {
+              const delimiter = 'EOF_' + Math.random().toString(36).slice(2);
+              await fs.appendFile(outputFile, 'body<<' + delimiter + '\n' + body + '\n' + delimiter + '\n');
+            }
+          "
+
+      - name: Commit report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/quality-report.json
+          git diff --cached --quiet || git commit -m "chore: update data quality report [skip ci]"
+          git push
+
+      - name: Create or update issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = '📊 Data Quality Report';
+            const labels = ['data-quality', 'automated'];
+            const body = `${{ steps.summary.outputs.body }}`;
+
+            // Find existing open issue
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: labels.join(','),
+            });
+
+            const existing = issues.find(i => i.title === title);
+
+            if (existing) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body,
+              });
+              core.info(`Updated issue #${existing.number}`);
+            } else {
+              const { data: issue } = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels,
+              });
+              core.info(`Created issue #${issue.number}`);
+            }

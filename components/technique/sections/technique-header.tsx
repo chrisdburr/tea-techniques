@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { TutorialBadge } from '@/components/technique/tutorial-badge';
 import GoalIcon from '@/components/ui/goal-icon';
 import type { Technique } from '@/lib/types';
 
@@ -13,7 +14,7 @@ export function TechniqueHeader({ technique }: TechniqueHeaderProps) {
         {technique.name}
       </h1>
 
-      {/* Assurance Goals */}
+      {/* Assurance Goals and Tutorial Badge */}
       <div className="flex flex-wrap items-center gap-3">
         {technique.assurance_goals?.map((goal) => (
           <Link
@@ -26,6 +27,7 @@ export function TechniqueHeader({ technique }: TechniqueHeaderProps) {
             <span>{goal}</span>
           </Link>
         ))}
+        <TutorialBadge techniqueSlug={technique.slug} />
       </div>
     </div>
   );

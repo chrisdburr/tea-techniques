@@ -13,6 +13,7 @@
     "dev": "next dev",
     "format": "ultracite format",
     "generate-data": "node scripts/generate-static-data.js",
+    "generate-diagrams": "mmdc -i docs/diagrams/kg-schema.mmd -o public/images/diagrams/kg-schema-light.svg -t default && mmdc -i docs/diagrams/kg-schema.mmd -o public/images/diagrams/kg-schema-dark.svg -t dark && mmdc -i docs/diagrams/mcp-architecture.mmd -o public/images/diagrams/mcp-architecture-light.svg -t default && mmdc -i docs/diagrams/mcp-architecture.mmd -o public/images/diagrams/mcp-architecture-dark.svg -t dark",
     "generate-jsonld": "node scripts/generate-jsonld.js",
     "generate-schemas": "node scripts/generate-schemas.js",
     "generate-sitemap": "node scripts/generate-sitemap.js",
@@ -68,6 +69,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.1.2",
     "@lhci/cli": "^0.15.1",
+    "@mermaid-js/mermaid-cli": "^11.12.0",
     "@next/bundle-analyzer": "^15.4.4",
     "@playwright/test": "^1.54.1",
     "@tailwindcss/typography": "^0.5.16",
@@ -81,7 +83,6 @@
     "chalk": "^5.3.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
-    "playwright": "^1.54.1",
     "postcss": "^8.5.0",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",

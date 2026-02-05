@@ -1,0 +1,24 @@
+erDiagram
+    TECHNIQUE ||--o{ GOAL : "addressesGoal"
+    TECHNIQUE ||--o{ TAG : "hasTag"
+    TECHNIQUE ||--o{ TECHNIQUE : "relatedTo"
+    TECHNIQUE ||--o{ RESOURCE : "citesResource"
+
+    TECHNIQUE {
+        string slug PK
+        string name
+        string description
+        int complexityRating
+    }
+    GOAL {
+        string slug PK
+        string name
+    }
+    TAG {
+        string path PK
+        string category
+    }
+    RESOURCE {
+        string citationKey PK
+        string sourceType
+    }

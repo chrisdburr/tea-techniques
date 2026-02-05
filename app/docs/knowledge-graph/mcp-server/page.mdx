@@ -1,21 +1,23 @@
 import {
-MDXPageLayout,
-generateMetadataFromFrontmatter,
+  MDXPageLayout,
+  generateMetadataFromFrontmatter,
 } from '@/components/layout/mdx-page-layout';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export const frontmatter = {
   title: 'MCP Server',
-  description: 'Setup guide and tool reference for the TEA Techniques MCP server',
+  description:
+    'Setup guide and tool reference for the TEA Techniques MCP server',
   breadcrumbs: [
     { label: 'Home', href: '/' },
     { label: 'Docs', href: '/docs' },
     { label: 'Knowledge Graph', href: '/docs/knowledge-graph' },
-    { label: 'MCP Server', href: '/docs/knowledge-graph/mcp-server' }
+    { label: 'MCP Server', href: '/docs/knowledge-graph/mcp-server' },
   ],
   publishedAt: '2025-02-04',
-  updatedAt: '2025-02-04'
+  updatedAt: '2025-02-05',
 };
 
 export const dynamic = 'force-static';
@@ -25,27 +27,50 @@ export default function McpServerPage({ children }) {
   return <MDXPageLayout frontmatter={frontmatter}>{children}</MDXPageLayout>;
 }
 
-<Callout variant="info" title="About">
-  The TEA Techniques MCP server lets AI assistants like Claude discover, compare, and analyse AI assurance techniques through 10 specialised tools.
+<Callout variant="info" title="What is MCP?">
+  The [Model Context Protocol (MCP)](https://modelcontextprotocol.io/docs/getting-started/intro) is an open standard that lets AI assistants like Claude
+  connect to external data sources. The TEA Techniques MCP server gives Claude direct access
+  to our knowledge graph—enabling conversational discovery of all TEA techniques.
 </Callout>
 
-## Setup
+## Why Use the MCP Server?
+
+Instead of manually browsing pages or writing API queries, you can ask an AI agent questions in natural language:
+
+| Task | Manual Approach | With MCP |
+|------|-----------------|----------|
+| Find fairness techniques for neural networks | Browse categories, filter manually, read each page | *"Find fairness techniques that work with neural networks"* |
+| Compare SHAP vs LIME | Open two tabs, compare side by side | *"Compare SHAP and LIME and help me evaluate which is the best one for my use case"* |
+| Find evidence for an assurance claim | Search docs, map techniques to claims | *"What techniques support the claim that our model treats all groups fairly?"* |
+| Explore related techniques | Follow links manually | *"What techniques are related to SHAP?"* |
+
+## How It Works
+
+<ThemedDiagram name="mcp-architecture" alt="Architecture diagram showing Claude connected to MCP Server which fetches from the Knowledge Graph" />
+
+The MCP server runs locally on your machine and provides 10 tools that Claude can call. When you ask a question, Claude selects the appropriate tools, the server queries the knowledge graph, and Claude synthesises the results into a helpful response.
+
+## Quick Start
 
 ### Prerequisites
 
 - Node.js 18+
-- The TEA Techniques repository cloned locally
+- TEA Techniques repository cloned locally
 
-### Install Dependencies
+### Install & Configure
 
 ```bash
 cd mcp-server
 pnpm install
 ```
 
-### Configure in Claude Code
-
-Add the following to your project's `.mcp.json`:
+<Tabs defaultValue="claude-code">
+  <TabsList>
+    <TabsTrigger value="claude-code">Claude Code</TabsTrigger>
+    <TabsTrigger value="claude-desktop">Claude Desktop</TabsTrigger>
+  </TabsList>
+  <TabsContent value="claude-code">
+Add to your project's `.mcp.json`:
 
 ```json
 {
@@ -58,19 +83,11 @@ Add the following to your project's `.mcp.json`:
   }
 }
 ```
+  </TabsContent>
+  <TabsContent value="claude-desktop">
+Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
 
-### Configure in Claude Desktop
-
-Add to your Claude Desktop configuration file:
-
-<Tabs defaultValue="mac">
-  <TabsList>
-    <TabsTrigger value="mac">macOS</TabsTrigger>
-    <TabsTrigger value="win">Windows</TabsTrigger>
-  </TabsList>
-  <TabsContent value="mac">
 ```json
-// ~/Library/Application Support/Claude/claude_desktop_config.json
 {
   "mcpServers": {
     "tea-techniques": {
@@ -81,66 +98,133 @@ Add to your Claude Desktop configuration file:
 }
 ```
   </TabsContent>
-  <TabsContent value="win">
-```json
-// %APPDATA%\Claude\claude_desktop_config.json
-{
-  "mcpServers": {
-    "tea-techniques": {
-      "command": "npx",
-      "args": ["tsx", "C:\\path\\to\\tea-techniques\\mcp-server\\src\\index.ts"]
-    }
-  }
-}
-```
-  </TabsContent>
 </Tabs>
 
-### Verify
+After configuring, restart Claude. You should see 10 tools prefixed with `mcp__tea-techniques__`.
 
-After configuring, restart Claude and ask it to list available tools. You should see 10 tools prefixed with the server name.
+---
 
-### Data Source
+## Workflow Examples
 
-The server fetches the knowledge graph from:
+### Discovering Techniques for a Use Case
 
-```
-https://alan-turing-institute.github.io/tea-techniques/data/ld/graph.jsonld
-```
+<Card className="mb-4">
+  <CardHeader>
+    <CardTitle className="text-base">Scenario: Building a credit scoring model that needs explainable decisions</CardTitle>
+  </CardHeader>
+  <CardContent className="text-sm space-y-4">
+    <div>
+      <span className="font-medium">You:</span> I'm building a credit scoring model using gradient boosting. What techniques can help me explain individual decisions to applicants?
+    </div>
+    <div className="text-muted-foreground">
+      <span className="font-medium">Claude</span> uses `find_techniques` with goals=["explainability"], tags=["tree-based"]
+    </div>
+    <div>
+      <span className="font-medium">Claude:</span> Based on your needs, here are relevant techniques:
+      <ul className="list-disc ml-4 mt-2">
+        <li><strong>SHAP</strong> — Quantifies each feature's contribution using game-theoretic principles.</li>
+        <li><strong>LIME</strong> — Creates simple local explanations by approximating the model.</li>
+        <li><strong>Permutation Importance</strong> — Measures feature importance by shuffling values.</li>
+      </ul>
+    </div>
+    <div>
+      <span className="font-medium">You:</span> How do SHAP and LIME compare?
+    </div>
+    <div className="text-muted-foreground">
+      <span className="font-medium">Claude</span> uses `compare_techniques` with slugs=["shapley-additive-explanations", "local-interpretable-model-agnostic-explanations"]
+    </div>
+    <div>
+      <span className="font-medium">Claude:</span> SHAP provides theoretically grounded explanations with consistency guarantees but is more computationally expensive. LIME is simpler and faster but may produce less stable explanations.
+    </div>
+  </CardContent>
+</Card>
 
-Data is cached locally in `~/.cache/tea-techniques-mcp/` for 24 hours. Use the `--local` flag to load from local project files instead:
+### Building Assurance Evidence
 
-```bash
-npx tsx mcp-server/src/index.ts --local
-```
+<Card className="mb-4">
+  <CardHeader>
+    <CardTitle className="text-base">Scenario: Demonstrating your model doesn't discriminate</CardTitle>
+  </CardHeader>
+  <CardContent className="text-sm space-y-4">
+    <div>
+      <span className="font-medium">You:</span> What types of evidence can fairness techniques produce?
+    </div>
+    <div className="text-muted-foreground">
+      <span className="font-medium">Claude</span> uses `find_evidence_types`
+    </div>
+    <div>
+      <span className="font-medium">Claude:</span> Fairness techniques can produce:
+      <ul className="list-disc ml-4 mt-2">
+        <li><strong>Fairness metrics</strong> (16 techniques) — Demographic parity, equalised odds</li>
+        <li><strong>Quantitative metrics</strong> (98 techniques) — Statistical measures of behaviour</li>
+        <li><strong>Qualitative reports</strong> (15 techniques) — Human review and documentation</li>
+      </ul>
+    </div>
+    <div>
+      <span className="font-medium">You:</span> Show me techniques that produce fairness metrics for neural networks.
+    </div>
+    <div className="text-muted-foreground">
+      <span className="font-medium">Claude</span> uses `find_techniques` with goals=["fairness"], tags=["neural-network", "quantitative-metric"]
+    </div>
+  </CardContent>
+</Card>
+
+### Research and Exploration
+
+<Card className="mb-4">
+  <CardHeader>
+    <CardTitle className="text-base">Scenario: Understanding the AI assurance landscape</CardTitle>
+  </CardHeader>
+  <CardContent className="text-sm space-y-4">
+    <div>
+      <span className="font-medium">You:</span> Give me an overview of the TEA Techniques knowledge graph.
+    </div>
+    <div className="text-muted-foreground">
+      <span className="font-medium">Claude</span> uses `get_knowledge_graph_summary`
+    </div>
+    <div>
+      <span className="font-medium">Claude:</span> The knowledge graph contains 121 techniques across 7 assurance goals, with 456 academic resources and 194 tags in a hierarchical taxonomy.
+    </div>
+    <div>
+      <span className="font-medium">You:</span> Which goal has the most techniques?
+    </div>
+    <div className="text-muted-foreground">
+      <span className="font-medium">Claude</span> uses `coverage_statistics` with dimension="goals"
+    </div>
+    <div>
+      <span className="font-medium">Claude:</span> Reliability has the most coverage (75 techniques), followed by Transparency (69) and Fairness (61). Privacy has the least (11).
+    </div>
+  </CardContent>
+</Card>
 
 ---
 
 ## Tool Reference
 
-### find_techniques
+### Discovery Tools
 
-<Badge variant="secondary">Discovery</Badge>
+Tools for finding and exploring techniques.
 
-Search and filter techniques by query text, assurance goals, tags, complexity, and more.
+#### find_techniques
+
+<Badge variant="secondary">Primary Search</Badge>
+
+Search and filter techniques by query text, assurance goals, and tags.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `query` | string (optional) | Free-text search across names and descriptions |
-| `goals` | string[] (optional) | Filter by goal slugs (e.g. `["explainability", "fairness"]`) |
-| `tags` | string[] (optional) | Filter by tag path fragments (e.g. `["model-agnostic"]`) |
-| `maxComplexity` | number (optional) | Maximum complexity rating 1-5 |
-| `limit` | number (optional) | Max results, default 20 |
-
-**Example:** "Find explainability techniques for neural networks with complexity under 3"
+| `query` | string | Free-text search across names and descriptions |
+| `goals` | string[] | Filter by goal slugs (e.g. `["explainability", "fairness"]`) |
+| `tags` | string[] | Filter by tag fragments (e.g. `["model-agnostic", "tabular"]`) |
+| `limit` | number | Max results (default 20) |
 
 ---
 
-### get_technique
+#### get_technique
 
-<Badge variant="secondary">Discovery</Badge>
+<Badge variant="secondary">Detail View</Badge>
 
-Get full details of a specific technique including goals, tags, use cases, limitations, related techniques, and resources.
+Get full details of a technique: goals, tags, use cases, limitations, related techniques, and resources.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
@@ -148,53 +232,53 @@ Get full details of a specific technique including goals, tags, use cases, limit
 
 ---
 
-### compare_techniques
+#### compare_techniques
 
-<Badge variant="secondary">Discovery</Badge>
+<Badge variant="secondary">Side-by-Side</Badge>
 
-Side-by-side comparison of 2-5 techniques across goals, tag categories, complexity, computational cost, and resource counts.
+Compare 2-5 techniques across goals, tags, and resources.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `slugs` | string[] | Array of 2-5 technique slugs to compare |
-
-**Example:** "Compare SHAP, LIME, and permutation importance"
+| `slugs` | string[] | Array of 2-5 technique slugs |
 
 ---
 
-### find_related
+#### find_related
 
-<Badge variant="secondary">Discovery</Badge>
+<Badge variant="secondary">Exploration</Badge>
 
 Find techniques related via explicit links, shared goals, or shared tags.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `slug` | string | Technique slug to find relatives for |
-| `depth` | number (optional) | 1 = explicit + same-goal, 2 = also same-tag (default 1) |
+| `depth` | number | 1 = explicit + same-goal, 2 = also same-tag (default 1) |
 
 ---
 
-### suggest_techniques_for_claim
+### Platform Integration Tools
 
-<Badge variant="secondary">Platform</Badge>
+Tools for connecting techniques to assurance arguments.
 
-Given an assurance claim, suggest relevant techniques. Uses keyword matching to identify relevant goals, then filters by optional system context.
+#### suggest_techniques_for_claim
+
+<Badge variant="secondary">Claim Matching</Badge>
+
+Given an assurance claim, suggest relevant techniques based on keyword matching.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `claim` | string | Assurance claim text (e.g. "the model treats all groups fairly") |
-| `modelType` | string (optional) | Model type context (e.g. `neural-network`) |
-| `dataType` | string (optional) | Data type context (e.g. `tabular`) |
-| `lifecycleStage` | string (optional) | Lifecycle stage (e.g. `model-development`) |
-
-**Example:** "Suggest techniques for the claim 'our model predictions can be explained to end users' for a neural network on tabular data"
+| `modelType` | string | Model type context (e.g. `neural-network`) |
+| `dataType` | string | Data type context (e.g. `tabular`) |
+| `lifecycleStage` | string | Lifecycle stage (e.g. `model-development`) |
 
 ---
 
-### find_evidence_types
+#### find_evidence_types
 
-<Badge variant="secondary">Platform</Badge>
+<Badge variant="secondary">Evidence Discovery</Badge>
 
 Explore what types of evidence techniques can produce, with example techniques for each type.
 
@@ -202,22 +286,26 @@ No parameters required.
 
 ---
 
-### explore_taxonomy
+### Research Tools
 
-<Badge variant="secondary">Research</Badge>
+Tools for analysing the dataset and finding resources.
+
+#### explore_taxonomy
+
+<Badge variant="secondary">Navigation</Badge>
 
 Navigate the hierarchical tag taxonomy. Call with no path to see top-level categories.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `path` | string (optional) | Tag path to explore (e.g. `applicable-models`) |
-| `includeTechniques` | boolean (optional) | Include technique names for each tag |
+| `path` | string | Tag path to explore (e.g. `applicable-models`) |
+| `includeTechniques` | boolean | Include technique names for each tag |
 
 ---
 
-### coverage_statistics
+#### coverage_statistics
 
-<Badge variant="secondary">Research</Badge>
+<Badge variant="secondary">Analysis</Badge>
 
 Analyse dataset coverage across a chosen dimension.
 
@@ -227,24 +315,24 @@ Analyse dataset coverage across a chosen dimension.
 
 ---
 
-### search_resources
+#### search_resources
 
-<Badge variant="secondary">Research</Badge>
+<Badge variant="secondary">Literature</Badge>
 
 Search academic resources (papers, software, documentation).
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `query` | string (optional) | Free-text search across titles, abstracts, and authors |
-| `type` | enum (optional) | Filter by type: `technical_paper`, `software_package`, `documentation`, `tutorial` |
-| `technique` | string (optional) | Filter by technique slug |
-| `limit` | number (optional) | Max results, default 20 |
+| `query` | string | Free-text search across titles, abstracts, and authors |
+| `type` | enum | Filter by type: `technical_paper`, `software_package`, `documentation`, `tutorial` |
+| `technique` | string | Filter by technique slug to get its cited resources |
+| `limit` | number | Max results (default 20) |
 
 ---
 
-### get_knowledge_graph_summary
+#### get_knowledge_graph_summary
 
-<Badge variant="secondary">Research</Badge>
+<Badge variant="secondary">Overview</Badge>
 
 High-level statistics: entity counts and relationship counts across the entire graph.
 
@@ -252,21 +340,16 @@ No parameters required.
 
 ---
 
-## Example Queries
+## Data Source
 
-Here are example prompts to try with the MCP server:
+The server fetches from the public knowledge graph:
 
-**Discovery:**
-- "What explainability techniques work with tree-based models?"
-- "Compare SHAP and LIME side by side"
-- "What techniques are related to counterfactual explanations?"
+```
+https://alan-turing-institute.github.io/tea-techniques/data/ld/graph.jsonld
+```
 
-**Platform integration:**
-- "Suggest techniques to support the claim: our model does not discriminate based on protected characteristics"
-- "What types of evidence can fairness techniques produce?"
+Data is cached locally in `~/.cache/tea-techniques-mcp/` for 24 hours. Use `--local` to load from project files during development:
 
-**Research:**
-- "Show me the tag taxonomy for applicable models"
-- "Which assurance goals have the most techniques?"
-- "Find papers about differential privacy"
-- "Give me an overview of the knowledge graph"
+```bash
+npx tsx mcp-server/src/index.ts --local
+```

@@ -20,7 +20,9 @@ const LANGUAGE_REGEX = /language-/;
 import { Callout } from '@/components/mdx/callout';
 import { CodeBlock } from '@/components/mdx/code-block';
 import { IconHeading } from '@/components/mdx/icon-heading';
+import { KnowledgeGraphStats } from '@/components/mdx/knowledge-graph-stats';
 import { LinkCard } from '@/components/mdx/link-card';
+import { ThemedDiagram } from '@/components/mdx/themed-diagram';
 
 // UI Components
 import { Badge } from '@/components/ui/badge';
@@ -248,7 +250,9 @@ export function useMDXComponents(
     Callout,
     CodeBlock,
     IconHeading,
+    KnowledgeGraphStats,
     LinkCard,
+    ThemedDiagram,
 
     ...components,
   };

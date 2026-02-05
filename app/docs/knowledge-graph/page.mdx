@@ -1,6 +1,6 @@
 import {
-MDXPageLayout,
-generateMetadataFromFrontmatter,
+  MDXPageLayout,
+  generateMetadataFromFrontmatter,
 } from '@/components/layout/mdx-page-layout';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,14 +8,15 @@ import Link from 'next/link';
 
 export const frontmatter = {
   title: 'Knowledge Graph',
-  description: 'The TEA Techniques dataset as a structured knowledge graph with JSON-LD vocabulary and MCP server',
+  description:
+    'The TEA Techniques dataset as a structured knowledge graph with JSON-LD vocabulary and MCP server',
   breadcrumbs: [
     { label: 'Home', href: '/' },
     { label: 'Docs', href: '/docs' },
-    { label: 'Knowledge Graph', href: '/docs/knowledge-graph' }
+    { label: 'Knowledge Graph', href: '/docs/knowledge-graph' },
   ],
   publishedAt: '2025-02-04',
-  updatedAt: '2025-02-04'
+  updatedAt: '2025-02-05',
 };
 
 export const dynamic = 'force-static';
@@ -25,36 +26,114 @@ export default function KnowledgeGraphPage({ children }) {
   return <MDXPageLayout frontmatter={frontmatter}>{children}</MDXPageLayout>;
 }
 
-<Callout variant="info" title="About">
-  The TEA Techniques knowledge graph formalises the dataset as a linked data structure, enabling structured queries, AI-powered discovery, and integration with the TEA Platform.
+<Callout variant="info" title="What is a knowledge graph?">
+  A knowledge graph represents data as interconnected entities rather than isolated records.
+  Instead of just listing techniques, it captures *how* techniques relate to goals, tags,
+  resources, and each other—enabling richer queries and AI-powered discovery.
 </Callout>
 
-## Overview
+## Why a Knowledge Graph?
 
-The TEA Techniques knowledge graph represents techniques, assurance goals, tags, and academic resources as interconnected entities. It is available in two forms:
+The TEA Techniques dataset contains rich relationships that a flat list can't capture. The knowledge graph makes these connections explicit and queryable:
 
-- **Static JSON-LD files** served via GitHub Pages for programmatic access
-- **MCP server** for AI-powered technique discovery via Claude and other LLM tools
+- **Rich relationships** — SHAP is related to LIME; both address explainability but differ in approach
+- **Semantic queries** — "Find all explainability techniques that work with neural networks"
+- **AI-powered discovery** — Ask AI Agents (e.g. Claude, ChatGPT, or Gemini) to find and compare techniques via the MCP server
+- **Linked data interoperability** — Connect with [schema.org](https://schema.org/), [SKOS](https://www.w3.org/2004/02/skos/), and other vocabularies
+
+## How It's Structured
+
+The knowledge graph connects four entity types through explicit relationships:
+
+<ThemedDiagram name="kg-schema" alt="Entity relationship diagram showing Technique connected to Goal, Tag, Resource, and other Techniques" />
 
 ### Entity Types
 
-| Entity | Count | Description |
-|--------|-------|-------------|
-| **Technique** | 121 | AI assurance techniques with metadata, ratings, and relationships |
-| **Assurance Goal** | 7 | High-level goals: Explainability, Fairness, Privacy, Reliability, Safety, Security, Transparency |
-| **Tag** | 194 | Hierarchical taxonomy covering model types, data types, lifecycle stages, and more |
-| **Resource** | 456 | Academic papers, software packages, and documentation |
+<KnowledgeGraphStats />
 
 ### Relationships
 
-The knowledge graph captures four types of relationships between entities:
+| Relationship | Description | Example |
+|--------------|-------------|---------|
+| `addressesGoal` | Which assurance goals a technique supports | SHAP → Explainability, Fairness, Reliability |
+| `hasTag` | Classification from the hierarchical taxonomy | SHAP → `model-agnostic`, `black-box` |
+| `relatedTo` | Explicit links between related techniques | SHAP → LIME, Permutation Importance |
+| `citesResource` | Academic papers and software references | SHAP → Lundberg & Lee (2017) |
 
-- **Technique → Goal** — Which assurance goals a technique addresses
-- **Technique → Tag** — Classification tags from the hierarchical taxonomy
-- **Technique → Technique** — Explicit relatedness links between techniques
-- **Technique → Resource** — Academic citations and software references
+## What You Can Discover
 
-## JSON-LD Vocabulary
+The knowledge graph enables queries that would be difficult with flat data:
+
+<Card className="mb-4">
+  <CardHeader>
+    <CardTitle className="text-base">Find techniques for a use case</CardTitle>
+  </CardHeader>
+  <CardContent className="text-sm text-muted-foreground">
+    "I need explainability techniques for neural networks"
+
+    → Filter by `addressesGoal: explainability` + `hasTag: neural-network`
+
+    → Results: Integrated Gradients, Grad-CAM, Attention Visualisation, SHAP...
+  </CardContent>
+</Card>
+
+<Card className="mb-4">
+  <CardHeader>
+    <CardTitle className="text-base">Explore related techniques</CardTitle>
+  </CardHeader>
+  <CardContent className="text-sm text-muted-foreground">
+    "I'm using SHAP—what similar techniques should I consider?"
+
+    → Follow `relatedTo` links from SHAP
+
+    → Results: LIME, Permutation Importance, Sobol Indices, Partial Dependence Plots
+  </CardContent>
+</Card>
+
+<Card className="mb-4">
+  <CardHeader>
+    <CardTitle className="text-base">Find evidence for assurance claims</CardTitle>
+  </CardHeader>
+  <CardContent className="text-sm text-muted-foreground">
+    "What techniques produce quantitative fairness metrics?"
+
+    → Filter by `addressesGoal: fairness` + `hasTag: evidence-type/quantitative-metric`
+
+    → Results: Demographic Parity Assessment, Equalised Odds, Average Odds Difference...
+  </CardContent>
+</Card>
+
+## JSON-LD Data Format
+
+Each technique is represented as a JSON-LD document with typed relationships:
+
+```json
+{
+  "@context": "https://alan-turing-institute.github.io/tea-techniques/data/ld/context.jsonld",
+  "@id": "tea:technique/shapley-additive-explanations",
+  "@type": "Technique",
+  "name": "SHapley Additive exPlanations",
+  "acronym": "SHAP",
+  "description": "SHAP explains model predictions by quantifying how much each input feature contributes...",
+
+  "addressesGoal": [
+    "tea:goal/explainability",
+    "tea:goal/fairness",
+    "tea:goal/reliability"
+  ],
+  "hasTag": [
+    "tea:tag/applicable-models/architecture/model-agnostic",
+    "tea:tag/evidence-type/quantitative-metric"
+  ],
+  "relatedTo": [
+    "tea:technique/local-interpretable-model-agnostic-explanations",
+    "tea:technique/permutation-importance"
+  ],
+  "citesResource": ["tea:resource/shapShap2016"]
+}
+```
+
+### Vocabulary Mappings
 
 The graph uses a custom namespace with mappings to established vocabularies:
 
@@ -66,6 +145,10 @@ The graph uses a custom namespace with mappings to established vocabularies:
 
 ### Entity IRI Patterns
 
+<Callout variant="tip" title="What are IRIs?">
+  IRIs (Internationalized Resource Identifiers) are unique identifiers for entities in the knowledge graph—like URLs but for data. They allow entities to be referenced unambiguously and linked across different systems.
+</Callout>
+
 ```
 tea:technique/{slug}              e.g. tea:technique/shapley-additive-explanations
 tea:goal/{slug}                   e.g. tea:goal/explainability
@@ -73,9 +156,11 @@ tea:tag/{category}/{path}         e.g. tea:tag/applicable-models/architecture/mo
 tea:resource/{citationKey}        e.g. tea:resource/shapShap2016
 ```
 
-## Static JSON-LD Endpoints
+## Accessing the Knowledge Graph
 
-All JSON-LD files are served from GitHub Pages at:
+### Static JSON-LD Files
+
+All JSON-LD files are served from GitHub Pages for programmatic access:
 
 ```
 https://alan-turing-institute.github.io/tea-techniques/data/ld/
@@ -93,28 +178,10 @@ https://alan-turing-institute.github.io/tea-techniques/data/ld/
 | `context.jsonld` | JSON-LD `@context` document |
 | `index.json` | API discovery document with entity counts |
 
-## MCP Server
+### MCP Server for AI-Powered Discovery
 
-The TEA Techniques MCP server provides 10 tools for AI-powered technique discovery, comparison, and research queries. It runs locally and fetches data from the public GitHub Pages endpoint.
+The TEA Techniques MCP server gives AI assistants like Claude direct access to the knowledge graph through 10 specialised tools. Instead of writing queries, you can ask questions in natural language.
 
 <Link href="/docs/knowledge-graph/mcp-server">
   View MCP Server setup guide and tool reference →
 </Link>
-
-### Tool Categories
-
-**Discovery tools** — Find and explore techniques:
-- `find_techniques` — Multi-dimensional search and filter
-- `get_technique` — Full technique details by slug
-- `compare_techniques` — Side-by-side comparison of 2-5 techniques
-- `find_related` — Explore technique relationships
-
-**Platform tools** — TEA Platform integration:
-- `suggest_techniques_for_claim` — Match assurance claims to relevant techniques
-- `find_evidence_types` — Explore evidence types and producing techniques
-
-**Research tools** — Dataset analysis:
-- `explore_taxonomy` — Navigate the hierarchical tag taxonomy
-- `coverage_statistics` — Analyse coverage across dimensions
-- `search_resources` — Search academic resources
-- `get_knowledge_graph_summary` — High-level graph statistics

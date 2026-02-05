@@ -1,0 +1,17 @@
+flowchart LR
+    subgraph Client["Your Environment"]
+        User([You])
+        Claude[Claude]
+    end
+
+    subgraph Server["Local MCP Server"]
+        MCP["TEA Techniques MCP<br/>(10 tools)"]
+    end
+
+    subgraph Data["GitHub Pages"]
+        KG[("Knowledge Graph")]
+    end
+
+    User --> Claude
+    Claude <-->|"MCP Protocol"| MCP
+    MCP -->|"Fetch JSON-LD"| KG

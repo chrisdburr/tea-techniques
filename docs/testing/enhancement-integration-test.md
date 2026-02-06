@@ -149,6 +149,115 @@
 
 ---
 
+## Test 4: Agent Goal Misalignment Testing Analysis
+
+**Command**: `/enhance-dataset --technique agent-goal-misalignment-testing`
+
+**Technique tested**: `agent-goal-misalignment-testing`
+- Initial score: 70.4
+- Initial issues: Missing Reliability use case, missing depth-3 tags
+
+**Results**:
+
+| Metric | Value |
+|--------|-------|
+| Proposals generated | 10 |
+| Proposals with consensus (3/3) | 1 |
+| Proposals with consensus (2/3) | 1 |
+| Proposals approved | 7 |
+| Proposals rejected | 3 |
+
+**Proposals by Perspective**:
+
+| # | Proposal | Academic | Practitioner | Standards | Consensus | Status |
+|---|----------|----------|--------------|-----------|-----------|--------|
+| 1 | Add Reliability use case | ✅ | ✅ | ✅ | **3/3** | ✅ Approved |
+| 2 | Add tag: applicable-models/paradigm/generative | ✅ | ✅ | - | **2/3** | ✅ Approved |
+| 3 | Add tag: lifecycle-stage/system-deployment/system-use-and-monitoring | - | ✅ | - | 1/3 | ✅ Approved |
+| 4 | Add tag: fairness-approach/causal | - | - | ✅ | 1/3 | ❌ Rejected |
+| 5 | Add tag: assurance-goal-category/safety/monitoring | - | - | ✅ | 1/3 | ✅ Approved |
+| 6 | Add tag: assurance-goal-category/reliability/uncertainty-quantification | - | - | ✅ | 1/3 | ❌ Rejected |
+| 7 | Add related: constitutional-ai-evaluation | ✅ | - | - | 1/3 | ✅ Approved |
+| 8 | Add related: hallucination-detection | ✅ | - | - | 1/3 | ❌ Rejected |
+| 9 | Add related: safety-envelope-testing | - | ✅ | - | 1/3 | ✅ Approved |
+| 10 | Add tag: applicable-models/architecture/neural-networks/transformer/llm | - | ✅ | - | 1/3 | ✅ Approved |
+
+**Changes Applied**:
+
+- ✅ Added 1 example use case (Reliability goal)
+- ✅ Added 4 new tags (paradigm/generative, safety/monitoring, system-use-and-monitoring, transformer/llm)
+- ✅ Added 2 related techniques (constitutional-ai-evaluation, safety-envelope-testing)
+
+**Validation**:
+
+- ✅ `pnpm generate-data`: Success (121 techniques, 7 goals, 202 tags, 462 resources)
+- ✅ `pnpm type-check`: 0 errors
+- ✅ `pnpm lint`: 0 errors
+
+**Status**: ✅ PASS
+
+---
+
+## Test 5: Causal Mediation Analysis in Language Models
+
+**Command**: `/enhance-dataset --technique causal-mediation-analysis-in-language-models`
+
+**Technique tested**: `causal-mediation-analysis-in-language-models`
+- Initial score: 70.6
+- Initial issues: Missing explanatory-scope (MUST), 0 resources, missing depth-3 tags for Reliability/Safety
+
+**Results**:
+
+| Metric | Value |
+|--------|-------|
+| Proposals generated | 15 |
+| Proposals with consensus (3/3) | 7 |
+| Proposals with consensus (2/3) | 6 |
+| Proposals approved | 13 |
+| Proposals rejected | 2 |
+
+**Proposals by Perspective**:
+
+| # | Proposal | Academic | Practitioner | Standards | Consensus | Status |
+|---|----------|----------|--------------|-----------|-----------|--------|
+| 1 | Add resource: vigCausalMediationAnalysis2020 | ✅ | ✅ | ✅ | **3/3** | ✅ Approved |
+| 2 | Add tags: explanatory-scope/global, explanatory-scope/local | ✅ | ✅ | ✅ | **3/3** | ✅ Approved |
+| 3 | Add tag: assurance-goal-category/safety/risk-identification | ✅ | ✅ | ✅ | **3/3** | ✅ Approved |
+| 4 | Add tag: assurance-goal-category/safety/harmful-behavior-detection | ✅ | ✅ | ✅ | **3/3** | ✅ Approved |
+| 5 | Add tag: assurance-goal-category/reliability/model-behavior-understanding | ✅ | ✅ | ✅ | **3/3** | ✅ Approved |
+| 6 | Add related: neuron-activation-analysis | ✅ | ✅ | ✅ | **3/3** | ✅ Approved |
+| 7 | Add related: attention-visualisation-in-transformers | ✅ | ✅ | ✅ | **3/3** | ✅ Approved |
+| 8 | Add resource: r.hsuEfficientAutomatedCircuit2024 | ✅ | ✅ | - | **2/3** | ✅ Approved |
+| 9 | Add resource: cheferTransformerInterpretabilityAttention2020 | ✅ | ✅ | - | **2/3** | ✅ Approved |
+| 10 | Add tag: lifecycle-stage/model-evaluation | ✅ | ✅ | - | **2/3** | ✅ Approved |
+| 11 | Add tag: lifecycle-stage/testing | ✅ | ✅ | - | **2/3** | ✅ Approved |
+| 12 | Add tag: evidence-type/documentation | - | ✅ | ✅ | **2/3** | ✅ Approved |
+| 13 | Add related: contextual-decomposition | ✅ | ✅ | - | **2/3** | ✅ Approved |
+| 14 | Add related: path-specific-counterfactual-fairness-assessment | ✅ | - | - | 1/3 | ❌ Rejected |
+| 15 | Add related: concept-activation-vectors | ✅ | - | - | 1/3 | ❌ Rejected |
+
+**Changes Applied**:
+
+- ✅ Added 3 resources (vigCausalMediationAnalysis2020, r.hsuEfficientAutomatedCircuit2024, cheferTransformerInterpretabilityAttention2020)
+- ✅ Added 8 new tags (2 explanatory-scope, 3 depth-3 assurance-goal-category, 2 lifecycle-stage, 1 evidence-type)
+- ✅ Added 3 related techniques (neuron-activation-analysis, attention-visualisation-in-transformers, contextual-decomposition)
+
+**Validation**:
+
+- ✅ `pnpm generate-data`: Success (121 techniques, 7 goals, 204 tags, 463 resources)
+- ✅ `pnpm type-check`: 0 errors
+- ✅ `pnpm lint`: 0 errors
+
+**Observations**:
+- Highest consensus session so far - 7 proposals at 3/3 and 6 at 2/3
+- All resources were already in Zotero (no manual additions needed)
+- Addressed MUST-level quality requirement (explanatory-scope)
+- Technique went from 0 to 3 resources
+
+**Status**: ✅ PASS
+
+---
+
 ## Workflow Verification
 
 | Step | Status | Notes |

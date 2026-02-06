@@ -2,7 +2,7 @@
   "tag": {
     "name": "applicable-models/paradigm/generative",
     "slug": "applicable-models-paradigm-generative",
-    "count": 11,
+    "count": 12,
     "category": "applicable-models"
   },
   "techniques": [
@@ -252,14 +252,22 @@
         "assurance-goal-category/explainability/property/causality",
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/harmful-behavior-detection",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/access-to-model-internals",
         "data-type/text",
         "evidence-type/causal-analysis",
+        "evidence-type/documentation",
+        "explanatory-scope/global",
+        "explanatory-scope/local",
         "expertise-needed/causal-inference",
         "expertise-needed/ml-engineering",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
+        "lifecycle-stage/testing",
         "technique-type/mechanistic-interpretability"
       ],
       "example_use_cases": [
@@ -293,14 +301,67 @@
           "description": "Causal relationships identified in specific contexts or datasets may not generalise to different domains, tasks, or model versions, requiring careful validation across diverse scenarios to ensure robust findings."
         }
       ],
-      "resources": [],
+      "resources": [
+        {
+          "title": "Transformer Interpretability Beyond Attention Visualization",
+          "url": "https://arxiv.org/abs/2012.09838",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hila Chefer",
+            "Shir Gur",
+            "Lior Wolf"
+          ],
+          "publication_date": "2020-12-17",
+          "citationKey": "cheferTransformerInterpretabilityAttention2020",
+          "abstract": "Self-attention techniques, and specifically Transformers, are dominating the field of text processing and are becoming increasingly popular in computer vision classification tasks. In order to visualize the parts of the image that led to a certain classification, existing methods either rely on the obtained attention maps or employ heuristic propagation along the attention graph. In this work, we propose a novel way to compute relevancy for Transformer networks. The method assigns local relevance based on the Deep Taylor Decomposition principle and then propagates these relevancy scores through the layers. This propagation involves attention layers and skip connections, which challenge existing methods. Our solution is based on a specific formulation that is shown to maintain the total relevancy across layers. We benchmark our method on very recent visual Transformer networks, as well as on a text classification problem, and demonstrate a clear advantage over the existing explainability methods."
+        },
+        {
+          "title": "Efficient Automated Circuit Discovery in Transformers using Contextual Decomposition",
+          "url": "http://arxiv.org/abs/2407.00886v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Aliyah R. Hsu",
+            "Georgia Zhou",
+            "Yeshwanth Cherapanamjeri",
+            "Yaxuan Huang",
+            "Anobel Y. Odisho",
+            "Peter R. Carroll",
+            "Bin Yu"
+          ],
+          "publication_date": "2024-07-01",
+          "citationKey": "r.hsuEfficientAutomatedCircuit2024",
+          "abstract": "Automated mechanistic interpretation research has attracted great interest due to its potential to scale explanations of neural network internals to large models. Existing automated circuit discovery work relies on activation patching or its approximations to identify subgraphs in models for specific tasks (circuits). They often suffer from slow runtime, approximation errors, and specific requirements of metrics, such as non-zero gradients. In this work, we introduce contextual decomposition for transformers (CD-T) to build interpretable circuits in large language models. CD-T can produce circuits of arbitrary level of abstraction, and is the first able to produce circuits as fine-grained as attention heads at specific sequence positions efficiently. CD-T consists of a set of mathematical equations to isolate contribution of model features. Through recursively computing contribution of all nodes in a computational graph of a model using CD-T followed by pruning, we are able to reduce circuit discovery runtime from hours to seconds compared to state-of-the-art baselines. On three standard circuit evaluation datasets (indirect object identification, greater-than comparisons, and docstring completion), we demonstrate that CD-T outperforms ACDC and EAP by better recovering the manual circuits with an average of 97% ROC AUC under low runtimes. In addition, we provide evidence that faithfulness of CD-T circuits is not due to random chance by showing our circuits are 80% more faithful than random circuits of up to 60% of the original model size. Finally, we show CD-T circuits are able to perfectly replicate original models' behavior (faithfulness $ = 1$) using fewer nodes than the baselines for all tasks. Our results underscore the great promise of CD-T for efficient automated mechanistic interpretability, paving the way for new insights into the workings of large language models."
+        },
+        {
+          "title": "Causal Mediation Analysis for Interpreting Neural NLP: The Case of Gender Bias",
+          "url": "http://arxiv.org/abs/2004.12265v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Jesse Vig",
+            "Sebastian Gehrmann",
+            "Yonatan Belinkov",
+            "Sharon Qian",
+            "Daniel Nevo",
+            "Simas Sakenis",
+            "Jason Huang",
+            "Yaron Singer",
+            "Stuart Shieber"
+          ],
+          "publication_date": "2020-04-26",
+          "citationKey": "vigCausalMediationAnalysis2020",
+          "abstract": "Common methods for interpreting neural models in natural language processing typically examine either their structure or their behavior, but not both. We propose a methodology grounded in the theory of causal mediation analysis for interpreting which parts of a model are causally implicated in its behavior. It enables us to analyze the mechanisms by which information flows from input to output through various model components, known as mediators. We apply this methodology to analyze gender bias in pre-trained Transformer language models. We study the role of individual neurons and attention heads in mediating gender bias across three datasets designed to gauge a model's sensitivity to gender bias. Our mediation analysis reveals that gender bias effects are (i) sparse, concentrated in a small part of the network; (ii) synergistic, amplified or repressed by different components; and (iii) decomposable into effects flowing directly from the input and indirectly through the mediators."
+        }
+      ],
       "complexity_rating": 5,
       "computational_cost_rating": 4,
       "related_techniques": [
-        "prompt-sensitivity-analysis",
+        "attention-visualisation-in-transformers",
+        "chain-of-thought-faithfulness-evaluation",
+        "contextual-decomposition",
         "feature-attribution-with-integrated-gradients-in-nlp",
         "multimodal-alignment-evaluation",
-        "chain-of-thought-faithfulness-evaluation"
+        "neuron-activation-analysis",
+        "prompt-sensitivity-analysis"
       ]
     },
     {
@@ -420,6 +481,143 @@
         "sensitivity-analysis-for-fairness",
         "attribute-removal-fairness-through-unawareness",
         "fair-adversarial-networks"
+      ]
+    },
+    {
+      "slug": "agent-goal-misalignment-testing",
+      "name": "Agent Goal Misalignment Testing",
+      "description": "Agent goal misalignment testing identifies scenarios where AI agents pursue objectives in unintended ways or develop proxy goals that diverge from true human intent. This technique tests for specification gaming (achieving stated metrics while violating intent), instrumental goals (agents developing problematic sub-goals to achieve main objectives), and reward hacking (exploiting loopholes in reward functions). Testing uses diverse scenarios to probe whether agents truly understand task intent or merely optimise narrow specified metrics.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/paradigm/generative",
+        "applicable-models/paradigm/reinforcement",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring",
+        "technique-type/testing"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing an autonomous vehicle routing agent in a ride-sharing service to ensure it optimizes for passenger safety and comfort rather than gaming metrics through risky driving behaviors that minimize journey time while technically meeting safety thresholds.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Evaluating a customer service chatbot agent for consistent and predictable behaviour across repeated interactions, verifying that it does not develop degenerate strategies such as prematurely closing conversations or providing overly generic responses to maximise satisfaction scores whilst failing to resolve underlying user issues reliably.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Verifying that a healthcare resource allocation agent distributes medical supplies based on genuine patient need rather than exploiting proxy metrics that could systematically disadvantage certain demographic groups or facilities.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Ensuring a resume screening agent doesn't develop proxy metrics that correlate with discriminatory criteria while technically optimizing for stated job performance predictions.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Evaluating a criminal justice risk assessment agent to ensure it optimizes for genuine recidivism prediction rather than learning proxies that correlate with protected characteristics while appearing to achieve stated accuracy objectives.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Comprehensive testing requires anticipating all possible ways objectives could be misinterpreted, which is inherently difficult for complex goals."
+        },
+        {
+          "description": "Agents may behave correctly during testing but develop misaligned strategies in deployment when facing novel situations or longer time horizons."
+        },
+        {
+          "description": "Distinguishing between intended and unintended goal achievement can be subjective, especially when stated objectives are ambiguous."
+        },
+        {
+          "description": "Testing environments may not replicate the full complexity and incentive structures of real deployment settings where misalignment emerges."
+        },
+        {
+          "description": "Requires domain expertise to define appropriate value-aligned objectives and identify subtle forms of misalignment, which may not be available for novel or cross-domain applications."
+        },
+        {
+          "description": "Quantifying the severity and likelihood of different misalignment scenarios requires subjective judgments and risk assessment capabilities that vary across organizations."
+        }
+      ],
+      "resources": [
+        {
+          "title": "The Urgent Need for Intrinsic Alignment Technologies for ...",
+          "url": "https://towardsdatascience.com/the-urgent-need-for-intrinsic-alignment-technologies-for-responsible-agentic-ai",
+          "source_type": "tutorial",
+          "authors": [
+            "Gadi Singer"
+          ],
+          "publication_date": "2025-03-04",
+          "citationKey": "singerUrgentNeedIntrinsic2025"
+        },
+        {
+          "title": "A Survey of Process Reward Models: From Outcome Signals to Process Supervisions for Large Language Models",
+          "url": "https://www.semanticscholar.org/paper/b670078b724938874a233687b5c53848df527a60",
+          "source_type": "technical_paper",
+          "authors": [
+            "Congmin Zheng",
+            "Jiachen Zhu",
+            "Zhuoying Ou",
+            "Yuxiang Chen",
+            "Kangning Zhang",
+            "Rong Shan",
+            "Zeyu Zheng",
+            "Mengyue Yang",
+            "Jianghao Lin",
+            "Yong Yu",
+            "Weinan Zhang"
+          ],
+          "publication_date": "2025",
+          "citationKey": "zhengSurveyProcessReward2025",
+          "abstract": "Although Large Language Models (LLMs) exhibit advanced reasoning ability, conventional alignment remains largely dominated by outcome reward models (ORMs) that judge only final answers. Process Reward Models(PRMs) address this gap by evaluating and guiding reasoning at the step or trajectory level. This survey provides a systematic overview of PRMs through the full loop: how to generate process data, build PRMs, and use PRMs for test-time scaling and reinforcement learning. We summarize applications across math, code, text, multimodal reasoning, robotics, and agents, and review emerging benchmarks. Our goal is to clarify design spaces, reveal open challenges, and guide future research toward fine-grained, robust reasoning alignment."
+        },
+        {
+          "title": "Large Language Model Safety: A Holistic Survey",
+          "url": "https://www.semanticscholar.org/paper/a0d2a54ed05a424f5eee35ea579cf54ef0f2c2aa",
+          "source_type": "technical_paper",
+          "authors": [
+            "Dan Shi",
+            "Tianhao Shen",
+            "Yufei Huang",
+            "Zhigen Li",
+            "Yongqi Leng",
+            "Renren Jin",
+            "Chuang Liu",
+            "Xinwei Wu",
+            "Zishan Guo",
+            "Linhao Yu",
+            "Ling Shi",
+            "Bojian Jiang",
+            "Deyi Xiong"
+          ],
+          "publication_date": "2024",
+          "citationKey": "shiLargeLanguageModel2024",
+          "abstract": "The rapid development and deployment of large language models (LLMs) have introduced a new frontier in artificial intelligence, marked by unprecedented capabilities in natural language understanding and generation. However, the increasing integration of these models into critical applications raises substantial safety concerns, necessitating a thorough examination of their potential risks and associated mitigation strategies. This survey provides a comprehensive overview of the current landscape of LLM safety, covering four major categories: value misalignment, robustness to adversarial attacks, misuse, and autonomous AI risks. In addition to the comprehensive review of the mitigation methodologies and evaluation resources on these four aspects, we further explore four topics related to LLM safety: the safety implications of LLM agents, the role of interpretability in enhancing LLM safety, the technology roadmaps proposed and abided by a list of AI companies and institutes for LLM safety, and AI governance aimed at LLM safety with discussions on international cooperation, policy proposals, and prospective regulatory directions. Our findings underscore the necessity for a proactive, multifaceted approach to LLM safety, emphasizing the integration of technical solutions, ethical considerations, and robust governance frameworks. This survey is intended to serve as a foundational resource for academy researchers, industry practitioners, and policymakers, offering insights into the challenges and opportunities associated with the safe integration of LLMs into society. Ultimately, it seeks to contribute to the safe and beneficial development of LLMs, aligning with the overarching goal of harnessing AI for societal advancement and well-being. A curated list of related papers has been publicly available at https://github.com/tjunlp-lab/Awesome-LLM-Safety-Papers."
+        }
+      ],
+      "related_techniques": [
+        "ai-agent-safety-testing",
+        "constitutional-ai-evaluation",
+        "multi-agent-system-testing",
+        "path-specific-counterfactual-fairness-assessment",
+        "reward-hacking-detection",
+        "safety-envelope-testing"
       ]
     },
     {
@@ -1307,5 +1505,5 @@
       ]
     }
   ],
-  "count": 11
+  "count": 12
 }

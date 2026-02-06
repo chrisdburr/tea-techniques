@@ -2971,16 +2971,21 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/bias-assessment",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/governance-disclosure",
         "data-requirements/no-special-requirements",
         "data-type/any",
+        "evidence-type/decision-record",
         "evidence-type/governance-framework",
         "evidence-type/qualitative-report",
         "expertise-needed/domain-expertise",
         "expertise-needed/ethics",
         "expertise-needed/legal",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/post-deployment",
         "lifecycle-stage/project-planning",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/process"
@@ -3028,16 +3033,31 @@
           ],
           "publication_date": "2024-09-16",
           "citationKey": "hadleyInvestigatingAlgorithmReview2024"
+        },
+        {
+          "title": "How to design an AI ethics board",
+          "url": "https://doi.org/10.1007/s43681-023-00409-y",
+          "source_type": "technical_paper",
+          "authors": [
+            "Jonas Schuett",
+            "Ann-Katrin Reuel",
+            "Alexis Carlier"
+          ],
+          "publication_date": "2025-04-01",
+          "citationKey": "schuettHowDesignAI2025",
+          "abstract": "The development and deployment of artificial intelligence (AI) systems poses significant risks to society. To reduce these risks to an acceptable level, AI companies need an effective risk management process and sound risk governance. In this paper, we explore a particular way in which AI companies can improve their risk governance: by setting up an AI ethics board. We identify five key design choices: (1) What responsibilities should the board have? (2) What should its legal structure be? (3) Who should sit on the board? (4) How should it make decisions? (5) And what resources does it need? We break each of these questions down into more specific sub-questions, list options, and discuss how different design choices affect the board’s ability to reduce societal risks from AI. Several failures have shown that designing an AI ethics board can be challenging. This paper provides a toolbox that can help AI companies to overcome these challenges."
         }
       ],
       "complexity_rating": 4,
       "computational_cost_rating": 1,
       "acronym": "IRBs",
       "related_techniques": [
-        "red-teaming",
-        "safety-envelope-testing",
+        "datasheets-for-datasets",
+        "human-in-the-loop-safeguards",
         "model-cards",
-        "model-development-audit-trails"
+        "model-development-audit-trails",
+        "red-teaming",
+        "safety-envelope-testing"
       ]
     },
     {
@@ -3056,11 +3076,15 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/reliability",
         "assurance-goal-category/safety",
+        "assurance-goal-category/security",
+        "assurance-goal-category/security/vulnerability-assessment",
         "data-requirements/no-special-requirements",
         "data-type/any",
+        "evidence-type/documentation",
         "evidence-type/qualitative-report",
         "expertise-needed/ml-engineering",
         "expertise-needed/security",
+        "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/procedural"
       ],
@@ -3076,6 +3100,10 @@
         {
           "description": "Systematically testing a hiring algorithm with inputs designed to reveal hidden biases, using adversarial examples to check if the system can be manipulated to discriminate against protected groups or favour certain demographics unfairly.",
           "goal": "Fairness"
+        },
+        {
+          "description": "Systematically testing AI systems for security vulnerabilities including prompt injection, data exfiltration, jailbreaking, and model manipulation by simulating adversarial attacks. This helps identify security weaknesses before deployment and provides documented evidence for compliance with regulatory requirements such as EU AI Act Article 55 and ISO 42001 adversarial testing mandates.",
+          "goal": "Security"
         }
       ],
       "limitations": [
@@ -3106,6 +3134,14 @@
           ],
           "publication_date": "2025",
           "citationKey": "doraRedTeamingLLM2025"
+        },
+        {
+          "title": "PyRIT: The Python Risk Identification Tool for generative AI",
+          "url": "https://github.com/Azure/PyRIT",
+          "source_type": "software_package",
+          "publication_date": "2024-02",
+          "citationKey": "microsoftPyRITPythonRisk2024",
+          "abstract": "The Python Risk Identification Tool for generative AI (PyRIT) is an open source framework built to empower security professionals and engineers to proactively identify risks in generative AI systems."
         },
         {
           "title": "Building Safe GenAI Applications: An End-to-End Overview of Red Teaming for Large Language Models",
@@ -3274,13 +3310,18 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/procedural",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/human-oversight",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/accountability",
         "data-requirements/no-special-requirements",
         "data-type/any",
+        "evidence-type/governance-framework",
         "evidence-type/qualitative-report",
         "expertise-needed/domain-expertise",
         "expertise-needed/stakeholder-engagement",
+        "lifecycle-stage/post-deployment",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/process"
       ],
@@ -3317,6 +3358,20 @@
       ],
       "resources": [
         {
+          "title": "Article 14: Human Oversight | EU Artificial Intelligence Act",
+          "url": "https://artificialintelligenceact.eu/article/14/",
+          "source_type": "tutorial",
+          "citationKey": "Article14Human"
+        },
+        {
+          "title": "HumanSignal/label-studio",
+          "url": "https://github.com/HumanSignal/label-studio",
+          "source_type": "software_package",
+          "publication_date": "2026-02-06T04:48:38Z",
+          "citationKey": "HumanSignalLabelstudio2026",
+          "abstract": "Label Studio is a multi-type data labeling and annotation tool with standardized output format"
+        },
+        {
           "title": "Human-in-the-Loop AI: A Comprehensive Guide",
           "url": "https://www.holisticai.com/blog/human-in-the-loop-ai",
           "source_type": "tutorial",
@@ -3334,15 +3389,47 @@
           ],
           "publication_date": "2022-01-01",
           "citationKey": "chelseaImprovingApplicabilityAI2022"
+        },
+        {
+          "title": "Human-in-the-loop machine learning: a state of the art",
+          "url": "https://doi.org/10.1007/s10462-022-10246-w",
+          "source_type": "technical_paper",
+          "authors": [
+            "Eduardo Mosqueira-Rey",
+            "Elena Hernández-Pereira",
+            "David Alonso-Ríos",
+            "José Bobes-Bascarán",
+            "Ángel Fernández-Leal"
+          ],
+          "publication_date": "2023-04-01",
+          "citationKey": "mosqueira-reyHumanintheloopMachineLearning2023",
+          "abstract": "Researchers are defining new types of interactions between humans and machine learning algorithms generically called human-in-the-loop machine learning. Depending on who is in control of the learning process, we can identify: active learning, in which the system remains in control; interactive machine learning, in which there is a closer interaction between users and learning systems; and machine teaching, where human domain experts have control over the learning process. Aside from control, humans can also be involved in the learning process in other ways. In curriculum learning human domain experts try to impose some structure on the examples presented to improve the learning; in explainable AI the focus is on the ability of the model to explain to humans why a given solution was chosen. This collaboration between AI models and humans should not be limited only to the learning process; if we go further, we can see other terms that arise such as Usable and Useful AI. In this paper we review the state of the art of the techniques involved in the new forms of relationship between humans and ML algorithms. Our contribution is not merely listing the different approaches, but to provide definitions clarifying confusing, varied and sometimes contradictory terms; to elucidate and determine the boundaries between the different methods; and to correlate all the techniques searching for the connections and influences between them."
+        },
+        {
+          "title": "A Survey of Human-in-the-loop for Machine Learning",
+          "url": "http://arxiv.org/abs/2108.00941",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xingjiao Wu",
+            "Luwei Xiao",
+            "Yixuan Sun",
+            "Junhang Zhang",
+            "Tianlong Ma",
+            "Liang He"
+          ],
+          "publication_date": "10/2022",
+          "citationKey": "wuSurveyHumanintheloopMachine2022",
+          "abstract": "Human-in-the-loop aims to train an accurate prediction model with minimum cost by integrating human knowledge and experience. Humans can provide training data for machine learning applications and directly accomplish tasks that are hard for computers in the pipeline with the help of machine-based approaches. In this paper, we survey existing works on human-in-the-loop from a data perspective and classify them into three categories with a progressive relationship: (1) the work of improving model performance from data processing, (2) the work of improving model performance through interventional model training, and (3) the design of the system independent human-in-the-loop. Using the above categorization, we summarize major approaches in the field; along with their technical strengths/ weaknesses, we have simple classification and discussion in natural language processing, computer vision, and others. Besides, we provide some open challenges and opportunities. This survey intends to provide a high-level summarization for human-in-the-loop and motivates interested readers to consider approaches for designing effective human-in-the-loop solutions."
         }
       ],
       "complexity_rating": 2,
       "computational_cost_rating": 2,
       "related_techniques": [
-        "confidence-thresholding",
-        "safety-guardrails",
         "anomaly-detection",
-        "out-of-domain-detection"
+        "confidence-thresholding",
+        "internal-review-boards",
+        "out-of-domain-detection",
+        "safety-guardrails"
       ]
     },
     {

@@ -3586,16 +3586,21 @@
         "tea:tag/applicable-models/architecture/model-agnostic",
         "tea:tag/applicable-models/requirements/black-box",
         "tea:tag/assurance-goal-category/fairness",
+        "tea:tag/assurance-goal-category/fairness/bias-assessment",
         "tea:tag/assurance-goal-category/safety",
+        "tea:tag/assurance-goal-category/safety/risk-identification",
         "tea:tag/assurance-goal-category/transparency",
+        "tea:tag/assurance-goal-category/transparency/governance-disclosure",
         "tea:tag/data-requirements/no-special-requirements",
         "tea:tag/data-type/any",
+        "tea:tag/evidence-type/decision-record",
         "tea:tag/evidence-type/governance-framework",
         "tea:tag/evidence-type/qualitative-report",
         "tea:tag/expertise-needed/domain-expertise",
         "tea:tag/expertise-needed/ethics",
         "tea:tag/expertise-needed/legal",
         "tea:tag/lifecycle-stage/model-development",
+        "tea:tag/lifecycle-stage/post-deployment",
         "tea:tag/lifecycle-stage/project-planning",
         "tea:tag/lifecycle-stage/system-deployment-and-use",
         "tea:tag/technique-type/process"
@@ -3604,13 +3609,16 @@
       "complexityRating": 4,
       "computationalCostRating": 1,
       "relatedTo": [
-        "tea:technique/red-teaming",
-        "tea:technique/safety-envelope-testing",
+        "tea:technique/datasheets-for-datasets",
+        "tea:technique/human-in-the-loop-safeguards",
         "tea:technique/model-cards",
-        "tea:technique/model-development-audit-trails"
+        "tea:technique/model-development-audit-trails",
+        "tea:technique/red-teaming",
+        "tea:technique/safety-envelope-testing"
       ],
       "citesResource": [
-        "tea:resource/hadleyInvestigatingAlgorithmReview2024"
+        "tea:resource/hadleyInvestigatingAlgorithmReview2024",
+        "tea:resource/schuettHowDesignAI2025"
       ],
       "exampleUseCases": [
         {
@@ -3662,11 +3670,15 @@
         "tea:tag/assurance-goal-category/fairness",
         "tea:tag/assurance-goal-category/reliability",
         "tea:tag/assurance-goal-category/safety",
+        "tea:tag/assurance-goal-category/security",
+        "tea:tag/assurance-goal-category/security/vulnerability-assessment",
         "tea:tag/data-requirements/no-special-requirements",
         "tea:tag/data-type/any",
+        "tea:tag/evidence-type/documentation",
         "tea:tag/evidence-type/qualitative-report",
         "tea:tag/expertise-needed/ml-engineering",
         "tea:tag/expertise-needed/security",
+        "tea:tag/lifecycle-stage/model-development",
         "tea:tag/lifecycle-stage/system-deployment-and-use",
         "tea:tag/technique-type/procedural"
       ],
@@ -3680,6 +3692,7 @@
       ],
       "citesResource": [
         "tea:resource/doraRedTeamingLLM2025",
+        "tea:resource/microsoftPyRITPythonRisk2024",
         "tea:resource/purpuraBuildingSafeGenAI2025",
         "tea:resource/qianzhangEffectiveAutomationSupport2025",
         "tea:resource/wangTrojanActivationAttack2023"
@@ -3696,6 +3709,10 @@
         {
           "description": "Systematically testing a hiring algorithm with inputs designed to reveal hidden biases, using adversarial examples to check if the system can be manipulated to discriminate against protected groups or favour certain demographics unfairly.",
           "goal": "Fairness"
+        },
+        {
+          "description": "Systematically testing AI systems for security vulnerabilities including prompt injection, data exfiltration, jailbreaking, and model manipulation by simulating adversarial attacks. This helps identify security weaknesses before deployment and provides documented evidence for compliance with regulatory requirements such as EU AI Act Article 55 and ISO 42001 adversarial testing mandates.",
+          "goal": "Security"
         }
       ],
       "limitations": [
@@ -3806,27 +3823,37 @@
         "tea:tag/applicable-models/architecture/model-agnostic",
         "tea:tag/applicable-models/requirements/black-box",
         "tea:tag/assurance-goal-category/fairness",
+        "tea:tag/assurance-goal-category/fairness/procedural",
         "tea:tag/assurance-goal-category/safety",
+        "tea:tag/assurance-goal-category/safety/human-oversight",
         "tea:tag/assurance-goal-category/transparency",
+        "tea:tag/assurance-goal-category/transparency/accountability",
         "tea:tag/data-requirements/no-special-requirements",
         "tea:tag/data-type/any",
+        "tea:tag/evidence-type/governance-framework",
         "tea:tag/evidence-type/qualitative-report",
         "tea:tag/expertise-needed/domain-expertise",
         "tea:tag/expertise-needed/stakeholder-engagement",
+        "tea:tag/lifecycle-stage/post-deployment",
         "tea:tag/lifecycle-stage/system-deployment-and-use",
         "tea:tag/technique-type/process"
       ],
       "complexityRating": 2,
       "computationalCostRating": 2,
       "relatedTo": [
-        "tea:technique/confidence-thresholding",
-        "tea:technique/safety-guardrails",
         "tea:technique/anomaly-detection",
-        "tea:technique/out-of-domain-detection"
+        "tea:technique/confidence-thresholding",
+        "tea:technique/internal-review-boards",
+        "tea:technique/out-of-domain-detection",
+        "tea:technique/safety-guardrails"
       ],
       "citesResource": [
+        "tea:resource/Article14Human",
+        "tea:resource/HumanSignalLabelstudio2026",
         "tea:resource/HumanintheLoopAIComprehensive2024",
-        "tea:resource/chelseaImprovingApplicabilityAI2022"
+        "tea:resource/chelseaImprovingApplicabilityAI2022",
+        "tea:resource/mosqueira-reyHumanintheloopMachineLearning2023",
+        "tea:resource/wuSurveyHumanintheloopMachine2022"
       ],
       "exampleUseCases": [
         {
@@ -9799,6 +9826,8 @@
       "broader": "tea:tag/assurance-goal-category",
       "narrower": [
         "tea:tag/assurance-goal-category/fairness/group",
+        "tea:tag/assurance-goal-category/fairness/bias-assessment",
+        "tea:tag/assurance-goal-category/fairness/procedural",
         "tea:tag/assurance-goal-category/fairness/causal"
       ]
     },
@@ -9878,6 +9907,7 @@
         "tea:tag/evidence-type/privacy-guarantee",
         "tea:tag/evidence-type/prediction-interval",
         "tea:tag/evidence-type/boundary-analysis",
+        "tea:tag/evidence-type/decision-record",
         "tea:tag/evidence-type/governance-framework",
         "tea:tag/evidence-type/documentation",
         "tea:tag/evidence-type/causal-analysis",
@@ -9962,6 +9992,7 @@
         "tea:tag/lifecycle-stage/model-development",
         "tea:tag/lifecycle-stage/system-deployment-and-use",
         "tea:tag/lifecycle-stage/data-handling",
+        "tea:tag/lifecycle-stage/post-deployment",
         "tea:tag/lifecycle-stage/project-planning",
         "tea:tag/lifecycle-stage/deployment",
         "tea:tag/lifecycle-stage/project-design",
@@ -9969,7 +10000,6 @@
         "tea:tag/lifecycle-stage/monitoring",
         "tea:tag/lifecycle-stage/testing",
         "tea:tag/lifecycle-stage/model-evaluation",
-        "tea:tag/lifecycle-stage/post-deployment",
         "tea:tag/lifecycle-stage/data-collection",
         "tea:tag/lifecycle-stage/post-processing",
         "tea:tag/lifecycle-stage/system-deployment"
@@ -10169,6 +10199,8 @@
       "category": "assurance-goal-category",
       "broader": "tea:tag/assurance-goal-category",
       "narrower": [
+        "tea:tag/assurance-goal-category/transparency/governance-disclosure",
+        "tea:tag/assurance-goal-category/transparency/accountability",
         "tea:tag/assurance-goal-category/transparency/documentation"
       ]
     },
@@ -10683,7 +10715,9 @@
       "category": "assurance-goal-category",
       "broader": "tea:tag/assurance-goal-category",
       "narrower": [
-        "tea:tag/assurance-goal-category/safety/monitoring"
+        "tea:tag/assurance-goal-category/safety/risk-identification",
+        "tea:tag/assurance-goal-category/safety/monitoring",
+        "tea:tag/assurance-goal-category/safety/human-oversight"
       ]
     },
     {
@@ -10948,6 +10982,38 @@
       "broader": "tea:tag/technique-type"
     },
     {
+      "@id": "tea:tag/assurance-goal-category/fairness/bias-assessment",
+      "@type": "Tag",
+      "prefLabel": "bias assessment",
+      "path": "assurance-goal-category/fairness/bias-assessment",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/fairness"
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/safety/risk-identification",
+      "@type": "Tag",
+      "prefLabel": "risk identification",
+      "path": "assurance-goal-category/safety/risk-identification",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/safety"
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/transparency/governance-disclosure",
+      "@type": "Tag",
+      "prefLabel": "governance disclosure",
+      "path": "assurance-goal-category/transparency/governance-disclosure",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/transparency"
+    },
+    {
+      "@id": "tea:tag/evidence-type/decision-record",
+      "@type": "Tag",
+      "prefLabel": "decision record",
+      "path": "evidence-type/decision-record",
+      "category": "evidence-type",
+      "broader": "tea:tag/evidence-type"
+    },
+    {
       "@id": "tea:tag/evidence-type/governance-framework",
       "@type": "Tag",
       "prefLabel": "governance framework",
@@ -10972,6 +11038,14 @@
       "broader": "tea:tag/expertise-needed"
     },
     {
+      "@id": "tea:tag/lifecycle-stage/post-deployment",
+      "@type": "Tag",
+      "prefLabel": "post deployment",
+      "path": "lifecycle-stage/post-deployment",
+      "category": "lifecycle-stage",
+      "broader": "tea:tag/lifecycle-stage"
+    },
+    {
       "@id": "tea:tag/lifecycle-stage/project-planning",
       "@type": "Tag",
       "prefLabel": "project planning",
@@ -10986,6 +11060,33 @@
       "path": "technique-type/process",
       "category": "technique-type",
       "broader": "tea:tag/technique-type"
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/security",
+      "@type": "Tag",
+      "prefLabel": "security",
+      "path": "assurance-goal-category/security",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category",
+      "narrower": [
+        "tea:tag/assurance-goal-category/security/vulnerability-assessment"
+      ]
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/security/vulnerability-assessment",
+      "@type": "Tag",
+      "prefLabel": "vulnerability assessment",
+      "path": "assurance-goal-category/security/vulnerability-assessment",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/security"
+    },
+    {
+      "@id": "tea:tag/evidence-type/documentation",
+      "@type": "Tag",
+      "prefLabel": "documentation",
+      "path": "evidence-type/documentation",
+      "category": "evidence-type",
+      "broader": "tea:tag/evidence-type"
     },
     {
       "@id": "tea:tag/expertise-needed/security",
@@ -11031,6 +11132,30 @@
       "broader": "tea:tag/lifecycle-stage/system-deployment-and-use"
     },
     {
+      "@id": "tea:tag/assurance-goal-category/fairness/procedural",
+      "@type": "Tag",
+      "prefLabel": "procedural",
+      "path": "assurance-goal-category/fairness/procedural",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/fairness"
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/safety/human-oversight",
+      "@type": "Tag",
+      "prefLabel": "human oversight",
+      "path": "assurance-goal-category/safety/human-oversight",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/safety"
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/transparency/accountability",
+      "@type": "Tag",
+      "prefLabel": "accountability",
+      "path": "assurance-goal-category/transparency/accountability",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/transparency"
+    },
+    {
       "@id": "tea:tag/expertise-needed/stakeholder-engagement",
       "@type": "Tag",
       "prefLabel": "stakeholder engagement",
@@ -11056,14 +11181,6 @@
       "path": "assurance-goal-category/transparency/documentation/model-card",
       "category": "assurance-goal-category",
       "broader": "tea:tag/assurance-goal-category/transparency/documentation"
-    },
-    {
-      "@id": "tea:tag/evidence-type/documentation",
-      "@type": "Tag",
-      "prefLabel": "documentation",
-      "path": "evidence-type/documentation",
-      "category": "evidence-type",
-      "broader": "tea:tag/evidence-type"
     },
     {
       "@id": "tea:tag/expertise-needed/regulatory-compliance",
@@ -11265,14 +11382,6 @@
       "broader": "tea:tag/evidence-type"
     },
     {
-      "@id": "tea:tag/lifecycle-stage/post-deployment",
-      "@type": "Tag",
-      "prefLabel": "post deployment",
-      "path": "lifecycle-stage/post-deployment",
-      "category": "lifecycle-stage",
-      "broader": "tea:tag/lifecycle-stage"
-    },
-    {
       "@id": "tea:tag/technique-type/mechanistic-interpretability",
       "@type": "Tag",
       "prefLabel": "mechanistic interpretability",
@@ -11454,14 +11563,6 @@
       "path": "data-requirements/causal-graph",
       "category": "data-requirements",
       "broader": "tea:tag/data-requirements"
-    },
-    {
-      "@id": "tea:tag/assurance-goal-category/security",
-      "@type": "Tag",
-      "prefLabel": "security",
-      "path": "assurance-goal-category/security",
-      "category": "assurance-goal-category",
-      "broader": "tea:tag/assurance-goal-category"
     },
     {
       "@id": "tea:tag/applicable-models/paradigm/reinforcement",
@@ -14134,6 +14235,21 @@
       "publicationDate": "2024-09-16"
     },
     {
+      "@id": "tea:resource/schuettHowDesignAI2025",
+      "@type": "Resource",
+      "name": "How to design an AI ethics board",
+      "citationKey": "schuettHowDesignAI2025",
+      "url": "https://doi.org/10.1007/s43681-023-00409-y",
+      "sourceType": "technical_paper",
+      "authors": [
+        "Jonas Schuett",
+        "Ann-Katrin Reuel",
+        "Alexis Carlier"
+      ],
+      "publicationDate": "2025-04-01",
+      "abstract": "The development and deployment of artificial intelligence (AI) systems poses significant risks to society. To reduce these risks to an acceptable level, AI companies need an effective risk management process and sound risk governance. In this paper, we explore a particular way in which AI companies can improve their risk governance: by setting up an AI ethics board. We identify five key design choices: (1) What responsibilities should the board have? (2) What should its legal structure be? (3) Who should sit on the board? (4) How should it make decisions? (5) And what resources does it need? We break each of these questions down into more specific sub-questions, list options, and discuss how different design choices affect the board’s ability to reduce societal risks from AI. Several failures have shown that designing an AI ethics board can be challenging. This paper provides a toolbox that can help AI companies to overcome these challenges."
+    },
+    {
       "@id": "tea:resource/doraRedTeamingLLM2025",
       "@type": "Resource",
       "name": "Red Teaming LLM Applications - DeepLearning.AI",
@@ -14145,6 +14261,16 @@
         "Luca Martial"
       ],
       "publicationDate": "2025"
+    },
+    {
+      "@id": "tea:resource/microsoftPyRITPythonRisk2024",
+      "@type": "Resource",
+      "name": "PyRIT: The Python Risk Identification Tool for generative AI",
+      "citationKey": "microsoftPyRITPythonRisk2024",
+      "url": "https://github.com/Azure/PyRIT",
+      "sourceType": "software_package",
+      "publicationDate": "2024-02",
+      "abstract": "The Python Risk Identification Tool for generative AI (PyRIT) is an open source framework built to empower security professionals and engineers to proactively identify risks in generative AI systems."
     },
     {
       "@id": "tea:resource/purpuraBuildingSafeGenAI2025",
@@ -14236,6 +14362,24 @@
       "publicationDate": "2023"
     },
     {
+      "@id": "tea:resource/Article14Human",
+      "@type": "Resource",
+      "name": "Article 14: Human Oversight | EU Artificial Intelligence Act",
+      "citationKey": "Article14Human",
+      "url": "https://artificialintelligenceact.eu/article/14/",
+      "sourceType": "tutorial"
+    },
+    {
+      "@id": "tea:resource/HumanSignalLabelstudio2026",
+      "@type": "Resource",
+      "name": "HumanSignal/label-studio",
+      "citationKey": "HumanSignalLabelstudio2026",
+      "url": "https://github.com/HumanSignal/label-studio",
+      "sourceType": "software_package",
+      "publicationDate": "2026-02-06T04:48:38Z",
+      "abstract": "Label Studio is a multi-type data labeling and annotation tool with standardized output format"
+    },
+    {
       "@id": "tea:resource/HumanintheLoopAIComprehensive2024",
       "@type": "Resource",
       "name": "Human-in-the-Loop AI: A Comprehensive Guide",
@@ -14257,6 +14401,41 @@
         "Foltz, Peter W."
       ],
       "publicationDate": "2022-01-01"
+    },
+    {
+      "@id": "tea:resource/mosqueira-reyHumanintheloopMachineLearning2023",
+      "@type": "Resource",
+      "name": "Human-in-the-loop machine learning: a state of the art",
+      "citationKey": "mosqueira-reyHumanintheloopMachineLearning2023",
+      "url": "https://doi.org/10.1007/s10462-022-10246-w",
+      "sourceType": "technical_paper",
+      "authors": [
+        "Eduardo Mosqueira-Rey",
+        "Elena Hernández-Pereira",
+        "David Alonso-Ríos",
+        "José Bobes-Bascarán",
+        "Ángel Fernández-Leal"
+      ],
+      "publicationDate": "2023-04-01",
+      "abstract": "Researchers are defining new types of interactions between humans and machine learning algorithms generically called human-in-the-loop machine learning. Depending on who is in control of the learning process, we can identify: active learning, in which the system remains in control; interactive machine learning, in which there is a closer interaction between users and learning systems; and machine teaching, where human domain experts have control over the learning process. Aside from control, humans can also be involved in the learning process in other ways. In curriculum learning human domain experts try to impose some structure on the examples presented to improve the learning; in explainable AI the focus is on the ability of the model to explain to humans why a given solution was chosen. This collaboration between AI models and humans should not be limited only to the learning process; if we go further, we can see other terms that arise such as Usable and Useful AI. In this paper we review the state of the art of the techniques involved in the new forms of relationship between humans and ML algorithms. Our contribution is not merely listing the different approaches, but to provide definitions clarifying confusing, varied and sometimes contradictory terms; to elucidate and determine the boundaries between the different methods; and to correlate all the techniques searching for the connections and influences between them."
+    },
+    {
+      "@id": "tea:resource/wuSurveyHumanintheloopMachine2022",
+      "@type": "Resource",
+      "name": "A Survey of Human-in-the-loop for Machine Learning",
+      "citationKey": "wuSurveyHumanintheloopMachine2022",
+      "url": "http://arxiv.org/abs/2108.00941",
+      "sourceType": "technical_paper",
+      "authors": [
+        "Xingjiao Wu",
+        "Luwei Xiao",
+        "Yixuan Sun",
+        "Junhang Zhang",
+        "Tianlong Ma",
+        "Liang He"
+      ],
+      "publicationDate": "10/2022",
+      "abstract": "Human-in-the-loop aims to train an accurate prediction model with minimum cost by integrating human knowledge and experience. Humans can provide training data for machine learning applications and directly accomplish tasks that are hard for computers in the pipeline with the help of machine-based approaches. In this paper, we survey existing works on human-in-the-loop from a data perspective and classify them into three categories with a progressive relationship: (1) the work of improving model performance from data processing, (2) the work of improving model performance through interventional model training, and (3) the design of the system independent human-in-the-loop. Using the above categorization, we summarize major approaches in the field; along with their technical strengths/ weaknesses, we have simple classification and discussion in natural language processing, computer vision, and others. Besides, we provide some open challenges and opportunities. This survey intends to provide a high-level summarization for human-in-the-loop and motivates interested readers to consider approaches for designing effective human-in-the-loop solutions."
     },
     {
       "@id": "tea:resource/thatikondaNovelDynamicConfidence2024",

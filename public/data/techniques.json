@@ -3484,16 +3484,21 @@
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box",
       "assurance-goal-category/fairness",
+      "assurance-goal-category/fairness/bias-assessment",
       "assurance-goal-category/safety",
+      "assurance-goal-category/safety/risk-identification",
       "assurance-goal-category/transparency",
+      "assurance-goal-category/transparency/governance-disclosure",
       "data-requirements/no-special-requirements",
       "data-type/any",
+      "evidence-type/decision-record",
       "evidence-type/governance-framework",
       "evidence-type/qualitative-report",
       "expertise-needed/domain-expertise",
       "expertise-needed/ethics",
       "expertise-needed/legal",
       "lifecycle-stage/model-development",
+      "lifecycle-stage/post-deployment",
       "lifecycle-stage/project-planning",
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/process"
@@ -3530,16 +3535,19 @@
       }
     ],
     "resources": [
-      "hadleyInvestigatingAlgorithmReview2024"
+      "hadleyInvestigatingAlgorithmReview2024",
+      "schuettHowDesignAI2025"
     ],
     "complexity_rating": 4,
     "computational_cost_rating": 1,
     "acronym": "IRBs",
     "related_techniques": [
-      "red-teaming",
-      "safety-envelope-testing",
+      "datasheets-for-datasets",
+      "human-in-the-loop-safeguards",
       "model-cards",
-      "model-development-audit-trails"
+      "model-development-audit-trails",
+      "red-teaming",
+      "safety-envelope-testing"
     ]
   },
   {
@@ -3558,11 +3566,15 @@
       "assurance-goal-category/fairness",
       "assurance-goal-category/reliability",
       "assurance-goal-category/safety",
+      "assurance-goal-category/security",
+      "assurance-goal-category/security/vulnerability-assessment",
       "data-requirements/no-special-requirements",
       "data-type/any",
+      "evidence-type/documentation",
       "evidence-type/qualitative-report",
       "expertise-needed/ml-engineering",
       "expertise-needed/security",
+      "lifecycle-stage/model-development",
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/procedural"
     ],
@@ -3578,6 +3590,10 @@
       {
         "description": "Systematically testing a hiring algorithm with inputs designed to reveal hidden biases, using adversarial examples to check if the system can be manipulated to discriminate against protected groups or favour certain demographics unfairly.",
         "goal": "Fairness"
+      },
+      {
+        "description": "Systematically testing AI systems for security vulnerabilities including prompt injection, data exfiltration, jailbreaking, and model manipulation by simulating adversarial attacks. This helps identify security weaknesses before deployment and provides documented evidence for compliance with regulatory requirements such as EU AI Act Article 55 and ISO 42001 adversarial testing mandates.",
+        "goal": "Security"
       }
     ],
     "limitations": [
@@ -3599,6 +3615,7 @@
     ],
     "resources": [
       "doraRedTeamingLLM2025",
+      "microsoftPyRITPythonRisk2024",
       "purpuraBuildingSafeGenAI2025",
       "qianzhangEffectiveAutomationSupport2025",
       "wangTrojanActivationAttack2023"
@@ -3698,13 +3715,18 @@
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box",
       "assurance-goal-category/fairness",
+      "assurance-goal-category/fairness/procedural",
       "assurance-goal-category/safety",
+      "assurance-goal-category/safety/human-oversight",
       "assurance-goal-category/transparency",
+      "assurance-goal-category/transparency/accountability",
       "data-requirements/no-special-requirements",
       "data-type/any",
+      "evidence-type/governance-framework",
       "evidence-type/qualitative-report",
       "expertise-needed/domain-expertise",
       "expertise-needed/stakeholder-engagement",
+      "lifecycle-stage/post-deployment",
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/process"
     ],
@@ -3740,16 +3762,21 @@
       }
     ],
     "resources": [
+      "Article14Human",
+      "HumanSignalLabelstudio2026",
       "HumanintheLoopAIComprehensive2024",
-      "chelseaImprovingApplicabilityAI2022"
+      "chelseaImprovingApplicabilityAI2022",
+      "mosqueira-reyHumanintheloopMachineLearning2023",
+      "wuSurveyHumanintheloopMachine2022"
     ],
     "complexity_rating": 2,
     "computational_cost_rating": 2,
     "related_techniques": [
-      "confidence-thresholding",
-      "safety-guardrails",
       "anomaly-detection",
-      "out-of-domain-detection"
+      "confidence-thresholding",
+      "internal-review-boards",
+      "out-of-domain-detection",
+      "safety-guardrails"
     ]
   },
   {

@@ -92,6 +92,12 @@ export function createServer(graph: KnowledgeGraph): McpServer {
           .describe(
             'Filter by tag path fragments (e.g. model-agnostic, tabular)'
           ),
+        excludeTags: z
+          .array(z.string())
+          .optional()
+          .describe(
+            'Exclude techniques matching any of these tag fragments (e.g. neural-networks)'
+          ),
         maxComplexity: z
           .number()
           .int()
@@ -108,11 +114,12 @@ export function createServer(graph: KnowledgeGraph): McpServer {
           .describe('Maximum number of results (default 20)'),
       },
     },
-    ({ query, goals, tags, maxComplexity, limit }) => {
+    ({ query, goals, tags, excludeTags, maxComplexity, limit }) => {
       const results = graph.findTechniques({
         query,
         goals,
         tags,
+        excludeTags,
         maxComplexity,
         limit,
       });
@@ -272,13 +279,20 @@ export function createServer(graph: KnowledgeGraph): McpServer {
           .describe(
             'Lifecycle stage context (e.g. model-development, deployment)'
           ),
+        excludeModelTypes: z
+          .array(z.string())
+          .optional()
+          .describe(
+            'Exclude techniques for these model architectures (e.g. neural-networks)'
+          ),
       },
     },
-    ({ claim, modelType, dataType, lifecycleStage }) => {
+    ({ claim, modelType, dataType, lifecycleStage, excludeModelTypes }) => {
       const results = graph.suggestForClaim(claim, {
         modelType,
         dataType,
         lifecycleStage,
+        excludeModelTypes,
       });
       if (results.length === 0) {
         return {

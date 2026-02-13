@@ -2,6 +2,7 @@
  * KnowledgeGraph: in-memory graph with query methods for all 10 MCP tools.
  */
 
+import Fuse from 'fuse.js';
 import { buildGraphIndex } from './indexes.js';
 import type {
   GoalNode,
@@ -21,6 +22,35 @@ export type {
 } from './types.js';
 
 const WHITESPACE_RE = /\s+/;
+
+// --- Concept-to-tag mapping for claim-based suggestions ---
+
+const CONCEPT_TAGS: Record<string, string[]> = {
+  // Uncertainty & robustness
+  uncertain: ['uncertainty-quantification'],
+  confidence: ['uncertainty-quantification'],
+  calibrat: ['uncertainty-quantification', 'validation'],
+  robust: ['robustness'],
+  reliab: ['validation', 'robustness'],
+  converge: ['validation'],
+  // Detection & monitoring
+  detect: ['anomaly-detection', 'monitoring'],
+  monitor: ['monitoring'],
+  'out-of-distribution': ['anomaly-detection'],
+  anomal: ['anomaly-detection'],
+  // Interpretability & governance
+  interpret: ['interpretability'],
+  explain: ['interpretability', 'attribution'],
+  actionable: ['human-in-the-loop', 'documentation'],
+  clinician: ['human-in-the-loop', 'documentation'],
+  stakeholder: ['human-in-the-loop'],
+  // Validation
+  valid: ['validation'],
+  endpoint: ['validation'],
+  accura: ['validation'],
+  fidelity: ['validation', 'sensitivity-analysis'],
+  sensitiv: ['sensitivity-analysis'],
+};
 
 // --- Helpers to reduce cognitive complexity ---
 
@@ -84,11 +114,71 @@ function buildTagCategoryCoverage(
   return { dimension, categories: result, total: techniques.length };
 }
 
+/** Extract concept tags from claim text using substring matching. */
+function extractConceptTags(claimText: string): string[] {
+  const lower = claimText.toLowerCase();
+  const tags = new Set<string>();
+  for (const [concept, mappedTags] of Object.entries(CONCEPT_TAGS)) {
+    if (lower.includes(concept)) {
+      for (const tag of mappedTags) {
+        tags.add(tag);
+      }
+    }
+  }
+  return Array.from(tags);
+}
+
+/** Check if a technique matches any of the given concept tag fragments. */
+function techniqueMatchesConceptTags(
+  technique: TechniqueNode,
+  conceptTags: string[]
+): boolean {
+  return conceptTags.some((concept) =>
+    technique.tags.some((tag) => tag.toLowerCase().includes(concept))
+  );
+}
+
+/** Filter out techniques matching any exclude tag fragment. */
+function applyExcludeTags(
+  techniques: TechniqueNode[],
+  excludeTags: string[]
+): TechniqueNode[] {
+  const excludeTerms = excludeTags.map((t) => t.toLowerCase());
+  return techniques.filter(
+    (t) =>
+      !excludeTerms.some((term) =>
+        t.tags.some((tag) => tag.toLowerCase().includes(term))
+      )
+  );
+}
+
+/** Filter by context tag (include only techniques matching the tag fragment). */
+function applyContextFilter(
+  techniques: TechniqueNode[],
+  term: string
+): TechniqueNode[] {
+  const lower = term.toLowerCase();
+  return techniques.filter((t) =>
+    t.tags.some((tag) => tag.toLowerCase().includes(lower))
+  );
+}
+
 export class KnowledgeGraph {
   private index: GraphIndex;
+  private fuse: Fuse<TechniqueNode>;
 
   constructor(graphData: JsonLdGraph) {
     this.index = buildGraphIndex(graphData['@graph']);
+    this.fuse = new Fuse(this.getAllTechniques(), {
+      keys: [
+        { name: 'name', weight: 0.4 },
+        { name: 'description', weight: 0.3 },
+        { name: 'acronym', weight: 0.1 },
+      ],
+      threshold: 0.3,
+      includeScore: true,
+      minMatchCharLength: 2,
+    });
   }
 
   // --- Accessors ---
@@ -131,6 +221,7 @@ export class KnowledgeGraph {
     query?: string;
     goals?: string[];
     tags?: string[];
+    excludeTags?: string[];
     maxComplexity?: number;
     limit?: number;
   }): TechniqueNode[] {
@@ -151,6 +242,10 @@ export class KnowledgeGraph {
       );
     }
 
+    if (filters.excludeTags?.length) {
+      results = applyExcludeTags(results, filters.excludeTags);
+    }
+
     if (maxComplexity != null) {
       results = results.filter(
         (t) => t.complexityRating == null || t.complexityRating <= maxComplexity
@@ -158,18 +253,18 @@ export class KnowledgeGraph {
     }
 
     if (filters.query) {
-      const terms = filters.query.toLowerCase().split(WHITESPACE_RE);
-      results = results.filter((t) => {
-        const text =
-          `${t.name} ${t.description} ${t.acronym ?? ''}`.toLowerCase();
-        return terms.every((term) => text.includes(term));
+      // Build a Fuse index over the pre-filtered set for scoped search
+      const scopedFuse = new Fuse(results, {
+        keys: [
+          { name: 'name', weight: 0.4 },
+          { name: 'description', weight: 0.3 },
+          { name: 'acronym', weight: 0.1 },
+        ],
+        threshold: 0.3,
+        includeScore: true,
+        minMatchCharLength: 2,
       });
-      const q = filters.query.toLowerCase();
-      results.sort((a, b) => {
-        const aName = a.name.toLowerCase().includes(q) ? 0 : 1;
-        const bName = b.name.toLowerCase().includes(q) ? 0 : 1;
-        return aName - bName;
-      });
+      results = scopedFuse.search(filters.query).map((r) => r.item);
     }
 
     const limit = filters.limit ?? 20;
@@ -283,8 +378,10 @@ export class KnowledgeGraph {
       modelType?: string;
       dataType?: string;
       lifecycleStage?: string;
+      excludeModelTypes?: string[];
     }
   ): TechniqueNode[] {
+    // Stage 1: Goal inference from claim keywords
     const goalKeywords: Record<string, string[]> = {
       explainability: [
         'explain',
@@ -346,32 +443,72 @@ export class KnowledgeGraph {
       }
     }
 
+    // Get goal-filtered base set
     let results = this.findTechniques({
       goals: matchedGoals.length > 0 ? matchedGoals : undefined,
-      query: claimText,
       limit: 50,
     });
 
-    if (context?.modelType) {
-      const term = context.modelType.toLowerCase();
-      results = results.filter((t) =>
-        t.tags.some((tag) => tag.toLowerCase().includes(term))
+    // Stage 2: Concept-tag sub-filtering
+    const conceptTags = extractConceptTags(claimText);
+    const goalFiltered = results;
+
+    if (conceptTags.length > 0) {
+      const conceptMatched = results.filter((t) =>
+        techniqueMatchesConceptTags(t, conceptTags)
       );
+      if (conceptMatched.length > 0) {
+        results = conceptMatched;
+      } else {
+        // Fall back to Fuse.js search within goal-filtered set
+        const fuseResults = this.fuseSearchWithin(results, claimText);
+        results = fuseResults.length > 0 ? fuseResults : goalFiltered;
+      }
+    } else {
+      // No concept tags extracted, try Fuse.js search
+      const fuseResults = this.fuseSearchWithin(results, claimText);
+      // If Fuse returns nothing, keep the goal-filtered set
+      results = fuseResults.length > 0 ? fuseResults : goalFiltered;
+    }
+
+    // Apply context filters (include)
+    if (context?.modelType) {
+      results = applyContextFilter(results, context.modelType);
     }
     if (context?.dataType) {
-      const term = context.dataType.toLowerCase();
-      results = results.filter((t) =>
-        t.tags.some((tag) => tag.toLowerCase().includes(term))
-      );
+      results = applyContextFilter(results, context.dataType);
     }
     if (context?.lifecycleStage) {
-      const term = context.lifecycleStage.toLowerCase();
-      results = results.filter((t) =>
-        t.tags.some((tag) => tag.toLowerCase().includes(term))
-      );
+      results = applyContextFilter(results, context.lifecycleStage);
+    }
+
+    // Apply model type exclusions
+    if (context?.excludeModelTypes?.length) {
+      results = applyExcludeTags(results, context.excludeModelTypes);
     }
 
     return results.slice(0, 10);
+  }
+
+  /** Run Fuse.js fuzzy search scoped to a pre-filtered technique list. */
+  private fuseSearchWithin(
+    techniques: TechniqueNode[],
+    query: string
+  ): TechniqueNode[] {
+    if (techniques.length === 0) {
+      return [];
+    }
+    const scopedFuse = new Fuse(techniques, {
+      keys: [
+        { name: 'name', weight: 0.4 },
+        { name: 'description', weight: 0.3 },
+        { name: 'acronym', weight: 0.1 },
+      ],
+      threshold: 0.3,
+      includeScore: true,
+      minMatchCharLength: 2,
+    });
+    return scopedFuse.search(query).map((r) => r.item);
   }
 
   findEvidenceTypes(): Array<{

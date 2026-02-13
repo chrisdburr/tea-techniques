@@ -79,6 +79,43 @@ describe('KnowledgeGraph', () => {
         }
       }
     });
+
+    it('fuzzy matches multi-word queries', () => {
+      // "permutation importance" is a technique name - Fuse should match it
+      const results = graph.findTechniques({
+        query: 'permutation importance',
+      });
+      expect(results.length).toBeGreaterThanOrEqual(1);
+      expect(results[0]?.slug).toBe('permutation-importance');
+    });
+
+    it('excludes techniques by tag fragment', () => {
+      const all = graph.findTechniques({});
+      const filtered = graph.findTechniques({
+        excludeTags: ['tree-based'],
+      });
+      expect(filtered.length).toBeLessThan(all.length);
+      for (const t of filtered) {
+        expect(
+          t.tags.some((tag) => tag.toLowerCase().includes('tree-based'))
+        ).toBe(false);
+      }
+    });
+
+    it('combines include tags and exclude tags', () => {
+      const results = graph.findTechniques({
+        tags: ['model-agnostic'],
+        excludeTags: ['tree-based'],
+      });
+      for (const t of results) {
+        expect(
+          t.tags.some((tag) => tag.toLowerCase().includes('model-agnostic'))
+        ).toBe(true);
+        expect(
+          t.tags.some((tag) => tag.toLowerCase().includes('tree-based'))
+        ).toBe(false);
+      }
+    });
   });
 
   describe('compareTechniques', () => {
@@ -129,6 +166,36 @@ describe('KnowledgeGraph', () => {
     it('returns results for broad claim', () => {
       const results = graph.suggestForClaim('understand the model');
       expect(results.length).toBeGreaterThanOrEqual(0);
+    });
+
+    it('no longer passes claim text as query (does not return empty)', () => {
+      // Long claim sentences previously returned 0 results with AND-all-terms
+      const results = graph.suggestForClaim(
+        'The model reliably quantifies uncertainty in its predictions'
+      );
+      expect(results.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it('uses concept-tag mapping for calibration claims', () => {
+      const results = graph.suggestForClaim(
+        'The model is well calibrated and reliable'
+      );
+      expect(results.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it('excludes model types when specified', () => {
+      const withAll = graph.suggestForClaim('explain model predictions');
+      const withExclude = graph.suggestForClaim('explain model predictions', {
+        excludeModelTypes: ['tree-based'],
+      });
+      // Exclusion should remove tree-based techniques
+      for (const t of withExclude) {
+        expect(
+          t.tags.some((tag) => tag.toLowerCase().includes('tree-based'))
+        ).toBe(false);
+      }
+      // Should have fewer or equal results
+      expect(withExclude.length).toBeLessThanOrEqual(withAll.length);
     });
   });
 

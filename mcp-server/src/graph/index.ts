@@ -198,6 +198,8 @@ const GOAL_KEYWORDS: Record<string, string[]> = {
     'calibrat',
     'uncertainty',
     'confidence',
+    'valid',
+    'stable',
   ],
   safety: ['safe', 'harm', 'risk', 'hazard', 'guardrail', 'alignment'],
   security: [
@@ -215,6 +217,9 @@ const GOAL_KEYWORDS: Record<string, string[]> = {
     'accountab',
     'model card',
     'datasheet',
+    'clinician',
+    'stakeholder',
+    'actionable',
   ],
 };
 

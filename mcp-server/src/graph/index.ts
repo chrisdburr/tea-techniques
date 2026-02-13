@@ -26,30 +26,31 @@ const WHITESPACE_RE = /\s+/;
 // --- Concept-to-tag mapping for claim-based suggestions ---
 
 const CONCEPT_TAGS: Record<string, string[]> = {
-  // Uncertainty & robustness
+  // Uncertainty & calibration (uncertainty-quantification is a real tag path)
   uncertain: ['uncertainty-quantification'],
   confidence: ['uncertainty-quantification'],
-  calibrat: ['uncertainty-quantification', 'validation'],
-  robust: ['robustness'],
-  reliab: ['validation', 'robustness'],
-  converge: ['validation'],
-  // Detection & monitoring
-  detect: ['anomaly-detection', 'monitoring'],
+  calibrat: ['uncertainty-quantification'],
+  converge: ['uncertainty-quantification'],
+  // Detection & monitoring (monitoring is a real tag path under lifecycle + safety)
+  detect: ['monitoring'],
   monitor: ['monitoring'],
-  'out-of-distribution': ['anomaly-detection'],
-  anomal: ['anomaly-detection'],
-  // Interpretability & governance
-  interpret: ['interpretability'],
-  explain: ['interpretability', 'attribution'],
-  actionable: ['human-in-the-loop', 'documentation'],
-  clinician: ['human-in-the-loop', 'documentation'],
-  stakeholder: ['human-in-the-loop'],
-  // Validation
-  valid: ['validation'],
-  endpoint: ['validation'],
-  accura: ['validation'],
-  fidelity: ['validation', 'sensitivity-analysis'],
-  sensitiv: ['sensitivity-analysis'],
+  'out-of-distribution': ['monitoring'],
+  anomal: ['monitoring'],
+  // Governance & process (process is technique-type, human-oversight is under safety)
+  interpret: ['process', 'human-oversight'],
+  clinician: ['process', 'human-oversight', 'documentation'],
+  stakeholder: ['process', 'human-oversight'],
+  actionable: ['process', 'documentation'],
+  governance: ['process', 'governance-disclosure'],
+  // Explainability methods (attribution is a real tag path under explainability)
+  explain: ['attribution', 'feature-importance'],
+  'feature importance': ['attribution', 'feature-importance'],
+  // Documentation & transparency (documentation is a real tag path)
+  document: ['documentation', 'governance-disclosure'],
+  audit: ['documentation', 'governance-disclosure'],
+  // Sensitivity & fidelity (sensitivity-testing is a real tag path)
+  sensitiv: ['sensitivity-testing'],
+  fidelity: ['sensitivity-testing'],
 };
 
 // --- Helpers to reduce cognitive complexity ---
@@ -163,22 +164,101 @@ function applyContextFilter(
   );
 }
 
+// --- Goal inference from claim keywords ---
+
+const GOAL_KEYWORDS: Record<string, string[]> = {
+  explainability: [
+    'explain',
+    'interpret',
+    'understand',
+    'transparent',
+    'feature importance',
+    'attribution',
+  ],
+  fairness: [
+    'fair',
+    'bias',
+    'equit',
+    'discriminat',
+    'parity',
+    'protected',
+    'demographic',
+  ],
+  privacy: [
+    'privacy',
+    'confidential',
+    'personal data',
+    'anonymi',
+    'differential privacy',
+  ],
+  reliability: [
+    'reliable',
+    'robust',
+    'consistent',
+    'calibrat',
+    'uncertainty',
+    'confidence',
+  ],
+  safety: ['safe', 'harm', 'risk', 'hazard', 'guardrail', 'alignment'],
+  security: [
+    'secur',
+    'attack',
+    'adversarial',
+    'vulnerab',
+    'malicious',
+    'injection',
+  ],
+  transparency: [
+    'transparen',
+    'document',
+    'audit',
+    'accountab',
+    'model card',
+    'datasheet',
+  ],
+};
+
+/** Infer assurance goals from claim text using keyword matching. */
+function inferGoals(claimText: string): string[] {
+  const lower = claimText.toLowerCase();
+  const goals: string[] = [];
+  for (const [goal, keywords] of Object.entries(GOAL_KEYWORDS)) {
+    if (keywords.some((kw) => lower.includes(kw))) {
+      goals.push(goal);
+    }
+  }
+  return goals;
+}
+
+/**
+ * Build auto-exclusion tags based on which goals were NOT matched.
+ * If the claim is not about fairness, exclude fairness-metric noise.
+ * Always exclude neural-networks unless modelType suggests otherwise.
+ */
+function buildAutoExclusions(
+  matchedGoals: string[],
+  modelType?: string
+): string[] {
+  const exclusions: string[] = [];
+  // Exclude NN techniques unless the user explicitly specified a NN model type
+  const isNnContext =
+    modelType?.toLowerCase().includes('neural') ||
+    modelType?.toLowerCase().includes('deep');
+  if (!isNnContext) {
+    exclusions.push('neural-networks');
+  }
+  // Exclude fairness-metric noise unless the claim is about fairness
+  if (!matchedGoals.includes('fairness')) {
+    exclusions.push('fairness-metric');
+  }
+  return exclusions;
+}
+
 export class KnowledgeGraph {
   private index: GraphIndex;
-  private fuse: Fuse<TechniqueNode>;
 
   constructor(graphData: JsonLdGraph) {
     this.index = buildGraphIndex(graphData['@graph']);
-    this.fuse = new Fuse(this.getAllTechniques(), {
-      keys: [
-        { name: 'name', weight: 0.4 },
-        { name: 'description', weight: 0.3 },
-        { name: 'acronym', weight: 0.1 },
-      ],
-      threshold: 0.3,
-      includeScore: true,
-      minMatchCharLength: 2,
-    });
   }
 
   // --- Accessors ---
@@ -381,75 +461,39 @@ export class KnowledgeGraph {
       excludeModelTypes?: string[];
     }
   ): TechniqueNode[] {
-    // Stage 1: Goal inference from claim keywords
-    const goalKeywords: Record<string, string[]> = {
-      explainability: [
-        'explain',
-        'interpret',
-        'understand',
-        'transparent',
-        'feature importance',
-        'attribution',
-      ],
-      fairness: [
-        'fair',
-        'bias',
-        'equit',
-        'discriminat',
-        'parity',
-        'protected',
-        'demographic',
-      ],
-      privacy: [
-        'privacy',
-        'confidential',
-        'personal data',
-        'anonymi',
-        'differential privacy',
-      ],
-      reliability: [
-        'reliable',
-        'robust',
-        'consistent',
-        'calibrat',
-        'uncertainty',
-        'confidence',
-      ],
-      safety: ['safe', 'harm', 'risk', 'hazard', 'guardrail', 'alignment'],
-      security: [
-        'secur',
-        'attack',
-        'adversarial',
-        'vulnerab',
-        'malicious',
-        'injection',
-      ],
-      transparency: [
-        'transparen',
-        'document',
-        'audit',
-        'accountab',
-        'model card',
-        'datasheet',
-      ],
-    };
+    const matchedGoals = inferGoals(claimText);
+    const autoExclusions = buildAutoExclusions(
+      matchedGoals,
+      context?.modelType
+    );
 
-    const lowerClaim = claimText.toLowerCase();
-    const matchedGoals: string[] = [];
+    // Combine auto-exclusions with explicit exclusions
+    const allExclusions = [
+      ...autoExclusions,
+      ...(context?.excludeModelTypes ?? []),
+    ];
 
-    for (const [goal, keywords] of Object.entries(goalKeywords)) {
-      if (keywords.some((kw) => lowerClaim.includes(kw))) {
-        matchedGoals.push(goal);
-      }
-    }
-
-    // Get goal-filtered base set
+    // Get goal-filtered base set with auto-exclusions applied
     let results = this.findTechniques({
       goals: matchedGoals.length > 0 ? matchedGoals : undefined,
+      excludeTags: allExclusions.length > 0 ? allExclusions : undefined,
       limit: 50,
     });
 
-    // Stage 2: Concept-tag sub-filtering
+    // Stage 2: Narrow by concept tags, with Fuse.js fallback
+    results = this.narrowByConceptTags(results, claimText);
+
+    // Stage 3: Apply context filters (include)
+    results = this.applyClaimContextFilters(results, context);
+
+    return results.slice(0, 10);
+  }
+
+  /** Narrow results by concept-tag matching with Fuse.js fallback. */
+  private narrowByConceptTags(
+    results: TechniqueNode[],
+    claimText: string
+  ): TechniqueNode[] {
     const conceptTags = extractConceptTags(claimText);
     const goalFiltered = results;
 
@@ -458,36 +502,31 @@ export class KnowledgeGraph {
         techniqueMatchesConceptTags(t, conceptTags)
       );
       if (conceptMatched.length > 0) {
-        results = conceptMatched;
-      } else {
-        // Fall back to Fuse.js search within goal-filtered set
-        const fuseResults = this.fuseSearchWithin(results, claimText);
-        results = fuseResults.length > 0 ? fuseResults : goalFiltered;
+        return conceptMatched;
       }
-    } else {
-      // No concept tags extracted, try Fuse.js search
-      const fuseResults = this.fuseSearchWithin(results, claimText);
-      // If Fuse returns nothing, keep the goal-filtered set
-      results = fuseResults.length > 0 ? fuseResults : goalFiltered;
     }
 
-    // Apply context filters (include)
+    // Fall back to Fuse.js search; if nothing matches, keep goal-filtered set
+    const fuseResults = this.fuseSearchWithin(results, claimText);
+    return fuseResults.length > 0 ? fuseResults : goalFiltered;
+  }
+
+  /** Apply include-style context filters from claim context. */
+  private applyClaimContextFilters(
+    results: TechniqueNode[],
+    context?: { modelType?: string; dataType?: string; lifecycleStage?: string }
+  ): TechniqueNode[] {
+    let filtered = results;
     if (context?.modelType) {
-      results = applyContextFilter(results, context.modelType);
+      filtered = applyContextFilter(filtered, context.modelType);
     }
     if (context?.dataType) {
-      results = applyContextFilter(results, context.dataType);
+      filtered = applyContextFilter(filtered, context.dataType);
     }
     if (context?.lifecycleStage) {
-      results = applyContextFilter(results, context.lifecycleStage);
+      filtered = applyContextFilter(filtered, context.lifecycleStage);
     }
-
-    // Apply model type exclusions
-    if (context?.excludeModelTypes?.length) {
-      results = applyExcludeTags(results, context.excludeModelTypes);
-    }
-
-    return results.slice(0, 10);
+    return filtered;
   }
 
   /** Run Fuse.js fuzzy search scoped to a pre-filtered technique list. */

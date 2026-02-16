@@ -22,6 +22,49 @@ export type {
 } from './types.js';
 
 const WHITESPACE_RE = /\s+/;
+const MIN_TERM_LENGTH = 2;
+
+/**
+ * Multi-term Fuse.js search: splits a multi-word query into individual terms,
+ * searches each independently, then ranks results by term-hit count and score.
+ * Single-term queries pass through to normal Fuse.js search unchanged.
+ *
+ * Returns items in ranked order (most term hits first, best score as tiebreaker).
+ */
+function multiTermFuseSearch<T>(fuse: Fuse<T>, query: string): T[] {
+  const terms = query
+    .trim()
+    .split(WHITESPACE_RE)
+    .filter((t) => t.length >= MIN_TERM_LENGTH);
+
+  // Single term or empty: use normal Fuse.js search
+  if (terms.length <= 1) {
+    return fuse.search(query).map((r) => r.item);
+  }
+
+  // Multi-term: search each term, aggregate by hit count + best score.
+  // Using object identity (reference equality) as Map key works because
+  // Fuse returns references to the original objects in the index.
+  const itemScores = new Map<T, { hits: number; bestScore: number }>();
+
+  for (const term of terms) {
+    for (const r of fuse.search(term)) {
+      const existing = itemScores.get(r.item);
+      const score = r.score ?? 1;
+      if (existing) {
+        existing.hits++;
+        existing.bestScore = Math.min(existing.bestScore, score);
+      } else {
+        itemScores.set(r.item, { hits: 1, bestScore: score });
+      }
+    }
+  }
+
+  // Sort: more hits first, then better (lower) Fuse.js score
+  return Array.from(itemScores.entries())
+    .sort(([, a], [, b]) => b.hits - a.hits || a.bestScore - b.bestScore)
+    .map(([item]) => item);
+}
 
 // --- Concept-to-tag mapping for claim-based suggestions ---
 
@@ -405,7 +448,7 @@ export class KnowledgeGraph {
         includeScore: true,
         minMatchCharLength: 2,
       });
-      results = scopedFuse.search(filters.query).map((r) => r.item);
+      results = multiTermFuseSearch(scopedFuse, filters.query);
     }
 
     const limit = filters.limit ?? 20;

@@ -10,6 +10,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadGraphData } from '../src/data/loader.js';
+import { loadEmbeddings } from '../src/embedding/loader.js';
 import { KnowledgeGraph } from '../src/graph/index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -291,13 +292,17 @@ function printReport(
 // --- Main ---
 
 async function main(): Promise<void> {
-  const graphData = await loadGraphData({ local: true, dataDir: DATA_DIR });
-  const graph = new KnowledgeGraph(graphData);
+  const [graphData, embeddings] = await Promise.all([
+    loadGraphData({ local: true, dataDir: DATA_DIR }),
+    loadEmbeddings({ local: true, dataDir: DATA_DIR }),
+  ]);
+  const graph = new KnowledgeGraph(graphData, embeddings);
 
   const claims: ClaimEvaluation[] = [];
 
   for (const rubric of RUBRIC) {
-    const results = graph.suggestForClaim(rubric.text);
+    // biome-ignore lint/nursery/noAwaitInLoop: sequential evaluation intentional
+    const results = await graph.suggestForClaim(rubric.text);
     const returnedSlugs = results.map((t) => t.slug);
 
     const scores = returnedSlugs.map((slug) => ({

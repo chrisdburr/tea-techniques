@@ -3,6 +3,9 @@
  */
 
 import Fuse from 'fuse.js';
+import { embedQuery, getEmbeddingModel } from '../embedding/model.js';
+import { computeRRF, rankBySimilarity } from '../embedding/search.js';
+import type { EmbeddingsIndex } from '../embedding/types.js';
 import { buildGraphIndex } from './indexes.js';
 import type {
   GoalNode,
@@ -342,9 +345,11 @@ interface ClaimEntry {
 export class KnowledgeGraph {
   private index: GraphIndex;
   private claimsFuse: Fuse<ClaimEntry>;
+  private embeddings: EmbeddingsIndex | null;
 
-  constructor(graphData: JsonLdGraph) {
+  constructor(graphData: JsonLdGraph, embeddings?: EmbeddingsIndex | null) {
     this.index = buildGraphIndex(graphData['@graph']);
+    this.embeddings = embeddings ?? null;
 
     // Build flattened claims index for semantic matching
     const claimEntries: ClaimEntry[] = [];
@@ -556,7 +561,7 @@ export class KnowledgeGraph {
     return results;
   }
 
-  suggestForClaim(
+  async suggestForClaim(
     claimText: string,
     context?: {
       modelType?: string;
@@ -564,7 +569,7 @@ export class KnowledgeGraph {
       lifecycleStage?: string;
       excludeModelTypes?: string[];
     }
-  ): TechniqueNode[] {
+  ): Promise<TechniqueNode[]> {
     const matchedGoals = inferGoals(claimText);
     const exclusions = context?.excludeModelTypes ?? [];
 
@@ -580,28 +585,63 @@ export class KnowledgeGraph {
     // Stage 2b: Claims search (unconstrained across all techniques)
     const claimsMatched = this.searchClaims(claimText, 10);
 
-    // Stage 2c: Merge (union, deduplicate, concept-tag results first)
-    // Concept-tag matching is structural/semantic; claims matching is fuzzy text.
-    const mergedIds = new Set<string>();
-    const merged: TechniqueNode[] = [];
+    // Build keyword pipeline ranking (concept-tag results first, then claims)
+    const keywordIds = new Set<string>();
+    const keywordSlugs: string[] = [];
     for (const t of [...narrowed, ...claimsMatched]) {
-      if (!mergedIds.has(t.id)) {
-        mergedIds.add(t.id);
-        merged.push(t);
+      if (!keywordIds.has(t.id)) {
+        keywordIds.add(t.id);
+        keywordSlugs.push(t.slug);
       }
     }
 
-    // If both paths found nothing, fall back to the goal-filtered set ranked
-    // by loose Fuse.js similarity (avoids arbitrary Map insertion order).
-    let results =
-      merged.length > 0
-        ? merged
-        : this.fuseRankFallback(goalFiltered, claimText);
+    // If keyword pipeline found nothing, use goal-filtered set as fallback
+    if (keywordSlugs.length === 0) {
+      const fallback = this.fuseRankFallback(goalFiltered, claimText);
+      for (const t of fallback) {
+        keywordSlugs.push(t.slug);
+      }
+    }
+
+    // Stage 2c: Embedding search + RRF merge (or keyword-only fallback)
+    const embedSlugs = await this.embeddingSearch(claimText, 20);
+    const mergedSlugs =
+      embedSlugs.length > 0
+        ? computeRRF([keywordSlugs, embedSlugs])
+        : keywordSlugs.slice(0, 10);
+
+    // Resolve slugs back to TechniqueNode[]
+    let results: TechniqueNode[] = [];
+    for (const slug of mergedSlugs) {
+      const t = this.getTechnique(slug);
+      if (t) {
+        results.push(t);
+      }
+    }
 
     // Stage 3: Apply context filters (include)
     results = this.applyClaimContextFilters(results, context);
 
     return results.slice(0, 10);
+  }
+
+  /** Embedding-based similarity search. Returns ranked slugs or empty on failure. */
+  private async embeddingSearch(
+    claimText: string,
+    topK: number
+  ): Promise<string[]> {
+    if (!this.embeddings) {
+      return [];
+    }
+    const model = await getEmbeddingModel();
+    if (!model) {
+      return [];
+    }
+    const queryVec = await embedQuery(model, claimText);
+    if (!queryVec) {
+      return [];
+    }
+    return rankBySimilarity(queryVec, this.embeddings, topK);
   }
 
   /** Search the flattened claims index across all techniques. */

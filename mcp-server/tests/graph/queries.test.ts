@@ -158,36 +158,39 @@ describe('KnowledgeGraph', () => {
   });
 
   describe('suggestForClaim', () => {
-    it('suggests techniques for an explainability claim', () => {
-      const results = graph.suggestForClaim('explain model predictions');
+    it('suggests techniques for an explainability claim', async () => {
+      const results = await graph.suggestForClaim('explain model predictions');
       expect(results.length).toBeGreaterThanOrEqual(1);
     });
 
-    it('returns results for broad claim', () => {
-      const results = graph.suggestForClaim('understand the model');
+    it('returns results for broad claim', async () => {
+      const results = await graph.suggestForClaim('understand the model');
       expect(results.length).toBeGreaterThanOrEqual(0);
     });
 
-    it('no longer passes claim text as query (does not return empty)', () => {
+    it('no longer passes claim text as query (does not return empty)', async () => {
       // Long claim sentences previously returned 0 results with AND-all-terms
-      const results = graph.suggestForClaim(
+      const results = await graph.suggestForClaim(
         'The model reliably quantifies uncertainty in its predictions'
       );
       expect(results.length).toBeGreaterThanOrEqual(1);
     });
 
-    it('uses concept-tag mapping for calibration claims', () => {
-      const results = graph.suggestForClaim(
+    it('uses concept-tag mapping for calibration claims', async () => {
+      const results = await graph.suggestForClaim(
         'The model is well calibrated and reliable'
       );
       expect(results.length).toBeGreaterThanOrEqual(1);
     });
 
-    it('excludes model types when specified', () => {
-      const withAll = graph.suggestForClaim('explain model predictions');
-      const withExclude = graph.suggestForClaim('explain model predictions', {
-        excludeModelTypes: ['tree-based'],
-      });
+    it('excludes model types when specified', async () => {
+      const withAll = await graph.suggestForClaim('explain model predictions');
+      const withExclude = await graph.suggestForClaim(
+        'explain model predictions',
+        {
+          excludeModelTypes: ['tree-based'],
+        }
+      );
       // Exclusion should remove tree-based techniques
       for (const t of withExclude) {
         expect(
@@ -198,24 +201,24 @@ describe('KnowledgeGraph', () => {
       expect(withExclude.length).toBeLessThanOrEqual(withAll.length);
     });
 
-    it('finds technique via claims search when claim text matches sample claim', () => {
+    it('finds technique via claims search when claim text matches sample claim', async () => {
       // SHAP has a sample claim about "decomposed into quantified contributions"
-      const results = graph.suggestForClaim(
+      const results = await graph.suggestForClaim(
         'predictions decomposed into quantified contributions from each input feature'
       );
       const slugs = results.map((t) => t.slug);
       expect(slugs).toContain('shapley-additive-explanations');
     });
 
-    it('claims search does not break when techniques have no claims', () => {
+    it('claims search does not break when techniques have no claims', async () => {
       // Permutation Importance and MDI have empty sampleClaims
-      const results = graph.suggestForClaim('feature importance ranking');
+      const results = await graph.suggestForClaim('feature importance ranking');
       expect(results.length).toBeGreaterThanOrEqual(1);
     });
 
-    it('deduplicates results from claims and concept-tag paths', () => {
+    it('deduplicates results from claims and concept-tag paths', async () => {
       // SHAP should appear at most once even if both paths find it
-      const results = graph.suggestForClaim(
+      const results = await graph.suggestForClaim(
         'explain the contributions from each feature'
       );
       const slugs = results.map((t) => t.slug);

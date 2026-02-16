@@ -10,6 +10,7 @@
 
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { loadGraphData } from './data/loader.js';
+import { loadEmbeddings } from './embedding/loader.js';
 import { KnowledgeGraph } from './graph/index.js';
 import { createServer } from './server.js';
 
@@ -20,16 +21,16 @@ const dataDir =
   new URL('../../public/data', import.meta.url).pathname;
 
 async function main(): Promise<void> {
-  const graphData = await loadGraphData({
-    local: isLocal,
-    dataDir,
-  });
+  const [graphData, embeddings] = await Promise.all([
+    loadGraphData({ local: isLocal, dataDir }),
+    loadEmbeddings({ local: isLocal, dataDir }),
+  ]);
 
-  const graph = new KnowledgeGraph(graphData);
+  const graph = new KnowledgeGraph(graphData, embeddings);
 
   // biome-ignore lint/suspicious/noConsole: startup logging to stderr
   console.error(
-    `TEA Techniques MCP Server ready (${graph.getSummary().techniques} techniques)`
+    `TEA Techniques MCP Server ready (${graph.getSummary().techniques} techniques, embeddings: ${embeddings ? 'loaded' : 'unavailable'})`
   );
 
   const server = createServer(graph);

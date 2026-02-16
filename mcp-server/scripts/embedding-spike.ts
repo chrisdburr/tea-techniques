@@ -893,7 +893,8 @@ async function main(): Promise<void> {
   log('Running current pipeline baseline...');
   const currentResults = new Map<string, string[]>();
   for (const rubric of RUBRICS) {
-    const results = graph.suggestForClaim(rubric.text);
+    // biome-ignore lint/nursery/noAwaitInLoop: sequential evaluation intentional
+    const results = await graph.suggestForClaim(rubric.text);
     currentResults.set(
       rubric.id,
       results.map((t) => t.slug)

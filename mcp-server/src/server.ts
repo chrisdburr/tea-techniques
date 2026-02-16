@@ -289,8 +289,14 @@ export function createServer(graph: KnowledgeGraph): McpServer {
           ),
       },
     },
-    ({ claim, modelType, dataType, lifecycleStage, excludeModelTypes }) => {
-      const results = graph.suggestForClaim(claim, {
+    async ({
+      claim,
+      modelType,
+      dataType,
+      lifecycleStage,
+      excludeModelTypes,
+    }) => {
+      const results = await graph.suggestForClaim(claim, {
         modelType,
         dataType,
         lifecycleStage,

@@ -52,16 +52,10 @@ The MCP server runs locally on your machine and provides 10 tools that Claude ca
 
 ## Quick Start
 
-### Prerequisites
-
-- Node.js 18+
-- TEA Techniques repository cloned locally
-
-### Install & Configure
+No installation needed — run directly with `npx`:
 
 ```bash
-cd mcp-server
-pnpm install
+npx @chrisdburr/tea-techniques-mcp
 ```
 
 <Tabs defaultValue="claude-code">
@@ -78,7 +72,7 @@ Add to your project's `.mcp.json`:
     "tea-techniques": {
       "type": "stdio",
       "command": "npx",
-      "args": ["tsx", "./mcp-server/src/index.ts"]
+      "args": ["-y", "@chrisdburr/tea-techniques-mcp"]
     }
   }
 }
@@ -92,7 +86,7 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
   "mcpServers": {
     "tea-techniques": {
       "command": "npx",
-      "args": ["tsx", "/path/to/tea-techniques/mcp-server/src/index.ts"]
+      "args": ["-y", "@chrisdburr/tea-techniques-mcp"]
     }
   }
 }
@@ -101,6 +95,26 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 </Tabs>
 
 After configuring, restart Claude. You should see 10 tools prefixed with `mcp__tea-techniques__`.
+
+<Callout variant="default" title="First-use setup">
+  On first run, the server fetches the knowledge graph from GitHub Pages and caches it locally for 24 hours.
+  Semantic search also downloads a lightweight ONNX model (~30MB) on first use.
+</Callout>
+
+<details>
+<summary>Local development (from source)</summary>
+
+If you want to contribute or run from the monorepo:
+
+```bash
+git clone https://github.com/alan-turing-institute/tea-techniques.git
+cd tea-techniques/mcp-server
+pnpm install
+```
+
+Then use `npx tsx ./mcp-server/src/index.ts` as the command in your MCP config, with `--local` to load data from project files instead of fetching remotely.
+
+</details>
 
 ---
 
@@ -265,7 +279,7 @@ Tools for connecting techniques to assurance arguments.
 
 <Badge variant="secondary">Claim Matching</Badge>
 
-Given an assurance claim, suggest relevant techniques based on keyword matching.
+Given an assurance claim, suggest relevant techniques using embedding-based semantic search with hybrid RRF ranking.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|

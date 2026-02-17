@@ -1,11 +1,16 @@
 {
-  "name": "tea-techniques-mcp",
-  "version": "1.0.0",
-  "description": "MCP server for the TEA Techniques knowledge graph",
+  "name": "@chrisdburr/tea-techniques-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for the TEA Techniques knowledge graph — AI assurance technique discovery via natural language",
   "type": "module",
   "bin": {
-    "tea-techniques-mcp": "./dist/index.js"
+    "tea-techniques-mcp": "dist/index.js"
   },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
@@ -13,17 +18,45 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "type-check": "tsc --noEmit",
+    "prepublishOnly": "tsc",
     "merge-claims": "tsx scripts/merge-claims.ts",
     "validate-claims": "tsx scripts/validate-claims.ts",
     "evaluate-cardiac-dt": "tsx scripts/evaluate-cardiac-dt.ts",
     "embedding-spike": "tsx scripts/embedding-spike.ts",
     "generate-embeddings": "tsx scripts/generate-embeddings.ts"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alan-turing-institute/tea-techniques.git",
+    "directory": "mcp-server"
+  },
+  "homepage": "https://alan-turing-institute.github.io/tea-techniques/docs/knowledge-graph/mcp-server/",
+  "bugs": {
+    "url": "https://github.com/alan-turing-institute/tea-techniques/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ai-assurance",
+    "explainability",
+    "fairness",
+    "knowledge-graph",
+    "claude",
+    "trustworthy-ai"
+  ],
+  "author": "Christopher Burr",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@huggingface/transformers": "^3.8.1",
     "@modelcontextprotocol/sdk": "^1.25.2",
     "fuse.js": "^7.1.0",
-    "onnxruntime-node": "^1.24.1",
+    "onnxruntime-node": "1.21.0",
     "zod": "^3.25.0"
   },
   "devDependencies": {

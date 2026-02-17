@@ -62,10 +62,12 @@ function formatTechniqueDetail(
   return sections.join('\n');
 }
 
+export const SERVER_VERSION = '0.1.0';
+
 export function createServer(graph: KnowledgeGraph): McpServer {
   const server = new McpServer({
     name: 'tea-techniques',
-    version: '1.0.0',
+    version: SERVER_VERSION,
   });
 
   // --- Tool 1: find_techniques ---

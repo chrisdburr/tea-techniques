@@ -8,25 +8,25 @@ importers:
 
   .:
     dependencies:
+      '@huggingface/transformers':
+        specifier: ^3.8.1
+        version: 3.8.1
       '@modelcontextprotocol/sdk':
         specifier: ^1.25.2
         version: 1.25.3(hono@4.11.7)(zod@3.25.76)
       fuse.js:
         specifier: ^7.1.0
         version: 7.1.0
+      onnxruntime-node:
+        specifier: 1.21.0
+        version: 1.21.0
       zod:
         specifier: ^3.25.0
         version: 3.25.76
     devDependencies:
-      '@huggingface/transformers':
-        specifier: ^3.8.1
-        version: 3.8.1
       '@types/node':
         specifier: ^20
         version: 20.19.31
-      onnxruntime-node:
-        specifier: ^1.24.1
-        version: 1.24.1
       tsx:
         specifier: ^4.20.3
         version: 4.21.0
@@ -565,10 +565,6 @@ packages:
     resolution: {integrity: sha512-5cvg6CtKwfgdmVqY1WIiXKc3Q1bkRqGLi+2W/6ao+6Y7gu/RCwRuAhGEzh5B4KlszSuTLgZYuqFqo5bImjNKng==}
     engines: {node: '>= 0.6'}
 
-  adm-zip@0.5.16:
-    resolution: {integrity: sha512-TGw5yVi4saajsSEgz25grObGHEUaDrniwvA2qwSC060KfqGPdglhvPMA2lPIoxs3PQIItj2iag35fONcQqgUaQ==}
-    engines: {node: '>=12.0'}
-
   ajv-formats@3.0.1:
     resolution: {integrity: sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==}
     peerDependencies:
@@ -943,15 +939,8 @@ packages:
   onnxruntime-common@1.22.0-dev.20250409-89f8206ba4:
     resolution: {integrity: sha512-vDJMkfCfb0b1A836rgHj+ORuZf4B4+cc2bASQtpeoJLueuFc5DuYwjIZUBrSvx/fO5IrLjLz+oTrB3pcGlhovQ==}
 
-  onnxruntime-common@1.24.1:
-    resolution: {integrity: sha512-UnV15u4p4XxoIV+jFP4hXPsW93s3QrwLSpi20HUDYHoTfI4z4sjzex3L4XDOxGGZJ/M/catrwAG2go958UQq0w==}
-
   onnxruntime-node@1.21.0:
     resolution: {integrity: sha512-NeaCX6WW2L8cRCSqy3bInlo5ojjQqu2fD3D+9W5qb5irwxhEyWKXeH2vZ8W9r6VxaMPUan+4/7NDwZMtouZxEw==}
-    os: [win32, darwin, linux]
-
-  onnxruntime-node@1.24.1:
-    resolution: {integrity: sha512-Ex/oUXKdhDoxvlNxBT3oYtW0MH88yYpPlXQeVQUXpcJQmN24usd/8RCoPLN5kCHwDsiZ+nqsnjciyFRl423dQw==}
     os: [win32, darwin, linux]
 
   onnxruntime-web@1.22.0-dev.20250409-89f8206ba4:
@@ -1650,8 +1639,6 @@ snapshots:
       mime-types: 3.0.2
       negotiator: 1.0.0
 
-  adm-zip@0.5.16: {}
-
   ajv-formats@3.0.1(ajv@8.17.1):
     optionalDependencies:
       ajv: 8.17.1
@@ -2024,19 +2011,11 @@ snapshots:
 
   onnxruntime-common@1.22.0-dev.20250409-89f8206ba4: {}
 
-  onnxruntime-common@1.24.1: {}
-
   onnxruntime-node@1.21.0:
     dependencies:
       global-agent: 3.0.0
       onnxruntime-common: 1.21.0
       tar: 7.5.9
-
-  onnxruntime-node@1.24.1:
-    dependencies:
-      adm-zip: 0.5.16
-      global-agent: 3.0.0
-      onnxruntime-common: 1.24.1
 
   onnxruntime-web@1.22.0-dev.20250409-89f8206ba4:
     dependencies:

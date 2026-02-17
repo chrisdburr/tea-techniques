@@ -1,0 +1,163 @@
+{
+  "version": "1.0",
+  "exportedAt": "2026-02-13T12:49:06.725Z",
+  "case": {
+    "name": "Cardiac Digital Twin for PAH Assessment",
+    "description": "Assurance case for a cardiac digital twin used in pulmonary arterial hypertension (PAH) severity assessment and progression monitoring."
+  },
+  "tree": {
+    "id": "d9774554-5066-46d4-b737-64f3cc790901",
+    "type": "GOAL",
+    "name": "G1",
+    "description": "The digital twin accurately represents individual patient cardiovascular physiology within clinically acceptable margins of error for PAH severity assessment and progression monitoring.",
+    "inSandbox": false,
+    "role": "TOP_LEVEL",
+    "assumption": "Input measurement noise from echocardiography and MRI is within the ranges typically observed in clinical practice and does not contain systematic biases that would invalidate the calibration process.",
+    "justification": "",
+    "context": [
+      "Pulmonary arterial hypertension (PAH) is a progressive condition characterised by elevated pulmonary vascular resistance, leading to right ventricular failure. Clinical management requires accurate assessment of haemodynamic severity (e.g. mean pulmonary artery pressure, pulmonary vascular resistance, cardiac output) and monitoring of disease progression over time.",
+      "The digital twin is a patient-specific computational model of cardiovascular haemodynamics. It uses a lumped-parameter (0D) representation of the heart and pulmonary circulation, calibrated to individual patients using non-invasive measurements (echocardiography, MRI) and, where available, invasive catheterisation data. The model predicts pressure waveforms, flow rates, and ventricular function metrics.",
+      "Clinical acceptance thresholds are defined with reference to measurement variability in standard clinical practice. For invasive haemodynamic measurements, inter-observer variability of 10-15% is typical. The digital twin must achieve accuracy within these clinically established margins to be considered fit for purpose."
+    ],
+    "children": [
+      {
+        "id": "1d4a13db-3a92-4141-92f2-d6977a088047",
+        "type": "STRATEGY",
+        "name": "S2",
+        "description": "Argument over patient-specific accuracy: the personalisation and calibration process produces predictions that are accurate within clinically acceptable tolerance for individual patients.",
+        "inSandbox": false,
+        "justification": "The 15% RMSE threshold for pressure waveform accuracy is justified by reference to inter-observer variability in clinical catheterisation measurements and published clinical significance thresholds for haemodynamic parameters in PAH.",
+        "children": [
+          {
+            "id": "0515b32a-d781-4faf-8074-80d22f4e827d",
+            "type": "PROPERTY_CLAIM",
+            "name": "P2.1",
+            "description": "Patient-specific predictions via the personalised model are accurate within tolerance, achieving less than 15% RMSE for pressure waveforms when compared to measured patient data.",
+            "inSandbox": false,
+            "level": 1,
+            "children": [
+              {
+                "id": "d670c139-7bf0-4aa3-ac53-9feff2cd340a",
+                "type": "EVIDENCE",
+                "name": "E2.1",
+                "description": "Patient-specific calibration error metrics showing RMSE < 15% for pressure waveforms across the validation cohort, with per-patient breakdown of calibration accuracy.",
+                "inSandbox": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "bb4487f4-8dd2-4d86-9ff9-062bfbd4c623",
+            "type": "PROPERTY_CLAIM",
+            "name": "P2.2",
+            "description": "The calibration process converges reliably across the target patient population, including patients at different disease stages and with varying data availability.",
+            "inSandbox": false,
+            "level": 1,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "bc4776b7-fea0-42d8-89c6-291f4837bf47",
+        "type": "STRATEGY",
+        "name": "S3",
+        "description": "Argument over uncertainty and robustness: prediction uncertainty is systematically quantified, communicated, and the model degrades gracefully under adverse conditions.",
+        "inSandbox": false,
+        "children": [
+          {
+            "id": "b0f2f83a-aa53-428a-9c73-17a7b6698fb6",
+            "type": "PROPERTY_CLAIM",
+            "name": "P3.1",
+            "description": "Prediction uncertainty is quantified and remains within acceptable clinical bounds, providing clinicians with calibrated confidence intervals for all key haemodynamic predictions.",
+            "inSandbox": false,
+            "level": 1,
+            "children": [
+              {
+                "id": "acf050ef-ca88-4391-b313-6d70198c445b",
+                "type": "EVIDENCE",
+                "name": "E3.1",
+                "description": "Clinical expert review confirming that reported prediction uncertainty bounds are acceptable for clinical decision-making in PAH severity assessment.",
+                "inSandbox": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "35e8578c-2bf7-4611-a6ca-1aea850f9efa",
+            "type": "PROPERTY_CLAIM",
+            "name": "P3.2",
+            "description": "The model identifies when predictions may be unreliable, detecting out-of-distribution inputs or calibration failures and flagging them to the clinician.",
+            "inSandbox": false,
+            "level": 1,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "68e41a35-d5f0-46c3-8d3d-cbacdfe6ea00",
+        "type": "STRATEGY",
+        "name": "S1",
+        "description": "Argument over physiological fidelity: the underlying computational model captures the essential haemodynamic mechanisms relevant to PAH with sufficient fidelity.",
+        "inSandbox": false,
+        "assumption": "A lumped-parameter (0D) modelling approach provides sufficient spatial resolution to capture the haemodynamic phenomena relevant to PAH severity assessment.",
+        "children": [
+          {
+            "id": "588ee1c2-ff8a-4e90-a408-9f9b5490a2cf",
+            "type": "PROPERTY_CLAIM",
+            "name": "P1.1",
+            "description": "The cardiac model captures essential PAH haemodynamics with sufficient fidelity, reproducing key pressure-volume relationships and flow dynamics observed in PAH patients.",
+            "inSandbox": false,
+            "level": 1,
+            "children": [
+              {
+                "id": "96c3da13-f200-4862-a70e-ff7fc2db8b80",
+                "type": "EVIDENCE",
+                "name": "E1.1",
+                "description": "Comparison of model-predicted haemodynamic parameters (mean PAP, PVR, cardiac output) with right heart catheterisation measurements in a validation cohort of PAH patients (n >= 30).",
+                "inSandbox": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "97157f66-94ac-4ba9-871f-8335c0f9b3ca",
+            "type": "PROPERTY_CLAIM",
+            "name": "P1.2",
+            "description": "The model correctly represents right ventricle-pulmonary artery coupling behaviour across the range of disease severities observed in the target PAH population.",
+            "inSandbox": false,
+            "level": 1,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "df6618ef-69d9-49d1-85a9-c50d9d4fed59",
+        "type": "STRATEGY",
+        "name": "S4",
+        "description": "Argument over clinical acceptability: the system's outputs are fit for the clinical decision context, interpretable by clinicians, and validated against relevant clinical endpoints.",
+        "inSandbox": false,
+        "justification": "Clinical acceptance criteria have been defined through structured engagement with a panel of PAH specialists, ensuring the assurance targets reflect real clinical needs and decision-making workflows.",
+        "children": [
+          {
+            "id": "842c2d0a-3fad-45ea-9348-60484d7dc472",
+            "type": "PROPERTY_CLAIM",
+            "name": "P4.1",
+            "description": "Model outputs are interpretable and actionable for clinicians, presenting predictions in formats aligned with established clinical practice for PAH management.",
+            "inSandbox": false,
+            "level": 1,
+            "children": []
+          },
+          {
+            "id": "3753da79-b5a1-478f-9f2b-73bbca357e70",
+            "type": "PROPERTY_CLAIM",
+            "name": "P4.2",
+            "description": "The system has been validated against relevant clinical endpoints for PAH management, demonstrating that model-guided assessments correlate with patient outcomes.",
+            "inSandbox": false,
+            "level": 1,
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+}

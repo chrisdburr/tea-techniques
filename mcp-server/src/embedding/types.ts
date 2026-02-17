@@ -17,3 +17,19 @@ export interface EmbeddingsIndex {
   slugs: string[];
   vectors: Float32Array[];
 }
+
+// --- Zod schema for runtime validation at parse boundaries ---
+
+import { z } from 'zod';
+
+export const EmbeddingsFileSchema = z.object({
+  modelId: z.string(),
+  dimensions: z.number().int().positive(),
+  corpusSize: z.number().int().nonnegative(),
+  entries: z.array(
+    z.object({
+      slug: z.string(),
+      vector: z.array(z.number()),
+    })
+  ),
+});

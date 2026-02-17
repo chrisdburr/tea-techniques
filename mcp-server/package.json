@@ -8,6 +8,7 @@
   },
   "files": [
     "dist/",
+    "!dist/**/*.map",
     "README.md",
     "LICENSE"
   ],
@@ -18,7 +19,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "type-check": "tsc --noEmit",
-    "prepublishOnly": "tsc",
+    "prepublishOnly": "tsc && node -e \"require('fs').chmodSync('dist/index.js', 0o755)\"",
     "merge-claims": "tsx scripts/merge-claims.ts",
     "validate-claims": "tsx scripts/validate-claims.ts",
     "evaluate-cardiac-dt": "tsx scripts/evaluate-cardiac-dt.ts",
@@ -46,6 +47,7 @@
   ],
   "author": "Christopher Burr",
   "license": "MIT",
+  "packageManager": "pnpm@10.23.0",
   "engines": {
     "node": ">=18"
   },
@@ -54,7 +56,7 @@
   },
   "dependencies": {
     "@huggingface/transformers": "^3.8.1",
-    "@modelcontextprotocol/sdk": "^1.25.2",
+    "@modelcontextprotocol/sdk": "^1.26.0",
     "fuse.js": "^7.1.0",
     "onnxruntime-node": "1.21.0",
     "zod": "^3.25.0"

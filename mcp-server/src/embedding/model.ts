@@ -9,8 +9,19 @@ import type { TechniqueNode } from '../graph/types.js';
 
 const MODEL_ID = 'Xenova/all-MiniLM-L12-v2';
 
-// biome-ignore lint/suspicious/noExplicitAny: HF pipeline type not fully exported
-type Extractor = any;
+/** Narrow interface for HuggingFace feature-extraction pipeline output. */
+interface ExtractorOutput {
+  data: Float32Array;
+  dims: number[];
+}
+
+type Extractor = (
+  texts: string[],
+  options: {
+    pooling: 'mean' | 'none' | 'cls';
+    normalize: boolean;
+  }
+) => Promise<ExtractorOutput>;
 
 let cachedExtractor: Extractor | null = null;
 let loadAttempted = false;
@@ -27,7 +38,14 @@ export async function getEmbeddingModel(): Promise<Extractor | null> {
 
   try {
     const { pipeline } = await import('@huggingface/transformers');
-    cachedExtractor = await pipeline('feature-extraction', MODEL_ID);
+    // HuggingFace pipeline returns a complex union type that isn't directly
+    // assignable to our narrow Extractor interface. The double cast is safe
+    // because pipeline('feature-extraction', ...) always returns a callable
+    // with the shape we define in Extractor.
+    cachedExtractor = (await pipeline(
+      'feature-extraction',
+      MODEL_ID
+    )) as unknown as Extractor;
     return cachedExtractor;
   } catch {
     return null;
@@ -44,8 +62,8 @@ export async function embedQuery(
       pooling: 'mean',
       normalize: true,
     });
-    const dims = output.dims[1] as number;
-    return (output.data as Float32Array).slice(0, dims);
+    const dims = output.dims[1];
+    return output.data.slice(0, dims);
   } catch {
     return null;
   }
@@ -65,8 +83,8 @@ export async function batchEmbed(
       pooling: 'mean',
       normalize: true,
     });
-    const data = output.data as Float32Array;
-    const dims = output.dims[1] as number;
+    const data = output.data;
+    const dims = output.dims[1];
     for (let j = 0; j < batch.length; j++) {
       vectors.push(data.slice(j * dims, (j + 1) * dims));
     }

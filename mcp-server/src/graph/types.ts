@@ -76,3 +76,19 @@ export interface JsonLdNode {
   '@type': string;
   [key: string]: unknown;
 }
+
+// --- Zod schemas for runtime validation at parse boundaries ---
+
+import { z } from 'zod';
+
+const JsonLdNodeSchema = z
+  .object({
+    '@id': z.string(),
+    '@type': z.string(),
+  })
+  .passthrough();
+
+export const JsonLdGraphSchema = z.object({
+  '@context': z.unknown(),
+  '@graph': z.array(JsonLdNodeSchema),
+});

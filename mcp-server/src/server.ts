@@ -2,9 +2,15 @@
  * MCP Server setup: registers all 10 tools and 2 resources.
  */
 
+import { createRequire } from 'node:module';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import type { KnowledgeGraph, TechniqueNode } from './graph/index.js';
+
+const require = createRequire(import.meta.url);
+const { version: SERVER_VERSION } = require('../package.json') as {
+  version: string;
+};
 
 function formatTechniqueSummary(t: {
   slug: string;
@@ -62,8 +68,6 @@ function formatTechniqueDetail(
   return sections.join('\n');
 }
 
-export const SERVER_VERSION = '0.1.0';
-
 export function createServer(graph: KnowledgeGraph): McpServer {
   const server = new McpServer({
     name: 'tea-techniques',
@@ -80,6 +84,7 @@ export function createServer(graph: KnowledgeGraph): McpServer {
       inputSchema: {
         query: z
           .string()
+          .max(1000)
           .optional()
           .describe('Free-text search across technique names and descriptions'),
         goals: z
@@ -142,6 +147,7 @@ export function createServer(graph: KnowledgeGraph): McpServer {
       inputSchema: {
         slug: z
           .string()
+          .max(200)
           .describe('The technique slug (e.g. shapley-additive-explanations)'),
       },
     },
@@ -174,7 +180,7 @@ export function createServer(graph: KnowledgeGraph): McpServer {
         'Side-by-side comparison of 2-5 techniques across goals, tags, complexity, and resources.',
       inputSchema: {
         slugs: z
-          .array(z.string())
+          .array(z.string().max(200))
           .min(2)
           .max(5)
           .describe('Array of technique slugs to compare'),
@@ -217,7 +223,10 @@ export function createServer(graph: KnowledgeGraph): McpServer {
       description:
         'Find techniques related to a given technique via explicit links, shared goals, or shared tags.',
       inputSchema: {
-        slug: z.string().describe('The technique slug to find relatives for'),
+        slug: z
+          .string()
+          .max(200)
+          .describe('The technique slug to find relatives for'),
         depth: z
           .number()
           .int()
@@ -266,25 +275,29 @@ export function createServer(graph: KnowledgeGraph): McpServer {
       inputSchema: {
         claim: z
           .string()
+          .max(2000)
           .describe('The assurance claim text to match techniques against'),
         modelType: z
           .string()
+          .max(200)
           .optional()
           .describe(
             'Model type context. ML types: neural-network, tree-based, linear-models, probabilistic, ensemble. Non-ML types: physics-based, simulation, mechanistic, statistical, other (excludes architecture-specific techniques).'
           ),
         dataType: z
           .string()
+          .max(200)
           .optional()
           .describe('Data type context (e.g. tabular, image, text)'),
         lifecycleStage: z
           .string()
+          .max(200)
           .optional()
           .describe(
             'Lifecycle stage context (e.g. model-development, deployment)'
           ),
         excludeModelTypes: z
-          .array(z.string())
+          .array(z.string().max(200))
           .optional()
           .describe(
             'Exclude techniques for these model architectures (e.g. neural-networks)'
@@ -367,6 +380,7 @@ export function createServer(graph: KnowledgeGraph): McpServer {
       inputSchema: {
         path: z
           .string()
+          .max(200)
           .optional()
           .describe(
             'Tag path to explore (e.g. "applicable-models"). Omit for top-level categories.'
@@ -446,6 +460,7 @@ export function createServer(graph: KnowledgeGraph): McpServer {
       inputSchema: {
         query: z
           .string()
+          .max(1000)
           .optional()
           .describe(
             'Free-text search across resource titles, abstracts, and authors'
@@ -461,6 +476,7 @@ export function createServer(graph: KnowledgeGraph): McpServer {
           .describe('Filter by resource type'),
         technique: z
           .string()
+          .max(200)
           .optional()
           .describe('Filter by technique slug to get its cited resources'),
         limit: z

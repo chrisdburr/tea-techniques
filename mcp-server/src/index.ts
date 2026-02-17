@@ -8,6 +8,7 @@
  *   npx tsx src/index.ts --local      # Load from local project data files
  */
 
+import path from 'node:path';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { loadGraphData } from './data/loader.js';
 import { loadEmbeddings } from './embedding/loader.js';
@@ -16,9 +17,10 @@ import { createServer } from './server.js';
 
 const args = process.argv.slice(2);
 const isLocal = args.includes('--local');
-const dataDir =
+const rawDataDir =
   args.find((a) => a.startsWith('--data-dir='))?.split('=')[1] ??
   new URL('../../public/data', import.meta.url).pathname;
+const dataDir = path.resolve(rawDataDir);
 
 async function main(): Promise<void> {
   const [graphData, embeddings] = await Promise.all([

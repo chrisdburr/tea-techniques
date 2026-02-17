@@ -143,10 +143,12 @@ function categoryMatchesDimension(
   return true;
 }
 
+type TagCategoryDimension = 'tags' | 'lifecycle' | 'evidence' | 'model-types';
+
 function buildTagCategoryCoverage(
   techniques: TechniqueNode[],
   tags: Map<string, TagNode>,
-  dimension: string
+  dimension: TagCategoryDimension
 ): Record<string, unknown> {
   const catMap = new Map<string, Map<string, number>>();
   for (const t of techniques) {
@@ -900,8 +902,15 @@ export class KnowledgeGraph {
         return this.coverageByComplexity(techniques);
       case 'cross-goal':
         return this.coverageCrossGoal(techniques);
-      default:
+      case 'tags':
+      case 'lifecycle':
+      case 'evidence':
+      case 'model-types':
         return buildTagCategoryCoverage(techniques, this.index.tags, dimension);
+      default: {
+        const _exhaustive: never = dimension;
+        throw new Error(`Unknown coverage dimension: ${_exhaustive}`);
+      }
     }
   }
 

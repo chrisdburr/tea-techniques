@@ -7,7 +7,7 @@
 import type { EmbeddingsIndex } from './types.js';
 
 /** Cosine similarity for L2-normalised vectors. */
-export function dotProduct(a: Float32Array, b: Float32Array): number {
+function dotProduct(a: Float32Array, b: Float32Array): number {
   let sum = 0;
   for (let i = 0; i < a.length; i++) {
     sum += a[i] * b[i];
@@ -24,6 +24,11 @@ export function rankBySimilarity(
   index: EmbeddingsIndex,
   topK = 10
 ): string[] {
+  if (index.vectors.length > 0 && queryVec.length !== index.dimensions) {
+    throw new Error(
+      `Query vector dimensions (${queryVec.length}) don't match index dimensions (${index.dimensions})`
+    );
+  }
   const bestPerSlug = new Map<string, number>();
   for (let i = 0; i < index.vectors.length; i++) {
     const sim = dotProduct(queryVec, index.vectors[i]);

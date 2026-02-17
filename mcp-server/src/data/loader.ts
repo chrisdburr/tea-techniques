@@ -6,9 +6,16 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import type { JsonLdGraph } from '../graph/types.js';
+import { JsonLdGraphSchema } from '../graph/types.js';
 
 const REMOTE_URL =
   'https://alan-turing-institute.github.io/tea-techniques/data/ld/graph.jsonld';
+if (!REMOTE_URL.startsWith('https://')) {
+  throw new Error('REMOTE_URL must use HTTPS');
+}
+
+const FETCH_TIMEOUT_MS = 30_000;
+const MAX_RESPONSE_CHARS = 50 * 1024 * 1024; // 50M chars
 
 const CACHE_DIR = path.join(os.homedir(), '.cache', 'tea-techniques-mcp');
 const CACHE_FILE = path.join(CACHE_DIR, 'graph.jsonld');
@@ -26,8 +33,10 @@ async function isCacheValid(): Promise<boolean> {
 async function readCache(): Promise<JsonLdGraph | null> {
   try {
     const content = await fs.readFile(CACHE_FILE, 'utf-8');
-    return JSON.parse(content) as JsonLdGraph;
+    return JsonLdGraphSchema.parse(JSON.parse(content)) as JsonLdGraph;
   } catch {
+    // biome-ignore lint/suspicious/noConsole: cache diagnostics to stderr
+    console.error(`Cache invalid or unreadable (${CACHE_FILE}), will re-fetch`);
     return null;
   }
 }
@@ -38,19 +47,33 @@ async function writeCache(data: JsonLdGraph): Promise<void> {
 }
 
 async function fetchRemote(): Promise<JsonLdGraph> {
-  const response = await fetch(REMOTE_URL);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch graph: ${response.status} ${response.statusText}`
-    );
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  try {
+    const response = await fetch(REMOTE_URL, { signal: controller.signal });
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch graph: ${response.status} ${response.statusText}`
+      );
+    }
+    const contentLength = Number(response.headers.get('content-length') || 0);
+    if (contentLength > MAX_RESPONSE_CHARS) {
+      throw new Error(`Response Content-Length too large: ${contentLength}`);
+    }
+    const text = await response.text();
+    if (text.length > MAX_RESPONSE_CHARS) {
+      throw new Error(`Response too large: ${text.length} chars`);
+    }
+    return JsonLdGraphSchema.parse(JSON.parse(text)) as JsonLdGraph;
+  } finally {
+    clearTimeout(timeout);
   }
-  return (await response.json()) as JsonLdGraph;
 }
 
 async function loadFromLocal(dataDir: string): Promise<JsonLdGraph> {
   const graphPath = path.join(dataDir, 'ld', 'graph.jsonld');
   const content = await fs.readFile(graphPath, 'utf-8');
-  return JSON.parse(content) as JsonLdGraph;
+  return JsonLdGraphSchema.parse(JSON.parse(content)) as JsonLdGraph;
 }
 
 export async function loadGraphData(options: {

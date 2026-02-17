@@ -188,6 +188,38 @@
         "type": "string",
         "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       }
+    },
+    "sample_claims": {
+      "type": "array",
+      "description": "Sample assurance claims this technique can support",
+      "items": {
+        "type": "object",
+        "required": ["text", "assuranceGoal"],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "The claim text",
+            "minLength": 20,
+            "maxLength": 500
+          },
+          "assuranceGoal": {
+            "type": "string",
+            "enum": [
+              "explainability",
+              "fairness",
+              "privacy",
+              "reliability",
+              "safety",
+              "security",
+              "transparency"
+            ]
+          },
+          "domain": {
+            "type": "string",
+            "description": "Application domain"
+          }
+        }
+      }
     }
   },
   "additionalProperties": false

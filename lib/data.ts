@@ -110,24 +110,19 @@ export async function getTechniquesByTag(
   return techniques.filter((technique) => technique.tags?.includes(tagName));
 }
 
-// Get related techniques (for now, just random selection from same goals)
+// Get related techniques by curated slug list
 export async function getRelatedTechniques(
   technique: Technique,
-  limit = 3
+  limit = 6
 ): Promise<Technique[]> {
+  if (!technique.related_techniques?.length) {
+    return [];
+  }
+
   const allTechniques = await getAllTechniques();
+  const slugsToFind = technique.related_techniques.slice(0, limit);
 
-  // Find techniques that share assurance goals
-  const related = allTechniques.filter(
-    (t) =>
-      t.slug !== technique.slug &&
-      t.assurance_goals?.some((goal) =>
-        technique.assurance_goals?.includes(goal)
-      )
-  );
-
-  // Return a random selection
-  return related.sort(() => Math.random() - 0.5).slice(0, limit);
+  return allTechniques.filter((t) => slugsToFind.includes(t.slug));
 }
 
 // Search techniques

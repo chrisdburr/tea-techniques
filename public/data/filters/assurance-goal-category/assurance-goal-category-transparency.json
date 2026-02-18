@@ -2,7 +2,7 @@
   "tag": {
     "name": "assurance-goal-category/transparency",
     "slug": "assurance-goal-category-transparency",
-    "count": 58,
+    "count": 55,
     "category": "assurance-goal-category"
   },
   "techniques": [
@@ -1690,127 +1690,6 @@
       ]
     },
     {
-      "slug": "prediction-intervals",
-      "name": "Prediction Intervals",
-      "description": "Prediction intervals provide a range of plausible values around a model's prediction, expressing uncertainty as 'the true value will likely fall between X and Y with Z% confidence'. For example, instead of predicting 'house price: £300,000', a prediction interval might say 'house price: £280,000 to £320,000 with 95% confidence'. This technique works by calculating upper and lower bounds that account for both model uncertainty (how confident the model is) and inherent randomness in the data. Prediction intervals are crucial for informed decision-making, as they help users understand the reliability and precision of predictions, enabling better risk assessment and planning.",
-      "assurance_goals": [
-        "Reliability",
-        "Transparency",
-        "Fairness"
-      ],
-      "tags": [
-        "applicable-models/architecture/model-agnostic",
-        "applicable-models/paradigm/supervised",
-        "applicable-models/requirements/black-box",
-        "assurance-goal-category/fairness",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/reliability/uncertainty-quantification",
-        "assurance-goal-category/transparency",
-        "data-requirements/no-special-requirements",
-        "data-type/any",
-        "evidence-type/prediction-interval",
-        "evidence-type/quantitative-metric",
-        "expertise-needed/statistics",
-        "lifecycle-stage/model-development",
-        "lifecycle-stage/system-deployment-and-use",
-        "technique-type/algorithmic"
-      ],
-      "example_use_cases": [
-        {
-          "description": "Providing realistic ranges for medical diagnosis predictions, such as 'patient survival time: 8-14 months with 90% confidence', enabling doctors to make informed treatment decisions and communicate uncertainty to patients and families.",
-          "goal": "Reliability"
-        },
-        {
-          "description": "Communicating uncertainty in automated loan approval systems by showing 'credit score prediction: 650-720 with 95% confidence' rather than a single score, helping loan officers understand prediction reliability and make transparent decisions.",
-          "goal": "Transparency"
-        },
-        {
-          "description": "Ensuring consistent prediction uncertainty across demographic groups in hiring algorithms, verifying that prediction intervals have similar widths for different protected groups to avoid unfair confidence disparities.",
-          "goal": "Fairness"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "Relies on assumptions about the error distribution (often normality) which may not hold in practice, leading to inaccurate interval coverage when data exhibits heavy tails, skewness, or other non-standard patterns."
-        },
-        {
-          "description": "Can be overconfident if the underlying model is poorly calibrated, producing intervals that are too narrow and fail to capture the true prediction uncertainty."
-        },
-        {
-          "description": "Vulnerable to distribution shift between training and deployment data, where intervals calculated on historical data may not reflect uncertainty in new, unseen conditions."
-        },
-        {
-          "description": "May require careful hyperparameter tuning and validation to achieve desired coverage rates, particularly when using advanced methods like conformal prediction or quantile regression."
-        },
-        {
-          "description": "Computational overhead increases when generating intervals for large datasets or complex models, especially when using resampling-based methods like bootstrapping."
-        }
-      ],
-      "resources": [
-        {
-          "title": "MAPIE",
-          "url": "https://github.com/scikit-learn-contrib/MAPIE",
-          "source_type": "software_package",
-          "publication_date": "2021-03-30",
-          "citationKey": "scikit-learn-contribMAPIE2021",
-          "abstract": "A scikit-learn-compatible library for estimating prediction intervals and controlling risks, based on conformal predictions."
-        },
-        {
-          "title": "MAPIE - Model Agnostic Prediction Interval Estimator",
-          "url": "https://mapie.readthedocs.io",
-          "source_type": "documentation",
-          "authors": [
-            "Mapie Developers"
-          ],
-          "publication_date": "2021",
-          "citationKey": "mapiedevelopersMAPIEModelAgnostic2021"
-        },
-        {
-          "title": "awesome-conformal-prediction",
-          "url": "https://github.com/valeman/awesome-conformal-prediction",
-          "source_type": "software_package",
-          "publication_date": "2021-12-10",
-          "citationKey": "valemanAwesomeconformalprediction2021",
-          "abstract": "A professionally curated list of awesome Conformal Prediction videos, tutorials, books, papers, PhD and MSc theses, articles and open-source libraries."
-        }
-      ],
-      "complexity_rating": 3,
-      "computational_cost_rating": 3,
-      "related_techniques": [
-        "conformal-prediction",
-        "quantile-regression",
-        "bootstrapping",
-        "jackknife-resampling"
-      ],
-      "sample_claims": [
-        {
-          "text": "The model's forecasts are bounded by quantified uncertainty ranges that inform decision-making under risk",
-          "domain": "environmental",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The system communicates prediction reliability through explicit upper and lower bounds accompanying each forecast",
-          "domain": "finance",
-          "assuranceGoal": "transparency"
-        },
-        {
-          "text": "The model's prediction uncertainty is comparable in magnitude across protected demographic groups",
-          "domain": "healthcare",
-          "assuranceGoal": "fairness"
-        },
-        {
-          "text": "The treatment planning model's dosage recommendations include clinically meaningful confidence bounds that account for patient variability",
-          "domain": "healthcare",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The autonomous system's trajectory predictions are accompanied by spatial uncertainty estimates that inform safe maneuver planning",
-          "domain": "autonomous systems",
-          "assuranceGoal": "transparency"
-        }
-      ]
-    },
-    {
       "slug": "quantile-regression",
       "name": "Quantile Regression",
       "description": "Quantile regression estimates specific percentiles (quantiles) of the target variable rather than just predicting the average outcome. For example, instead of predicting 'average house price = £300,000', it can predict 'there's a 10% chance the price will be below £250,000, 50% chance below £300,000, and 90% chance below £380,000'. This technique reveals how input features affect different parts of the outcome distribution - perhaps property size strongly influences luxury homes (90th percentile) but barely affects budget properties (10th percentile). By capturing the full conditional distribution, quantile regression provides rich uncertainty information and enables robust prediction intervals.",
@@ -1928,7 +1807,6 @@
       "computational_cost_rating": 2,
       "related_techniques": [
         "conformal-prediction",
-        "prediction-intervals",
         "bootstrapping",
         "jackknife-resampling"
       ],
@@ -2073,7 +1951,7 @@
       "complexity_rating": 4,
       "computational_cost_rating": 2,
       "related_techniques": [
-        "prediction-intervals",
+        "bootstrapping",
         "quantile-regression",
         "deep-ensembles",
         "empirical-calibration"
@@ -2200,7 +2078,7 @@
         "temperature-scaling",
         "conformal-prediction",
         "confidence-thresholding",
-        "prediction-intervals"
+        "quantile-regression"
       ],
       "sample_claims": [
         {
@@ -2619,7 +2497,7 @@
       "complexity_rating": 3,
       "computational_cost_rating": 4,
       "related_techniques": [
-        "prediction-intervals",
+        "quantile-regression",
         "jackknife-resampling",
         "conformal-prediction",
         "deep-ensembles"
@@ -3024,8 +2902,8 @@
       "computational_cost_rating": 2,
       "related_techniques": [
         "generalized-additive-models",
-        "intrinsically-interpretable-models",
-        "prediction-intervals",
+        "coefficient-magnitudes-in-linear-models",
+        "quantile-regression",
         "conformal-prediction"
       ],
       "sample_claims": [
@@ -3052,137 +2930,6 @@
         {
           "text": "The hiring suitability score preserves expected relationships where relevant experience monotonically improves candidate ratings",
           "domain": "general",
-          "assuranceGoal": "transparency"
-        }
-      ]
-    },
-    {
-      "slug": "intrinsically-interpretable-models",
-      "name": "Intrinsically Interpretable Models",
-      "description": "Intrinsically interpretable models are machine learning algorithms that are transparent by design, allowing users to understand their decision-making process without requiring additional explanation techniques. This category includes decision trees and rule lists (which use if-then logic), linear and logistic regression models (which use weighted feature combinations), and other simple algorithms where the model structure itself provides interpretability. These models prioritise transparency over complexity, making them ideal when stakeholder understanding and regulatory compliance are paramount.",
-      "assurance_goals": [
-        "Transparency",
-        "Reliability"
-      ],
-      "tags": [
-        "applicable-models/architecture/linear-models",
-        "applicable-models/architecture/tree-based",
-        "applicable-models/paradigm/supervised",
-        "applicable-models/requirements/white-box",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/transparency",
-        "data-requirements/no-special-requirements",
-        "data-type/any",
-        "evidence-type/quantitative-metric",
-        "evidence-type/structured-output",
-        "expertise-needed/low",
-        "explanatory-scope/global",
-        "lifecycle-stage/model-development",
-        "lifecycle-stage/project-design",
-        "technique-type/algorithmic"
-      ],
-      "example_use_cases": [
-        {
-          "description": "Developing a medical diagnosis support system using a decision tree with clear if-then rules based on symptoms and test results, allowing healthcare professionals to trace the reasoning path and explain diagnoses to patients whilst ensuring clinical transparency and accountability.",
-          "goal": "Transparency"
-        },
-        {
-          "description": "Creating a fraud detection model using logistic regression with carefully selected features (transaction amount, location, time patterns) where each coefficient's contribution can be understood and validated, ensuring reliable performance that financial institutions can audit and regulatory bodies can approve.",
-          "goal": "Reliability"
-        },
-        {
-          "description": "Implementing a hiring decision support tool using rule lists that explicitly state qualification criteria and scoring logic, providing transparent candidate evaluation that can be explained to applicants and reviewed for fairness whilst meeting legal requirements for employment decision documentation.",
-          "goal": "Transparency"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "Generally achieve lower predictive accuracy than complex models (neural networks, ensembles) for difficult problems involving high-dimensional data, non-linear relationships, or complex feature interactions."
-        },
-        {
-          "description": "Linear models cannot capture non-linear relationships or feature interactions without manual feature engineering, limiting their applicability to inherently non-linear domains like image recognition or natural language processing."
-        },
-        {
-          "description": "Decision trees can become unstable with small changes in training data, potentially leading to completely different tree structures and predictions, affecting model reliability in dynamic environments."
-        },
-        {
-          "description": "Deep decision trees may lose interpretability despite being inherently transparent, as human cognitive limits make it difficult to follow complex branching logic with many levels and conditions."
-        },
-        {
-          "description": "Feature selection becomes critical for maintaining interpretability, requiring domain expertise to identify the most relevant variables whilst potentially missing important but subtle predictive signals."
-        }
-      ],
-      "resources": [
-        {
-          "title": "scikit-learn Decision Trees",
-          "url": "https://scikit-learn.org/stable/modules/tree.html",
-          "source_type": "documentation",
-          "authors": [
-            "Scikit-learn Developers"
-          ],
-          "publication_date": "2007",
-          "citationKey": "scikit-learndevelopersScikitlearnDecisionTrees2007"
-        },
-        {
-          "title": "scikit-learn Linear Models",
-          "url": "https://scikit-learn.org/stable/modules/linear_model.html",
-          "source_type": "documentation",
-          "authors": [
-            "Scikit-learn Developers"
-          ],
-          "publication_date": "2007",
-          "citationKey": "scikit-learndevelopersScikitlearnLinearModels2007"
-        },
-        {
-          "title": "Interpretable Machine Learning",
-          "url": "https://christophm.github.io/interpretable-ml-book",
-          "source_type": "tutorial",
-          "authors": [
-            "Christoph Molnar"
-          ],
-          "publication_date": "2019",
-          "citationKey": "molnarInterpretableMachineLearning2019"
-        },
-        {
-          "title": "R package 'rpart' for Recursive Partitioning",
-          "url": "https://cran.r-project.org/web/packages/rpart/index.html",
-          "source_type": "software_package",
-          "publication_date": "2024",
-          "citationKey": "PackageRpartRecursive2024"
-        }
-      ],
-      "complexity_rating": 2,
-      "computational_cost_rating": 1,
-      "related_techniques": [
-        "generalized-additive-models",
-        "monotonicity-constraints",
-        "coefficient-magnitudes-in-linear-models",
-        "model-distillation"
-      ],
-      "sample_claims": [
-        {
-          "text": "The diagnostic system's decision logic is comprehensible to clinicians without requiring additional explanation tools",
-          "domain": "healthcare",
-          "assuranceGoal": "transparency"
-        },
-        {
-          "text": "The credit risk model's decision process can be audited by examining the model structure directly",
-          "domain": "finance",
-          "assuranceGoal": "transparency"
-        },
-        {
-          "text": "The eligibility assessment model produces consistent outcomes that regulators can validate through inspection of the decision rules",
-          "domain": "public sector",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The prediction model's behavior is stable and verifiable across different operating conditions without post-hoc analysis",
-          "domain": "general",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The quality control system's classification criteria are explicitly encoded in the model architecture for regulatory review",
-          "domain": "manufacturing",
           "assuranceGoal": "transparency"
         }
       ]
@@ -6165,7 +5912,7 @@
       ],
       "related_techniques": [
         "adversarial-training-evaluation",
-        "safety-guardrails",
+        "runtime-monitoring-and-circuit-breakers",
         "membership-inference-attack-testing",
         "prompt-injection-testing"
       ],
@@ -6288,7 +6035,7 @@
       "related_techniques": [
         "few-shot-fairness-evaluation",
         "retrieval-augmented-generation-evaluation",
-        "hallucination-detection",
+        "epistemic-uncertainty-quantification",
         "constitutional-ai-evaluation"
       ],
       "sample_claims": [
@@ -6435,8 +6182,8 @@
         }
       ],
       "related_techniques": [
-        "ai-agent-safety-testing",
-        "hallucination-detection",
+        "agent-goal-misalignment-testing",
+        "chain-of-thought-faithfulness-evaluation",
         "jailbreak-resistance-testing",
         "multimodal-alignment-evaluation"
       ],
@@ -6782,173 +6529,6 @@
       ]
     },
     {
-      "slug": "hallucination-detection",
-      "name": "Hallucination Detection",
-      "description": "Hallucination detection identifies when generative models produce factually incorrect, fabricated, or ungrounded outputs. This technique combines automated consistency checking, self-consistency methods, uncertainty quantification, and human evaluation. It produces detection scores distinguishing intrinsic hallucinations (contradicting sources) from extrinsic hallucinations (unverifiable claims), enabling filtering or user warnings.",
-      "assurance_goals": [
-        "Reliability",
-        "Transparency",
-        "Safety"
-      ],
-      "tags": [
-        "applicable-models/architecture/neural-networks/transformer",
-        "applicable-models/architecture/neural-networks/transformer/llm",
-        "applicable-models/paradigm/generative",
-        "applicable-models/requirements/black-box",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/transparency",
-        "assurance-goal-category/safety",
-        "data-type/text",
-        "data-requirements/access-to-training-data",
-        "evidence-type/quantitative-metric",
-        "evidence-type/qualitative-report",
-        "expertise-needed/ml-engineering",
-        "expertise-needed/domain-expertise",
-        "lifecycle-stage/model-evaluation",
-        "lifecycle-stage/post-deployment",
-        "technique-type/testing",
-        "technique-type/algorithmic"
-      ],
-      "example_use_cases": [
-        {
-          "description": "Monitoring a medical information system to detect when it generates unsupported clinical claims or fabricates research citations, preventing patients from receiving incorrect health advice.",
-          "goal": "Safety"
-        },
-        {
-          "description": "Evaluating an AI journalism assistant to ensure generated article drafts don't fabricate quotes, misattribute sources, or create false claims that could damage credibility and public trust.",
-          "goal": "Reliability"
-        },
-        {
-          "description": "Implementing confidence scoring and uncertainty indicators in AI assistants that transparently signal when responses may contain hallucinated information versus verified facts.",
-          "goal": "Transparency"
-        },
-        {
-          "description": "Validating an AI legal research tool used by public defenders to ensure generated case law summaries don't fabricate judicial opinions, misstate holdings, or invent precedents that could undermine legal arguments and defendants' rights.",
-          "goal": "Reliability"
-        },
-        {
-          "description": "Monitoring an AI-powered financial reporting assistant to detect when it generates unsubstantiated market analysis, fabricates company earnings data, or creates false attributions to analysts, protecting investors from misleading information.",
-          "goal": "Safety"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "Automated detection methods may miss subtle hallucinations or flag correct but unusual information as potentially fabricated."
-        },
-        {
-          "description": "Requires access to reliable ground truth knowledge sources for fact-checking, which may not exist for many domains or recent events."
-        },
-        {
-          "description": "Self-consistency methods assume inconsistency indicates hallucination, but models can consistently hallucinate the same false information."
-        },
-        {
-          "description": "Human evaluation is expensive and subjective, with annotators potentially disagreeing about what constitutes hallucination versus interpretation."
-        },
-        {
-          "description": "Detection effectiveness degrades for rapidly evolving domains or emerging topics where ground truth knowledge bases may be outdated, incomplete, or unavailable, making it difficult to distinguish hallucinations from genuinely novel or recent information."
-        },
-        {
-          "description": "Particularly challenging to apply in creative writing, storytelling, or subjective analysis contexts where the boundary between acceptable creative license and problematic hallucination is domain-dependent and context-specific."
-        }
-      ],
-      "resources": [
-        {
-          "title": "hallucination-leaderboard",
-          "url": "https://github.com/vectara/hallucination-leaderboard",
-          "source_type": "software_package",
-          "publication_date": "2023-10-31",
-          "citationKey": "vectaraHallucinationleaderboard2023",
-          "abstract": "Leaderboard Comparing LLM Performance at Producing Hallucinations when Summarizing Short Documents"
-        },
-        {
-          "title": "How to Perform Hallucination Detection for LLMs | Towards Data ...",
-          "url": "https://towardsdatascience.com/how-to-perform-hallucination-detection-for-llms-b8cb8b72e697",
-          "source_type": "tutorial",
-          "authors": [
-            "Mark Chen"
-          ],
-          "publication_date": "2024-01-22",
-          "citationKey": "chenHowPerformHallucination2024"
-        },
-        {
-          "title": "SelfCheckAgent: Zero-Resource Hallucination Detection in Generative Large Language Models",
-          "url": "https://www.semanticscholar.org/paper/e7cd95ec57302fc5897bed07bee87a388747f750",
-          "source_type": "technical_paper",
-          "authors": [
-            "Diyana Muhammed",
-            "Gollam Rabby",
-            "Soren Auer"
-          ],
-          "publication_date": "2025",
-          "citationKey": "muhammedSelfCheckAgentZeroResourceHallucination2025",
-          "abstract": "Detecting hallucinations in Large Language Models (LLMs) remains a critical challenge for their reliable deployment in real-world applications. To address this, we introduce SelfCheckAgent, a novel framework integrating three different agents: the Symbolic Agent, the Specialized Detection Agent, and the Contextual Consistency Agent. These agents provide a robust multi-dimensional approach to hallucination detection. Notable results include the Contextual Consistency Agent leveraging Llama 3.1 with Chain-of-Thought (CoT) to achieve outstanding performance on the WikiBio dataset, with NonFactual hallucination detection scoring 93.64%, Factual 70.26%, and Ranking 78.48% respectively. On the AIME dataset, GPT-4o with CoT excels in NonFactual detection with 94.89% but reveals trade-offs in Factual with 30.58% and Ranking with 30.68%, underscoring the complexity of hallucination detection in the complex mathematical domains. The framework also incorporates a triangulation strategy, which increases the strengths of the SelfCheckAgent, yielding significant improvements in real-world hallucination identification. The comparative analysis demonstrates SelfCheckAgent's applicability across diverse domains, positioning it as a crucial advancement for trustworthy LLMs. These findings highlight the potentiality of consistency-driven methodologies in detecting hallucinations in LLMs."
-        },
-        {
-          "title": "SINdex: Semantic INconsistency Index for Hallucination Detection in LLMs",
-          "url": "https://www.semanticscholar.org/paper/06ef8d4343f35184b4dec004365dfe1a562e08fc",
-          "source_type": "technical_paper",
-          "authors": [
-            "Samir Abdaljalil",
-            "H. Kurban",
-            "Parichit Sharma",
-            "E. Serpedin",
-            "Rachad Atat"
-          ],
-          "publication_date": "2025",
-          "citationKey": "abdaljalilSINdexSemanticINconsistency2025",
-          "abstract": "Large language models (LLMs) are increasingly deployed across diverse domains, yet they are prone to generating factually incorrect outputs - commonly known as\"hallucinations.\"Among existing mitigation strategies, uncertainty-based methods are particularly attractive due to their ease of implementation, independence from external data, and compatibility with standard LLMs. In this work, we introduce a novel and scalable uncertainty-based semantic clustering framework for automated hallucination detection. Our approach leverages sentence embeddings and hierarchical clustering alongside a newly proposed inconsistency measure, SINdex, to yield more homogeneous clusters and more accurate detection of hallucination phenomena across various LLMs. Evaluations on prominent open- and closed-book QA datasets demonstrate that our method achieves AUROC improvements of up to 9.3% over state-of-the-art techniques. Extensive ablation studies further validate the effectiveness of each component in our framework."
-        },
-        {
-          "title": "Uncertainty Quantification for Hallucination Detection in Large Language Models: Foundations, Methodology, and Future Directions",
-          "url": "https://www.semanticscholar.org/paper/76912e6ea42bdebb2795708dac381a9b268b391c",
-          "source_type": "technical_paper",
-          "authors": [
-            "Sungmin Kang",
-            "Y. Bakman",
-            "D. Yaldiz",
-            "Baturalp Buyukates",
-            "A. Avestimehr"
-          ],
-          "publication_date": "2025",
-          "citationKey": "kangUncertaintyQuantificationHallucination2025",
-          "abstract": "The rapid advancement of large language models (LLMs) has transformed the landscape of natural language processing, enabling breakthroughs across a wide range of areas including question answering, machine translation, and text summarization. Yet, their deployment in real-world applications has raised concerns over reliability and trustworthiness, as LLMs remain prone to hallucinations that produce plausible but factually incorrect outputs. Uncertainty quantification (UQ) has emerged as a central research direction to address this issue, offering principled measures for assessing the trustworthiness of model generations. We begin by introducing the foundations of UQ, from its formal definition to the traditional distinction between epistemic and aleatoric uncertainty, and then highlight how these concepts have been adapted to the context of LLMs. Building on this, we examine the role of UQ in hallucination detection, where quantifying uncertainty provides a mechanism for identifying unreliable generations and improving reliability. We systematically categorize a wide spectrum of existing methods along multiple dimensions and present empirical results for several representative approaches. Finally, we discuss current limitations and outline promising future research directions, providing a clearer picture of the current landscape of LLM UQ for hallucination detection."
-        }
-      ],
-      "related_techniques": [
-        "retrieval-augmented-generation-evaluation",
-        "chain-of-thought-faithfulness-evaluation",
-        "epistemic-uncertainty-quantification",
-        "confidence-thresholding"
-      ],
-      "sample_claims": [
-        {
-          "text": "The medical information system identifies when generated responses contain fabricated research citations or unsupported clinical claims",
-          "domain": "healthcare",
-          "assuranceGoal": "safety"
-        },
-        {
-          "text": "The content generation system distinguishes between factually grounded outputs and unverifiable assertions across diverse query types",
-          "domain": "general",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The customer service assistant signals when responses may contain fabricated information versus verified facts from knowledge sources",
-          "domain": "general",
-          "assuranceGoal": "transparency"
-        },
-        {
-          "text": "The financial reporting tool detects when generated market analysis contradicts source documents or creates unsubstantiated attributions",
-          "domain": "finance",
-          "assuranceGoal": "safety"
-        },
-        {
-          "text": "The legal research assistant identifies when case summaries fabricate judicial opinions or misstate holdings from the source materials",
-          "domain": "public sector",
-          "assuranceGoal": "reliability"
-        }
-      ]
-    },
-    {
       "slug": "epistemic-uncertainty-quantification",
       "name": "Epistemic Uncertainty Quantification",
       "description": "Epistemic uncertainty quantification systematically measures model uncertainty about what it knows, partially knows, and doesn't know across different domains and topics. This technique uses probing datasets, confidence calibration analysis, and consistency testing to quantify epistemic uncertainty (uncertainty due to lack of knowledge) as distinct from aleatoric uncertainty (inherent data uncertainty). Uncertainty quantification enables appropriate deployment scoping, communicating model limitations, and identifying knowledge gaps requiring additional training or human oversight.",
@@ -7099,9 +6679,9 @@
         }
       ],
       "related_techniques": [
-        "prediction-intervals",
+        "conformal-prediction",
         "jackknife-resampling",
-        "hallucination-detection",
+        "chain-of-thought-faithfulness-evaluation",
         "bootstrapping"
       ],
       "sample_claims": [
@@ -7406,7 +6986,7 @@
         }
       ],
       "related_techniques": [
-        "adversarial-robustness-testing",
+        "data-poisoning-detection",
         "membership-inference-attack-testing",
         "model-watermarking-and-theft-detection",
         "adversarial-training-evaluation"
@@ -7561,7 +7141,7 @@
         "model-extraction-defence-testing",
         "adversarial-training-evaluation",
         "synthetic-data-evaluation",
-        "adversarial-robustness-testing"
+        "data-poisoning-detection"
       ],
       "sample_claims": [
         {
@@ -7706,7 +7286,7 @@
         }
       ],
       "related_techniques": [
-        "adversarial-robustness-testing",
+        "jailbreak-resistance-testing",
         "adversarial-training-evaluation",
         "data-poisoning-detection",
         "model-extraction-defence-testing"
@@ -7853,8 +7433,8 @@
       ],
       "related_techniques": [
         "deep-ensembles",
-        "hallucination-detection",
-        "anomaly-detection",
+        "chain-of-thought-faithfulness-evaluation",
+        "out-of-distribution-detector-for-neural-networks",
         "conformal-prediction"
       ],
       "sample_claims": [
@@ -8176,7 +7756,7 @@
         }
       ],
       "related_techniques": [
-        "hallucination-detection",
+        "epistemic-uncertainty-quantification",
         "chain-of-thought-faithfulness-evaluation",
         "out-of-domain-detection",
         "prompt-robustness-testing"
@@ -8322,7 +7902,7 @@
         }
       ],
       "related_techniques": [
-        "hallucination-detection",
+        "chain-of-thought-faithfulness-evaluation",
         "adversarial-training-evaluation",
         "constitutional-ai-evaluation",
         "epistemic-uncertainty-quantification"
@@ -8356,5 +7936,5 @@
       ]
     }
   ],
-  "count": 58
+  "count": 55
 }

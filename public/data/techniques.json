@@ -2658,7 +2658,7 @@
       "deep-ensembles",
       "conformal-prediction",
       "out-of-distribution-detector-for-neural-networks",
-      "prediction-intervals"
+      "quantile-regression"
     ],
     "sample_claims": [
       {
@@ -2761,7 +2761,7 @@
     "related_techniques": [
       "out-of-domain-detection",
       "epistemic-uncertainty-quantification",
-      "anomaly-detection",
+      "data-poisoning-detection",
       "deep-ensembles"
     ],
     "sample_claims": [
@@ -3675,104 +3675,6 @@
     ]
   },
   {
-    "slug": "prediction-intervals",
-    "name": "Prediction Intervals",
-    "description": "Prediction intervals provide a range of plausible values around a model's prediction, expressing uncertainty as 'the true value will likely fall between X and Y with Z% confidence'. For example, instead of predicting 'house price: £300,000', a prediction interval might say 'house price: £280,000 to £320,000 with 95% confidence'. This technique works by calculating upper and lower bounds that account for both model uncertainty (how confident the model is) and inherent randomness in the data. Prediction intervals are crucial for informed decision-making, as they help users understand the reliability and precision of predictions, enabling better risk assessment and planning.",
-    "assurance_goals": [
-      "Reliability",
-      "Transparency",
-      "Fairness"
-    ],
-    "tags": [
-      "applicable-models/architecture/model-agnostic",
-      "applicable-models/paradigm/supervised",
-      "applicable-models/requirements/black-box",
-      "assurance-goal-category/fairness",
-      "assurance-goal-category/reliability",
-      "assurance-goal-category/reliability/uncertainty-quantification",
-      "assurance-goal-category/transparency",
-      "data-requirements/no-special-requirements",
-      "data-type/any",
-      "evidence-type/prediction-interval",
-      "evidence-type/quantitative-metric",
-      "expertise-needed/statistics",
-      "lifecycle-stage/model-development",
-      "lifecycle-stage/system-deployment-and-use",
-      "technique-type/algorithmic"
-    ],
-    "example_use_cases": [
-      {
-        "description": "Providing realistic ranges for medical diagnosis predictions, such as 'patient survival time: 8-14 months with 90% confidence', enabling doctors to make informed treatment decisions and communicate uncertainty to patients and families.",
-        "goal": "Reliability"
-      },
-      {
-        "description": "Communicating uncertainty in automated loan approval systems by showing 'credit score prediction: 650-720 with 95% confidence' rather than a single score, helping loan officers understand prediction reliability and make transparent decisions.",
-        "goal": "Transparency"
-      },
-      {
-        "description": "Ensuring consistent prediction uncertainty across demographic groups in hiring algorithms, verifying that prediction intervals have similar widths for different protected groups to avoid unfair confidence disparities.",
-        "goal": "Fairness"
-      }
-    ],
-    "limitations": [
-      {
-        "description": "Relies on assumptions about the error distribution (often normality) which may not hold in practice, leading to inaccurate interval coverage when data exhibits heavy tails, skewness, or other non-standard patterns."
-      },
-      {
-        "description": "Can be overconfident if the underlying model is poorly calibrated, producing intervals that are too narrow and fail to capture the true prediction uncertainty."
-      },
-      {
-        "description": "Vulnerable to distribution shift between training and deployment data, where intervals calculated on historical data may not reflect uncertainty in new, unseen conditions."
-      },
-      {
-        "description": "May require careful hyperparameter tuning and validation to achieve desired coverage rates, particularly when using advanced methods like conformal prediction or quantile regression."
-      },
-      {
-        "description": "Computational overhead increases when generating intervals for large datasets or complex models, especially when using resampling-based methods like bootstrapping."
-      }
-    ],
-    "resources": [
-      "scikit-learn-contribMAPIE2021",
-      "mapiedevelopersMAPIEModelAgnostic2021",
-      "valemanAwesomeconformalprediction2021"
-    ],
-    "complexity_rating": 3,
-    "computational_cost_rating": 3,
-    "related_techniques": [
-      "conformal-prediction",
-      "quantile-regression",
-      "bootstrapping",
-      "jackknife-resampling"
-    ],
-    "sample_claims": [
-      {
-        "text": "The model's forecasts are bounded by quantified uncertainty ranges that inform decision-making under risk",
-        "domain": "environmental",
-        "assuranceGoal": "reliability"
-      },
-      {
-        "text": "The system communicates prediction reliability through explicit upper and lower bounds accompanying each forecast",
-        "domain": "finance",
-        "assuranceGoal": "transparency"
-      },
-      {
-        "text": "The model's prediction uncertainty is comparable in magnitude across protected demographic groups",
-        "domain": "healthcare",
-        "assuranceGoal": "fairness"
-      },
-      {
-        "text": "The treatment planning model's dosage recommendations include clinically meaningful confidence bounds that account for patient variability",
-        "domain": "healthcare",
-        "assuranceGoal": "reliability"
-      },
-      {
-        "text": "The autonomous system's trajectory predictions are accompanied by spatial uncertainty estimates that inform safe maneuver planning",
-        "domain": "autonomous systems",
-        "assuranceGoal": "transparency"
-      }
-    ]
-  },
-  {
     "slug": "quantile-regression",
     "name": "Quantile Regression",
     "description": "Quantile regression estimates specific percentiles (quantiles) of the target variable rather than just predicting the average outcome. For example, instead of predicting 'average house price = £300,000', it can predict 'there's a 10% chance the price will be below £250,000, 50% chance below £300,000, and 90% chance below £380,000'. This technique reveals how input features affect different parts of the outcome distribution - perhaps property size strongly influences luxury homes (90th percentile) but barely affects budget properties (10th percentile). By capturing the full conditional distribution, quantile regression provides rich uncertainty information and enables robust prediction intervals.",
@@ -3843,7 +3745,6 @@
     "computational_cost_rating": 2,
     "related_techniques": [
       "conformal-prediction",
-      "prediction-intervals",
       "bootstrapping",
       "jackknife-resampling"
     ],
@@ -3942,7 +3843,7 @@
     "complexity_rating": 4,
     "computational_cost_rating": 2,
     "related_techniques": [
-      "prediction-intervals",
+      "bootstrapping",
       "quantile-regression",
       "deep-ensembles",
       "empirical-calibration"
@@ -4039,7 +3940,7 @@
       "temperature-scaling",
       "conformal-prediction",
       "confidence-thresholding",
-      "prediction-intervals"
+      "quantile-regression"
     ],
     "sample_claims": [
       {
@@ -4332,7 +4233,7 @@
     "complexity_rating": 3,
     "computational_cost_rating": 4,
     "related_techniques": [
-      "prediction-intervals",
+      "quantile-regression",
       "jackknife-resampling",
       "conformal-prediction",
       "deep-ensembles"
@@ -4722,10 +4623,10 @@
     "complexity_rating": 4,
     "computational_cost_rating": 4,
     "related_techniques": [
-      "adversarial-robustness-testing",
+      "adversarial-training-evaluation",
       "red-teaming",
       "out-of-domain-detection",
-      "anomaly-detection"
+      "out-of-distribution-detector-for-neural-networks"
     ],
     "sample_claims": [
       {
@@ -4921,7 +4822,7 @@
     "complexity_rating": 4,
     "computational_cost_rating": 3,
     "related_techniques": [
-      "adversarial-robustness-testing",
+      "adversarial-training-evaluation",
       "jailbreak-resistance-testing",
       "prompt-injection-testing",
       "safety-envelope-testing"
@@ -4951,100 +4852,6 @@
         "text": "The conversational AI assistant resists goal misalignment attacks and jailbreak attempts that probe for ways to circumvent safety constraints through iterative prompt refinement",
         "domain": "general",
         "assuranceGoal": "security"
-      }
-    ]
-  },
-  {
-    "slug": "anomaly-detection",
-    "name": "Anomaly Detection",
-    "description": "Anomaly detection identifies unusual behaviours, inputs, or outputs that deviate significantly from established normal patterns using statistical, machine learning, or rule-based methods. Applied to AI/ML systems, it serves as a continuous monitoring mechanism that can flag unexpected model predictions, suspicious input patterns, data drift, adversarial attacks, or operational malfunctions. By establishing baselines of normal system behaviour and alerting when deviations exceed predefined thresholds, organisations can detect potential security threats, model degradation, fairness violations, or system failures before they cause significant harm.",
-    "assurance_goals": [
-      "General"
-    ],
-    "tags": [
-      "applicable-models/architecture/model-agnostic",
-      "applicable-models/requirements/black-box",
-      "applicable-models/requirements/training-data",
-      "data-requirements/no-special-requirements",
-      "data-type/any",
-      "evidence-type/quantitative-metric",
-      "expertise-needed/ml-engineering",
-      "expertise-needed/statistics",
-      "lifecycle-stage/system-deployment-and-use",
-      "lifecycle-stage/system-deployment-and-use/monitoring",
-      "technique-type/algorithmic",
-      "assurance-goal-category/general"
-    ],
-    "example_use_cases": [
-      {
-        "description": "Monitoring a content moderation AI system to detect when it starts flagging significantly more or fewer posts than usual, which could indicate model drift, adversarial attacks, or changes in user behaviour patterns that require immediate investigation to prevent harmful content from appearing.",
-        "goal": "Safety"
-      },
-      {
-        "description": "Implementing anomaly detection on a medical diagnosis AI to identify when prediction confidence scores or feature importance patterns deviate from historical norms, helping catch model degradation or data quality issues that could lead to misdiagnoses before patients are affected.",
-        "goal": "Reliability"
-      },
-      {
-        "description": "Deploying anomaly detection on a hiring algorithm to monitor for unusual patterns in how candidates from different demographic groups are scored or rejected, enabling early detection of emerging bias issues or attempts to game the system through demographic manipulation.",
-        "goal": "Fairness"
-      }
-    ],
-    "limitations": [
-      {
-        "description": "Setting appropriate sensitivity thresholds is challenging and requires domain expertise, as overly sensitive settings generate excessive false alarms whilst conservative settings may miss genuine anomalies."
-      },
-      {
-        "description": "May generate false positives for legitimate edge cases or rare but valid system behaviours, potentially causing unnecessary alerts and disrupting normal operations."
-      },
-      {
-        "description": "Limited effectiveness against novel or sophisticated attacks that deliberately mimic normal patterns or gradually shift behaviour to avoid detection thresholds."
-      },
-      {
-        "description": "Requires substantial historical data to establish reliable baselines of normal behaviour, and may struggle with systems that have naturally high variability or seasonal patterns."
-      },
-      {
-        "description": "Detection lag can occur between when an anomaly begins and when it exceeds detection thresholds, potentially allowing harmful behaviour to persist during the detection window."
-      }
-    ],
-    "resources": [
-      "adtkdevelopersAnomalyDetectionToolkit2020",
-      "timeevaldevelopersTimeEvalTimeSeries2021",
-      "deepoddevelopersDeepODDeepLearning2022",
-      "anelloBeginnersGuideAnomaly2023"
-    ],
-    "complexity_rating": 3,
-    "computational_cost_rating": 3,
-    "related_techniques": [
-      "out-of-domain-detection",
-      "out-of-distribution-detector-for-neural-networks",
-      "data-poisoning-detection",
-      "runtime-monitoring-and-circuit-breakers"
-    ],
-    "sample_claims": [
-      {
-        "text": "The system detects and alerts when model predictions deviate significantly from established baseline patterns during operational use",
-        "domain": "general",
-        "assuranceGoal": "reliability"
-      },
-      {
-        "text": "The autonomous vehicle maintains continuous monitoring for sensor inputs and perception outputs that fall outside validated operational envelopes",
-        "domain": "autonomous systems",
-        "assuranceGoal": "safety"
-      },
-      {
-        "text": "The hiring system identifies unusual scoring patterns across demographic groups that may indicate emerging bias or system manipulation",
-        "domain": "public sector",
-        "assuranceGoal": "fairness"
-      },
-      {
-        "text": "The production model flags incoming requests that exhibit characteristics inconsistent with normal traffic patterns",
-        "domain": "finance",
-        "assuranceGoal": "security"
-      },
-      {
-        "text": "The clinical decision support system alerts clinicians when prediction confidence or feature importance patterns deviate from historical norms",
-        "domain": "healthcare",
-        "assuranceGoal": "reliability"
       }
     ]
   },
@@ -5111,11 +4918,11 @@
     "complexity_rating": 2,
     "computational_cost_rating": 2,
     "related_techniques": [
-      "anomaly-detection",
+      "out-of-distribution-detector-for-neural-networks",
       "confidence-thresholding",
       "internal-review-boards",
       "out-of-domain-detection",
-      "safety-guardrails"
+      "runtime-monitoring-and-circuit-breakers"
     ],
     "sample_claims": [
       {
@@ -5295,10 +5102,10 @@
     "complexity_rating": 3,
     "computational_cost_rating": 2,
     "related_techniques": [
-      "anomaly-detection",
+      "out-of-distribution-detector-for-neural-networks",
       "confidence-thresholding",
       "human-in-the-loop-safeguards",
-      "safety-guardrails"
+      "toxicity-and-bias-detection"
     ],
     "sample_claims": [
       {
@@ -5871,7 +5678,7 @@
       "model-pruning",
       "ridge-regression-surrogates",
       "rulefit",
-      "intrinsically-interpretable-models"
+      "generalized-additive-models"
     ],
     "sample_claims": [
       {
@@ -5966,8 +5773,8 @@
     "computational_cost_rating": 2,
     "related_techniques": [
       "generalized-additive-models",
-      "intrinsically-interpretable-models",
-      "prediction-intervals",
+      "coefficient-magnitudes-in-linear-models",
+      "quantile-regression",
       "conformal-prediction"
     ],
     "sample_claims": [
@@ -5994,104 +5801,6 @@
       {
         "text": "The hiring suitability score preserves expected relationships where relevant experience monotonically improves candidate ratings",
         "domain": "general",
-        "assuranceGoal": "transparency"
-      }
-    ]
-  },
-  {
-    "slug": "intrinsically-interpretable-models",
-    "name": "Intrinsically Interpretable Models",
-    "description": "Intrinsically interpretable models are machine learning algorithms that are transparent by design, allowing users to understand their decision-making process without requiring additional explanation techniques. This category includes decision trees and rule lists (which use if-then logic), linear and logistic regression models (which use weighted feature combinations), and other simple algorithms where the model structure itself provides interpretability. These models prioritise transparency over complexity, making them ideal when stakeholder understanding and regulatory compliance are paramount.",
-    "assurance_goals": [
-      "Transparency",
-      "Reliability"
-    ],
-    "tags": [
-      "applicable-models/architecture/linear-models",
-      "applicable-models/architecture/tree-based",
-      "applicable-models/paradigm/supervised",
-      "applicable-models/requirements/white-box",
-      "assurance-goal-category/reliability",
-      "assurance-goal-category/transparency",
-      "data-requirements/no-special-requirements",
-      "data-type/any",
-      "evidence-type/quantitative-metric",
-      "evidence-type/structured-output",
-      "expertise-needed/low",
-      "explanatory-scope/global",
-      "lifecycle-stage/model-development",
-      "lifecycle-stage/project-design",
-      "technique-type/algorithmic"
-    ],
-    "example_use_cases": [
-      {
-        "description": "Developing a medical diagnosis support system using a decision tree with clear if-then rules based on symptoms and test results, allowing healthcare professionals to trace the reasoning path and explain diagnoses to patients whilst ensuring clinical transparency and accountability.",
-        "goal": "Transparency"
-      },
-      {
-        "description": "Creating a fraud detection model using logistic regression with carefully selected features (transaction amount, location, time patterns) where each coefficient's contribution can be understood and validated, ensuring reliable performance that financial institutions can audit and regulatory bodies can approve.",
-        "goal": "Reliability"
-      },
-      {
-        "description": "Implementing a hiring decision support tool using rule lists that explicitly state qualification criteria and scoring logic, providing transparent candidate evaluation that can be explained to applicants and reviewed for fairness whilst meeting legal requirements for employment decision documentation.",
-        "goal": "Transparency"
-      }
-    ],
-    "limitations": [
-      {
-        "description": "Generally achieve lower predictive accuracy than complex models (neural networks, ensembles) for difficult problems involving high-dimensional data, non-linear relationships, or complex feature interactions."
-      },
-      {
-        "description": "Linear models cannot capture non-linear relationships or feature interactions without manual feature engineering, limiting their applicability to inherently non-linear domains like image recognition or natural language processing."
-      },
-      {
-        "description": "Decision trees can become unstable with small changes in training data, potentially leading to completely different tree structures and predictions, affecting model reliability in dynamic environments."
-      },
-      {
-        "description": "Deep decision trees may lose interpretability despite being inherently transparent, as human cognitive limits make it difficult to follow complex branching logic with many levels and conditions."
-      },
-      {
-        "description": "Feature selection becomes critical for maintaining interpretability, requiring domain expertise to identify the most relevant variables whilst potentially missing important but subtle predictive signals."
-      }
-    ],
-    "resources": [
-      "scikit-learndevelopersScikitlearnDecisionTrees2007",
-      "scikit-learndevelopersScikitlearnLinearModels2007",
-      "molnarInterpretableMachineLearning2019",
-      "PackageRpartRecursive2024"
-    ],
-    "complexity_rating": 2,
-    "computational_cost_rating": 1,
-    "related_techniques": [
-      "generalized-additive-models",
-      "monotonicity-constraints",
-      "coefficient-magnitudes-in-linear-models",
-      "model-distillation"
-    ],
-    "sample_claims": [
-      {
-        "text": "The diagnostic system's decision logic is comprehensible to clinicians without requiring additional explanation tools",
-        "domain": "healthcare",
-        "assuranceGoal": "transparency"
-      },
-      {
-        "text": "The credit risk model's decision process can be audited by examining the model structure directly",
-        "domain": "finance",
-        "assuranceGoal": "transparency"
-      },
-      {
-        "text": "The eligibility assessment model produces consistent outcomes that regulators can validate through inspection of the decision rules",
-        "domain": "public sector",
-        "assuranceGoal": "reliability"
-      },
-      {
-        "text": "The prediction model's behavior is stable and verifiable across different operating conditions without post-hoc analysis",
-        "domain": "general",
-        "assuranceGoal": "reliability"
-      },
-      {
-        "text": "The quality control system's classification criteria are explicitly encoded in the model architecture for regulatory review",
-        "domain": "manufacturing",
         "assuranceGoal": "transparency"
       }
     ]
@@ -9209,113 +8918,6 @@
     ]
   },
   {
-    "slug": "adversarial-robustness-testing",
-    "name": "Adversarial Robustness Testing",
-    "description": "Adversarial robustness testing evaluates model resilience against intentionally crafted inputs designed to cause misclassification or malfunction. This technique generates adversarial examples through methods like FGSM, PGD, Carlini & Wagner (C&W) attacks, and AutoAttack to measure model vulnerability. Testing assesses both white-box scenarios (where attackers have full model access) and black-box scenarios (where attackers only observe inputs and outputs), measuring metrics like robust accuracy, attack success rates, and perturbation budgets required for successful attacks.",
-    "assurance_goals": [
-      "Security",
-      "Reliability",
-      "Safety"
-    ],
-    "tags": [
-      "applicable-models/architecture/model-agnostic",
-      "applicable-models/architecture/neural-networks",
-      "applicable-models/requirements/black-box",
-      "applicable-models/requirements/white-box",
-      "assurance-goal-category/security",
-      "assurance-goal-category/reliability",
-      "assurance-goal-category/safety",
-      "data-requirements/no-special-requirements",
-      "data-type/image",
-      "data-type/text",
-      "data-type/tabular",
-      "evidence-type/quantitative-metric",
-      "expertise-needed/ml-engineering",
-      "expertise-needed/domain-expertise",
-      "lifecycle-stage/model-evaluation",
-      "lifecycle-stage/post-deployment",
-      "technique-type/testing"
-    ],
-    "example_use_cases": [
-      {
-        "description": "Testing an autonomous vehicle's perception system against adversarial perturbations to road signs or traffic signals, ensuring the vehicle cannot be fooled by maliciously modified visual inputs.",
-        "goal": "Safety"
-      },
-      {
-        "description": "Evaluating a spam filter's robustness to adversarial text manipulations such as character substitutions, synonym replacements, and formatting tricks that attackers use to craft phishing emails that evade detection whilst remaining readable to humans.",
-        "goal": "Security"
-      },
-      {
-        "description": "Assessing whether a medical imaging classifier maintains reliable performance when images are slightly corrupted or manipulated, preventing misdiagnosis from low-quality or tampered inputs.",
-        "goal": "Reliability"
-      },
-      {
-        "description": "Testing a credit risk assessment model against adversarial perturbations in loan application data, ensuring attackers cannot manipulate minor input features like stated income or employment history to obtain fraudulent credit approvals.",
-        "goal": "Security"
-      }
-    ],
-    "limitations": [
-      {
-        "description": "Adversarial examples often transfer poorly between different models or architectures, making it difficult to comprehensively test against all possible attacks."
-      },
-      {
-        "description": "Focus on worst-case perturbations may not reflect realistic threat models, as some adversarial examples require unrealistic levels of control over inputs."
-      },
-      {
-        "description": "Computationally expensive to generate strong adversarial examples, often requiring 10-100x more computation than standard inference, especially for large models or high-dimensional inputs."
-      },
-      {
-        "description": "Trade-off between robustness and accuracy means improving adversarial robustness often reduces performance on clean, unperturbed data."
-      },
-      {
-        "description": "Requires representative test data covering expected deployment scenarios, as adversarial testing on narrow datasets may miss vulnerabilities that emerge in real-world conditions."
-      },
-      {
-        "description": "Requires expertise in both attack methodology and domain knowledge to design meaningful adversarial perturbations that reflect genuine threats rather than artificial edge cases."
-      }
-    ],
-    "resources": [
-      "adversarial-robustness-toolboxdevelopersWelcomeAdversarialRobustness",
-      "secml-torchdevelopersSecMLTorchLibraryRobustness2022",
-      "wangSurveyNeuralNetwork2024",
-      "zhaoAdversarialTrainingSurvey2024",
-      "textattackdevelopersWhatAdversarialAttack2020"
-    ],
-    "related_techniques": [
-      "data-poisoning-detection",
-      "model-watermarking-and-theft-detection",
-      "multi-agent-system-testing",
-      "prompt-injection-testing"
-    ],
-    "sample_claims": [
-      {
-        "text": "The perception system maintains safe operation when presented with inputs designed to cause misclassification",
-        "domain": "autonomous systems",
-        "assuranceGoal": "safety"
-      },
-      {
-        "text": "The model withstands intentional manipulation attempts that exploit input vulnerabilities",
-        "domain": "general",
-        "assuranceGoal": "security"
-      },
-      {
-        "text": "The system's classification accuracy remains acceptable under deliberately crafted worst-case perturbations",
-        "domain": "healthcare",
-        "assuranceGoal": "reliability"
-      },
-      {
-        "text": "The fraud detection model resists evasion attempts through strategically modified transaction features",
-        "domain": "finance",
-        "assuranceGoal": "security"
-      },
-      {
-        "text": "The autonomous vehicle's decision-making remains reliable when environmental sensors receive subtly corrupted signals",
-        "domain": "autonomous systems",
-        "assuranceGoal": "safety"
-      }
-    ]
-  },
-  {
     "slug": "adversarial-training-evaluation",
     "name": "Adversarial Training Evaluation",
     "description": "Adversarial training evaluation assesses whether models trained with adversarial examples have genuinely improved robustness rather than merely overfitting to specific attack methods. This technique tests robustness against diverse attack algorithms including those not used during training, measures certified robustness bounds, and evaluates whether adversarial training creates exploitable trade-offs in clean accuracy or introduces new vulnerabilities. Evaluation ensures adversarial training provides genuine security benefits rather than superficial improvements.",
@@ -9499,7 +9101,7 @@
       "shiLargeLanguageModel2024"
     ],
     "related_techniques": [
-      "ai-agent-safety-testing",
+      "prompt-injection-testing",
       "constitutional-ai-evaluation",
       "multi-agent-system-testing",
       "path-specific-counterfactual-fairness-assessment",
@@ -9613,7 +9215,7 @@
     ],
     "related_techniques": [
       "adversarial-training-evaluation",
-      "safety-guardrails",
+      "runtime-monitoring-and-circuit-breakers",
       "membership-inference-attack-testing",
       "prompt-injection-testing"
     ],
@@ -9718,7 +9320,7 @@
     "related_techniques": [
       "few-shot-fairness-evaluation",
       "retrieval-augmented-generation-evaluation",
-      "hallucination-detection",
+      "epistemic-uncertainty-quantification",
       "constitutional-ai-evaluation"
     ],
     "sample_claims": [
@@ -9826,8 +9428,8 @@
       "zhangConstitutionCollapseExploring2025"
     ],
     "related_techniques": [
-      "ai-agent-safety-testing",
-      "hallucination-detection",
+      "agent-goal-misalignment-testing",
+      "chain-of-thought-faithfulness-evaluation",
       "jailbreak-resistance-testing",
       "multimodal-alignment-evaluation"
     ],
@@ -10039,8 +9641,8 @@
       "saunshiUnderstandingInfluenceFunctions2022"
     ],
     "related_techniques": [
-      "anomaly-detection",
-      "adversarial-robustness-testing",
+      "out-of-distribution-detector-for-neural-networks",
+      "adversarial-training-evaluation",
       "influence-functions",
       "cross-validation"
     ],
@@ -10319,230 +9921,6 @@
     ]
   },
   {
-    "slug": "hallucination-detection",
-    "name": "Hallucination Detection",
-    "description": "Hallucination detection identifies when generative models produce factually incorrect, fabricated, or ungrounded outputs. This technique combines automated consistency checking, self-consistency methods, uncertainty quantification, and human evaluation. It produces detection scores distinguishing intrinsic hallucinations (contradicting sources) from extrinsic hallucinations (unverifiable claims), enabling filtering or user warnings.",
-    "assurance_goals": [
-      "Reliability",
-      "Transparency",
-      "Safety"
-    ],
-    "tags": [
-      "applicable-models/architecture/neural-networks/transformer",
-      "applicable-models/architecture/neural-networks/transformer/llm",
-      "applicable-models/paradigm/generative",
-      "applicable-models/requirements/black-box",
-      "assurance-goal-category/reliability",
-      "assurance-goal-category/transparency",
-      "assurance-goal-category/safety",
-      "data-type/text",
-      "data-requirements/access-to-training-data",
-      "evidence-type/quantitative-metric",
-      "evidence-type/qualitative-report",
-      "expertise-needed/ml-engineering",
-      "expertise-needed/domain-expertise",
-      "lifecycle-stage/model-evaluation",
-      "lifecycle-stage/post-deployment",
-      "technique-type/testing",
-      "technique-type/algorithmic"
-    ],
-    "example_use_cases": [
-      {
-        "description": "Monitoring a medical information system to detect when it generates unsupported clinical claims or fabricates research citations, preventing patients from receiving incorrect health advice.",
-        "goal": "Safety"
-      },
-      {
-        "description": "Evaluating an AI journalism assistant to ensure generated article drafts don't fabricate quotes, misattribute sources, or create false claims that could damage credibility and public trust.",
-        "goal": "Reliability"
-      },
-      {
-        "description": "Implementing confidence scoring and uncertainty indicators in AI assistants that transparently signal when responses may contain hallucinated information versus verified facts.",
-        "goal": "Transparency"
-      },
-      {
-        "description": "Validating an AI legal research tool used by public defenders to ensure generated case law summaries don't fabricate judicial opinions, misstate holdings, or invent precedents that could undermine legal arguments and defendants' rights.",
-        "goal": "Reliability"
-      },
-      {
-        "description": "Monitoring an AI-powered financial reporting assistant to detect when it generates unsubstantiated market analysis, fabricates company earnings data, or creates false attributions to analysts, protecting investors from misleading information.",
-        "goal": "Safety"
-      }
-    ],
-    "limitations": [
-      {
-        "description": "Automated detection methods may miss subtle hallucinations or flag correct but unusual information as potentially fabricated."
-      },
-      {
-        "description": "Requires access to reliable ground truth knowledge sources for fact-checking, which may not exist for many domains or recent events."
-      },
-      {
-        "description": "Self-consistency methods assume inconsistency indicates hallucination, but models can consistently hallucinate the same false information."
-      },
-      {
-        "description": "Human evaluation is expensive and subjective, with annotators potentially disagreeing about what constitutes hallucination versus interpretation."
-      },
-      {
-        "description": "Detection effectiveness degrades for rapidly evolving domains or emerging topics where ground truth knowledge bases may be outdated, incomplete, or unavailable, making it difficult to distinguish hallucinations from genuinely novel or recent information."
-      },
-      {
-        "description": "Particularly challenging to apply in creative writing, storytelling, or subjective analysis contexts where the boundary between acceptable creative license and problematic hallucination is domain-dependent and context-specific."
-      }
-    ],
-    "resources": [
-      "vectaraHallucinationleaderboard2023",
-      "chenHowPerformHallucination2024",
-      "muhammedSelfCheckAgentZeroResourceHallucination2025",
-      "abdaljalilSINdexSemanticINconsistency2025",
-      "kangUncertaintyQuantificationHallucination2025"
-    ],
-    "related_techniques": [
-      "retrieval-augmented-generation-evaluation",
-      "chain-of-thought-faithfulness-evaluation",
-      "epistemic-uncertainty-quantification",
-      "confidence-thresholding"
-    ],
-    "sample_claims": [
-      {
-        "text": "The medical information system identifies when generated responses contain fabricated research citations or unsupported clinical claims",
-        "domain": "healthcare",
-        "assuranceGoal": "safety"
-      },
-      {
-        "text": "The content generation system distinguishes between factually grounded outputs and unverifiable assertions across diverse query types",
-        "domain": "general",
-        "assuranceGoal": "reliability"
-      },
-      {
-        "text": "The customer service assistant signals when responses may contain fabricated information versus verified facts from knowledge sources",
-        "domain": "general",
-        "assuranceGoal": "transparency"
-      },
-      {
-        "text": "The financial reporting tool detects when generated market analysis contradicts source documents or creates unsubstantiated attributions",
-        "domain": "finance",
-        "assuranceGoal": "safety"
-      },
-      {
-        "text": "The legal research assistant identifies when case summaries fabricate judicial opinions or misstate holdings from the source materials",
-        "domain": "public sector",
-        "assuranceGoal": "reliability"
-      }
-    ]
-  },
-  {
-    "slug": "safety-guardrails",
-    "name": "Safety Guardrails",
-    "description": "Safety guardrails apply real-time content moderation and safety constraints during deployment, generating evidence of safety violations and protection effectiveness. This technique produces detailed logs of blocked content, safety incident reports, violation pattern analysis, and guardrail performance metrics. Evidence includes categorised threat taxonomies, false positive/negative rates, and temporal trends in attack patterns, supporting assurance claims about deployed system safety.",
-    "assurance_goals": [
-      "Safety",
-      "Security",
-      "Reliability"
-    ],
-    "tags": [
-      "applicable-models/architecture/model-agnostic",
-      "applicable-models/requirements/black-box",
-      "assurance-goal-category/safety",
-      "assurance-goal-category/security",
-      "assurance-goal-category/reliability",
-      "data-type/text",
-      "data-requirements/no-special-requirements",
-      "lifecycle-stage/deployment",
-      "lifecycle-stage/post-deployment",
-      "lifecycle-stage/system-deployment/system-use-and-monitoring",
-      "technique-type/algorithmic",
-      "technique-type/procedural",
-      "evidence-type/quantitative-metric",
-      "evidence-type/documentation",
-      "evidence-type/visualisation",
-      "expertise-needed/ml-engineering",
-      "expertise-needed/domain-expertise",
-      "expertise-needed/low"
-    ],
-    "example_use_cases": [
-      {
-        "description": "Implementing real-time filtering on a chatbot to catch any harmful outputs that slip through training-time safety alignment, blocking toxic content before it reaches users.",
-        "goal": "Safety"
-      },
-      {
-        "description": "Protecting a code generation model from responding to prompts requesting malicious code by filtering both inputs and outputs for security vulnerabilities and attack patterns.",
-        "goal": "Security"
-      },
-      {
-        "description": "Ensuring reliable content safety in production by adding a filtering layer that catches edge cases missed during testing and provides immediate protection against newly discovered attack patterns.",
-        "goal": "Reliability"
-      },
-      {
-        "description": "Implementing guardrails on a medical information chatbot to filter queries requesting diagnosis or treatment recommendations that should only come from licensed professionals, and to block outputs containing specific dosage information without proper context and disclaimers.",
-        "goal": "Safety"
-      },
-      {
-        "description": "Protecting a financial advisory AI from generating outputs that could constitute unauthorised securities advice or recommendations violating regulatory requirements, filtering both prompts and responses for compliance violations.",
-        "goal": "Security"
-      },
-      {
-        "description": "Ensuring an educational AI tutor blocks inappropriate content and maintains age-appropriate interactions by filtering both student inputs (detecting potential self-harm signals) and system outputs (preventing exposure to mature content).",
-        "goal": "Safety"
-      }
-    ],
-    "limitations": [
-      {
-        "description": "Adds 50-200ms latency to inference depending on filter complexity, which may be unacceptable for real-time applications requiring sub-100ms response times."
-      },
-      {
-        "description": "Safety classifiers may produce false positives that block legitimate content, degrading user experience and system utility."
-      },
-      {
-        "description": "Sophisticated adversaries may craft outputs that evade filtering through obfuscation, encoding, or subtle harmful content."
-      },
-      {
-        "description": "Requires continuous updates to filtering rules and classifiers as new attack patterns and harmful content types emerge."
-      },
-      {
-        "description": "Running guardrail models alongside primary models increases infrastructure costs by 20-50% depending on guardrail complexity, which may be prohibitive for resource-constrained deployments."
-      }
-    ],
-    "resources": [
-      "databricks-sdk-pydevelopersRealtimeServingDatabricks2023",
-      "nvidia-nemoGuardrails2023",
-      "wuLegilimensPracticalUnified2024",
-      "ghoshAEGISOnlineAdaptive2024",
-      "liJudgmentInterferenceEarly2025"
-    ],
-    "related_techniques": [
-      "out-of-domain-detection",
-      "hallucination-detection",
-      "toxicity-and-bias-detection",
-      "reward-hacking-detection"
-    ],
-    "sample_claims": [
-      {
-        "text": "The chatbot prevents harmful medical advice from reaching patients by blocking responses that contain specific treatment recommendations or dosage information without appropriate disclaimers",
-        "domain": "healthcare",
-        "assuranceGoal": "safety"
-      },
-      {
-        "text": "The code generation system refuses requests for malicious code and blocks outputs containing security vulnerabilities before they reach users",
-        "domain": "general",
-        "assuranceGoal": "security"
-      },
-      {
-        "text": "The conversational AI maintains safe interactions by blocking toxic content and policy violations in real-time during production use",
-        "domain": "general",
-        "assuranceGoal": "reliability"
-      },
-      {
-        "text": "The financial advisory system blocks outputs that constitute unauthorised securities recommendations or regulatory compliance violations before delivery",
-        "domain": "finance",
-        "assuranceGoal": "security"
-      },
-      {
-        "text": "The autonomous vehicle's communication system prevents the generation of instructions that could compromise safety-critical decision-making processes",
-        "domain": "autonomous systems",
-        "assuranceGoal": "safety"
-      }
-    ]
-  },
-  {
     "slug": "jailbreak-resistance-testing",
     "name": "Jailbreak Resistance Testing",
     "description": "Jailbreak resistance testing evaluates LLM defences against techniques that bypass safety constraints. This involves testing role-playing attacks, hypothetical framing, encoded instructions, and multi-turn manipulation. Testing measures immediate resistance to jailbreaks and the system's ability to detect and block evolving attack patterns, producing reports on vulnerability severity and exploit paths.",
@@ -10614,9 +9992,9 @@
     ],
     "related_techniques": [
       "prompt-injection-testing",
-      "ai-agent-safety-testing",
+      "agent-goal-misalignment-testing",
       "prompt-sensitivity-analysis",
-      "adversarial-robustness-testing"
+      "adversarial-training-evaluation"
     ],
     "sample_claims": [
       {
@@ -10724,9 +10102,9 @@
       "renInvestigatingFactualKnowledge2025"
     ],
     "related_techniques": [
-      "prediction-intervals",
+      "conformal-prediction",
       "jackknife-resampling",
-      "hallucination-detection",
+      "chain-of-thought-faithfulness-evaluation",
       "bootstrapping"
     ],
     "sample_claims": [
@@ -10931,7 +10309,7 @@
       "liuHypothesisTestingMini2025"
     ],
     "related_techniques": [
-      "adversarial-robustness-testing",
+      "data-poisoning-detection",
       "membership-inference-attack-testing",
       "model-watermarking-and-theft-detection",
       "adversarial-training-evaluation"
@@ -11039,7 +10417,7 @@
       "ou-yangApplyingProcessMining2010"
     ],
     "related_techniques": [
-      "ai-agent-safety-testing",
+      "jailbreak-resistance-testing",
       "agent-goal-misalignment-testing",
       "prompt-injection-testing",
       "chain-of-thought-faithfulness-evaluation"
@@ -11135,7 +10513,7 @@
       "model-extraction-defence-testing",
       "adversarial-training-evaluation",
       "synthetic-data-evaluation",
-      "adversarial-robustness-testing"
+      "data-poisoning-detection"
     ],
     "sample_claims": [
       {
@@ -11251,9 +10629,9 @@
       "i.markinIntegrationLargeLanguage2025"
     ],
     "related_techniques": [
-      "adversarial-robustness-testing",
+      "adversarial-training-evaluation",
       "constitutional-ai-evaluation",
-      "hallucination-detection",
+      "chain-of-thought-faithfulness-evaluation",
       "jailbreak-resistance-testing"
     ],
     "sample_claims": [
@@ -11354,7 +10732,7 @@
       "zhangProtectingIntellectualProperty2018"
     ],
     "related_techniques": [
-      "adversarial-robustness-testing",
+      "jailbreak-resistance-testing",
       "adversarial-training-evaluation",
       "data-poisoning-detection",
       "model-extraction-defence-testing"
@@ -11466,8 +10844,8 @@
     ],
     "related_techniques": [
       "deep-ensembles",
-      "hallucination-detection",
-      "anomaly-detection",
+      "chain-of-thought-faithfulness-evaluation",
+      "out-of-distribution-detector-for-neural-networks",
       "conformal-prediction"
     ],
     "sample_claims": [
@@ -11786,9 +11164,9 @@
       "hackettBypassingLLMGuardrails2025"
     ],
     "related_techniques": [
-      "ai-agent-safety-testing",
+      "agent-goal-misalignment-testing",
       "jailbreak-resistance-testing",
-      "hallucination-detection",
+      "chain-of-thought-faithfulness-evaluation",
       "toxicity-and-bias-detection"
     ],
     "sample_claims": [
@@ -11898,7 +11276,7 @@
       "hindiEnhancingPrecisionInterpretability2025"
     ],
     "related_techniques": [
-      "hallucination-detection",
+      "epistemic-uncertainty-quantification",
       "chain-of-thought-faithfulness-evaluation",
       "out-of-domain-detection",
       "prompt-robustness-testing"
@@ -12006,7 +11384,7 @@
       "HowMakeReward2024"
     ],
     "related_techniques": [
-      "hallucination-detection",
+      "chain-of-thought-faithfulness-evaluation",
       "adversarial-training-evaluation",
       "constitutional-ai-evaluation",
       "epistemic-uncertainty-quantification"
@@ -12036,114 +11414,6 @@
         "text": "The educational recommendation system's learning outcome improvements reflect genuine student progress rather than optimisation of engagement proxies",
         "domain": "public sector",
         "assuranceGoal": "safety"
-      }
-    ]
-  },
-  {
-    "slug": "ai-agent-safety-testing",
-    "name": "AI Agent Safety Testing",
-    "description": "AI agent safety testing evaluates autonomous AI agents that interact with external tools, APIs, and systems to ensure they operate safely and as intended. This technique assesses whether agents correctly understand tool specifications, respect usage constraints, handle errors gracefully, avoid unintended side effects, and make safe decisions during multi-step reasoning. Testing includes boundary condition validation (extreme parameters, edge cases), permission verification (ensuring agents don't exceed authorized actions), and cascade failure analysis (how tool errors propagate through agent workflows).",
-    "assurance_goals": [
-      "Safety",
-      "Security",
-      "Reliability"
-    ],
-    "tags": [
-      "applicable-models/architecture/neural-networks/transformer/llm",
-      "applicable-models/paradigm/generative",
-      "applicable-models/requirements/black-box",
-      "assurance-goal-category/safety",
-      "assurance-goal-category/security",
-      "assurance-goal-category/reliability",
-      "data-type/any",
-      "data-requirements/no-special-requirements",
-      "lifecycle-stage/model-evaluation",
-      "lifecycle-stage/post-deployment",
-      "technique-type/testing",
-      "evidence-type/quantitative-metric",
-      "evidence-type/documentation",
-      "expertise-needed/ml-engineering",
-      "expertise-needed/software-engineering",
-      "expertise-needed/domain-expertise"
-    ],
-    "example_use_cases": [
-      {
-        "description": "Testing an AI agent with database access to ensure it only executes safe read queries and cannot be manipulated into running destructive operations like deletions or schema modifications.",
-        "goal": "Safety"
-      },
-      {
-        "description": "Testing a healthcare AI agent with electronic health record access to ensure it correctly interprets permission levels, cannot be prompted to access unauthorised patient data, and maintains audit logs of all record queries.",
-        "goal": "Security"
-      },
-      {
-        "description": "Verifying that a customer service agent with CRM and payment processing tools cannot be manipulated through adversarial prompts to refund transactions outside policy boundaries or expose customer financial information.",
-        "goal": "Security"
-      },
-      {
-        "description": "Ensuring an educational AI assistant with gradebook access reliably validates student identity, cannot be socially engineered into changing grades, and handles grade calculation edge cases without data corruption.",
-        "goal": "Reliability"
-      }
-    ],
-    "limitations": [
-      {
-        "description": "Comprehensive testing of all possible tool interactions, parameter combinations, and prompt variations is infeasible for agents with access to many tools, requiring risk-based prioritisation of test scenarios."
-      },
-      {
-        "description": "Agents may exhibit unexpected emergent behaviors when composing multiple tools in novel ways not anticipated during testing."
-      },
-      {
-        "description": "Difficult to test for all possible security vulnerabilities, especially when tools themselves may have undiscovered vulnerabilities."
-      },
-      {
-        "description": "Testing in sandboxed environments may not capture all real-world failure modes and integration issues."
-      },
-      {
-        "description": "Requires specialised expertise in both LLM security (prompt injection, jailbreaking) and domain-specific safety considerations, which may not exist within a single team."
-      },
-      {
-        "description": "As underlying LLMs and available tools evolve, previously safe agent behaviors may become unsafe, necessitating continuous re-evaluation rather than one-time testing."
-      },
-      {
-        "description": "Creating realistic adversarial test cases that anticipate how malicious users might manipulate agents requires red-teaming skills and understanding of social engineering tactics."
-      }
-    ],
-    "resources": [
-      "mlflowdevelopersEvaluatingLLMsAgents2018",
-      "quachDevelopersGuideBuilding2025",
-      "LangGraphBuildStateful2025",
-      "mouraDesignDevelopDeploy2025"
-    ],
-    "related_techniques": [
-      "toxicity-and-bias-detection",
-      "multi-agent-system-testing",
-      "prompt-injection-testing",
-      "jailbreak-resistance-testing"
-    ],
-    "sample_claims": [
-      {
-        "text": "The autonomous agent respects authorization boundaries when accessing external systems and databases",
-        "domain": "general",
-        "assuranceGoal": "security"
-      },
-      {
-        "text": "The system maintains safe operation when tool invocations return unexpected errors or malformed responses",
-        "domain": "autonomous systems",
-        "assuranceGoal": "safety"
-      },
-      {
-        "text": "The agent cannot be manipulated through adversarial prompts into executing operations outside its permitted scope",
-        "domain": "finance",
-        "assuranceGoal": "security"
-      },
-      {
-        "text": "The healthcare system correctly validates permissions before retrieving patient records across all access pathways",
-        "domain": "healthcare",
-        "assuranceGoal": "security"
-      },
-      {
-        "text": "The agent handles cascading tool failures without data corruption or unintended side effects",
-        "domain": "general",
-        "assuranceGoal": "reliability"
       }
     ]
   },

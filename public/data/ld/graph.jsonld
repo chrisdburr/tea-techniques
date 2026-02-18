@@ -2682,7 +2682,7 @@
         "tea:technique/deep-ensembles",
         "tea:technique/conformal-prediction",
         "tea:technique/out-of-distribution-detector-for-neural-networks",
-        "tea:technique/prediction-intervals"
+        "tea:technique/quantile-regression"
       ],
       "citesResource": [
         "tea:resource/galDropoutBayesianApproximation2015",
@@ -2787,7 +2787,7 @@
       "relatedTo": [
         "tea:technique/out-of-domain-detection",
         "tea:technique/epistemic-uncertainty-quantification",
-        "tea:technique/anomaly-detection",
+        "tea:technique/data-poisoning-detection",
         "tea:technique/deep-ensembles"
       ],
       "citesResource": [
@@ -3753,106 +3753,6 @@
       ]
     },
     {
-      "@id": "tea:technique/prediction-intervals",
-      "@type": "Technique",
-      "name": "Prediction Intervals",
-      "slug": "prediction-intervals",
-      "description": "Prediction intervals provide a range of plausible values around a model's prediction, expressing uncertainty as 'the true value will likely fall between X and Y with Z% confidence'. For example, instead of predicting 'house price: £300,000', a prediction interval might say 'house price: £280,000 to £320,000 with 95% confidence'. This technique works by calculating upper and lower bounds that account for both model uncertainty (how confident the model is) and inherent randomness in the data. Prediction intervals are crucial for informed decision-making, as they help users understand the reliability and precision of predictions, enabling better risk assessment and planning.",
-      "addressesGoal": [
-        "tea:goal/reliability",
-        "tea:goal/transparency",
-        "tea:goal/fairness"
-      ],
-      "hasTag": [
-        "tea:tag/applicable-models/architecture/model-agnostic",
-        "tea:tag/applicable-models/paradigm/supervised",
-        "tea:tag/applicable-models/requirements/black-box",
-        "tea:tag/assurance-goal-category/fairness",
-        "tea:tag/assurance-goal-category/reliability",
-        "tea:tag/assurance-goal-category/reliability/uncertainty-quantification",
-        "tea:tag/assurance-goal-category/transparency",
-        "tea:tag/data-requirements/no-special-requirements",
-        "tea:tag/data-type/any",
-        "tea:tag/evidence-type/prediction-interval",
-        "tea:tag/evidence-type/quantitative-metric",
-        "tea:tag/expertise-needed/statistics",
-        "tea:tag/lifecycle-stage/model-development",
-        "tea:tag/lifecycle-stage/system-deployment-and-use",
-        "tea:tag/technique-type/algorithmic"
-      ],
-      "complexityRating": 3,
-      "computationalCostRating": 3,
-      "relatedTo": [
-        "tea:technique/conformal-prediction",
-        "tea:technique/quantile-regression",
-        "tea:technique/bootstrapping",
-        "tea:technique/jackknife-resampling"
-      ],
-      "citesResource": [
-        "tea:resource/scikit-learn-contribMAPIE2021",
-        "tea:resource/mapiedevelopersMAPIEModelAgnostic2021",
-        "tea:resource/valemanAwesomeconformalprediction2021"
-      ],
-      "exampleUseCases": [
-        {
-          "description": "Providing realistic ranges for medical diagnosis predictions, such as 'patient survival time: 8-14 months with 90% confidence', enabling doctors to make informed treatment decisions and communicate uncertainty to patients and families.",
-          "goal": "Reliability"
-        },
-        {
-          "description": "Communicating uncertainty in automated loan approval systems by showing 'credit score prediction: 650-720 with 95% confidence' rather than a single score, helping loan officers understand prediction reliability and make transparent decisions.",
-          "goal": "Transparency"
-        },
-        {
-          "description": "Ensuring consistent prediction uncertainty across demographic groups in hiring algorithms, verifying that prediction intervals have similar widths for different protected groups to avoid unfair confidence disparities.",
-          "goal": "Fairness"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "Relies on assumptions about the error distribution (often normality) which may not hold in practice, leading to inaccurate interval coverage when data exhibits heavy tails, skewness, or other non-standard patterns."
-        },
-        {
-          "description": "Can be overconfident if the underlying model is poorly calibrated, producing intervals that are too narrow and fail to capture the true prediction uncertainty."
-        },
-        {
-          "description": "Vulnerable to distribution shift between training and deployment data, where intervals calculated on historical data may not reflect uncertainty in new, unseen conditions."
-        },
-        {
-          "description": "May require careful hyperparameter tuning and validation to achieve desired coverage rates, particularly when using advanced methods like conformal prediction or quantile regression."
-        },
-        {
-          "description": "Computational overhead increases when generating intervals for large datasets or complex models, especially when using resampling-based methods like bootstrapping."
-        }
-      ],
-      "sampleClaims": [
-        {
-          "text": "The model's forecasts are bounded by quantified uncertainty ranges that inform decision-making under risk",
-          "domain": "environmental",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The system communicates prediction reliability through explicit upper and lower bounds accompanying each forecast",
-          "domain": "finance",
-          "assuranceGoal": "transparency"
-        },
-        {
-          "text": "The model's prediction uncertainty is comparable in magnitude across protected demographic groups",
-          "domain": "healthcare",
-          "assuranceGoal": "fairness"
-        },
-        {
-          "text": "The treatment planning model's dosage recommendations include clinically meaningful confidence bounds that account for patient variability",
-          "domain": "healthcare",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The autonomous system's trajectory predictions are accompanied by spatial uncertainty estimates that inform safe maneuver planning",
-          "domain": "autonomous systems",
-          "assuranceGoal": "transparency"
-        }
-      ]
-    },
-    {
       "@id": "tea:technique/quantile-regression",
       "@type": "Technique",
       "name": "Quantile Regression",
@@ -3887,7 +3787,6 @@
       "computationalCostRating": 2,
       "relatedTo": [
         "tea:technique/conformal-prediction",
-        "tea:technique/prediction-intervals",
         "tea:technique/bootstrapping",
         "tea:technique/jackknife-resampling"
       ],
@@ -3988,7 +3887,7 @@
       "complexityRating": 4,
       "computationalCostRating": 2,
       "relatedTo": [
-        "tea:technique/prediction-intervals",
+        "tea:technique/bootstrapping",
         "tea:technique/quantile-regression",
         "tea:technique/deep-ensembles",
         "tea:technique/empirical-calibration"
@@ -4092,7 +3991,7 @@
         "tea:technique/temperature-scaling",
         "tea:technique/conformal-prediction",
         "tea:technique/confidence-thresholding",
-        "tea:technique/prediction-intervals"
+        "tea:technique/quantile-regression"
       ],
       "citesResource": [
         "tea:resource/googleEmpirical_calibration2019",
@@ -4389,7 +4288,7 @@
       "complexityRating": 3,
       "computationalCostRating": 4,
       "relatedTo": [
-        "tea:technique/prediction-intervals",
+        "tea:technique/quantile-regression",
         "tea:technique/jackknife-resampling",
         "tea:technique/conformal-prediction",
         "tea:technique/deep-ensembles"
@@ -4785,10 +4684,10 @@
       "complexityRating": 4,
       "computationalCostRating": 4,
       "relatedTo": [
-        "tea:technique/adversarial-robustness-testing",
+        "tea:technique/adversarial-training-evaluation",
         "tea:technique/red-teaming",
         "tea:technique/out-of-domain-detection",
-        "tea:technique/anomaly-detection"
+        "tea:technique/out-of-distribution-detector-for-neural-networks"
       ],
       "citesResource": [
         "tea:resource/j.lohnEstimatingBrittlenessAI2020",
@@ -4983,7 +4882,7 @@
       "complexityRating": 4,
       "computationalCostRating": 3,
       "relatedTo": [
-        "tea:technique/adversarial-robustness-testing",
+        "tea:technique/adversarial-training-evaluation",
         "tea:technique/jailbreak-resistance-testing",
         "tea:technique/prompt-injection-testing",
         "tea:technique/safety-envelope-testing"
@@ -5059,102 +4958,6 @@
       ]
     },
     {
-      "@id": "tea:technique/anomaly-detection",
-      "@type": "Technique",
-      "name": "Anomaly Detection",
-      "slug": "anomaly-detection",
-      "description": "Anomaly detection identifies unusual behaviours, inputs, or outputs that deviate significantly from established normal patterns using statistical, machine learning, or rule-based methods. Applied to AI/ML systems, it serves as a continuous monitoring mechanism that can flag unexpected model predictions, suspicious input patterns, data drift, adversarial attacks, or operational malfunctions. By establishing baselines of normal system behaviour and alerting when deviations exceed predefined thresholds, organisations can detect potential security threats, model degradation, fairness violations, or system failures before they cause significant harm.",
-      "addressesGoal": [
-        "tea:goal/general"
-      ],
-      "hasTag": [
-        "tea:tag/applicable-models/architecture/model-agnostic",
-        "tea:tag/applicable-models/requirements/black-box",
-        "tea:tag/applicable-models/requirements/training-data",
-        "tea:tag/data-requirements/no-special-requirements",
-        "tea:tag/data-type/any",
-        "tea:tag/evidence-type/quantitative-metric",
-        "tea:tag/expertise-needed/ml-engineering",
-        "tea:tag/expertise-needed/statistics",
-        "tea:tag/lifecycle-stage/system-deployment-and-use",
-        "tea:tag/lifecycle-stage/system-deployment-and-use/monitoring",
-        "tea:tag/technique-type/algorithmic",
-        "tea:tag/assurance-goal-category/general"
-      ],
-      "complexityRating": 3,
-      "computationalCostRating": 3,
-      "relatedTo": [
-        "tea:technique/out-of-domain-detection",
-        "tea:technique/out-of-distribution-detector-for-neural-networks",
-        "tea:technique/data-poisoning-detection",
-        "tea:technique/runtime-monitoring-and-circuit-breakers"
-      ],
-      "citesResource": [
-        "tea:resource/adtkdevelopersAnomalyDetectionToolkit2020",
-        "tea:resource/timeevaldevelopersTimeEvalTimeSeries2021",
-        "tea:resource/deepoddevelopersDeepODDeepLearning2022",
-        "tea:resource/anelloBeginnersGuideAnomaly2023"
-      ],
-      "exampleUseCases": [
-        {
-          "description": "Monitoring a content moderation AI system to detect when it starts flagging significantly more or fewer posts than usual, which could indicate model drift, adversarial attacks, or changes in user behaviour patterns that require immediate investigation to prevent harmful content from appearing.",
-          "goal": "Safety"
-        },
-        {
-          "description": "Implementing anomaly detection on a medical diagnosis AI to identify when prediction confidence scores or feature importance patterns deviate from historical norms, helping catch model degradation or data quality issues that could lead to misdiagnoses before patients are affected.",
-          "goal": "Reliability"
-        },
-        {
-          "description": "Deploying anomaly detection on a hiring algorithm to monitor for unusual patterns in how candidates from different demographic groups are scored or rejected, enabling early detection of emerging bias issues or attempts to game the system through demographic manipulation.",
-          "goal": "Fairness"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "Setting appropriate sensitivity thresholds is challenging and requires domain expertise, as overly sensitive settings generate excessive false alarms whilst conservative settings may miss genuine anomalies."
-        },
-        {
-          "description": "May generate false positives for legitimate edge cases or rare but valid system behaviours, potentially causing unnecessary alerts and disrupting normal operations."
-        },
-        {
-          "description": "Limited effectiveness against novel or sophisticated attacks that deliberately mimic normal patterns or gradually shift behaviour to avoid detection thresholds."
-        },
-        {
-          "description": "Requires substantial historical data to establish reliable baselines of normal behaviour, and may struggle with systems that have naturally high variability or seasonal patterns."
-        },
-        {
-          "description": "Detection lag can occur between when an anomaly begins and when it exceeds detection thresholds, potentially allowing harmful behaviour to persist during the detection window."
-        }
-      ],
-      "sampleClaims": [
-        {
-          "text": "The system detects and alerts when model predictions deviate significantly from established baseline patterns during operational use",
-          "domain": "general",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The autonomous vehicle maintains continuous monitoring for sensor inputs and perception outputs that fall outside validated operational envelopes",
-          "domain": "autonomous systems",
-          "assuranceGoal": "safety"
-        },
-        {
-          "text": "The hiring system identifies unusual scoring patterns across demographic groups that may indicate emerging bias or system manipulation",
-          "domain": "public sector",
-          "assuranceGoal": "fairness"
-        },
-        {
-          "text": "The production model flags incoming requests that exhibit characteristics inconsistent with normal traffic patterns",
-          "domain": "finance",
-          "assuranceGoal": "security"
-        },
-        {
-          "text": "The clinical decision support system alerts clinicians when prediction confidence or feature importance patterns deviate from historical norms",
-          "domain": "healthcare",
-          "assuranceGoal": "reliability"
-        }
-      ]
-    },
-    {
       "@id": "tea:technique/human-in-the-loop-safeguards",
       "@type": "Technique",
       "name": "Human-in-the-Loop Safeguards",
@@ -5180,11 +4983,11 @@
       "complexityRating": 2,
       "computationalCostRating": 2,
       "relatedTo": [
-        "tea:technique/anomaly-detection",
+        "tea:technique/out-of-distribution-detector-for-neural-networks",
         "tea:technique/confidence-thresholding",
         "tea:technique/internal-review-boards",
         "tea:technique/out-of-domain-detection",
-        "tea:technique/safety-guardrails"
+        "tea:technique/runtime-monitoring-and-circuit-breakers"
       ],
       "citesResource": [
         "tea:resource/Article14Human",
@@ -5372,10 +5175,10 @@
       "complexityRating": 3,
       "computationalCostRating": 2,
       "relatedTo": [
-        "tea:technique/anomaly-detection",
+        "tea:technique/out-of-distribution-detector-for-neural-networks",
         "tea:technique/confidence-thresholding",
         "tea:technique/human-in-the-loop-safeguards",
-        "tea:technique/safety-guardrails"
+        "tea:technique/toxicity-and-bias-detection"
       ],
       "citesResource": [
         "tea:resource/arlyonAiobreaker2018",
@@ -5958,7 +5761,7 @@
         "tea:technique/model-pruning",
         "tea:technique/ridge-regression-surrogates",
         "tea:technique/rulefit",
-        "tea:technique/intrinsically-interpretable-models"
+        "tea:technique/generalized-additive-models"
       ],
       "citesResource": [
         "tea:resource/airariaTextBrewer2020",
@@ -6054,8 +5857,8 @@
       "computationalCostRating": 2,
       "relatedTo": [
         "tea:technique/generalized-additive-models",
-        "tea:technique/intrinsically-interpretable-models",
-        "tea:technique/prediction-intervals",
+        "tea:technique/coefficient-magnitudes-in-linear-models",
+        "tea:technique/quantile-regression",
         "tea:technique/conformal-prediction"
       ],
       "citesResource": [
@@ -6120,106 +5923,6 @@
         {
           "text": "The hiring suitability score preserves expected relationships where relevant experience monotonically improves candidate ratings",
           "domain": "general",
-          "assuranceGoal": "transparency"
-        }
-      ]
-    },
-    {
-      "@id": "tea:technique/intrinsically-interpretable-models",
-      "@type": "Technique",
-      "name": "Intrinsically Interpretable Models",
-      "slug": "intrinsically-interpretable-models",
-      "description": "Intrinsically interpretable models are machine learning algorithms that are transparent by design, allowing users to understand their decision-making process without requiring additional explanation techniques. This category includes decision trees and rule lists (which use if-then logic), linear and logistic regression models (which use weighted feature combinations), and other simple algorithms where the model structure itself provides interpretability. These models prioritise transparency over complexity, making them ideal when stakeholder understanding and regulatory compliance are paramount.",
-      "addressesGoal": [
-        "tea:goal/transparency",
-        "tea:goal/reliability"
-      ],
-      "hasTag": [
-        "tea:tag/applicable-models/architecture/linear-models",
-        "tea:tag/applicable-models/architecture/tree-based",
-        "tea:tag/applicable-models/paradigm/supervised",
-        "tea:tag/applicable-models/requirements/white-box",
-        "tea:tag/assurance-goal-category/reliability",
-        "tea:tag/assurance-goal-category/transparency",
-        "tea:tag/data-requirements/no-special-requirements",
-        "tea:tag/data-type/any",
-        "tea:tag/evidence-type/quantitative-metric",
-        "tea:tag/evidence-type/structured-output",
-        "tea:tag/expertise-needed/low",
-        "tea:tag/explanatory-scope/global",
-        "tea:tag/lifecycle-stage/model-development",
-        "tea:tag/lifecycle-stage/project-design",
-        "tea:tag/technique-type/algorithmic"
-      ],
-      "complexityRating": 2,
-      "computationalCostRating": 1,
-      "relatedTo": [
-        "tea:technique/generalized-additive-models",
-        "tea:technique/monotonicity-constraints",
-        "tea:technique/coefficient-magnitudes-in-linear-models",
-        "tea:technique/model-distillation"
-      ],
-      "citesResource": [
-        "tea:resource/scikit-learndevelopersScikitlearnDecisionTrees2007",
-        "tea:resource/scikit-learndevelopersScikitlearnLinearModels2007",
-        "tea:resource/molnarInterpretableMachineLearning2019",
-        "tea:resource/PackageRpartRecursive2024"
-      ],
-      "exampleUseCases": [
-        {
-          "description": "Developing a medical diagnosis support system using a decision tree with clear if-then rules based on symptoms and test results, allowing healthcare professionals to trace the reasoning path and explain diagnoses to patients whilst ensuring clinical transparency and accountability.",
-          "goal": "Transparency"
-        },
-        {
-          "description": "Creating a fraud detection model using logistic regression with carefully selected features (transaction amount, location, time patterns) where each coefficient's contribution can be understood and validated, ensuring reliable performance that financial institutions can audit and regulatory bodies can approve.",
-          "goal": "Reliability"
-        },
-        {
-          "description": "Implementing a hiring decision support tool using rule lists that explicitly state qualification criteria and scoring logic, providing transparent candidate evaluation that can be explained to applicants and reviewed for fairness whilst meeting legal requirements for employment decision documentation.",
-          "goal": "Transparency"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "Generally achieve lower predictive accuracy than complex models (neural networks, ensembles) for difficult problems involving high-dimensional data, non-linear relationships, or complex feature interactions."
-        },
-        {
-          "description": "Linear models cannot capture non-linear relationships or feature interactions without manual feature engineering, limiting their applicability to inherently non-linear domains like image recognition or natural language processing."
-        },
-        {
-          "description": "Decision trees can become unstable with small changes in training data, potentially leading to completely different tree structures and predictions, affecting model reliability in dynamic environments."
-        },
-        {
-          "description": "Deep decision trees may lose interpretability despite being inherently transparent, as human cognitive limits make it difficult to follow complex branching logic with many levels and conditions."
-        },
-        {
-          "description": "Feature selection becomes critical for maintaining interpretability, requiring domain expertise to identify the most relevant variables whilst potentially missing important but subtle predictive signals."
-        }
-      ],
-      "sampleClaims": [
-        {
-          "text": "The diagnostic system's decision logic is comprehensible to clinicians without requiring additional explanation tools",
-          "domain": "healthcare",
-          "assuranceGoal": "transparency"
-        },
-        {
-          "text": "The credit risk model's decision process can be audited by examining the model structure directly",
-          "domain": "finance",
-          "assuranceGoal": "transparency"
-        },
-        {
-          "text": "The eligibility assessment model produces consistent outcomes that regulators can validate through inspection of the decision rules",
-          "domain": "public sector",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The prediction model's behavior is stable and verifiable across different operating conditions without post-hoc analysis",
-          "domain": "general",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The quality control system's classification criteria are explicitly encoded in the model architecture for regulatory review",
-          "domain": "manufacturing",
           "assuranceGoal": "transparency"
         }
       ]
@@ -9396,115 +9099,6 @@
       ]
     },
     {
-      "@id": "tea:technique/adversarial-robustness-testing",
-      "@type": "Technique",
-      "name": "Adversarial Robustness Testing",
-      "slug": "adversarial-robustness-testing",
-      "description": "Adversarial robustness testing evaluates model resilience against intentionally crafted inputs designed to cause misclassification or malfunction. This technique generates adversarial examples through methods like FGSM, PGD, Carlini & Wagner (C&W) attacks, and AutoAttack to measure model vulnerability. Testing assesses both white-box scenarios (where attackers have full model access) and black-box scenarios (where attackers only observe inputs and outputs), measuring metrics like robust accuracy, attack success rates, and perturbation budgets required for successful attacks.",
-      "addressesGoal": [
-        "tea:goal/security",
-        "tea:goal/reliability",
-        "tea:goal/safety"
-      ],
-      "hasTag": [
-        "tea:tag/applicable-models/architecture/model-agnostic",
-        "tea:tag/applicable-models/architecture/neural-networks",
-        "tea:tag/applicable-models/requirements/black-box",
-        "tea:tag/applicable-models/requirements/white-box",
-        "tea:tag/assurance-goal-category/security",
-        "tea:tag/assurance-goal-category/reliability",
-        "tea:tag/assurance-goal-category/safety",
-        "tea:tag/data-requirements/no-special-requirements",
-        "tea:tag/data-type/image",
-        "tea:tag/data-type/text",
-        "tea:tag/data-type/tabular",
-        "tea:tag/evidence-type/quantitative-metric",
-        "tea:tag/expertise-needed/ml-engineering",
-        "tea:tag/expertise-needed/domain-expertise",
-        "tea:tag/lifecycle-stage/model-evaluation",
-        "tea:tag/lifecycle-stage/post-deployment",
-        "tea:tag/technique-type/testing"
-      ],
-      "relatedTo": [
-        "tea:technique/data-poisoning-detection",
-        "tea:technique/model-watermarking-and-theft-detection",
-        "tea:technique/multi-agent-system-testing",
-        "tea:technique/prompt-injection-testing"
-      ],
-      "citesResource": [
-        "tea:resource/adversarial-robustness-toolboxdevelopersWelcomeAdversarialRobustness",
-        "tea:resource/secml-torchdevelopersSecMLTorchLibraryRobustness2022",
-        "tea:resource/wangSurveyNeuralNetwork2024",
-        "tea:resource/zhaoAdversarialTrainingSurvey2024",
-        "tea:resource/textattackdevelopersWhatAdversarialAttack2020"
-      ],
-      "exampleUseCases": [
-        {
-          "description": "Testing an autonomous vehicle's perception system against adversarial perturbations to road signs or traffic signals, ensuring the vehicle cannot be fooled by maliciously modified visual inputs.",
-          "goal": "Safety"
-        },
-        {
-          "description": "Evaluating a spam filter's robustness to adversarial text manipulations such as character substitutions, synonym replacements, and formatting tricks that attackers use to craft phishing emails that evade detection whilst remaining readable to humans.",
-          "goal": "Security"
-        },
-        {
-          "description": "Assessing whether a medical imaging classifier maintains reliable performance when images are slightly corrupted or manipulated, preventing misdiagnosis from low-quality or tampered inputs.",
-          "goal": "Reliability"
-        },
-        {
-          "description": "Testing a credit risk assessment model against adversarial perturbations in loan application data, ensuring attackers cannot manipulate minor input features like stated income or employment history to obtain fraudulent credit approvals.",
-          "goal": "Security"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "Adversarial examples often transfer poorly between different models or architectures, making it difficult to comprehensively test against all possible attacks."
-        },
-        {
-          "description": "Focus on worst-case perturbations may not reflect realistic threat models, as some adversarial examples require unrealistic levels of control over inputs."
-        },
-        {
-          "description": "Computationally expensive to generate strong adversarial examples, often requiring 10-100x more computation than standard inference, especially for large models or high-dimensional inputs."
-        },
-        {
-          "description": "Trade-off between robustness and accuracy means improving adversarial robustness often reduces performance on clean, unperturbed data."
-        },
-        {
-          "description": "Requires representative test data covering expected deployment scenarios, as adversarial testing on narrow datasets may miss vulnerabilities that emerge in real-world conditions."
-        },
-        {
-          "description": "Requires expertise in both attack methodology and domain knowledge to design meaningful adversarial perturbations that reflect genuine threats rather than artificial edge cases."
-        }
-      ],
-      "sampleClaims": [
-        {
-          "text": "The perception system maintains safe operation when presented with inputs designed to cause misclassification",
-          "domain": "autonomous systems",
-          "assuranceGoal": "safety"
-        },
-        {
-          "text": "The model withstands intentional manipulation attempts that exploit input vulnerabilities",
-          "domain": "general",
-          "assuranceGoal": "security"
-        },
-        {
-          "text": "The system's classification accuracy remains acceptable under deliberately crafted worst-case perturbations",
-          "domain": "healthcare",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The fraud detection model resists evasion attempts through strategically modified transaction features",
-          "domain": "finance",
-          "assuranceGoal": "security"
-        },
-        {
-          "text": "The autonomous vehicle's decision-making remains reliable when environmental sensors receive subtly corrupted signals",
-          "domain": "autonomous systems",
-          "assuranceGoal": "safety"
-        }
-      ]
-    },
-    {
       "@id": "tea:technique/adversarial-training-evaluation",
       "@type": "Technique",
       "name": "Adversarial Training Evaluation",
@@ -9645,7 +9239,7 @@
         "tea:tag/technique-type/testing"
       ],
       "relatedTo": [
-        "tea:technique/ai-agent-safety-testing",
+        "tea:technique/prompt-injection-testing",
         "tea:technique/constitutional-ai-evaluation",
         "tea:technique/multi-agent-system-testing",
         "tea:technique/path-specific-counterfactual-fairness-assessment",
@@ -9758,7 +9352,7 @@
       ],
       "relatedTo": [
         "tea:technique/adversarial-training-evaluation",
-        "tea:technique/safety-guardrails",
+        "tea:technique/runtime-monitoring-and-circuit-breakers",
         "tea:technique/membership-inference-attack-testing",
         "tea:technique/prompt-injection-testing"
       ],
@@ -9876,7 +9470,7 @@
       "relatedTo": [
         "tea:technique/few-shot-fairness-evaluation",
         "tea:technique/retrieval-augmented-generation-evaluation",
-        "tea:technique/hallucination-detection",
+        "tea:technique/epistemic-uncertainty-quantification",
         "tea:technique/constitutional-ai-evaluation"
       ],
       "citesResource": [
@@ -9977,8 +9571,8 @@
         "tea:tag/expertise-needed/domain-expertise"
       ],
       "relatedTo": [
-        "tea:technique/ai-agent-safety-testing",
-        "tea:technique/hallucination-detection",
+        "tea:technique/agent-goal-misalignment-testing",
+        "tea:technique/chain-of-thought-faithfulness-evaluation",
         "tea:technique/jailbreak-resistance-testing",
         "tea:technique/multimodal-alignment-evaluation"
       ],
@@ -10196,8 +9790,8 @@
         "tea:tag/expertise-needed/domain-expertise"
       ],
       "relatedTo": [
-        "tea:technique/anomaly-detection",
-        "tea:technique/adversarial-robustness-testing",
+        "tea:technique/out-of-distribution-detector-for-neural-networks",
+        "tea:technique/adversarial-training-evaluation",
         "tea:technique/influence-functions",
         "tea:technique/cross-validation"
       ],
@@ -10526,234 +10120,6 @@
       ]
     },
     {
-      "@id": "tea:technique/hallucination-detection",
-      "@type": "Technique",
-      "name": "Hallucination Detection",
-      "slug": "hallucination-detection",
-      "description": "Hallucination detection identifies when generative models produce factually incorrect, fabricated, or ungrounded outputs. This technique combines automated consistency checking, self-consistency methods, uncertainty quantification, and human evaluation. It produces detection scores distinguishing intrinsic hallucinations (contradicting sources) from extrinsic hallucinations (unverifiable claims), enabling filtering or user warnings.",
-      "addressesGoal": [
-        "tea:goal/reliability",
-        "tea:goal/transparency",
-        "tea:goal/safety"
-      ],
-      "hasTag": [
-        "tea:tag/applicable-models/architecture/neural-networks/transformer",
-        "tea:tag/applicable-models/architecture/neural-networks/transformer/llm",
-        "tea:tag/applicable-models/paradigm/generative",
-        "tea:tag/applicable-models/requirements/black-box",
-        "tea:tag/assurance-goal-category/reliability",
-        "tea:tag/assurance-goal-category/transparency",
-        "tea:tag/assurance-goal-category/safety",
-        "tea:tag/data-type/text",
-        "tea:tag/data-requirements/access-to-training-data",
-        "tea:tag/evidence-type/quantitative-metric",
-        "tea:tag/evidence-type/qualitative-report",
-        "tea:tag/expertise-needed/ml-engineering",
-        "tea:tag/expertise-needed/domain-expertise",
-        "tea:tag/lifecycle-stage/model-evaluation",
-        "tea:tag/lifecycle-stage/post-deployment",
-        "tea:tag/technique-type/testing",
-        "tea:tag/technique-type/algorithmic"
-      ],
-      "relatedTo": [
-        "tea:technique/retrieval-augmented-generation-evaluation",
-        "tea:technique/chain-of-thought-faithfulness-evaluation",
-        "tea:technique/epistemic-uncertainty-quantification",
-        "tea:technique/confidence-thresholding"
-      ],
-      "citesResource": [
-        "tea:resource/vectaraHallucinationleaderboard2023",
-        "tea:resource/chenHowPerformHallucination2024",
-        "tea:resource/muhammedSelfCheckAgentZeroResourceHallucination2025",
-        "tea:resource/abdaljalilSINdexSemanticINconsistency2025",
-        "tea:resource/kangUncertaintyQuantificationHallucination2025"
-      ],
-      "exampleUseCases": [
-        {
-          "description": "Monitoring a medical information system to detect when it generates unsupported clinical claims or fabricates research citations, preventing patients from receiving incorrect health advice.",
-          "goal": "Safety"
-        },
-        {
-          "description": "Evaluating an AI journalism assistant to ensure generated article drafts don't fabricate quotes, misattribute sources, or create false claims that could damage credibility and public trust.",
-          "goal": "Reliability"
-        },
-        {
-          "description": "Implementing confidence scoring and uncertainty indicators in AI assistants that transparently signal when responses may contain hallucinated information versus verified facts.",
-          "goal": "Transparency"
-        },
-        {
-          "description": "Validating an AI legal research tool used by public defenders to ensure generated case law summaries don't fabricate judicial opinions, misstate holdings, or invent precedents that could undermine legal arguments and defendants' rights.",
-          "goal": "Reliability"
-        },
-        {
-          "description": "Monitoring an AI-powered financial reporting assistant to detect when it generates unsubstantiated market analysis, fabricates company earnings data, or creates false attributions to analysts, protecting investors from misleading information.",
-          "goal": "Safety"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "Automated detection methods may miss subtle hallucinations or flag correct but unusual information as potentially fabricated."
-        },
-        {
-          "description": "Requires access to reliable ground truth knowledge sources for fact-checking, which may not exist for many domains or recent events."
-        },
-        {
-          "description": "Self-consistency methods assume inconsistency indicates hallucination, but models can consistently hallucinate the same false information."
-        },
-        {
-          "description": "Human evaluation is expensive and subjective, with annotators potentially disagreeing about what constitutes hallucination versus interpretation."
-        },
-        {
-          "description": "Detection effectiveness degrades for rapidly evolving domains or emerging topics where ground truth knowledge bases may be outdated, incomplete, or unavailable, making it difficult to distinguish hallucinations from genuinely novel or recent information."
-        },
-        {
-          "description": "Particularly challenging to apply in creative writing, storytelling, or subjective analysis contexts where the boundary between acceptable creative license and problematic hallucination is domain-dependent and context-specific."
-        }
-      ],
-      "sampleClaims": [
-        {
-          "text": "The medical information system identifies when generated responses contain fabricated research citations or unsupported clinical claims",
-          "domain": "healthcare",
-          "assuranceGoal": "safety"
-        },
-        {
-          "text": "The content generation system distinguishes between factually grounded outputs and unverifiable assertions across diverse query types",
-          "domain": "general",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The customer service assistant signals when responses may contain fabricated information versus verified facts from knowledge sources",
-          "domain": "general",
-          "assuranceGoal": "transparency"
-        },
-        {
-          "text": "The financial reporting tool detects when generated market analysis contradicts source documents or creates unsubstantiated attributions",
-          "domain": "finance",
-          "assuranceGoal": "safety"
-        },
-        {
-          "text": "The legal research assistant identifies when case summaries fabricate judicial opinions or misstate holdings from the source materials",
-          "domain": "public sector",
-          "assuranceGoal": "reliability"
-        }
-      ]
-    },
-    {
-      "@id": "tea:technique/safety-guardrails",
-      "@type": "Technique",
-      "name": "Safety Guardrails",
-      "slug": "safety-guardrails",
-      "description": "Safety guardrails apply real-time content moderation and safety constraints during deployment, generating evidence of safety violations and protection effectiveness. This technique produces detailed logs of blocked content, safety incident reports, violation pattern analysis, and guardrail performance metrics. Evidence includes categorised threat taxonomies, false positive/negative rates, and temporal trends in attack patterns, supporting assurance claims about deployed system safety.",
-      "addressesGoal": [
-        "tea:goal/safety",
-        "tea:goal/security",
-        "tea:goal/reliability"
-      ],
-      "hasTag": [
-        "tea:tag/applicable-models/architecture/model-agnostic",
-        "tea:tag/applicable-models/requirements/black-box",
-        "tea:tag/assurance-goal-category/safety",
-        "tea:tag/assurance-goal-category/security",
-        "tea:tag/assurance-goal-category/reliability",
-        "tea:tag/data-type/text",
-        "tea:tag/data-requirements/no-special-requirements",
-        "tea:tag/lifecycle-stage/deployment",
-        "tea:tag/lifecycle-stage/post-deployment",
-        "tea:tag/lifecycle-stage/system-deployment/system-use-and-monitoring",
-        "tea:tag/technique-type/algorithmic",
-        "tea:tag/technique-type/procedural",
-        "tea:tag/evidence-type/quantitative-metric",
-        "tea:tag/evidence-type/documentation",
-        "tea:tag/evidence-type/visualisation",
-        "tea:tag/expertise-needed/ml-engineering",
-        "tea:tag/expertise-needed/domain-expertise",
-        "tea:tag/expertise-needed/low"
-      ],
-      "relatedTo": [
-        "tea:technique/out-of-domain-detection",
-        "tea:technique/hallucination-detection",
-        "tea:technique/toxicity-and-bias-detection",
-        "tea:technique/reward-hacking-detection"
-      ],
-      "citesResource": [
-        "tea:resource/databricks-sdk-pydevelopersRealtimeServingDatabricks2023",
-        "tea:resource/nvidia-nemoGuardrails2023",
-        "tea:resource/wuLegilimensPracticalUnified2024",
-        "tea:resource/ghoshAEGISOnlineAdaptive2024",
-        "tea:resource/liJudgmentInterferenceEarly2025"
-      ],
-      "exampleUseCases": [
-        {
-          "description": "Implementing real-time filtering on a chatbot to catch any harmful outputs that slip through training-time safety alignment, blocking toxic content before it reaches users.",
-          "goal": "Safety"
-        },
-        {
-          "description": "Protecting a code generation model from responding to prompts requesting malicious code by filtering both inputs and outputs for security vulnerabilities and attack patterns.",
-          "goal": "Security"
-        },
-        {
-          "description": "Ensuring reliable content safety in production by adding a filtering layer that catches edge cases missed during testing and provides immediate protection against newly discovered attack patterns.",
-          "goal": "Reliability"
-        },
-        {
-          "description": "Implementing guardrails on a medical information chatbot to filter queries requesting diagnosis or treatment recommendations that should only come from licensed professionals, and to block outputs containing specific dosage information without proper context and disclaimers.",
-          "goal": "Safety"
-        },
-        {
-          "description": "Protecting a financial advisory AI from generating outputs that could constitute unauthorised securities advice or recommendations violating regulatory requirements, filtering both prompts and responses for compliance violations.",
-          "goal": "Security"
-        },
-        {
-          "description": "Ensuring an educational AI tutor blocks inappropriate content and maintains age-appropriate interactions by filtering both student inputs (detecting potential self-harm signals) and system outputs (preventing exposure to mature content).",
-          "goal": "Safety"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "Adds 50-200ms latency to inference depending on filter complexity, which may be unacceptable for real-time applications requiring sub-100ms response times."
-        },
-        {
-          "description": "Safety classifiers may produce false positives that block legitimate content, degrading user experience and system utility."
-        },
-        {
-          "description": "Sophisticated adversaries may craft outputs that evade filtering through obfuscation, encoding, or subtle harmful content."
-        },
-        {
-          "description": "Requires continuous updates to filtering rules and classifiers as new attack patterns and harmful content types emerge."
-        },
-        {
-          "description": "Running guardrail models alongside primary models increases infrastructure costs by 20-50% depending on guardrail complexity, which may be prohibitive for resource-constrained deployments."
-        }
-      ],
-      "sampleClaims": [
-        {
-          "text": "The chatbot prevents harmful medical advice from reaching patients by blocking responses that contain specific treatment recommendations or dosage information without appropriate disclaimers",
-          "domain": "healthcare",
-          "assuranceGoal": "safety"
-        },
-        {
-          "text": "The code generation system refuses requests for malicious code and blocks outputs containing security vulnerabilities before they reach users",
-          "domain": "general",
-          "assuranceGoal": "security"
-        },
-        {
-          "text": "The conversational AI maintains safe interactions by blocking toxic content and policy violations in real-time during production use",
-          "domain": "general",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The financial advisory system blocks outputs that constitute unauthorised securities recommendations or regulatory compliance violations before delivery",
-          "domain": "finance",
-          "assuranceGoal": "security"
-        },
-        {
-          "text": "The autonomous vehicle's communication system prevents the generation of instructions that could compromise safety-critical decision-making processes",
-          "domain": "autonomous systems",
-          "assuranceGoal": "safety"
-        }
-      ]
-    },
-    {
       "@id": "tea:technique/jailbreak-resistance-testing",
       "@type": "Technique",
       "name": "Jailbreak Resistance Testing",
@@ -10782,9 +10148,9 @@
       ],
       "relatedTo": [
         "tea:technique/prompt-injection-testing",
-        "tea:technique/ai-agent-safety-testing",
+        "tea:technique/agent-goal-misalignment-testing",
         "tea:technique/prompt-sensitivity-analysis",
-        "tea:technique/adversarial-robustness-testing"
+        "tea:technique/adversarial-training-evaluation"
       ],
       "citesResource": [
         "tea:resource/llamator-coreLlamator2024",
@@ -10890,9 +10256,9 @@
         "tea:tag/technique-type/testing"
       ],
       "relatedTo": [
-        "tea:technique/prediction-intervals",
+        "tea:technique/conformal-prediction",
         "tea:technique/jackknife-resampling",
-        "tea:technique/hallucination-detection",
+        "tea:technique/chain-of-thought-faithfulness-evaluation",
         "tea:technique/bootstrapping"
       ],
       "citesResource": [
@@ -11103,7 +10469,7 @@
         "tea:tag/expertise-needed/software-engineering"
       ],
       "relatedTo": [
-        "tea:technique/adversarial-robustness-testing",
+        "tea:technique/data-poisoning-detection",
         "tea:technique/membership-inference-attack-testing",
         "tea:technique/model-watermarking-and-theft-detection",
         "tea:technique/adversarial-training-evaluation"
@@ -11215,7 +10581,7 @@
         "tea:tag/data-requirements/no-special-requirements"
       ],
       "relatedTo": [
-        "tea:technique/ai-agent-safety-testing",
+        "tea:technique/jailbreak-resistance-testing",
         "tea:technique/agent-goal-misalignment-testing",
         "tea:technique/prompt-injection-testing",
         "tea:technique/chain-of-thought-faithfulness-evaluation"
@@ -11324,7 +10690,7 @@
         "tea:technique/model-extraction-defence-testing",
         "tea:technique/adversarial-training-evaluation",
         "tea:technique/synthetic-data-evaluation",
-        "tea:technique/adversarial-robustness-testing"
+        "tea:technique/data-poisoning-detection"
       ],
       "citesResource": [
         "tea:resource/niuSoKComparingDifferent2023",
@@ -11420,9 +10786,9 @@
         "tea:tag/expertise-needed/domain-expertise"
       ],
       "relatedTo": [
-        "tea:technique/adversarial-robustness-testing",
+        "tea:technique/adversarial-training-evaluation",
         "tea:technique/constitutional-ai-evaluation",
-        "tea:technique/hallucination-detection",
+        "tea:technique/chain-of-thought-faithfulness-evaluation",
         "tea:technique/jailbreak-resistance-testing"
       ],
       "citesResource": [
@@ -11540,7 +10906,7 @@
         "tea:tag/expertise-needed/domain-expertise"
       ],
       "relatedTo": [
-        "tea:technique/adversarial-robustness-testing",
+        "tea:technique/jailbreak-resistance-testing",
         "tea:technique/adversarial-training-evaluation",
         "tea:technique/data-poisoning-detection",
         "tea:technique/model-extraction-defence-testing"
@@ -11647,8 +11013,8 @@
       ],
       "relatedTo": [
         "tea:technique/deep-ensembles",
-        "tea:technique/hallucination-detection",
-        "tea:technique/anomaly-detection",
+        "tea:technique/chain-of-thought-faithfulness-evaluation",
+        "tea:technique/out-of-distribution-detector-for-neural-networks",
         "tea:technique/conformal-prediction"
       ],
       "citesResource": [
@@ -11972,9 +11338,9 @@
         "tea:tag/technique-type/algorithmic"
       ],
       "relatedTo": [
-        "tea:technique/ai-agent-safety-testing",
+        "tea:technique/agent-goal-misalignment-testing",
         "tea:technique/jailbreak-resistance-testing",
-        "tea:technique/hallucination-detection",
+        "tea:technique/chain-of-thought-faithfulness-evaluation",
         "tea:technique/toxicity-and-bias-detection"
       ],
       "citesResource": [
@@ -12086,7 +11452,7 @@
         "tea:tag/technique-type/algorithmic"
       ],
       "relatedTo": [
-        "tea:technique/hallucination-detection",
+        "tea:technique/epistemic-uncertainty-quantification",
         "tea:technique/chain-of-thought-faithfulness-evaluation",
         "tea:technique/out-of-domain-detection",
         "tea:technique/prompt-robustness-testing"
@@ -12198,7 +11564,7 @@
         "tea:tag/expertise-needed/domain-expertise"
       ],
       "relatedTo": [
-        "tea:technique/hallucination-detection",
+        "tea:technique/chain-of-thought-faithfulness-evaluation",
         "tea:technique/adversarial-training-evaluation",
         "tea:technique/constitutional-ai-evaluation",
         "tea:technique/epistemic-uncertainty-quantification"
@@ -12275,116 +11641,6 @@
           "text": "The educational recommendation system's learning outcome improvements reflect genuine student progress rather than optimisation of engagement proxies",
           "domain": "public sector",
           "assuranceGoal": "safety"
-        }
-      ]
-    },
-    {
-      "@id": "tea:technique/ai-agent-safety-testing",
-      "@type": "Technique",
-      "name": "AI Agent Safety Testing",
-      "slug": "ai-agent-safety-testing",
-      "description": "AI agent safety testing evaluates autonomous AI agents that interact with external tools, APIs, and systems to ensure they operate safely and as intended. This technique assesses whether agents correctly understand tool specifications, respect usage constraints, handle errors gracefully, avoid unintended side effects, and make safe decisions during multi-step reasoning. Testing includes boundary condition validation (extreme parameters, edge cases), permission verification (ensuring agents don't exceed authorized actions), and cascade failure analysis (how tool errors propagate through agent workflows).",
-      "addressesGoal": [
-        "tea:goal/safety",
-        "tea:goal/security",
-        "tea:goal/reliability"
-      ],
-      "hasTag": [
-        "tea:tag/applicable-models/architecture/neural-networks/transformer/llm",
-        "tea:tag/applicable-models/paradigm/generative",
-        "tea:tag/applicable-models/requirements/black-box",
-        "tea:tag/assurance-goal-category/safety",
-        "tea:tag/assurance-goal-category/security",
-        "tea:tag/assurance-goal-category/reliability",
-        "tea:tag/data-type/any",
-        "tea:tag/data-requirements/no-special-requirements",
-        "tea:tag/lifecycle-stage/model-evaluation",
-        "tea:tag/lifecycle-stage/post-deployment",
-        "tea:tag/technique-type/testing",
-        "tea:tag/evidence-type/quantitative-metric",
-        "tea:tag/evidence-type/documentation",
-        "tea:tag/expertise-needed/ml-engineering",
-        "tea:tag/expertise-needed/software-engineering",
-        "tea:tag/expertise-needed/domain-expertise"
-      ],
-      "relatedTo": [
-        "tea:technique/toxicity-and-bias-detection",
-        "tea:technique/multi-agent-system-testing",
-        "tea:technique/prompt-injection-testing",
-        "tea:technique/jailbreak-resistance-testing"
-      ],
-      "citesResource": [
-        "tea:resource/mlflowdevelopersEvaluatingLLMsAgents2018",
-        "tea:resource/quachDevelopersGuideBuilding2025",
-        "tea:resource/LangGraphBuildStateful2025",
-        "tea:resource/mouraDesignDevelopDeploy2025"
-      ],
-      "exampleUseCases": [
-        {
-          "description": "Testing an AI agent with database access to ensure it only executes safe read queries and cannot be manipulated into running destructive operations like deletions or schema modifications.",
-          "goal": "Safety"
-        },
-        {
-          "description": "Testing a healthcare AI agent with electronic health record access to ensure it correctly interprets permission levels, cannot be prompted to access unauthorised patient data, and maintains audit logs of all record queries.",
-          "goal": "Security"
-        },
-        {
-          "description": "Verifying that a customer service agent with CRM and payment processing tools cannot be manipulated through adversarial prompts to refund transactions outside policy boundaries or expose customer financial information.",
-          "goal": "Security"
-        },
-        {
-          "description": "Ensuring an educational AI assistant with gradebook access reliably validates student identity, cannot be socially engineered into changing grades, and handles grade calculation edge cases without data corruption.",
-          "goal": "Reliability"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "Comprehensive testing of all possible tool interactions, parameter combinations, and prompt variations is infeasible for agents with access to many tools, requiring risk-based prioritisation of test scenarios."
-        },
-        {
-          "description": "Agents may exhibit unexpected emergent behaviors when composing multiple tools in novel ways not anticipated during testing."
-        },
-        {
-          "description": "Difficult to test for all possible security vulnerabilities, especially when tools themselves may have undiscovered vulnerabilities."
-        },
-        {
-          "description": "Testing in sandboxed environments may not capture all real-world failure modes and integration issues."
-        },
-        {
-          "description": "Requires specialised expertise in both LLM security (prompt injection, jailbreaking) and domain-specific safety considerations, which may not exist within a single team."
-        },
-        {
-          "description": "As underlying LLMs and available tools evolve, previously safe agent behaviors may become unsafe, necessitating continuous re-evaluation rather than one-time testing."
-        },
-        {
-          "description": "Creating realistic adversarial test cases that anticipate how malicious users might manipulate agents requires red-teaming skills and understanding of social engineering tactics."
-        }
-      ],
-      "sampleClaims": [
-        {
-          "text": "The autonomous agent respects authorization boundaries when accessing external systems and databases",
-          "domain": "general",
-          "assuranceGoal": "security"
-        },
-        {
-          "text": "The system maintains safe operation when tool invocations return unexpected errors or malformed responses",
-          "domain": "autonomous systems",
-          "assuranceGoal": "safety"
-        },
-        {
-          "text": "The agent cannot be manipulated through adversarial prompts into executing operations outside its permitted scope",
-          "domain": "finance",
-          "assuranceGoal": "security"
-        },
-        {
-          "text": "The healthcare system correctly validates permissions before retrieving patient records across all access pathways",
-          "domain": "healthcare",
-          "assuranceGoal": "security"
-        },
-        {
-          "text": "The agent handles cascading tool failures without data corruption or unintended side effects",
-          "domain": "general",
-          "assuranceGoal": "reliability"
         }
       ]
     },
@@ -12523,7 +11779,7 @@
       "name": "Explainability",
       "slug": "explainability",
       "description": "Understanding how AI systems make decisions and what factors influence their outputs.",
-      "techniqueCount": 57,
+      "techniqueCount": 56,
       "hasTechnique": [
         "tea:technique/shapley-additive-explanations",
         "tea:technique/permutation-importance",
@@ -12577,7 +11833,7 @@
       "name": "Fairness",
       "slug": "fairness",
       "description": "Ensuring AI systems treat different groups and individuals equitably.",
-      "techniqueCount": 67,
+      "techniqueCount": 65,
       "hasTechnique": [
         "tea:technique/shapley-additive-explanations",
         "tea:technique/sobol-indices",
@@ -12592,7 +11848,6 @@
         "tea:technique/synthetic-data-generation",
         "tea:technique/federated-learning",
         "tea:technique/differential-privacy",
-        "tea:technique/prediction-intervals",
         "tea:technique/quantile-regression",
         "tea:technique/conformal-prediction",
         "tea:technique/empirical-calibration",
@@ -12641,12 +11896,11 @@
       "name": "General",
       "slug": "general",
       "description": "Cross-cutting techniques that support any assurance goal.",
-      "techniqueCount": 13,
+      "techniqueCount": 12,
       "hasTechnique": [
         "tea:technique/cross-validation",
         "tea:technique/internal-review-boards",
         "tea:technique/red-teaming",
-        "tea:technique/anomaly-detection",
         "tea:technique/human-in-the-loop-safeguards",
         "tea:technique/confidence-thresholding",
         "tea:technique/runtime-monitoring-and-circuit-breakers",
@@ -12664,7 +11918,7 @@
       "name": "Privacy",
       "slug": "privacy",
       "description": "Protecting personal data and maintaining confidentiality in AI systems.",
-      "techniqueCount": 23,
+      "techniqueCount": 22,
       "hasTechnique": [
         "tea:technique/influence-functions",
         "tea:technique/synthetic-data-generation",
@@ -12684,7 +11938,7 @@
       "name": "Reliability",
       "slug": "reliability",
       "description": "Building AI systems that perform consistently and predictably.",
-      "techniqueCount": 79,
+      "techniqueCount": 72,
       "hasTechnique": [
         "tea:technique/shapley-additive-explanations",
         "tea:technique/permutation-importance",
@@ -12694,7 +11948,6 @@
         "tea:technique/permutation-tests",
         "tea:technique/synthetic-data-generation",
         "tea:technique/federated-learning",
-        "tea:technique/prediction-intervals",
         "tea:technique/quantile-regression",
         "tea:technique/conformal-prediction",
         "tea:technique/empirical-calibration",
@@ -12706,7 +11959,6 @@
         "tea:technique/safety-envelope-testing",
         "tea:technique/model-distillation",
         "tea:technique/monotonicity-constraints",
-        "tea:technique/intrinsically-interpretable-models",
         "tea:technique/generalized-additive-models",
         "tea:technique/model-pruning",
         "tea:technique/prompt-sensitivity-analysis",
@@ -12730,7 +11982,6 @@
         "tea:technique/average-odds-difference",
         "tea:technique/path-specific-counterfactual-fairness-assessment",
         "tea:technique/bayesian-fairness-regularization",
-        "tea:technique/adversarial-robustness-testing",
         "tea:technique/adversarial-training-evaluation",
         "tea:technique/agent-goal-misalignment-testing",
         "tea:technique/chain-of-thought-faithfulness-evaluation",
@@ -12738,8 +11989,6 @@
         "tea:technique/continual-learning-stability-testing",
         "tea:technique/data-poisoning-detection",
         "tea:technique/few-shot-fairness-evaluation",
-        "tea:technique/hallucination-detection",
-        "tea:technique/safety-guardrails",
         "tea:technique/jailbreak-resistance-testing",
         "tea:technique/epistemic-uncertainty-quantification",
         "tea:technique/multi-agent-system-testing",
@@ -12750,7 +11999,6 @@
         "tea:technique/prompt-injection-testing",
         "tea:technique/retrieval-augmented-generation-evaluation",
         "tea:technique/reward-hacking-detection",
-        "tea:technique/ai-agent-safety-testing",
         "tea:technique/toxicity-and-bias-detection"
       ]
     },
@@ -12760,7 +12008,7 @@
       "name": "Safety",
       "slug": "safety",
       "description": "Ensuring AI systems operate safely and do not cause harm.",
-      "techniqueCount": 42,
+      "techniqueCount": 37,
       "hasTechnique": [
         "tea:technique/out-of-distribution-detector-for-neural-networks",
         "tea:technique/synthetic-data-generation",
@@ -12774,14 +12022,11 @@
         "tea:technique/prompt-sensitivity-analysis",
         "tea:technique/causal-mediation-analysis-in-language-models",
         "tea:technique/feature-attribution-with-integrated-gradients-in-nlp",
-        "tea:technique/adversarial-robustness-testing",
         "tea:technique/agent-goal-misalignment-testing",
         "tea:technique/api-usage-pattern-monitoring",
         "tea:technique/constitutional-ai-evaluation",
         "tea:technique/continual-learning-stability-testing",
         "tea:technique/data-poisoning-detection",
-        "tea:technique/hallucination-detection",
-        "tea:technique/safety-guardrails",
         "tea:technique/jailbreak-resistance-testing",
         "tea:technique/epistemic-uncertainty-quantification",
         "tea:technique/multi-agent-system-testing",
@@ -12789,7 +12034,6 @@
         "tea:technique/out-of-domain-detection",
         "tea:technique/prompt-injection-testing",
         "tea:technique/reward-hacking-detection",
-        "tea:technique/ai-agent-safety-testing",
         "tea:technique/toxicity-and-bias-detection"
       ]
     },
@@ -12799,21 +12043,18 @@
       "name": "Security",
       "slug": "security",
       "description": "Protecting AI systems from malicious attacks and unauthorized access.",
-      "techniqueCount": 26,
+      "techniqueCount": 22,
       "hasTechnique": [
         "tea:technique/homomorphic-encryption",
-        "tea:technique/adversarial-robustness-testing",
         "tea:technique/adversarial-training-evaluation",
         "tea:technique/api-usage-pattern-monitoring",
         "tea:technique/data-poisoning-detection",
-        "tea:technique/safety-guardrails",
         "tea:technique/jailbreak-resistance-testing",
         "tea:technique/model-extraction-defence-testing",
         "tea:technique/multi-agent-system-testing",
         "tea:technique/membership-inference-attack-testing",
         "tea:technique/model-watermarking-and-theft-detection",
-        "tea:technique/prompt-injection-testing",
-        "tea:technique/ai-agent-safety-testing"
+        "tea:technique/prompt-injection-testing"
       ]
     },
     {
@@ -12822,7 +12063,7 @@
       "name": "Transparency",
       "slug": "transparency",
       "description": "Making AI systems and their decision-making processes open and understandable.",
-      "techniqueCount": 71,
+      "techniqueCount": 67,
       "hasTechnique": [
         "tea:technique/coefficient-magnitudes-in-linear-models",
         "tea:technique/deeplift",
@@ -12836,7 +12077,6 @@
         "tea:technique/rulefit",
         "tea:technique/differential-privacy",
         "tea:technique/homomorphic-encryption",
-        "tea:technique/prediction-intervals",
         "tea:technique/quantile-regression",
         "tea:technique/conformal-prediction",
         "tea:technique/empirical-calibration",
@@ -12846,7 +12086,6 @@
         "tea:technique/jackknife-resampling",
         "tea:technique/area-under-precision-recall-curve",
         "tea:technique/monotonicity-constraints",
-        "tea:technique/intrinsically-interpretable-models",
         "tea:technique/generalized-additive-models",
         "tea:technique/concept-activation-vectors",
         "tea:technique/attention-visualisation-in-transformers",
@@ -12872,7 +12111,6 @@
         "tea:technique/constitutional-ai-evaluation",
         "tea:technique/embedding-bias-analysis",
         "tea:technique/few-shot-fairness-evaluation",
-        "tea:technique/hallucination-detection",
         "tea:technique/epistemic-uncertainty-quantification",
         "tea:technique/machine-unlearning",
         "tea:technique/model-extraction-defence-testing",
@@ -14072,22 +13310,6 @@
       "broader": "tea:tag/applicable-models/architecture/neural-networks"
     },
     {
-      "@id": "tea:tag/assurance-goal-category/reliability/uncertainty-quantification",
-      "@type": "Tag",
-      "prefLabel": "uncertainty quantification",
-      "path": "assurance-goal-category/reliability/uncertainty-quantification",
-      "category": "assurance-goal-category",
-      "broader": "tea:tag/assurance-goal-category/reliability"
-    },
-    {
-      "@id": "tea:tag/evidence-type/prediction-interval",
-      "@type": "Tag",
-      "prefLabel": "prediction interval",
-      "path": "evidence-type/prediction-interval",
-      "category": "evidence-type",
-      "broader": "tea:tag/evidence-type"
-    },
-    {
       "@id": "tea:tag/applicable-models/architecture/linear-models/regression",
       "@type": "Tag",
       "prefLabel": "regression",
@@ -14102,6 +13324,22 @@
       "path": "applicable-models/architecture/tree-based/gradient-boosting",
       "category": "applicable-models",
       "broader": "tea:tag/applicable-models/architecture/tree-based"
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/reliability/uncertainty-quantification",
+      "@type": "Tag",
+      "prefLabel": "uncertainty quantification",
+      "path": "assurance-goal-category/reliability/uncertainty-quantification",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/reliability"
+    },
+    {
+      "@id": "tea:tag/evidence-type/prediction-interval",
+      "@type": "Tag",
+      "prefLabel": "prediction interval",
+      "path": "evidence-type/prediction-interval",
+      "category": "evidence-type",
+      "broader": "tea:tag/evidence-type"
     },
     {
       "@id": "tea:tag/data-requirements/calibration-set",
@@ -14256,20 +13494,20 @@
       "broader": "tea:tag/technique-type"
     },
     {
-      "@id": "tea:tag/lifecycle-stage/system-deployment-and-use/monitoring",
-      "@type": "Tag",
-      "prefLabel": "monitoring",
-      "path": "lifecycle-stage/system-deployment-and-use/monitoring",
-      "category": "lifecycle-stage",
-      "broader": "tea:tag/lifecycle-stage/system-deployment-and-use"
-    },
-    {
       "@id": "tea:tag/expertise-needed/stakeholder-engagement",
       "@type": "Tag",
       "prefLabel": "stakeholder engagement",
       "path": "expertise-needed/stakeholder-engagement",
       "category": "expertise-needed",
       "broader": "tea:tag/expertise-needed"
+    },
+    {
+      "@id": "tea:tag/lifecycle-stage/system-deployment-and-use/monitoring",
+      "@type": "Tag",
+      "prefLabel": "monitoring",
+      "path": "lifecycle-stage/system-deployment-and-use/monitoring",
+      "category": "lifecycle-stage",
+      "broader": "tea:tag/lifecycle-stage/system-deployment-and-use"
     },
     {
       "@id": "tea:tag/technique-type/documentation",
@@ -16832,38 +16070,6 @@
       "abstract": "Microsoft SEAL is an easy-to-use and powerful homomorphic encryption library."
     },
     {
-      "@id": "tea:resource/scikit-learn-contribMAPIE2021",
-      "@type": "Resource",
-      "name": "MAPIE",
-      "citationKey": "scikit-learn-contribMAPIE2021",
-      "url": "https://github.com/scikit-learn-contrib/MAPIE",
-      "sourceType": "software_package",
-      "publicationDate": "2021-03-30",
-      "abstract": "A scikit-learn-compatible library for estimating prediction intervals and controlling risks, based on conformal predictions."
-    },
-    {
-      "@id": "tea:resource/mapiedevelopersMAPIEModelAgnostic2021",
-      "@type": "Resource",
-      "name": "MAPIE - Model Agnostic Prediction Interval Estimator",
-      "citationKey": "mapiedevelopersMAPIEModelAgnostic2021",
-      "url": "https://mapie.readthedocs.io",
-      "sourceType": "documentation",
-      "authors": [
-        "Mapie Developers"
-      ],
-      "publicationDate": "2021"
-    },
-    {
-      "@id": "tea:resource/valemanAwesomeconformalprediction2021",
-      "@type": "Resource",
-      "name": "awesome-conformal-prediction",
-      "citationKey": "valemanAwesomeconformalprediction2021",
-      "url": "https://github.com/valeman/awesome-conformal-prediction",
-      "sourceType": "software_package",
-      "publicationDate": "2021-12-10",
-      "abstract": "A professionally curated list of awesome Conformal Prediction videos, tutorials, books, papers, PhD and MSc theses, articles and open-source libraries."
-    },
-    {
       "@id": "tea:resource/statsmodelsStatsmodels2011",
       "@type": "Resource",
       "name": "statsmodels",
@@ -16938,6 +16144,26 @@
       ],
       "publicationDate": "2007-06-21",
       "abstract": "Conformal prediction uses past experience to determine precise levels of confidence in new predictions. Given an error probability $ε$, together with a method that makes a prediction $\\hat{y}$ of a label $y$, it produces a set of labels, typically containing $\\hat{y}$, that also contains $y$ with probability $1-ε$. Conformal prediction can be applied to any method for producing $\\hat{y}$: a nearest-neighbor method, a support-vector machine, ridge regression, etc.   Conformal prediction is designed for an on-line setting in which labels are predicted successively, each one being revealed before the next is predicted. The most novel and valuable feature of conformal prediction is that if the successive examples are sampled independently from the same distribution, then the successive predictions will be right $1-ε$ of the time, even though they are based on an accumulating dataset rather than on independent datasets.   In addition to the model under which successive examples are sampled independently, other on-line compression models can also use conformal prediction. The widely used Gaussian linear model is one of these.   This tutorial presents a self-contained account of the theory of conformal prediction and works through several numerical examples. A more comprehensive treatment of the topic is provided in \"Algorithmic Learning in a Random World\", by Vladimir Vovk, Alex Gammerman, and Glenn Shafer (Springer, 2005)."
+    },
+    {
+      "@id": "tea:resource/valemanAwesomeconformalprediction2021",
+      "@type": "Resource",
+      "name": "awesome-conformal-prediction",
+      "citationKey": "valemanAwesomeconformalprediction2021",
+      "url": "https://github.com/valeman/awesome-conformal-prediction",
+      "sourceType": "software_package",
+      "publicationDate": "2021-12-10",
+      "abstract": "A professionally curated list of awesome Conformal Prediction videos, tutorials, books, papers, PhD and MSc theses, articles and open-source libraries."
+    },
+    {
+      "@id": "tea:resource/scikit-learn-contribMAPIE2021",
+      "@type": "Resource",
+      "name": "MAPIE",
+      "citationKey": "scikit-learn-contribMAPIE2021",
+      "url": "https://github.com/scikit-learn-contrib/MAPIE",
+      "sourceType": "software_package",
+      "publicationDate": "2021-03-30",
+      "abstract": "A scikit-learn-compatible library for estimating prediction intervals and controlling risks, based on conformal predictions."
     },
     {
       "@id": "tea:resource/mapiedevelopersTutorialClassificationMAPIE2021",
@@ -17444,45 +16670,6 @@
       "abstract": "To ensure AI safety, instruction-tuned Large Language Models (LLMs) are specifically trained to ensure alignment, which refers to making models behave in accordance with human intentions. While these models have demonstrated commendable results on various safety benchmarks, the vulnerability of their safety alignment has not been extensively studied. This is particularly troubling given the potential harm that LLMs can inflict. Existing attack methods on LLMs often rely on poisoned training data or the injection of malicious prompts. These approaches compromise the stealthiness and generalizability of the attacks, making them susceptible to detection. Additionally, these models often demand substantial computational resources for implementation, making them less practical for real-world applications. In this work, we study a different attack scenario, called Trojan Activation Attack (TA2), which injects trojan steering vectors into the activation layers of LLMs. These malicious steering vectors can be triggered at inference time to steer the models toward attacker-desired behaviors by manipulating their activations. Our experiment results on four primary alignment tasks show that TA2 is highly effective and adds little or no overhead to attack efficiency. Additionally, we discuss potential countermeasures against such activation attacks."
     },
     {
-      "@id": "tea:resource/adtkdevelopersAnomalyDetectionToolkit2020",
-      "@type": "Resource",
-      "name": "Anomaly Detection Toolkit (ADTK)",
-      "citationKey": "adtkdevelopersAnomalyDetectionToolkit2020",
-      "url": "https://adtk.readthedocs.io/en/stable",
-      "sourceType": "documentation",
-      "publicationDate": "2020"
-    },
-    {
-      "@id": "tea:resource/timeevaldevelopersTimeEvalTimeSeries2021",
-      "@type": "Resource",
-      "name": "TimeEval: Time Series Anomaly Detection Evaluation Framework",
-      "citationKey": "timeevaldevelopersTimeEvalTimeSeries2021",
-      "url": "https://timeeval.readthedocs.io",
-      "sourceType": "documentation",
-      "publicationDate": "2021"
-    },
-    {
-      "@id": "tea:resource/deepoddevelopersDeepODDeepLearning2022",
-      "@type": "Resource",
-      "name": "DeepOD: Deep Learning for Outlier Detection",
-      "citationKey": "deepoddevelopersDeepODDeepLearning2022",
-      "url": "https://deepod.readthedocs.io",
-      "sourceType": "documentation",
-      "publicationDate": "2022"
-    },
-    {
-      "@id": "tea:resource/anelloBeginnersGuideAnomaly2023",
-      "@type": "Resource",
-      "name": "A Beginner's Guide to Anomaly Detection Techniques in Data Science",
-      "citationKey": "anelloBeginnersGuideAnomaly2023",
-      "url": "https://www.kdnuggets.com/2023/05/beginner-guide-anomaly-detection-techniques-data-science.html",
-      "sourceType": "tutorial",
-      "authors": [
-        "Eugenia Anello"
-      ],
-      "publicationDate": "2023"
-    },
-    {
       "@id": "tea:resource/Article14Human",
       "@type": "Resource",
       "name": "Article 14: Human Oversight | EU Artificial Intelligence Act",
@@ -17975,39 +17162,6 @@
       "sourceType": "software_package",
       "publicationDate": "2019-03-05",
       "abstract": "Python model for constrained GP"
-    },
-    {
-      "@id": "tea:resource/scikit-learndevelopersScikitlearnDecisionTrees2007",
-      "@type": "Resource",
-      "name": "scikit-learn Decision Trees",
-      "citationKey": "scikit-learndevelopersScikitlearnDecisionTrees2007",
-      "url": "https://scikit-learn.org/stable/modules/tree.html",
-      "sourceType": "documentation",
-      "authors": [
-        "Scikit-learn Developers"
-      ],
-      "publicationDate": "2007"
-    },
-    {
-      "@id": "tea:resource/molnarInterpretableMachineLearning2019",
-      "@type": "Resource",
-      "name": "Interpretable Machine Learning",
-      "citationKey": "molnarInterpretableMachineLearning2019",
-      "url": "https://christophm.github.io/interpretable-ml-book",
-      "sourceType": "tutorial",
-      "authors": [
-        "Christoph Molnar"
-      ],
-      "publicationDate": "2019"
-    },
-    {
-      "@id": "tea:resource/PackageRpartRecursive2024",
-      "@type": "Resource",
-      "name": "R package 'rpart' for Recursive Partitioning",
-      "citationKey": "PackageRpartRecursive2024",
-      "url": "https://cran.r-project.org/web/packages/rpart/index.html",
-      "sourceType": "software_package",
-      "publicationDate": "2024"
     },
     {
       "@id": "tea:resource/hastieGeneralizedAdditiveModels1986",
@@ -19277,46 +18431,6 @@
       "publicationDate": "2025-04-14"
     },
     {
-      "@id": "tea:resource/adversarial-robustness-toolboxdevelopersWelcomeAdversarialRobustness",
-      "@type": "Resource",
-      "name": "Welcome to the Adversarial Robustness Toolbox — Adversarial ...",
-      "citationKey": "adversarial-robustness-toolboxdevelopersWelcomeAdversarialRobustness",
-      "url": "https://adversarial-robustness-toolbox.readthedocs.io",
-      "sourceType": "documentation",
-      "authors": [
-        "Adversarial-robustness-toolbox Developers"
-      ]
-    },
-    {
-      "@id": "tea:resource/secml-torchdevelopersSecMLTorchLibraryRobustness2022",
-      "@type": "Resource",
-      "name": "SecML-Torch: A Library for Robustness Evaluation of Deep ...",
-      "citationKey": "secml-torchdevelopersSecMLTorchLibraryRobustness2022",
-      "url": "https://secml-torch.readthedocs.io",
-      "sourceType": "documentation",
-      "publicationDate": "2022"
-    },
-    {
-      "@id": "tea:resource/wangSurveyNeuralNetwork2024",
-      "@type": "Resource",
-      "name": "A Survey of Neural Network Robustness Assessment in Image Recognition",
-      "citationKey": "wangSurveyNeuralNetwork2024",
-      "url": "https://www.semanticscholar.org/paper/4ff905df12fe2e5d3ef9801f22cdf301124cb0cb",
-      "sourceType": "technical_paper",
-      "authors": [
-        "Jie Wang",
-        "Jun Ai",
-        "Minyan Lu",
-        "Haoran Su",
-        "Dan Yu",
-        "Yutao Zhang",
-        "Junda Zhu",
-        "Jingyu Liu"
-      ],
-      "publicationDate": "2024",
-      "abstract": "In recent years, there has been significant attention given to the robustness assessment of neural networks. Robustness plays a critical role in ensuring reliable operation of artificial intelligence (AI) systems in complex and uncertain environments. Deep learning's robustness problem is particularly significant, highlighted by the discovery of adversarial attacks on image classification models. Researchers have dedicated efforts to evaluate robustness in diverse perturbation conditions for image recognition tasks. Robustness assessment encompasses two main techniques: robustness verification/ certification for deliberate adversarial attacks and robustness testing for random data corruptions. In this survey, we present a detailed examination of both adversarial robustness (AR) and corruption robustness (CR) in neural network assessment. Analyzing current research papers and standards, we provide an extensive overview of robustness assessment in image recognition. Three essential aspects are analyzed: concepts, metrics, and assessment methods. We investigate the perturbation metrics and range representations used to measure the degree of perturbations on images, as well as the robustness metrics specifically for the robustness conditions of classification models. The strengths and limitations of the existing methods are also discussed, and some potential directions for future research are provided."
-    },
-    {
       "@id": "tea:resource/zhaoAdversarialTrainingSurvey2024",
       "@type": "Resource",
       "name": "Adversarial Training: A Survey",
@@ -19335,16 +18449,15 @@
       "abstract": "Adversarial training (AT) refers to integrating adversarial examples -- inputs altered with imperceptible perturbations that can significantly impact model predictions -- into the training process. Recent studies have demonstrated the effectiveness of AT in improving the robustness of deep neural networks against diverse adversarial attacks. However, a comprehensive overview of these developments is still missing. This survey addresses this gap by reviewing a broad range of recent and representative studies. Specifically, we first describe the implementation procedures and practical applications of AT, followed by a comprehensive review of AT techniques from three perspectives: data enhancement, network design, and training configurations. Lastly, we discuss common challenges in AT and propose several promising directions for future research."
     },
     {
-      "@id": "tea:resource/textattackdevelopersWhatAdversarialAttack2020",
+      "@id": "tea:resource/adversarial-robustness-toolboxdevelopersWelcomeAdversarialRobustness",
       "@type": "Resource",
-      "name": "What is an adversarial attack in NLP? — TextAttack 0.3.10 ...",
-      "citationKey": "textattackdevelopersWhatAdversarialAttack2020",
-      "url": "https://textattack.readthedocs.io/en/latest/1start/what_is_an_adversarial_attack.html",
+      "name": "Welcome to the Adversarial Robustness Toolbox — Adversarial ...",
+      "citationKey": "adversarial-robustness-toolboxdevelopersWelcomeAdversarialRobustness",
+      "url": "https://adversarial-robustness-toolbox.readthedocs.io",
       "sourceType": "documentation",
       "authors": [
-        "Textattack Developers"
-      ],
-      "publicationDate": "2020"
+        "Adversarial-robustness-toolbox Developers"
+      ]
     },
     {
       "@id": "tea:resource/robustnessdevelopersTrainingEvaluatingNetworks2019",
@@ -19762,151 +18875,6 @@
       "url": "https://arxiv.org/abs/2303.13217",
       "sourceType": "technical_paper",
       "publicationDate": "2023"
-    },
-    {
-      "@id": "tea:resource/vectaraHallucinationleaderboard2023",
-      "@type": "Resource",
-      "name": "hallucination-leaderboard",
-      "citationKey": "vectaraHallucinationleaderboard2023",
-      "url": "https://github.com/vectara/hallucination-leaderboard",
-      "sourceType": "software_package",
-      "publicationDate": "2023-10-31",
-      "abstract": "Leaderboard Comparing LLM Performance at Producing Hallucinations when Summarizing Short Documents"
-    },
-    {
-      "@id": "tea:resource/chenHowPerformHallucination2024",
-      "@type": "Resource",
-      "name": "How to Perform Hallucination Detection for LLMs | Towards Data ...",
-      "citationKey": "chenHowPerformHallucination2024",
-      "url": "https://towardsdatascience.com/how-to-perform-hallucination-detection-for-llms-b8cb8b72e697",
-      "sourceType": "tutorial",
-      "authors": [
-        "Mark Chen"
-      ],
-      "publicationDate": "2024-01-22"
-    },
-    {
-      "@id": "tea:resource/muhammedSelfCheckAgentZeroResourceHallucination2025",
-      "@type": "Resource",
-      "name": "SelfCheckAgent: Zero-Resource Hallucination Detection in Generative Large Language Models",
-      "citationKey": "muhammedSelfCheckAgentZeroResourceHallucination2025",
-      "url": "https://www.semanticscholar.org/paper/e7cd95ec57302fc5897bed07bee87a388747f750",
-      "sourceType": "technical_paper",
-      "authors": [
-        "Diyana Muhammed",
-        "Gollam Rabby",
-        "Soren Auer"
-      ],
-      "publicationDate": "2025",
-      "abstract": "Detecting hallucinations in Large Language Models (LLMs) remains a critical challenge for their reliable deployment in real-world applications. To address this, we introduce SelfCheckAgent, a novel framework integrating three different agents: the Symbolic Agent, the Specialized Detection Agent, and the Contextual Consistency Agent. These agents provide a robust multi-dimensional approach to hallucination detection. Notable results include the Contextual Consistency Agent leveraging Llama 3.1 with Chain-of-Thought (CoT) to achieve outstanding performance on the WikiBio dataset, with NonFactual hallucination detection scoring 93.64%, Factual 70.26%, and Ranking 78.48% respectively. On the AIME dataset, GPT-4o with CoT excels in NonFactual detection with 94.89% but reveals trade-offs in Factual with 30.58% and Ranking with 30.68%, underscoring the complexity of hallucination detection in the complex mathematical domains. The framework also incorporates a triangulation strategy, which increases the strengths of the SelfCheckAgent, yielding significant improvements in real-world hallucination identification. The comparative analysis demonstrates SelfCheckAgent's applicability across diverse domains, positioning it as a crucial advancement for trustworthy LLMs. These findings highlight the potentiality of consistency-driven methodologies in detecting hallucinations in LLMs."
-    },
-    {
-      "@id": "tea:resource/abdaljalilSINdexSemanticINconsistency2025",
-      "@type": "Resource",
-      "name": "SINdex: Semantic INconsistency Index for Hallucination Detection in LLMs",
-      "citationKey": "abdaljalilSINdexSemanticINconsistency2025",
-      "url": "https://www.semanticscholar.org/paper/06ef8d4343f35184b4dec004365dfe1a562e08fc",
-      "sourceType": "technical_paper",
-      "authors": [
-        "Samir Abdaljalil",
-        "H. Kurban",
-        "Parichit Sharma",
-        "E. Serpedin",
-        "Rachad Atat"
-      ],
-      "publicationDate": "2025",
-      "abstract": "Large language models (LLMs) are increasingly deployed across diverse domains, yet they are prone to generating factually incorrect outputs - commonly known as\"hallucinations.\"Among existing mitigation strategies, uncertainty-based methods are particularly attractive due to their ease of implementation, independence from external data, and compatibility with standard LLMs. In this work, we introduce a novel and scalable uncertainty-based semantic clustering framework for automated hallucination detection. Our approach leverages sentence embeddings and hierarchical clustering alongside a newly proposed inconsistency measure, SINdex, to yield more homogeneous clusters and more accurate detection of hallucination phenomena across various LLMs. Evaluations on prominent open- and closed-book QA datasets demonstrate that our method achieves AUROC improvements of up to 9.3% over state-of-the-art techniques. Extensive ablation studies further validate the effectiveness of each component in our framework."
-    },
-    {
-      "@id": "tea:resource/kangUncertaintyQuantificationHallucination2025",
-      "@type": "Resource",
-      "name": "Uncertainty Quantification for Hallucination Detection in Large Language Models: Foundations, Methodology, and Future Directions",
-      "citationKey": "kangUncertaintyQuantificationHallucination2025",
-      "url": "https://www.semanticscholar.org/paper/76912e6ea42bdebb2795708dac381a9b268b391c",
-      "sourceType": "technical_paper",
-      "authors": [
-        "Sungmin Kang",
-        "Y. Bakman",
-        "D. Yaldiz",
-        "Baturalp Buyukates",
-        "A. Avestimehr"
-      ],
-      "publicationDate": "2025",
-      "abstract": "The rapid advancement of large language models (LLMs) has transformed the landscape of natural language processing, enabling breakthroughs across a wide range of areas including question answering, machine translation, and text summarization. Yet, their deployment in real-world applications has raised concerns over reliability and trustworthiness, as LLMs remain prone to hallucinations that produce plausible but factually incorrect outputs. Uncertainty quantification (UQ) has emerged as a central research direction to address this issue, offering principled measures for assessing the trustworthiness of model generations. We begin by introducing the foundations of UQ, from its formal definition to the traditional distinction between epistemic and aleatoric uncertainty, and then highlight how these concepts have been adapted to the context of LLMs. Building on this, we examine the role of UQ in hallucination detection, where quantifying uncertainty provides a mechanism for identifying unreliable generations and improving reliability. We systematically categorize a wide spectrum of existing methods along multiple dimensions and present empirical results for several representative approaches. Finally, we discuss current limitations and outline promising future research directions, providing a clearer picture of the current landscape of LLM UQ for hallucination detection."
-    },
-    {
-      "@id": "tea:resource/databricks-sdk-pydevelopersRealtimeServingDatabricks2023",
-      "@type": "Resource",
-      "name": "Real-time Serving — Databricks SDK for Python beta documentation",
-      "citationKey": "databricks-sdk-pydevelopersRealtimeServingDatabricks2023",
-      "url": "https://databricks-sdk-py.readthedocs.io/en/latest/dbdataclasses/serving.html",
-      "sourceType": "documentation",
-      "authors": [
-        "Databricks-sdk-py Developers"
-      ],
-      "publicationDate": "2023"
-    },
-    {
-      "@id": "tea:resource/nvidia-nemoGuardrails2023",
-      "@type": "Resource",
-      "name": "Guardrails",
-      "citationKey": "nvidia-nemoGuardrails2023",
-      "url": "https://github.com/NVIDIA-NeMo/Guardrails",
-      "sourceType": "software_package",
-      "publicationDate": "2023-04-18",
-      "abstract": "NeMo Guardrails is an open-source toolkit for easily adding programmable guardrails to LLM-based conversational systems."
-    },
-    {
-      "@id": "tea:resource/wuLegilimensPracticalUnified2024",
-      "@type": "Resource",
-      "name": "Legilimens: Practical and Unified Content Moderation for Large Language Model Services",
-      "citationKey": "wuLegilimensPracticalUnified2024",
-      "url": "https://arxiv.org/abs/2408.15488",
-      "sourceType": "technical_paper",
-      "authors": [
-        "Jialin Wu",
-        "Jiangyi Deng",
-        "Shengyuan Pang",
-        "Yanjiao Chen",
-        "Jiayang Xu",
-        "Xinfeng Li",
-        "Wenyuan Xu"
-      ],
-      "publicationDate": "2024-08-28",
-      "abstract": "Given the societal impact of unsafe content generated by large language models (LLMs), ensuring that LLM services comply with safety standards is a crucial concern for LLM service providers. Common content moderation methods are limited by an effectiveness-and-efficiency dilemma, where simple models are fragile while sophisticated models consume excessive computational resources. In this paper, we reveal for the first time that effective and efficient content moderation can be achieved by extracting conceptual features from chat-oriented LLMs, despite their initial fine-tuning for conversation rather than content moderation. We propose a practical and unified content moderation framework for LLM services, named Legilimens, which features both effectiveness and efficiency. Our red-team model-based data augmentation enhances the robustness of Legilimens against state-of-the-art jailbreaking. Additionally, we develop a framework to theoretically analyze the cost-effectiveness of Legilimens compared to other methods. We have conducted extensive experiments on five host LLMs, seventeen datasets, and nine jailbreaking methods to verify the effectiveness, efficiency, and robustness of Legilimens against normal and adaptive adversaries. A comparison of Legilimens with both commercial and academic baselines demonstrates the superior performance of Legilimens. Furthermore, we confirm that Legilimens can be applied to few-shot scenarios and extended to multi-label classification tasks."
-    },
-    {
-      "@id": "tea:resource/ghoshAEGISOnlineAdaptive2024",
-      "@type": "Resource",
-      "name": "AEGIS: Online Adaptive AI Content Safety Moderation with Ensemble of LLM Experts",
-      "citationKey": "ghoshAEGISOnlineAdaptive2024",
-      "url": "https://arxiv.org/abs/2404.05993",
-      "sourceType": "technical_paper",
-      "authors": [
-        "Shaona Ghosh",
-        "Prasoon Varshney",
-        "Erick Galinkin",
-        "Christopher Parisien"
-      ],
-      "publicationDate": "2024-04-09",
-      "abstract": "As Large Language Models (LLMs) and generative AI become more widespread, the content safety risks associated with their use also increase. We find a notable deficiency in high-quality content safety datasets and benchmarks that comprehensively cover a wide range of critical safety areas. To address this, we define a broad content safety risk taxonomy, comprising 13 critical risk and 9 sparse risk categories. Additionally, we curate AEGISSAFETYDATASET, a new dataset of approximately 26, 000 human-LLM interaction instances, complete with human annotations adhering to the taxonomy. We plan to release this dataset to the community to further research and to help benchmark LLM models for safety. To demonstrate the effectiveness of the dataset, we instruction-tune multiple LLM-based safety models. We show that our models (named AEGISSAFETYEXPERTS), not only surpass or perform competitively with the state-of-the-art LLM-based safety models and general purpose LLMs, but also exhibit robustness across multiple jail-break attack categories. We also show how using AEGISSAFETYDATASET during the LLM alignment phase does not negatively impact the performance of the aligned models on MT Bench scores. Furthermore, we propose AEGIS, a novel application of a no-regret online adaptation framework with strong theoretical guarantees, to perform content moderation with an ensemble of LLM content safety experts in deployment"
-    },
-    {
-      "@id": "tea:resource/liJudgmentInterferenceEarly2025",
-      "@type": "Resource",
-      "name": "From Judgment to Interference: Early Stopping LLM Harmful Outputs via Streaming Content Monitoring",
-      "citationKey": "liJudgmentInterferenceEarly2025",
-      "url": "https://arxiv.org/abs/2506.09996",
-      "sourceType": "technical_paper",
-      "authors": [
-        "Yang Li",
-        "Qiang Sheng",
-        "Yehan Yang",
-        "Xueyao Zhang",
-        "Juan Cao"
-      ],
-      "publicationDate": "2025-06-11",
-      "abstract": "Though safety alignment has been applied to most large language models (LLMs), LLM service providers generally deploy a subsequent moderation as the external safety guardrail in real-world products. Existing moderators mainly practice a conventional full detection, which determines the harmfulness based on the complete LLM output, causing high service latency. Recent works pay more attention to partial detection where moderators oversee the generation midway and early stop the output if harmfulness is detected, but they directly apply moderators trained with the full detection paradigm to incomplete outputs, introducing a training-inference gap that lowers the performance. In this paper, we explore how to form a data-and-model solution that natively supports partial detection. For the data, we construct FineHarm, a dataset consisting of 29K prompt-response pairs with fine-grained annotations to provide reasonable supervision for token-level training. Then, we propose the streaming content monitor, which is trained with dual supervision of response- and token-level labels and can follow the output stream of LLM to make a timely judgment of harmfulness. Experiments show that SCM gains 0.95+ in macro F1 score that is comparable to full detection, by only seeing the first 18% of tokens in responses on average. Moreover, the SCM can serve as a pseudo-harmfulness annotator for improving safety alignment and lead to a higher harmlessness score than DPO."
     },
     {
       "@id": "tea:resource/llamator-coreLlamator2024",
@@ -20795,51 +19763,6 @@
       "url": "https://www.geeksforgeeks.org/machine-learning/how-to-make-a-reward-function-in-reinforcement-learning",
       "sourceType": "tutorial",
       "publicationDate": "2024-10-01"
-    },
-    {
-      "@id": "tea:resource/mlflowdevelopersEvaluatingLLMsAgents2018",
-      "@type": "Resource",
-      "name": "Evaluating LLMs/Agents with MLflow | MLflow",
-      "citationKey": "mlflowdevelopersEvaluatingLLMsAgents2018",
-      "url": "https://mlflow.org/docs/latest/genai/eval-monitor",
-      "sourceType": "documentation",
-      "authors": [
-        "MLflow Developers"
-      ],
-      "publicationDate": "2018"
-    },
-    {
-      "@id": "tea:resource/quachDevelopersGuideBuilding2025",
-      "@type": "Resource",
-      "name": "A Developer's Guide to Building Scalable AI: Workflows vs Agents ...",
-      "citationKey": "quachDevelopersGuideBuilding2025",
-      "url": "https://towardsdatascience.com/a-developers-guide-to-building-scalable-ai-workflows-vs-agents",
-      "sourceType": "tutorial",
-      "authors": [
-        "Hailey Quach"
-      ],
-      "publicationDate": "2025-06-27"
-    },
-    {
-      "@id": "tea:resource/LangGraphBuildStateful2025",
-      "@type": "Resource",
-      "name": "LangGraph: Build Stateful AI Agents in Python – Real Python",
-      "citationKey": "LangGraphBuildStateful2025",
-      "url": "https://realpython.com/langgraph-python",
-      "sourceType": "tutorial",
-      "publicationDate": "2025-03-19"
-    },
-    {
-      "@id": "tea:resource/mouraDesignDevelopDeploy2025",
-      "@type": "Resource",
-      "name": "Design, Develop, and Deploy Multi-Agent Systems with CrewAI ...",
-      "citationKey": "mouraDesignDevelopDeploy2025",
-      "url": "https://learn.deeplearning.ai/courses/design-develop-and-deploy-multi-agent-systems-with-crewai/lesson/rc39v/welcome",
-      "sourceType": "tutorial",
-      "authors": [
-        "João Moura"
-      ],
-      "publicationDate": "2025"
     },
     {
       "@id": "tea:resource/bansalEvaluatingToxicityLarge2025",

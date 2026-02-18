@@ -247,34 +247,6 @@
     "searchText": "federated learning federated learning enables collaborative model training across multiple distributed parties (devices, organisations, or data centres) without requiring centralised data sharing. participants train models locally on their private datasets and only share model updates (gradients, weights, or aggregated statistics) with a central coordinator. this distributed approach serves multiple purposes: preserving data privacy and sovereignty, reducing communication costs, enabling learning from diverse data sources, improving model robustness through heterogeneous training, and facilitating compliance with data protection regulations whilst maintaining model performance comparable to centralised training. privacy reliability safety fairness applicable-models/architecture/linear-models applicable-models/architecture/neural-networks applicable-models/paradigm/parametric applicable-models/paradigm/supervised applicable-models/requirements/gradient-access applicable-models/requirements/white-box assurance-goal-category/fairness assurance-goal-category/privacy assurance-goal-category/reliability assurance-goal-category/safety data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/software-engineering lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic the model training process does not require patient data to leave individual healthcare institutions the diagnostic model performs reliably despite learning from patient populations with heterogeneous clinical characteristics across multiple sites the fraud detection system maintains effective threat identification without exposing transaction records between competing financial institutions the credit scoring model represents diverse demographic groups by learning from regional datasets that cannot be centralized due to data sovereignty requirements the keyboard prediction model learns from user typing patterns without transmitting personal text content to central servers"
   },
   {
-    "slug": "prediction-intervals",
-    "name": "Prediction Intervals",
-    "description": "Prediction intervals provide a range of plausible values around a model's prediction, expressing uncertainty as 'the true value will likely fall between X and Y with Z% confidence'. For example, instead of predicting 'house price: £300,000', a prediction interval might say 'house price: £280,000 to £320,000 with 95% confidence'. This technique works by calculating upper and lower bounds that account for both model uncertainty (how confident the model is) and inherent randomness in the data. Prediction intervals are crucial for informed decision-making, as they help users understand the reliability and precision of predictions, enabling better risk assessment and planning.",
-    "assurance_goals": [
-      "Reliability",
-      "Transparency",
-      "Fairness"
-    ],
-    "tags": [
-      "applicable-models/architecture/model-agnostic",
-      "applicable-models/paradigm/supervised",
-      "applicable-models/requirements/black-box",
-      "assurance-goal-category/fairness",
-      "assurance-goal-category/reliability",
-      "assurance-goal-category/reliability/uncertainty-quantification",
-      "assurance-goal-category/transparency",
-      "data-requirements/no-special-requirements",
-      "data-type/any",
-      "evidence-type/prediction-interval",
-      "evidence-type/quantitative-metric",
-      "expertise-needed/statistics",
-      "lifecycle-stage/model-development",
-      "lifecycle-stage/system-deployment-and-use",
-      "technique-type/algorithmic"
-    ],
-    "searchText": "prediction intervals prediction intervals provide a range of plausible values around a model's prediction, expressing uncertainty as 'the true value will likely fall between x and y with z% confidence'. for example, instead of predicting 'house price: £300,000', a prediction interval might say 'house price: £280,000 to £320,000 with 95% confidence'. this technique works by calculating upper and lower bounds that account for both model uncertainty (how confident the model is) and inherent randomness in the data. prediction intervals are crucial for informed decision-making, as they help users understand the reliability and precision of predictions, enabling better risk assessment and planning. reliability transparency fairness applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box assurance-goal-category/fairness assurance-goal-category/reliability assurance-goal-category/reliability/uncertainty-quantification assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/prediction-interval evidence-type/quantitative-metric expertise-needed/statistics lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic the model's forecasts are bounded by quantified uncertainty ranges that inform decision-making under risk the system communicates prediction reliability through explicit upper and lower bounds accompanying each forecast the model's prediction uncertainty is comparable in magnitude across protected demographic groups the treatment planning model's dosage recommendations include clinically meaningful confidence bounds that account for patient variability the autonomous system's trajectory predictions are accompanied by spatial uncertainty estimates that inform safe maneuver planning"
-  },
-  {
     "slug": "quantile-regression",
     "name": "Quantile Regression",
     "description": "Quantile regression estimates specific percentiles (quantiles) of the target variable rather than just predicting the average outcome. For example, instead of predicting 'average house price = £300,000', it can predict 'there's a 10% chance the price will be below £250,000, 50% chance below £300,000, and 90% chance below £380,000'. This technique reveals how input features affect different parts of the outcome distribution - perhaps property size strongly influences luxury homes (90th percentile) but barely affects budget properties (10th percentile). By capturing the full conditional distribution, quantile regression provides rich uncertainty information and enables robust prediction intervals.",
@@ -607,29 +579,6 @@
     "searchText": "red teaming red teaming involves systematic adversarial testing of ai/ml systems by dedicated specialists who attempt to identify flaws, vulnerabilities, harmful outputs, and ways to circumvent safety measures. drawing from cybersecurity practices, red teams employ diverse attack vectors including prompt injection, adversarial examples, edge case exploitation, social engineering scenarios, and goal misalignment probes. unlike standard testing that validates expected behaviour, red teaming specifically seeks to break systems through creative and adversarial approaches, revealing non-obvious risks and failure modes that could be exploited maliciously or cause harm in deployment. general applicable-models/architecture/model-agnostic applicable-models/requirements/black-box data-requirements/no-special-requirements data-type/any evidence-type/documentation evidence-type/qualitative-report expertise-needed/ml-engineering expertise-needed/security lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/procedural assurance-goal-category/general the medical ai system maintains safe behavior when subjected to edge case scenarios and adversarial inputs designed to elicit harmful clinical recommendations the financial advisory system resists attempts to extract confidential client information through social engineering scenarios and multi-turn manipulation strategies the public benefits allocation system withstands systematic probing designed to reveal exploitable pathways for discriminatory outcomes against protected groups the autonomous vehicle control system fails gracefully rather than catastrophically when exposed to creative adversarial scenarios that exploit edge cases in perception and decision-making the conversational ai assistant resists goal misalignment attacks and jailbreak attempts that probe for ways to circumvent safety constraints through iterative prompt refinement"
   },
   {
-    "slug": "anomaly-detection",
-    "name": "Anomaly Detection",
-    "description": "Anomaly detection identifies unusual behaviours, inputs, or outputs that deviate significantly from established normal patterns using statistical, machine learning, or rule-based methods. Applied to AI/ML systems, it serves as a continuous monitoring mechanism that can flag unexpected model predictions, suspicious input patterns, data drift, adversarial attacks, or operational malfunctions. By establishing baselines of normal system behaviour and alerting when deviations exceed predefined thresholds, organisations can detect potential security threats, model degradation, fairness violations, or system failures before they cause significant harm.",
-    "assurance_goals": [
-      "General"
-    ],
-    "tags": [
-      "applicable-models/architecture/model-agnostic",
-      "applicable-models/requirements/black-box",
-      "applicable-models/requirements/training-data",
-      "data-requirements/no-special-requirements",
-      "data-type/any",
-      "evidence-type/quantitative-metric",
-      "expertise-needed/ml-engineering",
-      "expertise-needed/statistics",
-      "lifecycle-stage/system-deployment-and-use",
-      "lifecycle-stage/system-deployment-and-use/monitoring",
-      "technique-type/algorithmic",
-      "assurance-goal-category/general"
-    ],
-    "searchText": "anomaly detection anomaly detection identifies unusual behaviours, inputs, or outputs that deviate significantly from established normal patterns using statistical, machine learning, or rule-based methods. applied to ai/ml systems, it serves as a continuous monitoring mechanism that can flag unexpected model predictions, suspicious input patterns, data drift, adversarial attacks, or operational malfunctions. by establishing baselines of normal system behaviour and alerting when deviations exceed predefined thresholds, organisations can detect potential security threats, model degradation, fairness violations, or system failures before they cause significant harm. general applicable-models/architecture/model-agnostic applicable-models/requirements/black-box applicable-models/requirements/training-data data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/system-deployment-and-use lifecycle-stage/system-deployment-and-use/monitoring technique-type/algorithmic assurance-goal-category/general the system detects and alerts when model predictions deviate significantly from established baseline patterns during operational use the autonomous vehicle maintains continuous monitoring for sensor inputs and perception outputs that fall outside validated operational envelopes the hiring system identifies unusual scoring patterns across demographic groups that may indicate emerging bias or system manipulation the production model flags incoming requests that exhibit characteristics inconsistent with normal traffic patterns the clinical decision support system alerts clinicians when prediction confidence or feature importance patterns deviate from historical norms"
-  },
-  {
     "slug": "human-in-the-loop-safeguards",
     "name": "Human-in-the-Loop Safeguards",
     "description": "Human-in-the-loop safeguards establish systematic checkpoints where human experts review, validate, or override AI/ML system decisions before they take effect. This governance approach combines automated efficiency with human judgement by defining clear intervention criteria (such as uncertainty thresholds, risk levels, or sensitive contexts) that trigger mandatory human oversight. By incorporating domain expertise, ethical considerations, and contextual understanding that machines may lack, these safeguards help ensure that critical decisions maintain appropriate human accountability whilst preserving the benefits of automated processing for routine cases.",
@@ -868,33 +817,6 @@
       "technique-type/algorithmic"
     ],
     "searchText": "monotonicity constraints monotonicity constraints enforce consistent directional relationships between input features and model predictions, ensuring that increasing a feature value either always increases, always decreases, or has no effect on the output. these constraints integrate domain knowledge into model training, preventing counterintuitive relationships that may arise from spurious correlations in data. by maintaining logical feature relationships (e.g., experience always positively influences salary), monotonicity constraints enhance model trustworthiness, interpretability, and alignment with business logic whilst often improving generalisation to new data. transparency reliability applicable-models/architecture/probabilistic/gaussian-processes applicable-models/architecture/tree-based applicable-models/requirements/model-internals applicable-models/requirements/white-box assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/labelled-data data-type/tabular evidence-type/quantitative-metric expertise-needed/domain-expertise expertise-needed/statistics lifecycle-stage/model-development technique-type/algorithmic the lending model's approval probability increases consistently with applicant income without counterintuitive reversals the insurance premium calculation respects logical directional relationships where risk factors monotonically increase costs the clinical risk assessment maintains consistent directionality where deteriorating vital signs monotonically increase predicted severity the energy consumption forecast ensures that increased building occupancy always raises predicted demand the hiring suitability score preserves expected relationships where relevant experience monotonically improves candidate ratings"
-  },
-  {
-    "slug": "intrinsically-interpretable-models",
-    "name": "Intrinsically Interpretable Models",
-    "description": "Intrinsically interpretable models are machine learning algorithms that are transparent by design, allowing users to understand their decision-making process without requiring additional explanation techniques. This category includes decision trees and rule lists (which use if-then logic), linear and logistic regression models (which use weighted feature combinations), and other simple algorithms where the model structure itself provides interpretability. These models prioritise transparency over complexity, making them ideal when stakeholder understanding and regulatory compliance are paramount.",
-    "assurance_goals": [
-      "Transparency",
-      "Reliability"
-    ],
-    "tags": [
-      "applicable-models/architecture/linear-models",
-      "applicable-models/architecture/tree-based",
-      "applicable-models/paradigm/supervised",
-      "applicable-models/requirements/white-box",
-      "assurance-goal-category/reliability",
-      "assurance-goal-category/transparency",
-      "data-requirements/no-special-requirements",
-      "data-type/any",
-      "evidence-type/quantitative-metric",
-      "evidence-type/structured-output",
-      "expertise-needed/low",
-      "explanatory-scope/global",
-      "lifecycle-stage/model-development",
-      "lifecycle-stage/project-design",
-      "technique-type/algorithmic"
-    ],
-    "searchText": "intrinsically interpretable models intrinsically interpretable models are machine learning algorithms that are transparent by design, allowing users to understand their decision-making process without requiring additional explanation techniques. this category includes decision trees and rule lists (which use if-then logic), linear and logistic regression models (which use weighted feature combinations), and other simple algorithms where the model structure itself provides interpretability. these models prioritise transparency over complexity, making them ideal when stakeholder understanding and regulatory compliance are paramount. transparency reliability applicable-models/architecture/linear-models applicable-models/architecture/tree-based applicable-models/paradigm/supervised applicable-models/requirements/white-box assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/no-special-requirements data-type/any evidence-type/quantitative-metric evidence-type/structured-output expertise-needed/low explanatory-scope/global lifecycle-stage/model-development lifecycle-stage/project-design technique-type/algorithmic the diagnostic system's decision logic is comprehensible to clinicians without requiring additional explanation tools the credit risk model's decision process can be audited by examining the model structure directly the eligibility assessment model produces consistent outcomes that regulators can validate through inspection of the decision rules the prediction model's behavior is stable and verifiable across different operating conditions without post-hoc analysis the quality control system's classification criteria are explicitly encoded in the model architecture for regulatory review"
   },
   {
     "slug": "generalized-additive-models",
@@ -1678,36 +1600,6 @@
     "searchText": "model development audit trails model development audit trails create comprehensive, immutable records of all decisions, experiments, and changes throughout the ml lifecycle. this technique captures dataset versions, training configurations, hyperparameter searches, model architecture changes, evaluation results, and deployment decisions in tamper-evident logs. audit trails enable reproducibility, accountability, and regulatory compliance by documenting who made what changes when and why, supporting post-hoc investigation of model failures or unexpected behaviours. general applicable-models/architecture/model-agnostic applicable-models/requirements/black-box data-type/any lifecycle-stage/project-planning lifecycle-stage/data-collection lifecycle-stage/model-development lifecycle-stage/model-evaluation lifecycle-stage/deployment lifecycle-stage/post-deployment technique-type/procedural evidence-type/governance-framework evidence-type/documentation expertise-needed/software-engineering expertise-needed/ml-engineering data-requirements/no-special-requirements assurance-goal-category/general all model development decisions are traceable to documented rationale and identified decision-makers the diagnostic system's training data lineage, architecture changes, and validation results are preserved in tamper-evident logs enabling regulatory review the model's unexpected behaviour can be investigated by tracing dataset versions, hyperparameter configurations, and evaluation metrics back to specific development phases all safety-critical decisions during autonomous system development are recorded with timestamps, responsible parties, and justifications the environmental forecasting model's experimental results and deployment decisions are reproducible from archived configurations and versioned datasets"
   },
   {
-    "slug": "adversarial-robustness-testing",
-    "name": "Adversarial Robustness Testing",
-    "description": "Adversarial robustness testing evaluates model resilience against intentionally crafted inputs designed to cause misclassification or malfunction. This technique generates adversarial examples through methods like FGSM, PGD, Carlini & Wagner (C&W) attacks, and AutoAttack to measure model vulnerability. Testing assesses both white-box scenarios (where attackers have full model access) and black-box scenarios (where attackers only observe inputs and outputs), measuring metrics like robust accuracy, attack success rates, and perturbation budgets required for successful attacks.",
-    "assurance_goals": [
-      "Security",
-      "Reliability",
-      "Safety"
-    ],
-    "tags": [
-      "applicable-models/architecture/model-agnostic",
-      "applicable-models/architecture/neural-networks",
-      "applicable-models/requirements/black-box",
-      "applicable-models/requirements/white-box",
-      "assurance-goal-category/security",
-      "assurance-goal-category/reliability",
-      "assurance-goal-category/safety",
-      "data-requirements/no-special-requirements",
-      "data-type/image",
-      "data-type/text",
-      "data-type/tabular",
-      "evidence-type/quantitative-metric",
-      "expertise-needed/ml-engineering",
-      "expertise-needed/domain-expertise",
-      "lifecycle-stage/model-evaluation",
-      "lifecycle-stage/post-deployment",
-      "technique-type/testing"
-    ],
-    "searchText": "adversarial robustness testing adversarial robustness testing evaluates model resilience against intentionally crafted inputs designed to cause misclassification or malfunction. this technique generates adversarial examples through methods like fgsm, pgd, carlini & wagner (c&w) attacks, and autoattack to measure model vulnerability. testing assesses both white-box scenarios (where attackers have full model access) and black-box scenarios (where attackers only observe inputs and outputs), measuring metrics like robust accuracy, attack success rates, and perturbation budgets required for successful attacks. security reliability safety applicable-models/architecture/model-agnostic applicable-models/architecture/neural-networks applicable-models/requirements/black-box applicable-models/requirements/white-box assurance-goal-category/security assurance-goal-category/reliability assurance-goal-category/safety data-requirements/no-special-requirements data-type/image data-type/text data-type/tabular evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/domain-expertise lifecycle-stage/model-evaluation lifecycle-stage/post-deployment technique-type/testing the perception system maintains safe operation when presented with inputs designed to cause misclassification the model withstands intentional manipulation attempts that exploit input vulnerabilities the system's classification accuracy remains acceptable under deliberately crafted worst-case perturbations the fraud detection model resists evasion attempts through strategically modified transaction features the autonomous vehicle's decision-making remains reliable when environmental sensors receive subtly corrupted signals"
-  },
-  {
     "slug": "adversarial-training-evaluation",
     "name": "Adversarial Training Evaluation",
     "description": "Adversarial training evaluation assesses whether models trained with adversarial examples have genuinely improved robustness rather than merely overfitting to specific attack methods. This technique tests robustness against diverse attack algorithms including those not used during training, measures certified robustness bounds, and evaluates whether adversarial training creates exploitable trade-offs in clean accuracy or introduces new vulnerabilities. Evaluation ensures adversarial training provides genuine security benefits rather than superficial improvements.",
@@ -1917,67 +1809,6 @@
       "technique-type/algorithmic"
     ],
     "searchText": "few-shot fairness evaluation few-shot fairness evaluation assesses whether in-context learning with few-shot examples introduces or amplifies biases in model predictions. this technique systematically varies demographic characteristics in few-shot examples and measures how these variations affect model outputs for different groups. evaluation includes testing prompt sensitivity (how example selection impacts fairness), stereotype amplification (whether biased examples disproportionately affect outputs), and consistency (whether similar inputs receive equitable treatment regardless of example composition). fairness reliability transparency applicable-models/architecture/neural-networks/transformer/llm applicable-models/paradigm/generative applicable-models/requirements/black-box assurance-goal-category/fairness evidence-type/fairness-metric assurance-goal-category/reliability assurance-goal-category/transparency data-requirements/labelled-data data-type/text evidence-type/quantitative-metric evidence-type/documentation expertise-needed/ml-engineering expertise-needed/statistics expertise-needed/domain-expertise lifecycle-stage/model-evaluation lifecycle-stage/post-deployment technique-type/testing technique-type/algorithmic the language model produces equitable outcomes across demographic groups regardless of which few-shot examples are provided in the prompt the recruitment system's candidate assessments remain unbiased when the composition of demonstration examples varies in demographic representation the model maintains consistent performance across protected groups under diverse configurations of in-context learning examples the system's fairness characteristics across different prompt example compositions are quantified and documented the content generation model's outputs exhibit equitable treatment of demographic groups when few-shot examples contain varying levels of representation"
-  },
-  {
-    "slug": "hallucination-detection",
-    "name": "Hallucination Detection",
-    "description": "Hallucination detection identifies when generative models produce factually incorrect, fabricated, or ungrounded outputs. This technique combines automated consistency checking, self-consistency methods, uncertainty quantification, and human evaluation. It produces detection scores distinguishing intrinsic hallucinations (contradicting sources) from extrinsic hallucinations (unverifiable claims), enabling filtering or user warnings.",
-    "assurance_goals": [
-      "Reliability",
-      "Transparency",
-      "Safety"
-    ],
-    "tags": [
-      "applicable-models/architecture/neural-networks/transformer",
-      "applicable-models/architecture/neural-networks/transformer/llm",
-      "applicable-models/paradigm/generative",
-      "applicable-models/requirements/black-box",
-      "assurance-goal-category/reliability",
-      "assurance-goal-category/transparency",
-      "assurance-goal-category/safety",
-      "data-type/text",
-      "data-requirements/access-to-training-data",
-      "evidence-type/quantitative-metric",
-      "evidence-type/qualitative-report",
-      "expertise-needed/ml-engineering",
-      "expertise-needed/domain-expertise",
-      "lifecycle-stage/model-evaluation",
-      "lifecycle-stage/post-deployment",
-      "technique-type/testing",
-      "technique-type/algorithmic"
-    ],
-    "searchText": "hallucination detection hallucination detection identifies when generative models produce factually incorrect, fabricated, or ungrounded outputs. this technique combines automated consistency checking, self-consistency methods, uncertainty quantification, and human evaluation. it produces detection scores distinguishing intrinsic hallucinations (contradicting sources) from extrinsic hallucinations (unverifiable claims), enabling filtering or user warnings. reliability transparency safety applicable-models/architecture/neural-networks/transformer applicable-models/architecture/neural-networks/transformer/llm applicable-models/paradigm/generative applicable-models/requirements/black-box assurance-goal-category/reliability assurance-goal-category/transparency assurance-goal-category/safety data-type/text data-requirements/access-to-training-data evidence-type/quantitative-metric evidence-type/qualitative-report expertise-needed/ml-engineering expertise-needed/domain-expertise lifecycle-stage/model-evaluation lifecycle-stage/post-deployment technique-type/testing technique-type/algorithmic the medical information system identifies when generated responses contain fabricated research citations or unsupported clinical claims the content generation system distinguishes between factually grounded outputs and unverifiable assertions across diverse query types the customer service assistant signals when responses may contain fabricated information versus verified facts from knowledge sources the financial reporting tool detects when generated market analysis contradicts source documents or creates unsubstantiated attributions the legal research assistant identifies when case summaries fabricate judicial opinions or misstate holdings from the source materials"
-  },
-  {
-    "slug": "safety-guardrails",
-    "name": "Safety Guardrails",
-    "description": "Safety guardrails apply real-time content moderation and safety constraints during deployment, generating evidence of safety violations and protection effectiveness. This technique produces detailed logs of blocked content, safety incident reports, violation pattern analysis, and guardrail performance metrics. Evidence includes categorised threat taxonomies, false positive/negative rates, and temporal trends in attack patterns, supporting assurance claims about deployed system safety.",
-    "assurance_goals": [
-      "Safety",
-      "Security",
-      "Reliability"
-    ],
-    "tags": [
-      "applicable-models/architecture/model-agnostic",
-      "applicable-models/requirements/black-box",
-      "assurance-goal-category/safety",
-      "assurance-goal-category/security",
-      "assurance-goal-category/reliability",
-      "data-type/text",
-      "data-requirements/no-special-requirements",
-      "lifecycle-stage/deployment",
-      "lifecycle-stage/post-deployment",
-      "lifecycle-stage/system-deployment/system-use-and-monitoring",
-      "technique-type/algorithmic",
-      "technique-type/procedural",
-      "evidence-type/quantitative-metric",
-      "evidence-type/documentation",
-      "evidence-type/visualisation",
-      "expertise-needed/ml-engineering",
-      "expertise-needed/domain-expertise",
-      "expertise-needed/low"
-    ],
-    "searchText": "safety guardrails safety guardrails apply real-time content moderation and safety constraints during deployment, generating evidence of safety violations and protection effectiveness. this technique produces detailed logs of blocked content, safety incident reports, violation pattern analysis, and guardrail performance metrics. evidence includes categorised threat taxonomies, false positive/negative rates, and temporal trends in attack patterns, supporting assurance claims about deployed system safety. safety security reliability applicable-models/architecture/model-agnostic applicable-models/requirements/black-box assurance-goal-category/safety assurance-goal-category/security assurance-goal-category/reliability data-type/text data-requirements/no-special-requirements lifecycle-stage/deployment lifecycle-stage/post-deployment lifecycle-stage/system-deployment/system-use-and-monitoring technique-type/algorithmic technique-type/procedural evidence-type/quantitative-metric evidence-type/documentation evidence-type/visualisation expertise-needed/ml-engineering expertise-needed/domain-expertise expertise-needed/low the chatbot prevents harmful medical advice from reaching patients by blocking responses that contain specific treatment recommendations or dosage information without appropriate disclaimers the code generation system refuses requests for malicious code and blocks outputs containing security vulnerabilities before they reach users the conversational ai maintains safe interactions by blocking toxic content and policy violations in real-time during production use the financial advisory system blocks outputs that constitute unauthorised securities recommendations or regulatory compliance violations before delivery the autonomous vehicle's communication system prevents the generation of instructions that could compromise safety-critical decision-making processes"
   },
   {
     "slug": "jailbreak-resistance-testing",
@@ -2277,35 +2108,6 @@
       "expertise-needed/domain-expertise"
     ],
     "searchText": "reward hacking detection reward hacking detection identifies when ai systems achieve stated objectives through unintended shortcuts or loopholes rather than genuine task mastery. this technique analyses whether systems exploit reward specification ambiguities, reward function bugs, or simulator artifacts to maximise rewards without actually solving the intended problem. detection involves adversarial specification testing, human evaluation of solution quality, transfer testing to slightly modified tasks, and analysis of unexpected strategy patterns that suggest reward hacking rather than genuine learning. reliability safety transparency applicable-models/architecture/model-agnostic applicable-models/paradigm/reinforcement applicable-models/requirements/black-box assurance-goal-category/reliability assurance-goal-category/safety assurance-goal-category/transparency data-type/any data-requirements/no-special-requirements lifecycle-stage/model-evaluation lifecycle-stage/post-deployment technique-type/testing technique-type/algorithmic evidence-type/qualitative-report evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/domain-expertise the autonomous vehicle's lane-keeping performance transfers reliably to real-world conditions rather than exploiting simulator artifacts the healthcare scheduling system improves patient outcomes through genuine efficiency gains rather than manipulating appointment metrics the system's strategy for achieving stated objectives is interpretable and consistent with task intent rather than relying on unintended shortcuts the loan processing system maintains creditworthiness assessment accuracy when evaluated on modified criteria that close potential loopholes the educational recommendation system's learning outcome improvements reflect genuine student progress rather than optimisation of engagement proxies"
-  },
-  {
-    "slug": "ai-agent-safety-testing",
-    "name": "AI Agent Safety Testing",
-    "description": "AI agent safety testing evaluates autonomous AI agents that interact with external tools, APIs, and systems to ensure they operate safely and as intended. This technique assesses whether agents correctly understand tool specifications, respect usage constraints, handle errors gracefully, avoid unintended side effects, and make safe decisions during multi-step reasoning. Testing includes boundary condition validation (extreme parameters, edge cases), permission verification (ensuring agents don't exceed authorized actions), and cascade failure analysis (how tool errors propagate through agent workflows).",
-    "assurance_goals": [
-      "Safety",
-      "Security",
-      "Reliability"
-    ],
-    "tags": [
-      "applicable-models/architecture/neural-networks/transformer/llm",
-      "applicable-models/paradigm/generative",
-      "applicable-models/requirements/black-box",
-      "assurance-goal-category/safety",
-      "assurance-goal-category/security",
-      "assurance-goal-category/reliability",
-      "data-type/any",
-      "data-requirements/no-special-requirements",
-      "lifecycle-stage/model-evaluation",
-      "lifecycle-stage/post-deployment",
-      "technique-type/testing",
-      "evidence-type/quantitative-metric",
-      "evidence-type/documentation",
-      "expertise-needed/ml-engineering",
-      "expertise-needed/software-engineering",
-      "expertise-needed/domain-expertise"
-    ],
-    "searchText": "ai agent safety testing ai agent safety testing evaluates autonomous ai agents that interact with external tools, apis, and systems to ensure they operate safely and as intended. this technique assesses whether agents correctly understand tool specifications, respect usage constraints, handle errors gracefully, avoid unintended side effects, and make safe decisions during multi-step reasoning. testing includes boundary condition validation (extreme parameters, edge cases), permission verification (ensuring agents don't exceed authorized actions), and cascade failure analysis (how tool errors propagate through agent workflows). safety security reliability applicable-models/architecture/neural-networks/transformer/llm applicable-models/paradigm/generative applicable-models/requirements/black-box assurance-goal-category/safety assurance-goal-category/security assurance-goal-category/reliability data-type/any data-requirements/no-special-requirements lifecycle-stage/model-evaluation lifecycle-stage/post-deployment technique-type/testing evidence-type/quantitative-metric evidence-type/documentation expertise-needed/ml-engineering expertise-needed/software-engineering expertise-needed/domain-expertise the autonomous agent respects authorization boundaries when accessing external systems and databases the system maintains safe operation when tool invocations return unexpected errors or malformed responses the agent cannot be manipulated through adversarial prompts into executing operations outside its permitted scope the healthcare system correctly validates permissions before retrieving patient records across all access pathways the agent handles cascading tool failures without data corruption or unintended side effects"
   },
   {
     "slug": "toxicity-and-bias-detection",

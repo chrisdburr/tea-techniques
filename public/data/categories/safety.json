@@ -2,7 +2,7 @@
   "goal": {
     "name": "Safety",
     "slug": "safety",
-    "count": 42,
+    "count": 37,
     "description": "Ensuring AI systems operate safely and do not cause harm."
   },
   "techniques": [
@@ -125,7 +125,7 @@
       "related_techniques": [
         "out-of-domain-detection",
         "epistemic-uncertainty-quantification",
-        "anomaly-detection",
+        "data-poisoning-detection",
         "deep-ensembles"
       ],
       "sample_claims": [
@@ -988,10 +988,10 @@
       "complexity_rating": 4,
       "computational_cost_rating": 4,
       "related_techniques": [
-        "adversarial-robustness-testing",
+        "adversarial-training-evaluation",
         "red-teaming",
         "out-of-domain-detection",
-        "anomaly-detection"
+        "out-of-distribution-detector-for-neural-networks"
       ],
       "sample_claims": [
         {
@@ -1268,7 +1268,7 @@
       "complexity_rating": 4,
       "computational_cost_rating": 3,
       "related_techniques": [
-        "adversarial-robustness-testing",
+        "adversarial-training-evaluation",
         "jailbreak-resistance-testing",
         "prompt-injection-testing",
         "safety-envelope-testing"
@@ -1298,127 +1298,6 @@
           "text": "The conversational AI assistant resists goal misalignment attacks and jailbreak attempts that probe for ways to circumvent safety constraints through iterative prompt refinement",
           "domain": "general",
           "assuranceGoal": "security"
-        }
-      ]
-    },
-    {
-      "slug": "anomaly-detection",
-      "name": "Anomaly Detection",
-      "description": "Anomaly detection identifies unusual behaviours, inputs, or outputs that deviate significantly from established normal patterns using statistical, machine learning, or rule-based methods. Applied to AI/ML systems, it serves as a continuous monitoring mechanism that can flag unexpected model predictions, suspicious input patterns, data drift, adversarial attacks, or operational malfunctions. By establishing baselines of normal system behaviour and alerting when deviations exceed predefined thresholds, organisations can detect potential security threats, model degradation, fairness violations, or system failures before they cause significant harm.",
-      "assurance_goals": [
-        "General"
-      ],
-      "tags": [
-        "applicable-models/architecture/model-agnostic",
-        "applicable-models/requirements/black-box",
-        "applicable-models/requirements/training-data",
-        "data-requirements/no-special-requirements",
-        "data-type/any",
-        "evidence-type/quantitative-metric",
-        "expertise-needed/ml-engineering",
-        "expertise-needed/statistics",
-        "lifecycle-stage/system-deployment-and-use",
-        "lifecycle-stage/system-deployment-and-use/monitoring",
-        "technique-type/algorithmic",
-        "assurance-goal-category/general"
-      ],
-      "example_use_cases": [
-        {
-          "description": "Monitoring a content moderation AI system to detect when it starts flagging significantly more or fewer posts than usual, which could indicate model drift, adversarial attacks, or changes in user behaviour patterns that require immediate investigation to prevent harmful content from appearing.",
-          "goal": "Safety"
-        },
-        {
-          "description": "Implementing anomaly detection on a medical diagnosis AI to identify when prediction confidence scores or feature importance patterns deviate from historical norms, helping catch model degradation or data quality issues that could lead to misdiagnoses before patients are affected.",
-          "goal": "Reliability"
-        },
-        {
-          "description": "Deploying anomaly detection on a hiring algorithm to monitor for unusual patterns in how candidates from different demographic groups are scored or rejected, enabling early detection of emerging bias issues or attempts to game the system through demographic manipulation.",
-          "goal": "Fairness"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "Setting appropriate sensitivity thresholds is challenging and requires domain expertise, as overly sensitive settings generate excessive false alarms whilst conservative settings may miss genuine anomalies."
-        },
-        {
-          "description": "May generate false positives for legitimate edge cases or rare but valid system behaviours, potentially causing unnecessary alerts and disrupting normal operations."
-        },
-        {
-          "description": "Limited effectiveness against novel or sophisticated attacks that deliberately mimic normal patterns or gradually shift behaviour to avoid detection thresholds."
-        },
-        {
-          "description": "Requires substantial historical data to establish reliable baselines of normal behaviour, and may struggle with systems that have naturally high variability or seasonal patterns."
-        },
-        {
-          "description": "Detection lag can occur between when an anomaly begins and when it exceeds detection thresholds, potentially allowing harmful behaviour to persist during the detection window."
-        }
-      ],
-      "resources": [
-        {
-          "title": "Anomaly Detection Toolkit (ADTK)",
-          "url": "https://adtk.readthedocs.io/en/stable",
-          "source_type": "documentation",
-          "publication_date": "2020",
-          "citationKey": "adtkdevelopersAnomalyDetectionToolkit2020"
-        },
-        {
-          "title": "TimeEval: Time Series Anomaly Detection Evaluation Framework",
-          "url": "https://timeeval.readthedocs.io",
-          "source_type": "documentation",
-          "publication_date": "2021",
-          "citationKey": "timeevaldevelopersTimeEvalTimeSeries2021"
-        },
-        {
-          "title": "DeepOD: Deep Learning for Outlier Detection",
-          "url": "https://deepod.readthedocs.io",
-          "source_type": "documentation",
-          "publication_date": "2022",
-          "citationKey": "deepoddevelopersDeepODDeepLearning2022"
-        },
-        {
-          "title": "A Beginner's Guide to Anomaly Detection Techniques in Data Science",
-          "url": "https://www.kdnuggets.com/2023/05/beginner-guide-anomaly-detection-techniques-data-science.html",
-          "source_type": "tutorial",
-          "authors": [
-            "Eugenia Anello"
-          ],
-          "publication_date": "2023",
-          "citationKey": "anelloBeginnersGuideAnomaly2023"
-        }
-      ],
-      "complexity_rating": 3,
-      "computational_cost_rating": 3,
-      "related_techniques": [
-        "out-of-domain-detection",
-        "out-of-distribution-detector-for-neural-networks",
-        "data-poisoning-detection",
-        "runtime-monitoring-and-circuit-breakers"
-      ],
-      "sample_claims": [
-        {
-          "text": "The system detects and alerts when model predictions deviate significantly from established baseline patterns during operational use",
-          "domain": "general",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The autonomous vehicle maintains continuous monitoring for sensor inputs and perception outputs that fall outside validated operational envelopes",
-          "domain": "autonomous systems",
-          "assuranceGoal": "safety"
-        },
-        {
-          "text": "The hiring system identifies unusual scoring patterns across demographic groups that may indicate emerging bias or system manipulation",
-          "domain": "public sector",
-          "assuranceGoal": "fairness"
-        },
-        {
-          "text": "The production model flags incoming requests that exhibit characteristics inconsistent with normal traffic patterns",
-          "domain": "finance",
-          "assuranceGoal": "security"
-        },
-        {
-          "text": "The clinical decision support system alerts clinicians when prediction confidence or feature importance patterns deviate from historical norms",
-          "domain": "healthcare",
-          "assuranceGoal": "reliability"
         }
       ]
     },
@@ -1543,11 +1422,11 @@
       "complexity_rating": 2,
       "computational_cost_rating": 2,
       "related_techniques": [
-        "anomaly-detection",
+        "out-of-distribution-detector-for-neural-networks",
         "confidence-thresholding",
         "internal-review-boards",
         "out-of-domain-detection",
-        "safety-guardrails"
+        "runtime-monitoring-and-circuit-breakers"
       ],
       "sample_claims": [
         {
@@ -1788,10 +1667,10 @@
       "complexity_rating": 3,
       "computational_cost_rating": 2,
       "related_techniques": [
-        "anomaly-detection",
+        "out-of-distribution-detector-for-neural-networks",
         "confidence-thresholding",
         "human-in-the-loop-safeguards",
-        "safety-guardrails"
+        "toxicity-and-bias-detection"
       ],
       "sample_claims": [
         {
@@ -2579,7 +2458,7 @@
         "model-pruning",
         "ridge-regression-surrogates",
         "rulefit",
-        "intrinsically-interpretable-models"
+        "generalized-additive-models"
       ],
       "sample_claims": [
         {
@@ -3483,168 +3362,6 @@
       ]
     },
     {
-      "slug": "adversarial-robustness-testing",
-      "name": "Adversarial Robustness Testing",
-      "description": "Adversarial robustness testing evaluates model resilience against intentionally crafted inputs designed to cause misclassification or malfunction. This technique generates adversarial examples through methods like FGSM, PGD, Carlini & Wagner (C&W) attacks, and AutoAttack to measure model vulnerability. Testing assesses both white-box scenarios (where attackers have full model access) and black-box scenarios (where attackers only observe inputs and outputs), measuring metrics like robust accuracy, attack success rates, and perturbation budgets required for successful attacks.",
-      "assurance_goals": [
-        "Security",
-        "Reliability",
-        "Safety"
-      ],
-      "tags": [
-        "applicable-models/architecture/model-agnostic",
-        "applicable-models/architecture/neural-networks",
-        "applicable-models/requirements/black-box",
-        "applicable-models/requirements/white-box",
-        "assurance-goal-category/security",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/safety",
-        "data-requirements/no-special-requirements",
-        "data-type/image",
-        "data-type/text",
-        "data-type/tabular",
-        "evidence-type/quantitative-metric",
-        "expertise-needed/ml-engineering",
-        "expertise-needed/domain-expertise",
-        "lifecycle-stage/model-evaluation",
-        "lifecycle-stage/post-deployment",
-        "technique-type/testing"
-      ],
-      "example_use_cases": [
-        {
-          "description": "Testing an autonomous vehicle's perception system against adversarial perturbations to road signs or traffic signals, ensuring the vehicle cannot be fooled by maliciously modified visual inputs.",
-          "goal": "Safety"
-        },
-        {
-          "description": "Evaluating a spam filter's robustness to adversarial text manipulations such as character substitutions, synonym replacements, and formatting tricks that attackers use to craft phishing emails that evade detection whilst remaining readable to humans.",
-          "goal": "Security"
-        },
-        {
-          "description": "Assessing whether a medical imaging classifier maintains reliable performance when images are slightly corrupted or manipulated, preventing misdiagnosis from low-quality or tampered inputs.",
-          "goal": "Reliability"
-        },
-        {
-          "description": "Testing a credit risk assessment model against adversarial perturbations in loan application data, ensuring attackers cannot manipulate minor input features like stated income or employment history to obtain fraudulent credit approvals.",
-          "goal": "Security"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "Adversarial examples often transfer poorly between different models or architectures, making it difficult to comprehensively test against all possible attacks."
-        },
-        {
-          "description": "Focus on worst-case perturbations may not reflect realistic threat models, as some adversarial examples require unrealistic levels of control over inputs."
-        },
-        {
-          "description": "Computationally expensive to generate strong adversarial examples, often requiring 10-100x more computation than standard inference, especially for large models or high-dimensional inputs."
-        },
-        {
-          "description": "Trade-off between robustness and accuracy means improving adversarial robustness often reduces performance on clean, unperturbed data."
-        },
-        {
-          "description": "Requires representative test data covering expected deployment scenarios, as adversarial testing on narrow datasets may miss vulnerabilities that emerge in real-world conditions."
-        },
-        {
-          "description": "Requires expertise in both attack methodology and domain knowledge to design meaningful adversarial perturbations that reflect genuine threats rather than artificial edge cases."
-        }
-      ],
-      "resources": [
-        {
-          "title": "Welcome to the Adversarial Robustness Toolbox — Adversarial ...",
-          "url": "https://adversarial-robustness-toolbox.readthedocs.io",
-          "source_type": "documentation",
-          "authors": [
-            "Adversarial-robustness-toolbox Developers"
-          ],
-          "citationKey": "adversarial-robustness-toolboxdevelopersWelcomeAdversarialRobustness"
-        },
-        {
-          "title": "SecML-Torch: A Library for Robustness Evaluation of Deep ...",
-          "url": "https://secml-torch.readthedocs.io",
-          "source_type": "documentation",
-          "publication_date": "2022",
-          "citationKey": "secml-torchdevelopersSecMLTorchLibraryRobustness2022"
-        },
-        {
-          "title": "A Survey of Neural Network Robustness Assessment in Image Recognition",
-          "url": "https://www.semanticscholar.org/paper/4ff905df12fe2e5d3ef9801f22cdf301124cb0cb",
-          "source_type": "technical_paper",
-          "authors": [
-            "Jie Wang",
-            "Jun Ai",
-            "Minyan Lu",
-            "Haoran Su",
-            "Dan Yu",
-            "Yutao Zhang",
-            "Junda Zhu",
-            "Jingyu Liu"
-          ],
-          "publication_date": "2024",
-          "citationKey": "wangSurveyNeuralNetwork2024",
-          "abstract": "In recent years, there has been significant attention given to the robustness assessment of neural networks. Robustness plays a critical role in ensuring reliable operation of artificial intelligence (AI) systems in complex and uncertain environments. Deep learning's robustness problem is particularly significant, highlighted by the discovery of adversarial attacks on image classification models. Researchers have dedicated efforts to evaluate robustness in diverse perturbation conditions for image recognition tasks. Robustness assessment encompasses two main techniques: robustness verification/ certification for deliberate adversarial attacks and robustness testing for random data corruptions. In this survey, we present a detailed examination of both adversarial robustness (AR) and corruption robustness (CR) in neural network assessment. Analyzing current research papers and standards, we provide an extensive overview of robustness assessment in image recognition. Three essential aspects are analyzed: concepts, metrics, and assessment methods. We investigate the perturbation metrics and range representations used to measure the degree of perturbations on images, as well as the robustness metrics specifically for the robustness conditions of classification models. The strengths and limitations of the existing methods are also discussed, and some potential directions for future research are provided."
-        },
-        {
-          "title": "Adversarial Training: A Survey",
-          "url": "https://www.semanticscholar.org/paper/3181007ef16737020b51d5f77ec2855bf2b82b0e",
-          "source_type": "technical_paper",
-          "authors": [
-            "Mengnan Zhao",
-            "Lihe Zhang",
-            "Jingwen Ye",
-            "Huchuan Lu",
-            "Baocai Yin",
-            "Xinchao Wang"
-          ],
-          "publication_date": "2024",
-          "citationKey": "zhaoAdversarialTrainingSurvey2024",
-          "abstract": "Adversarial training (AT) refers to integrating adversarial examples -- inputs altered with imperceptible perturbations that can significantly impact model predictions -- into the training process. Recent studies have demonstrated the effectiveness of AT in improving the robustness of deep neural networks against diverse adversarial attacks. However, a comprehensive overview of these developments is still missing. This survey addresses this gap by reviewing a broad range of recent and representative studies. Specifically, we first describe the implementation procedures and practical applications of AT, followed by a comprehensive review of AT techniques from three perspectives: data enhancement, network design, and training configurations. Lastly, we discuss common challenges in AT and propose several promising directions for future research."
-        },
-        {
-          "title": "What is an adversarial attack in NLP? — TextAttack 0.3.10 ...",
-          "url": "https://textattack.readthedocs.io/en/latest/1start/what_is_an_adversarial_attack.html",
-          "source_type": "documentation",
-          "authors": [
-            "Textattack Developers"
-          ],
-          "publication_date": "2020",
-          "citationKey": "textattackdevelopersWhatAdversarialAttack2020"
-        }
-      ],
-      "related_techniques": [
-        "data-poisoning-detection",
-        "model-watermarking-and-theft-detection",
-        "multi-agent-system-testing",
-        "prompt-injection-testing"
-      ],
-      "sample_claims": [
-        {
-          "text": "The perception system maintains safe operation when presented with inputs designed to cause misclassification",
-          "domain": "autonomous systems",
-          "assuranceGoal": "safety"
-        },
-        {
-          "text": "The model withstands intentional manipulation attempts that exploit input vulnerabilities",
-          "domain": "general",
-          "assuranceGoal": "security"
-        },
-        {
-          "text": "The system's classification accuracy remains acceptable under deliberately crafted worst-case perturbations",
-          "domain": "healthcare",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The fraud detection model resists evasion attempts through strategically modified transaction features",
-          "domain": "finance",
-          "assuranceGoal": "security"
-        },
-        {
-          "text": "The autonomous vehicle's decision-making remains reliable when environmental sensors receive subtly corrupted signals",
-          "domain": "autonomous systems",
-          "assuranceGoal": "safety"
-        }
-      ]
-    },
-    {
       "slug": "agent-goal-misalignment-testing",
       "name": "Agent Goal Misalignment Testing",
       "description": "Agent goal misalignment testing identifies scenarios where AI agents pursue objectives in unintended ways or develop proxy goals that diverge from true human intent. This technique tests for specification gaming (achieving stated metrics while violating intent), instrumental goals (agents developing problematic sub-goals to achieve main objectives), and reward hacking (exploiting loopholes in reward functions). Testing uses diverse scenarios to probe whether agents truly understand task intent or merely optimise narrow specified metrics.",
@@ -3773,7 +3490,7 @@
         }
       ],
       "related_techniques": [
-        "ai-agent-safety-testing",
+        "prompt-injection-testing",
         "constitutional-ai-evaluation",
         "multi-agent-system-testing",
         "path-specific-counterfactual-fairness-assessment",
@@ -3906,7 +3623,7 @@
       ],
       "related_techniques": [
         "adversarial-training-evaluation",
-        "safety-guardrails",
+        "runtime-monitoring-and-circuit-breakers",
         "membership-inference-attack-testing",
         "prompt-injection-testing"
       ],
@@ -4054,8 +3771,8 @@
         }
       ],
       "related_techniques": [
-        "ai-agent-safety-testing",
-        "hallucination-detection",
+        "agent-goal-misalignment-testing",
+        "chain-of-thought-faithfulness-evaluation",
         "jailbreak-resistance-testing",
         "multimodal-alignment-evaluation"
       ],
@@ -4373,8 +4090,8 @@
         }
       ],
       "related_techniques": [
-        "anomaly-detection",
-        "adversarial-robustness-testing",
+        "out-of-distribution-detector-for-neural-networks",
+        "adversarial-training-evaluation",
         "influence-functions",
         "cross-validation"
       ],
@@ -4402,345 +4119,6 @@
         {
           "text": "The financial model's training data is validated to exclude manipulated records designed to create exploitable prediction patterns",
           "domain": "finance",
-          "assuranceGoal": "safety"
-        }
-      ]
-    },
-    {
-      "slug": "hallucination-detection",
-      "name": "Hallucination Detection",
-      "description": "Hallucination detection identifies when generative models produce factually incorrect, fabricated, or ungrounded outputs. This technique combines automated consistency checking, self-consistency methods, uncertainty quantification, and human evaluation. It produces detection scores distinguishing intrinsic hallucinations (contradicting sources) from extrinsic hallucinations (unverifiable claims), enabling filtering or user warnings.",
-      "assurance_goals": [
-        "Reliability",
-        "Transparency",
-        "Safety"
-      ],
-      "tags": [
-        "applicable-models/architecture/neural-networks/transformer",
-        "applicable-models/architecture/neural-networks/transformer/llm",
-        "applicable-models/paradigm/generative",
-        "applicable-models/requirements/black-box",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/transparency",
-        "assurance-goal-category/safety",
-        "data-type/text",
-        "data-requirements/access-to-training-data",
-        "evidence-type/quantitative-metric",
-        "evidence-type/qualitative-report",
-        "expertise-needed/ml-engineering",
-        "expertise-needed/domain-expertise",
-        "lifecycle-stage/model-evaluation",
-        "lifecycle-stage/post-deployment",
-        "technique-type/testing",
-        "technique-type/algorithmic"
-      ],
-      "example_use_cases": [
-        {
-          "description": "Monitoring a medical information system to detect when it generates unsupported clinical claims or fabricates research citations, preventing patients from receiving incorrect health advice.",
-          "goal": "Safety"
-        },
-        {
-          "description": "Evaluating an AI journalism assistant to ensure generated article drafts don't fabricate quotes, misattribute sources, or create false claims that could damage credibility and public trust.",
-          "goal": "Reliability"
-        },
-        {
-          "description": "Implementing confidence scoring and uncertainty indicators in AI assistants that transparently signal when responses may contain hallucinated information versus verified facts.",
-          "goal": "Transparency"
-        },
-        {
-          "description": "Validating an AI legal research tool used by public defenders to ensure generated case law summaries don't fabricate judicial opinions, misstate holdings, or invent precedents that could undermine legal arguments and defendants' rights.",
-          "goal": "Reliability"
-        },
-        {
-          "description": "Monitoring an AI-powered financial reporting assistant to detect when it generates unsubstantiated market analysis, fabricates company earnings data, or creates false attributions to analysts, protecting investors from misleading information.",
-          "goal": "Safety"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "Automated detection methods may miss subtle hallucinations or flag correct but unusual information as potentially fabricated."
-        },
-        {
-          "description": "Requires access to reliable ground truth knowledge sources for fact-checking, which may not exist for many domains or recent events."
-        },
-        {
-          "description": "Self-consistency methods assume inconsistency indicates hallucination, but models can consistently hallucinate the same false information."
-        },
-        {
-          "description": "Human evaluation is expensive and subjective, with annotators potentially disagreeing about what constitutes hallucination versus interpretation."
-        },
-        {
-          "description": "Detection effectiveness degrades for rapidly evolving domains or emerging topics where ground truth knowledge bases may be outdated, incomplete, or unavailable, making it difficult to distinguish hallucinations from genuinely novel or recent information."
-        },
-        {
-          "description": "Particularly challenging to apply in creative writing, storytelling, or subjective analysis contexts where the boundary between acceptable creative license and problematic hallucination is domain-dependent and context-specific."
-        }
-      ],
-      "resources": [
-        {
-          "title": "hallucination-leaderboard",
-          "url": "https://github.com/vectara/hallucination-leaderboard",
-          "source_type": "software_package",
-          "publication_date": "2023-10-31",
-          "citationKey": "vectaraHallucinationleaderboard2023",
-          "abstract": "Leaderboard Comparing LLM Performance at Producing Hallucinations when Summarizing Short Documents"
-        },
-        {
-          "title": "How to Perform Hallucination Detection for LLMs | Towards Data ...",
-          "url": "https://towardsdatascience.com/how-to-perform-hallucination-detection-for-llms-b8cb8b72e697",
-          "source_type": "tutorial",
-          "authors": [
-            "Mark Chen"
-          ],
-          "publication_date": "2024-01-22",
-          "citationKey": "chenHowPerformHallucination2024"
-        },
-        {
-          "title": "SelfCheckAgent: Zero-Resource Hallucination Detection in Generative Large Language Models",
-          "url": "https://www.semanticscholar.org/paper/e7cd95ec57302fc5897bed07bee87a388747f750",
-          "source_type": "technical_paper",
-          "authors": [
-            "Diyana Muhammed",
-            "Gollam Rabby",
-            "Soren Auer"
-          ],
-          "publication_date": "2025",
-          "citationKey": "muhammedSelfCheckAgentZeroResourceHallucination2025",
-          "abstract": "Detecting hallucinations in Large Language Models (LLMs) remains a critical challenge for their reliable deployment in real-world applications. To address this, we introduce SelfCheckAgent, a novel framework integrating three different agents: the Symbolic Agent, the Specialized Detection Agent, and the Contextual Consistency Agent. These agents provide a robust multi-dimensional approach to hallucination detection. Notable results include the Contextual Consistency Agent leveraging Llama 3.1 with Chain-of-Thought (CoT) to achieve outstanding performance on the WikiBio dataset, with NonFactual hallucination detection scoring 93.64%, Factual 70.26%, and Ranking 78.48% respectively. On the AIME dataset, GPT-4o with CoT excels in NonFactual detection with 94.89% but reveals trade-offs in Factual with 30.58% and Ranking with 30.68%, underscoring the complexity of hallucination detection in the complex mathematical domains. The framework also incorporates a triangulation strategy, which increases the strengths of the SelfCheckAgent, yielding significant improvements in real-world hallucination identification. The comparative analysis demonstrates SelfCheckAgent's applicability across diverse domains, positioning it as a crucial advancement for trustworthy LLMs. These findings highlight the potentiality of consistency-driven methodologies in detecting hallucinations in LLMs."
-        },
-        {
-          "title": "SINdex: Semantic INconsistency Index for Hallucination Detection in LLMs",
-          "url": "https://www.semanticscholar.org/paper/06ef8d4343f35184b4dec004365dfe1a562e08fc",
-          "source_type": "technical_paper",
-          "authors": [
-            "Samir Abdaljalil",
-            "H. Kurban",
-            "Parichit Sharma",
-            "E. Serpedin",
-            "Rachad Atat"
-          ],
-          "publication_date": "2025",
-          "citationKey": "abdaljalilSINdexSemanticINconsistency2025",
-          "abstract": "Large language models (LLMs) are increasingly deployed across diverse domains, yet they are prone to generating factually incorrect outputs - commonly known as\"hallucinations.\"Among existing mitigation strategies, uncertainty-based methods are particularly attractive due to their ease of implementation, independence from external data, and compatibility with standard LLMs. In this work, we introduce a novel and scalable uncertainty-based semantic clustering framework for automated hallucination detection. Our approach leverages sentence embeddings and hierarchical clustering alongside a newly proposed inconsistency measure, SINdex, to yield more homogeneous clusters and more accurate detection of hallucination phenomena across various LLMs. Evaluations on prominent open- and closed-book QA datasets demonstrate that our method achieves AUROC improvements of up to 9.3% over state-of-the-art techniques. Extensive ablation studies further validate the effectiveness of each component in our framework."
-        },
-        {
-          "title": "Uncertainty Quantification for Hallucination Detection in Large Language Models: Foundations, Methodology, and Future Directions",
-          "url": "https://www.semanticscholar.org/paper/76912e6ea42bdebb2795708dac381a9b268b391c",
-          "source_type": "technical_paper",
-          "authors": [
-            "Sungmin Kang",
-            "Y. Bakman",
-            "D. Yaldiz",
-            "Baturalp Buyukates",
-            "A. Avestimehr"
-          ],
-          "publication_date": "2025",
-          "citationKey": "kangUncertaintyQuantificationHallucination2025",
-          "abstract": "The rapid advancement of large language models (LLMs) has transformed the landscape of natural language processing, enabling breakthroughs across a wide range of areas including question answering, machine translation, and text summarization. Yet, their deployment in real-world applications has raised concerns over reliability and trustworthiness, as LLMs remain prone to hallucinations that produce plausible but factually incorrect outputs. Uncertainty quantification (UQ) has emerged as a central research direction to address this issue, offering principled measures for assessing the trustworthiness of model generations. We begin by introducing the foundations of UQ, from its formal definition to the traditional distinction between epistemic and aleatoric uncertainty, and then highlight how these concepts have been adapted to the context of LLMs. Building on this, we examine the role of UQ in hallucination detection, where quantifying uncertainty provides a mechanism for identifying unreliable generations and improving reliability. We systematically categorize a wide spectrum of existing methods along multiple dimensions and present empirical results for several representative approaches. Finally, we discuss current limitations and outline promising future research directions, providing a clearer picture of the current landscape of LLM UQ for hallucination detection."
-        }
-      ],
-      "related_techniques": [
-        "retrieval-augmented-generation-evaluation",
-        "chain-of-thought-faithfulness-evaluation",
-        "epistemic-uncertainty-quantification",
-        "confidence-thresholding"
-      ],
-      "sample_claims": [
-        {
-          "text": "The medical information system identifies when generated responses contain fabricated research citations or unsupported clinical claims",
-          "domain": "healthcare",
-          "assuranceGoal": "safety"
-        },
-        {
-          "text": "The content generation system distinguishes between factually grounded outputs and unverifiable assertions across diverse query types",
-          "domain": "general",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The customer service assistant signals when responses may contain fabricated information versus verified facts from knowledge sources",
-          "domain": "general",
-          "assuranceGoal": "transparency"
-        },
-        {
-          "text": "The financial reporting tool detects when generated market analysis contradicts source documents or creates unsubstantiated attributions",
-          "domain": "finance",
-          "assuranceGoal": "safety"
-        },
-        {
-          "text": "The legal research assistant identifies when case summaries fabricate judicial opinions or misstate holdings from the source materials",
-          "domain": "public sector",
-          "assuranceGoal": "reliability"
-        }
-      ]
-    },
-    {
-      "slug": "safety-guardrails",
-      "name": "Safety Guardrails",
-      "description": "Safety guardrails apply real-time content moderation and safety constraints during deployment, generating evidence of safety violations and protection effectiveness. This technique produces detailed logs of blocked content, safety incident reports, violation pattern analysis, and guardrail performance metrics. Evidence includes categorised threat taxonomies, false positive/negative rates, and temporal trends in attack patterns, supporting assurance claims about deployed system safety.",
-      "assurance_goals": [
-        "Safety",
-        "Security",
-        "Reliability"
-      ],
-      "tags": [
-        "applicable-models/architecture/model-agnostic",
-        "applicable-models/requirements/black-box",
-        "assurance-goal-category/safety",
-        "assurance-goal-category/security",
-        "assurance-goal-category/reliability",
-        "data-type/text",
-        "data-requirements/no-special-requirements",
-        "lifecycle-stage/deployment",
-        "lifecycle-stage/post-deployment",
-        "lifecycle-stage/system-deployment/system-use-and-monitoring",
-        "technique-type/algorithmic",
-        "technique-type/procedural",
-        "evidence-type/quantitative-metric",
-        "evidence-type/documentation",
-        "evidence-type/visualisation",
-        "expertise-needed/ml-engineering",
-        "expertise-needed/domain-expertise",
-        "expertise-needed/low"
-      ],
-      "example_use_cases": [
-        {
-          "description": "Implementing real-time filtering on a chatbot to catch any harmful outputs that slip through training-time safety alignment, blocking toxic content before it reaches users.",
-          "goal": "Safety"
-        },
-        {
-          "description": "Protecting a code generation model from responding to prompts requesting malicious code by filtering both inputs and outputs for security vulnerabilities and attack patterns.",
-          "goal": "Security"
-        },
-        {
-          "description": "Ensuring reliable content safety in production by adding a filtering layer that catches edge cases missed during testing and provides immediate protection against newly discovered attack patterns.",
-          "goal": "Reliability"
-        },
-        {
-          "description": "Implementing guardrails on a medical information chatbot to filter queries requesting diagnosis or treatment recommendations that should only come from licensed professionals, and to block outputs containing specific dosage information without proper context and disclaimers.",
-          "goal": "Safety"
-        },
-        {
-          "description": "Protecting a financial advisory AI from generating outputs that could constitute unauthorised securities advice or recommendations violating regulatory requirements, filtering both prompts and responses for compliance violations.",
-          "goal": "Security"
-        },
-        {
-          "description": "Ensuring an educational AI tutor blocks inappropriate content and maintains age-appropriate interactions by filtering both student inputs (detecting potential self-harm signals) and system outputs (preventing exposure to mature content).",
-          "goal": "Safety"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "Adds 50-200ms latency to inference depending on filter complexity, which may be unacceptable for real-time applications requiring sub-100ms response times."
-        },
-        {
-          "description": "Safety classifiers may produce false positives that block legitimate content, degrading user experience and system utility."
-        },
-        {
-          "description": "Sophisticated adversaries may craft outputs that evade filtering through obfuscation, encoding, or subtle harmful content."
-        },
-        {
-          "description": "Requires continuous updates to filtering rules and classifiers as new attack patterns and harmful content types emerge."
-        },
-        {
-          "description": "Running guardrail models alongside primary models increases infrastructure costs by 20-50% depending on guardrail complexity, which may be prohibitive for resource-constrained deployments."
-        }
-      ],
-      "resources": [
-        {
-          "title": "Real-time Serving — Databricks SDK for Python beta documentation",
-          "url": "https://databricks-sdk-py.readthedocs.io/en/latest/dbdataclasses/serving.html",
-          "source_type": "documentation",
-          "authors": [
-            "Databricks-sdk-py Developers"
-          ],
-          "publication_date": "2023",
-          "citationKey": "databricks-sdk-pydevelopersRealtimeServingDatabricks2023"
-        },
-        {
-          "title": "Guardrails",
-          "url": "https://github.com/NVIDIA-NeMo/Guardrails",
-          "source_type": "software_package",
-          "publication_date": "2023-04-18",
-          "citationKey": "nvidia-nemoGuardrails2023",
-          "abstract": "NeMo Guardrails is an open-source toolkit for easily adding programmable guardrails to LLM-based conversational systems."
-        },
-        {
-          "title": "Legilimens: Practical and Unified Content Moderation for Large Language Model Services",
-          "url": "https://arxiv.org/abs/2408.15488",
-          "source_type": "technical_paper",
-          "authors": [
-            "Jialin Wu",
-            "Jiangyi Deng",
-            "Shengyuan Pang",
-            "Yanjiao Chen",
-            "Jiayang Xu",
-            "Xinfeng Li",
-            "Wenyuan Xu"
-          ],
-          "publication_date": "2024-08-28",
-          "citationKey": "wuLegilimensPracticalUnified2024",
-          "abstract": "Given the societal impact of unsafe content generated by large language models (LLMs), ensuring that LLM services comply with safety standards is a crucial concern for LLM service providers. Common content moderation methods are limited by an effectiveness-and-efficiency dilemma, where simple models are fragile while sophisticated models consume excessive computational resources. In this paper, we reveal for the first time that effective and efficient content moderation can be achieved by extracting conceptual features from chat-oriented LLMs, despite their initial fine-tuning for conversation rather than content moderation. We propose a practical and unified content moderation framework for LLM services, named Legilimens, which features both effectiveness and efficiency. Our red-team model-based data augmentation enhances the robustness of Legilimens against state-of-the-art jailbreaking. Additionally, we develop a framework to theoretically analyze the cost-effectiveness of Legilimens compared to other methods. We have conducted extensive experiments on five host LLMs, seventeen datasets, and nine jailbreaking methods to verify the effectiveness, efficiency, and robustness of Legilimens against normal and adaptive adversaries. A comparison of Legilimens with both commercial and academic baselines demonstrates the superior performance of Legilimens. Furthermore, we confirm that Legilimens can be applied to few-shot scenarios and extended to multi-label classification tasks."
-        },
-        {
-          "title": "AEGIS: Online Adaptive AI Content Safety Moderation with Ensemble of LLM Experts",
-          "url": "https://arxiv.org/abs/2404.05993",
-          "source_type": "technical_paper",
-          "authors": [
-            "Shaona Ghosh",
-            "Prasoon Varshney",
-            "Erick Galinkin",
-            "Christopher Parisien"
-          ],
-          "publication_date": "2024-04-09",
-          "citationKey": "ghoshAEGISOnlineAdaptive2024",
-          "abstract": "As Large Language Models (LLMs) and generative AI become more widespread, the content safety risks associated with their use also increase. We find a notable deficiency in high-quality content safety datasets and benchmarks that comprehensively cover a wide range of critical safety areas. To address this, we define a broad content safety risk taxonomy, comprising 13 critical risk and 9 sparse risk categories. Additionally, we curate AEGISSAFETYDATASET, a new dataset of approximately 26, 000 human-LLM interaction instances, complete with human annotations adhering to the taxonomy. We plan to release this dataset to the community to further research and to help benchmark LLM models for safety. To demonstrate the effectiveness of the dataset, we instruction-tune multiple LLM-based safety models. We show that our models (named AEGISSAFETYEXPERTS), not only surpass or perform competitively with the state-of-the-art LLM-based safety models and general purpose LLMs, but also exhibit robustness across multiple jail-break attack categories. We also show how using AEGISSAFETYDATASET during the LLM alignment phase does not negatively impact the performance of the aligned models on MT Bench scores. Furthermore, we propose AEGIS, a novel application of a no-regret online adaptation framework with strong theoretical guarantees, to perform content moderation with an ensemble of LLM content safety experts in deployment"
-        },
-        {
-          "title": "From Judgment to Interference: Early Stopping LLM Harmful Outputs via Streaming Content Monitoring",
-          "url": "https://arxiv.org/abs/2506.09996",
-          "source_type": "technical_paper",
-          "authors": [
-            "Yang Li",
-            "Qiang Sheng",
-            "Yehan Yang",
-            "Xueyao Zhang",
-            "Juan Cao"
-          ],
-          "publication_date": "2025-06-11",
-          "citationKey": "liJudgmentInterferenceEarly2025",
-          "abstract": "Though safety alignment has been applied to most large language models (LLMs), LLM service providers generally deploy a subsequent moderation as the external safety guardrail in real-world products. Existing moderators mainly practice a conventional full detection, which determines the harmfulness based on the complete LLM output, causing high service latency. Recent works pay more attention to partial detection where moderators oversee the generation midway and early stop the output if harmfulness is detected, but they directly apply moderators trained with the full detection paradigm to incomplete outputs, introducing a training-inference gap that lowers the performance. In this paper, we explore how to form a data-and-model solution that natively supports partial detection. For the data, we construct FineHarm, a dataset consisting of 29K prompt-response pairs with fine-grained annotations to provide reasonable supervision for token-level training. Then, we propose the streaming content monitor, which is trained with dual supervision of response- and token-level labels and can follow the output stream of LLM to make a timely judgment of harmfulness. Experiments show that SCM gains 0.95+ in macro F1 score that is comparable to full detection, by only seeing the first 18% of tokens in responses on average. Moreover, the SCM can serve as a pseudo-harmfulness annotator for improving safety alignment and lead to a higher harmlessness score than DPO."
-        }
-      ],
-      "related_techniques": [
-        "out-of-domain-detection",
-        "hallucination-detection",
-        "toxicity-and-bias-detection",
-        "reward-hacking-detection"
-      ],
-      "sample_claims": [
-        {
-          "text": "The chatbot prevents harmful medical advice from reaching patients by blocking responses that contain specific treatment recommendations or dosage information without appropriate disclaimers",
-          "domain": "healthcare",
-          "assuranceGoal": "safety"
-        },
-        {
-          "text": "The code generation system refuses requests for malicious code and blocks outputs containing security vulnerabilities before they reach users",
-          "domain": "general",
-          "assuranceGoal": "security"
-        },
-        {
-          "text": "The conversational AI maintains safe interactions by blocking toxic content and policy violations in real-time during production use",
-          "domain": "general",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The financial advisory system blocks outputs that constitute unauthorised securities recommendations or regulatory compliance violations before delivery",
-          "domain": "finance",
-          "assuranceGoal": "security"
-        },
-        {
-          "text": "The autonomous vehicle's communication system prevents the generation of instructions that could compromise safety-critical decision-making processes",
-          "domain": "autonomous systems",
           "assuranceGoal": "safety"
         }
       ]
@@ -4875,9 +4253,9 @@
       ],
       "related_techniques": [
         "prompt-injection-testing",
-        "ai-agent-safety-testing",
+        "agent-goal-misalignment-testing",
         "prompt-sensitivity-analysis",
-        "adversarial-robustness-testing"
+        "adversarial-training-evaluation"
       ],
       "sample_claims": [
         {
@@ -5058,9 +4436,9 @@
         }
       ],
       "related_techniques": [
-        "prediction-intervals",
+        "conformal-prediction",
         "jackknife-resampling",
-        "hallucination-detection",
+        "chain-of-thought-faithfulness-evaluation",
         "bootstrapping"
       ],
       "sample_claims": [
@@ -5221,7 +4599,7 @@
         }
       ],
       "related_techniques": [
-        "ai-agent-safety-testing",
+        "jailbreak-resistance-testing",
         "agent-goal-misalignment-testing",
         "prompt-injection-testing",
         "chain-of-thought-faithfulness-evaluation"
@@ -5386,9 +4764,9 @@
         }
       ],
       "related_techniques": [
-        "adversarial-robustness-testing",
+        "adversarial-training-evaluation",
         "constitutional-ai-evaluation",
-        "hallucination-detection",
+        "chain-of-thought-faithfulness-evaluation",
         "jailbreak-resistance-testing"
       ],
       "sample_claims": [
@@ -5533,8 +4911,8 @@
       ],
       "related_techniques": [
         "deep-ensembles",
-        "hallucination-detection",
-        "anomaly-detection",
+        "chain-of-thought-faithfulness-evaluation",
+        "out-of-distribution-detector-for-neural-networks",
         "conformal-prediction"
       ],
       "sample_claims": [
@@ -5703,9 +5081,9 @@
         }
       ],
       "related_techniques": [
-        "ai-agent-safety-testing",
+        "agent-goal-misalignment-testing",
         "jailbreak-resistance-testing",
-        "hallucination-detection",
+        "chain-of-thought-faithfulness-evaluation",
         "toxicity-and-bias-detection"
       ],
       "sample_claims": [
@@ -5849,7 +5227,7 @@
         }
       ],
       "related_techniques": [
-        "hallucination-detection",
+        "chain-of-thought-faithfulness-evaluation",
         "adversarial-training-evaluation",
         "constitutional-ai-evaluation",
         "epistemic-uncertainty-quantification"
@@ -5879,147 +5257,6 @@
           "text": "The educational recommendation system's learning outcome improvements reflect genuine student progress rather than optimisation of engagement proxies",
           "domain": "public sector",
           "assuranceGoal": "safety"
-        }
-      ]
-    },
-    {
-      "slug": "ai-agent-safety-testing",
-      "name": "AI Agent Safety Testing",
-      "description": "AI agent safety testing evaluates autonomous AI agents that interact with external tools, APIs, and systems to ensure they operate safely and as intended. This technique assesses whether agents correctly understand tool specifications, respect usage constraints, handle errors gracefully, avoid unintended side effects, and make safe decisions during multi-step reasoning. Testing includes boundary condition validation (extreme parameters, edge cases), permission verification (ensuring agents don't exceed authorized actions), and cascade failure analysis (how tool errors propagate through agent workflows).",
-      "assurance_goals": [
-        "Safety",
-        "Security",
-        "Reliability"
-      ],
-      "tags": [
-        "applicable-models/architecture/neural-networks/transformer/llm",
-        "applicable-models/paradigm/generative",
-        "applicable-models/requirements/black-box",
-        "assurance-goal-category/safety",
-        "assurance-goal-category/security",
-        "assurance-goal-category/reliability",
-        "data-type/any",
-        "data-requirements/no-special-requirements",
-        "lifecycle-stage/model-evaluation",
-        "lifecycle-stage/post-deployment",
-        "technique-type/testing",
-        "evidence-type/quantitative-metric",
-        "evidence-type/documentation",
-        "expertise-needed/ml-engineering",
-        "expertise-needed/software-engineering",
-        "expertise-needed/domain-expertise"
-      ],
-      "example_use_cases": [
-        {
-          "description": "Testing an AI agent with database access to ensure it only executes safe read queries and cannot be manipulated into running destructive operations like deletions or schema modifications.",
-          "goal": "Safety"
-        },
-        {
-          "description": "Testing a healthcare AI agent with electronic health record access to ensure it correctly interprets permission levels, cannot be prompted to access unauthorised patient data, and maintains audit logs of all record queries.",
-          "goal": "Security"
-        },
-        {
-          "description": "Verifying that a customer service agent with CRM and payment processing tools cannot be manipulated through adversarial prompts to refund transactions outside policy boundaries or expose customer financial information.",
-          "goal": "Security"
-        },
-        {
-          "description": "Ensuring an educational AI assistant with gradebook access reliably validates student identity, cannot be socially engineered into changing grades, and handles grade calculation edge cases without data corruption.",
-          "goal": "Reliability"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "Comprehensive testing of all possible tool interactions, parameter combinations, and prompt variations is infeasible for agents with access to many tools, requiring risk-based prioritisation of test scenarios."
-        },
-        {
-          "description": "Agents may exhibit unexpected emergent behaviors when composing multiple tools in novel ways not anticipated during testing."
-        },
-        {
-          "description": "Difficult to test for all possible security vulnerabilities, especially when tools themselves may have undiscovered vulnerabilities."
-        },
-        {
-          "description": "Testing in sandboxed environments may not capture all real-world failure modes and integration issues."
-        },
-        {
-          "description": "Requires specialised expertise in both LLM security (prompt injection, jailbreaking) and domain-specific safety considerations, which may not exist within a single team."
-        },
-        {
-          "description": "As underlying LLMs and available tools evolve, previously safe agent behaviors may become unsafe, necessitating continuous re-evaluation rather than one-time testing."
-        },
-        {
-          "description": "Creating realistic adversarial test cases that anticipate how malicious users might manipulate agents requires red-teaming skills and understanding of social engineering tactics."
-        }
-      ],
-      "resources": [
-        {
-          "title": "Evaluating LLMs/Agents with MLflow | MLflow",
-          "url": "https://mlflow.org/docs/latest/genai/eval-monitor",
-          "source_type": "documentation",
-          "authors": [
-            "MLflow Developers"
-          ],
-          "publication_date": "2018",
-          "citationKey": "mlflowdevelopersEvaluatingLLMsAgents2018"
-        },
-        {
-          "title": "A Developer's Guide to Building Scalable AI: Workflows vs Agents ...",
-          "url": "https://towardsdatascience.com/a-developers-guide-to-building-scalable-ai-workflows-vs-agents",
-          "source_type": "tutorial",
-          "authors": [
-            "Hailey Quach"
-          ],
-          "publication_date": "2025-06-27",
-          "citationKey": "quachDevelopersGuideBuilding2025"
-        },
-        {
-          "title": "LangGraph: Build Stateful AI Agents in Python – Real Python",
-          "url": "https://realpython.com/langgraph-python",
-          "source_type": "tutorial",
-          "publication_date": "2025-03-19",
-          "citationKey": "LangGraphBuildStateful2025"
-        },
-        {
-          "title": "Design, Develop, and Deploy Multi-Agent Systems with CrewAI ...",
-          "url": "https://learn.deeplearning.ai/courses/design-develop-and-deploy-multi-agent-systems-with-crewai/lesson/rc39v/welcome",
-          "source_type": "tutorial",
-          "authors": [
-            "João Moura"
-          ],
-          "publication_date": "2025",
-          "citationKey": "mouraDesignDevelopDeploy2025"
-        }
-      ],
-      "related_techniques": [
-        "toxicity-and-bias-detection",
-        "multi-agent-system-testing",
-        "prompt-injection-testing",
-        "jailbreak-resistance-testing"
-      ],
-      "sample_claims": [
-        {
-          "text": "The autonomous agent respects authorization boundaries when accessing external systems and databases",
-          "domain": "general",
-          "assuranceGoal": "security"
-        },
-        {
-          "text": "The system maintains safe operation when tool invocations return unexpected errors or malformed responses",
-          "domain": "autonomous systems",
-          "assuranceGoal": "safety"
-        },
-        {
-          "text": "The agent cannot be manipulated through adversarial prompts into executing operations outside its permitted scope",
-          "domain": "finance",
-          "assuranceGoal": "security"
-        },
-        {
-          "text": "The healthcare system correctly validates permissions before retrieving patient records across all access pathways",
-          "domain": "healthcare",
-          "assuranceGoal": "security"
-        },
-        {
-          "text": "The agent handles cascading tool failures without data corruption or unintended side effects",
-          "domain": "general",
-          "assuranceGoal": "reliability"
         }
       ]
     },
@@ -6190,5 +5427,5 @@
       ]
     }
   ],
-  "count": 42
+  "count": 37
 }

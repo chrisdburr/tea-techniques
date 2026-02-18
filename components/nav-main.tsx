@@ -122,16 +122,16 @@ export function NavMain() {
           url: '/categories',
         },
         {
+          title: 'General',
+          url: '/categories/general',
+        },
+        {
           title: 'Explainability',
           url: '/categories/explainability',
         },
         {
           title: 'Fairness',
           url: '/categories/fairness',
-        },
-        {
-          title: 'General',
-          url: '/categories/general',
         },
         {
           title: 'Privacy',

@@ -68,6 +68,17 @@ export default async function CategoriesPage() {
     };
   });
 
+  // Sort: General first, then alphabetical
+  goalItems.sort((a, b) => {
+    if (a.title === 'General') {
+      return -1;
+    }
+    if (b.title === 'General') {
+      return 1;
+    }
+    return a.title.localeCompare(b.title);
+  });
+
   return (
     <IndexPageLayout
       description="Explore techniques organized by their primary assurance goals. Each category represents a key aspect of responsible AI development."

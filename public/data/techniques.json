@@ -4469,18 +4469,13 @@
     "name": "Cross-validation",
     "description": "Cross-validation evaluates model performance and robustness by systematically partitioning data into multiple subsets (folds) and training/testing repeatedly on different combinations. Common approaches include k-fold (splitting into k equal parts), stratified (preserving class distributions), and leave-one-out variants. By testing on multiple independent holdout sets, it reveals how performance varies across different data subsamples, provides robust estimates of generalisation ability, and helps detect overfitting or model instability that single train-test splits might miss.",
     "assurance_goals": [
-      "Reliability",
-      "Transparency",
-      "Fairness"
+      "General"
     ],
     "tags": [
       "applicable-models/architecture/model-agnostic",
       "applicable-models/paradigm/supervised",
       "applicable-models/requirements/black-box",
       "applicable-models/requirements/training-data",
-      "assurance-goal-category/fairness",
-      "assurance-goal-category/reliability",
-      "assurance-goal-category/transparency",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/quantitative-metric",
@@ -4488,7 +4483,8 @@
       "expertise-needed/statistics",
       "lifecycle-stage/model-development",
       "lifecycle-stage/system-deployment-and-use",
-      "technique-type/algorithmic"
+      "technique-type/algorithmic",
+      "assurance-goal-category/general"
     ],
     "example_use_cases": [
       {
@@ -4764,19 +4760,11 @@
     "name": "Internal Review Boards",
     "description": "Internal Review Boards (IRBs) provide independent, systematic evaluation of AI/ML projects throughout their lifecycle to identify ethical, safety, and societal risks before they materialise. Typically composed of multidisciplinary experts including ethicists, domain specialists, legal counsel, community representatives, and technical staff, IRBs review project proposals, assess potential harms to individuals and communities, evaluate mitigation strategies, and establish ongoing monitoring requirements. Unlike traditional research ethics committees, AI-focused IRBs address algorithmic bias, fairness concerns, privacy implications, and societal impact at scale, providing essential governance for responsible AI development and deployment.",
     "assurance_goals": [
-      "Safety",
-      "Fairness",
-      "Transparency"
+      "General"
     ],
     "tags": [
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box",
-      "assurance-goal-category/fairness",
-      "assurance-goal-category/fairness/bias-assessment",
-      "assurance-goal-category/safety",
-      "assurance-goal-category/safety/risk-identification",
-      "assurance-goal-category/transparency",
-      "assurance-goal-category/transparency/governance-disclosure",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/decision-record",
@@ -4786,12 +4774,12 @@
       "expertise-needed/ethics",
       "expertise-needed/legal",
       "expertise-needed/regulatory-compliance",
-      "fairness-approach/group",
       "lifecycle-stage/model-development",
       "lifecycle-stage/post-deployment",
       "lifecycle-stage/project-planning",
       "lifecycle-stage/system-deployment-and-use",
-      "technique-type/process"
+      "technique-type/process",
+      "assurance-goal-category/general"
     ],
     "example_use_cases": [
       {
@@ -4872,19 +4860,11 @@
     "name": "Red Teaming",
     "description": "Red teaming involves systematic adversarial testing of AI/ML systems by dedicated specialists who attempt to identify flaws, vulnerabilities, harmful outputs, and ways to circumvent safety measures. Drawing from cybersecurity practices, red teams employ diverse attack vectors including prompt injection, adversarial examples, edge case exploitation, social engineering scenarios, and goal misalignment probes. Unlike standard testing that validates expected behaviour, red teaming specifically seeks to break systems through creative and adversarial approaches, revealing non-obvious risks and failure modes that could be exploited maliciously or cause harm in deployment.",
     "assurance_goals": [
-      "Safety",
-      "Reliability",
-      "Fairness",
-      "Security"
+      "General"
     ],
     "tags": [
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box",
-      "assurance-goal-category/fairness",
-      "assurance-goal-category/reliability",
-      "assurance-goal-category/safety",
-      "assurance-goal-category/security",
-      "assurance-goal-category/security/vulnerability-assessment",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/documentation",
@@ -4893,7 +4873,8 @@
       "expertise-needed/security",
       "lifecycle-stage/model-development",
       "lifecycle-stage/system-deployment-and-use",
-      "technique-type/procedural"
+      "technique-type/procedural",
+      "assurance-goal-category/general"
     ],
     "example_use_cases": [
       {
@@ -4978,19 +4959,12 @@
     "name": "Anomaly Detection",
     "description": "Anomaly detection identifies unusual behaviours, inputs, or outputs that deviate significantly from established normal patterns using statistical, machine learning, or rule-based methods. Applied to AI/ML systems, it serves as a continuous monitoring mechanism that can flag unexpected model predictions, suspicious input patterns, data drift, adversarial attacks, or operational malfunctions. By establishing baselines of normal system behaviour and alerting when deviations exceed predefined thresholds, organisations can detect potential security threats, model degradation, fairness violations, or system failures before they cause significant harm.",
     "assurance_goals": [
-      "Safety",
-      "Reliability",
-      "Fairness",
-      "Security"
+      "General"
     ],
     "tags": [
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box",
       "applicable-models/requirements/training-data",
-      "assurance-goal-category/fairness",
-      "assurance-goal-category/reliability",
-      "assurance-goal-category/safety",
-      "assurance-goal-category/safety/monitoring/anomaly-detection",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/quantitative-metric",
@@ -4998,7 +4972,8 @@
       "expertise-needed/statistics",
       "lifecycle-stage/system-deployment-and-use",
       "lifecycle-stage/system-deployment-and-use/monitoring",
-      "technique-type/algorithmic"
+      "technique-type/algorithmic",
+      "assurance-goal-category/general"
     ],
     "example_use_cases": [
       {
@@ -5078,19 +5053,11 @@
     "name": "Human-in-the-Loop Safeguards",
     "description": "Human-in-the-loop safeguards establish systematic checkpoints where human experts review, validate, or override AI/ML system decisions before they take effect. This governance approach combines automated efficiency with human judgement by defining clear intervention criteria (such as uncertainty thresholds, risk levels, or sensitive contexts) that trigger mandatory human oversight. By incorporating domain expertise, ethical considerations, and contextual understanding that machines may lack, these safeguards help ensure that critical decisions maintain appropriate human accountability whilst preserving the benefits of automated processing for routine cases.",
     "assurance_goals": [
-      "Safety",
-      "Transparency",
-      "Fairness"
+      "General"
     ],
     "tags": [
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box",
-      "assurance-goal-category/fairness",
-      "assurance-goal-category/fairness/procedural",
-      "assurance-goal-category/safety",
-      "assurance-goal-category/safety/human-oversight",
-      "assurance-goal-category/transparency",
-      "assurance-goal-category/transparency/accountability",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/governance-framework",
@@ -5099,7 +5066,8 @@
       "expertise-needed/stakeholder-engagement",
       "lifecycle-stage/post-deployment",
       "lifecycle-stage/system-deployment-and-use",
-      "technique-type/process"
+      "technique-type/process",
+      "assurance-goal-category/general"
     ],
     "example_use_cases": [
       {
@@ -5182,25 +5150,20 @@
     "name": "Confidence Thresholding",
     "description": "Confidence thresholding creates decision boundaries based on model uncertainty scores, routing predictions into different handling workflows depending on their confidence levels. High-confidence predictions (e.g., above 95%) proceed automatically, whilst medium-confidence cases (e.g., 70-95%) may trigger additional validation or human review, and low-confidence predictions (below 70%) receive extensive oversight or default to conservative fallback actions. This technique enables organisations to maintain automated efficiency for clear-cut cases whilst ensuring appropriate human intervention for uncertain decisions, balancing operational speed with risk management across safety-critical applications.",
     "assurance_goals": [
-      "Safety",
-      "Reliability",
-      "Transparency"
+      "General"
     ],
     "tags": [
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box",
       "applicable-models/requirements/probabilistic-output",
-      "assurance-goal-category/reliability",
-      "assurance-goal-category/reliability/uncertainty-quantification",
-      "assurance-goal-category/safety",
-      "assurance-goal-category/transparency",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/quantitative-metric",
       "expertise-needed/ml-engineering",
       "expertise-needed/statistics",
       "lifecycle-stage/system-deployment-and-use",
-      "technique-type/algorithmic"
+      "technique-type/algorithmic",
+      "assurance-goal-category/general"
     ],
     "example_use_cases": [
       {
@@ -5279,17 +5242,11 @@
     "name": "Runtime Monitoring and Circuit Breakers",
     "description": "Runtime monitoring and circuit breakers establish continuous surveillance of AI/ML systems in production, tracking critical metrics such as prediction accuracy, response times, input characteristics, output distributions, and system resource usage. When monitored parameters exceed predefined safety thresholds or exhibit anomalous patterns, automated circuit breakers immediately trigger protective actions including request throttling, service degradation, system shutdown, or failover to backup mechanisms. This approach provides real-time defensive capabilities that prevent cascading failures, ensure consistent service reliability, and maintain transparent operation status for stakeholders monitoring system health.",
     "assurance_goals": [
-      "Safety",
-      "Reliability",
-      "Transparency"
+      "General"
     ],
     "tags": [
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box",
-      "assurance-goal-category/reliability",
-      "assurance-goal-category/safety",
-      "assurance-goal-category/safety/monitoring/anomaly-detection",
-      "assurance-goal-category/transparency",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/quantitative-metric",
@@ -5297,7 +5254,8 @@
       "expertise-needed/software-engineering",
       "lifecycle-stage/system-deployment-and-use",
       "lifecycle-stage/system-deployment-and-use/monitoring",
-      "technique-type/algorithmic"
+      "technique-type/algorithmic",
+      "assurance-goal-category/general"
     ],
     "example_use_cases": [
       {
@@ -5375,17 +5333,11 @@
     "name": "Model Cards",
     "description": "Model cards are standardised documentation frameworks that systematically document machine learning models through structured templates. The templates cover intended use cases, performance metrics across different demographic groups and operating conditions, training data characteristics, evaluation procedures, limitations, and ethical considerations. They serve as comprehensive technical specifications that enable informed model selection, prevent inappropriate deployment, support regulatory compliance, and facilitate fair assessment by providing transparent reporting of model capabilities and constraints across diverse populations and scenarios.",
     "assurance_goals": [
-      "Transparency",
-      "Fairness",
-      "Safety"
+      "General"
     ],
     "tags": [
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box",
-      "assurance-goal-category/fairness",
-      "assurance-goal-category/safety",
-      "assurance-goal-category/transparency",
-      "assurance-goal-category/transparency/documentation/model-card",
       "data-requirements/access-to-training-data",
       "data-requirements/sensitive-attributes",
       "data-type/any",
@@ -5395,7 +5347,8 @@
       "expertise-needed/statistics",
       "lifecycle-stage/model-development",
       "lifecycle-stage/system-deployment-and-use",
-      "technique-type/documentation"
+      "technique-type/documentation",
+      "assurance-goal-category/general"
     ],
     "example_use_cases": [
       {
@@ -5474,16 +5427,11 @@
     "name": "Datasheets for Datasets",
     "description": "Datasheets for datasets establish comprehensive documentation standards for datasets, systematically recording creation methodology, data composition, collection procedures, preprocessing transformations, intended applications, potential biases, privacy considerations, and maintenance protocols. These structured documents enhance dataset transparency by providing essential context for appropriate usage, enabling informed decisions about dataset suitability for specific tasks, supporting bias detection and mitigation efforts, ensuring compliance with data protection regulations, and promoting responsible data stewardship throughout the entire data lifecycle from collection to disposal.",
     "assurance_goals": [
-      "Transparency",
-      "Fairness",
-      "Privacy"
+      "General"
     ],
     "tags": [
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box",
-      "assurance-goal-category/fairness",
-      "assurance-goal-category/privacy",
-      "assurance-goal-category/transparency",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/documentation",
@@ -5492,7 +5440,8 @@
       "lifecycle-stage/data-handling",
       "lifecycle-stage/data-handling/collection",
       "lifecycle-stage/data-handling/preparation",
-      "technique-type/documentation"
+      "technique-type/documentation",
+      "assurance-goal-category/general"
     ],
     "example_use_cases": [
       {
@@ -5572,14 +5521,11 @@
     "name": "MLflow Experiment Tracking",
     "description": "MLflow is an open-source platform that tracks machine learning experiments by automatically logging parameters, metrics, models, and artifacts throughout the ML lifecycle. It provides a centralised repository for comparing different experimental runs, reproducing results, and managing model versions. Teams can track hyperparameters, evaluation metrics, model files, and execution environment details, creating a comprehensive audit trail that supports collaboration, reproducibility, and regulatory compliance across the entire machine learning development process.",
     "assurance_goals": [
-      "Transparency",
-      "Reliability"
+      "General"
     ],
     "tags": [
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box",
-      "assurance-goal-category/reliability",
-      "assurance-goal-category/transparency",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/documentation",
@@ -5587,7 +5533,8 @@
       "expertise-needed/software-engineering",
       "lifecycle-stage/model-development",
       "lifecycle-stage/system-deployment-and-use",
-      "technique-type/process"
+      "technique-type/process",
+      "assurance-goal-category/general"
     ],
     "example_use_cases": [
       {
@@ -5667,14 +5614,11 @@
     "name": "Data Version Control",
     "description": "Data Version Control (DVC) is a Git-like version control system specifically designed for machine learning data, models, and experiments. It tracks changes to large data files, maintains reproducible ML pipelines, and creates a complete audit trail of data transformations, model training, and evaluation processes. DVC works alongside Git to provide end-to-end lineage tracking from raw data through preprocessing, training, and deployment, enabling teams to reproduce any model version and understand exactly how datasets evolved throughout the ML lifecycle.",
     "assurance_goals": [
-      "Transparency",
-      "Reliability"
+      "General"
     ],
     "tags": [
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box",
-      "assurance-goal-category/reliability",
-      "assurance-goal-category/transparency",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/documentation",
@@ -5683,7 +5627,8 @@
       "lifecycle-stage/data-handling",
       "lifecycle-stage/model-development",
       "lifecycle-stage/system-deployment-and-use",
-      "technique-type/process"
+      "technique-type/process",
+      "assurance-goal-category/general"
     ],
     "example_use_cases": [
       {
@@ -5763,15 +5708,11 @@
     "name": "Automated Documentation Generation",
     "description": "Automated documentation generation creates and maintains up-to-date documentation using various methods including programmatic scripts, large language models (LLMs), and extraction tools. These approaches can capture model architectures, data schemas, feature importance, performance metrics, API specifications, and lineage information without manual writing. Methods range from traditional code parsing and template-based generation to modern AI-assisted documentation that can understand context and generate human-readable explanations.",
     "assurance_goals": [
-      "Transparency",
-      "Reliability"
+      "General"
     ],
     "tags": [
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box",
-      "assurance-goal-category/reliability",
-      "assurance-goal-category/transparency",
-      "assurance-goal-category/transparency/documentation",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/documentation",
@@ -5779,7 +5720,8 @@
       "lifecycle-stage/deployment",
       "lifecycle-stage/model-development",
       "lifecycle-stage/project-design",
-      "technique-type/algorithmic"
+      "technique-type/algorithmic",
+      "assurance-goal-category/general"
     ],
     "example_use_cases": [
       {
@@ -9161,16 +9103,11 @@
     "name": "Model Development Audit Trails",
     "description": "Model development audit trails create comprehensive, immutable records of all decisions, experiments, and changes throughout the ML lifecycle. This technique captures dataset versions, training configurations, hyperparameter searches, model architecture changes, evaluation results, and deployment decisions in tamper-evident logs. Audit trails enable reproducibility, accountability, and regulatory compliance by documenting who made what changes when and why, supporting post-hoc investigation of model failures or unexpected behaviours.",
     "assurance_goals": [
-      "Transparency",
-      "Reliability",
-      "Safety"
+      "General"
     ],
     "tags": [
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box",
-      "assurance-goal-category/transparency",
-      "assurance-goal-category/reliability",
-      "assurance-goal-category/safety",
       "data-type/any",
       "lifecycle-stage/project-planning",
       "lifecycle-stage/data-collection",
@@ -9183,7 +9120,8 @@
       "evidence-type/documentation",
       "expertise-needed/software-engineering",
       "expertise-needed/ml-engineering",
-      "data-requirements/no-special-requirements"
+      "data-requirements/no-special-requirements",
+      "assurance-goal-category/general"
     ],
     "example_use_cases": [
       {

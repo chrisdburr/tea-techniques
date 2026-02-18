@@ -5,6 +5,7 @@ import {
   Brain,
   CheckCircle,
   Eye,
+  Globe,
   HelpCircle,
   Lock,
   Scale,
@@ -17,6 +18,7 @@ import { cn } from '@/lib/utils';
 export const goalIconsMap = {
   Explainability: Brain,
   Fairness: Scale,
+  General: Globe,
   Security: Shield,
   Safety: ShieldCheck,
   Reliability: CheckCircle,

@@ -33,6 +33,7 @@ function getAssuranceGoalOptions(techniques: Technique[]): QuestionOption[] {
   const goalDescriptions = new Map<string, string>([
     ['Explainability', 'Understanding how AI makes decisions'],
     ['Fairness', 'Ensuring equitable treatment across groups'],
+    ['General', 'Cross-cutting techniques applicable to any assurance goal'],
     ['Privacy', 'Protecting personal information'],
     ['Reliability', 'Consistent and predictable performance'],
     ['Safety', 'Preventing harm and ensuring safe operation'],
@@ -185,6 +186,7 @@ function getAssuranceSubcategoryOptions(
         description: 'Clear explanations for all',
       },
     ],
+    General: [],
   };
 
   const subcategories = subcategoryMap[selectedGoal] || [];

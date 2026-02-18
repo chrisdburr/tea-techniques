@@ -130,6 +130,10 @@ export function NavMain() {
           url: '/categories/fairness',
         },
         {
+          title: 'General',
+          url: '/categories/general',
+        },
+        {
           title: 'Privacy',
           url: '/categories/privacy',
         },

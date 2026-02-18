@@ -2,7 +2,7 @@
   "goal": {
     "name": "Transparency",
     "slug": "transparency",
-    "count": 69,
+    "count": 71,
     "description": "Making AI systems and their decision-making processes open and understandable."
   },
   "techniques": [
@@ -2774,18 +2774,13 @@
       "name": "Cross-validation",
       "description": "Cross-validation evaluates model performance and robustness by systematically partitioning data into multiple subsets (folds) and training/testing repeatedly on different combinations. Common approaches include k-fold (splitting into k equal parts), stratified (preserving class distributions), and leave-one-out variants. By testing on multiple independent holdout sets, it reveals how performance varies across different data subsamples, provides robust estimates of generalisation ability, and helps detect overfitting or model instability that single train-test splits might miss.",
       "assurance_goals": [
-        "Reliability",
-        "Transparency",
-        "Fairness"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/paradigm/supervised",
         "applicable-models/requirements/black-box",
         "applicable-models/requirements/training-data",
-        "assurance-goal-category/fairness",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -2793,7 +2788,8 @@
         "expertise-needed/statistics",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -3056,19 +3052,11 @@
       "name": "Internal Review Boards",
       "description": "Internal Review Boards (IRBs) provide independent, systematic evaluation of AI/ML projects throughout their lifecycle to identify ethical, safety, and societal risks before they materialise. Typically composed of multidisciplinary experts including ethicists, domain specialists, legal counsel, community representatives, and technical staff, IRBs review project proposals, assess potential harms to individuals and communities, evaluate mitigation strategies, and establish ongoing monitoring requirements. Unlike traditional research ethics committees, AI-focused IRBs address algorithmic bias, fairness concerns, privacy implications, and societal impact at scale, providing essential governance for responsible AI development and deployment.",
       "assurance_goals": [
-        "Safety",
-        "Fairness",
-        "Transparency"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/fairness",
-        "assurance-goal-category/fairness/bias-assessment",
-        "assurance-goal-category/safety",
-        "assurance-goal-category/safety/risk-identification",
-        "assurance-goal-category/transparency",
-        "assurance-goal-category/transparency/governance-disclosure",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/decision-record",
@@ -3078,12 +3066,12 @@
         "expertise-needed/ethics",
         "expertise-needed/legal",
         "expertise-needed/regulatory-compliance",
-        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "lifecycle-stage/post-deployment",
         "lifecycle-stage/project-planning",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/process"
+        "technique-type/process",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -3183,23 +3171,293 @@
       ]
     },
     {
-      "slug": "human-in-the-loop-safeguards",
-      "name": "Human-in-the-Loop Safeguards",
-      "description": "Human-in-the-loop safeguards establish systematic checkpoints where human experts review, validate, or override AI/ML system decisions before they take effect. This governance approach combines automated efficiency with human judgement by defining clear intervention criteria (such as uncertainty thresholds, risk levels, or sensitive contexts) that trigger mandatory human oversight. By incorporating domain expertise, ethical considerations, and contextual understanding that machines may lack, these safeguards help ensure that critical decisions maintain appropriate human accountability whilst preserving the benefits of automated processing for routine cases.",
+      "slug": "red-teaming",
+      "name": "Red Teaming",
+      "description": "Red teaming involves systematic adversarial testing of AI/ML systems by dedicated specialists who attempt to identify flaws, vulnerabilities, harmful outputs, and ways to circumvent safety measures. Drawing from cybersecurity practices, red teams employ diverse attack vectors including prompt injection, adversarial examples, edge case exploitation, social engineering scenarios, and goal misalignment probes. Unlike standard testing that validates expected behaviour, red teaming specifically seeks to break systems through creative and adversarial approaches, revealing non-obvious risks and failure modes that could be exploited maliciously or cause harm in deployment.",
       "assurance_goals": [
-        "Safety",
-        "Transparency",
-        "Fairness"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/fairness",
-        "assurance-goal-category/fairness/procedural",
-        "assurance-goal-category/safety",
-        "assurance-goal-category/safety/human-oversight",
-        "assurance-goal-category/transparency",
-        "assurance-goal-category/transparency/accountability",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/documentation",
+        "evidence-type/qualitative-report",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/security",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/procedural",
+        "assurance-goal-category/general"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing a content moderation AI by attempting to make it generate harmful outputs through creative prompt injection, jailbreaking techniques, and edge case scenarios to identify safety vulnerabilities before deployment.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Probing a medical diagnosis AI system with adversarial examples and edge cases to identify failure modes that could lead to incorrect diagnoses, ensuring the system fails gracefully rather than confidently providing wrong information.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Systematically testing a hiring algorithm with inputs designed to reveal hidden biases, using adversarial examples to check if the system can be manipulated to discriminate against protected groups or favour certain demographics unfairly.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Systematically testing AI systems for security vulnerabilities including prompt injection, data exfiltration, jailbreaking, and model manipulation by simulating adversarial attacks. This helps identify security weaknesses before deployment and provides documented evidence for compliance with regulatory requirements such as EU AI Act Article 55 and ISO 42001 adversarial testing mandates.",
+          "goal": "Security"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires highly specialized expertise in both AI/ML systems and adversarial attack methods, making it expensive and difficult to scale across organizations."
+        },
+        {
+          "description": "Limited by the creativity and knowledge of red team members - can only discover vulnerabilities that testers think to explore, potentially missing novel attack vectors."
+        },
+        {
+          "description": "Time-intensive process that may not be feasible for rapid development cycles or resource-constrained projects, potentially delaying beneficial system deployments."
+        },
+        {
+          "description": "May not generalize to real-world adversarial scenarios, as red team attacks may differ significantly from actual malicious use patterns or user behaviours."
+        },
+        {
+          "description": "Risk of false confidence if red teaming is incomplete or superficial, leading organizations to believe systems are safer than they actually are."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Red Teaming LLM Applications - DeepLearning.AI",
+          "url": "https://www.deeplearning.ai/short-courses/red-teaming-llm-applications",
+          "source_type": "tutorial",
+          "authors": [
+            "Matteo Dora",
+            "Luca Martial"
+          ],
+          "publication_date": "2025",
+          "citationKey": "doraRedTeamingLLM2025"
+        },
+        {
+          "title": "PyRIT: The Python Risk Identification Tool for generative AI",
+          "url": "https://github.com/Azure/PyRIT",
+          "source_type": "software_package",
+          "publication_date": "2024-02",
+          "citationKey": "microsoftPyRITPythonRisk2024",
+          "abstract": "The Python Risk Identification Tool for generative AI (PyRIT) is an open source framework built to empower security professionals and engineers to proactively identify risks in generative AI systems."
+        },
+        {
+          "title": "Building Safe GenAI Applications: An End-to-End Overview of Red Teaming for Large Language Models",
+          "url": "https://www.semanticscholar.org/paper/a2fb135fc4bfa323bc92dd498ba45bcaf7259a02",
+          "source_type": "technical_paper",
+          "authors": [
+            "Alberto Purpura",
+            "Sahil Wadhwa",
+            "Jesse Zymet",
+            "Akshay Gupta",
+            "Andy Luo",
+            "Melissa Kazemi Rad",
+            "Swapnil Shinde",
+            "M. Sorower"
+          ],
+          "publication_date": "2025",
+          "citationKey": "purpuraBuildingSafeGenAI2025",
+          "abstract": "The rapid growth of Large Language Models (LLMs) presents significant privacy, security, and ethical concerns. While much research has proposed methods for defending LLM systems against misuse by malicious actors, researchers have recently complemented these efforts with an offensive approach that involves red teaming, i.e., proactively attacking LLMs with the purpose of identifying their vulnerabilities. This paper provides a concise and practical overview of the LLM red teaming literature, structured so as to describe a multi-component system end-to-end. To motivate red teaming we survey the initial safety needs of some high-profile LLMs, and then dive into the different components of a red teaming system as well as software packages for implementing them. We cover various attack methods, strategies for attack-success evaluation, metrics for assessing experiment outcomes, as well as a host of other considerations. Our survey will be useful for any reader who wants to rapidly obtain a grasp of the major red teaming concepts for their own use in practical applications."
+        },
+        {
+          "title": "Effective Automation to Support the Human Infrastructure in AI Red Teaming",
+          "url": "https://www.semanticscholar.org/paper/c42dcb3a795f970d657ee46537553634eea2b014",
+          "source_type": "technical_paper",
+          "authors": [
+            "Alice Qian Zhang",
+            "Jina Suh",
+            "Mary L. Gray",
+            "Hong Shen"
+          ],
+          "publication_date": "2025",
+          "citationKey": "qianzhangEffectiveAutomationSupport2025",
+          "abstract": "This forum focuses on the conditions and futures of the labor underpinning technology production and maintenance. We welcome standalone articles as well as interviews and conversations about all tech labor within the global supply chain of digital technologies. --- Seyram Avle and Sarah Fox, Editors"
+        },
+        {
+          "title": "Trojan Activation Attack: Red-Teaming Large Language Models using Steering Vectors for Safety-Alignment",
+          "url": "https://www.semanticscholar.org/paper/598df44f1d21a5d1fe3940c0bb2a6128a62c1c15",
+          "source_type": "technical_paper",
+          "authors": [
+            "Haoran Wang",
+            "Kai Shu"
+          ],
+          "publication_date": "2023",
+          "citationKey": "wangTrojanActivationAttack2023",
+          "abstract": "To ensure AI safety, instruction-tuned Large Language Models (LLMs) are specifically trained to ensure alignment, which refers to making models behave in accordance with human intentions. While these models have demonstrated commendable results on various safety benchmarks, the vulnerability of their safety alignment has not been extensively studied. This is particularly troubling given the potential harm that LLMs can inflict. Existing attack methods on LLMs often rely on poisoned training data or the injection of malicious prompts. These approaches compromise the stealthiness and generalizability of the attacks, making them susceptible to detection. Additionally, these models often demand substantial computational resources for implementation, making them less practical for real-world applications. In this work, we study a different attack scenario, called Trojan Activation Attack (TA2), which injects trojan steering vectors into the activation layers of LLMs. These malicious steering vectors can be triggered at inference time to steer the models toward attacker-desired behaviors by manipulating their activations. Our experiment results on four primary alignment tasks show that TA2 is highly effective and adds little or no overhead to attack efficiency. Additionally, we discuss potential countermeasures against such activation attacks."
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "adversarial-robustness-testing",
+        "jailbreak-resistance-testing",
+        "prompt-injection-testing",
+        "safety-envelope-testing"
+      ],
+      "sample_claims": [
+        {
+          "text": "The medical AI system maintains safe behavior when subjected to edge case scenarios and adversarial inputs designed to elicit harmful clinical recommendations",
+          "domain": "healthcare",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The financial advisory system resists attempts to extract confidential client information through social engineering scenarios and multi-turn manipulation strategies",
+          "domain": "finance",
+          "assuranceGoal": "security"
+        },
+        {
+          "text": "The public benefits allocation system withstands systematic probing designed to reveal exploitable pathways for discriminatory outcomes against protected groups",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The autonomous vehicle control system fails gracefully rather than catastrophically when exposed to creative adversarial scenarios that exploit edge cases in perception and decision-making",
+          "domain": "autonomous systems",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The conversational AI assistant resists goal misalignment attacks and jailbreak attempts that probe for ways to circumvent safety constraints through iterative prompt refinement",
+          "domain": "general",
+          "assuranceGoal": "security"
+        }
+      ]
+    },
+    {
+      "slug": "anomaly-detection",
+      "name": "Anomaly Detection",
+      "description": "Anomaly detection identifies unusual behaviours, inputs, or outputs that deviate significantly from established normal patterns using statistical, machine learning, or rule-based methods. Applied to AI/ML systems, it serves as a continuous monitoring mechanism that can flag unexpected model predictions, suspicious input patterns, data drift, adversarial attacks, or operational malfunctions. By establishing baselines of normal system behaviour and alerting when deviations exceed predefined thresholds, organisations can detect potential security threats, model degradation, fairness violations, or system failures before they cause significant harm.",
+      "assurance_goals": [
+        "General"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/system-deployment-and-use",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/algorithmic",
+        "assurance-goal-category/general"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Monitoring a content moderation AI system to detect when it starts flagging significantly more or fewer posts than usual, which could indicate model drift, adversarial attacks, or changes in user behaviour patterns that require immediate investigation to prevent harmful content from appearing.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Implementing anomaly detection on a medical diagnosis AI to identify when prediction confidence scores or feature importance patterns deviate from historical norms, helping catch model degradation or data quality issues that could lead to misdiagnoses before patients are affected.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Deploying anomaly detection on a hiring algorithm to monitor for unusual patterns in how candidates from different demographic groups are scored or rejected, enabling early detection of emerging bias issues or attempts to game the system through demographic manipulation.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Setting appropriate sensitivity thresholds is challenging and requires domain expertise, as overly sensitive settings generate excessive false alarms whilst conservative settings may miss genuine anomalies."
+        },
+        {
+          "description": "May generate false positives for legitimate edge cases or rare but valid system behaviours, potentially causing unnecessary alerts and disrupting normal operations."
+        },
+        {
+          "description": "Limited effectiveness against novel or sophisticated attacks that deliberately mimic normal patterns or gradually shift behaviour to avoid detection thresholds."
+        },
+        {
+          "description": "Requires substantial historical data to establish reliable baselines of normal behaviour, and may struggle with systems that have naturally high variability or seasonal patterns."
+        },
+        {
+          "description": "Detection lag can occur between when an anomaly begins and when it exceeds detection thresholds, potentially allowing harmful behaviour to persist during the detection window."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Anomaly Detection Toolkit (ADTK)",
+          "url": "https://adtk.readthedocs.io/en/stable",
+          "source_type": "documentation",
+          "publication_date": "2020",
+          "citationKey": "adtkdevelopersAnomalyDetectionToolkit2020"
+        },
+        {
+          "title": "TimeEval: Time Series Anomaly Detection Evaluation Framework",
+          "url": "https://timeeval.readthedocs.io",
+          "source_type": "documentation",
+          "publication_date": "2021",
+          "citationKey": "timeevaldevelopersTimeEvalTimeSeries2021"
+        },
+        {
+          "title": "DeepOD: Deep Learning for Outlier Detection",
+          "url": "https://deepod.readthedocs.io",
+          "source_type": "documentation",
+          "publication_date": "2022",
+          "citationKey": "deepoddevelopersDeepODDeepLearning2022"
+        },
+        {
+          "title": "A Beginner's Guide to Anomaly Detection Techniques in Data Science",
+          "url": "https://www.kdnuggets.com/2023/05/beginner-guide-anomaly-detection-techniques-data-science.html",
+          "source_type": "tutorial",
+          "authors": [
+            "Eugenia Anello"
+          ],
+          "publication_date": "2023",
+          "citationKey": "anelloBeginnersGuideAnomaly2023"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "out-of-domain-detection",
+        "out-of-distribution-detector-for-neural-networks",
+        "data-poisoning-detection",
+        "runtime-monitoring-and-circuit-breakers"
+      ],
+      "sample_claims": [
+        {
+          "text": "The system detects and alerts when model predictions deviate significantly from established baseline patterns during operational use",
+          "domain": "general",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The autonomous vehicle maintains continuous monitoring for sensor inputs and perception outputs that fall outside validated operational envelopes",
+          "domain": "autonomous systems",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The hiring system identifies unusual scoring patterns across demographic groups that may indicate emerging bias or system manipulation",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The production model flags incoming requests that exhibit characteristics inconsistent with normal traffic patterns",
+          "domain": "finance",
+          "assuranceGoal": "security"
+        },
+        {
+          "text": "The clinical decision support system alerts clinicians when prediction confidence or feature importance patterns deviate from historical norms",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        }
+      ]
+    },
+    {
+      "slug": "human-in-the-loop-safeguards",
+      "name": "Human-in-the-Loop Safeguards",
+      "description": "Human-in-the-loop safeguards establish systematic checkpoints where human experts review, validate, or override AI/ML system decisions before they take effect. This governance approach combines automated efficiency with human judgement by defining clear intervention criteria (such as uncertainty thresholds, risk levels, or sensitive contexts) that trigger mandatory human oversight. By incorporating domain expertise, ethical considerations, and contextual understanding that machines may lack, these safeguards help ensure that critical decisions maintain appropriate human accountability whilst preserving the benefits of automated processing for routine cases.",
+      "assurance_goals": [
+        "General"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/governance-framework",
@@ -3208,7 +3466,8 @@
         "expertise-needed/stakeholder-engagement",
         "lifecycle-stage/post-deployment",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/process"
+        "technique-type/process",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -3349,25 +3608,20 @@
       "name": "Confidence Thresholding",
       "description": "Confidence thresholding creates decision boundaries based on model uncertainty scores, routing predictions into different handling workflows depending on their confidence levels. High-confidence predictions (e.g., above 95%) proceed automatically, whilst medium-confidence cases (e.g., 70-95%) may trigger additional validation or human review, and low-confidence predictions (below 70%) receive extensive oversight or default to conservative fallback actions. This technique enables organisations to maintain automated efficiency for clear-cut cases whilst ensuring appropriate human intervention for uncertain decisions, balancing operational speed with risk management across safety-critical applications.",
       "assurance_goals": [
-        "Safety",
-        "Reliability",
-        "Transparency"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "applicable-models/requirements/probabilistic-output",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/reliability/uncertainty-quantification",
-        "assurance-goal-category/safety",
-        "assurance-goal-category/transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -3481,17 +3735,11 @@
       "name": "Runtime Monitoring and Circuit Breakers",
       "description": "Runtime monitoring and circuit breakers establish continuous surveillance of AI/ML systems in production, tracking critical metrics such as prediction accuracy, response times, input characteristics, output distributions, and system resource usage. When monitored parameters exceed predefined safety thresholds or exhibit anomalous patterns, automated circuit breakers immediately trigger protective actions including request throttling, service degradation, system shutdown, or failover to backup mechanisms. This approach provides real-time defensive capabilities that prevent cascading failures, ensure consistent service reliability, and maintain transparent operation status for stakeholders monitoring system health.",
       "assurance_goals": [
-        "Safety",
-        "Reliability",
-        "Transparency"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/safety",
-        "assurance-goal-category/safety/monitoring/anomaly-detection",
-        "assurance-goal-category/transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -3499,7 +3747,8 @@
         "expertise-needed/software-engineering",
         "lifecycle-stage/system-deployment-and-use",
         "lifecycle-stage/system-deployment-and-use/monitoring",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -3603,17 +3852,11 @@
       "name": "Model Cards",
       "description": "Model cards are standardised documentation frameworks that systematically document machine learning models through structured templates. The templates cover intended use cases, performance metrics across different demographic groups and operating conditions, training data characteristics, evaluation procedures, limitations, and ethical considerations. They serve as comprehensive technical specifications that enable informed model selection, prevent inappropriate deployment, support regulatory compliance, and facilitate fair assessment by providing transparent reporting of model capabilities and constraints across diverse populations and scenarios.",
       "assurance_goals": [
-        "Transparency",
-        "Fairness",
-        "Safety"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/fairness",
-        "assurance-goal-category/safety",
-        "assurance-goal-category/transparency",
-        "assurance-goal-category/transparency/documentation/model-card",
         "data-requirements/access-to-training-data",
         "data-requirements/sensitive-attributes",
         "data-type/any",
@@ -3623,7 +3866,8 @@
         "expertise-needed/statistics",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/documentation"
+        "technique-type/documentation",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -3735,16 +3979,11 @@
       "name": "Datasheets for Datasets",
       "description": "Datasheets for datasets establish comprehensive documentation standards for datasets, systematically recording creation methodology, data composition, collection procedures, preprocessing transformations, intended applications, potential biases, privacy considerations, and maintenance protocols. These structured documents enhance dataset transparency by providing essential context for appropriate usage, enabling informed decisions about dataset suitability for specific tasks, supporting bias detection and mitigation efforts, ensuring compliance with data protection regulations, and promoting responsible data stewardship throughout the entire data lifecycle from collection to disposal.",
       "assurance_goals": [
-        "Transparency",
-        "Fairness",
-        "Privacy"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/fairness",
-        "assurance-goal-category/privacy",
-        "assurance-goal-category/transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/documentation",
@@ -3753,7 +3992,8 @@
         "lifecycle-stage/data-handling",
         "lifecycle-stage/data-handling/collection",
         "lifecycle-stage/data-handling/preparation",
-        "technique-type/documentation"
+        "technique-type/documentation",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -3892,14 +4132,11 @@
       "name": "MLflow Experiment Tracking",
       "description": "MLflow is an open-source platform that tracks machine learning experiments by automatically logging parameters, metrics, models, and artifacts throughout the ML lifecycle. It provides a centralised repository for comparing different experimental runs, reproducing results, and managing model versions. Teams can track hyperparameters, evaluation metrics, model files, and execution environment details, creating a comprehensive audit trail that supports collaboration, reproducibility, and regulatory compliance across the entire machine learning development process.",
       "assurance_goals": [
-        "Transparency",
-        "Reliability"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/documentation",
@@ -3907,7 +4144,8 @@
         "expertise-needed/software-engineering",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/process"
+        "technique-type/process",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -4024,14 +4262,11 @@
       "name": "Data Version Control",
       "description": "Data Version Control (DVC) is a Git-like version control system specifically designed for machine learning data, models, and experiments. It tracks changes to large data files, maintains reproducible ML pipelines, and creates a complete audit trail of data transformations, model training, and evaluation processes. DVC works alongside Git to provide end-to-end lineage tracking from raw data through preprocessing, training, and deployment, enabling teams to reproduce any model version and understand exactly how datasets evolved throughout the ML lifecycle.",
       "assurance_goals": [
-        "Transparency",
-        "Reliability"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/documentation",
@@ -4040,7 +4275,8 @@
         "lifecycle-stage/data-handling",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/process"
+        "technique-type/process",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -4139,15 +4375,11 @@
       "name": "Automated Documentation Generation",
       "description": "Automated documentation generation creates and maintains up-to-date documentation using various methods including programmatic scripts, large language models (LLMs), and extraction tools. These approaches can capture model architectures, data schemas, feature importance, performance metrics, API specifications, and lineage information without manual writing. Methods range from traditional code parsing and template-based generation to modern AI-assisted documentation that can understand context and generate human-readable explanations.",
       "assurance_goals": [
-        "Transparency",
-        "Reliability"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/transparency",
-        "assurance-goal-category/transparency/documentation",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/documentation",
@@ -4155,7 +4387,8 @@
         "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
         "lifecycle-stage/project-design",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -7261,16 +7494,11 @@
       "name": "Model Development Audit Trails",
       "description": "Model development audit trails create comprehensive, immutable records of all decisions, experiments, and changes throughout the ML lifecycle. This technique captures dataset versions, training configurations, hyperparameter searches, model architecture changes, evaluation results, and deployment decisions in tamper-evident logs. Audit trails enable reproducibility, accountability, and regulatory compliance by documenting who made what changes when and why, supporting post-hoc investigation of model failures or unexpected behaviours.",
       "assurance_goals": [
-        "Transparency",
-        "Reliability",
-        "Safety"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/transparency",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/safety",
         "data-type/any",
         "lifecycle-stage/project-planning",
         "lifecycle-stage/data-collection",
@@ -7283,7 +7511,8 @@
         "evidence-type/documentation",
         "expertise-needed/software-engineering",
         "expertise-needed/ml-engineering",
-        "data-requirements/no-special-requirements"
+        "data-requirements/no-special-requirements",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -9851,5 +10080,5 @@
       ]
     }
   ],
-  "count": 69
+  "count": 71
 }

@@ -11,19 +11,11 @@
       "name": "Red Teaming",
       "description": "Red teaming involves systematic adversarial testing of AI/ML systems by dedicated specialists who attempt to identify flaws, vulnerabilities, harmful outputs, and ways to circumvent safety measures. Drawing from cybersecurity practices, red teams employ diverse attack vectors including prompt injection, adversarial examples, edge case exploitation, social engineering scenarios, and goal misalignment probes. Unlike standard testing that validates expected behaviour, red teaming specifically seeks to break systems through creative and adversarial approaches, revealing non-obvious risks and failure modes that could be exploited maliciously or cause harm in deployment.",
       "assurance_goals": [
-        "Safety",
-        "Reliability",
-        "Fairness",
-        "Security"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/fairness",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/safety",
-        "assurance-goal-category/security",
-        "assurance-goal-category/security/vulnerability-assessment",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/documentation",
@@ -32,7 +24,8 @@
         "expertise-needed/security",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/procedural"
+        "technique-type/procedural",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -175,17 +168,11 @@
       "name": "Model Cards",
       "description": "Model cards are standardised documentation frameworks that systematically document machine learning models through structured templates. The templates cover intended use cases, performance metrics across different demographic groups and operating conditions, training data characteristics, evaluation procedures, limitations, and ethical considerations. They serve as comprehensive technical specifications that enable informed model selection, prevent inappropriate deployment, support regulatory compliance, and facilitate fair assessment by providing transparent reporting of model capabilities and constraints across diverse populations and scenarios.",
       "assurance_goals": [
-        "Transparency",
-        "Fairness",
-        "Safety"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/fairness",
-        "assurance-goal-category/safety",
-        "assurance-goal-category/transparency",
-        "assurance-goal-category/transparency/documentation/model-card",
         "data-requirements/access-to-training-data",
         "data-requirements/sensitive-attributes",
         "data-type/any",
@@ -195,7 +182,8 @@
         "expertise-needed/statistics",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/documentation"
+        "technique-type/documentation",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -307,16 +295,11 @@
       "name": "Datasheets for Datasets",
       "description": "Datasheets for datasets establish comprehensive documentation standards for datasets, systematically recording creation methodology, data composition, collection procedures, preprocessing transformations, intended applications, potential biases, privacy considerations, and maintenance protocols. These structured documents enhance dataset transparency by providing essential context for appropriate usage, enabling informed decisions about dataset suitability for specific tasks, supporting bias detection and mitigation efforts, ensuring compliance with data protection regulations, and promoting responsible data stewardship throughout the entire data lifecycle from collection to disposal.",
       "assurance_goals": [
-        "Transparency",
-        "Fairness",
-        "Privacy"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/fairness",
-        "assurance-goal-category/privacy",
-        "assurance-goal-category/transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/documentation",
@@ -325,7 +308,8 @@
         "lifecycle-stage/data-handling",
         "lifecycle-stage/data-handling/collection",
         "lifecycle-stage/data-handling/preparation",
-        "technique-type/documentation"
+        "technique-type/documentation",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -464,14 +448,11 @@
       "name": "MLflow Experiment Tracking",
       "description": "MLflow is an open-source platform that tracks machine learning experiments by automatically logging parameters, metrics, models, and artifacts throughout the ML lifecycle. It provides a centralised repository for comparing different experimental runs, reproducing results, and managing model versions. Teams can track hyperparameters, evaluation metrics, model files, and execution environment details, creating a comprehensive audit trail that supports collaboration, reproducibility, and regulatory compliance across the entire machine learning development process.",
       "assurance_goals": [
-        "Transparency",
-        "Reliability"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/documentation",
@@ -479,7 +460,8 @@
         "expertise-needed/software-engineering",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/process"
+        "technique-type/process",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -596,14 +578,11 @@
       "name": "Data Version Control",
       "description": "Data Version Control (DVC) is a Git-like version control system specifically designed for machine learning data, models, and experiments. It tracks changes to large data files, maintains reproducible ML pipelines, and creates a complete audit trail of data transformations, model training, and evaluation processes. DVC works alongside Git to provide end-to-end lineage tracking from raw data through preprocessing, training, and deployment, enabling teams to reproduce any model version and understand exactly how datasets evolved throughout the ML lifecycle.",
       "assurance_goals": [
-        "Transparency",
-        "Reliability"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/documentation",
@@ -612,7 +591,8 @@
         "lifecycle-stage/data-handling",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/process"
+        "technique-type/process",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -711,15 +691,11 @@
       "name": "Automated Documentation Generation",
       "description": "Automated documentation generation creates and maintains up-to-date documentation using various methods including programmatic scripts, large language models (LLMs), and extraction tools. These approaches can capture model architectures, data schemas, feature importance, performance metrics, API specifications, and lineage information without manual writing. Methods range from traditional code parsing and template-based generation to modern AI-assisted documentation that can understand context and generate human-readable explanations.",
       "assurance_goals": [
-        "Transparency",
-        "Reliability"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/transparency",
-        "assurance-goal-category/transparency/documentation",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/documentation",
@@ -727,7 +703,8 @@
         "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
         "lifecycle-stage/project-design",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -1000,16 +977,11 @@
       "name": "Model Development Audit Trails",
       "description": "Model development audit trails create comprehensive, immutable records of all decisions, experiments, and changes throughout the ML lifecycle. This technique captures dataset versions, training configurations, hyperparameter searches, model architecture changes, evaluation results, and deployment decisions in tamper-evident logs. Audit trails enable reproducibility, accountability, and regulatory compliance by documenting who made what changes when and why, supporting post-hoc investigation of model failures or unexpected behaviours.",
       "assurance_goals": [
-        "Transparency",
-        "Reliability",
-        "Safety"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/transparency",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/safety",
         "data-type/any",
         "lifecycle-stage/project-planning",
         "lifecycle-stage/data-collection",
@@ -1022,7 +994,8 @@
         "evidence-type/documentation",
         "expertise-needed/software-engineering",
         "expertise-needed/ml-engineering",
-        "data-requirements/no-special-requirements"
+        "data-requirements/no-special-requirements",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {

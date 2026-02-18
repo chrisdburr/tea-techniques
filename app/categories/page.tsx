@@ -3,6 +3,7 @@ import {
   Brain,
   CheckCircle,
   Eye,
+  Globe,
   HelpCircle,
   Lock,
   Scale,
@@ -19,6 +20,7 @@ import { getAllTechniquesMetadata, getAssuranceGoals } from '@/lib/data';
 const goalIconsMap = {
   Explainability: Brain,
   Fairness: Scale,
+  General: Globe,
   Security: Shield,
   Safety: ShieldCheck,
   Reliability: CheckCircle,
@@ -42,10 +44,16 @@ export default async function CategoriesPage() {
   ]);
 
   // Count techniques per goal and convert to IndexPageChildItem format
+  const generalCount = techniques.filter((t) =>
+    t.assurance_goals?.includes('General')
+  ).length;
+
   const goalItems: IndexPageChildItem[] = goals.map((goal) => {
-    const techniqueCount = techniques.filter((t) =>
+    const directCount = techniques.filter((t) =>
       t.assurance_goals?.includes(goal.name)
     ).length;
+    const techniqueCount =
+      goal.name !== 'General' ? directCount + generalCount : directCount;
 
     // Get the appropriate icon from the goalIconsMap
     const IconComponent =

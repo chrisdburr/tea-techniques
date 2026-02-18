@@ -34,6 +34,7 @@ export const wizardConfig: WizardConfig = {
       helpItems: {
         Explainability: 'Understanding how AI makes decisions',
         Fairness: 'Ensuring equitable treatment across groups',
+        General: 'Cross-cutting techniques applicable to any assurance goal',
         Privacy: 'Protecting personal information',
         Reliability: 'Consistent and predictable performance',
         Safety: 'Preventing harm and ensuring safe operation',

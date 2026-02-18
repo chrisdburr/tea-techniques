@@ -55,6 +55,10 @@ function scoreAssuranceGoal(
   technique: Technique,
   answer: string | string[]
 ): number {
+  // General techniques match any selected goal
+  if (technique.assurance_goals?.includes('General')) {
+    return 100;
+  }
   const answers = Array.isArray(answer) ? answer : [answer];
   return answers.some((goal) => technique.assurance_goals?.includes(goal))
     ? 100
@@ -391,6 +395,10 @@ function getAssuranceGoalReason(
   technique: Technique,
   answer: string | string[]
 ): string | null {
+  // General techniques support any goal
+  if (technique.assurance_goals?.includes('General')) {
+    return 'General (cross-cutting)';
+  }
   const answers = Array.isArray(answer) ? answer : [answer];
   const matchedGoals = answers.filter((goal) =>
     technique.assurance_goals?.includes(goal)

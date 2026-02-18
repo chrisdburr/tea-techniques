@@ -46,6 +46,7 @@ export function WizardResultCard({
       [
         'Transparency',
         'Fairness',
+        'General',
         'Safety',
         'Reliability',
         'Privacy',

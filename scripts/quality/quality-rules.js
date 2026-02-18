@@ -65,6 +65,10 @@ export const GOAL_CONDITIONAL_RULES = {
     must: [],
     should: ['assurance-goal-category/transparency/'],
   },
+  General: {
+    must: [],
+    should: ['assurance-goal-category/general'],
+  },
 };
 
 /**

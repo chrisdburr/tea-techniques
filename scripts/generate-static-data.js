@@ -150,6 +150,15 @@ function extractAssuranceGoals(techniques) {
     }
   }
 
+  // Inflate non-General goal counts by adding the General count
+  // so that assurance-goals.json counts match what appears on each category page
+  const generalCount = goalCounts.General?.count || 0;
+  for (const goal of Object.values(goalCounts)) {
+    if (goal.name !== 'General') {
+      goal.count += generalCount;
+    }
+  }
+
   return Object.values(goalCounts).sort((a, b) => a.name.localeCompare(b.name));
 }
 
@@ -202,8 +211,11 @@ async function generateCategoryData(techniques, assuranceGoals) {
   // Generate main category files
   await Promise.all(
     assuranceGoals.map((goal) => {
-      const categoryTechniques = techniques.filter((technique) =>
-        technique.assurance_goals?.includes(goal.name)
+      const categoryTechniques = techniques.filter(
+        (technique) =>
+          technique.assurance_goals?.includes(goal.name) ||
+          (goal.name !== 'General' &&
+            technique.assurance_goals?.includes('General'))
       );
 
       return fs.writeFile(
@@ -389,8 +401,11 @@ async function generateCategorySearchIndices(techniques, assuranceGoals) {
   // Generate search index for each assurance goal
   await Promise.all(
     assuranceGoals.map(async (goal) => {
-      const categoryTechniques = techniques.filter((technique) =>
-        technique.assurance_goals?.includes(goal.name)
+      const categoryTechniques = techniques.filter(
+        (technique) =>
+          technique.assurance_goals?.includes(goal.name) ||
+          (goal.name !== 'General' &&
+            technique.assurance_goals?.includes('General'))
       );
 
       const categorySearchIndex = generateSearchIndex(categoryTechniques);
@@ -432,6 +447,7 @@ function getGoalDescription(goal) {
       'Protecting AI systems from malicious attacks and unauthorized access.',
     Transparency:
       'Making AI systems and their decision-making processes open and understandable.',
+    General: 'Cross-cutting techniques that support any assurance goal.',
   };
   return descriptions[goal] || `Techniques related to ${goal.toLowerCase()}.`;
 }

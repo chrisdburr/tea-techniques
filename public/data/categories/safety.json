@@ -2,7 +2,7 @@
   "goal": {
     "name": "Safety",
     "slug": "safety",
-    "count": 37,
+    "count": 42,
     "description": "Ensuring AI systems operate safely and do not cause harm."
   },
   "techniques": [
@@ -752,6 +752,140 @@
       ]
     },
     {
+      "slug": "cross-validation",
+      "name": "Cross-validation",
+      "description": "Cross-validation evaluates model performance and robustness by systematically partitioning data into multiple subsets (folds) and training/testing repeatedly on different combinations. Common approaches include k-fold (splitting into k equal parts), stratified (preserving class distributions), and leave-one-out variants. By testing on multiple independent holdout sets, it reveals how performance varies across different data subsamples, provides robust estimates of generalisation ability, and helps detect overfitting or model instability that single train-test splits might miss.",
+      "assurance_goals": [
+        "General"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic",
+        "assurance-goal-category/general"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Using 10-fold cross-validation to estimate a healthcare prediction model's true accuracy and detect overfitting, ensuring robust performance estimates that generalise beyond the specific training sample to new patient populations.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing transparent model evaluation in regulatory submissions by showing consistent performance across multiple validation folds, demonstrating to auditors that model performance claims are not cherry-picked from a single favourable test set.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring fair model evaluation across demographic groups by using stratified cross-validation that maintains representative proportions of protected classes in each fold, revealing whether performance is consistent across different population segments.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive for large datasets or complex models, requiring multiple training runs that scale linearly with the number of folds."
+        },
+        {
+          "description": "Can provide overly optimistic performance estimates when data has dependencies or structure (e.g., time series, grouped observations) that violate independence assumptions."
+        },
+        {
+          "description": "May not reflect real-world performance if the training data distribution differs significantly from future deployment conditions or population shifts."
+        },
+        {
+          "description": "Choice of fold number (k) involves a bias-variance trade-off: fewer folds reduce computational cost but increase variance in estimates, whilst more folds increase computation but may introduce bias."
+        },
+        {
+          "description": "Standard cross-validation doesn't account for temporal ordering in sequential data, potentially leading to data leakage where future information influences past predictions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Cross-validation: evaluating estimator performance",
+          "url": "https://scikit-learn.org/stable/modules/cross_validation.html",
+          "source_type": "documentation",
+          "authors": [
+            "Scikit-learn Developers"
+          ],
+          "publication_date": "2007",
+          "citationKey": "scikit-learndevelopersCrossvalidationEvaluatingEstimator2007"
+        },
+        {
+          "title": "Cross-validation: what does it estimate and how well does it do it?",
+          "url": "http://arxiv.org/abs/2104.00673v4",
+          "source_type": "technical_paper",
+          "authors": [
+            "Stephen Bates",
+            "Trevor Hastie",
+            "Robert Tibshirani"
+          ],
+          "publication_date": "2021-04-01",
+          "citationKey": "batesCrossvalidationWhatDoes2021",
+          "abstract": "Cross-validation is a widely-used technique to estimate prediction error, but its behavior is complex and not fully understood. Ideally, one would like to think that cross-validation estimates the prediction error for the model at hand, fit to the training data. We prove that this is not the case for the linear model fit by ordinary least squares; rather it estimates the average prediction error of models fit on other unseen training sets drawn from the same population. We further show that this phenomenon occurs for most popular estimates of prediction error, including data splitting, bootstrapping, and Mallow's Cp. Next, the standard confidence intervals for prediction error derived from cross-validation may have coverage far below the desired level. Because each data point is used for both training and testing, there are correlations among the measured accuracies for each fold, and so the usual estimate of variance is too small. We introduce a nested cross-validation scheme to estimate this variance more accurately, and we show empirically that this modification leads to intervals with approximately correct coverage in many examples where traditional cross-validation intervals fail."
+        },
+        {
+          "title": "A Study of Cross-Validation and Bootstrap for Accuracy Estimation and Model Selection",
+          "url": "https://www.ijcai.org/Proceedings/95-2/Papers/016.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ron Kohavi"
+          ],
+          "publication_date": "1995-01-01",
+          "citationKey": "kohaviStudyCrossValidationBootstrap1995"
+        },
+        {
+          "title": "Cross-Validation in Machine Learning: How to Do It Right",
+          "url": "https://neptune.ai/blog/cross-validation-in-machine-learning-how-to-do-it-right",
+          "source_type": "tutorial",
+          "authors": [
+            "Vladimir Lyashenko"
+          ],
+          "publication_date": "2022-07-21",
+          "citationKey": "lyashenkoCrossValidationMachineLearning2022"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "bootstrapping",
+        "jackknife-resampling",
+        "permutation-tests",
+        "area-under-precision-recall-curve"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's performance estimate is robust to the particular train-test partition used",
+          "domain": "general",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The fraud detection system generalizes consistently across different subsets of historical transaction data",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The diagnostic model's validation results are reproducible across multiple independent holdout sets",
+          "domain": "healthcare",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The system maintains equitable performance across demographic groups when evaluated on different data partitions",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The model's accuracy claims reflect genuine predictive capability rather than overfitting to a single test set",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        }
+      ]
+    },
+    {
       "slug": "safety-envelope-testing",
       "name": "Safety Envelope Testing",
       "description": "Safety envelope testing systematically evaluates AI system performance at the boundaries of its intended operational domain to identify potential failure modes before deployment. The technique involves defining the system's operational design domain (ODD), creating test scenarios that approach or exceed these boundaries, and measuring performance degradation as conditions become more challenging. By testing edge cases, environmental extremes, and boundary conditions, it reveals where the system transitions from safe to unsafe operation, enabling the establishment of clear operational limits and safety margins for deployment.",
@@ -892,19 +1026,11 @@
       "name": "Internal Review Boards",
       "description": "Internal Review Boards (IRBs) provide independent, systematic evaluation of AI/ML projects throughout their lifecycle to identify ethical, safety, and societal risks before they materialise. Typically composed of multidisciplinary experts including ethicists, domain specialists, legal counsel, community representatives, and technical staff, IRBs review project proposals, assess potential harms to individuals and communities, evaluate mitigation strategies, and establish ongoing monitoring requirements. Unlike traditional research ethics committees, AI-focused IRBs address algorithmic bias, fairness concerns, privacy implications, and societal impact at scale, providing essential governance for responsible AI development and deployment.",
       "assurance_goals": [
-        "Safety",
-        "Fairness",
-        "Transparency"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/fairness",
-        "assurance-goal-category/fairness/bias-assessment",
-        "assurance-goal-category/safety",
-        "assurance-goal-category/safety/risk-identification",
-        "assurance-goal-category/transparency",
-        "assurance-goal-category/transparency/governance-disclosure",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/decision-record",
@@ -914,12 +1040,12 @@
         "expertise-needed/ethics",
         "expertise-needed/legal",
         "expertise-needed/regulatory-compliance",
-        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "lifecycle-stage/post-deployment",
         "lifecycle-stage/project-planning",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/process"
+        "technique-type/process",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -1023,19 +1149,11 @@
       "name": "Red Teaming",
       "description": "Red teaming involves systematic adversarial testing of AI/ML systems by dedicated specialists who attempt to identify flaws, vulnerabilities, harmful outputs, and ways to circumvent safety measures. Drawing from cybersecurity practices, red teams employ diverse attack vectors including prompt injection, adversarial examples, edge case exploitation, social engineering scenarios, and goal misalignment probes. Unlike standard testing that validates expected behaviour, red teaming specifically seeks to break systems through creative and adversarial approaches, revealing non-obvious risks and failure modes that could be exploited maliciously or cause harm in deployment.",
       "assurance_goals": [
-        "Safety",
-        "Reliability",
-        "Fairness",
-        "Security"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/fairness",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/safety",
-        "assurance-goal-category/security",
-        "assurance-goal-category/security/vulnerability-assessment",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/documentation",
@@ -1044,7 +1162,8 @@
         "expertise-needed/security",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/procedural"
+        "technique-type/procedural",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -1187,19 +1306,12 @@
       "name": "Anomaly Detection",
       "description": "Anomaly detection identifies unusual behaviours, inputs, or outputs that deviate significantly from established normal patterns using statistical, machine learning, or rule-based methods. Applied to AI/ML systems, it serves as a continuous monitoring mechanism that can flag unexpected model predictions, suspicious input patterns, data drift, adversarial attacks, or operational malfunctions. By establishing baselines of normal system behaviour and alerting when deviations exceed predefined thresholds, organisations can detect potential security threats, model degradation, fairness violations, or system failures before they cause significant harm.",
       "assurance_goals": [
-        "Safety",
-        "Reliability",
-        "Fairness",
-        "Security"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "applicable-models/requirements/training-data",
-        "assurance-goal-category/fairness",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/safety",
-        "assurance-goal-category/safety/monitoring/anomaly-detection",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -1207,7 +1319,8 @@
         "expertise-needed/statistics",
         "lifecycle-stage/system-deployment-and-use",
         "lifecycle-stage/system-deployment-and-use/monitoring",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -1314,19 +1427,11 @@
       "name": "Human-in-the-Loop Safeguards",
       "description": "Human-in-the-loop safeguards establish systematic checkpoints where human experts review, validate, or override AI/ML system decisions before they take effect. This governance approach combines automated efficiency with human judgement by defining clear intervention criteria (such as uncertainty thresholds, risk levels, or sensitive contexts) that trigger mandatory human oversight. By incorporating domain expertise, ethical considerations, and contextual understanding that machines may lack, these safeguards help ensure that critical decisions maintain appropriate human accountability whilst preserving the benefits of automated processing for routine cases.",
       "assurance_goals": [
-        "Safety",
-        "Transparency",
-        "Fairness"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/fairness",
-        "assurance-goal-category/fairness/procedural",
-        "assurance-goal-category/safety",
-        "assurance-goal-category/safety/human-oversight",
-        "assurance-goal-category/transparency",
-        "assurance-goal-category/transparency/accountability",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/governance-framework",
@@ -1335,7 +1440,8 @@
         "expertise-needed/stakeholder-engagement",
         "lifecycle-stage/post-deployment",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/process"
+        "technique-type/process",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -1476,25 +1582,20 @@
       "name": "Confidence Thresholding",
       "description": "Confidence thresholding creates decision boundaries based on model uncertainty scores, routing predictions into different handling workflows depending on their confidence levels. High-confidence predictions (e.g., above 95%) proceed automatically, whilst medium-confidence cases (e.g., 70-95%) may trigger additional validation or human review, and low-confidence predictions (below 70%) receive extensive oversight or default to conservative fallback actions. This technique enables organisations to maintain automated efficiency for clear-cut cases whilst ensuring appropriate human intervention for uncertain decisions, balancing operational speed with risk management across safety-critical applications.",
       "assurance_goals": [
-        "Safety",
-        "Reliability",
-        "Transparency"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "applicable-models/requirements/probabilistic-output",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/reliability/uncertainty-quantification",
-        "assurance-goal-category/safety",
-        "assurance-goal-category/transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -1608,17 +1709,11 @@
       "name": "Runtime Monitoring and Circuit Breakers",
       "description": "Runtime monitoring and circuit breakers establish continuous surveillance of AI/ML systems in production, tracking critical metrics such as prediction accuracy, response times, input characteristics, output distributions, and system resource usage. When monitored parameters exceed predefined safety thresholds or exhibit anomalous patterns, automated circuit breakers immediately trigger protective actions including request throttling, service degradation, system shutdown, or failover to backup mechanisms. This approach provides real-time defensive capabilities that prevent cascading failures, ensure consistent service reliability, and maintain transparent operation status for stakeholders monitoring system health.",
       "assurance_goals": [
-        "Safety",
-        "Reliability",
-        "Transparency"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/safety",
-        "assurance-goal-category/safety/monitoring/anomaly-detection",
-        "assurance-goal-category/transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -1626,7 +1721,8 @@
         "expertise-needed/software-engineering",
         "lifecycle-stage/system-deployment-and-use",
         "lifecycle-stage/system-deployment-and-use/monitoring",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -1730,17 +1826,11 @@
       "name": "Model Cards",
       "description": "Model cards are standardised documentation frameworks that systematically document machine learning models through structured templates. The templates cover intended use cases, performance metrics across different demographic groups and operating conditions, training data characteristics, evaluation procedures, limitations, and ethical considerations. They serve as comprehensive technical specifications that enable informed model selection, prevent inappropriate deployment, support regulatory compliance, and facilitate fair assessment by providing transparent reporting of model capabilities and constraints across diverse populations and scenarios.",
       "assurance_goals": [
-        "Transparency",
-        "Fairness",
-        "Safety"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/fairness",
-        "assurance-goal-category/safety",
-        "assurance-goal-category/transparency",
-        "assurance-goal-category/transparency/documentation/model-card",
         "data-requirements/access-to-training-data",
         "data-requirements/sensitive-attributes",
         "data-type/any",
@@ -1750,7 +1840,8 @@
         "expertise-needed/statistics",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
-        "technique-type/documentation"
+        "technique-type/documentation",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -1854,6 +1945,527 @@
           "text": "The system's training data characteristics, evaluation procedures, and ethical considerations are comprehensively documented",
           "domain": "public sector",
           "assuranceGoal": "transparency"
+        }
+      ]
+    },
+    {
+      "slug": "datasheets-for-datasets",
+      "name": "Datasheets for Datasets",
+      "description": "Datasheets for datasets establish comprehensive documentation standards for datasets, systematically recording creation methodology, data composition, collection procedures, preprocessing transformations, intended applications, potential biases, privacy considerations, and maintenance protocols. These structured documents enhance dataset transparency by providing essential context for appropriate usage, enabling informed decisions about dataset suitability for specific tasks, supporting bias detection and mitigation efforts, ensuring compliance with data protection regulations, and promoting responsible data stewardship throughout the entire data lifecycle from collection to disposal.",
+      "assurance_goals": [
+        "General"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/documentation",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/regulatory-compliance",
+        "lifecycle-stage/data-handling",
+        "lifecycle-stage/data-handling/collection",
+        "lifecycle-stage/data-handling/preparation",
+        "technique-type/documentation",
+        "assurance-goal-category/general"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Documenting a medical imaging dataset with detailed information about patient privacy protections, anonymisation procedures, and data sharing constraints to ensure sensitive health information is handled appropriately and regulatory compliance is maintained.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Creating comprehensive datasheets for recruitment datasets that document demographic representation across different job categories, helping developers identify potential bias in training data and develop more equitable hiring algorithms.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Establishing transparent documentation for financial transaction datasets that clearly describes data collection methodology, preprocessing steps, and intended use cases, enabling researchers to make informed decisions about dataset appropriateness for their specific applications.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Creating thorough datasheets requires significant time investment and domain expertise to properly document collection methods, biases, and ethical considerations, potentially delaying dataset release or publication."
+        },
+        {
+          "description": "Information may become outdated as datasets undergo preprocessing, cleaning, or augmentation, requiring ongoing maintenance to ensure documentation accuracy throughout the data lifecycle."
+        },
+        {
+          "description": "Absence of standardised templates and enforcement mechanisms leads to inconsistent documentation quality and completeness across different organisations and research communities."
+        },
+        {
+          "description": "Dataset creators may intentionally omit sensitive information about collection methods, participant consent, or potential biases to avoid legal liability or competitive disadvantage."
+        },
+        {
+          "description": "Limited adoption and awareness means many existing datasets lack proper documentation, creating gaps in the historical record and making legacy dataset assessment difficult."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Datasheets for Datasets",
+          "url": "https://arxiv.org/abs/1803.09010",
+          "source_type": "technical_paper",
+          "authors": [
+            "Timnit Gebru",
+            "Jamie Morgenstern",
+            "Briana Vecchione",
+            "Jennifer Wortman Vaughan",
+            "Hanna Wallach",
+            "Hal Daumé",
+            "Kate Crawford"
+          ],
+          "publication_date": "2018-03-23",
+          "citationKey": "gebruDatasheetsDatasets2018",
+          "abstract": "The machine learning community currently has no standardized process for documenting datasets, which can lead to severe consequences in high-stakes domains. To address this gap, we propose datasheets for datasets. In the electronics industry, every component, no matter how simple or complex, is accompanied with a datasheet that describes its operating characteristics, test results, recommended uses, and other information. By analogy, we propose that every dataset be accompanied with a datasheet that documents its motivation, composition, collection process, recommended uses, and so on. Datasheets for datasets will facilitate better communication between dataset creators and dataset consumers, and encourage the machine learning community to prioritize transparency and accountability."
+        },
+        {
+          "title": "Datasheets for AI and medical datasets (DAIMS): a data validation and documentation framework before machine learning analysis in medical research",
+          "url": "http://arxiv.org/abs/2501.14094v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ramtin Zargari Marandi",
+            "Anne Svane Frahm",
+            "Maja Milojevic"
+          ],
+          "publication_date": "2025-01-23",
+          "citationKey": "zargarimarandiDatasheetsAIMedical2025",
+          "abstract": "Despite progresses in data engineering, there are areas with limited consistencies across data validation and documentation procedures causing confusions and technical problems in research involving machine learning. There have been progresses by introducing frameworks like \"Datasheets for Datasets\", however there are areas for improvements to prepare datasets, ready for ML pipelines. Here, we extend the framework to \"Datasheets for AI and medical datasets - DAIMS.\" Our publicly available solution, DAIMS, provides a checklist including data standardization requirements, a software tool to assist the process of the data preparation, an extended form for data documentation and pose research questions, a table as data dictionary, and a flowchart to suggest ML analyses to address the research questions. The checklist consists of 24 common data standardization requirements, where the tool checks and validate a subset of them. In addition, we provided a flowchart mapping research questions to suggested ML methods. DAIMS can serve as a reference for standardizing datasets and a roadmap for researchers aiming to apply effective ML techniques in their medical research endeavors. DAIMS is available on GitHub and as an online app to automate key aspects of dataset evaluation, facilitating efficient preparation of datasets for ML studies."
+        },
+        {
+          "title": "MT-Adapted Datasheets for Datasets: Template and Repository",
+          "url": "http://arxiv.org/abs/2005.13156v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Marta R. Costa-jussà",
+            "Roger Creus",
+            "Oriol Domingo",
+            "Albert Domínguez",
+            "Miquel Escobar",
+            "Cayetana López",
+            "Marina Garcia",
+            "Margarita Geleta"
+          ],
+          "publication_date": "2020-05-27",
+          "citationKey": "r.costa-jussaMTAdaptedDatasheetsDatasets2020",
+          "abstract": "In this report we are taking the standardized model proposed by Gebru et al. (2018) for documenting the popular machine translation datasets of the EuroParl (Koehn, 2005) and News-Commentary (Barrault et al., 2019). Within this documentation process, we have adapted the original datasheet to the particular case of data consumers within the Machine Translation area. We are also proposing a repository for collecting the adapted datasheets in this research area"
+        },
+        {
+          "title": "Understanding Machine Learning Practitioners' Data Documentation Perceptions, Needs, Challenges, and Desiderata",
+          "url": "http://arxiv.org/abs/2206.02923v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Amy K. Heger",
+            "Liz B. Marquis",
+            "Mihaela Vorvoreanu",
+            "Hanna Wallach",
+            "Jennifer Wortman Vaughan"
+          ],
+          "publication_date": "2022-06-06",
+          "citationKey": "k.hegerUnderstandingMachineLearning2022",
+          "abstract": "Data is central to the development and evaluation of machine learning (ML) models. However, the use of problematic or inappropriate datasets can result in harms when the resulting models are deployed. To encourage responsible AI practice through more deliberate reflection on datasets and transparency around the processes by which they are created, researchers and practitioners have begun to advocate for increased data documentation and have proposed several data documentation frameworks. However, there is little research on whether these data documentation frameworks meet the needs of ML practitioners, who both create and consume datasets. To address this gap, we set out to understand ML practitioners' data documentation perceptions, needs, challenges, and desiderata, with the goal of deriving design requirements that can inform future data documentation frameworks. We conducted a series of semi-structured interviews with 14 ML practitioners at a single large, international technology company. We had them answer a list of questions taken from datasheets for datasets (Gebru, 2021). Our findings show that current approaches to data documentation are largely ad hoc and myopic in nature. Participants expressed needs for data documentation frameworks to be adaptable to their contexts, integrated into their existing tools and workflows, and automated wherever possible. Despite the fact that data documentation frameworks are often motivated from the perspective of responsible AI, participants did not make the connection between the questions that they were asked to answer and their responsible AI implications. In addition, participants often had difficulties prioritizing the needs of dataset consumers and providing information that someone unfamiliar with their datasets might need to know. Based on these findings, we derive seven design requirements for future data documentation frameworks."
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "model-cards",
+        "data-version-control",
+        "automated-documentation-generation",
+        "synthetic-data-evaluation"
+      ],
+      "sample_claims": [
+        {
+          "text": "The training dataset's collection methodology, participant consent procedures, and intended use constraints are documented and accessible to model developers",
+          "domain": "healthcare",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The dataset composition across demographic groups and protected characteristics is documented to enable bias detection during model development",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The dataset's privacy protections, anonymisation procedures, and re-identification risks are documented before data sharing",
+          "domain": "healthcare",
+          "assuranceGoal": "privacy"
+        },
+        {
+          "text": "The data provenance from original sources through preprocessing transformations is traceable for regulatory review",
+          "domain": "public sector",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The environmental sensing dataset documents geographic coverage, temporal distribution, and known measurement biases across different operating conditions",
+          "domain": "environmental",
+          "assuranceGoal": "fairness"
+        }
+      ]
+    },
+    {
+      "slug": "mlflow-experiment-tracking",
+      "name": "MLflow Experiment Tracking",
+      "description": "MLflow is an open-source platform that tracks machine learning experiments by automatically logging parameters, metrics, models, and artifacts throughout the ML lifecycle. It provides a centralised repository for comparing different experimental runs, reproducing results, and managing model versions. Teams can track hyperparameters, evaluation metrics, model files, and execution environment details, creating a comprehensive audit trail that supports collaboration, reproducibility, and regulatory compliance across the entire machine learning development process.",
+      "assurance_goals": [
+        "General"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/documentation",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/software-engineering",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/process",
+        "assurance-goal-category/general"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Tracking medical diagnosis model experiments across different hospitals, logging hyperparameters, performance metrics, and model artifacts to ensure reproducible research and enable regulatory audits of model development processes.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Managing fraud detection model versions in production, tracking which specific model configuration and training data version is deployed, enabling quick rollback and performance comparison when system reliability issues arise.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Documenting loan approval model experiments with complete parameter tracking and performance logging across demographic groups, supporting fair lending compliance by providing transparent records of model development and validation processes.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires teams to adopt disciplined logging practices and may introduce overhead to development workflows if not properly integrated into existing processes."
+        },
+        {
+          "description": "Storage costs can grow substantially with extensive artifact logging, especially for large models or high-frequency experimentation."
+        },
+        {
+          "description": "Tracking quality depends on developers consistently logging relevant information, with incomplete logging leading to gaps in experimental records."
+        },
+        {
+          "description": "Complex multi-stage pipelines may require custom instrumentation to capture dependencies and data flow relationships effectively."
+        },
+        {
+          "description": "Security and access control configurations require careful setup to protect sensitive model information and experimental data in shared environments."
+        }
+      ],
+      "resources": [
+        {
+          "title": "MLflow Documentation",
+          "url": "https://mlflow.org/docs/latest/index.html",
+          "source_type": "documentation",
+          "authors": [
+            "MLflow Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "mlflowdevelopersMLflowDocumentation2018"
+        },
+        {
+          "title": "mlflow",
+          "url": "https://github.com/mlflow/mlflow",
+          "source_type": "software_package",
+          "publication_date": "2018-06-05",
+          "citationKey": "mlflowMlflow2018",
+          "abstract": "The open source developer platform to build AI agents and models with confidence. Enhance your AI applications with end-to-end tracking, observability, and evaluations, all in one integrated platform."
+        },
+        {
+          "title": "An MLOps Framework for Explainable Network Intrusion Detection with MLflow",
+          "url": "https://ieeexplore.ieee.org/abstract/document/10733700",
+          "source_type": "technical_paper",
+          "authors": [
+            "Vincenzo Spadari",
+            "Francesco Cerasuolo",
+            "Giampaolo Bovenzi",
+            "Antonio Pescapè"
+          ],
+          "publication_date": "2024-06-26",
+          "citationKey": "spadariMLOpsFrameworkExplainable2024"
+        },
+        {
+          "title": "MLflow - A Tool for Managing the Machine Learning Lifecycle",
+          "url": "https://www.mlflow.org/docs/latest/ml",
+          "source_type": "tutorial",
+          "authors": [
+            "MLflow Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "mlflowdevelopersMLflowToolManaging2018"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "model-development-audit-trails",
+        "data-version-control",
+        "automated-documentation-generation",
+        "model-cards"
+      ],
+      "sample_claims": [
+        {
+          "text": "All experimental configurations and hyperparameters tested during model development are centrally logged with their corresponding performance outcomes",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The deployed clinical model is reproducible from logged training parameters, data versions, and execution environment specifications",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The fraud detection model's performance evolution across successive training runs is traceable through logged metrics and artifact histories",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The production model version can be systematically compared against alternative experimental configurations evaluated during development",
+          "domain": "environmental",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "Model training artifacts and evaluation metrics are accessible to authorized team members through a centralized repository supporting collaborative review",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        }
+      ]
+    },
+    {
+      "slug": "data-version-control",
+      "name": "Data Version Control",
+      "description": "Data Version Control (DVC) is a Git-like version control system specifically designed for machine learning data, models, and experiments. It tracks changes to large data files, maintains reproducible ML pipelines, and creates a complete audit trail of data transformations, model training, and evaluation processes. DVC works alongside Git to provide end-to-end lineage tracking from raw data through preprocessing, training, and deployment, enabling teams to reproduce any model version and understand exactly how datasets evolved throughout the ML lifecycle.",
+      "assurance_goals": [
+        "General"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/documentation",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/software-engineering",
+        "lifecycle-stage/data-handling",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/process",
+        "assurance-goal-category/general"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Tracking medical imaging dataset versions and model training pipelines to ensure reproducible research results, enabling hospitals to verify which specific data version and preprocessing steps were used for regulatory submissions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Managing credit scoring model data pipelines with complete version control of training datasets, feature engineering steps, and model artifacts, ensuring reliable model reproduction and rollback capabilities when performance issues arise.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Maintaining pharmaceutical drug discovery data lineage across multiple research teams, tracking compound datasets, feature extraction processes, and model versions to support FDA submissions with complete experimental provenance.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires learning Git-like workflows and CLI commands, which may have a steep learning curve for teams unfamiliar with version control systems."
+        },
+        {
+          "description": "Storage costs can be substantial for large datasets with frequent changes, especially when maintaining multiple versions and branches of data."
+        },
+        {
+          "description": "Complex data pipelines with many interdependencies may require significant setup time and careful configuration to track properly."
+        },
+        {
+          "description": "Performance can degrade with very large files or datasets due to checksumming and synchronisation overhead during operations."
+        },
+        {
+          "description": "Team coordination becomes essential as improper branch management or merge conflicts can disrupt collaborative workflows."
+        }
+      ],
+      "resources": [
+        {
+          "title": "DVC Documentation",
+          "url": "https://dvc.org/doc",
+          "source_type": "documentation",
+          "publication_date": "2017",
+          "citationKey": "DVCDocumentation2017"
+        },
+        {
+          "title": "dvc",
+          "url": "https://github.com/iterative/dvc",
+          "source_type": "software_package",
+          "publication_date": "2017-03-04",
+          "citationKey": "iterativeDvc2017",
+          "abstract": "🦉 Data Versioning and ML Experiments"
+        },
+        {
+          "title": "DVC Tutorial - Data Version Control for Machine Learning",
+          "url": "https://dvc.org/doc/start",
+          "source_type": "tutorial",
+          "publication_date": "2017",
+          "citationKey": "DVCTutorialData2017"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "acronym": "DVC",
+      "related_techniques": [
+        "mlflow-experiment-tracking",
+        "model-development-audit-trails",
+        "automated-documentation-generation",
+        "model-cards"
+      ],
+      "sample_claims": [
+        {
+          "text": "The training dataset's lineage is traceable from original data sources through all preprocessing transformations to the deployed model",
+          "domain": "healthcare",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The model's performance can be recreated using the exact dataset version and pipeline configuration from any prior release",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "All modifications to sensor calibration data and feature extraction steps are documented with timestamps and author attribution",
+          "domain": "environmental",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The system can be rolled back to any previous data processing pipeline version when performance degradation is detected",
+          "domain": "autonomous systems",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The complete history of dataset changes is preserved and queryable across the model's development lifecycle",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        }
+      ]
+    },
+    {
+      "slug": "automated-documentation-generation",
+      "name": "Automated Documentation Generation",
+      "description": "Automated documentation generation creates and maintains up-to-date documentation using various methods including programmatic scripts, large language models (LLMs), and extraction tools. These approaches can capture model architectures, data schemas, feature importance, performance metrics, API specifications, and lineage information without manual writing. Methods range from traditional code parsing and template-based generation to modern AI-assisted documentation that can understand context and generate human-readable explanations.",
+      "assurance_goals": [
+        "General"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/documentation",
+        "expertise-needed/software-engineering",
+        "lifecycle-stage/deployment",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/project-design",
+        "technique-type/algorithmic",
+        "assurance-goal-category/general"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Automatically generating comprehensive model cards for a healthcare AI system each time a new version is deployed, including updated performance metrics across demographic groups, data lineage information, and bias evaluation results for regulatory compliance documentation.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Using LLM-powered tools to automatically document complex financial risk models by analysing code, extracting business logic, and generating human-readable explanations of model behaviour for audit trails and stakeholder communication.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Implementing automated API documentation generation for a machine learning platform that extracts endpoint specifications, parameter definitions, and usage examples, ensuring documentation stays synchronised with code changes and reducing deployment errors from outdated documentation.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "AI-generated documentation may miss critical domain context and business logic that human experts would include, potentially leading to incomplete or misleading explanations of model behaviour."
+        },
+        {
+          "description": "Template-based approaches often struggle with unstructured information and complex relationships between code components, limiting their ability to capture nuanced system interactions."
+        },
+        {
+          "description": "Quality heavily depends on code quality and instrumentation comprehensiveness; poorly commented or documented source code will result in inadequate generated documentation."
+        },
+        {
+          "description": "Maintenance overhead can be significant as automated systems require configuration updates when code structures change, and generated content may need human review for accuracy and completeness."
+        },
+        {
+          "description": "LLM-based approaches may introduce hallucinations or inaccuracies, particularly when documenting complex technical details or domain-specific terminology without proper validation mechanisms."
+        }
+      ],
+      "resources": [
+        {
+          "title": "fundoc",
+          "url": "https://github.com/daynin/fundoc",
+          "source_type": "software_package",
+          "publication_date": "2020-04-10",
+          "citationKey": "dayninFundoc2020",
+          "abstract": "Fundoc - the right way to generate documentation"
+        },
+        {
+          "title": "Generative AI for Software Development - DeepLearning.AI",
+          "url": "https://www.deeplearning.ai/courses/generative-ai-for-software-development",
+          "source_type": "tutorial",
+          "authors": [
+            "Laurence Moroney"
+          ],
+          "publication_date": "2025",
+          "citationKey": "moroneyGenerativeAISoftware2025"
+        },
+        {
+          "title": "Documentation Generator Analysis — Wiser Documentation",
+          "url": "https://chiplicity.readthedocs.io/en/latest/On_Software/DocumentationGenerator.html",
+          "source_type": "documentation",
+          "authors": [
+            "Chiplicity Developers"
+          ],
+          "publication_date": "2022",
+          "citationKey": "chiplicitydevelopersDocumentationGeneratorAnalysis2022"
+        },
+        {
+          "title": "sphinx-reports",
+          "url": "https://github.com/pyTooling/sphinx-reports",
+          "source_type": "software_package",
+          "publication_date": "2024-01-07",
+          "citationKey": "pytoolingSphinxreports2024",
+          "abstract": "Integrate reports (code coverage, doc. coverage, pytest, mypy, ...) into Sphinx documentation as appendix pages."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "model-cards",
+        "datasheets-for-datasets",
+        "mlflow-experiment-tracking",
+        "model-development-audit-trails"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's technical specifications remain synchronized with the deployed version throughout the production lifecycle",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The diagnostic system's documentation accurately reflects current performance characteristics across patient demographics",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The API endpoints and model interfaces are documented with up-to-date parameter definitions and usage examples",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The credit assessment model's architecture, feature definitions, and decision boundaries are documented without manual maintenance overhead",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The system's performance metrics and operational characteristics are continuously extracted and reported as code evolves",
+          "domain": "autonomous systems",
+          "assuranceGoal": "reliability"
         }
       ]
     },
@@ -2733,16 +3345,11 @@
       "name": "Model Development Audit Trails",
       "description": "Model development audit trails create comprehensive, immutable records of all decisions, experiments, and changes throughout the ML lifecycle. This technique captures dataset versions, training configurations, hyperparameter searches, model architecture changes, evaluation results, and deployment decisions in tamper-evident logs. Audit trails enable reproducibility, accountability, and regulatory compliance by documenting who made what changes when and why, supporting post-hoc investigation of model failures or unexpected behaviours.",
       "assurance_goals": [
-        "Transparency",
-        "Reliability",
-        "Safety"
+        "General"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
-        "assurance-goal-category/transparency",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/safety",
         "data-type/any",
         "lifecycle-stage/project-planning",
         "lifecycle-stage/data-collection",
@@ -2755,7 +3362,8 @@
         "evidence-type/documentation",
         "expertise-needed/software-engineering",
         "expertise-needed/ml-engineering",
-        "data-requirements/no-special-requirements"
+        "data-requirements/no-special-requirements",
+        "assurance-goal-category/general"
       ],
       "example_use_cases": [
         {
@@ -5582,5 +6190,5 @@
       ]
     }
   ],
-  "count": 37
+  "count": 42
 }

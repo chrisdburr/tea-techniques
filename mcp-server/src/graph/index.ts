@@ -324,6 +324,14 @@ const GOAL_KEYWORDS: Record<string, string[]> = {
     'present',
     'report',
   ],
+  general: [
+    'cross-cutting',
+    'general-purpose',
+    'goal-agnostic',
+    'any goal',
+    'all goals',
+    'universal',
+  ],
 };
 
 /** Infer assurance goals from claim text using keyword matching. */
@@ -421,7 +429,11 @@ export class KnowledgeGraph {
 
     if (filters.goals?.length) {
       const goalIds = new Set(filters.goals.map((g) => `tea:goal/${g}`));
-      results = results.filter((t) => t.goals.some((g) => goalIds.has(g)));
+      const generalGoalId = 'tea:goal/general';
+      results = results.filter(
+        (t) =>
+          t.goals.some((g) => goalIds.has(g)) || t.goals.includes(generalGoalId)
+      );
     }
 
     if (filters.tags?.length) {

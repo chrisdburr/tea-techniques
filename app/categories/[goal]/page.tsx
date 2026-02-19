@@ -1,14 +1,19 @@
+import { ChevronRight } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { columns } from '@/components/techniques-columns';
 import { TechniquesDataTable } from '@/components/techniques-data-table';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { GoalIcon } from '@/components/ui/goal-icon';
+import { Separator } from '@/components/ui/separator';
 import {
   generateCategoryParams,
   getAssuranceGoals,
+  getGoalDimensions,
   getTechniquesByGoal,
 } from '@/lib/data';
+import { resolveGoalDimensions } from '@/lib/data/tag-hierarchies';
 
 // Force static rendering for static export
 export const dynamic = 'force-static';
@@ -58,6 +63,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   }
 
   const techniques = await getTechniquesByGoal(goal.name);
+  const rawDimensions = await getGoalDimensions(goal.slug);
+  const dimensions = resolveGoalDimensions(goal.slug, rawDimensions);
+  const hasDimensions = dimensions.length > 0;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -93,6 +101,53 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
         <p className="mb-6 text-lg text-muted-foreground">{goal.description}</p>
       </div>
+
+      {/* Browse by Subcategory */}
+      {hasDimensions && (
+        <>
+          <div className="mb-6">
+            <h2 className="mb-4 font-semibold text-foreground text-xl">
+              Browse by subcategory
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {dimensions.map((dim) => (
+                <Link
+                  href={`/categories/${goal.slug}/${dim.slug}`}
+                  key={dim.slug}
+                >
+                  <Card className="h-full transition-colors hover:bg-accent">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="flex items-center justify-between text-lg">
+                        <span>{dim.name}</span>
+                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      {dim.description && (
+                        <p className="mb-2 text-muted-foreground text-sm">
+                          {dim.description}
+                        </p>
+                      )}
+                      <p className="text-muted-foreground text-xs">
+                        {dim.techniqueCount} technique
+                        {dim.techniqueCount !== 1 ? 's' : ''}
+                        {dim.subcategoryCount > 0 &&
+                          ` · ${dim.subcategoryCount} subcategor${dim.subcategoryCount !== 1 ? 'ies' : 'y'}`}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <Separator className="my-8" />
+
+          <h2 className="mb-4 font-semibold text-foreground text-xl">
+            All techniques
+          </h2>
+        </>
+      )}
 
       {/* Techniques Table */}
       <TechniquesDataTable columns={columns} data={techniques} />

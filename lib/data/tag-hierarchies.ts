@@ -457,6 +457,58 @@ export function groupTagsByDimension(
 }
 
 /**
+ * Format a slug to title case (e.g. "attribution-methods" → "Attribution Methods")
+ */
+export function formatSlugToTitle(slug: string): string {
+  return slug
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+/**
+ * Resolved display info for a dimension, combining TAG_HIERARCHIES enrichment with fallbacks
+ */
+export interface ResolvedDimension {
+  slug: string;
+  name: string;
+  description?: string;
+  order: number;
+  subcategoryCount: number;
+  techniqueCount: number;
+}
+
+/**
+ * Resolves display properties for a goal's dimensions.
+ * Uses TAG_HIERARCHIES for curated name/description/order when available,
+ * falling back to auto-formatted slugs for unconfigured dimensions.
+ */
+export function resolveGoalDimensions(
+  goalSlug: string,
+  dimensions: {
+    dimension: string;
+    subcategoryCount: number;
+    techniqueCount: number;
+  }[]
+): ResolvedDimension[] {
+  const hierarchy = TAG_HIERARCHIES[goalSlug];
+
+  return dimensions
+    .map((d, index) => {
+      const config = hierarchy?.dimensions[d.dimension];
+      return {
+        slug: d.dimension,
+        name: config?.name ?? formatSlugToTitle(d.dimension),
+        description: config?.description,
+        order: config?.order ?? 1000 + index,
+        subcategoryCount: d.subcategoryCount,
+        techniqueCount: d.techniqueCount,
+      };
+    })
+    .sort((a, b) => a.order - b.order);
+}
+
+/**
  * Checks if a goal has hierarchical tagging configured
  * @param goal - The assurance goal name
  * @returns True if hierarchical configuration exists

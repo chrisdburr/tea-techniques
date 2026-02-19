@@ -4,10 +4,13 @@
  * This page handles routes like:
  * - /categories/explainability/property/
  * - /categories/explainability/attribution-methods/
- * - /categories/fairness/bias-detection/ (future)
+ * - /categories/fairness/bias-detection/
  *
  * It displays all subcategories within a dimension and allows
  * users to navigate the hierarchical tag structure.
+ *
+ * Route generation is driven by the dimensions manifest (build-time data),
+ * while TAG_HIERARCHIES provides optional display enrichment (names, descriptions).
  */
 
 import { ChevronRight } from 'lucide-react';
@@ -16,8 +19,9 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getDimensionsManifest } from '@/lib/data';
 import { tagDefinitions } from '@/lib/data/tag-definitions';
-import { TAG_HIERARCHIES } from '@/lib/data/tag-hierarchies';
+import { formatSlugToTitle, TAG_HIERARCHIES } from '@/lib/data/tag-hierarchies';
 
 // Force static rendering for static export
 export const dynamic = 'force-static';
@@ -28,43 +32,19 @@ interface DimensionPageProps {
 
 /**
  * Generate static params for all dimension routes
- * Based on the hierarchical tags in the data
+ * Driven by the dimensions manifest (covers all goals with depth-3+ tags)
  */
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const manifest = await getDimensionsManifest();
   const params: { goal: string; dimension: string }[] = [];
 
-  // For now, only generate for goals with hierarchical tagging configured
-  for (const [goal, config] of Object.entries(TAG_HIERARCHIES)) {
-    for (const dimension of Object.keys(config.dimensions)) {
+  for (const [goal, dimensions] of Object.entries(manifest)) {
+    for (const { dimension } of dimensions) {
       params.push({ goal, dimension });
     }
   }
 
   return params;
-}
-
-export async function generateMetadata({
-  params,
-}: DimensionPageProps): Promise<Metadata> {
-  const resolvedParams = await params;
-  const { goal, dimension } = resolvedParams;
-
-  const hierarchy = TAG_HIERARCHIES[goal];
-  if (!hierarchy?.dimensions[dimension]) {
-    return {
-      title: 'Dimension Not Found - TEA Techniques',
-    };
-  }
-
-  const dimensionConfig = hierarchy.dimensions[dimension];
-  const goalName = goal.charAt(0).toUpperCase() + goal.slice(1);
-
-  return {
-    title: `${dimensionConfig.name} - ${goalName} - TEA Techniques`,
-    description:
-      dimensionConfig.description ||
-      `Explore ${dimensionConfig.name.toLowerCase()} subcategories in ${goalName}.`,
-  };
 }
 
 /**
@@ -81,28 +61,54 @@ async function getDimensionData(goal: string, dimension: string) {
   }
 }
 
+export async function generateMetadata({
+  params,
+}: DimensionPageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const { goal, dimension } = resolvedParams;
+
+  // Use TAG_HIERARCHIES for curated name if available, otherwise format slug
+  const hierarchy = TAG_HIERARCHIES[goal];
+  const dimensionConfig = hierarchy?.dimensions[dimension];
+  const dimensionName = dimensionConfig?.name ?? formatSlugToTitle(dimension);
+  const goalName = formatSlugToTitle(goal);
+
+  // Validate that this dimension actually exists in generated data
+  const dimensionData = await getDimensionData(goal, dimension);
+  if (!dimensionData) {
+    return {
+      title: 'Dimension Not Found - TEA Techniques',
+    };
+  }
+
+  return {
+    title: `${dimensionName} - ${goalName} - TEA Techniques`,
+    description:
+      dimensionConfig?.description ??
+      `Explore ${dimensionName.toLowerCase()} subcategories in ${goalName}.`,
+  };
+}
+
 export default async function DimensionPage({ params }: DimensionPageProps) {
   const resolvedParams = await params;
   const { goal, dimension } = resolvedParams;
 
-  // Check if this is a valid hierarchical dimension
-  const hierarchy = TAG_HIERARCHIES[goal];
-  if (!hierarchy?.dimensions[dimension]) {
+  // Load dimension data — this is the source of truth for route validity
+  const dimensionData = await getDimensionData(goal, dimension);
+  if (!dimensionData) {
     notFound();
   }
 
-  const dimensionConfig = hierarchy.dimensions[dimension];
-  const goalName = goal.charAt(0).toUpperCase() + goal.slice(1);
-
-  // Load dimension data (subcategories and technique count)
-  const dimensionData = await getDimensionData(goal, dimension);
+  // Use TAG_HIERARCHIES for display enrichment (optional)
+  const hierarchy = TAG_HIERARCHIES[goal];
+  const dimensionConfig = hierarchy?.dimensions[dimension];
+  const dimensionName = dimensionConfig?.name ?? formatSlugToTitle(dimension);
+  const dimensionDescription = dimensionConfig?.description;
+  const goalName = formatSlugToTitle(goal);
 
   // Format subcategory names for display
   const formatSubcategory = (sub: string) => {
-    return sub
-      .split('-')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+    return formatSlugToTitle(sub);
   };
 
   return (
@@ -127,7 +133,7 @@ export default async function DimensionPage({ params }: DimensionPageProps) {
           {goalName}
         </Link>
         <span className="mx-2 text-muted-foreground">/</span>
-        <span className="text-foreground">{dimensionConfig.name}</span>
+        <span className="text-foreground">{dimensionName}</span>
       </nav>
 
       {/* Header */}
@@ -137,24 +143,22 @@ export default async function DimensionPage({ params }: DimensionPageProps) {
             {goalName}
           </Badge>
           <h1 className="font-bold text-3xl text-foreground">
-            {dimensionConfig.name}
+            {dimensionName}
           </h1>
         </div>
 
         {/* Dimension Description */}
-        {dimensionConfig.description && (
+        {dimensionDescription && (
           <div className="mb-4 rounded-lg bg-muted/50 p-4">
-            <p className="text-base">{dimensionConfig.description}</p>
+            <p className="text-base">{dimensionDescription}</p>
           </div>
         )}
 
         {/* Statistics */}
-        {dimensionData && (
-          <p className="text-lg text-muted-foreground">
-            {dimensionData.subcategories?.length || 0} subcategories •{' '}
-            {dimensionData.count || 0} techniques
-          </p>
-        )}
+        <p className="text-lg text-muted-foreground">
+          {dimensionData.subcategories?.length || 0} subcategories •{' '}
+          {dimensionData.count || 0} techniques
+        </p>
       </div>
 
       {/* Subcategories Grid */}

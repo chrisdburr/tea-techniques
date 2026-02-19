@@ -4,6 +4,8 @@ import path from 'node:path';
 import type {
   AssuranceGoal,
   CategoryData,
+  DimensionSummary,
+  DimensionsManifest,
   FilterData,
   SearchIndexEntry,
   Tag,
@@ -31,6 +33,21 @@ async function loadJsonFile<T>(filePath: string): Promise<T> {
   } catch (_error) {
     throw new Error(`Failed to load ${filePath}`);
   }
+}
+
+// Load dimensions manifest (generated at build time)
+export async function getDimensionsManifest(): Promise<DimensionsManifest> {
+  return await loadJsonFile<DimensionsManifest>(
+    'categories/dimensions-manifest.json'
+  );
+}
+
+// Load dimensions for a specific goal
+export async function getGoalDimensions(
+  goalSlug: string
+): Promise<DimensionSummary[]> {
+  const manifest = await getDimensionsManifest();
+  return manifest[goalSlug] ?? [];
 }
 
 // Load all techniques (full data)

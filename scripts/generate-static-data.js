@@ -311,19 +311,29 @@ function buildHierarchyMap(hierarchicalTags, techniques) {
 }
 
 /**
- * Writes hierarchy JSON files to disk
+ * Writes hierarchy JSON files to disk, including a dimensions manifest
  */
 async function writeHierarchicalFiles(hierarchyMap) {
   // Prepare all file write operations
   const writeOperations = [];
 
+  // Build dimensions manifest: { goalSlug: [{ dimension, subcategoryCount, techniqueCount }] }
+  const dimensionsManifest = {};
+
   for (const [goal, dimensions] of Object.entries(hierarchyMap)) {
     const goalDir = path.join(dataDir, 'categories', goal);
+    dimensionsManifest[goal] = [];
 
     for (const [dimension, data] of Object.entries(dimensions)) {
       const dimensionDir = path.join(goalDir, dimension);
       const dimensionTechniques = Array.from(data.techniques);
       const subcategories = Array.from(data.subcategories).sort();
+
+      dimensionsManifest[goal].push({
+        dimension,
+        subcategoryCount: subcategories.length,
+        techniqueCount: dimensionTechniques.length,
+      });
 
       // Create directory and file write promises
       writeOperations.push(
@@ -345,7 +355,20 @@ async function writeHierarchicalFiles(hierarchyMap) {
         )
       );
     }
+
+    // Sort dimensions alphabetically within each goal
+    dimensionsManifest[goal].sort((a, b) =>
+      a.dimension.localeCompare(b.dimension)
+    );
   }
+
+  // Write the dimensions manifest
+  writeOperations.push(
+    fs.writeFile(
+      path.join(dataDir, 'categories', 'dimensions-manifest.json'),
+      JSON.stringify(dimensionsManifest, null, 2)
+    )
+  );
 
   // Execute all operations in parallel
   await Promise.all(writeOperations);

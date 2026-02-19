@@ -74,6 +74,15 @@ export interface FilterData {
   count: number;
 }
 
+// Dimensions manifest types (generated at build time)
+export interface DimensionSummary {
+  dimension: string;
+  subcategoryCount: number;
+  techniqueCount: number;
+}
+
+export type DimensionsManifest = Record<string, DimensionSummary[]>;
+
 // Utility types for static generation
 export interface StaticPageData<T = unknown> {
   data: T;

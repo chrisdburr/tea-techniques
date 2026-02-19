@@ -48,5 +48,3 @@ export const GoalIcon: React.FC<GoalIconProps> = ({
 
   return <IconComponent className={cn('shrink-0', className)} size={size} />;
 };
-
-export default GoalIcon;

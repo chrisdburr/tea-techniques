@@ -72,6 +72,7 @@ export function TechniqueSelector({
         <PopoverTrigger asChild>
           {/* biome-ignore lint/a11y/useSemanticElements: This is a searchable select (combobox pattern), not a simple select */}
           <Button
+            aria-controls="technique-selector-listbox"
             aria-expanded={open}
             className="w-full justify-between"
             disabled={isAtLimit}
@@ -100,7 +101,12 @@ export function TechniqueSelector({
             </div>
 
             {/* Results */}
-            <div className="overflow-y-auto">
+            {/* biome-ignore lint/a11y/useSemanticElements: Custom combobox pattern with search — not a simple select */}
+            <div
+              className="overflow-y-auto"
+              id="technique-selector-listbox"
+              role="listbox"
+            >
               {isLoading && (
                 <div className="p-8 text-center text-muted-foreground text-sm">
                   Loading search...

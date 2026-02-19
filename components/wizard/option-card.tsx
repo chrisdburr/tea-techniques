@@ -69,7 +69,7 @@ export function OptionCard({
             <motion.div
               animate={{ scale: 1, opacity: 1 }}
               className="ml-2"
-              initial={{ scale: 0, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
             >
               <Check className="h-5 w-5 text-primary" />
             </motion.div>

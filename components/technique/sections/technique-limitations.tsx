@@ -13,10 +13,10 @@ export function TechniqueLimitations({ technique }: TechniqueLimitationsProps) {
     <section className="mb-12" id="limitations">
       <h2 className="mb-6 font-semibold text-2xl">Limitations</h2>
       <ul className="space-y-3">
-        {technique.limitations.map((limitation, index) => (
+        {technique.limitations.map((limitation) => (
           <li
             className="flex items-start gap-3"
-            key={`${limitation.description.slice(0, 50)}-${index}`}
+            key={limitation.description.slice(0, 50)}
           >
             <div className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-muted-foreground" />
             <span className="text-muted-foreground">

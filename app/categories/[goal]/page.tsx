@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { columns } from '@/components/techniques-columns';
 import { TechniquesDataTable } from '@/components/techniques-data-table';
-import GoalIcon from '@/components/ui/goal-icon';
+import { GoalIcon } from '@/components/ui/goal-icon';
 import {
   generateCategoryParams,
   getAssuranceGoals,

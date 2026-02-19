@@ -1,8 +1,15 @@
+import type { Metadata } from 'next';
 import { Code, Network, Users } from '@/components/icons';
 import {
   type IndexPageChildItem,
   IndexPageLayout,
 } from '@/components/layout/index-page-layout';
+
+export const metadata: Metadata = {
+  title: 'Documentation - TEA Techniques',
+  description:
+    'Guides and technical documentation for the TEA Techniques platform, including community contributions, developer instructions, and knowledge graph resources.',
+};
 
 export default function DocsPage() {
   const docSections: IndexPageChildItem[] = [

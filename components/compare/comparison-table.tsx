@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { X } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import GoalIcon from '@/components/ui/goal-icon';
+import { GoalIcon } from '@/components/ui/goal-icon';
 import {
   Table,
   TableBody,

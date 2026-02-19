@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
-import GoalIcon from '@/components/ui/goal-icon';
+import { GoalIcon } from '@/components/ui/goal-icon';
 import {
   Table,
   TableBody,

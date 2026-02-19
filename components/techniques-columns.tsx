@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ArrowUpDown } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import GoalIcon from '@/components/ui/goal-icon';
+import { GoalIcon } from '@/components/ui/goal-icon';
 import {
   extractApplicableModels,
   extractDataTypes,

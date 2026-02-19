@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { TutorialBadge } from '@/components/technique/tutorial-badge';
-import GoalIcon from '@/components/ui/goal-icon';
+import { GoalIcon } from '@/components/ui/goal-icon';
 import type { Technique } from '@/lib/types';
 
 interface TechniqueHeaderProps {

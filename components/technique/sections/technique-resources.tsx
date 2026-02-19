@@ -64,7 +64,7 @@ export function TechniqueResources({ technique }: TechniqueResourcesProps) {
                 {getResourceTypeLabel(type as Resource['source_type'])}s
               </h3>
               <div className="grid gap-4">
-                {typeResources.map((resource, index) => {
+                {typeResources.map((resource) => {
                   const ResourceIcon = getResourceIcon(resource.source_type);
                   const authors = formatAuthors(resource.authors);
                   const date = formatPublicationDate(resource.publication_date);
@@ -72,7 +72,7 @@ export function TechniqueResources({ technique }: TechniqueResourcesProps) {
                   return (
                     <div
                       className="group flex flex-col gap-3 rounded-lg border bg-card p-4 transition-colors hover:bg-accent/50 md:flex-row md:items-start md:justify-between"
-                      key={`${resource.title}-${index}`}
+                      key={resource.url}
                     >
                       <div className="flex flex-1 gap-4">
                         <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-muted group-hover:bg-background">

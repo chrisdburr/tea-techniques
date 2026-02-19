@@ -1,4 +1,4 @@
-import GoalIcon from '@/components/ui/goal-icon';
+import { GoalIcon } from '@/components/ui/goal-icon';
 import type { ExampleUseCase, Technique } from '@/lib/types';
 
 interface TechniqueUseCasesProps {
@@ -37,10 +37,10 @@ export function TechniqueUseCases({ technique }: TechniqueUseCasesProps) {
               <h3 className="font-semibold text-lg">{goal}</h3>
             </div>
             <div className="space-y-3 pl-7">
-              {useCases.map((useCase, index) => (
+              {useCases.map((useCase) => (
                 <div
                   className="rounded-lg border bg-muted/30 p-4"
-                  key={`${goal}-${index}-${useCase.description.slice(0, 20)}`}
+                  key={`${goal}-${useCase.description.slice(0, 50)}`}
                 >
                   <p className="text-muted-foreground">{useCase.description}</p>
                 </div>

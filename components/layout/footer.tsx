@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { ExternalLink } from '@/components/icons';
 
 export function Footer() {
@@ -19,28 +20,28 @@ export function Footer() {
             <h4 className="mb-4 font-semibold text-foreground">Quick Links</h4>
             <ul className="space-y-2 text-muted-foreground text-sm">
               <li>
-                <a
+                <Link
                   className="transition-colors hover:text-primary"
                   href="/techniques"
                 >
                   All Techniques
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   className="transition-colors hover:text-primary"
                   href="/categories"
                 >
                   Categories
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   className="transition-colors hover:text-primary"
                   href="/about"
                 >
                   About
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

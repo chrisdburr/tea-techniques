@@ -11,6 +11,8 @@ import {
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
+const EMPTY_ITEMS: IndexPageChildItem[] = [];
+
 export interface IndexPageChildItem {
   title: string;
   description: string;
@@ -35,7 +37,7 @@ interface IndexPageLayoutProps {
 export function IndexPageLayout({
   title,
   description,
-  items = [],
+  items = EMPTY_ITEMS,
   additionalSections,
   gridCols = 2,
   className,

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Database, FileText, Globe } from '@/components/icons';
@@ -10,6 +11,12 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { getAssetPath } from '@/lib/config';
+
+export const metadata: Metadata = {
+  title: 'TEA Techniques - Trustworthy and Ethical Assurance',
+  description:
+    'Explore techniques for evidencing claims about responsible design, development, and deployment of data-driven technologies.',
+};
 
 export default function Home() {
   return (

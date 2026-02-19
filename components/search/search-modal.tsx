@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useReducer } from 'react';
 import { ArrowRight, Search, X } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
-import GoalIcon from '@/components/ui/goal-icon';
+import { GoalIcon } from '@/components/ui/goal-icon';
 import { useFuseSearch } from '@/lib/hooks/use-fuse-search';
 import type { Technique } from '@/lib/types';
 

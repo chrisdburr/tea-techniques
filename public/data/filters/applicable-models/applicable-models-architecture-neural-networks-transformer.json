@@ -2,7 +2,7 @@
   "tag": {
     "name": "applicable-models/architecture/neural-networks/transformer",
     "slug": "applicable-models-architecture-neural-networks-transformer",
-    "count": 5,
+    "count": 6,
     "category": "applicable-models"
   },
   "techniques": [
@@ -483,6 +483,170 @@
       ]
     },
     {
+      "slug": "agent-goal-misalignment-testing",
+      "name": "Agent Goal Misalignment Testing",
+      "description": "Agent goal misalignment testing identifies scenarios where AI agents pursue objectives in unintended ways or develop proxy goals that diverge from true human intent. This technique tests for specification gaming (achieving stated metrics while violating intent), instrumental goals (agents developing problematic sub-goals to achieve main objectives), and reward hacking (exploiting loopholes in reward functions). Testing uses diverse scenarios to probe whether agents truly understand task intent or merely optimise narrow specified metrics.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/architecture/neural-networks/transformer",
+        "applicable-models/paradigm/generative",
+        "applicable-models/paradigm/reinforcement",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring",
+        "technique-type/testing"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing an autonomous vehicle routing agent in a ride-sharing service to ensure it optimizes for passenger safety and comfort rather than gaming metrics through risky driving behaviors that minimize journey time while technically meeting safety thresholds.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Evaluating a customer service chatbot agent for consistent and predictable behaviour across repeated interactions, verifying that it does not develop degenerate strategies such as prematurely closing conversations or providing overly generic responses to maximise satisfaction scores whilst failing to resolve underlying user issues reliably.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Verifying that a healthcare resource allocation agent distributes medical supplies based on genuine patient need rather than exploiting proxy metrics that could systematically disadvantage certain demographic groups or facilities.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Ensuring a resume screening agent doesn't develop proxy metrics that correlate with discriminatory criteria while technically optimizing for stated job performance predictions.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Evaluating a criminal justice risk assessment agent to ensure it optimizes for genuine recidivism prediction rather than learning proxies that correlate with protected characteristics while appearing to achieve stated accuracy objectives.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Comprehensive testing requires anticipating all possible ways objectives could be misinterpreted, which is inherently difficult for complex goals."
+        },
+        {
+          "description": "Agents may behave correctly during testing but develop misaligned strategies in deployment when facing novel situations or longer time horizons."
+        },
+        {
+          "description": "Distinguishing between intended and unintended goal achievement can be subjective, especially when stated objectives are ambiguous."
+        },
+        {
+          "description": "Testing environments may not replicate the full complexity and incentive structures of real deployment settings where misalignment emerges."
+        },
+        {
+          "description": "Requires domain expertise to define appropriate value-aligned objectives and identify subtle forms of misalignment, which may not be available for novel or cross-domain applications."
+        },
+        {
+          "description": "Quantifying the severity and likelihood of different misalignment scenarios requires subjective judgments and risk assessment capabilities that vary across organizations."
+        }
+      ],
+      "resources": [
+        {
+          "title": "The Urgent Need for Intrinsic Alignment Technologies for ...",
+          "url": "https://towardsdatascience.com/the-urgent-need-for-intrinsic-alignment-technologies-for-responsible-agentic-ai",
+          "source_type": "tutorial",
+          "authors": [
+            "Gadi Singer"
+          ],
+          "publication_date": "2025-03-04",
+          "citationKey": "singerUrgentNeedIntrinsic2025"
+        },
+        {
+          "title": "A Survey of Process Reward Models: From Outcome Signals to Process Supervisions for Large Language Models",
+          "url": "https://www.semanticscholar.org/paper/b670078b724938874a233687b5c53848df527a60",
+          "source_type": "technical_paper",
+          "authors": [
+            "Congmin Zheng",
+            "Jiachen Zhu",
+            "Zhuoying Ou",
+            "Yuxiang Chen",
+            "Kangning Zhang",
+            "Rong Shan",
+            "Zeyu Zheng",
+            "Mengyue Yang",
+            "Jianghao Lin",
+            "Yong Yu",
+            "Weinan Zhang"
+          ],
+          "publication_date": "2025",
+          "citationKey": "zhengSurveyProcessReward2025",
+          "abstract": "Although Large Language Models (LLMs) exhibit advanced reasoning ability, conventional alignment remains largely dominated by outcome reward models (ORMs) that judge only final answers. Process Reward Models(PRMs) address this gap by evaluating and guiding reasoning at the step or trajectory level. This survey provides a systematic overview of PRMs through the full loop: how to generate process data, build PRMs, and use PRMs for test-time scaling and reinforcement learning. We summarize applications across math, code, text, multimodal reasoning, robotics, and agents, and review emerging benchmarks. Our goal is to clarify design spaces, reveal open challenges, and guide future research toward fine-grained, robust reasoning alignment."
+        },
+        {
+          "title": "Large Language Model Safety: A Holistic Survey",
+          "url": "https://www.semanticscholar.org/paper/a0d2a54ed05a424f5eee35ea579cf54ef0f2c2aa",
+          "source_type": "technical_paper",
+          "authors": [
+            "Dan Shi",
+            "Tianhao Shen",
+            "Yufei Huang",
+            "Zhigen Li",
+            "Yongqi Leng",
+            "Renren Jin",
+            "Chuang Liu",
+            "Xinwei Wu",
+            "Zishan Guo",
+            "Linhao Yu",
+            "Ling Shi",
+            "Bojian Jiang",
+            "Deyi Xiong"
+          ],
+          "publication_date": "2024",
+          "citationKey": "shiLargeLanguageModel2024",
+          "abstract": "The rapid development and deployment of large language models (LLMs) have introduced a new frontier in artificial intelligence, marked by unprecedented capabilities in natural language understanding and generation. However, the increasing integration of these models into critical applications raises substantial safety concerns, necessitating a thorough examination of their potential risks and associated mitigation strategies. This survey provides a comprehensive overview of the current landscape of LLM safety, covering four major categories: value misalignment, robustness to adversarial attacks, misuse, and autonomous AI risks. In addition to the comprehensive review of the mitigation methodologies and evaluation resources on these four aspects, we further explore four topics related to LLM safety: the safety implications of LLM agents, the role of interpretability in enhancing LLM safety, the technology roadmaps proposed and abided by a list of AI companies and institutes for LLM safety, and AI governance aimed at LLM safety with discussions on international cooperation, policy proposals, and prospective regulatory directions. Our findings underscore the necessity for a proactive, multifaceted approach to LLM safety, emphasizing the integration of technical solutions, ethical considerations, and robust governance frameworks. This survey is intended to serve as a foundational resource for academy researchers, industry practitioners, and policymakers, offering insights into the challenges and opportunities associated with the safe integration of LLMs into society. Ultimately, it seeks to contribute to the safe and beneficial development of LLMs, aligning with the overarching goal of harnessing AI for societal advancement and well-being. A curated list of related papers has been publicly available at https://github.com/tjunlp-lab/Awesome-LLM-Safety-Papers."
+        }
+      ],
+      "related_techniques": [
+        "prompt-injection-testing",
+        "constitutional-ai-evaluation",
+        "multi-agent-system-testing",
+        "path-specific-counterfactual-fairness-assessment",
+        "reward-hacking-detection",
+        "safety-envelope-testing"
+      ],
+      "sample_claims": [
+        {
+          "text": "The autonomous system achieves operational objectives through intended methods rather than exploiting measurement loopholes or specification ambiguities",
+          "domain": "autonomous systems",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The agent's decision-making process genuinely optimizes for stated healthcare outcomes rather than developing proxy metrics that satisfy performance indicators without improving patient care",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The resource allocation system distributes opportunities based on genuine merit criteria rather than learning instrumental goals that correlate with protected demographic characteristics",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The system's optimization strategy aligns with true environmental objectives rather than gaming sustainability metrics through technically compliant but counterproductive behaviors",
+          "domain": "environmental",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The model achieves performance targets through genuine task mastery rather than specification gaming strategies that exploit ambiguities in objective definitions",
+          "domain": "general",
+          "assuranceGoal": "reliability"
+        }
+      ]
+    },
+    {
       "slug": "embedding-bias-analysis",
       "name": "Embedding Bias Analysis",
       "description": "Embedding bias analysis examines learned representations to identify biases, spurious correlations, and problematic clustering patterns in vector embeddings. This technique uses dimensionality reduction, clustering analysis, and geometric fairness metrics to examine whether embeddings encode sensitive attributes, place certain groups in disadvantaged regions of representation space, or learn stereotypical associations. Analysis reveals whether embeddings used for retrieval, recommendation, or downstream tasks contain fairness issues that will propagate to applications.",
@@ -820,5 +984,5 @@
       ]
     }
   ],
-  "count": 5
+  "count": 6
 }

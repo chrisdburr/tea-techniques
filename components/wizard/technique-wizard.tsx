@@ -2,15 +2,17 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, RotateCcw, X } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { useWizard } from '@/lib/hooks/use-wizard';
 import type { Technique } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import type { WizardQuestion } from '@/lib/wizard/types';
-import { WizardStateMachine } from '@/lib/wizard/wizard-machine';
-import { EntrySelector } from './entry-selector';
-import { QuestionRenderer } from './question-renderer';
-import { WizardResults } from './wizard-results';
+import {
+  contentVariants,
+  modalVariants,
+  overlayVariants,
+} from '@/lib/wizard/animation-variants';
+import { WizardContent } from './wizard-content';
 
 interface TechniqueWizardProps {
   isOpen: boolean;
@@ -24,36 +26,14 @@ export function TechniqueWizard({
   onClose,
   techniques,
 }: TechniqueWizardProps) {
-  const [wizardMachine, setWizardMachine] = useState(
-    () => new WizardStateMachine(techniques)
-  );
-  const [currentQuestion, setCurrentQuestion] = useState<WizardQuestion | null>(
-    null
-  );
-  const [currentFlow, setCurrentFlow] = useState<string>('');
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [direction, setDirection] = useState<'forward' | 'backward'>('forward');
-  const [progress, setProgress] = useState(0);
-  const [showResults, setShowResults] = useState(false);
-  const [filteredTechniques, setFilteredTechniques] = useState<Technique[]>([]);
-
-  // Update wizard machine when techniques change
-  useEffect(() => {
-    if (techniques.length > 0) {
-      setWizardMachine(new WizardStateMachine(techniques));
-    }
-  }, [techniques]);
+  const wizard = useWizard({ techniques, animationDelay: 300 });
 
   // Reset wizard when closed
   useEffect(() => {
     if (!isOpen) {
-      wizardMachine.reset();
-      setCurrentQuestion(null);
-      setCurrentFlow('');
-      setShowResults(false);
-      setProgress(0);
+      wizard.reset();
     }
-  }, [isOpen, wizardMachine]);
+  }, [isOpen, wizard.reset]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -61,158 +41,15 @@ export function TechniqueWizard({
       if (!isOpen) {
         return;
       }
-
-      // Prevent default for certain keys to avoid conflicts
       if (e.key === 'Escape') {
         e.preventDefault();
         onClose();
-      } else if (e.key === '?' && e.shiftKey) {
-        // Trigger help modal (to be implemented)
-        e.preventDefault();
-        // setShowHelp(true);
-      } else if (e.key === 'Tab') {
-        // Allow natural Tab navigation
-        // The browser handles this by default
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
-
-  const startFlow = useCallback(
-    (flowId: string) => {
-      setDirection('forward');
-      setIsTransitioning(true);
-      setCurrentFlow(flowId);
-
-      setTimeout(() => {
-        const question = wizardMachine.startFlow(flowId);
-        setCurrentQuestion(question);
-        setProgress(wizardMachine.getProgress());
-        const filtered = wizardMachine.getFilteredTechniques();
-        setFilteredTechniques(filtered);
-        setIsTransitioning(false);
-      }, 300);
-    },
-    [wizardMachine]
-  );
-
-  const submitAnswer = useCallback(
-    (answer: string | string[]) => {
-      setDirection('forward');
-      setIsTransitioning(true);
-
-      setTimeout(() => {
-        const nextQuestion = wizardMachine.submitAnswer(answer);
-        setProgress(wizardMachine.getProgress());
-        setFilteredTechniques(wizardMachine.getFilteredTechniques());
-
-        if (!nextQuestion || wizardMachine.shouldShowResults()) {
-          setShowResults(true);
-        } else {
-          setCurrentQuestion(nextQuestion);
-        }
-        setIsTransitioning(false);
-      }, 300);
-    },
-    [wizardMachine]
-  );
-
-  const goBack = useCallback(() => {
-    setDirection('backward');
-    setIsTransitioning(true);
-
-    setTimeout(() => {
-      // Hide results if we're currently showing them
-      if (showResults) {
-        setShowResults(false);
-      }
-
-      // Always call goBack to remove the last answer and re-filter
-      const previousQuestion = wizardMachine.goBack();
-      if (previousQuestion) {
-        setCurrentQuestion(previousQuestion);
-        setProgress(wizardMachine.getProgress());
-        setFilteredTechniques(wizardMachine.getFilteredTechniques());
-      } else {
-        // Back to entry point selection
-        setCurrentFlow('');
-        setCurrentQuestion(null);
-        setFilteredTechniques(wizardMachine.getFilteredTechniques());
-      }
-      setIsTransitioning(false);
-    }, 300);
-  }, [wizardMachine, showResults]);
-
-  const restart = useCallback(() => {
-    setDirection('forward');
-    setIsTransitioning(true);
-
-    setTimeout(() => {
-      wizardMachine.reset();
-      setCurrentQuestion(null);
-      setCurrentFlow('');
-      setShowResults(false);
-      setProgress(0);
-      setIsTransitioning(false);
-    }, 300);
-  }, [wizardMachine]);
-
-  // Animation variants
-  const overlayVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 },
-  };
-
-  const modalVariants = {
-    hidden: {
-      opacity: 0,
-      scale: 0.95,
-      y: 20,
-    },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      transition: {
-        type: 'spring' as const,
-        duration: 0.5,
-        bounce: 0.3,
-      },
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.95,
-      y: 20,
-      transition: {
-        duration: 0.3,
-      },
-    },
-  };
-
-  const contentVariants = {
-    enter: (dir: 'forward' | 'backward') => ({
-      x: dir === 'forward' ? 300 : -300,
-      opacity: 0,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-      transition: {
-        x: { type: 'spring' as const, stiffness: 300, damping: 30 },
-        opacity: { duration: 0.2 },
-      },
-    },
-    exit: (dir: 'forward' | 'backward') => ({
-      x: dir === 'forward' ? -300 : 300,
-      opacity: 0,
-      transition: {
-        x: { type: 'spring' as const, stiffness: 300, damping: 30 },
-        opacity: { duration: 0.2 },
-      },
-    }),
-  };
 
   return (
     <AnimatePresence>
@@ -265,10 +102,10 @@ export function TechniqueWizard({
                 </div>
 
                 {/* Progress bar */}
-                {currentFlow && (
+                {wizard.currentFlow && (
                   <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted">
                     <motion.div
-                      animate={{ width: `${progress}%` }}
+                      animate={{ width: `${wizard.progress}%` }}
                       className="h-full bg-primary"
                       initial={{ width: 0 }}
                       transition={{ duration: 0.3, ease: 'easeOut' }}
@@ -279,59 +116,31 @@ export function TechniqueWizard({
 
               {/* Content */}
               <div className="relative flex-1 overflow-y-auto p-4 sm:max-h-[60vh] sm:min-h-[400px] sm:p-6">
-                <AnimatePresence custom={direction} mode="wait">
+                <AnimatePresence custom={wizard.direction} mode="wait">
                   <motion.div
                     animate="center"
                     className={cn(
                       'w-full',
-                      isTransitioning && 'pointer-events-none'
+                      wizard.isTransitioning && 'pointer-events-none'
                     )}
-                    custom={direction}
+                    custom={wizard.direction}
                     exit="exit"
                     initial="enter"
-                    key={currentFlow || 'entry'}
+                    key={wizard.currentFlow || 'entry'}
                     variants={contentVariants}
                   >
-                    {(() => {
-                      if (!currentFlow) {
-                        // Entry point selection
-                        return (
-                          <EntrySelector
-                            isLoading={isTransitioning}
-                            onSelectEntry={startFlow}
-                          />
-                        );
-                      }
-                      if (showResults) {
-                        // Results display
-                        return (
-                          <WizardResults
-                            onGoBack={goBack}
-                            onRestart={restart}
-                            state={wizardMachine.getState()}
-                            techniques={filteredTechniques}
-                          />
-                        );
-                      }
-                      if (currentQuestion) {
-                        // Current question
-                        const wizardState = wizardMachine.getState();
-                        return (
-                          <QuestionRenderer
-                            filteredTechniques={filteredTechniques}
-                            isLoading={isTransitioning}
-                            onAnswer={submitAnswer}
-                            previousAnswer={
-                              wizardState.path.length > 0
-                                ? String(wizardState.path.at(-1)?.answer)
-                                : undefined
-                            }
-                            question={currentQuestion}
-                          />
-                        );
-                      }
-                      return null;
-                    })()}
+                    <WizardContent
+                      currentFlow={wizard.currentFlow}
+                      currentQuestion={wizard.currentQuestion}
+                      filteredTechniques={wizard.filteredTechniques}
+                      goBack={wizard.goBack}
+                      isTransitioning={wizard.isTransitioning}
+                      machineState={wizard.machineState}
+                      restart={wizard.restart}
+                      showResults={wizard.showResults}
+                      startFlow={wizard.startFlow}
+                      submitAnswer={wizard.submitAnswer}
+                    />
                   </motion.div>
                 </AnimatePresence>
               </div>
@@ -340,11 +149,11 @@ export function TechniqueWizard({
               <div className="border-border border-t px-4 py-3 sm:px-6 sm:py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex gap-2">
-                    {currentFlow && (
+                    {wizard.currentFlow && (
                       <Button
                         className="h-10 px-3 text-sm sm:h-9 sm:px-3"
-                        disabled={isTransitioning}
-                        onClick={goBack}
+                        disabled={wizard.isTransitioning}
+                        onClick={wizard.goBack}
                         size="default"
                         variant="outline"
                       >
@@ -352,11 +161,11 @@ export function TechniqueWizard({
                         Back
                       </Button>
                     )}
-                    {(currentFlow || showResults) && (
+                    {(wizard.currentFlow || wizard.showResults) && (
                       <Button
                         className="h-10 px-3 text-sm sm:h-9 sm:px-3"
-                        disabled={isTransitioning}
-                        onClick={restart}
+                        disabled={wizard.isTransitioning}
+                        onClick={wizard.restart}
                         size="default"
                         variant="ghost"
                       >
@@ -365,8 +174,6 @@ export function TechniqueWizard({
                       </Button>
                     )}
                   </div>
-
-                  {/* Results navigation handled within WizardResults component */}
                 </div>
               </div>
             </motion.div>

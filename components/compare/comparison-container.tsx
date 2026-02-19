@@ -7,6 +7,12 @@ import { TechniqueSelector } from '@/components/compare/technique-selector';
 import { getAssetPath } from '@/lib/config';
 import type { Technique } from '@/lib/types';
 
+type ComparisonData =
+  | { status: 'idle'; techniques: Technique[] }
+  | { status: 'loading'; techniques: Technique[] }
+  | { status: 'loaded'; techniques: Technique[] }
+  | { status: 'error'; techniques: Technique[]; error: string };
+
 interface ComparisonContainerProps {
   techniques: Technique[]; // Metadata only
 }
@@ -15,8 +21,10 @@ export function ComparisonContainer({ techniques }: ComparisonContainerProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [selectedSlugs, setSelectedSlugs] = useState<string[]>([]);
-  const [selectedTechniques, setSelectedTechniques] = useState<Technique[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [comparison, setComparison] = useState<ComparisonData>({
+    status: 'idle',
+    techniques: [],
+  });
 
   // Parse URL query params on mount and when they change
   useEffect(() => {
@@ -29,31 +37,45 @@ export function ComparisonContainer({ techniques }: ComparisonContainerProps) {
 
   // Fetch full technique data when slugs change
   useEffect(() => {
-    async function loadTechniques() {
-      if (selectedSlugs.length === 0) {
-        setSelectedTechniques([]);
-        return;
-      }
-
-      setLoading(true);
-      try {
-        // Fetch full technique data for selected slugs
-        const responses = await Promise.all(
-          selectedSlugs.map((slug) =>
-            fetch(getAssetPath(`/data/techniques/${slug}.json`)).then((r) =>
-              r.json()
-            )
-          )
-        );
-        setSelectedTechniques(responses.filter(Boolean));
-      } catch (_error) {
-        // Failed to load techniques
-      } finally {
-        setLoading(false);
-      }
+    if (selectedSlugs.length === 0) {
+      setComparison({ status: 'idle', techniques: [] });
+      return;
     }
 
-    loadTechniques();
+    let cancelled = false;
+    setComparison((prev) => ({
+      status: 'loading',
+      techniques: prev.techniques,
+    }));
+
+    Promise.all(
+      selectedSlugs.map((slug) =>
+        fetch(getAssetPath(`/data/techniques/${slug}.json`)).then((r) =>
+          r.json()
+        )
+      )
+    )
+      .then((responses) => {
+        if (!cancelled) {
+          setComparison({
+            status: 'loaded',
+            techniques: responses.filter(Boolean),
+          });
+        }
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          setComparison({
+            status: 'error',
+            techniques: [],
+            error: String(error),
+          });
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [selectedSlugs]);
 
   // Update URL when selection changes
@@ -84,21 +106,24 @@ export function ComparisonContainer({ techniques }: ComparisonContainerProps) {
         selectedSlugs={selectedSlugs}
       />
 
-      {loading && (
+      {comparison.status === 'loading' && (
         <div className="py-12 text-center">
           <p className="text-muted-foreground">Loading comparison...</p>
         </div>
       )}
 
-      {!loading && selectedTechniques.length > 0 && (
-        <ComparisonTable
-          onClearAll={handleClearAll}
-          onRemoveTechnique={handleRemoveTechnique}
-          techniques={selectedTechniques}
-        />
-      )}
+      {(comparison.status === 'loaded' || comparison.status === 'error') &&
+        comparison.techniques.length > 0 && (
+          <ComparisonTable
+            onClearAll={handleClearAll}
+            onRemoveTechnique={handleRemoveTechnique}
+            techniques={comparison.techniques}
+          />
+        )}
 
-      {!loading && selectedTechniques.length === 0 && (
+      {(comparison.status === 'idle' ||
+        ((comparison.status === 'loaded' || comparison.status === 'error') &&
+          comparison.techniques.length === 0)) && (
         <div className="rounded-lg border-2 border-dashed py-12 text-center">
           <p className="mb-2 text-lg text-muted-foreground">
             No techniques selected

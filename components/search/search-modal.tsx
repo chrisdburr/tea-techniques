@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useReducer } from 'react';
 import { ArrowRight, Search, X } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import GoalIcon from '@/components/ui/goal-icon';
@@ -13,27 +13,70 @@ interface SearchResult {
   score?: number;
 }
 
+interface SearchState {
+  isOpen: boolean;
+  query: string;
+  results: SearchResult[];
+  selectedIndex: number;
+}
+
+type SearchAction =
+  | { type: 'OPEN' }
+  | { type: 'CLOSE' }
+  | { type: 'SEARCH'; query: string; results: SearchResult[] }
+  | { type: 'NAVIGATE'; direction: 'up' | 'down' };
+
+function searchReducer(state: SearchState, action: SearchAction): SearchState {
+  switch (action.type) {
+    case 'OPEN':
+      return { ...state, isOpen: true };
+    case 'CLOSE':
+      return { isOpen: false, query: '', results: [], selectedIndex: 0 };
+    case 'SEARCH':
+      return {
+        ...state,
+        query: action.query,
+        results: action.results,
+        selectedIndex: 0,
+      };
+    case 'NAVIGATE':
+      return {
+        ...state,
+        selectedIndex:
+          action.direction === 'down'
+            ? Math.min(state.selectedIndex + 1, state.results.length - 1)
+            : Math.max(state.selectedIndex - 1, 0),
+      };
+    default:
+      return state;
+  }
+}
+
+const initialSearchState: SearchState = {
+  isOpen: false,
+  query: '',
+  results: [],
+  selectedIndex: 0,
+};
+
 interface SearchModalProps {
   category?: string;
 }
 
 export function SearchModal({ category }: SearchModalProps = {}) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [state, dispatch] = useReducer(searchReducer, initialSearchState);
   const { search, isLoading } = useFuseSearch({ category });
   const router = useRouter();
 
-  // Keyboard shortcut (Cmd/Ctrl + K)
+  // Keyboard shortcut (Cmd/Ctrl + K) and Escape
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
-        setIsOpen(true);
+        dispatch({ type: 'OPEN' });
       }
       if (e.key === 'Escape') {
-        setIsOpen(false);
+        dispatch({ type: 'CLOSE' });
       }
     };
 
@@ -41,48 +84,42 @@ export function SearchModal({ category }: SearchModalProps = {}) {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Search when query changes
-  useEffect(() => {
-    if (query) {
-      const searchResults = search(query, 10);
-      setResults(searchResults);
-      setSelectedIndex(0);
-    } else {
-      setResults([]);
-    }
-  }, [query, search]);
+  // Inline search on input change (synchronous Fuse.js, no effect needed)
+  const handleQueryChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newQuery = e.target.value;
+      const newResults = newQuery ? search(newQuery, 10) : [];
+      dispatch({ type: 'SEARCH', query: newQuery, results: newResults });
+    },
+    [search]
+  );
 
-  // Keyboard navigation
-  const handleKeyDown = useCallback(
+  // Keyboard navigation within results
+  const handleInputKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === 'ArrowDown') {
         e.preventDefault();
-        setSelectedIndex((i) => Math.min(i + 1, results.length - 1));
+        dispatch({ type: 'NAVIGATE', direction: 'down' });
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
-        setSelectedIndex((i) => Math.max(i - 1, 0));
-      } else if (e.key === 'Enter' && results[selectedIndex]) {
+        dispatch({ type: 'NAVIGATE', direction: 'up' });
+      } else if (e.key === 'Enter' && state.results[state.selectedIndex]) {
         e.preventDefault();
-        router.push(`/techniques/${results[selectedIndex].item.slug}`);
-        setIsOpen(false);
+        router.push(
+          `/techniques/${state.results[state.selectedIndex].item.slug}`
+        );
+        dispatch({ type: 'CLOSE' });
       }
     },
-    [results, selectedIndex, router]
+    [state.results, state.selectedIndex, router]
   );
 
-  const handleClose = () => {
-    setIsOpen(false);
-    setQuery('');
-    setResults([]);
-    setSelectedIndex(0);
-  };
-
-  if (!isOpen) {
+  if (!state.isOpen) {
     return (
       <button
         aria-label="Search techniques (Cmd+K)"
         className="flex w-full items-center gap-2 rounded-md border px-3 py-1.5 text-muted-foreground text-sm transition-colors hover:bg-secondary/50 group-data-[collapsible=icon]:hidden"
-        onClick={() => setIsOpen(true)}
+        onClick={() => dispatch({ type: 'OPEN' })}
         type="button"
       >
         <Search size={16} />
@@ -104,16 +141,16 @@ export function SearchModal({ category }: SearchModalProps = {}) {
             <input
               autoFocus
               className="flex-1 bg-transparent text-foreground outline-none placeholder:text-muted-foreground"
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={handleKeyDown}
+              onChange={handleQueryChange}
+              onKeyDown={handleInputKeyDown}
               placeholder="Search techniques..."
               type="text"
-              value={query}
+              value={state.query}
             />
             <button
               aria-label="Close search"
               className="rounded p-1 hover:bg-secondary"
-              onClick={handleClose}
+              onClick={() => dispatch({ type: 'CLOSE' })}
               type="button"
             >
               <X size={18} />
@@ -130,25 +167,25 @@ export function SearchModal({ category }: SearchModalProps = {}) {
                   </div>
                 );
               }
-              if (query && results.length === 0) {
+              if (state.query && state.results.length === 0) {
                 return (
                   <div className="p-8 text-center text-muted-foreground">
-                    No techniques found for "{query}"
+                    No techniques found for "{state.query}"
                   </div>
                 );
               }
-              if (results.length > 0) {
+              if (state.results.length > 0) {
                 return (
                   <div className="py-2">
-                    {results.map((result, index) => (
+                    {state.results.map((result, index) => (
                       <button
                         className={`flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-secondary/50 ${
-                          index === selectedIndex ? 'bg-secondary/50' : ''
+                          index === state.selectedIndex ? 'bg-secondary/50' : ''
                         }`}
                         key={result.item.slug}
                         onClick={() => {
                           router.push(`/techniques/${result.item.slug}`);
-                          handleClose();
+                          dispatch({ type: 'CLOSE' });
                         }}
                         type="button"
                       >
@@ -224,7 +261,9 @@ export function SearchModal({ category }: SearchModalProps = {}) {
                 Close
               </span>
             </div>
-            {results.length > 0 && <span>{results.length} results</span>}
+            {state.results.length > 0 && (
+              <span>{state.results.length} results</span>
+            )}
           </div>
         </div>
       </div>

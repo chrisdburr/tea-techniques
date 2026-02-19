@@ -8,6 +8,9 @@
  * - Dataset summary statistics
  * - Cross-reference validation
  * - Completeness scoring
+ * - Resource freshness analysis
+ * - Review staleness tracking
+ * - Peer comparison metrics
  *
  * Usage:
  *   node scripts/quality/generate-quality-report.js
@@ -21,6 +24,8 @@ import chalk from 'chalk';
 
 import {
   COMPLETENESS_WEIGHTS,
+  FRESHNESS_HALF_LIFE_YEARS,
+  FRESHNESS_OLD_THRESHOLD_YEARS,
   GOAL_CONDITIONAL_RULES,
   MIN_PEER_GROUP_SIZE,
   OUTLIER_THRESHOLD,
@@ -37,10 +42,15 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..', '..');
 const dataDir = path.join(rootDir, 'public', 'data');
 const techniquesPath = path.join(dataDir, 'techniques.json');
+const zoteroPath = path.join(dataDir, 'zotero-resources.json');
+const enhancementLogPath = path.join(rootDir, '.enhancement-log.json');
 
 // Top-level regex constants
 const TRAILING_SLASH_RE = /\/$/;
 const WHITESPACE_RE = /\s+/g;
+const YEAR_ONLY_RE = /^\d{4}$/;
+const ISO_DATE_RE = /^(\d{4})-(\d{1,2})(?:-(\d{1,2}))?/;
+const SLASH_DATE_RE = /^(\d{1,2})\/(\d{4})$/;
 
 // Custom logger to handle console usage
 const logger = {
@@ -91,6 +101,59 @@ function getTagCategories(technique) {
 function round(value, decimals = 2) {
   const factor = 10 ** decimals;
   return Math.round(value * factor) / factor;
+}
+
+/**
+ * Parse a Zotero date string to a decimal year.
+ * Handles: "2024", "2024-01", "2024-01-15", "04/2021", "2024-12-20", etc.
+ * Returns null if unparseable.
+ */
+function parseDateToYear(dateStr) {
+  if (!dateStr || typeof dateStr !== 'string') {
+    return null;
+  }
+  const trimmed = dateStr.trim();
+
+  // "YYYY" — just a year
+  if (YEAR_ONLY_RE.test(trimmed)) {
+    return Number.parseInt(trimmed, 10);
+  }
+
+  // "YYYY-MM-DD" or "YYYY-MM"
+  const isoMatch = trimmed.match(ISO_DATE_RE);
+  if (isoMatch) {
+    const year = Number.parseInt(isoMatch[1], 10);
+    const month = Number.parseInt(isoMatch[2], 10);
+    const day = isoMatch[3] ? Number.parseInt(isoMatch[3], 10) : 1;
+    return year + (month - 1) / 12 + (day - 1) / 365;
+  }
+
+  // "MM/YYYY"
+  const slashMatch = trimmed.match(SLASH_DATE_RE);
+  if (slashMatch) {
+    const month = Number.parseInt(slashMatch[1], 10);
+    const year = Number.parseInt(slashMatch[2], 10);
+    return year + (month - 1) / 12;
+  }
+
+  return null;
+}
+
+/** Exponential freshness decay: score = exp(-age / halfLife). */
+function freshnessDecay(ageYears) {
+  return Math.exp(-ageYears / FRESHNESS_HALF_LIFE_YEARS);
+}
+
+/** Compute the median of a numeric array. Returns null for empty arrays. */
+function median(values) {
+  if (values.length === 0) {
+    return null;
+  }
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 0
+    ? (sorted[mid - 1] + sorted[mid]) / 2
+    : sorted[mid];
 }
 
 // ---------------------------------------------------------------------------
@@ -760,7 +823,10 @@ function collectContentIssues(technique, breakdown, slugSet) {
   return issues;
 }
 
-function computeCompletenessScores(techniques) {
+function computeCompletenessScores(
+  techniques,
+  freshnessScoreBySlug = new Map()
+) {
   const slugSet = new Set(techniques.map((t) => t.slug));
   const scores = [];
 
@@ -773,6 +839,9 @@ function computeCompletenessScores(techniques) {
       resources: round(scoreResources(technique)),
       related_techniques: round(scoreRelatedTechniques(technique, slugSet)),
       goal_tag_depth: round(scoreGoalTagDepth(technique)),
+      resource_freshness: round(
+        freshnessScoreBySlug.get(technique.slug) ?? 0.5
+      ),
     };
 
     const score = round(
@@ -802,8 +871,318 @@ function computeCompletenessScores(techniques) {
 }
 
 // ---------------------------------------------------------------------------
+// Module E: Resource Freshness
+// ---------------------------------------------------------------------------
+
+/** Build a map of citationKey → decimal year from Zotero items. */
+function buildCitekeyYearMap(zoteroItems) {
+  const citekeyYearMap = new Map();
+  const undatedKeys = new Set();
+
+  for (const item of zoteroItems) {
+    const key = item.citationKey;
+    if (!key) {
+      continue;
+    }
+    const year = parseDateToYear(item.date);
+    if (year !== null) {
+      citekeyYearMap.set(key, year);
+    } else {
+      undatedKeys.add(key);
+    }
+  }
+
+  return { citekeyYearMap, undatedKeys };
+}
+
+/** Classify a single resource key as dated, undated, or unmatched. */
+function classifyResourceKey(key, citekeyYearMap, undatedKeys, currentYear) {
+  const year = citekeyYearMap.get(key);
+  if (year !== undefined) {
+    return {
+      age: currentYear - year,
+      year,
+      isOld: currentYear - year >= FRESHNESS_OLD_THRESHOLD_YEARS,
+    };
+  }
+  if (undatedKeys.has(key)) {
+    return { age: null, year: null, isOld: false, isUndated: true };
+  }
+  return null;
+}
+
+/** Gather age statistics from a technique's resource keys. */
+function gatherResourceAges(
+  resourceKeys,
+  citekeyYearMap,
+  undatedKeys,
+  currentYear
+) {
+  const ages = [];
+  let undatedCount = 0;
+  let newestYear = null;
+  let oldestYear = null;
+  let oldCount = 0;
+
+  for (const key of resourceKeys) {
+    const result = classifyResourceKey(
+      key,
+      citekeyYearMap,
+      undatedKeys,
+      currentYear
+    );
+    if (!result) {
+      continue;
+    }
+    if (result.isUndated) {
+      undatedCount++;
+      continue;
+    }
+    ages.push(result.age);
+    newestYear =
+      newestYear === null || result.year > newestYear
+        ? result.year
+        : newestYear;
+    oldestYear =
+      oldestYear === null || result.year < oldestYear
+        ? result.year
+        : oldestYear;
+    if (result.isOld) {
+      oldCount++;
+    }
+  }
+
+  return { ages, undatedCount, newestYear, oldestYear, oldCount };
+}
+
+/** Build the empty freshness result for a technique with no resources. */
+function emptyFreshnessResult(slug) {
+  return {
+    slug,
+    resource_count: 0,
+    dated_count: 0,
+    undated_count: 0,
+    avg_age: null,
+    freshness_score: null,
+    newest_year: null,
+    oldest_year: null,
+    old_resource_count: 0,
+  };
+}
+
+/** Compute freshness metrics for a single technique. */
+function computeTechniqueFreshness(
+  technique,
+  citekeyYearMap,
+  undatedKeys,
+  currentYear
+) {
+  const resourceKeys = technique.resources || [];
+  if (resourceKeys.length === 0) {
+    return emptyFreshnessResult(technique.slug);
+  }
+
+  const { ages, undatedCount, newestYear, oldestYear, oldCount } =
+    gatherResourceAges(resourceKeys, citekeyYearMap, undatedKeys, currentYear);
+
+  const avgAge =
+    ages.length > 0 ? ages.reduce((a, b) => a + b, 0) / ages.length : null;
+  const score = avgAge !== null ? freshnessDecay(avgAge) : null;
+
+  return {
+    slug: technique.slug,
+    resource_count: resourceKeys.length,
+    dated_count: ages.length,
+    undated_count: undatedCount,
+    avg_age: avgAge !== null ? round(avgAge, 1) : null,
+    freshness_score: score !== null ? round(score) : null,
+    newest_year: newestYear !== null ? round(newestYear, 0) : null,
+    oldest_year: oldestYear !== null ? round(oldestYear, 0) : null,
+    old_resource_count: oldCount,
+  };
+}
+
+/** Analyse resource freshness across all techniques. */
+function analyseResourceFreshness(techniques, zoteroItems) {
+  const currentYear = new Date().getFullYear() + new Date().getMonth() / 12;
+  const { citekeyYearMap, undatedKeys } = buildCitekeyYearMap(zoteroItems);
+
+  const perTechnique = techniques.map((t) =>
+    computeTechniqueFreshness(t, citekeyYearMap, undatedKeys, currentYear)
+  );
+
+  // Global aggregates (only from techniques with datable resources)
+  const allScores = perTechnique
+    .map((t) => t.freshness_score)
+    .filter((s) => s !== null);
+  const allAges = perTechnique.map((t) => t.avg_age).filter((a) => a !== null);
+
+  const totalOld = perTechnique.reduce((s, t) => s + t.old_resource_count, 0);
+  const techniquesWithDatedResources = allScores.length;
+  const techniquesWithoutDatedResources =
+    techniques.length - techniquesWithDatedResources;
+
+  return {
+    half_life_years: FRESHNESS_HALF_LIFE_YEARS,
+    old_threshold_years: FRESHNESS_OLD_THRESHOLD_YEARS,
+    zotero_items_loaded: zoteroItems.length,
+    citekeys_with_dates: citekeyYearMap.size,
+    citekeys_without_dates: undatedKeys.size,
+    techniques_with_dated_resources: techniquesWithDatedResources,
+    techniques_without_dated_resources: techniquesWithoutDatedResources,
+    avg_freshness_score:
+      allScores.length > 0
+        ? round(allScores.reduce((a, b) => a + b, 0) / allScores.length)
+        : null,
+    median_resource_age:
+      median(allAges) !== null ? round(median(allAges), 1) : null,
+    total_old_resources: totalOld,
+    per_technique: perTechnique,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Module F: Review Staleness
+// ---------------------------------------------------------------------------
+
+/** Analyse review staleness from enhancement log timestamps. */
+function analyseReviewStaleness(techniques, enhancementLog) {
+  const timestamps = enhancementLog?.technique_timestamps || {};
+  const now = Date.now();
+
+  const perTechnique = [];
+  let reviewedCount = 0;
+  let neverReviewedCount = 0;
+  const daysSinceReviewList = [];
+  let stalestReviewed = null;
+
+  for (const technique of techniques) {
+    const entry = timestamps[technique.slug];
+    if (!entry?.last_reviewed) {
+      neverReviewedCount++;
+      perTechnique.push({
+        slug: technique.slug,
+        last_reviewed: null,
+        days_since_review: null,
+      });
+      continue;
+    }
+
+    const reviewedAt = new Date(entry.last_reviewed).getTime();
+    const daysSince = round((now - reviewedAt) / (1000 * 60 * 60 * 24), 1);
+    reviewedCount++;
+    daysSinceReviewList.push(daysSince);
+
+    perTechnique.push({
+      slug: technique.slug,
+      last_reviewed: entry.last_reviewed,
+      days_since_review: daysSince,
+    });
+
+    if (
+      stalestReviewed === null ||
+      daysSince > stalestReviewed.days_since_review
+    ) {
+      stalestReviewed = {
+        slug: technique.slug,
+        last_reviewed: entry.last_reviewed,
+        days_since_review: daysSince,
+      };
+    }
+  }
+
+  const avgDays =
+    daysSinceReviewList.length > 0
+      ? round(
+          daysSinceReviewList.reduce((a, b) => a + b, 0) /
+            daysSinceReviewList.length,
+          1
+        )
+      : null;
+
+  return {
+    techniques_never_reviewed: neverReviewedCount,
+    techniques_reviewed: reviewedCount,
+    avg_days_since_review: avgDays,
+    stalest_reviewed: stalestReviewed,
+    per_technique: perTechnique,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Module G: Peer Comparison
+// ---------------------------------------------------------------------------
+
+/** Build slug → primary goal lookup from techniques. */
+function buildSlugToPrimaryGoal(techniques) {
+  const map = {};
+  for (const technique of techniques) {
+    map[technique.slug] = (technique.assurance_goals || [])[0] || null;
+  }
+  return map;
+}
+
+/** Enrich completeness score entries with peer comparison metrics. */
+function enrichWithPeerComparison(completenessScores, techniques) {
+  const slugToPrimaryGoal = buildSlugToPrimaryGoal(techniques);
+
+  // Build peer group score maps: goal → sorted scores[]
+  const peerScoresByGoal = {};
+  for (const entry of completenessScores) {
+    const goal = slugToPrimaryGoal[entry.slug];
+    if (!goal) {
+      continue;
+    }
+    if (!peerScoresByGoal[goal]) {
+      peerScoresByGoal[goal] = [];
+    }
+    peerScoresByGoal[goal].push(entry.score);
+  }
+
+  // Pre-sort and compute averages per goal
+  const peerAvgByGoal = {};
+  for (const [goal, scores] of Object.entries(peerScoresByGoal)) {
+    scores.sort((a, b) => a - b);
+    peerAvgByGoal[goal] = round(
+      scores.reduce((a, b) => a + b, 0) / scores.length,
+      1
+    );
+  }
+
+  // Enrich each entry
+  for (const entry of completenessScores) {
+    const goal = slugToPrimaryGoal[entry.slug];
+    if (!(goal && peerScoresByGoal[goal])) {
+      entry.primary_goal = goal;
+      entry.peer_avg_score = null;
+      entry.peer_percentile = null;
+      continue;
+    }
+
+    const peerScores = peerScoresByGoal[goal];
+    // Percentile: fraction of peers scoring strictly below this entry
+    const belowCount = peerScores.filter((s) => s < entry.score).length;
+    const percentile = round((belowCount / peerScores.length) * 100, 1);
+
+    entry.primary_goal = goal;
+    entry.peer_avg_score = peerAvgByGoal[goal];
+    entry.peer_percentile = percentile;
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
+
+/** Load a JSON file gracefully — returns fallback on error. */
+async function loadJsonGracefully(filePath, fallback) {
+  try {
+    const raw = await fs.readFile(filePath, 'utf-8');
+    return JSON.parse(raw);
+  } catch {
+    return fallback;
+  }
+}
 
 async function main() {
   logger.info(chalk.blue('\n📊 Generating TEA Techniques Quality Report...\n'));
@@ -819,6 +1198,19 @@ async function main() {
   }
 
   logger.info(`  Loaded ${techniques.length} techniques`);
+
+  // Load supplementary data (graceful — missing files don't block report)
+  const zoteroData = await loadJsonGracefully(zoteroPath, { items: [] });
+  const zoteroItems = (zoteroData.items || []).filter((i) => i.citationKey);
+  logger.info(`  Loaded ${zoteroItems.length} Zotero items with citation keys`);
+
+  const enhancementLog = await loadJsonGracefully(enhancementLogPath, {});
+  const reviewedCount = Object.keys(
+    enhancementLog?.technique_timestamps || {}
+  ).length;
+  logger.info(
+    `  Loaded enhancement log (${reviewedCount} reviewed techniques)`
+  );
 
   // Collect all unique tags
   const allTags = new Set();
@@ -837,8 +1229,28 @@ async function main() {
   logger.info('  Validating cross-references...');
   const crossReferences = validateCrossReferences(techniques);
 
+  logger.info('  Analysing resource freshness...');
+  const resourceFreshness = analyseResourceFreshness(techniques, zoteroItems);
+
+  // Build freshness score map for completeness integration
+  const freshnessScoreBySlug = new Map();
+  for (const entry of resourceFreshness.per_technique) {
+    if (entry.freshness_score !== null) {
+      freshnessScoreBySlug.set(entry.slug, entry.freshness_score);
+    }
+  }
+
   logger.info('  Computing completeness scores...');
-  const completenessScores = computeCompletenessScores(techniques);
+  const completenessScores = computeCompletenessScores(
+    techniques,
+    freshnessScoreBySlug
+  );
+
+  logger.info('  Analysing review staleness...');
+  const reviewStaleness = analyseReviewStaleness(techniques, enhancementLog);
+
+  logger.info('  Computing peer comparison...');
+  enrichWithPeerComparison(completenessScores, techniques);
 
   logger.info('  Computing summary...');
   const summary = computeSummary(techniques, completenessScores);
@@ -858,6 +1270,8 @@ async function main() {
     },
     cross_references: crossReferences,
     completeness_scores: completenessScores,
+    resource_freshness: resourceFreshness,
+    review_staleness: reviewStaleness,
   };
 
   // Output
@@ -892,6 +1306,12 @@ async function main() {
   );
   logger.info(
     `  Orphan techniques: ${crossReferences.orphan_techniques.length}`
+  );
+  logger.info(
+    `  Avg resource freshness: ${resourceFreshness.avg_freshness_score ?? 'N/A'}`
+  );
+  logger.info(
+    `  Techniques never reviewed: ${reviewStaleness.techniques_never_reviewed}`
   );
 
   // Lowest scoring techniques

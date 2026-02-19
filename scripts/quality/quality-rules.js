@@ -110,10 +110,22 @@ export const COMPLETENESS_WEIGHTS = {
   description_quality: 0.1,
   use_cases: 0.1,
   limitations: 0.1,
-  resources: 0.1,
-  related_techniques: 0.05,
+  resources: 0.08,
+  related_techniques: 0.02,
   goal_tag_depth: 0.2,
+  resource_freshness: 0.05,
 };
+
+/**
+ * Resource freshness: exponential decay half-life in years.
+ * At age = HALF_LIFE, freshness score ≈ 0.37.
+ */
+export const FRESHNESS_HALF_LIFE_YEARS = 5;
+
+/**
+ * Threshold (years) above which a resource is counted as "old".
+ */
+export const FRESHNESS_OLD_THRESHOLD_YEARS = 5;
 
 /**
  * Scoring thresholds for individual completeness components.

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-19T14:26:33.014Z",
+  "generated_at": "2026-02-21T08:32:44.729Z",
   "dataset_version": {
     "technique_count": 114,
     "tag_count": 172
@@ -8,7 +8,7 @@
     "total_techniques": 114,
     "techniques_by_goal": {
       "Explainability": 44,
-      "Fairness": 53,
+      "Fairness": 52,
       "Reliability": 60,
       "Transparency": 55,
       "Privacy": 10,
@@ -126,8 +126,8 @@
         "level": "should"
       },
       {
-        "slug": "saliency-maps",
-        "name": "Saliency Maps",
+        "slug": "gradient-saliency",
+        "name": "Gradient Saliency",
         "goal": "Fairness",
         "missing": [
           "fairness-approach",
@@ -1771,8 +1771,8 @@
         "level": "should"
       },
       {
-        "slug": "toxicity-and-bias-detection",
-        "name": "Toxicity and Bias Detection",
+        "slug": "toxicity-detection",
+        "name": "Toxicity Detection",
         "goal": "Safety",
         "missing": [
           "assurance-goal-category/safety"
@@ -1780,18 +1780,8 @@
         "level": "should"
       },
       {
-        "slug": "toxicity-and-bias-detection",
-        "name": "Toxicity and Bias Detection",
-        "goal": "Fairness",
-        "missing": [
-          "fairness-approach",
-          "assurance-goal-category/fairness"
-        ],
-        "level": "should"
-      },
-      {
-        "slug": "toxicity-and-bias-detection",
-        "name": "Toxicity and Bias Detection",
+        "slug": "toxicity-detection",
+        "name": "Toxicity Detection",
         "goal": "Reliability",
         "missing": [
           "assurance-goal-category/reliability"
@@ -1877,7 +1867,7 @@
       },
       {
         "source": "deeplift",
-        "target": "saliency-maps",
+        "target": "gradient-saliency",
         "direction": "a_lists_b_but_not_reverse"
       },
       {
@@ -1936,7 +1926,7 @@
         "direction": "a_lists_b_but_not_reverse"
       },
       {
-        "source": "saliency-maps",
+        "source": "gradient-saliency",
         "target": "layer-wise-relevance-propagation",
         "direction": "a_lists_b_but_not_reverse"
       },
@@ -2276,11 +2266,6 @@
         "direction": "a_lists_b_but_not_reverse"
       },
       {
-        "source": "runtime-monitoring-and-circuit-breakers",
-        "target": "toxicity-and-bias-detection",
-        "direction": "a_lists_b_but_not_reverse"
-      },
-      {
         "source": "model-cards",
         "target": "model-development-audit-trails",
         "direction": "a_lists_b_but_not_reverse"
@@ -2432,7 +2417,7 @@
       },
       {
         "source": "concept-activation-vectors",
-        "target": "saliency-maps",
+        "target": "gradient-saliency",
         "direction": "a_lists_b_but_not_reverse"
       },
       {
@@ -2871,11 +2856,6 @@
         "direction": "a_lists_b_but_not_reverse"
       },
       {
-        "source": "prompt-injection-testing",
-        "target": "toxicity-and-bias-detection",
-        "direction": "a_lists_b_but_not_reverse"
-      },
-      {
         "source": "retrieval-augmented-generation-evaluation",
         "target": "epistemic-uncertainty-quantification",
         "direction": "a_lists_b_but_not_reverse"
@@ -2911,23 +2891,12 @@
         "direction": "a_lists_b_but_not_reverse"
       },
       {
-        "source": "toxicity-and-bias-detection",
-        "target": "demographic-parity-assessment",
-        "direction": "a_lists_b_but_not_reverse"
-      },
-      {
-        "source": "toxicity-and-bias-detection",
-        "target": "counterfactual-fairness-assessment",
-        "direction": "a_lists_b_but_not_reverse"
-      },
-      {
-        "source": "toxicity-and-bias-detection",
-        "target": "sensitivity-analysis-for-fairness",
+        "source": "toxicity-detection",
+        "target": "embedding-bias-analysis",
         "direction": "a_lists_b_but_not_reverse"
       }
     ],
     "orphan_techniques": [
-      "embedding-bias-analysis",
       "prejudice-remover-regulariser"
     ]
   },
@@ -3227,7 +3196,7 @@
         "Missing depth-3+ assurance-goal-category tags for some goals"
       ],
       "primary_goal": "Safety",
-      "peer_avg_score": 74.3,
+      "peer_avg_score": 74.7,
       "peer_percentile": 0
     },
     {
@@ -3359,27 +3328,6 @@
       "peer_percentile": 11.1
     },
     {
-      "slug": "toxicity-and-bias-detection",
-      "name": "Toxicity and Bias Detection",
-      "score": 72.3,
-      "breakdown": {
-        "tag_coverage": 0.82,
-        "description_quality": 1,
-        "use_cases": 1,
-        "limitations": 1,
-        "resources": 1,
-        "related_techniques": 1,
-        "goal_tag_depth": 0,
-        "resource_freshness": 0.71
-      },
-      "issues": [
-        "Missing depth-3+ assurance-goal-category tags for some goals"
-      ],
-      "primary_goal": "Safety",
-      "peer_avg_score": 74.3,
-      "peer_percentile": 16.7
-    },
-    {
       "slug": "bayesian-fairness-regularization",
       "name": "Bayesian Fairness Regularization",
       "score": 72.4,
@@ -3502,8 +3450,8 @@
         "Missing depth-3+ assurance-goal-category tags for some goals"
       ],
       "primary_goal": "Safety",
-      "peer_avg_score": 74.3,
-      "peer_percentile": 33.3
+      "peer_avg_score": 74.7,
+      "peer_percentile": 16.7
     },
     {
       "slug": "safety-envelope-testing",
@@ -3523,8 +3471,8 @@
         "Missing depth-3+ assurance-goal-category tags for some goals"
       ],
       "primary_goal": "Safety",
-      "peer_avg_score": 74.3,
-      "peer_percentile": 50
+      "peer_avg_score": 74.7,
+      "peer_percentile": 33.3
     },
     {
       "slug": "prompt-injection-testing",
@@ -3671,8 +3619,8 @@
         "Missing depth-3+ assurance-goal-category tags for some goals"
       ],
       "primary_goal": "Safety",
-      "peer_avg_score": 74.3,
-      "peer_percentile": 66.7
+      "peer_avg_score": 74.7,
+      "peer_percentile": 50
     },
     {
       "slug": "threshold-optimiser",
@@ -3737,6 +3685,27 @@
       "primary_goal": "Privacy",
       "peer_avg_score": 72.4,
       "peer_percentile": 71.4
+    },
+    {
+      "slug": "toxicity-detection",
+      "name": "Toxicity Detection",
+      "score": 75.1,
+      "breakdown": {
+        "tag_coverage": 0.9,
+        "description_quality": 1,
+        "use_cases": 1,
+        "limitations": 1,
+        "resources": 1,
+        "related_techniques": 1,
+        "goal_tag_depth": 0,
+        "resource_freshness": 0.71
+      },
+      "issues": [
+        "Missing depth-3+ assurance-goal-category tags for some goals"
+      ],
+      "primary_goal": "Safety",
+      "peer_avg_score": 74.7,
+      "peer_percentile": 66.7
     },
     {
       "slug": "prompt-sensitivity-analysis",
@@ -4393,7 +4362,7 @@
         "Missing depth-3+ assurance-goal-category tags for some goals"
       ],
       "primary_goal": "Safety",
-      "peer_avg_score": 74.3,
+      "peer_avg_score": 74.7,
       "peer_percentile": 83.3
     },
     {
@@ -4481,8 +4450,8 @@
       "peer_percentile": 92.6
     },
     {
-      "slug": "saliency-maps",
-      "name": "Saliency Maps",
+      "slug": "gradient-saliency",
+      "name": "Gradient Saliency",
       "score": 82.5,
       "breakdown": {
         "tag_coverage": 0.91,
@@ -5467,7 +5436,7 @@
         "old_resource_count": 1
       },
       {
-        "slug": "saliency-maps",
+        "slug": "gradient-saliency",
         "resource_count": 4,
         "dated_count": 2,
         "undated_count": 2,
@@ -6556,7 +6525,7 @@
         "old_resource_count": 0
       },
       {
-        "slug": "toxicity-and-bias-detection",
+        "slug": "toxicity-detection",
         "resource_count": 5,
         "dated_count": 5,
         "undated_count": 0,
@@ -6571,11 +6540,11 @@
   "review_staleness": {
     "techniques_never_reviewed": 109,
     "techniques_reviewed": 5,
-    "avg_days_since_review": 13,
+    "avg_days_since_review": 14.8,
     "stalest_reviewed": {
       "slug": "internal-review-boards",
       "last_reviewed": "2026-02-06T12:30:00Z",
-      "days_since_review": 13.1
+      "days_since_review": 14.8
     },
     "per_technique": [
       {
@@ -6649,7 +6618,7 @@
         "days_since_review": null
       },
       {
-        "slug": "saliency-maps",
+        "slug": "gradient-saliency",
         "last_reviewed": null,
         "days_since_review": null
       },
@@ -6821,17 +6790,17 @@
       {
         "slug": "internal-review-boards",
         "last_reviewed": "2026-02-06T12:30:00Z",
-        "days_since_review": 13.1
+        "days_since_review": 14.8
       },
       {
         "slug": "red-teaming",
         "last_reviewed": "2026-02-06T13:00:00Z",
-        "days_since_review": 13.1
+        "days_since_review": 14.8
       },
       {
         "slug": "human-in-the-loop-safeguards",
         "last_reviewed": "2026-02-06T14:00:00Z",
-        "days_since_review": 13
+        "days_since_review": 14.8
       },
       {
         "slug": "confidence-thresholding",
@@ -6901,7 +6870,7 @@
       {
         "slug": "causal-mediation-analysis-in-language-models",
         "last_reviewed": "2026-02-06T16:00:00Z",
-        "days_since_review": 12.9
+        "days_since_review": 14.7
       },
       {
         "slug": "feature-attribution-with-integrated-gradients-in-nlp",
@@ -7036,7 +7005,7 @@
       {
         "slug": "agent-goal-misalignment-testing",
         "last_reviewed": "2026-02-06T15:00:00Z",
-        "days_since_review": 13
+        "days_since_review": 14.7
       },
       {
         "slug": "api-usage-pattern-monitoring",
@@ -7144,7 +7113,7 @@
         "days_since_review": null
       },
       {
-        "slug": "toxicity-and-bias-detection",
+        "slug": "toxicity-detection",
         "last_reviewed": null,
         "days_since_review": null
       }

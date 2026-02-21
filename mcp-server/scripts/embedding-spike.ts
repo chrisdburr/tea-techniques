@@ -32,7 +32,7 @@ const NN_SPECIFIC = [
   'layer-wise-relevance-propagation',
   'gradient-weighted-class-activation-mapping',
   'integrated-gradients',
-  'saliency-maps',
+  'gradient-saliency',
   'contextual-decomposition',
   'taylor-decomposition',
   'attention-visualisation-in-transformers',
@@ -58,7 +58,7 @@ const LLM_SPECIFIC = [
   'chain-of-thought-faithfulness-evaluation',
   'causal-mediation-analysis-in-language-models',
   'attention-visualisation-in-transformers',
-  'toxicity-and-bias-detection',
+  'toxicity-detection',
   'safety-guardrails',
   'few-shot-fairness-evaluation',
   'automated-documentation-generation',
@@ -66,7 +66,7 @@ const LLM_SPECIFIC = [
 
 const VISION_SPECIFIC = [
   'gradient-weighted-class-activation-mapping',
-  'saliency-maps',
+  'gradient-saliency',
 ];
 
 const FAIRNESS_IRRELEVANT = [
@@ -279,7 +279,7 @@ const RUBRICS: ClaimRubric[] = [
     scenario: 'Chatbot',
     text: 'Responds consistently regardless of formal, colloquial, or non-native language; no offensive or biased replies.',
     good: [
-      'toxicity-and-bias-detection',
+      'toxicity-detection',
       'prompt-robustness-testing',
       'prompt-sensitivity-analysis',
       'few-shot-fairness-evaluation',
@@ -306,7 +306,7 @@ const RUBRICS: ClaimRubric[] = [
     text: 'System highlights specific region of chest X-ray that led to suspected abnormality, allowing radiologist to verify reasoning.',
     good: [
       'gradient-weighted-class-activation-mapping',
-      'saliency-maps',
+      'gradient-saliency',
       'integrated-gradients',
       'layer-wise-relevance-propagation',
     ],

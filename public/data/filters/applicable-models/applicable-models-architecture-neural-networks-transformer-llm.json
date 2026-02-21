@@ -994,7 +994,7 @@
       ],
       "related_techniques": [
         "prompt-robustness-testing",
-        "toxicity-and-bias-detection",
+        "toxicity-detection",
         "sensitivity-analysis-for-fairness",
         "path-specific-counterfactual-fairness-assessment"
       ],
@@ -1621,7 +1621,7 @@
         "agent-goal-misalignment-testing",
         "jailbreak-resistance-testing",
         "chain-of-thought-faithfulness-evaluation",
-        "toxicity-and-bias-detection"
+        "toxicity-detection"
       ],
       "sample_claims": [
         {
@@ -1817,12 +1817,11 @@
       ]
     },
     {
-      "slug": "toxicity-and-bias-detection",
-      "name": "Toxicity and Bias Detection",
-      "description": "Toxicity and bias detection uses automated classifiers and human review to identify harmful, offensive, or biased content in model outputs. This technique employs tools trained to detect toxic language, hate speech, stereotypes, and demographic biases through targeted testing with adversarial prompts. Detection covers explicit toxicity, implicit bias, and distributional unfairness across demographic groups.",
+      "slug": "toxicity-detection",
+      "name": "Toxicity Detection",
+      "description": "Toxicity detection uses automated classifiers and human review to identify harmful, offensive, or dangerous content in model outputs. This technique employs tools trained to detect toxic language, hate speech, threats, and other harmful content through targeted testing with adversarial prompts. Detection covers explicit toxicity (slurs, threats, graphic content) and implicit harm (manipulative advice, dangerous instructions). For bias and fairness evaluation of model outputs, see related techniques such as few-shot fairness evaluation and demographic parity assessment.",
       "assurance_goals": [
         "Safety",
-        "Fairness",
         "Reliability"
       ],
       "tags": [
@@ -1831,8 +1830,6 @@
         "applicable-models/requirements/black-box",
         "applicable-models/paradigm/generative",
         "assurance-goal-category/safety",
-        "assurance-goal-category/fairness",
-        "evidence-type/fairness-metric",
         "assurance-goal-category/reliability",
         "data-type/text",
         "data-requirements/labelled-data",
@@ -1852,28 +1849,12 @@
           "goal": "Safety"
         },
         {
-          "description": "Testing whether a content generation model produces stereotypical or discriminatory outputs when prompted with queries about different demographic groups, professions, or social characteristics.",
-          "goal": "Fairness"
-        },
-        {
           "description": "Screening an AI writing assistant for educational content to ensure it maintains appropriate language and doesn't generate offensive material that could be harmful in classroom or academic settings.",
           "goal": "Reliability"
         },
         {
           "description": "Screening a mental health support chatbot to ensure it doesn't generate stigmatising language about mental health conditions, substance use, or marginalised communities, which could cause harm to vulnerable patients seeking help.",
           "goal": "Safety"
-        },
-        {
-          "description": "Monitoring a banking chatbot's responses to detect bias in how it addresses customers from different demographic groups, ensuring equitable treatment in explaining financial products, fees, or denial reasons.",
-          "goal": "Fairness"
-        },
-        {
-          "description": "Testing a content moderation assistant to ensure it consistently identifies hate speech, harassment, and discriminatory content across different demographic targets without over-flagging minority language patterns or dialect variations.",
-          "goal": "Fairness"
-        },
-        {
-          "description": "Evaluating an AI interview scheduling assistant to verify it doesn't generate biased language or make stereotypical assumptions when communicating with candidates from diverse backgrounds or with non-traditional career paths.",
-          "goal": "Fairness"
         }
       ],
       "limitations": [
@@ -1950,9 +1931,9 @@
       ],
       "related_techniques": [
         "few-shot-fairness-evaluation",
-        "demographic-parity-assessment",
-        "counterfactual-fairness-assessment",
-        "sensitivity-analysis-for-fairness"
+        "embedding-bias-analysis",
+        "prompt-injection-testing",
+        "runtime-monitoring-and-circuit-breakers"
       ],
       "sample_claims": [
         {
@@ -1966,19 +1947,9 @@
           "assuranceGoal": "safety"
         },
         {
-          "text": "The content generation system produces equitable characterisations across demographic groups without stereotypical assumptions about professions or social roles",
-          "domain": "general",
-          "assuranceGoal": "fairness"
-        },
-        {
           "text": "The public-facing chatbot maintains appropriate language standards and does not produce harmful outputs when deployed in educational environments with young users",
           "domain": "public sector",
           "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The banking assistant addresses customers from different demographic backgrounds without bias in tone, formality, or characterisation of financial circumstances",
-          "domain": "finance",
-          "assuranceGoal": "fairness"
         }
       ]
     }

@@ -109,7 +109,7 @@
         "layer-wise-relevance-propagation",
         "integrated-gradients",
         "taylor-decomposition",
-        "saliency-maps"
+        "gradient-saliency"
       ],
       "sample_claims": [
         {
@@ -407,9 +407,9 @@
       ]
     },
     {
-      "slug": "saliency-maps",
-      "name": "Saliency Maps",
-      "description": "Saliency maps are visual explanations for image classification models that highlight which pixels in an image most strongly influence the model's prediction. Computed by calculating gradients of the model's output with respect to input pixels, saliency maps produce heatmaps where brighter regions indicate pixels that, when changed, would most significantly affect the prediction. This technique helps users understand which parts of an image the model is 'looking at' when making decisions.",
+      "slug": "gradient-saliency",
+      "name": "Gradient Saliency",
+      "description": "Gradient saliency (also known as vanilla gradient saliency) produces visual explanations for image classification models by computing the gradient of the model's output with respect to input pixels. The resulting heatmap highlights pixels where small changes would most significantly affect the prediction. Originally proposed by Simonyan et al. (2013), this is the simplest gradient-based attribution method and serves as a baseline for more sophisticated approaches such as Integrated Gradients and Grad-CAM.",
       "assurance_goals": [
         "Explainability",
         "Fairness"
@@ -666,7 +666,7 @@
       "acronym": "Grad-CAM",
       "related_techniques": [
         "integrated-gradients",
-        "saliency-maps",
+        "gradient-saliency",
         "occlusion-sensitivity",
         "local-interpretable-model-agnostic-explanations"
       ],
@@ -1593,7 +1593,7 @@
       "related_techniques": [
         "neuron-activation-analysis",
         "integrated-gradients",
-        "saliency-maps",
+        "gradient-saliency",
         "prototype-and-criticism-models"
       ],
       "sample_claims": [

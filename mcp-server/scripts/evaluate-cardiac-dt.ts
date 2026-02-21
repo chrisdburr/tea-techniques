@@ -36,7 +36,7 @@ const NN_SPECIFIC = [
   'layer-wise-relevance-propagation',
   'gradient-weighted-class-activation-mapping',
   'integrated-gradients',
-  'saliency-maps',
+  'gradient-saliency',
   'contextual-decomposition',
   'taylor-decomposition',
   'attention-visualisation-in-transformers',

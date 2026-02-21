@@ -759,9 +759,9 @@
     ]
   },
   {
-    "slug": "saliency-maps",
-    "name": "Saliency Maps",
-    "description": "Saliency maps are visual explanations for image classification models that highlight which pixels in an image most strongly influence the model's prediction. Computed by calculating gradients of the model's output with respect to input pixels, saliency maps produce heatmaps where brighter regions indicate pixels that, when changed, would most significantly affect the prediction. This technique helps users understand which parts of an image the model is 'looking at' when making decisions.",
+    "slug": "gradient-saliency",
+    "name": "Gradient Saliency",
+    "description": "Gradient saliency (also known as vanilla gradient saliency) produces visual explanations for image classification models by computing the gradient of the model's output with respect to input pixels. The resulting heatmap highlights pixels where small changes would most significantly affect the prediction. Originally proposed by Simonyan et al. (2013), this is the simplest gradient-based attribution method and serves as a baseline for more sophisticated approaches such as Integrated Gradients and Grad-CAM.",
     "assurance_goals": [
       "Explainability",
       "Fairness"
@@ -2658,7 +2658,7 @@
   {
     "slug": "red-teaming",
     "name": "Red Teaming",
-    "description": "Red teaming involves systematic adversarial testing of AI/ML systems by dedicated specialists who attempt to identify flaws, vulnerabilities, harmful outputs, and ways to circumvent safety measures. Drawing from cybersecurity practices, red teams employ diverse attack vectors including prompt injection, adversarial examples, edge case exploitation, social engineering scenarios, and goal misalignment probes. Unlike standard testing that validates expected behaviour, red teaming specifically seeks to break systems through creative and adversarial approaches, revealing non-obvious risks and failure modes that could be exploited maliciously or cause harm in deployment.",
+    "description": "Red teaming is a structured adversarial evaluation process in which a dedicated team systematically probes an AI/ML system to discover vulnerabilities and failure modes. Unlike individual testing techniques (such as prompt injection testing, jailbreak resistance testing, or safety envelope testing), red teaming defines the organisational methodology: team composition, campaign planning, attack taxonomy, and reporting structure. The red team coordinates diverse attack vectors — including prompt manipulation, adversarial examples, edge case exploitation, and social engineering scenarios — into a coherent assessment programme. Results feed into risk registers and remediation plans rather than pass/fail metrics.",
     "assurance_goals": [
       "General"
     ],
@@ -6241,12 +6241,11 @@
     ]
   },
   {
-    "slug": "toxicity-and-bias-detection",
-    "name": "Toxicity and Bias Detection",
-    "description": "Toxicity and bias detection uses automated classifiers and human review to identify harmful, offensive, or biased content in model outputs. This technique employs tools trained to detect toxic language, hate speech, stereotypes, and demographic biases through targeted testing with adversarial prompts. Detection covers explicit toxicity, implicit bias, and distributional unfairness across demographic groups.",
+    "slug": "toxicity-detection",
+    "name": "Toxicity Detection",
+    "description": "Toxicity detection uses automated classifiers and human review to identify harmful, offensive, or dangerous content in model outputs. This technique employs tools trained to detect toxic language, hate speech, threats, and other harmful content through targeted testing with adversarial prompts. Detection covers explicit toxicity (slurs, threats, graphic content) and implicit harm (manipulative advice, dangerous instructions). For bias and fairness evaluation of model outputs, see related techniques such as few-shot fairness evaluation and demographic parity assessment.",
     "assurance_goals": [
       "Safety",
-      "Fairness",
       "Reliability"
     ],
     "tags": [
@@ -6255,8 +6254,6 @@
       "applicable-models/requirements/black-box",
       "applicable-models/paradigm/generative",
       "assurance-goal-category/safety",
-      "assurance-goal-category/fairness",
-      "evidence-type/fairness-metric",
       "assurance-goal-category/reliability",
       "data-type/text",
       "data-requirements/labelled-data",
@@ -6282,19 +6279,9 @@
         "assuranceGoal": "safety"
       },
       {
-        "text": "The content generation system produces equitable characterisations across demographic groups without stereotypical assumptions about professions or social roles",
-        "domain": "general",
-        "assuranceGoal": "fairness"
-      },
-      {
         "text": "The public-facing chatbot maintains appropriate language standards and does not produce harmful outputs when deployed in educational environments with young users",
         "domain": "public sector",
         "assuranceGoal": "reliability"
-      },
-      {
-        "text": "The banking assistant addresses customers from different demographic backgrounds without bias in tone, formality, or characterisation of financial circumstances",
-        "domain": "finance",
-        "assuranceGoal": "fairness"
       }
     ]
   }

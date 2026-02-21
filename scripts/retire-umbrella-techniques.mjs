@@ -41,7 +41,7 @@ const RETIREMENTS = {
   ],
   'safety-guardrails': [
     'runtime-monitoring-and-circuit-breakers',
-    'toxicity-and-bias-detection',
+    'toxicity-detection',
     'out-of-domain-detection',
     'confidence-thresholding',
   ],

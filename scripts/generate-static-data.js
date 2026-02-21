@@ -8,6 +8,16 @@ import { generateJsonLd } from './generate-jsonld.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+/**
+ * Catch-all tags: techniques tagged with these match any specific value
+ * in the same category (mirrors lib/constants.ts for use in this JS script).
+ */
+const CATCH_ALL_TAGS = {
+  'lifecycle-stage': 'lifecycle-stage/all',
+  'data-type': 'data-type/any',
+  'assurance-goal-category': 'assurance-goal-category/general',
+};
+
 // Paths
 const rootDir = path.resolve(__dirname, '..');
 const dataDir = path.join(rootDir, 'public', 'data');
@@ -395,8 +405,13 @@ async function generateFilterData(techniques, tags) {
 
       return Promise.all(
         categoryTags.map((tag) => {
-          const filteredTechniques = techniques.filter((technique) =>
-            technique.tags?.includes(tag.name)
+          const catchAllTag = CATCH_ALL_TAGS[tag.category];
+          const filteredTechniques = techniques.filter(
+            (technique) =>
+              technique.tags?.includes(tag.name) ||
+              (catchAllTag &&
+                catchAllTag !== tag.name &&
+                technique.tags?.includes(catchAllTag))
           );
 
           return fs.writeFile(

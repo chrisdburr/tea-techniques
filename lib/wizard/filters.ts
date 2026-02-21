@@ -237,6 +237,10 @@ function hasLifecycleMatch(technique: Technique, stages: string[]): boolean {
   const lifecycleTags =
     technique.tags?.filter((tag) => tag.startsWith('lifecycle-stage/')) || [];
 
+  if (lifecycleTags.includes('lifecycle-stage/all')) {
+    return true;
+  }
+
   return stages.some((stage) =>
     lifecycleTags.some((tag) => tag.includes(stage))
   );

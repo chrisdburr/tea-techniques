@@ -220,6 +220,32 @@ const MODEL_TYPE_MAP: Record<string, string | null> = {
 // Architecture-specific tags to exclude for non-ML model types.
 const NON_ML_EXCLUDE_TAGS = ['neural-networks', 'tree-based', 'linear-models'];
 
+/**
+ * Catch-all tags: techniques tagged with these match any specific value
+ * in the same category (mirrors lib/constants.ts for use in this ESM module).
+ */
+const CATCH_ALL_TAGS: Record<string, string> = {
+  'lifecycle-stage': 'lifecycle-stage/all',
+  'data-type': 'data-type/any',
+  'assurance-goal-category': 'assurance-goal-category/general',
+};
+
+/** Check if a technique has a catch-all tag for the category matching the search term. */
+function hasCatchAllMatch(
+  technique: TechniqueNode,
+  searchTerm: string
+): boolean {
+  for (const [category, catchAllTag] of Object.entries(CATCH_ALL_TAGS)) {
+    if (
+      searchTerm.startsWith(category) &&
+      technique.tags.some((tag) => tag.toLowerCase().includes(catchAllTag))
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
 /** Filter by context tag (include only techniques matching the tag fragment).
  *  Degrades gracefully: if the filter would eliminate all results, skip it. */
 function applyContextFilter(
@@ -239,8 +265,10 @@ function applyContextFilter(
     return applyContextFilter(techniques, mapped);
   }
 
-  const filtered = techniques.filter((t) =>
-    t.tags.some((tag) => tag.toLowerCase().includes(lower))
+  const filtered = techniques.filter(
+    (t) =>
+      t.tags.some((tag) => tag.toLowerCase().includes(lower)) ||
+      hasCatchAllMatch(t, lower)
   );
   // Graceful degradation: if filter eliminates everything, skip it
   return filtered.length > 0 ? filtered : techniques;
@@ -439,8 +467,10 @@ export class KnowledgeGraph {
     if (filters.tags?.length) {
       const tagTerms = filters.tags.map((t) => t.toLowerCase());
       results = results.filter((t) =>
-        tagTerms.every((term) =>
-          t.tags.some((tag) => tag.toLowerCase().includes(term))
+        tagTerms.every(
+          (term) =>
+            t.tags.some((tag) => tag.toLowerCase().includes(term)) ||
+            hasCatchAllMatch(t, term)
         )
       );
     }

@@ -1,6 +1,7 @@
 // Static data loading utilities
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { CATCH_ALL_TAGS } from './constants';
 import type {
   AssuranceGoal,
   CategoryData,
@@ -129,7 +130,15 @@ export async function getTechniquesByTag(
   tagName: string
 ): Promise<Technique[]> {
   const techniques = await getAllTechniques();
-  return techniques.filter((technique) => technique.tags?.includes(tagName));
+  const category = tagName.split('/')[0];
+  const catchAllTag = CATCH_ALL_TAGS[category];
+  return techniques.filter(
+    (technique) =>
+      technique.tags?.includes(tagName) ||
+      (catchAllTag &&
+        catchAllTag !== tagName &&
+        technique.tags?.includes(catchAllTag))
+  );
 }
 
 // Get related techniques by curated slug list

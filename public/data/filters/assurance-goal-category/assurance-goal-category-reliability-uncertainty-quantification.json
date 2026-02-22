@@ -2,10 +2,164 @@
   "tag": {
     "name": "assurance-goal-category/reliability/uncertainty-quantification",
     "slug": "assurance-goal-category-reliability-uncertainty-quantification",
-    "count": 4,
+    "count": 7,
     "category": "assurance-goal-category"
   },
   "techniques": [
+    {
+      "slug": "synthetic-data-generation",
+      "name": "Synthetic Data Generation",
+      "description": "Synthetic data generation creates artificial datasets that aim to preserve the statistical properties, distributions, and relationships of real data whilst containing no actual records from real individuals. The technique encompasses various approaches including generative adversarial networks (GANs), variational autoencoders (VAEs), statistical sampling methods, and privacy-preserving techniques like differential privacy. Beyond privacy protection, synthetic data serves multiple purposes: augmenting limited datasets, balancing class distributions, testing model robustness, enabling data sharing across organisations, and supporting fairness assessments by generating representative samples for underrepresented groups.",
+      "assurance_goals": [
+        "Privacy",
+        "Fairness",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/generative/gan",
+        "applicable-models/architecture/neural-networks/generative/vae",
+        "applicable-models/architecture/probabilistic",
+        "applicable-models/paradigm/generative",
+        "applicable-models/paradigm/unsupervised",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/structured-output",
+        "evidence-type/synthetic-data",
+        "expertise-needed/cryptography",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-augmentation",
+        "lifecycle-stage/data-handling",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Creating realistic but synthetic electronic health records for developing and testing medical diagnosis algorithms without exposing real patient data, enabling secure collaboration between healthcare institutions.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Generating synthetic samples for underrepresented demographic groups in a hiring dataset to train fair recruitment models, ensuring all groups have sufficient representation for bias testing and mitigation.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Augmenting limited training data for rare medical conditions by generating synthetic patient records, improving model reliability and performance on edge cases where real data is insufficient.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Creating synthetic financial transaction data for testing fraud detection systems in development environments, avoiding exposure of real customer financial information whilst maintaining realistic attack patterns.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "May not capture all subtle patterns, correlations, and edge cases present in real data, potentially leading to reduced model performance when deployed on actual data with different characteristics."
+        },
+        {
+          "description": "Generating high-quality synthetic data that maintains both statistical fidelity and utility requires sophisticated techniques and substantial computational resources, especially for complex, high-dimensional datasets."
+        },
+        {
+          "description": "Privacy-preserving approaches may still risk information leakage through statistical inference attacks, membership inference, or model inversion, requiring careful privacy budget management and validation."
+        },
+        {
+          "description": "Synthetic data may inadvertently amplify existing biases in the original data or introduce new biases through the generation process, particularly in generative models trained on biased datasets."
+        },
+        {
+          "description": "Validation and quality assessment of synthetic data is challenging, as traditional metrics may not adequately capture whether the synthetic data preserves the relationships and patterns needed for specific downstream tasks."
+        }
+      ],
+      "resources": [
+        {
+          "title": "SDV",
+          "url": "https://github.com/sdv-dev/SDV",
+          "source_type": "software_package",
+          "publication_date": "2018-05-11",
+          "citationKey": "sdv-devSDV2018",
+          "abstract": "Synthetic data generation for tabular data"
+        },
+        {
+          "title": "An evaluation framework for synthetic data generation models",
+          "url": "http://arxiv.org/abs/2404.08866v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ioannis E. Livieris",
+            "Nikos Alimpertis",
+            "George Domalis",
+            "Dimitris Tsakalidis"
+          ],
+          "publication_date": "2024-04-13",
+          "citationKey": "e.livierisEvaluationFrameworkSynthetic2024",
+          "abstract": "Nowadays, the use of synthetic data has gained popularity as a cost-efficient strategy for enhancing data augmentation for improving machine learning models performance as well as addressing concerns related to sensitive data privacy. Therefore, the necessity of ensuring quality of generated synthetic data, in terms of accurate representation of real data, consists of primary importance. In this work, we present a new framework for evaluating synthetic data generation models' ability for developing high-quality synthetic data. The proposed approach is able to provide strong statistical and theoretical information about the evaluation framework and the compared models' ranking. Two use case scenarios demonstrate the applicability of the proposed framework for evaluating the ability of synthetic data generation models to generated high quality data. The implementation code can be found in https://github.com/novelcore/synthetic_data_evaluation_framework."
+        },
+        {
+          "title": "Synthetic Data — SecureML 0.2.2 documentation",
+          "url": "https://secureml.readthedocs.io/en/latest/user_guide/synthetic_data.html",
+          "source_type": "documentation",
+          "authors": [
+            "Secureml Developers"
+          ],
+          "publication_date": "2023",
+          "citationKey": "securemldevelopersSyntheticDataSecureML2023"
+        },
+        {
+          "title": "How to Generate Real-World Synthetic Data with CTGAN | Towards ...",
+          "url": "https://towardsdatascience.com/how-to-generate-real-world-synthetic-data-with-ctgan-af41b4d60fde",
+          "source_type": "tutorial",
+          "authors": [
+            "Miriam Santos"
+          ],
+          "publication_date": "2023-04-13",
+          "citationKey": "santosHowGenerateRealWorld2023"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "differential-privacy",
+        "federated-learning",
+        "synthetic-data-evaluation",
+        "fairness-gan"
+      ],
+      "sample_claims": [
+        {
+          "text": "The training dataset contains no records traceable to actual individuals from the original data source",
+          "domain": "healthcare",
+          "assuranceGoal": "privacy"
+        },
+        {
+          "text": "The model evaluation dataset includes representative samples from demographic groups underrepresented in production data",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The perception system's performance on edge-case scenarios has been validated using generated test data covering conditions rarely observed in real operation",
+          "domain": "autonomous systems",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The development environment uses generated transaction data that preserves realistic fraud patterns without exposing customer financial information",
+          "domain": "finance",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The quality control model has been tested on generated defect patterns that maintain statistical relationships with manufacturing parameters without revealing proprietary production data",
+          "domain": "manufacturing",
+          "assuranceGoal": "privacy"
+        }
+      ]
+    },
     {
       "slug": "quantile-regression",
       "name": "Quantile Regression",
@@ -429,6 +583,150 @@
           "text": "The system's hazard warnings are triggered when multiple independent models produce conflicting predictions about safe operation",
           "domain": "autonomous systems",
           "assuranceGoal": "safety"
+        }
+      ]
+    },
+    {
+      "slug": "bootstrapping",
+      "name": "Bootstrapping",
+      "description": "Bootstrapping estimates uncertainty by repeatedly resampling the original dataset with replacement to create many new training sets, training a model on each sample, and analysing the variation in predictions. This approach provides confidence intervals and stability measures without making strong statistical assumptions. By showing how predictions change with different random samples of the data, it reveals how sensitive the model is to the specific training examples and provides robust uncertainty estimates.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Estimating uncertainty in financial risk models by resampling historical data to understand how predictions might vary under different historical scenarios.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing confidence intervals for medical diagnosis predictions to help doctors understand the reliability of AI recommendations and make more informed treatment decisions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Assessing whether prediction uncertainty is consistent across different demographic groups in hiring algorithms, identifying if the model is systematically more uncertain for certain populations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive as it requires training multiple models on resampled datasets."
+        },
+        {
+          "description": "Does not account for uncertainty in model structure or architecture choices."
+        },
+        {
+          "description": "Cannot detect systematically missing data patterns or biases present in the original dataset."
+        },
+        {
+          "description": "Assumes that the original dataset is representative of the population of interest."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Deterministic bootstrapping for a class of bootstrap methods",
+          "url": "http://arxiv.org/abs/1903.10816v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Thomas Pitschel"
+          ],
+          "publication_date": "2019-03-26",
+          "citationKey": "pitschelDeterministicBootstrappingClass2019",
+          "abstract": "An algorithm is described that enables efficient deterministic approximate computation of the bootstrap distribution for any linear bootstrap method $T_n^*$, alleviating the need for repeated resampling from observations (resp. input-derived data). In essence, the algorithm computes the distribution function from a linear mixture of independent random variables each having a finite discrete distribution. The algorithm is applicable to elementary bootstrap scenarios (targetting the mean as parameter of interest), for block bootstrap, as well as for certain residual bootstrap scenarios. Moreover, the algorithm promises a much broader applicability, in non-bootstrapped hypothesis testing."
+        },
+        {
+          "title": "A Gentle Introduction to the Bootstrap Method ...",
+          "url": "https://www.machinelearningmastery.com/a-gentle-introduction-to-the-bootstrap-method",
+          "source_type": "tutorial",
+          "authors": [
+            "Jason Brownlee"
+          ],
+          "publication_date": "2018-05-24",
+          "citationKey": "brownleeGentleIntroductionBootstrap2018"
+        },
+        {
+          "title": "scipy.stats.bootstrap",
+          "url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html",
+          "source_type": "software_package",
+          "publication_date": "2008",
+          "citationKey": "Scipystatsbootstrap2008"
+        },
+        {
+          "title": "Bootstrapping and bagging — modAL documentation",
+          "url": "https://modal-python.readthedocs.io/en/latest/content/examples/bootstrapping_and_bagging.html",
+          "source_type": "documentation",
+          "publication_date": "2021",
+          "citationKey": "BootstrappingBaggingModAL2021"
+        },
+        {
+          "title": "Machine Learning: What is Bootstrapping?",
+          "url": "https://www.kdnuggets.com/2023/03/bootstrapping.html",
+          "source_type": "tutorial",
+          "authors": [
+            "Nate Rosidi"
+          ],
+          "publication_date": "2023",
+          "citationKey": "rosidiMachineLearningWhat2023"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "quantile-regression",
+        "jackknife-resampling",
+        "conformal-prediction",
+        "deep-ensembles",
+        "cross-validation",
+        "empirical-calibration"
+      ],
+      "sample_claims": [
+        {
+          "text": "The financial risk model's uncertainty estimates are robust to random variation in the historical data sample",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The clinical decision support system communicates prediction variability through confidence bounds derived from data resampling",
+          "domain": "healthcare",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The environmental model's uncertainty quantification does not rely on distributional assumptions about measurement errors",
+          "domain": "environmental",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The hiring algorithm's prediction stability is consistent across demographic groups when assessed using resampled training data",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The system's confidence intervals reflect genuine variability in model predictions across different data samples",
+          "domain": "general",
+          "assuranceGoal": "transparency"
         }
       ]
     },
@@ -2148,7 +2446,156 @@
           "assuranceGoal": "reliability"
         }
       ]
+    },
+    {
+      "slug": "out-of-domain-detection",
+      "name": "Out-of-Domain Detection",
+      "description": "Out-of-domain (OOD) detection identifies user inputs that fall outside an AI system's intended domain or capabilities, enabling graceful handling rather than generating unreliable responses. This technique trains classifiers or uses embedding-based methods to recognise when queries require knowledge or capabilities the system doesn't possess. OOD detection enables systems to explicitly decline, redirect, or request clarification rather than hallucinating answers or applying inappropriate reasoning to unfamiliar domains.",
+      "assurance_goals": [
+        "Reliability",
+        "Safety",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-training-data",
+        "data-requirements/labelled-data",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-expertise",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/deployment",
+        "lifecycle-stage/post-deployment",
+        "technique-type/algorithmic",
+        "technique-type/procedural"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Enabling a medical chatbot specialized in diabetes management to recognize and deflect questions about unrelated conditions, avoiding potentially dangerous medical advice outside its training domain.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Ensuring an educational AI tutor for high school mathematics reliably identifies advanced university-level questions and redirects students to appropriate resources rather than attempting explanations beyond its scope.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Transparently communicating system limitations by explicitly informing users when queries exceed the AI's scope rather than silently providing low-quality responses.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Protecting an insurance claims processing system trained on standard claims from making unreliable decisions on unusual or complex cases (e.g., natural disasters, emerging fraud patterns) by detecting and routing them to specialist adjusters.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Ensuring an autonomous vehicle's perception system detects when it encounters road conditions, weather patterns, or infrastructure types outside its training distribution (e.g., unmapped construction zones, unusual signage), triggering increased caution or human intervention.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Defining precise scope boundaries can be challenging, especially for general-purpose systems or domains with fuzzy edges."
+        },
+        {
+          "description": "May produce false positives that reject legitimate queries at the boundary of the system's capabilities, degrading user experience."
+        },
+        {
+          "description": "Users may rephrase out-of-scope queries to bypass detection, requiring robust handling of paraphrases and edge cases."
+        },
+        {
+          "description": "Difficult to maintain accurate scope detection as systems are updated and capabilities expand or shift over time."
+        },
+        {
+          "description": "Establishing reliable domain boundaries requires substantial labeled data from both in-domain and out-of-domain examples, which can be expensive to collect and annotate systematically."
+        },
+        {
+          "description": "Real-time OOD detection adds inference latency (typically 10-50ms per query depending on method), which may impact user experience in time-sensitive applications."
+        }
+      ],
+      "resources": [
+        {
+          "title": "OOD4NLU",
+          "url": "https://github.com/silverriver/OOD4NLU",
+          "source_type": "software_package",
+          "publication_date": "2022-05-20",
+          "citationKey": "silverriverOOD4NLU2022",
+          "abstract": "Code for paper \"Out-of-domain detection for natural language understanding in dialog systems\""
+        },
+        {
+          "title": "BERT-unsupervised-OOD",
+          "url": "https://github.com/rivercold/BERT-unsupervised-OOD",
+          "source_type": "software_package",
+          "publication_date": "2021-05-07",
+          "citationKey": "rivercoldBERTunsupervisedOOD2021",
+          "abstract": "Code for ACL 2021 paper \"Unsupervised Out-of-Domain Detection via Pre-trained Transformers\""
+        },
+        {
+          "title": "few-shot-ood",
+          "url": "https://github.com/SLAD-ml/few-shot-ood",
+          "source_type": "software_package",
+          "publication_date": "2019-08-14",
+          "citationKey": "slad-mlFewshotood2019"
+        },
+        {
+          "title": "A Unified Survey on Anomaly, Novelty, Open-Set, and Out-of-Distribution Detection: Solutions and Future Challenges",
+          "url": "https://www.semanticscholar.org/paper/8b153cc2c7f5ea9f307f12ea945a5e9196ee5c52",
+          "source_type": "technical_paper",
+          "authors": [
+            "Mohammadreza Salehi",
+            "Hossein Mirzaei",
+            "Dan Hendrycks",
+            "Yixuan Li",
+            "M. H. Rohban",
+            "M. Sabokrou"
+          ],
+          "publication_date": "2021",
+          "citationKey": "salehiUnifiedSurveyAnomaly2021",
+          "abstract": "Machine learning models often encounter samples that are diverged from the training distribution. Failure to recognize an out-of-distribution (OOD) sample, and consequently assign that sample to an in-class label significantly compromises the reliability of a model. The problem has gained significant attention due to its importance for safety deploying models in open-world settings. Detecting OOD samples is challenging due to the intractability of modeling all possible unknown distributions. To date, several research domains tackle the problem of detecting unfamiliar samples, including anomaly detection, novelty detection, one-class learning, open set recognition, and out-of-distribution detection. Despite having similar and shared concepts, out-of-distribution, open-set, and anomaly detection have been investigated independently. Accordingly, these research avenues have not cross-pollinated, creating research barriers. While some surveys intend to provide an overview of these approaches, they seem to only focus on a specific domain without examining the relationship between different domains. This survey aims to provide a cross-domain and comprehensive review of numerous eminent works in respective areas while identifying their commonalities. Researchers can benefit from the overview of research advances in different fields and develop future methodology synergistically. Furthermore, to the best of our knowledge, while there are surveys in anomaly detection or one-class learning, there is no comprehensive or up-to-date survey on out-of-distribution detection, which our survey covers extensively. Finally, having a unified cross-domain perspective, we discuss and shed light on future lines of research, intending to bring these fields closer together."
+        }
+      ],
+      "related_techniques": [
+        "deep-ensembles",
+        "chain-of-thought-faithfulness-evaluation",
+        "out-of-distribution-detector-for-neural-networks",
+        "conformal-prediction",
+        "runtime-monitoring-and-circuit-breakers"
+      ],
+      "sample_claims": [
+        {
+          "text": "The medical chatbot declines to answer queries about conditions outside its specialized scope rather than generating potentially harmful advice",
+          "domain": "healthcare",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The autonomous system recognizes when it encounters environmental conditions that exceed its validated operating envelope",
+          "domain": "autonomous systems",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The educational assistant consistently identifies when questions require expertise beyond its subject area and directs users to appropriate resources",
+          "domain": "general",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The system explicitly communicates scope limitations when presented with queries at the boundary of its competence",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The financial advisory system detects complex or unusual market scenarios outside its training scope and escalates to human analysts",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        }
+      ]
     }
   ],
-  "count": 16
+  "count": 19
 }

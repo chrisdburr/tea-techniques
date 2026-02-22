@@ -2,10 +2,154 @@
   "tag": {
     "name": "lifecycle-stage/model-evaluation",
     "slug": "lifecycle-stage-model-evaluation",
-    "count": 24,
+    "count": 27,
     "category": "lifecycle-stage"
   },
   "techniques": [
+    {
+      "slug": "bootstrapping",
+      "name": "Bootstrapping",
+      "description": "Bootstrapping estimates uncertainty by repeatedly resampling the original dataset with replacement to create many new training sets, training a model on each sample, and analysing the variation in predictions. This approach provides confidence intervals and stability measures without making strong statistical assumptions. By showing how predictions change with different random samples of the data, it reveals how sensitive the model is to the specific training examples and provides robust uncertainty estimates.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Estimating uncertainty in financial risk models by resampling historical data to understand how predictions might vary under different historical scenarios.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing confidence intervals for medical diagnosis predictions to help doctors understand the reliability of AI recommendations and make more informed treatment decisions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Assessing whether prediction uncertainty is consistent across different demographic groups in hiring algorithms, identifying if the model is systematically more uncertain for certain populations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive as it requires training multiple models on resampled datasets."
+        },
+        {
+          "description": "Does not account for uncertainty in model structure or architecture choices."
+        },
+        {
+          "description": "Cannot detect systematically missing data patterns or biases present in the original dataset."
+        },
+        {
+          "description": "Assumes that the original dataset is representative of the population of interest."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Deterministic bootstrapping for a class of bootstrap methods",
+          "url": "http://arxiv.org/abs/1903.10816v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Thomas Pitschel"
+          ],
+          "publication_date": "2019-03-26",
+          "citationKey": "pitschelDeterministicBootstrappingClass2019",
+          "abstract": "An algorithm is described that enables efficient deterministic approximate computation of the bootstrap distribution for any linear bootstrap method $T_n^*$, alleviating the need for repeated resampling from observations (resp. input-derived data). In essence, the algorithm computes the distribution function from a linear mixture of independent random variables each having a finite discrete distribution. The algorithm is applicable to elementary bootstrap scenarios (targetting the mean as parameter of interest), for block bootstrap, as well as for certain residual bootstrap scenarios. Moreover, the algorithm promises a much broader applicability, in non-bootstrapped hypothesis testing."
+        },
+        {
+          "title": "A Gentle Introduction to the Bootstrap Method ...",
+          "url": "https://www.machinelearningmastery.com/a-gentle-introduction-to-the-bootstrap-method",
+          "source_type": "tutorial",
+          "authors": [
+            "Jason Brownlee"
+          ],
+          "publication_date": "2018-05-24",
+          "citationKey": "brownleeGentleIntroductionBootstrap2018"
+        },
+        {
+          "title": "scipy.stats.bootstrap",
+          "url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html",
+          "source_type": "software_package",
+          "publication_date": "2008",
+          "citationKey": "Scipystatsbootstrap2008"
+        },
+        {
+          "title": "Bootstrapping and bagging — modAL documentation",
+          "url": "https://modal-python.readthedocs.io/en/latest/content/examples/bootstrapping_and_bagging.html",
+          "source_type": "documentation",
+          "publication_date": "2021",
+          "citationKey": "BootstrappingBaggingModAL2021"
+        },
+        {
+          "title": "Machine Learning: What is Bootstrapping?",
+          "url": "https://www.kdnuggets.com/2023/03/bootstrapping.html",
+          "source_type": "tutorial",
+          "authors": [
+            "Nate Rosidi"
+          ],
+          "publication_date": "2023",
+          "citationKey": "rosidiMachineLearningWhat2023"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "quantile-regression",
+        "jackknife-resampling",
+        "conformal-prediction",
+        "deep-ensembles",
+        "cross-validation",
+        "empirical-calibration"
+      ],
+      "sample_claims": [
+        {
+          "text": "The financial risk model's uncertainty estimates are robust to random variation in the historical data sample",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The clinical decision support system communicates prediction variability through confidence bounds derived from data resampling",
+          "domain": "healthcare",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The environmental model's uncertainty quantification does not rely on distributional assumptions about measurement errors",
+          "domain": "environmental",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The hiring algorithm's prediction stability is consistent across demographic groups when assessed using resampled training data",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The system's confidence intervals reflect genuine variability in model predictions across different data samples",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        }
+      ]
+    },
     {
       "slug": "internal-review-boards",
       "name": "Internal Review Boards",
@@ -123,6 +267,153 @@
           "text": "The autonomous vehicle system's safety-critical design choices are subject to ongoing monitoring requirements established by an independent review board",
           "domain": "autonomous systems",
           "assuranceGoal": "safety"
+        }
+      ]
+    },
+    {
+      "slug": "monotonicity-constraints",
+      "name": "Monotonicity Constraints",
+      "description": "Monotonicity constraints enforce consistent directional relationships between input features and model predictions, ensuring that increasing a feature value either always increases, always decreases, or has no effect on the output. These constraints integrate domain knowledge into model training, preventing counterintuitive relationships that may arise from spurious correlations in data. By maintaining logical feature relationships (e.g., experience always positively influences salary), monotonicity constraints enhance model trustworthiness, interpretability, and alignment with business logic whilst often improving generalisation to new data.",
+      "assurance_goals": [
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/architecture/probabilistic/gaussian-processes",
+        "applicable-models/architecture/tree-based",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/transparency",
+        "data-requirements/labelled-data",
+        "data-type/tabular",
+        "evidence-type/documentation",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Enforcing that a mortgage approval model always treats higher income, longer employment history, and higher credit scores as positive factors, making the decision logic transparent and intuitive for loan officers and applicants whilst preventing counterintuitive relationships that could undermine trust in the system.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Constraining a healthcare cost prediction model so that age and number of chronic conditions always increase predicted costs, ensuring the model generalises reliably to new patient populations and maintains logical behaviour even when training data contains sampling biases or unusual correlations.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Implementing monotonic constraints in an insurance premium model where driving experience always reduces premiums and accident history always increases them, creating consistent pricing logic that regulatory authorities can easily validate and customers can understand and trust.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Can reduce model accuracy when real-world relationships are inherently non-monotonic, such as the inverted-U relationship between experience and performance, where constraints force oversimplified linear relationships."
+        },
+        {
+          "description": "Requires substantial domain expertise to identify which features should have monotonic relationships, creating dependency on subject matter experts and potential for incorrect constraint specification."
+        },
+        {
+          "description": "Increases computational complexity during training as optimisation algorithms must respect additional constraints, potentially leading to longer training times and convergence difficulties."
+        },
+        {
+          "description": "May mask important non-linear patterns in data that could be crucial for understanding system behaviour, particularly in exploratory analysis where discovering unexpected relationships is valuable."
+        },
+        {
+          "description": "Limited applicability to certain model types, with implementation varying significantly across algorithms (well-supported in tree-based models, more complex in neural networks), restricting technique flexibility."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Monotonic Constraints — xgboost 3.1.0-dev documentation",
+          "url": "https://xgboost.readthedocs.io/en/latest/tutorials/monotonic.html",
+          "source_type": "documentation",
+          "authors": [
+            "Xgboost Developers"
+          ],
+          "citationKey": "xgboostdevelopersMonotonicConstraintsXgboost"
+        },
+        {
+          "title": "NONPARAMETRIC KERNEL REGRESSION SUBJECT TO MONOTONICITY CONSTRAINTS",
+          "url": "https://www.semanticscholar.org/paper/28e2be532d66694d3fe3486671f5c0217f58892d",
+          "source_type": "technical_paper",
+          "authors": [
+            "P. Hall",
+            "Li-Shan Huang"
+          ],
+          "publication_date": "2001",
+          "citationKey": "hallNONPARAMETRICKERNELREGRESSION2001"
+        },
+        {
+          "title": "scikit-learn Isotonic Regression",
+          "url": "https://scikit-learn.org/stable/modules/isotonic.html",
+          "source_type": "documentation",
+          "authors": [
+            "Scikit-learn Developers"
+          ],
+          "publication_date": "2007",
+          "citationKey": "scikit-learndevelopersScikitlearnIsotonicRegression2007"
+        },
+        {
+          "title": "High-dimensional additive Gaussian processes under monotonicity constraints",
+          "url": "https://www.semanticscholar.org/paper/4d4f1e2de3742735dcc47d2e51cc572a4415231e",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andr'es F. L'opez-Lopera",
+            "F. Bachoc",
+            "O. Roustant"
+          ],
+          "publication_date": "2022",
+          "citationKey": "f.lopez-loperaHighdimensionalAdditiveGaussian2022",
+          "abstract": "We introduce an additive Gaussian process framework accounting for monotonicity constraints and scalable to high dimensions. Our contributions are threefold. First, we show that our framework enables to satisfy the constraints everywhere in the input space. We also show that more general componentwise linear inequality constraints can be handled similarly, such as componentwise convexity. Second, we propose the additive MaxMod algorithm for sequential dimension reduction. By sequentially maximizing a squared-norm criterion, MaxMod identifies the active input dimensions and refines the most important ones. This criterion can be computed explicitly at a linear cost. Finally, we provide open-source codes for our full framework. We demonstrate the performance and scalability of the methodology in several synthetic examples with hundreds of dimensions under monotonicity constraints as well as on a real-world flood application."
+        },
+        {
+          "title": "gp_constr",
+          "url": "https://github.com/cagrell/gp_constr",
+          "source_type": "software_package",
+          "publication_date": "2019-03-05",
+          "citationKey": "cagrellGp_constr2019",
+          "abstract": "Python model for constrained GP"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "generalized-additive-models",
+        "coefficient-magnitudes-in-linear-models",
+        "quantile-regression",
+        "partial-dependence-plots"
+      ],
+      "sample_claims": [
+        {
+          "text": "The lending model's approval probability increases consistently with applicant income without counterintuitive reversals",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The insurance premium calculation respects logical directional relationships where risk factors monotonically increase costs",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The clinical risk assessment maintains consistent directionality where deteriorating vital signs monotonically increase predicted severity",
+          "domain": "healthcare",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The energy consumption forecast ensures that increased building occupancy always raises predicted demand",
+          "domain": "environmental",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The hiring suitability score preserves expected relationships where relevant experience monotonically improves candidate ratings",
+          "domain": "general",
+          "assuranceGoal": "transparency"
         }
       ]
     },
@@ -683,7 +974,8 @@
         "technique-type/algorithmic",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
-        "expertise-needed/domain-expertise"
+        "expertise-needed/domain-expertise",
+        "assurance-goal-category/reliability/model-behavior-understanding"
       ],
       "example_use_cases": [
         {
@@ -705,6 +997,10 @@
         {
           "description": "Verifying that adversarial training of a medical imaging classifier for tumour detection maintains diagnostic accuracy on routine cases whilst improving robustness to image quality variations and potential adversarial attacks.",
           "goal": "Security"
+        },
+        {
+          "description": "Documenting adversarial training evaluation results in a model card or technical dossier to meet transparency and disclosure obligations for high-risk AI systems, enabling regulators and deployers to assess whether robustness claims are substantiated by rigorous evaluation across diverse attack types beyond those used in training.",
+          "goal": "Transparency"
         }
       ],
       "limitations": [
@@ -789,7 +1085,12 @@
         "api-usage-pattern-monitoring",
         "continual-learning-stability-testing",
         "model-watermarking-and-theft-detection",
-        "safety-envelope-testing"
+        "safety-envelope-testing",
+        "red-teaming",
+        "data-poisoning-detection",
+        "model-extraction-defence-testing",
+        "membership-inference-attack-testing",
+        "jailbreak-resistance-testing"
       ],
       "sample_claims": [
         {
@@ -1424,8 +1725,13 @@
         "applicable-models/requirements/white-box",
         "applicable-models/requirements/gradient-access",
         "assurance-goal-category/security",
+        "assurance-goal-category/security/adversarial-robustness",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/harmful-behavior-detection",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/access-to-training-data",
         "data-type/any",
         "lifecycle-stage/data-collection",
@@ -1435,7 +1741,8 @@
         "technique-type/testing",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
-        "expertise-needed/domain-expertise"
+        "expertise-needed/domain-expertise",
+        "expertise-needed/security"
       ],
       "example_use_cases": [
         {
@@ -1543,7 +1850,11 @@
         "out-of-distribution-detector-for-neural-networks",
         "adversarial-training-evaluation",
         "influence-functions",
-        "cross-validation"
+        "cross-validation",
+        "federated-learning",
+        "membership-inference-attack-testing",
+        "model-extraction-defence-testing",
+        "model-watermarking-and-theft-detection"
       ],
       "sample_claims": [
         {
@@ -2233,6 +2544,181 @@
       ]
     },
     {
+      "slug": "machine-unlearning",
+      "name": "Machine Unlearning",
+      "description": "Machine unlearning enables removal of specific training data's influence from trained models without complete retraining. This technique addresses privacy rights like GDPR's right to be forgotten by selectively erasing learned patterns associated with particular data points, individuals, or sensitive attributes. Methods include exact unlearning (provably equivalent to retraining without the data), approximate unlearning (efficient algorithms that closely approximate retraining), and certified unlearning (providing formal guarantees about information removal).",
+      "assurance_goals": [
+        "Privacy",
+        "Fairness",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/requirements/white-box",
+        "applicable-models/requirements/model-internals",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/documentation",
+        "evidence-type/privacy-guarantee",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Responding to user deletion requests in a social media recommendation system by removing all influence of that user's historical interactions, ensuring GDPR compliance and verifiable data removal.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Removing specific patient records from a hospital's diagnostic model after a patient withdraws consent, ensuring the model no longer reflects patterns from that individual's medical history while maintaining clinical accuracy for other patients.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Enabling a financial institution to demonstrate regulatory compliance by providing cryptographic proof that a former customer's transaction history has been completely removed from credit risk assessment models following account closure.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Exact unlearning for complex models like deep neural networks is computationally expensive, often nearly as costly as full retraining."
+        },
+        {
+          "description": "Approximate unlearning methods may not provide strong guarantees that information has been fully removed, potentially leaving residual influence."
+        },
+        {
+          "description": "Difficult to verify unlearning effectiveness, as adversaries might extract information about supposedly removed data through membership inference or other attacks."
+        },
+        {
+          "description": "Repeated unlearning requests can degrade model performance significantly, especially if many data points are removed from the training distribution."
+        },
+        {
+          "description": "Requires access to model architecture and training process details (white-box access), making it difficult to apply to third-party models or models where internal structure is proprietary."
+        },
+        {
+          "description": "Particularly challenging for very large foundation models where even storing checkpoints for potential retraining is infeasible, limiting practical applicability to smaller, domain-specific models."
+        }
+      ],
+      "resources": [
+        {
+          "title": "awesome-machine-unlearning",
+          "url": "https://github.com/tamlhp/awesome-machine-unlearning",
+          "source_type": "software_package",
+          "publication_date": "2022-07-07",
+          "citationKey": "tamlhpAwesomemachineunlearning2022",
+          "abstract": "Awesome Machine Unlearning (A Survey of Machine Unlearning)"
+        },
+        {
+          "title": "machine_unlearning",
+          "url": "https://github.com/jjbrophy47/machine_unlearning",
+          "source_type": "software_package",
+          "publication_date": "2020-09-11",
+          "citationKey": "jjbrophy47Machine_unlearning2020",
+          "abstract": "Existing Literature about Machine Unlearning"
+        },
+        {
+          "title": "Right to be forgotten in the era of large language models",
+          "url": "https://link.springer.com/article/10.1007/s43681-024-00573-9",
+          "source_type": "technical_paper",
+          "authors": [
+            "Dawen Zhang",
+            "Pamela Finckenberg-Broman",
+            "Thong Hoang",
+            "Shidong Pan",
+            "Zhenchang Xing",
+            "Mark Staples",
+            "Xiwei Xu",
+            "Dawen Zhang",
+            "Pamela Finckenberg-Broman",
+            "Thong Hoang",
+            "Shidong Pan",
+            "Zhenchang Xing",
+            "Mark Staples",
+            "Xiwei Xu"
+          ],
+          "publication_date": "2024-09-10",
+          "citationKey": "zhangRightBeForgotten2024"
+        },
+        {
+          "title": "Digital forgetting in large language models: A survey of unlearning methods",
+          "url": "https://link.springer.com/article/10.1007/s10462-024-11078-6",
+          "source_type": "technical_paper",
+          "authors": [
+            "Alberto Blanco-Justicia",
+            "Najeeb Jebreel",
+            "Benet Manzanares-Salor",
+            "David Sánchez",
+            "Josep Domingo-Ferrer",
+            "Guillem Collell",
+            "Kuan Eeik Tan",
+            "Alberto Blanco-Justicia",
+            "Najeeb Jebreel",
+            "Benet Manzanares-Salor",
+            "David Sánchez",
+            "Josep Domingo-Ferrer",
+            "Guillem Collell",
+            "Kuan Eeik Tan"
+          ],
+          "publication_date": "2025-01-13",
+          "citationKey": "blanco-justiciaDigitalForgettingLarge2025"
+        },
+        {
+          "title": "Machine Unlearning for Traditional Models and Large Language Models: A Short Survey",
+          "url": "https://arxiv.org/abs/2404.01206",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yi Xu"
+          ],
+          "publication_date": "2024-04-01",
+          "citationKey": "xuMachineUnlearningTraditional2024",
+          "abstract": "With the implementation of personal data privacy regulations, the field of machine learning (ML) faces the challenge of the \"right to be forgotten\". Machine unlearning has emerged to address this issue, aiming to delete data and reduce its impact on models according to user requests. Despite the widespread interest in machine unlearning, comprehensive surveys on its latest advancements, especially in the field of Large Language Models (LLMs) is lacking. This survey aims to fill this gap by providing an in-depth exploration of machine unlearning, including the definition, classification and evaluation criteria, as well as challenges in different environments and their solutions. Specifically, this paper categorizes and investigates unlearning on both traditional models and LLMs, and proposes methods for evaluating the effectiveness and efficiency of unlearning, and standards for performance measurement. This paper reveals the limitations of current unlearning techniques and emphasizes the importance of a comprehensive unlearning evaluation to avoid arbitrary forgetting. This survey not only summarizes the key concepts of unlearning technology but also points out its prominent issues and feasible directions for future research, providing valuable guidance for scholars in the field."
+        }
+      ],
+      "related_techniques": [
+        "federated-learning",
+        "homomorphic-encryption",
+        "membership-inference-attack-testing",
+        "influence-functions",
+        "differential-privacy"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model demonstrably excludes the influence of withdrawn patient records without requiring complete retraining of the clinical risk assessment system",
+          "domain": "healthcare",
+          "assuranceGoal": "privacy"
+        },
+        {
+          "text": "The recommendation system provides verifiable evidence that deleted user data no longer affects personalized content rankings following account closure requests",
+          "domain": "general",
+          "assuranceGoal": "privacy"
+        },
+        {
+          "text": "The lending model's decision boundaries no longer reflect patterns from removed customer records that exhibited historical discrimination",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The system documents which training examples have been removed and provides formal guarantees about the completeness of their erasure from model behavior",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The diagnostic model's predictions remain unaffected by specific training cases that were retrospectively identified as containing erroneous labels",
+          "domain": "healthcare",
+          "assuranceGoal": "fairness"
+        }
+      ]
+    },
+    {
       "slug": "model-extraction-defence-testing",
       "name": "Model Extraction Defence Testing",
       "description": "Model extraction defence testing evaluates protections against attackers who attempt to steal model functionality by querying it and training surrogate models. This technique assesses defences like query limiting, output perturbation, watermarking, and fingerprinting by simulating extraction attacks and measuring how much model functionality can be replicated. Testing evaluates both the effectiveness of defences in preventing extraction and their impact on legitimate use cases, ensuring security measures don't excessively degrade user experience.",
@@ -2382,7 +2868,10 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/security",
         "data-type/any",
         "lifecycle-stage/model-evaluation",
@@ -2396,6 +2885,7 @@
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
         "expertise-needed/software-engineering",
+        "expertise-needed/safety-engineering",
         "data-requirements/no-special-requirements"
       ],
       "example_use_cases": [
@@ -2502,7 +2992,8 @@
         "jailbreak-resistance-testing",
         "agent-goal-misalignment-testing",
         "prompt-injection-testing",
-        "chain-of-thought-faithfulness-evaluation"
+        "runtime-monitoring-and-circuit-breakers",
+        "safety-envelope-testing"
       ],
       "sample_claims": [
         {
@@ -2545,8 +3036,11 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
         "assurance-goal-category/security",
+        "assurance-goal-category/security/adversarial-robustness",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
         "data-requirements/access-to-training-data",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -2654,7 +3148,9 @@
         "model-extraction-defence-testing",
         "adversarial-training-evaluation",
         "synthetic-data-evaluation",
-        "data-poisoning-detection"
+        "data-poisoning-detection",
+        "differential-privacy",
+        "machine-unlearning"
       ],
       "sample_claims": [
         {
@@ -2862,7 +3358,9 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
         "assurance-goal-category/reliability",
         "data-requirements/access-to-training-data",
         "data-type/tabular",
@@ -2889,6 +3387,10 @@
         {
           "description": "Ensuring fraud detection models trained on synthetic credit card transactions maintain reliable performance comparable to models trained on sensitive real transaction data.",
           "goal": "Reliability"
+        },
+        {
+          "description": "Producing audit-ready evaluation reports for a synthetic financial dataset used to train credit-risk models, demonstrating to regulators (e.g., under EU AI Act or SR 11-7 model risk management guidance) that the training data met documented privacy and quality thresholds, and that all trade-off decisions between privacy protection and model utility were recorded and justified.",
+          "goal": "Transparency"
         }
       ],
       "limitations": [
@@ -3774,5 +4276,5 @@
       ]
     }
   ],
-  "count": 25
+  "count": 28
 }

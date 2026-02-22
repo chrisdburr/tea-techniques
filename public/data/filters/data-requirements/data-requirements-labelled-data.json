@@ -164,13 +164,16 @@
         "applicable-models/requirements/black-box",
         "applicable-models/requirements/probabilistic-output",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/transparency",
         "data-requirements/labelled-data",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
@@ -263,7 +266,8 @@
         "empirical-calibration",
         "bootstrapping",
         "temperature-scaling",
-        "equal-opportunity-difference"
+        "equal-opportunity-difference",
+        "cross-validation"
       ],
       "sample_claims": [
         {
@@ -302,18 +306,22 @@
         "Reliability"
       ],
       "tags": [
+        "applicable-models/architecture/neural-networks",
         "applicable-models/architecture/probabilistic/gaussian-processes",
         "applicable-models/architecture/tree-based",
         "applicable-models/requirements/model-internals",
         "applicable-models/requirements/white-box",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/transparency",
         "data-requirements/labelled-data",
         "data-type/tabular",
+        "evidence-type/documentation",
         "evidence-type/quantitative-metric",
         "expertise-needed/domain-expertise",
         "expertise-needed/statistics",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -406,7 +414,7 @@
         "generalized-additive-models",
         "coefficient-magnitudes-in-linear-models",
         "quantile-regression",
-        "conformal-prediction"
+        "partial-dependence-plots"
       ],
       "sample_claims": [
         {
@@ -2320,7 +2328,8 @@
         "technique-type/algorithmic",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
-        "expertise-needed/domain-expertise"
+        "expertise-needed/domain-expertise",
+        "assurance-goal-category/reliability/model-behavior-understanding"
       ],
       "example_use_cases": [
         {
@@ -2342,6 +2351,10 @@
         {
           "description": "Verifying that adversarial training of a medical imaging classifier for tumour detection maintains diagnostic accuracy on routine cases whilst improving robustness to image quality variations and potential adversarial attacks.",
           "goal": "Security"
+        },
+        {
+          "description": "Documenting adversarial training evaluation results in a model card or technical dossier to meet transparency and disclosure obligations for high-risk AI systems, enabling regulators and deployers to assess whether robustness claims are substantiated by rigorous evaluation across diverse attack types beyond those used in training.",
+          "goal": "Transparency"
         }
       ],
       "limitations": [
@@ -2426,7 +2439,12 @@
         "api-usage-pattern-monitoring",
         "continual-learning-stability-testing",
         "model-watermarking-and-theft-detection",
-        "safety-envelope-testing"
+        "safety-envelope-testing",
+        "red-teaming",
+        "data-poisoning-detection",
+        "model-extraction-defence-testing",
+        "membership-inference-attack-testing",
+        "jailbreak-resistance-testing"
       ],
       "sample_claims": [
         {
@@ -3232,7 +3250,9 @@
         "applicable-models/paradigm/supervised",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
         "assurance-goal-category/transparency",
         "data-requirements/access-to-training-data",
         "data-requirements/labelled-data",
@@ -3333,7 +3353,8 @@
         "deep-ensembles",
         "chain-of-thought-faithfulness-evaluation",
         "out-of-distribution-detector-for-neural-networks",
-        "conformal-prediction"
+        "conformal-prediction",
+        "runtime-monitoring-and-circuit-breakers"
       ],
       "sample_claims": [
         {

@@ -2,7 +2,7 @@
   "tag": {
     "name": "expertise-needed/domain-expertise",
     "slug": "expertise-needed-domain-expertise",
-    "count": 27,
+    "count": 28,
     "category": "expertise-needed"
   },
   "techniques": [
@@ -579,18 +579,22 @@
         "Reliability"
       ],
       "tags": [
+        "applicable-models/architecture/neural-networks",
         "applicable-models/architecture/probabilistic/gaussian-processes",
         "applicable-models/architecture/tree-based",
         "applicable-models/requirements/model-internals",
         "applicable-models/requirements/white-box",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/transparency",
         "data-requirements/labelled-data",
         "data-type/tabular",
+        "evidence-type/documentation",
         "evidence-type/quantitative-metric",
         "expertise-needed/domain-expertise",
         "expertise-needed/statistics",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -683,7 +687,7 @@
         "generalized-additive-models",
         "coefficient-magnitudes-in-linear-models",
         "quantile-regression",
-        "conformal-prediction"
+        "partial-dependence-plots"
       ],
       "sample_claims": [
         {
@@ -888,6 +892,143 @@
       ]
     },
     {
+      "slug": "disparate-impact-remover",
+      "name": "Disparate Impact Remover",
+      "description": "Disparate Impact Remover is a preprocessing technique that transforms feature values in a dataset to reduce statistical dependence between features and protected attributes (like race or gender). The method modifies non-protected features through mathematical transformations that preserve the utility of the data whilst reducing correlations that could lead to discriminatory outcomes. This approach specifically targets the '80% rule' disparate impact threshold by adjusting feature distributions to ensure more equitable treatment across demographic groups in downstream model predictions.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/sensitive-attributes",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/data-collection/data-augmentation",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Transforming features in a credit scoring dataset where variables like 'years of employment' and 'education level' are correlated with race, applying mathematical transformations to reduce these correlations whilst preserving the predictive value for creditworthiness assessment.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Preprocessing a recruitment dataset where features like 'previous job titles' and 'university attended' correlate with gender, modifying these features to ensure the '80% rule' is met whilst maintaining useful information for predicting job performance.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Preprocessing financial lending data to provide transparent bias metrics showing the quantified reduction in correlation between protected attributes and creditworthiness features, enabling institutions to demonstrate compliance with the 80% rule and explain their fairness interventions to regulators.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring consistent model performance across demographic groups in healthcare risk assessment by mathematically transforming features to reduce protected attribute correlations, improving reliability of predictions for minority populations who may have been systematically under-served.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Feature transformations may reduce model accuracy by removing or distorting important predictive information during the debiasing process."
+        },
+        {
+          "description": "Only addresses measured protected attributes and cannot eliminate bias that operates through unmeasured proxy variables."
+        },
+        {
+          "description": "Effectiveness depends on the specific transformation method chosen and may not generalise well to different datasets or domains."
+        },
+        {
+          "description": "May create artificial feature distributions that don't reflect real-world data patterns, potentially causing issues in model deployment."
+        }
+      ],
+      "resources": [
+        {
+          "title": "holisticai",
+          "url": "https://github.com/holistic-ai/holisticai",
+          "source_type": "software_package",
+          "publication_date": "2023-01-26",
+          "citationKey": "holistic-aiHolisticai2023",
+          "abstract": "This is an open-source tool to assess and improve the trustworthiness of AI systems."
+        },
+        {
+          "title": "Disparate Impact Remover — holisticai documentation",
+          "url": "https://holisticai.readthedocs.io/en/latest/getting_started/bias/mitigation/preprocessing/bc_disparate_impact_remover_disparate_impact_remover.html",
+          "source_type": "documentation",
+          "authors": [
+            "Holisticai Developers"
+          ],
+          "publication_date": "2023",
+          "citationKey": "holisticaidevelopersDisparateImpactRemover2023"
+        },
+        {
+          "title": "AIF360",
+          "url": "https://github.com/Trusted-AI/AIF360",
+          "source_type": "software_package",
+          "publication_date": "2018-08-22",
+          "citationKey": "trusted-aiAIF3602018",
+          "abstract": "A comprehensive set of fairness metrics for datasets and machine learning models, explanations for these metrics, and algorithms to mitigate bias in datasets and models."
+        },
+        {
+          "title": "aif360.algorithms.preprocessing.DisparateImpactRemover — aif360 ...",
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.algorithms.preprocessing.DisparateImpactRemover.html",
+          "source_type": "documentation",
+          "authors": [
+            "Aif360 Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "aif360developersAif360algorithmspreprocessingDisparateImpactRemoverAif3602018"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "reweighing",
+        "relabelling",
+        "preferential-sampling",
+        "attribute-removal-fairness-through-unawareness",
+        "adversarial-debiasing"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's input features exhibit reduced statistical dependence on protected demographic attributes",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The credit assessment system meets the 80% rule threshold for equitable treatment across demographic groups",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The hiring system's feature correlations with protected attributes are quantifiably documented and minimized",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The diagnostic model maintains consistent predictive performance across patient demographics through balanced feature distributions",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The lending model's feature transformations preserve creditworthiness information whilst reducing demographic correlations",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        }
+      ]
+    },
+    {
       "slug": "relabelling",
       "name": "Relabelling",
       "description": "A preprocessing fairness technique that modifies class labels in training data to achieve equal positive outcome rates across protected groups. Also known as 'data massaging', this method identifies instances that contribute to discriminatory patterns and flips their labels (from positive to negative or vice versa) to balance the proportion of positive outcomes between demographic groups. The technique aims to remove historical bias from training data whilst preserving the overall class distribution, enabling standard classifiers to learn from discrimination-free datasets.",
@@ -1048,7 +1189,8 @@
         "technique-type/algorithmic",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
-        "expertise-needed/domain-expertise"
+        "expertise-needed/domain-expertise",
+        "assurance-goal-category/reliability/model-behavior-understanding"
       ],
       "example_use_cases": [
         {
@@ -1070,6 +1212,10 @@
         {
           "description": "Verifying that adversarial training of a medical imaging classifier for tumour detection maintains diagnostic accuracy on routine cases whilst improving robustness to image quality variations and potential adversarial attacks.",
           "goal": "Security"
+        },
+        {
+          "description": "Documenting adversarial training evaluation results in a model card or technical dossier to meet transparency and disclosure obligations for high-risk AI systems, enabling regulators and deployers to assess whether robustness claims are substantiated by rigorous evaluation across diverse attack types beyond those used in training.",
+          "goal": "Transparency"
         }
       ],
       "limitations": [
@@ -1154,7 +1300,12 @@
         "api-usage-pattern-monitoring",
         "continual-learning-stability-testing",
         "model-watermarking-and-theft-detection",
-        "safety-envelope-testing"
+        "safety-envelope-testing",
+        "red-teaming",
+        "data-poisoning-detection",
+        "model-extraction-defence-testing",
+        "membership-inference-attack-testing",
+        "jailbreak-resistance-testing"
       ],
       "sample_claims": [
         {
@@ -1361,8 +1512,11 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/security",
+        "assurance-goal-category/security/adversarial-robustness",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
         "data-type/any",
         "data-requirements/no-special-requirements",
         "lifecycle-stage/post-deployment",
@@ -1448,7 +1602,8 @@
         "adversarial-training-evaluation",
         "runtime-monitoring-and-circuit-breakers",
         "membership-inference-attack-testing",
-        "prompt-injection-testing"
+        "prompt-injection-testing",
+        "model-development-audit-trails"
       ],
       "sample_claims": [
         {
@@ -1919,8 +2074,13 @@
         "applicable-models/requirements/white-box",
         "applicable-models/requirements/gradient-access",
         "assurance-goal-category/security",
+        "assurance-goal-category/security/adversarial-robustness",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/harmful-behavior-detection",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/access-to-training-data",
         "data-type/any",
         "lifecycle-stage/data-collection",
@@ -1930,7 +2090,8 @@
         "technique-type/testing",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
-        "expertise-needed/domain-expertise"
+        "expertise-needed/domain-expertise",
+        "expertise-needed/security"
       ],
       "example_use_cases": [
         {
@@ -2038,7 +2199,11 @@
         "out-of-distribution-detector-for-neural-networks",
         "adversarial-training-evaluation",
         "influence-functions",
-        "cross-validation"
+        "cross-validation",
+        "federated-learning",
+        "membership-inference-attack-testing",
+        "model-extraction-defence-testing",
+        "model-watermarking-and-theft-detection"
       ],
       "sample_claims": [
         {
@@ -2568,7 +2733,10 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/security",
         "data-type/any",
         "lifecycle-stage/model-evaluation",
@@ -2582,6 +2750,7 @@
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
         "expertise-needed/software-engineering",
+        "expertise-needed/safety-engineering",
         "data-requirements/no-special-requirements"
       ],
       "example_use_cases": [
@@ -2688,7 +2857,8 @@
         "jailbreak-resistance-testing",
         "agent-goal-misalignment-testing",
         "prompt-injection-testing",
-        "chain-of-thought-faithfulness-evaluation"
+        "runtime-monitoring-and-circuit-breakers",
+        "safety-envelope-testing"
       ],
       "sample_claims": [
         {
@@ -3046,7 +3216,9 @@
         "applicable-models/paradigm/supervised",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
         "assurance-goal-category/transparency",
         "data-requirements/access-to-training-data",
         "data-requirements/labelled-data",
@@ -3147,7 +3319,8 @@
         "deep-ensembles",
         "chain-of-thought-faithfulness-evaluation",
         "out-of-distribution-detector-for-neural-networks",
-        "conformal-prediction"
+        "conformal-prediction",
+        "runtime-monitoring-and-circuit-breakers"
       ],
       "sample_claims": [
         {
@@ -3190,7 +3363,9 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
         "assurance-goal-category/reliability",
         "data-requirements/access-to-training-data",
         "data-type/tabular",
@@ -3217,6 +3392,10 @@
         {
           "description": "Ensuring fraud detection models trained on synthetic credit card transactions maintain reliable performance comparable to models trained on sensitive real transaction data.",
           "goal": "Reliability"
+        },
+        {
+          "description": "Producing audit-ready evaluation reports for a synthetic financial dataset used to train credit-risk models, demonstrating to regulators (e.g., under EU AI Act or SR 11-7 model risk management guidance) that the training data met documented privacy and quality thresholds, and that all trade-off decisions between privacy protection and model utility were recorded and justified.",
+          "goal": "Transparency"
         }
       ],
       "limitations": [
@@ -4102,5 +4281,5 @@
       ]
     }
   ],
-  "count": 27
+  "count": 28
 }

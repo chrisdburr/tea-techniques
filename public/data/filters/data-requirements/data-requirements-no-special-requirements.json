@@ -2,7 +2,7 @@
   "tag": {
     "name": "data-requirements/no-special-requirements",
     "slug": "data-requirements-no-special-requirements",
-    "count": 49,
+    "count": 48,
     "category": "data-requirements"
   },
   "techniques": [
@@ -3091,17 +3091,24 @@
         "applicable-models/paradigm/generative",
         "applicable-models/paradigm/unsupervised",
         "applicable-models/requirements/training-data",
-        "applicable-models/requirements/white-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/structured-output",
+        "evidence-type/synthetic-data",
         "expertise-needed/cryptography",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-augmentation",
         "lifecycle-stage/data-handling",
         "lifecycle-stage/model-development",
         "technique-type/algorithmic"
@@ -3217,171 +3224,6 @@
         {
           "text": "The quality control model has been tested on generated defect patterns that maintain statistical relationships with manufacturing parameters without revealing proprietary production data",
           "domain": "manufacturing",
-          "assuranceGoal": "privacy"
-        }
-      ]
-    },
-    {
-      "slug": "federated-learning",
-      "name": "Federated Learning",
-      "description": "Federated learning enables collaborative model training across multiple distributed parties (devices, organisations, or data centres) without requiring centralised data sharing. Participants train models locally on their private datasets and only share model updates (gradients, weights, or aggregated statistics) with a central coordinator. This distributed approach serves multiple purposes: preserving data privacy and sovereignty, reducing communication costs, enabling learning from diverse data sources, improving model robustness through heterogeneous training, and facilitating compliance with data protection regulations whilst maintaining model performance comparable to centralised training.",
-      "assurance_goals": [
-        "Privacy",
-        "Reliability",
-        "Safety",
-        "Fairness"
-      ],
-      "tags": [
-        "applicable-models/architecture/linear-models",
-        "applicable-models/architecture/neural-networks",
-        "applicable-models/paradigm/parametric",
-        "applicable-models/paradigm/supervised",
-        "applicable-models/requirements/gradient-access",
-        "applicable-models/requirements/white-box",
-        "assurance-goal-category/fairness",
-        "assurance-goal-category/privacy",
-        "assurance-goal-category/reliability",
-        "assurance-goal-category/safety",
-        "data-requirements/no-special-requirements",
-        "data-type/any",
-        "evidence-type/quantitative-metric",
-        "expertise-needed/ml-engineering",
-        "expertise-needed/software-engineering",
-        "lifecycle-stage/model-development",
-        "lifecycle-stage/system-deployment-and-use",
-        "technique-type/algorithmic"
-      ],
-      "example_use_cases": [
-        {
-          "description": "Developing a smartphone keyboard prediction model by learning from users' typing patterns without their text ever leaving their devices, enabling personalised predictions whilst maintaining complete data privacy.",
-          "goal": "Privacy"
-        },
-        {
-          "description": "Training a medical diagnosis model across multiple hospitals without sharing patient records, ensuring model robustness by learning from diverse patient populations and clinical practices across different institutions.",
-          "goal": "Reliability"
-        },
-        {
-          "description": "Creating a cybersecurity threat detection model by federating learning across financial institutions without exposing sensitive transaction data, reducing systemic risk whilst maintaining competitive confidentiality.",
-          "goal": "Safety"
-        },
-        {
-          "description": "Building a fair credit scoring model by training across multiple regions and demographics without centralising sensitive financial data, ensuring representation from diverse populations whilst respecting local data sovereignty laws.",
-          "goal": "Fairness"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "Communication overhead can be substantial, especially with frequent model updates and large models, potentially limiting scalability and increasing training time compared to centralised approaches."
-        },
-        {
-          "description": "Statistical heterogeneity across participants (non-IID data distributions) can lead to training instability, slower convergence, and reduced model performance compared to centralised training on pooled data."
-        },
-        {
-          "description": "System heterogeneity in computational capabilities, network connectivity, and availability of participating devices can create bottlenecks and introduce bias towards more capable participants."
-        },
-        {
-          "description": "Privacy vulnerabilities remain through gradient leakage attacks, model inversion, and membership inference attacks that can potentially reconstruct sensitive information from shared model updates."
-        },
-        {
-          "description": "Coordination complexity increases with the number of participants, requiring sophisticated aggregation protocols, fault tolerance mechanisms, and secure communication infrastructure."
-        }
-      ],
-      "resources": [
-        {
-          "title": "Open Federated Learning (OpenFL) Documentation",
-          "url": "https://openfl.readthedocs.io/en/stable",
-          "source_type": "documentation",
-          "authors": [
-            "Openfl Developers"
-          ],
-          "publication_date": "2020",
-          "citationKey": "openfldevelopersOpenFederatedLearning2020"
-        },
-        {
-          "title": "Federated Learning - DeepLearning.AI",
-          "url": "https://www.deeplearning.ai/short-courses/intro-to-federated-learning",
-          "source_type": "tutorial",
-          "authors": [
-            "Daniel J. Beutel",
-            "Nicholas Lane"
-          ],
-          "publication_date": "2025",
-          "citationKey": "beutelFederatedLearningDeepLearningAI2025"
-        },
-        {
-          "title": "A Survey on Federated Learning Systems: Vision, Hype and Reality for Data Privacy and Protection",
-          "url": "http://arxiv.org/abs/1907.09693v7",
-          "source_type": "technical_paper",
-          "authors": [
-            "Qinbin Li",
-            "Zeyi Wen",
-            "Zhaomin Wu",
-            "Sixu Hu",
-            "Naibo Wang",
-            "Yuan Li",
-            "Xu Liu",
-            "Bingsheng He"
-          ],
-          "publication_date": "2019-07-23",
-          "citationKey": "liSurveyFederatedLearning2019",
-          "abstract": "Federated learning has been a hot research topic in enabling the collaborative training of machine learning models among different organizations under the privacy restrictions. As researchers try to support more machine learning models with different privacy-preserving approaches, there is a requirement in developing systems and infrastructures to ease the development of various federated learning algorithms. Similar to deep learning systems such as PyTorch and TensorFlow that boost the development of deep learning, federated learning systems (FLSs) are equivalently important, and face challenges from various aspects such as effectiveness, efficiency, and privacy. In this survey, we conduct a comprehensive review on federated learning systems. To achieve smooth flow and guide future research, we introduce the definition of federated learning systems and analyze the system components. Moreover, we provide a thorough categorization for federated learning systems according to six different aspects, including data distribution, machine learning model, privacy mechanism, communication architecture, scale of federation and motivation of federation. The categorization can help the design of federated learning systems as shown in our case studies. By systematically summarizing the existing federated learning systems, we present the design factors, case studies, and future research opportunities."
-        },
-        {
-          "title": "Federated learning with hybrid differential privacy for secure and reliable cross-IoT platform knowledge sharing",
-          "url": "https://onlinelibrary.wiley.com/doi/full/10.1002/spy2.374",
-          "source_type": "technical_paper",
-          "authors": [
-            "Algburi, S.",
-            "Algburi, S.",
-            "Anupallavi, S.",
-            "Anupallavi, S.",
-            "Ashokkumar, S. R.",
-            "Ashokkumar, S. R.",
-            "Elmedany, W.",
-            "Elmedany, W.",
-            "Khalaf, O. I.",
-            "Khalaf, O. I.",
-            "Selvaraj, D.",
-            "Selvaraj, D.",
-            "Sharif, M. S.",
-            "Sharif, M. S."
-          ],
-          "publication_date": "2024-01-01",
-          "citationKey": "s.FederatedLearningHybrid2024"
-        }
-      ],
-      "complexity_rating": 4,
-      "computational_cost_rating": 5,
-      "related_techniques": [
-        "differential-privacy",
-        "homomorphic-encryption",
-        "synthetic-data-generation",
-        "data-poisoning-detection"
-      ],
-      "sample_claims": [
-        {
-          "text": "The model training process does not require patient data to leave individual healthcare institutions",
-          "domain": "healthcare",
-          "assuranceGoal": "privacy"
-        },
-        {
-          "text": "The diagnostic model performs reliably despite learning from patient populations with heterogeneous clinical characteristics across multiple sites",
-          "domain": "healthcare",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The fraud detection system maintains effective threat identification without exposing transaction records between competing financial institutions",
-          "domain": "finance",
-          "assuranceGoal": "safety"
-        },
-        {
-          "text": "The credit scoring model represents diverse demographic groups by learning from regional datasets that cannot be centralized due to data sovereignty requirements",
-          "domain": "finance",
-          "assuranceGoal": "fairness"
-        },
-        {
-          "text": "The keyboard prediction model learns from user typing patterns without transmitting personal text content to central servers",
-          "domain": "general",
           "assuranceGoal": "privacy"
         }
       ]
@@ -5874,8 +5716,11 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/security",
+        "assurance-goal-category/security/adversarial-robustness",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
         "data-type/any",
         "data-requirements/no-special-requirements",
         "lifecycle-stage/post-deployment",
@@ -5961,7 +5806,8 @@
         "adversarial-training-evaluation",
         "runtime-monitoring-and-circuit-breakers",
         "membership-inference-attack-testing",
-        "prompt-injection-testing"
+        "prompt-injection-testing",
+        "model-development-audit-trails"
       ],
       "sample_claims": [
         {
@@ -6166,7 +6012,10 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/security",
         "data-type/any",
         "lifecycle-stage/model-evaluation",
@@ -6180,6 +6029,7 @@
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
         "expertise-needed/software-engineering",
+        "expertise-needed/safety-engineering",
         "data-requirements/no-special-requirements"
       ],
       "example_use_cases": [
@@ -6286,7 +6136,8 @@
         "jailbreak-resistance-testing",
         "agent-goal-misalignment-testing",
         "prompt-injection-testing",
-        "chain-of-thought-faithfulness-evaluation"
+        "runtime-monitoring-and-circuit-breakers",
+        "safety-envelope-testing"
       ],
       "sample_claims": [
         {
@@ -6928,5 +6779,5 @@
       ]
     }
   ],
-  "count": 49
+  "count": 48
 }

@@ -2,7 +2,7 @@
   "tag": {
     "name": "lifecycle-stage/system-deployment-and-use",
     "slug": "lifecycle-stage-system-deployment-and-use",
-    "count": 25,
+    "count": 26,
     "category": "lifecycle-stage"
   },
   "techniques": [
@@ -1049,14 +1049,20 @@
         "applicable-models/requirements/gradient-access",
         "applicable-models/requirements/white-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/data-minimization",
+        "assurance-goal-category/privacy/formal-guarantee",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
         "assurance-goal-category/safety",
-        "data-requirements/no-special-requirements",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "expertise-needed/software-engineering",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
@@ -2030,6 +2036,150 @@
       ]
     },
     {
+      "slug": "bootstrapping",
+      "name": "Bootstrapping",
+      "description": "Bootstrapping estimates uncertainty by repeatedly resampling the original dataset with replacement to create many new training sets, training a model on each sample, and analysing the variation in predictions. This approach provides confidence intervals and stability measures without making strong statistical assumptions. By showing how predictions change with different random samples of the data, it reveals how sensitive the model is to the specific training examples and provides robust uncertainty estimates.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Estimating uncertainty in financial risk models by resampling historical data to understand how predictions might vary under different historical scenarios.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing confidence intervals for medical diagnosis predictions to help doctors understand the reliability of AI recommendations and make more informed treatment decisions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Assessing whether prediction uncertainty is consistent across different demographic groups in hiring algorithms, identifying if the model is systematically more uncertain for certain populations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive as it requires training multiple models on resampled datasets."
+        },
+        {
+          "description": "Does not account for uncertainty in model structure or architecture choices."
+        },
+        {
+          "description": "Cannot detect systematically missing data patterns or biases present in the original dataset."
+        },
+        {
+          "description": "Assumes that the original dataset is representative of the population of interest."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Deterministic bootstrapping for a class of bootstrap methods",
+          "url": "http://arxiv.org/abs/1903.10816v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Thomas Pitschel"
+          ],
+          "publication_date": "2019-03-26",
+          "citationKey": "pitschelDeterministicBootstrappingClass2019",
+          "abstract": "An algorithm is described that enables efficient deterministic approximate computation of the bootstrap distribution for any linear bootstrap method $T_n^*$, alleviating the need for repeated resampling from observations (resp. input-derived data). In essence, the algorithm computes the distribution function from a linear mixture of independent random variables each having a finite discrete distribution. The algorithm is applicable to elementary bootstrap scenarios (targetting the mean as parameter of interest), for block bootstrap, as well as for certain residual bootstrap scenarios. Moreover, the algorithm promises a much broader applicability, in non-bootstrapped hypothesis testing."
+        },
+        {
+          "title": "A Gentle Introduction to the Bootstrap Method ...",
+          "url": "https://www.machinelearningmastery.com/a-gentle-introduction-to-the-bootstrap-method",
+          "source_type": "tutorial",
+          "authors": [
+            "Jason Brownlee"
+          ],
+          "publication_date": "2018-05-24",
+          "citationKey": "brownleeGentleIntroductionBootstrap2018"
+        },
+        {
+          "title": "scipy.stats.bootstrap",
+          "url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html",
+          "source_type": "software_package",
+          "publication_date": "2008",
+          "citationKey": "Scipystatsbootstrap2008"
+        },
+        {
+          "title": "Bootstrapping and bagging — modAL documentation",
+          "url": "https://modal-python.readthedocs.io/en/latest/content/examples/bootstrapping_and_bagging.html",
+          "source_type": "documentation",
+          "publication_date": "2021",
+          "citationKey": "BootstrappingBaggingModAL2021"
+        },
+        {
+          "title": "Machine Learning: What is Bootstrapping?",
+          "url": "https://www.kdnuggets.com/2023/03/bootstrapping.html",
+          "source_type": "tutorial",
+          "authors": [
+            "Nate Rosidi"
+          ],
+          "publication_date": "2023",
+          "citationKey": "rosidiMachineLearningWhat2023"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "quantile-regression",
+        "jackknife-resampling",
+        "conformal-prediction",
+        "deep-ensembles",
+        "cross-validation",
+        "empirical-calibration"
+      ],
+      "sample_claims": [
+        {
+          "text": "The financial risk model's uncertainty estimates are robust to random variation in the historical data sample",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The clinical decision support system communicates prediction variability through confidence bounds derived from data resampling",
+          "domain": "healthcare",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The environmental model's uncertainty quantification does not rely on distributional assumptions about measurement errors",
+          "domain": "environmental",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The hiring algorithm's prediction stability is consistent across demographic groups when assessed using resampled training data",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The system's confidence intervals reflect genuine variability in model predictions across different data samples",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        }
+      ]
+    },
+    {
       "slug": "jackknife-resampling",
       "name": "Jackknife Resampling",
       "description": "Jackknife resampling (also called leave-one-out resampling) assesses model stability and uncertainty by systematically removing one data point at a time and retraining the model on the remaining data. Unlike bootstrapping which samples with replacement, jackknife creates n different models by excluding each of the n data points once. This systematic approach reveals how individual points influence results, provides robust estimates of prediction variance, and identifies unusually influential observations that may be outliers or leverage points affecting model reliability.",
@@ -2295,13 +2445,16 @@
         "applicable-models/requirements/black-box",
         "applicable-models/requirements/probabilistic-output",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/transparency",
         "data-requirements/labelled-data",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
@@ -2394,7 +2547,8 @@
         "empirical-calibration",
         "bootstrapping",
         "temperature-scaling",
-        "equal-opportunity-difference"
+        "equal-opportunity-difference",
+        "cross-validation"
       ],
       "sample_claims": [
         {
@@ -3607,5 +3761,5 @@
       ]
     }
   ],
-  "count": 26
+  "count": 27
 }

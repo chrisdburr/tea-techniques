@@ -2877,8 +2877,13 @@
       "applicable-models/requirements/white-box",
       "applicable-models/requirements/gradient-access",
       "assurance-goal-category/security",
+      "assurance-goal-category/security/adversarial-robustness",
       "assurance-goal-category/reliability",
+      "assurance-goal-category/reliability/robustness",
+      "assurance-goal-category/reliability/model-behavior-understanding",
       "assurance-goal-category/safety",
+      "assurance-goal-category/safety/harmful-behavior-detection",
+      "assurance-goal-category/safety/risk-identification",
       "data-requirements/access-to-training-data",
       "data-type/any",
       "lifecycle-stage/data-collection",
@@ -2888,9 +2893,10 @@
       "technique-type/testing",
       "evidence-type/quantitative-metric",
       "expertise-needed/ml-engineering",
-      "expertise-needed/domain-expertise"
+      "expertise-needed/domain-expertise",
+      "expertise-needed/security"
     ],
-    "searchText": "data poisoning detection data poisoning detection identifies malicious training data designed to compromise model behaviour. this technique detects various poisoning attacks including backdoor injection (triggers causing specific behaviours), availability attacks (degrading overall performance), and targeted attacks (causing errors on specific inputs). detection methods include statistical outlier analysis, influence function analysis to identify high-impact training points, and validation-based approaches that test for suspicious model behaviours indicative of poisoning. security reliability safety applicable-models/architecture/model-agnostic applicable-models/requirements/white-box applicable-models/requirements/gradient-access assurance-goal-category/security assurance-goal-category/reliability assurance-goal-category/safety data-requirements/access-to-training-data data-type/any lifecycle-stage/data-collection lifecycle-stage/model-development lifecycle-stage/model-evaluation technique-type/algorithmic technique-type/testing evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/domain-expertise the training data is free from malicious examples designed to compromise model behaviour on specific trigger patterns the diagnostic system's training dataset contains no manipulated medical records that systematically bias predictions for specific patient profiles the content moderation model's training corpus has not been corrupted with examples designed to suppress detection of particular harmful content categories the federated learning system detects and rejects training contributions containing backdoor triggers before they influence the global model the financial model's training data is validated to exclude manipulated records designed to create exploitable prediction patterns"
+    "searchText": "data poisoning detection data poisoning detection identifies malicious training data designed to compromise model behaviour. this technique detects various poisoning attacks including backdoor injection (triggers causing specific behaviours), availability attacks (degrading overall performance), and targeted attacks (causing errors on specific inputs). detection methods include statistical outlier analysis, influence function analysis to identify high-impact training points, and validation-based approaches that test for suspicious model behaviours indicative of poisoning. security reliability safety applicable-models/architecture/model-agnostic applicable-models/requirements/white-box applicable-models/requirements/gradient-access assurance-goal-category/security assurance-goal-category/security/adversarial-robustness assurance-goal-category/reliability assurance-goal-category/reliability/robustness assurance-goal-category/reliability/model-behavior-understanding assurance-goal-category/safety assurance-goal-category/safety/harmful-behavior-detection assurance-goal-category/safety/risk-identification data-requirements/access-to-training-data data-type/any lifecycle-stage/data-collection lifecycle-stage/model-development lifecycle-stage/model-evaluation technique-type/algorithmic technique-type/testing evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/domain-expertise expertise-needed/security the training data is free from malicious examples designed to compromise model behaviour on specific trigger patterns the diagnostic system's training dataset contains no manipulated medical records that systematically bias predictions for specific patient profiles the content moderation model's training corpus has not been corrupted with examples designed to suppress detection of particular harmful content categories the federated learning system detects and rejects training contributions containing backdoor triggers before they influence the global model the financial model's training data is validated to exclude manipulated records designed to create exploitable prediction patterns"
   },
   {
     "slug": "embedding-bias-analysis",
@@ -3124,8 +3130,11 @@
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box",
       "assurance-goal-category/privacy",
+      "assurance-goal-category/privacy/formal-guarantee",
       "assurance-goal-category/security",
+      "assurance-goal-category/security/adversarial-robustness",
       "assurance-goal-category/transparency",
+      "assurance-goal-category/transparency/audit-trail",
       "data-requirements/access-to-training-data",
       "data-type/any",
       "evidence-type/quantitative-metric",
@@ -3136,7 +3145,7 @@
       "technique-type/testing",
       "technique-type/algorithmic"
     ],
-    "searchText": "membership inference attack testing membership inference attack testing evaluates whether adversaries can determine if specific data points were included in a model's training set. this technique simulates attacks where adversaries use model confidence scores, prediction patterns, or loss values to distinguish training data from non-training data. testing measures privacy leakage by calculating attack success rates, precision-recall trade-offs, and advantage over random guessing. results inform decisions about privacy-enhancing techniques like differential privacy or regularisation. privacy security transparency applicable-models/architecture/model-agnostic applicable-models/requirements/black-box assurance-goal-category/privacy assurance-goal-category/security assurance-goal-category/transparency data-requirements/access-to-training-data data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/security lifecycle-stage/model-evaluation lifecycle-stage/post-deployment technique-type/testing technique-type/algorithmic the genomics research model does not reveal which individuals' genetic data were included in its training dataset the facial recognition system resists attempts to identify whose images were used during model development the credit scoring model's documented privacy characteristics include quantified risk of exposing individual customers' training data participation the medical diagnosis system protects patient privacy by preventing determination of which clinical records were used in training the recommendation system maintains user privacy even when adversaries systematically probe for training data membership"
+    "searchText": "membership inference attack testing membership inference attack testing evaluates whether adversaries can determine if specific data points were included in a model's training set. this technique simulates attacks where adversaries use model confidence scores, prediction patterns, or loss values to distinguish training data from non-training data. testing measures privacy leakage by calculating attack success rates, precision-recall trade-offs, and advantage over random guessing. results inform decisions about privacy-enhancing techniques like differential privacy or regularisation. privacy security transparency applicable-models/architecture/model-agnostic applicable-models/requirements/black-box assurance-goal-category/privacy assurance-goal-category/privacy/formal-guarantee assurance-goal-category/security assurance-goal-category/security/adversarial-robustness assurance-goal-category/transparency assurance-goal-category/transparency/audit-trail data-requirements/access-to-training-data data-type/any evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/security lifecycle-stage/model-evaluation lifecycle-stage/post-deployment technique-type/testing technique-type/algorithmic the genomics research model does not reveal which individuals' genetic data were included in its training dataset the facial recognition system resists attempts to identify whose images were used during model development the credit scoring model's documented privacy characteristics include quantified risk of exposing individual customers' training data participation the medical diagnosis system protects patient privacy by preventing determination of which clinical records were used in training the recommendation system maintains user privacy even when adversaries systematically probe for training data membership"
   },
   {
     "slug": "multimodal-alignment-evaluation",

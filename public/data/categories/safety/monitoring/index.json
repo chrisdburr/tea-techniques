@@ -4,6 +4,177 @@
   "subcategories": [],
   "techniques": [
     {
+      "slug": "federated-learning",
+      "name": "Federated Learning",
+      "description": "Federated learning enables collaborative model training across multiple distributed parties (devices, organisations, or data centres) without requiring centralised data sharing. Participants train models locally on their private datasets and only share model updates (gradients, weights, or aggregated statistics) with a central coordinator. This distributed approach serves multiple purposes: preserving data privacy and sovereignty, reducing communication costs, enabling learning from diverse data sources, improving model robustness through heterogeneous training, and facilitating compliance with data protection regulations whilst maintaining model performance comparable to centralised training.",
+      "assurance_goals": [
+        "Privacy",
+        "Reliability",
+        "Safety",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/linear-models",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/data-minimization",
+        "assurance-goal-category/privacy/formal-guarantee",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/software-engineering",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Developing a smartphone keyboard prediction model by learning from users' typing patterns without their text ever leaving their devices, enabling personalised predictions whilst maintaining complete data privacy.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Training a medical diagnosis model across multiple hospitals without sharing patient records, ensuring model robustness by learning from diverse patient populations and clinical practices across different institutions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Creating a cybersecurity threat detection model by federating learning across financial institutions without exposing sensitive transaction data, reducing systemic risk whilst maintaining competitive confidentiality.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Building a fair credit scoring model by training across multiple regions and demographics without centralising sensitive financial data, ensuring representation from diverse populations whilst respecting local data sovereignty laws.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Communication overhead can be substantial, especially with frequent model updates and large models, potentially limiting scalability and increasing training time compared to centralised approaches."
+        },
+        {
+          "description": "Statistical heterogeneity across participants (non-IID data distributions) can lead to training instability, slower convergence, and reduced model performance compared to centralised training on pooled data."
+        },
+        {
+          "description": "System heterogeneity in computational capabilities, network connectivity, and availability of participating devices can create bottlenecks and introduce bias towards more capable participants."
+        },
+        {
+          "description": "Privacy vulnerabilities remain through gradient leakage attacks, model inversion, and membership inference attacks that can potentially reconstruct sensitive information from shared model updates."
+        },
+        {
+          "description": "Coordination complexity increases with the number of participants, requiring sophisticated aggregation protocols, fault tolerance mechanisms, and secure communication infrastructure."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Open Federated Learning (OpenFL) Documentation",
+          "url": "https://openfl.readthedocs.io/en/stable",
+          "source_type": "documentation",
+          "authors": [
+            "Openfl Developers"
+          ],
+          "publication_date": "2020",
+          "citationKey": "openfldevelopersOpenFederatedLearning2020"
+        },
+        {
+          "title": "Federated Learning - DeepLearning.AI",
+          "url": "https://www.deeplearning.ai/short-courses/intro-to-federated-learning",
+          "source_type": "tutorial",
+          "authors": [
+            "Daniel J. Beutel",
+            "Nicholas Lane"
+          ],
+          "publication_date": "2025",
+          "citationKey": "beutelFederatedLearningDeepLearningAI2025"
+        },
+        {
+          "title": "A Survey on Federated Learning Systems: Vision, Hype and Reality for Data Privacy and Protection",
+          "url": "http://arxiv.org/abs/1907.09693v7",
+          "source_type": "technical_paper",
+          "authors": [
+            "Qinbin Li",
+            "Zeyi Wen",
+            "Zhaomin Wu",
+            "Sixu Hu",
+            "Naibo Wang",
+            "Yuan Li",
+            "Xu Liu",
+            "Bingsheng He"
+          ],
+          "publication_date": "2019-07-23",
+          "citationKey": "liSurveyFederatedLearning2019",
+          "abstract": "Federated learning has been a hot research topic in enabling the collaborative training of machine learning models among different organizations under the privacy restrictions. As researchers try to support more machine learning models with different privacy-preserving approaches, there is a requirement in developing systems and infrastructures to ease the development of various federated learning algorithms. Similar to deep learning systems such as PyTorch and TensorFlow that boost the development of deep learning, federated learning systems (FLSs) are equivalently important, and face challenges from various aspects such as effectiveness, efficiency, and privacy. In this survey, we conduct a comprehensive review on federated learning systems. To achieve smooth flow and guide future research, we introduce the definition of federated learning systems and analyze the system components. Moreover, we provide a thorough categorization for federated learning systems according to six different aspects, including data distribution, machine learning model, privacy mechanism, communication architecture, scale of federation and motivation of federation. The categorization can help the design of federated learning systems as shown in our case studies. By systematically summarizing the existing federated learning systems, we present the design factors, case studies, and future research opportunities."
+        },
+        {
+          "title": "Federated learning with hybrid differential privacy for secure and reliable cross-IoT platform knowledge sharing",
+          "url": "https://onlinelibrary.wiley.com/doi/full/10.1002/spy2.374",
+          "source_type": "technical_paper",
+          "authors": [
+            "Algburi, S.",
+            "Algburi, S.",
+            "Anupallavi, S.",
+            "Anupallavi, S.",
+            "Ashokkumar, S. R.",
+            "Ashokkumar, S. R.",
+            "Elmedany, W.",
+            "Elmedany, W.",
+            "Khalaf, O. I.",
+            "Khalaf, O. I.",
+            "Selvaraj, D.",
+            "Selvaraj, D.",
+            "Sharif, M. S.",
+            "Sharif, M. S."
+          ],
+          "publication_date": "2024-01-01",
+          "citationKey": "s.FederatedLearningHybrid2024"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "differential-privacy",
+        "homomorphic-encryption",
+        "synthetic-data-generation",
+        "data-poisoning-detection"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model training process does not require patient data to leave individual healthcare institutions",
+          "domain": "healthcare",
+          "assuranceGoal": "privacy"
+        },
+        {
+          "text": "The diagnostic model performs reliably despite learning from patient populations with heterogeneous clinical characteristics across multiple sites",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The fraud detection system maintains effective threat identification without exposing transaction records between competing financial institutions",
+          "domain": "finance",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The credit scoring model represents diverse demographic groups by learning from regional datasets that cannot be centralized due to data sovereignty requirements",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The keyboard prediction model learns from user typing patterns without transmitting personal text content to central servers",
+          "domain": "general",
+          "assuranceGoal": "privacy"
+        }
+      ]
+    },
+    {
       "slug": "agent-goal-misalignment-testing",
       "name": "Agent Goal Misalignment Testing",
       "description": "Agent goal misalignment testing identifies scenarios where AI agents pursue objectives in unintended ways or develop proxy goals that diverge from true human intent. This technique tests for specification gaming (achieving stated metrics while violating intent), instrumental goals (agents developing problematic sub-goals to achieve main objectives), and reward hacking (exploiting loopholes in reward functions). Testing uses diverse scenarios to probe whether agents truly understand task intent or merely optimise narrow specified metrics.",
@@ -166,7 +337,309 @@
           "assuranceGoal": "reliability"
         }
       ]
+    },
+    {
+      "slug": "api-usage-pattern-monitoring",
+      "name": "API Usage Pattern Monitoring",
+      "description": "API usage pattern monitoring analyses AI model API usage to detect anomalies and generate evidence of secure operation. This technique tracks request patterns, input distributions, and usage velocity to produce security reports, anomaly detection evidence, and usage compliance documentation. Monitoring generates quantitative metrics on extraction attempt frequency, adversarial probing patterns, and deviation from intended use, creating auditable evidence for assurance cases.",
+      "assurance_goals": [
+        "Security",
+        "Safety",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/security",
+        "assurance-goal-category/security/adversarial-robustness",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "data-type/any",
+        "data-requirements/no-special-requirements",
+        "lifecycle-stage/post-deployment",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring",
+        "technique-type/algorithmic",
+        "technique-type/procedural",
+        "evidence-type/quantitative-metric",
+        "evidence-type/documentation",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/statistics"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Detecting suspicious query patterns in a fraud detection API that might indicate attackers are probing to understand decision boundaries and evade detection.",
+          "goal": "Security"
+        },
+        {
+          "description": "Monitoring a content moderation API for unexpected input distributions that might indicate new types of harmful content not adequately covered by current safety measures.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Providing transparent reporting on actual API usage patterns versus intended use cases, enabling proactive identification of misuse and appropriate interventions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Monitoring query patterns in a healthcare diagnosis API to detect when clinics are submitting unusual volumes or types of queries that might indicate misuse (e.g., using a pediatric model for geriatric patients) or system integration errors requiring intervention.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Analyzing usage patterns in an educational content recommendation API to identify when schools or districts are experiencing different student interaction patterns than expected, enabling proactive quality assurance and equity reviews.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Detecting anomalous query sequences in a loan underwriting API that might indicate adversarial testing by competitors or attackers attempting to reverse-engineer decision boundaries for circumvention.",
+          "goal": "Security"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Defining normal versus anomalous usage patterns requires establishing baselines that may not capture legitimate diversity in usage."
+        },
+        {
+          "description": "Sophisticated adversaries may disguise malicious activity to blend with normal traffic, evading pattern-based detection."
+        },
+        {
+          "description": "Privacy concerns may limit the extent to which usage data can be collected and analyzed, especially for sensitive applications."
+        },
+        {
+          "description": "High false positive rates (often 20-40% in anomaly detection) can create alert fatigue, reducing the effectiveness of human review processes."
+        },
+        {
+          "description": "Continuous pattern analysis requires storing and processing large volumes of query logs (potentially petabytes for high-traffic APIs), creating significant infrastructure and data retention costs."
+        },
+        {
+          "description": "Real-time anomaly detection can add 5-20ms latency per request depending on analysis complexity, potentially impacting service level agreements for low-latency applications."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Production Monitoring for GenAI Applications | MLflow",
+          "url": "https://mlflow.org/docs/latest/genai/tracing/prod-tracing",
+          "source_type": "documentation",
+          "authors": [
+            "MLflow Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "mlflowdevelopersProductionMonitoringGenAI2018"
+        },
+        {
+          "title": "Collaborative Intelligence in API Gateway Optimization: A Human-AI Synergy Framework for Microservices Architecture",
+          "url": "https://www.semanticscholar.org/paper/0ad3bb852891f552d26d8d081669244dc49a0a30",
+          "source_type": "technical_paper",
+          "authors": [
+            "VijayKumar Pasunoori"
+          ],
+          "publication_date": "2024",
+          "citationKey": "pasunooriCollaborativeIntelligenceAPI2024",
+          "abstract": "This article presents a novel framework for optimizing API gateway performance in microservices architectures through human-AI collaboration. The article proposes an integrated approach that leverages artificial intelligence for real-time monitoring and dynamic configuration adjustments while incorporating human domain expertise for strategic decision-making. The framework implements machine learning algorithms for traffic pattern analysis, anomaly detection, and predictive optimization, complemented by a human-in-the-loop interface that enables expert oversight and intervention. The article implementation demonstrates improved gateway performance across multiple metrics, including response time, resource utilization, and system reliability. Through case studies across different industry sectors, the article validates the framework's effectiveness in maintaining optimal gateway performance under varying load conditions while adhering to business constraints and regulatory requirements. The results indicate that this synergistic approach provides superior optimization outcomes to purely automated or human-managed systems. The findings contribute to the growing knowledge on human-AI collaboration in infrastructure management and provide practical insights for organizations implementing microservices architectures."
+        }
+      ],
+      "related_techniques": [
+        "adversarial-training-evaluation",
+        "runtime-monitoring-and-circuit-breakers",
+        "membership-inference-attack-testing",
+        "prompt-injection-testing",
+        "model-development-audit-trails"
+      ],
+      "sample_claims": [
+        {
+          "text": "The system detects and logs query patterns consistent with attempts to reverse-engineer decision boundaries",
+          "domain": "general",
+          "assuranceGoal": "security"
+        },
+        {
+          "text": "The deployed model identifies when usage patterns deviate from the validated operational envelope",
+          "domain": "autonomous systems",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The API service maintains auditable records demonstrating alignment between actual usage and documented intended purposes",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The healthcare AI system flags unusual request volumes or distributions that may indicate integration errors or misuse",
+          "domain": "healthcare",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The model API detects coordinated query sequences characteristic of adversarial probing attempts",
+          "domain": "general",
+          "assuranceGoal": "security"
+        }
+      ]
+    },
+    {
+      "slug": "multi-agent-system-testing",
+      "name": "Multi-Agent System Testing",
+      "description": "Multi-agent system testing evaluates safety and reliability of systems where multiple AI agents interact, coordinate, or compete. This technique assesses emergent behaviours, communication protocols, conflict resolution, and whether agents maintain objectives appropriately. Testing produces reports on agent interaction patterns, coalition formation, failure cascade analysis, and safety property violations in multi-agent scenarios.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Security"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/security",
+        "data-type/any",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring",
+        "technique-type/testing",
+        "technique-type/algorithmic",
+        "evidence-type/quantitative-metric",
+        "evidence-type/documentation",
+        "evidence-type/qualitative-report",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/software-engineering",
+        "expertise-needed/safety-engineering",
+        "data-requirements/no-special-requirements"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing a warehouse management system with multiple autonomous robots to ensure they coordinate safely without collisions, deadlocks, or inefficient resource contention.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Verifying that a multi-agent traffic management system maintains reliable traffic flow and emergency vehicle prioritisation even when individual intersection agents face sensor failures or conflicting optimisation objectives.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Testing a collaborative diagnostic system where multiple AI agents analyze medical images, ensuring they reach reliable consensus without one dominant agent's biases propagating through the system or creating security vulnerabilities in patient data handling.",
+          "goal": "Security"
+        },
+        {
+          "description": "Evaluating a multi-agent algorithmic trading system to ensure coordinated agents don't inadvertently create market manipulation patterns or cascade failures during high-volatility conditions.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Combinatorial explosion of possible agent interactions makes comprehensive testing infeasible beyond small numbers of agents."
+        },
+        {
+          "description": "Emergent behaviors may only appear in specific scenarios that are difficult to anticipate and test systematically."
+        },
+        {
+          "description": "Formal verification methods don't scale well to complex multi-agent systems with learning components that adapt their behavior over time, requiring hybrid approaches combining testing and monitoring."
+        },
+        {
+          "description": "Testing environments may not capture all real-world complexities of agent deployment, communication delays, and failure modes."
+        },
+        {
+          "description": "Simulating realistic multi-agent environments requires significant computational resources and domain-specific modeling expertise, particularly for systems with complex physical or social dynamics."
+        },
+        {
+          "description": "Continuous monitoring in deployed systems is essential but challenging, as agents may develop new interaction patterns over time that weren't observed during initial testing phases."
+        }
+      ],
+      "resources": [
+        {
+          "title": "awesome-ai-agent-testing",
+          "url": "https://github.com/chaosync-org/awesome-ai-agent-testing",
+          "source_type": "software_package",
+          "publication_date": "2025-05-28",
+          "citationKey": "chaosync-orgAwesomeaiagenttesting2025",
+          "abstract": "🤖 A curated list of resources for testing AI agents - frameworks, methodologies, benchmarks, tools, and best practices for ensuring reliable, safe, and effective autonomous AI systems"
+        },
+        {
+          "title": "RV4JaCa - Towards Runtime Verification of Multi-Agent Systems and Robotic Applications",
+          "url": "https://www.semanticscholar.org/paper/c1091bd2ca87d3de1a8b152fb6ba0af944fcfe73",
+          "source_type": "technical_paper",
+          "authors": [
+            "D. Engelmann",
+            "Angelo Ferrando",
+            "Alison R. Panisson",
+            "D. Ancona",
+            "Rafael Heitor Bordini",
+            "V. Mascardi"
+          ],
+          "publication_date": "2023",
+          "citationKey": "engelmannRV4JaCaRuntimeVerification2023",
+          "abstract": "This paper presents a Runtime Verification (RV) approach for Multi-Agent Systems (MAS) using the JaCaMo framework. Our objective is to bring a layer of security to the MAS. This is achieved keeping in mind possible safety-critical uses of the MAS, such as robotic applications. This layer is capable of controlling events during the execution of the system without needing a specific implementation in the behaviour of each agent to recognise the events. In this paper, we mainly focus on MAS when used in the context of hybrid intelligence. This use requires communication between software agents and human beings. In some cases, communication takes place via natural language dialogues. However, this kind of communication brings us to a concern related to controlling the flow of dialogue so that agents can prevent any change in the topic of discussion that could impair their reasoning. The latter may be a problem and undermine the development of the software agents. In this paper, we tackle this problem by proposing and demonstrating the implementation of a framework that aims to control the dialogue flow in a MAS; especially when the MAS communicates with the user through natural language to aid decision-making in a hospital bed allocation scenario."
+        },
+        {
+          "title": "A synergistic and extensible framework for multi-agent system verification",
+          "url": "https://www.semanticscholar.org/paper/922ff8eb6a98b86402990c4a1df68a6a8be685c0",
+          "source_type": "technical_paper",
+          "authors": [
+            "J. Hunter",
+            "F. Raimondi",
+            "Neha Rungta",
+            "Richard Stocker"
+          ],
+          "publication_date": "2013",
+          "citationKey": "hunterSynergisticExtensibleFramework2013"
+        },
+        {
+          "title": "Distributed Control Design and Safety Verification for Multi-Agent Systems",
+          "url": "https://www.semanticscholar.org/paper/da353344f00519d4ea1672da2a84154473a07647",
+          "source_type": "technical_paper",
+          "authors": [
+            "Han Wang",
+            "Antonis Papachristodoulou",
+            "Kostas Margellos"
+          ],
+          "publication_date": "2023",
+          "citationKey": "wangDistributedControlDesign2023"
+        },
+        {
+          "title": "Applying process mining approach to support the verification of a multi-agent system",
+          "url": "https://www.semanticscholar.org/paper/de3d883dcf0a0f0d0bc3a5285484ba0f8150b8ba",
+          "source_type": "technical_paper",
+          "authors": [
+            "C. Ou-Yang",
+            "Y. Juan"
+          ],
+          "publication_date": "2010",
+          "citationKey": "ou-yangApplyingProcessMining2010"
+        }
+      ],
+      "related_techniques": [
+        "jailbreak-resistance-testing",
+        "agent-goal-misalignment-testing",
+        "prompt-injection-testing",
+        "runtime-monitoring-and-circuit-breakers",
+        "safety-envelope-testing"
+      ],
+      "sample_claims": [
+        {
+          "text": "The autonomous warehouse system maintains safe robot coordination without collision or deadlock even when individual units encounter navigation failures",
+          "domain": "manufacturing",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The collaborative diagnostic system reaches reliable consensus across multiple analyzing agents without propagating individual model biases",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The algorithmic trading platform's coordinated agents do not create market manipulation patterns or cascade failures during high-volatility conditions",
+          "domain": "finance",
+          "assuranceGoal": "security"
+        },
+        {
+          "text": "The traffic management system's distributed intersection agents maintain safe flow coordination when facing conflicting optimization objectives or sensor degradation",
+          "domain": "autonomous systems",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The system maintains reliable operation when communication delays or partial agent failures disrupt normal coordination protocols",
+          "domain": "general",
+          "assuranceGoal": "reliability"
+        }
+      ]
     }
   ],
-  "count": 1
+  "count": 4
 }

@@ -2889,7 +2889,9 @@
         "applicable-models/requirements/black-box",
         "applicable-models/requirements/training-data",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/transparency",
         "data-requirements/access-to-training-data",
         "data-type/any",
@@ -2897,7 +2899,10 @@
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
         "explanatory-scope/global",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -2981,7 +2986,9 @@
         "quantile-regression",
         "jackknife-resampling",
         "conformal-prediction",
-        "deep-ensembles"
+        "deep-ensembles",
+        "cross-validation",
+        "empirical-calibration"
       ],
       "sample_claims": [
         {
@@ -3277,13 +3284,16 @@
         "applicable-models/requirements/black-box",
         "applicable-models/requirements/probabilistic-output",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/transparency",
         "data-requirements/labelled-data",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
@@ -3376,7 +3386,8 @@
         "empirical-calibration",
         "bootstrapping",
         "temperature-scaling",
-        "equal-opportunity-difference"
+        "equal-opportunity-difference",
+        "cross-validation"
       ],
       "sample_claims": [
         {
@@ -5156,13 +5167,18 @@
         "applicable-models/requirements/black-box",
         "applicable-models/requirements/training-data",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/sensitive-attributes",
         "data-type/tabular",
         "evidence-type/quantitative-metric",
+        "expertise-needed/domain-expertise",
         "expertise-needed/statistics",
         "fairness-approach/group",
+        "lifecycle-stage/data-collection/data-augmentation",
         "lifecycle-stage/model-development",
         "technique-type/algorithmic"
       ],
@@ -5242,7 +5258,8 @@
         "reweighing",
         "relabelling",
         "preferential-sampling",
-        "attribute-removal-fairness-through-unawareness"
+        "attribute-removal-fairness-through-unawareness",
+        "adversarial-debiasing"
       ],
       "sample_claims": [
         {
@@ -6816,7 +6833,8 @@
         "technique-type/algorithmic",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
-        "expertise-needed/domain-expertise"
+        "expertise-needed/domain-expertise",
+        "assurance-goal-category/reliability/model-behavior-understanding"
       ],
       "example_use_cases": [
         {
@@ -6838,6 +6856,10 @@
         {
           "description": "Verifying that adversarial training of a medical imaging classifier for tumour detection maintains diagnostic accuracy on routine cases whilst improving robustness to image quality variations and potential adversarial attacks.",
           "goal": "Security"
+        },
+        {
+          "description": "Documenting adversarial training evaluation results in a model card or technical dossier to meet transparency and disclosure obligations for high-risk AI systems, enabling regulators and deployers to assess whether robustness claims are substantiated by rigorous evaluation across diverse attack types beyond those used in training.",
+          "goal": "Transparency"
         }
       ],
       "limitations": [
@@ -6922,7 +6944,12 @@
         "api-usage-pattern-monitoring",
         "continual-learning-stability-testing",
         "model-watermarking-and-theft-detection",
-        "safety-envelope-testing"
+        "safety-envelope-testing",
+        "red-teaming",
+        "data-poisoning-detection",
+        "model-extraction-defence-testing",
+        "membership-inference-attack-testing",
+        "jailbreak-resistance-testing"
       ],
       "sample_claims": [
         {
@@ -7129,8 +7156,11 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/security",
+        "assurance-goal-category/security/adversarial-robustness",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
         "data-type/any",
         "data-requirements/no-special-requirements",
         "lifecycle-stage/post-deployment",
@@ -7216,7 +7246,8 @@
         "adversarial-training-evaluation",
         "runtime-monitoring-and-circuit-breakers",
         "membership-inference-attack-testing",
-        "prompt-injection-testing"
+        "prompt-injection-testing",
+        "model-development-audit-trails"
       ],
       "sample_claims": [
         {
@@ -8161,7 +8192,10 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/security",
         "data-type/any",
         "lifecycle-stage/model-evaluation",
@@ -8175,6 +8209,7 @@
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
         "expertise-needed/software-engineering",
+        "expertise-needed/safety-engineering",
         "data-requirements/no-special-requirements"
       ],
       "example_use_cases": [
@@ -8281,7 +8316,8 @@
         "jailbreak-resistance-testing",
         "agent-goal-misalignment-testing",
         "prompt-injection-testing",
-        "chain-of-thought-faithfulness-evaluation"
+        "runtime-monitoring-and-circuit-breakers",
+        "safety-envelope-testing"
       ],
       "sample_claims": [
         {
@@ -8324,8 +8360,11 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
         "assurance-goal-category/security",
+        "assurance-goal-category/security/adversarial-robustness",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
         "data-requirements/access-to-training-data",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -8433,7 +8472,9 @@
         "model-extraction-defence-testing",
         "adversarial-training-evaluation",
         "synthetic-data-evaluation",
-        "data-poisoning-detection"
+        "data-poisoning-detection",
+        "differential-privacy",
+        "machine-unlearning"
       ],
       "sample_claims": [
         {
@@ -8791,7 +8832,9 @@
         "applicable-models/paradigm/supervised",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
         "assurance-goal-category/transparency",
         "data-requirements/access-to-training-data",
         "data-requirements/labelled-data",
@@ -8892,7 +8935,8 @@
         "deep-ensembles",
         "chain-of-thought-faithfulness-evaluation",
         "out-of-distribution-detector-for-neural-networks",
-        "conformal-prediction"
+        "conformal-prediction",
+        "runtime-monitoring-and-circuit-breakers"
       ],
       "sample_claims": [
         {
@@ -8935,7 +8979,9 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
         "assurance-goal-category/reliability",
         "data-requirements/access-to-training-data",
         "data-type/tabular",
@@ -8962,6 +9008,10 @@
         {
           "description": "Ensuring fraud detection models trained on synthetic credit card transactions maintain reliable performance comparable to models trained on sensitive real transaction data.",
           "goal": "Reliability"
+        },
+        {
+          "description": "Producing audit-ready evaluation reports for a synthetic financial dataset used to train credit-risk models, demonstrating to regulators (e.g., under EU AI Act or SR 11-7 model risk management guidance) that the training data met documented privacy and quality thresholds, and that all trade-off decisions between privacy protection and model utility were recorded and justified.",
+          "goal": "Transparency"
         }
       ],
       "limitations": [

@@ -1630,7 +1630,8 @@
         "technique-type/algorithmic",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
-        "expertise-needed/domain-expertise"
+        "expertise-needed/domain-expertise",
+        "assurance-goal-category/reliability/model-behavior-understanding"
       ],
       "example_use_cases": [
         {
@@ -1652,6 +1653,10 @@
         {
           "description": "Verifying that adversarial training of a medical imaging classifier for tumour detection maintains diagnostic accuracy on routine cases whilst improving robustness to image quality variations and potential adversarial attacks.",
           "goal": "Security"
+        },
+        {
+          "description": "Documenting adversarial training evaluation results in a model card or technical dossier to meet transparency and disclosure obligations for high-risk AI systems, enabling regulators and deployers to assess whether robustness claims are substantiated by rigorous evaluation across diverse attack types beyond those used in training.",
+          "goal": "Transparency"
         }
       ],
       "limitations": [
@@ -1736,7 +1741,12 @@
         "api-usage-pattern-monitoring",
         "continual-learning-stability-testing",
         "model-watermarking-and-theft-detection",
-        "safety-envelope-testing"
+        "safety-envelope-testing",
+        "red-teaming",
+        "data-poisoning-detection",
+        "model-extraction-defence-testing",
+        "membership-inference-attack-testing",
+        "jailbreak-resistance-testing"
       ],
       "sample_claims": [
         {
@@ -1779,8 +1789,11 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/security",
+        "assurance-goal-category/security/adversarial-robustness",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
         "data-type/any",
         "data-requirements/no-special-requirements",
         "lifecycle-stage/post-deployment",
@@ -1866,7 +1879,8 @@
         "adversarial-training-evaluation",
         "runtime-monitoring-and-circuit-breakers",
         "membership-inference-attack-testing",
-        "prompt-injection-testing"
+        "prompt-injection-testing",
+        "model-development-audit-trails"
       ],
       "sample_claims": [
         {
@@ -1910,8 +1924,13 @@
         "applicable-models/requirements/white-box",
         "applicable-models/requirements/gradient-access",
         "assurance-goal-category/security",
+        "assurance-goal-category/security/adversarial-robustness",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/harmful-behavior-detection",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/access-to-training-data",
         "data-type/any",
         "lifecycle-stage/data-collection",
@@ -1921,7 +1940,8 @@
         "technique-type/testing",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
-        "expertise-needed/domain-expertise"
+        "expertise-needed/domain-expertise",
+        "expertise-needed/security"
       ],
       "example_use_cases": [
         {
@@ -2029,7 +2049,11 @@
         "out-of-distribution-detector-for-neural-networks",
         "adversarial-training-evaluation",
         "influence-functions",
-        "cross-validation"
+        "cross-validation",
+        "federated-learning",
+        "membership-inference-attack-testing",
+        "model-extraction-defence-testing",
+        "model-watermarking-and-theft-detection"
       ],
       "sample_claims": [
         {
@@ -2371,7 +2395,10 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/security",
         "data-type/any",
         "lifecycle-stage/model-evaluation",
@@ -2385,6 +2412,7 @@
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
         "expertise-needed/software-engineering",
+        "expertise-needed/safety-engineering",
         "data-requirements/no-special-requirements"
       ],
       "example_use_cases": [
@@ -2491,7 +2519,8 @@
         "jailbreak-resistance-testing",
         "agent-goal-misalignment-testing",
         "prompt-injection-testing",
-        "chain-of-thought-faithfulness-evaluation"
+        "runtime-monitoring-and-circuit-breakers",
+        "safety-envelope-testing"
       ],
       "sample_claims": [
         {
@@ -2534,8 +2563,11 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
         "assurance-goal-category/security",
+        "assurance-goal-category/security/adversarial-robustness",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
         "data-requirements/access-to-training-data",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -2643,7 +2675,9 @@
         "model-extraction-defence-testing",
         "adversarial-training-evaluation",
         "synthetic-data-evaluation",
-        "data-poisoning-detection"
+        "data-poisoning-detection",
+        "differential-privacy",
+        "machine-unlearning"
       ],
       "sample_claims": [
         {

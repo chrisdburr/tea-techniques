@@ -4,6 +4,721 @@
   "subcategories": [],
   "techniques": [
     {
+      "slug": "coefficient-magnitudes-in-linear-models",
+      "name": "Coefficient Magnitudes (in Linear Models)",
+      "description": "Coefficient Magnitudes assess feature influence in linear models by examining the absolute values of their coefficients. Features with larger absolute coefficients are considered to have a stronger impact on the prediction, while the sign of the coefficient indicates the direction of that influence (positive or negative). This technique provides a straightforward and transparent way to understand the direct linear relationship between each input feature and the model's output.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/model-specific",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/low",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/metric",
+        "applicable-models/architecture/linear-models",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/white-box"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Interpreting which features influence housing price predictions in linear regression, such as identifying that 'number of bedrooms' has a larger positive impact than 'distance to city centre' based on coefficient magnitudes.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Explaining the factors contributing to customer lifetime value (CLV) in a linear model, showing how 'average monthly spend' has a strong positive coefficient, making the model transparent for business stakeholders.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Only valid for linear relationships; it cannot capture complex non-linear patterns or interactions between features."
+        },
+        {
+          "description": "Highly sensitive to feature scaling; features with larger numerical ranges can appear more important even if their true impact is smaller."
+        },
+        {
+          "description": "Can be misleading in the presence of multicollinearity, where correlated features may split importance or have unstable coefficients."
+        },
+        {
+          "description": "Does not imply causation; a strong correlation (large coefficient) does not necessarily mean a causal relationship."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn Linear Models",
+          "url": "https://scikit-learn.org/stable/modules/linear_model.html",
+          "source_type": "documentation",
+          "authors": [
+            "Scikit-learn Developers"
+          ],
+          "publication_date": "2007",
+          "citationKey": "scikit-learndevelopersScikitlearnLinearModels2007"
+        },
+        {
+          "title": "Interpreting Linear Regression Coefficients",
+          "url": "https://statisticsbyjim.com/regression/interpret-coefficients-p-values-regression",
+          "source_type": "tutorial",
+          "authors": [
+            "Jim Frost"
+          ],
+          "publication_date": "2017-04-12",
+          "citationKey": "frostInterpretingLinearRegression2017"
+        },
+        {
+          "title": "statsmodels: Econometric and statistical modeling",
+          "url": "https://www.statsmodels.org/stable/index.html",
+          "source_type": "software_package",
+          "publication_date": "2009",
+          "citationKey": "StatsmodelsEconometricStatistical2009"
+        },
+        {
+          "title": "The Elements of Statistical Learning",
+          "url": "https://hastie.su.domains/ElemStatLearn",
+          "source_type": "technical_paper",
+          "publication_date": "2009",
+          "citationKey": "ElementsStatisticalLearning2009"
+        }
+      ],
+      "complexity_rating": 1,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "permutation-importance",
+        "mean-decrease-impurity",
+        "shapley-additive-explanations",
+        "generalized-additive-models",
+        "ridge-regression-surrogates"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's feature influences are quantifiable through direct examination of their linear coefficients",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The housing price estimator's reliance on specific property attributes is transparent to regulators through standardized coefficient magnitudes",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The clinical risk model's predictive contributions from patient characteristics are directly interpretable from the regression parameters",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The system's feature importance rankings remain consistent when input variables are appropriately scaled",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The crop yield prediction model's dependence on environmental factors is directly measurable through their coefficient values",
+          "domain": "environmental",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
+      "slug": "local-interpretable-model-agnostic-explanations",
+      "name": "Local Interpretable Model-Agnostic Explanations",
+      "description": "LIME (Local Interpretable Model-agnostic Explanations) explains individual predictions by approximating the complex model's behaviour in a small neighbourhood around a specific instance. It works by creating perturbed versions of the input (e.g., removing words from text, changing pixel values in images, or varying feature values), obtaining the model's predictions for these variations, and training a simple interpretable model (typically linear regression) weighted by proximity to the original instance. The coefficients of this local surrogate model reveal which features most influenced the specific prediction.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/surrogate-models/local-surrogates",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Explaining why a specific patient received a high-risk diagnosis by showing which symptoms (fever, blood pressure, age) contributed most to the prediction, helping doctors validate the AI's reasoning.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging a text classifier's misclassification of a movie review by highlighting which words (e.g., sarcastic phrases) confused the model, enabling targeted model improvements.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations to customers about automated decisions in insurance claims, showing which claim features influenced approval or denial to meet regulatory requirements.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Explanations can be unstable due to random sampling, producing different results across multiple runs."
+        },
+        {
+          "description": "The linear surrogate may poorly approximate highly non-linear model behaviour in the local region."
+        },
+        {
+          "description": "Defining the neighbourhood size and perturbation strategy requires careful tuning for each data type."
+        },
+        {
+          "description": "Can be computationally expensive for explaining many instances due to repeated model queries."
+        },
+        {
+          "description": "Assumes features are independent when generating perturbations, producing unrealistic out-of-distribution samples for datasets with correlated features. This can generate misleading attribution scores when inputs share strong correlations (e.g., age and income in credit scoring, comorbidities in clinical data)."
+        }
+      ],
+      "resources": [
+        {
+          "title": "lime",
+          "url": "https://github.com/marcotcr/lime",
+          "source_type": "software_package",
+          "publication_date": "2016-03-15",
+          "citationKey": "marcotcrLime2016",
+          "abstract": "Lime: Explaining the predictions of any machine learning classifier"
+        },
+        {
+          "title": "lime",
+          "url": "https://github.com/thomasp85/lime",
+          "source_type": "software_package",
+          "publication_date": "2017-03-17",
+          "citationKey": "thomasp85Lime2017",
+          "abstract": "Local Interpretable Model-Agnostic Explanations (R port of original Python package)"
+        },
+        {
+          "title": "Local Interpretable Model-Agnostic Explanations (lime) — lime 0.1 ...",
+          "url": "https://lime-ml.readthedocs.io",
+          "source_type": "documentation",
+          "authors": [
+            "Lime-ml Developers"
+          ],
+          "publication_date": "2016",
+          "citationKey": "lime-mldevelopersLocalInterpretableModelAgnostic2016"
+        },
+        {
+          "title": "\"Why Should I Trust You?\": Explaining the Predictions of Any Classifier",
+          "url": "https://arxiv.org/abs/1602.04938",
+          "source_type": "technical_paper",
+          "authors": [
+            "Marco Tulio Ribeiro",
+            "Sameer Singh",
+            "Carlos Guestrin"
+          ],
+          "publication_date": "2016-02-16",
+          "citationKey": "tulioribeiroWhyShouldTrust2016",
+          "abstract": "Despite widespread adoption, machine learning models remain mostly black boxes. Understanding the reasons behind predictions is, however, quite important in assessing trust, which is fundamental if one plans to take action based on a prediction, or when choosing whether to deploy a new model. Such understanding also provides insights into the model, which can be used to transform an untrustworthy model or prediction into a trustworthy one. In this work, we propose LIME, a novel explanation technique that explains the predictions of any classifier in an interpretable and faithful manner, by learning an interpretable model locally around the prediction. We also propose a method to explain models by presenting representative individual predictions and their explanations in a non-redundant way, framing the task as a submodular optimization problem. We demonstrate the flexibility of these methods by explaining different models for text (e.g. random forests) and image classification (e.g. neural networks). We show the utility of explanations via novel experiments, both simulated and with human subjects, on various scenarios that require trust: deciding if one should trust a prediction, choosing between models, improving an untrustworthy classifier, and identifying why a classifier should not be trusted."
+        },
+        {
+          "title": "How to convince your boss to trust your ML/DL models - Towards Data Science",
+          "url": "https://towardsdatascience.com/how-to-convince-your-boss-to-trust-your-ml-dl-models-671f707246a8",
+          "source_type": "tutorial",
+          "authors": [
+            "Gurami Keretchashvili"
+          ],
+          "publication_date": "2022-09-15",
+          "citationKey": "keretchashviliHowConvinceYour2022"
+        },
+        {
+          "title": "Enhanced LIME — ADS 2.6.5 documentation",
+          "url": "https://accelerated-data-science.readthedocs.io/en/v2.6.5/user_guide/model_explainability/lime.html",
+          "source_type": "documentation",
+          "authors": [
+            "Accelerated-data-science Developers"
+          ],
+          "publication_date": "2021",
+          "citationKey": "accelerated-data-sciencedevelopersEnhancedLIMEADS2021"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 3,
+      "acronym": "LIME",
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "anchor",
+        "ridge-regression-surrogates",
+        "partial-dependence-plots",
+        "individual-conditional-expectation-plots",
+        "occlusion-sensitivity",
+        "contrastive-explanation-method",
+        "mean-decrease-impurity",
+        "sobol-indices"
+      ],
+      "sample_claims": [
+        {
+          "text": "The fraud detection system's flagging of individual transactions is attributable to specific transaction features in the local decision context",
+          "domain": "finance",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The medical diagnosis model's predictions for individual patients are interpretable through locally approximated feature contributions",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The autonomous vehicle's object classification decisions are explainable to operators through feature-level analysis of specific detection instances",
+          "domain": "autonomous systems",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The content moderation system provides interpretable explanations for individual moderation decisions without requiring access to model internals",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The environmental monitoring system's anomaly alerts are accompanied by explanations showing which sensor readings contributed to each specific detection",
+          "domain": "environmental",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
+      "slug": "ridge-regression-surrogates",
+      "name": "Ridge Regression Surrogates",
+      "description": "This technique approximates a complex model by training a ridge regression (a linear model with L2 regularisation) on the original model's predictions. The ridge regression serves as a global surrogate that balances fidelity and interpretability, capturing the main linear relationships that the complex model learned whilst ignoring noise due to regularisation. This approach is particularly useful when stakeholders need to understand the overall behaviour of a complex model through transparent linear coefficients.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/structured-output",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Approximating a complex ensemble model used for credit scoring with a ridge regression surrogate to identify the most influential features (income, credit history, debt-to-income ratio) and their linear relationships for regulatory compliance reporting.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating a ridge regression surrogate of a neural network used for medical diagnosis to understand which patient symptoms and biomarkers have the strongest linear predictive relationships with disease outcomes.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating an interpretable approximation of a complex insurance pricing model for regulatory compliance, enabling stakeholders to understand and validate the decision-making process through transparent linear relationships.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Linear approximation may miss important non-linear relationships and interactions captured by the original complex model."
+        },
+        {
+          "description": "Requires a representative dataset to train the surrogate model, which may not be available or may be expensive to generate."
+        },
+        {
+          "description": "Ridge regularisation may oversimplify the model by shrinking coefficients, potentially hiding important but less dominant features."
+        },
+        {
+          "description": "Surrogate fidelity depends on how well linear relationships approximate the original model's behaviour across the entire input space."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn Ridge Regression Documentation",
+          "url": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html",
+          "source_type": "documentation",
+          "authors": [
+            "Scikit-learn Developers"
+          ],
+          "publication_date": "2007",
+          "citationKey": "scikit-learndevelopersScikitlearnRidgeRegression2007"
+        },
+        {
+          "title": "Interpretable Machine Learning: A Guide for Making Black Box Models Explainable",
+          "url": "https://christophm.github.io/interpretable-ml-book/global.html",
+          "source_type": "tutorial",
+          "publication_date": "2019",
+          "citationKey": "InterpretableMachineLearning2019"
+        },
+        {
+          "title": "Interpreting Blackbox Models via Model Extraction",
+          "url": "https://arxiv.org/abs/1705.08504",
+          "source_type": "technical_paper",
+          "authors": [
+            "Osbert Bastani",
+            "Carolyn Kim",
+            "Hamsa Bastani"
+          ],
+          "publication_date": "2017-05-23",
+          "citationKey": "bastaniInterpretingBlackboxModels2017",
+          "abstract": "Interpretability has become incredibly important as machine learning is increasingly used to inform consequential decisions. We propose to construct global explanations of complex, blackbox models in the form of a decision tree approximating the original model---as long as the decision tree is a good approximation, then it mirrors the computation performed by the blackbox model. We devise a novel algorithm for extracting decision tree explanations that actively samples new training points to avoid overfitting. We evaluate our algorithm on a random forest to predict diabetes risk and a learned controller for cart-pole. Compared to several baselines, our decision trees are both substantially more accurate and equally or more interpretable based on a user study. Finally, we describe several insights provided by our interpretations, including a causal issue validated by a physician."
+        },
+        {
+          "title": "Model extraction and defenses on generative adversarial networks",
+          "url": "https://ieeexplore.ieee.org/document/8424633",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yuheng Jia",
+            "Zhuofu Tian",
+            "Mulin Xiong",
+            "Jiaxin Ding"
+          ],
+          "publication_date": "2018-06-20",
+          "citationKey": "jiaModelExtractionDefenses2018"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "local-interpretable-model-agnostic-explanations",
+        "model-distillation",
+        "rulefit",
+        "partial-dependence-plots",
+        "coefficient-magnitudes-in-linear-models"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's global behavior is approximated by a simpler representation that captures dominant linear relationships across all predictions",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The credit scoring model's decision logic can be explained through consistent linear weights applied uniformly across all applicant evaluations",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The diagnostic system's predictions are attributable to weighted combinations of patient features that remain stable across the entire population",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The environmental forecasting model's feature influences are represented through simplified linear coefficients that prioritize robust patterns over noise",
+          "domain": "environmental",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The complex ensemble model's overall decision-making process is captured by an interpretable linear approximation that reveals primary feature contributions",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
+      "slug": "anchor",
+      "name": "ANCHOR",
+      "acronym": "ANCHOR",
+      "description": "ANCHOR generates high-precision if-then rules that explain individual predictions by identifying the minimal set of feature conditions that guarantee a specific prediction with high confidence. It searches for 'anchor' conditions (e.g., 'age > 30 AND income < £50k') that ensure the model gives the same prediction at least 95% of the time when those conditions are met. This creates human-readable rules that users can trust as sufficient conditions for understanding why a particular decision was made.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/surrogate-models/rule-extraction",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Explaining loan application decisions with rules like 'IF credit_score > 650 AND debt_ratio < 0.4 THEN approval = 95% likely', giving applicants clear, actionable conditions they can understand and potentially improve.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Generating diagnostic rules for medical predictions such as 'IF fever > 38.5°C AND white_blood_cells > 12,000 THEN infection = 92% likely', helping clinicians validate automated diagnoses with trusted clinical indicators.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating transparent hiring decisions with rules like 'IF experience >= 3_years AND degree = relevant THEN hire = 89% likely', providing clear justification for recruitment decisions that can be audited for fairness.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Limited to local explanations for individual instances, cannot provide global insights about overall model behaviour."
+        },
+        {
+          "description": "Requires discretisation of continuous features, which can lose important nuanced information and create arbitrary thresholds."
+        },
+        {
+          "description": "May fail to find suitable anchor rules if precision requirements are too strict or if the prediction space is highly complex."
+        },
+        {
+          "description": "Computationally expensive as it requires extensive sampling to validate rule precision, especially for high-dimensional data."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Anchors: High-Precision Model-Agnostic Explanations",
+          "url": "https://homes.cs.washington.edu/~marcotcr/aaai18.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Marco Tulio Ribeiro",
+            "Sameer Singh",
+            "Carlos Guestrin"
+          ],
+          "publication_date": "2018-01-01",
+          "citationKey": "ribeiroAnchorsHighPrecisionModelAgnostic2018"
+        },
+        {
+          "title": "anchor",
+          "url": "https://github.com/marcotcr/anchor",
+          "source_type": "software_package",
+          "publication_date": "2018-02-02",
+          "citationKey": "marcotcrAnchor2018",
+          "abstract": "Code for \"High-Precision Model-Agnostic Explanations\" paper"
+        },
+        {
+          "title": "alibi",
+          "url": "https://github.com/SeldonIO/alibi",
+          "source_type": "software_package",
+          "publication_date": "2019-02-26",
+          "citationKey": "seldonioAlibi2019",
+          "abstract": "Algorithms for explaining machine learning models"
+        },
+        {
+          "title": "Interpretable Machine Learning - Anchors",
+          "url": "https://christophm.github.io/interpretable-ml-book/anchors.html",
+          "source_type": "documentation",
+          "publication_date": "2019",
+          "citationKey": "InterpretableMachineLearning2019b"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "local-interpretable-model-agnostic-explanations",
+        "shapley-additive-explanations",
+        "rulefit",
+        "ridge-regression-surrogates",
+        "contrastive-explanation-method"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's individual predictions are supported by verifiable sufficient conditions with quantified confidence guarantees",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The lending system provides loan applicants with specific, actionable conditions that guarantee approval with stated probability",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The diagnostic system's recommendations are justified by minimal sets of clinical indicators that ensure the decision under specified conditions",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The hiring decision criteria are documented as precise if-then rules with empirically validated confidence bounds",
+          "domain": "public sector",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The fraud detection system identifies sufficient feature combinations that reliably predict flagged transactions with quantified precision",
+          "domain": "finance",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
+      "slug": "rulefit",
+      "name": "RuleFit",
+      "description": "RuleFit creates interpretable surrogate models that can explain complex black-box models or serve as interpretable alternatives. It works by learning a sparse linear model that combines automatically extracted decision rules with original features. The technique first builds tree ensembles to generate candidate rules, then uses LASSO regression to select the most important rules and features. The resulting model provides global explanations through human-readable rules (e.g., 'IF age > 50 AND income < 30k THEN ...') combined with linear feature weights, making complex model behaviour transparent and auditable.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+        "assurance-goal-category/explainability/surrogate-models/rule-extraction",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Building customer churn prediction models with rules like 'IF contract_length < 12_months AND support_calls > 5 THEN churn_risk = high', allowing marketing teams to understand and act on the key drivers of customer attrition.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating credit scoring models that combine traditional linear factors (income, age) with interpretable rules (IF recent_missed_payments = 0 AND account_age > 2_years THEN creditworthy), providing transparent lending decisions.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Developing regulatory-compliant medical diagnosis models where treatment recommendations combine clinical measurements with clear decision rules (IF blood_pressure > 140 AND diabetes = true THEN high_risk), enabling audit trails for healthcare decisions.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Can generate large numbers of rules even with regularisation, potentially overwhelming users and reducing practical interpretability."
+        },
+        {
+          "description": "Performance may be inferior to complex ensemble methods when rule complexity is constrained for interpretability."
+        },
+        {
+          "description": "Rule extraction quality depends heavily on the underlying tree ensemble, which may miss important feature interactions if not properly configured."
+        },
+        {
+          "description": "Requires careful hyperparameter tuning to balance between model complexity and interpretability, with no universal optimal setting."
+        }
+      ],
+      "resources": [
+        {
+          "title": "rulefit",
+          "url": "https://github.com/christophM/rulefit",
+          "source_type": "software_package",
+          "publication_date": "2015-10-16",
+          "citationKey": "christophmRulefit2015",
+          "abstract": "Python implementation of the rulefit algorithm"
+        },
+        {
+          "title": "Tree Ensembles with Rule Structured Horseshoe Regularization",
+          "url": "http://arxiv.org/abs/1702.05008v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Malte Nalenz",
+            "Mattias Villani"
+          ],
+          "publication_date": "2017-02-16",
+          "citationKey": "nalenzTreeEnsemblesRule2017",
+          "abstract": "We propose a new Bayesian model for flexible nonlinear regression and classification using tree ensembles. The model is based on the RuleFit approach in Friedman and Popescu (2008) where rules from decision trees and linear terms are used in a L1-regularized regression. We modify RuleFit by replacing the L1-regularization by a horseshoe prior, which is well known to give aggressive shrinkage of noise predictor while leaving the important signal essentially untouched. This is especially important when a large number of rules are used as predictors as many of them only contribute noise. Our horseshoe prior has an additional hierarchical layer that applies more shrinkage a priori to rules with a large number of splits, and to rules that are only satisfied by a few observations. The aggressive noise shrinkage of our prior also makes it possible to complement the rules from boosting in Friedman and Popescu (2008) with an additional set of trees from random forest, which brings a desirable diversity to the ensemble. We sample from the posterior distribution using a very efficient and easily implemented Gibbs sampler. The new model is shown to outperform state-of-the-art methods like RuleFit, BART and random forest on 16 datasets. The model and its interpretation is demonstrated on the well known Boston housing data, and on gene expression data for cancer classification. The posterior sampling, prediction and graphical tools for interpreting the model results are implemented in a publicly available R package."
+        },
+        {
+          "title": "Safe RuleFit: Learning Optimal Sparse Rule Model by Meta Safe Screening",
+          "url": "http://arxiv.org/abs/1810.01683v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hiroki Kato",
+            "Hiroyuki Hanada",
+            "Ichiro Takeuchi"
+          ],
+          "publication_date": "2018-10-03",
+          "citationKey": "katoSafeRuleFitLearning2018",
+          "abstract": "We consider the problem of learning a sparse rule model, a prediction model in the form of a sparse linear combination of rules, where a rule is an indicator function defined over a hyper-rectangle in the input space. Since the number of all possible such rules is extremely large, it has been computationally intractable to select the optimal set of active rules. In this paper, to solve this difficulty for learning the optimal sparse rule model, we propose Safe RuleFit (SRF). Our basic idea is to develop meta safe screening (mSS), which is a non-trivial extension of well-known safe screening (SS) techniques. While SS is used for screening out one feature, mSS can be used for screening out multiple features by exploiting the inclusion-relations of hyper-rectangles in the input space. SRF provides a general framework for fitting sparse rule models for regression and classification, and it can be extended to handle more general sparse regularizations such as group regularization. We demonstrate the advantages of SRF through intensive numerical experiments."
+        },
+        {
+          "title": "imodels",
+          "url": "https://github.com/csinva/imodels",
+          "source_type": "software_package",
+          "publication_date": "2019-07-04",
+          "citationKey": "csinvaImodels2019",
+          "abstract": "Interpretable ML package 🔍 for concise, transparent, and accurate predictive modeling (sklearn-compatible)."
+        },
+        {
+          "title": "Getting More From Regression Models with RuleFit | Towards Data ...",
+          "url": "https://towardsdatascience.com/getting-more-from-regression-models-with-rulefit-2e6be8d77432",
+          "source_type": "tutorial",
+          "authors": [
+            "Casey Whorton"
+          ],
+          "publication_date": "2020-11-28",
+          "citationKey": "whortonGettingMoreRegression2020"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "ridge-regression-surrogates",
+        "anchor",
+        "local-interpretable-model-agnostic-explanations",
+        "mean-decrease-impurity",
+        "model-distillation"
+      ],
+      "sample_claims": [
+        {
+          "text": "The credit risk model's decision logic is expressible as a sparse set of interpretable if-then rules combined with linear feature weights",
+          "domain": "finance",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The patient risk stratification system's predictions are traceable to explicit clinical decision rules that mirror diagnostic reasoning patterns",
+          "domain": "healthcare",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The fraud detection model identifies risk through comprehensible rules that stakeholders can validate against domain knowledge",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The customer churn prediction system's global behavior is approximated by a small number of actionable business rules rather than opaque feature interactions",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The regulatory compliance model combines human-readable decision boundaries with weighted factors in a single auditable representation",
+          "domain": "public sector",
+          "assuranceGoal": "transparency"
+        }
+      ]
+    },
+    {
       "slug": "differential-privacy",
       "name": "Differential Privacy",
       "description": "Differential privacy provides mathematically rigorous privacy protection by adding carefully calibrated random noise to data queries, statistical computations, or machine learning outputs. The technique works by ensuring that the presence or absence of any individual's data has minimal impact on the results - specifically, any query result should be nearly indistinguishable whether or not a particular person's data is included. This is achieved through controlled noise addition that scales with the query's sensitivity and a privacy budget (epsilon) that quantifies the privacy-utility trade-off. The smaller the epsilon, the more noise is added and the stronger the privacy guarantee, but at the cost of reduced accuracy.",
@@ -1025,6 +1740,165 @@
       ]
     },
     {
+      "slug": "fair-adversarial-networks",
+      "name": "Fair Adversarial Networks",
+      "description": "An in-processing fairness technique that employs adversarial training with dual neural networks to learn fair representations. The method consists of a predictor network that learns the main task whilst an adversarial discriminator network simultaneously attempts to predict sensitive attributes from the predictor's hidden representations. Through this adversarial min-max game, the predictor is incentivised to learn features that are informative for the task but statistically independent of protected attributes, effectively removing bias at the representation level in deep learning models.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training a facial recognition system that maintains high accuracy for person identification whilst ensuring equal performance across different ethnic groups, using adversarial training to remove race-related features from learned representations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Developing a resume screening neural network that provides transparent evidence of bias mitigation by demonstrating that learned features cannot predict gender, whilst maintaining predictive performance for job suitability assessment.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Creating a medical image analysis model that achieves reliable diagnostic performance across patient demographics by using adversarial debiasing to ensure age and gender information cannot be extracted from diagnostic features.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Implementation complexity is high, requiring careful design of adversarial loss functions and balancing multiple competing objectives during training."
+        },
+        {
+          "description": "Sensitive to hyperparameter choices, particularly the trade-off weights between prediction accuracy and adversarial loss, which require extensive tuning."
+        },
+        {
+          "description": "Adversarial training can be unstable, with potential for mode collapse or failure to converge, especially in complex deep learning architectures."
+        },
+        {
+          "description": "Interpretability of fairness improvements can be limited, as it may be difficult to verify that sensitive attributes are truly removed from learned representations."
+        },
+        {
+          "description": "Computational overhead is significant due to training two networks simultaneously, increasing both training time and resource requirements."
+        },
+        {
+          "description": "The adversarial objective only removes dependence on explicitly labelled sensitive attributes; proxy variables that correlate with protected characteristics will remain encoded in learned representations. Extending to intersectional fairness across multiple protected attributes requires separate discriminator components or multi-task adversarial architectures, substantially increasing design complexity and training instability."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Fair Adversarial Networks",
+          "url": "http://arxiv.org/abs/2002.12144v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "George Cevora"
+          ],
+          "publication_date": "2020-02-23",
+          "citationKey": "cevoraFairAdversarialNetworks2020",
+          "abstract": "The influence of human judgement is ubiquitous in datasets used across the analytics industry, yet humans are known to be sub-optimal decision makers prone to various biases. Analysing biased datasets then leads to biased outcomes of the analysis. Bias by protected characteristics (e.g. race) is of particular interest as it may not only make the output of analytical process sub-optimal, but also illegal. Countering the bias by constraining the analytical outcomes to be fair is problematic because A) fairness lacks a universally accepted definition, while at the same time some definitions are mutually exclusive, and B) the use of optimisation constraints ensuring fairness is incompatible with most analytical pipelines. Both problems are solved by methods which remove bias from the data and returning an altered dataset. This approach aims to not only remove the actual bias variable (e.g. race), but also alter all proxy variables (e.g. postcode) so the bias variable is not detectable from the rest of the data. The advantage of using this approach is that the definition of fairness as a lack of detectable bias in the data (as opposed to the output of analysis) is universal and therefore solves problem (A). Furthermore, as the data is altered to remove bias the problem (B) disappears because the analytical pipelines can remain unchanged. This approach has been adopted by several technical solutions. None of them, however, seems to be satisfactory in terms of ability to remove multivariate, non-linear and non-binary biases. Therefore, in this paper I propose the concept of Fair Adversarial Networks as an easy-to-implement general method for removing bias from data. This paper demonstrates that Fair Adversarial Networks achieve this aim."
+        },
+        {
+          "title": "Demonstrating Rosa: the fairness solution for any Data Analytic pipeline",
+          "url": "http://arxiv.org/abs/2003.00899v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Kate Wilkinson",
+            "George Cevora"
+          ],
+          "publication_date": "2020-02-28",
+          "citationKey": "wilkinsonDemonstratingRosaFairness2020",
+          "abstract": "Most datasets of interest to the analytics industry are impacted by various forms of human bias. The outcomes of Data Analytics [DA] or Machine Learning [ML] on such data are therefore prone to replicating the bias. As a result, a large number of biased decision-making systems based on DA/ML have recently attracted attention. In this paper we introduce Rosa, a free, web-based tool to easily de-bias datasets with respect to a chosen characteristic. Rosa is based on the principles of Fair Adversarial Networks, developed by illumr Ltd., and can therefore remove interactive, non-linear, and non-binary bias. Rosa is stand-alone pre-processing step / API, meaning it can be used easily with any DA/ML pipeline. We test the efficacy of Rosa in removing bias from data-driven decision making systems by performing standard DA tasks on five real-world datasets, selected for their relevance to current DA problems, and also their high potential for bias. We use simple ML models to model a characteristic of analytical interest, and compare the level of bias in the model output both with and without Rosa as a pre-processing step. We find that in all cases there is a substantial decrease in bias of the data-driven decision making systems when the data is pre-processed with Rosa."
+        },
+        {
+          "title": "Triangular Trade-off between Robustness, Accuracy, and Fairness in Deep Neural Networks: A Survey",
+          "url": "https://www.semanticscholar.org/paper/13b0444d079bea1c8c57a6082200b67ab5f4616e",
+          "source_type": "technical_paper",
+          "authors": [
+            "Jingyang Li",
+            "Guoqiang Li"
+          ],
+          "publication_date": "2024",
+          "citationKey": "liTriangularTradeoffRobustness2024",
+          "abstract": "With the rapid development of deep learning, AI systems are being used more in complex and important domains and necessitates the simultaneous fulfillment of multiple constraints: accurate, robust, and fair. Accuracy measures how well a DNN can generalize to new data. Robustness demonstrates how well the network can withstand minor perturbations without changing the results. Fairness focuses on treating different groups equally. This survey provides an overview of the triangular trade-off among robustness, accuracy, and fairness in neural networks. This trade-off makes it difficult for AI systems to achieve true intelligence and is connected to generalization, robustness, and fairness in deep learning. The survey explores these trade-offs and their relationships to adversarial examples, adversarial training, and fair machine learning. The trade-offs between accuracy and robustness, accuracy and fairness, and robustness and fairness have been studied to different extents. However, there is a lack of taxonomy and analysis of these trade-offs. The accuracy-robustness trade-off is inherent in Gaussian models, but it varies when classes are not closely distributed. The accuracy-fairness and robustness-fairness trade-offs have been assessed empirically, but their theoretical nature needs more investigation. This survey aims to explore the origins, evolution, influencing factors, and future research directions of these trade-offs."
+        },
+        {
+          "title": "Bt-GAN: Generating Fair Synthetic Healthdata via Bias-transforming Generative Adversarial Networks",
+          "url": "https://www.semanticscholar.org/paper/6995779ac582c5f2436cfb82a3c8cf5ca72bae2f",
+          "source_type": "technical_paper",
+          "authors": [
+            "R. Ramachandranpillai",
+            "Md Fahim Sikder",
+            "David Bergstrom",
+            "Fredrik Heintz"
+          ],
+          "publication_date": "2024",
+          "citationKey": "ramachandranpillaiBtGANGeneratingFair2024",
+          "abstract": "Synthetic data generation offers a promising solution to enhance the usefulness of Electronic Healthcare Records (EHR) by generating realistic de-identified data. However, the existing literature primarily focuses on the quality of synthetic health data, neglecting the crucial aspect of fairness in downstream predictions. Consequently, models trained on synthetic EHR have faced criticism for producing biased outcomes in target tasks. These biases can arise from either spurious correlations between features or the failure of models to accurately represent sub-groups. To address these concerns, we present Bias-transforming Generative Adversarial Networks (Bt-GAN), a GAN-based synthetic data generator specifically designed for the healthcare domain. In order to tackle spurious correlations (i), we propose an information-constrained Data Generation Process (DGP) that enables the generator to learn a fair deterministic transformation based on a well-defined notion of algorithmic fairness. To overcome the challenge of capturing exact sub-group representations (ii), we incentivize the generator to preserve sub-group densities through score-based weighted sampling. This approach compels the generator to learn from underrepresented regions of the data manifold. To evaluate the effectiveness of our proposed method, we conduct extensive experiments using the Medical Information Mart for Intensive Care (MIMIC-III) database. Our results demonstrate that Bt-GAN achieves state-of-the-art accuracy while significantly improving fairness and minimizing bias amplification. Furthermore, we perform an in-depth explainability analysis to provide additional evidence supporting the validity of our study. In conclusion, our research introduces a novel and professional approach to addressing the limitations of synthetic data generation in the healthcare domain. By incorporating fairness considerations and leveraging advanced techniques such as GANs, we pave the way for more reliable and unbiased predictions in healthcare applications."
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "adaptive-sensitive-reweighting",
+        "adversarial-debiasing",
+        "exponentiated-gradient-reduction",
+        "fair-transfer-learning",
+        "fairness-gan",
+        "meta-fair-classifier"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's learned representations cannot be used to infer applicants' protected characteristics",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The hiring system's internal features maintain predictive power for job performance whilst being statistically independent of demographic attributes",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The diagnostic model provides evidence that its decision-making features do not encode sensitive patient demographics",
+          "domain": "healthcare",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The vision system achieves consistent object recognition performance across demographic groups through representation-level bias mitigation",
+          "domain": "autonomous systems",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The model's intermediate representations are demonstrably uninformative about protected attributes whilst preserving task-relevant information",
+          "domain": "public sector",
+          "assuranceGoal": "transparency"
+        }
+      ]
+    },
+    {
       "slug": "prejudice-remover-regulariser",
       "name": "Prejudice Remover Regulariser",
       "description": "An in-processing fairness technique that adds a fairness penalty to machine learning models to reduce bias against protected groups. The method works by minimising 'mutual information' - essentially reducing how much the model's predictions reveal about sensitive attributes like race or gender. By adding this penalty term to the learning objective (typically in logistic regression), the technique ensures predictions become less dependent on protected features. This addresses not only direct discrimination but also indirect bias through correlated features. Practitioners can adjust a tuning parameter to balance between maintaining accuracy and removing prejudice from the model.",
@@ -1154,6 +2028,295 @@
         },
         {
           "text": "The insurance pricing model's premium calculations do not cluster by demographic identifiers even when correlated features are present",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        }
+      ]
+    },
+    {
+      "slug": "fair-transfer-learning",
+      "name": "Fair Transfer Learning",
+      "description": "An in-processing fairness technique that adapts pre-trained models from one domain to another whilst explicitly preserving fairness constraints across different contexts or populations. The method addresses the challenge that fairness properties may not transfer when adapting models to new domains with different demographic compositions or data distributions. Fair transfer learning typically involves constraint-aware fine-tuning, domain adaptation techniques, or adversarial training that maintains equitable performance across groups in the target domain, ensuring that bias mitigation efforts carry over from source to target domains.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/pre-trained-model",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/fine-tuning",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adapting a hiring algorithm trained on one country's recruitment data to another region whilst maintaining fairness across gender and ethnicity groups, ensuring equitable candidate evaluation despite different local demographic distributions and cultural contexts.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Transferring a medical diagnosis model from urban hospital data to rural clinics whilst providing transparent evidence that fairness constraints are preserved across age, gender, and socioeconomic groups despite different patient populations and healthcare infrastructure.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Adapting a fraud detection system from one financial market to another whilst ensuring reliable performance across customer demographics, maintaining consistent accuracy and fairness even when transaction patterns and customer characteristics differ between markets.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Fairness properties achieved in the source domain may not translate directly to the target domain if demographic distributions or data characteristics differ significantly."
+        },
+        {
+          "description": "Requires careful hyperparameter tuning and constraint specification to balance fairness preservation with model performance in the new domain."
+        },
+        {
+          "description": "Implementation complexity is high, requiring expertise in both transfer learning techniques and fairness constraint optimisation methods."
+        },
+        {
+          "description": "May suffer from negative transfer effects where fairness constraints that worked well in the source domain actually harm performance in the target domain."
+        },
+        {
+          "description": "Evaluation challenges arise from needing to validate fairness across multiple domains and demographic groups simultaneously."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Segmenting across places: The need for fair transfer learning with satellite imagery",
+          "url": "http://arxiv.org/abs/2204.04358v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Miao Zhang",
+            "Harvineet Singh",
+            "Lazarus Chok",
+            "Rumi Chunara"
+          ],
+          "publication_date": "2022-04-09",
+          "citationKey": "zhangSegmentingPlacesNeed2022",
+          "abstract": "The increasing availability of high-resolution satellite imagery has enabled the use of machine learning to support land-cover measurement and inform policy-making. However, labelling satellite images is expensive and is available for only some locations. This prompts the use of transfer learning to adapt models from data-rich locations to others. Given the potential for high-impact applications of satellite imagery across geographies, a systematic assessment of transfer learning implications is warranted. In this work, we consider the task of land-cover segmentation and study the fairness implications of transferring models across locations. We leverage a large satellite image segmentation benchmark with 5987 images from 18 districts (9 urban and 9 rural). Via fairness metrics we quantify disparities in model performance along two axes -- across urban-rural locations and across land-cover classes. Findings show that state-of-the-art models have better overall accuracy in rural areas compared to urban areas, through unsupervised domain adaptation methods transfer learning better to urban versus rural areas and enlarge fairness gaps. In analysis of reasons for these findings, we show that raw satellite images are overall more dissimilar between source and target districts for rural than for urban locations. This work highlights the need to conduct fairness analysis for satellite imagery segmentation models and motivates the development of methods for fair transfer learning in order not to introduce disparities between places, particularly urban and rural locations."
+        },
+        {
+          "title": "Trustworthy Transfer Learning: A Survey",
+          "url": "https://www.semanticscholar.org/paper/7ee5c5b58ed0b4e585e0c30790c206bea07faacf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Jun Wu",
+            "Jingrui He"
+          ],
+          "publication_date": "2024",
+          "citationKey": "wuTrustworthyTransferLearning2024",
+          "abstract": "Transfer learning aims to transfer knowledge or information from a source domain to a relevant target domain. In this paper, we understand transfer learning from the perspectives of knowledge transferability and trustworthiness. This involves two research questions: How is knowledge transferability quantitatively measured and enhanced across domains? Can we trust the transferred knowledge in the transfer learning process? To answer these questions, this paper provides a comprehensive review of trustworthy transfer learning from various aspects, including problem definitions, theoretical analysis, empirical algorithms, and real-world applications. Specifically, we summarize recent theories and algorithms for understanding knowledge transferability under (within-domain) IID and non-IID assumptions. In addition to knowledge transferability, we review the impact of trustworthiness on transfer learning, e.g., whether the transferred knowledge is adversarially robust or algorithmically fair, how to transfer the knowledge under privacy-preserving constraints, etc. Beyond discussing the current advancements, we highlight the open questions and future directions for understanding transfer learning in a reliable and trustworthy manner."
+        },
+        {
+          "title": "Cross-Institutional Transfer Learning for Educational Models: Implications for Model Performance, Fairness, and Equity",
+          "url": "https://arxiv.org/abs/2305.00927",
+          "source_type": "technical_paper",
+          "authors": [
+            "Josh Gardner",
+            "Renzhe Yu",
+            "Quan Nguyen",
+            "Christopher Brooks",
+            "Rene Kizilcec"
+          ],
+          "publication_date": "2023-05-01",
+          "citationKey": "gardnerCrossInstitutionalTransferLearning2023",
+          "abstract": "Modern machine learning increasingly supports paradigms that are multi-institutional (using data from multiple institutions during training) or cross-institutional (using models from multiple institutions for inference), but the empirical effects of these paradigms are not well understood. This study investigates cross-institutional learning via an empirical case study in higher education. We propose a framework and metrics for assessing the utility and fairness of student dropout prediction models that are transferred across institutions. We examine the feasibility of cross-institutional transfer under real-world data- and model-sharing constraints, quantifying model biases for intersectional student identities, characterizing potential disparate impact due to these biases, and investigating the impact of various cross-institutional ensembling approaches on fairness and overall model performance. We perform this analysis on data representing over 200,000 enrolled students annually from four universities without sharing training data between institutions.   We find that a simple zero-shot cross-institutional transfer procedure can achieve similar performance to locally-trained models for all institutions in our study, without sacrificing model fairness. We also find that stacked ensembling provides no additional benefits to overall performance or fairness compared to either a local model or the zero-shot transfer procedure we tested. We find no evidence of a fairness-accuracy tradeoff across dozens of models and transfer schemes evaluated. Our auditing procedure also highlights the importance of intersectional fairness analysis, revealing performance disparities at the intersection of sensitive identity groups that are concealed under one-dimensional analysis."
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "adaptive-sensitive-reweighting",
+        "adversarial-debiasing",
+        "exponentiated-gradient-reduction",
+        "fair-adversarial-networks",
+        "federated-learning",
+        "multi-accuracy-boosting"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model maintains equitable performance across demographic groups when deployed in contexts with different population characteristics than the training environment",
+          "domain": "healthcare",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The hiring system produces consistent outcomes across protected attributes when applied to regional markets with distinct demographic compositions",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The system's fairness properties are preserved when adapted from one operational context to another with different data distributions",
+          "domain": "autonomous systems",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The model's equitable treatment of demographic groups is documented across multiple deployment contexts",
+          "domain": "public sector",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The fraud detection system maintains reliable performance across customer demographics when transferred between markets with different transaction patterns",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        }
+      ]
+    },
+    {
+      "slug": "multi-accuracy-boosting",
+      "name": "Multi-Accuracy Boosting",
+      "description": "An in-processing fairness technique that employs boosting algorithms to improve accuracy uniformly across demographic groups by iteratively correcting errors where the model performs poorly for certain subgroups. The method uses a multi-calibration approach that trains weak learners to focus on prediction errors for underperforming groups, ensuring that no group experiences systematically worse accuracy. This iterative boosting process continues until accuracy parity is achieved across all groups whilst maintaining overall model performance.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/ensemble",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training a medical diagnosis model that achieves equal accuracy across age, gender, and ethnicity groups by using boosting to specifically target prediction errors for underrepresented patient demographics, ensuring equitable healthcare outcomes for all populations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Building a robust fraud detection system that maintains consistent accuracy across different customer segments by iteratively correcting errors where the model performs poorly for specific demographic or geographic groups, ensuring reliable fraud prevention across all user types.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Developing a transparent hiring algorithm that provides clear evidence of equal performance across candidate demographics by using multi-accuracy boosting to systematically address group-specific prediction errors, enabling auditable fair recruitment processes.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires identifying and defining relevant subgroups or error regions, which may be challenging when group boundaries are unclear or overlapping."
+        },
+        {
+          "description": "Could increase model complexity significantly as the boosting process adds multiple weak learners, potentially affecting interpretability and computational efficiency."
+        },
+        {
+          "description": "May overfit to training data if very granular corrections are made, particularly when subgroups are small or the boosting process continues for too many iterations."
+        },
+        {
+          "description": "Performance depends on the quality of subgroup identification, and may fail to achieve fairness if important demographic intersections are not properly captured."
+        },
+        {
+          "description": "Convergence to equal accuracy across groups is not guaranteed, especially when there are fundamental differences in data distributions between groups."
+        }
+      ],
+      "resources": [
+        {
+          "title": "mcboost: Multi-Calibration Boosting for R",
+          "url": "https://joss.theoj.org/papers/10.21105/joss.03453",
+          "source_type": "technical_paper",
+          "authors": [
+            "Bernd Bischl",
+            "Susanne Dandl",
+            "Christoph Kern",
+            "Michael P. Kim",
+            "Florian Pfisterer",
+            "Matthew Sun"
+          ],
+          "publication_date": "2021-08-24",
+          "citationKey": "bischlMcboostMultiCalibrationBoosting2021"
+        },
+        {
+          "title": "mcboost",
+          "url": "https://github.com/mlr-org/mcboost",
+          "source_type": "software_package",
+          "publication_date": "2020-12-28",
+          "citationKey": "mlr-orgMcboost2020",
+          "abstract": "Multi-Calibration & Multi-Accuracy Boosting for R"
+        },
+        {
+          "title": "Multigroup Robustness",
+          "url": "http://arxiv.org/abs/2405.00614",
+          "source_type": "technical_paper",
+          "authors": [
+            "Lunjia Hu",
+            "Charlotte Peale",
+            "Judy Hanwen Shen"
+          ],
+          "publication_date": "2024-05-01",
+          "citationKey": "huMultigroupRobustness2024",
+          "abstract": "To address the shortcomings of real-world datasets, robust learning algorithms have been designed to overcome arbitrary and indiscriminate data corruption. However, practical processes of gathering data may lead to patterns of data corruption that are localized to specific partitions of the training dataset. Motivated by critical applications where the learned model is deployed to make predictions about people from a rich collection of overlapping subpopulations, we initiate the study of multigroup robust algorithms whose robustness guarantees for each subpopulation only degrade with the amount of data corruption inside that subpopulation. When the data corruption is not distributed uniformly over subpopulations, our algorithms provide more meaningful robustness guarantees than standard guarantees that are oblivious to how the data corruption and the affected subpopulations are related. Our techniques establish a new connection between multigroup fairness and robustness."
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "adaptive-sensitive-reweighting",
+        "adversarial-debiasing",
+        "fair-transfer-learning",
+        "meta-fair-classifier",
+        "reweighing"
+      ],
+      "sample_claims": [
+        {
+          "text": "The medical diagnosis system maintains equivalent prediction accuracy across patient age, gender, and ethnicity groups",
+          "domain": "healthcare",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The fraud detection model achieves consistent error rates across customer demographics without systematic underperformance for any group",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The hiring algorithm demonstrates measurable accuracy parity across protected demographic categories with documented performance metrics for each group",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The environmental risk assessment model produces equally accurate predictions across geographic regions and socioeconomic communities",
+          "domain": "environmental",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The loan approval system maintains uniform prediction quality across applicant demographics without disproportionate errors for minority groups",
           "domain": "finance",
           "assuranceGoal": "reliability"
         }
@@ -1955,5 +3118,5 @@
       ]
     }
   ],
-  "count": 13
+  "count": 21
 }

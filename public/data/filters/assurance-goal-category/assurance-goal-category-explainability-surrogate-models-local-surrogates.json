@@ -22,6 +22,7 @@
         "assurance-goal-category/explainability/explains/decision-boundaries",
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/qualitative-report",
@@ -29,6 +30,7 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic",
         "applicable-models/architecture/model-agnostic",
@@ -60,6 +62,9 @@
         },
         {
           "description": "Can be computationally expensive for explaining many instances due to repeated model queries."
+        },
+        {
+          "description": "Assumes features are independent when generating perturbations, producing unrealistic out-of-distribution samples for datasets with correlated features. This can generate misleading attribution scores when inputs share strong correlations (e.g., age and income in credit scoring, comorbidities in clinical data)."
         }
       ],
       "resources": [
@@ -130,7 +135,12 @@
         "shapley-additive-explanations",
         "anchor",
         "ridge-regression-surrogates",
-        "partial-dependence-plots"
+        "partial-dependence-plots",
+        "individual-conditional-expectation-plots",
+        "occlusion-sensitivity",
+        "contrastive-explanation-method",
+        "mean-decrease-impurity",
+        "sobol-indices"
       ],
       "sample_claims": [
         {

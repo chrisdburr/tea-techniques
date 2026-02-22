@@ -2,7 +2,7 @@
   "tag": {
     "name": "explanatory-scope/local",
     "slug": "explanatory-scope-local",
-    "count": 23,
+    "count": 24,
     "category": "explanatory-scope"
   },
   "techniques": [
@@ -22,13 +22,17 @@
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/explainability/property/consistency",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
         "explanatory-scope/global",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "technique-type/algorithmic",
         "applicable-models/architecture/model-agnostic",
@@ -122,7 +126,13 @@
         "local-interpretable-model-agnostic-explanations",
         "permutation-importance",
         "sobol-indices",
-        "partial-dependence-plots"
+        "partial-dependence-plots",
+        "mean-decrease-impurity",
+        "individual-conditional-expectation-plots",
+        "anchor",
+        "contrastive-explanation-method",
+        "permutation-tests",
+        "generalized-additive-models"
       ],
       "sample_claims": [
         {
@@ -872,6 +882,7 @@
         "assurance-goal-category/explainability/explains/decision-boundaries",
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/qualitative-report",
@@ -879,6 +890,7 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic",
         "applicable-models/architecture/model-agnostic",
@@ -910,6 +922,9 @@
         },
         {
           "description": "Can be computationally expensive for explaining many instances due to repeated model queries."
+        },
+        {
+          "description": "Assumes features are independent when generating perturbations, producing unrealistic out-of-distribution samples for datasets with correlated features. This can generate misleading attribution scores when inputs share strong correlations (e.g., age and income in credit scoring, comorbidities in clinical data)."
         }
       ],
       "resources": [
@@ -980,7 +995,12 @@
         "shapley-additive-explanations",
         "anchor",
         "ridge-regression-surrogates",
-        "partial-dependence-plots"
+        "partial-dependence-plots",
+        "individual-conditional-expectation-plots",
+        "occlusion-sensitivity",
+        "contrastive-explanation-method",
+        "mean-decrease-impurity",
+        "sobol-indices"
       ],
       "sample_claims": [
         {
@@ -1160,11 +1180,13 @@
         "assurance-goal-category/explainability/property/efficiency",
         "assurance-goal-category/explainability/visualization-methods/activation-maps",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "data-requirements/access-to-model-internals",
         "data-type/image",
         "evidence-type/visualisation",
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "technique-type/algorithmic"
       ],
@@ -1240,6 +1262,8 @@
       "complexity_rating": 3,
       "computational_cost_rating": 2,
       "related_techniques": [
+        "concept-activation-vectors",
+        "deeplift",
         "gradient-weighted-class-activation-mapping",
         "integrated-gradients",
         "occlusion-sensitivity",
@@ -1301,7 +1325,11 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/fairness/group",
+        "fairness-approach/group",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use/auditing"
       ],
       "example_use_cases": [
         {
@@ -1403,7 +1431,9 @@
         "integrated-gradients",
         "gradient-saliency",
         "occlusion-sensitivity",
-        "local-interpretable-model-agnostic-explanations"
+        "local-interpretable-model-agnostic-explanations",
+        "layer-wise-relevance-propagation",
+        "concept-activation-vectors"
       ],
       "sample_claims": [
         {
@@ -2043,12 +2073,16 @@
         "assurance-goal-category/explainability/property/sparsity",
         "assurance-goal-category/explainability/surrogate-models/rule-extraction",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -2122,7 +2156,8 @@
         "local-interpretable-model-agnostic-explanations",
         "shapley-additive-explanations",
         "rulefit",
-        "ridge-regression-surrogates"
+        "ridge-regression-surrogates",
+        "contrastive-explanation-method"
       ],
       "sample_claims": [
         {
@@ -2286,13 +2321,18 @@
         "applicable-models/requirements/black-box",
         "applicable-models/requirements/training-data",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "data-requirements/no-special-requirements",
         "data-requirements/sensitive-attributes",
         "data-type/any",
         "evidence-type/quantitative-metric",
+        "expertise-needed/domain-expertise",
         "expertise-needed/statistics",
         "explanatory-scope/local",
         "fairness-approach/group",
+        "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -2764,13 +2804,18 @@
         "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/no-special-requirements",
         "data-type/text",
         "evidence-type/quantitative-metric",
         "evidence-type/visualisation",
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
+        "fairness-approach/group",
+        "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
         "lifecycle-stage/testing",
         "technique-type/algorithmic"
@@ -2857,7 +2902,8 @@
         "prompt-sensitivity-analysis",
         "causal-mediation-analysis-in-language-models",
         "attention-visualisation-in-transformers",
-        "contextual-decomposition"
+        "contextual-decomposition",
+        "shapley-additive-explanations"
       ],
       "sample_claims": [
         {
@@ -2908,6 +2954,7 @@
         "assurance-goal-category/explainability/property/comprehensibility",
         "assurance-goal-category/explainability/representation-analysis/concept-identification",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/transparency",
         "data-requirements/access-to-model-internals",
         "data-type/any",
@@ -2917,8 +2964,11 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/global",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/system-deployment-and-use/auditing",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -3083,6 +3133,7 @@
         "assurance-goal-category/explainability/property/efficiency",
         "assurance-goal-category/explainability/visualization-methods/attention-patterns",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/transparency",
         "data-requirements/access-to-model-internals",
         "data-type/image",
@@ -3091,6 +3142,7 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/global",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "lifecycle-stage/testing",
         "technique-type/algorithmic"
@@ -3353,7 +3405,175 @@
           "assuranceGoal": "transparency"
         }
       ]
+    },
+    {
+      "slug": "retrieval-augmented-generation-evaluation",
+      "name": "Retrieval-Augmented Generation Evaluation",
+      "description": "RAG evaluation assesses systems combining retrieval and generation by measuring retrieval quality, generation faithfulness, and overall performance. This technique evaluates whether retrieved context is relevant, whether responses faithfully represent information without hallucination, and how systems handle insufficient context. Key metrics include retrieval precision/recall, answer relevance, faithfulness scores, and citation accuracy.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Explainability"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/paradigm/generative",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/fidelity",
+        "data-requirements/labelled-data",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "evidence-type/qualitative-report",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-expertise",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "technique-type/testing",
+        "technique-type/algorithmic",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/transparency/process-transparency",
+        "explanatory-scope/local"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating a technical support knowledge system at a software company to ensure it retrieves relevant troubleshooting documentation and generates accurate solutions without fabricating configuration steps or commands not present in official documentation.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Assessing whether a legal research assistant properly cites source documents when generating case summaries, enabling lawyers to verify information and trace conclusions back to authoritative sources.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Evaluating a scientific literature review system to verify generated research summaries accurately synthesize findings across papers, clearly indicating contradictory results or missing evidence in the knowledge base.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Evaluating a clinical decision support system that retrieves relevant medical literature and patient records to ensure generated treatment recommendations accurately reflect evidence-based guidelines without extrapolating beyond available clinical data.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Assessing a government benefits information chatbot to verify it retrieves relevant policy documents and accurately communicates eligibility criteria without hallucinating benefits, amounts, or requirements that could mislead citizens seeking assistance.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Evaluation requires high-quality ground truth datasets with known correct retrievals and answers, which may be expensive or impossible to create for specialized domains."
+        },
+        {
+          "description": "Faithfulness assessment can be subjective and difficult to automate, often requiring human judgment to determine whether responses accurately represent retrieved context."
+        },
+        {
+          "description": "Trade-offs between retrieval precision and recall mean optimizing for one metric may degrade the other, requiring domain-specific balancing decisions."
+        },
+        {
+          "description": "Metrics may not capture subtle quality issues like incomplete answers, misleading emphasis, or failure to synthesize information from multiple retrieved sources."
+        },
+        {
+          "description": "Evaluating multi-hop reasoning—where answers require synthesising information across multiple retrieved documents—is particularly challenging, as standard metrics may not capture whether the system correctly chains information or makes unsupported logical leaps."
+        },
+        {
+          "description": "Difficult to isolate whether poor performance stems from retrieval failures (finding wrong documents), generation failures (misusing correct documents), or interaction effects, complicating diagnosis and improvement efforts."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Evaluation of Retrieval-Augmented Generation: A Survey",
+          "url": "https://www.semanticscholar.org/paper/3c6a6c8de005ef5722a54847747f65922e79d622",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hao Yu",
+            "Aoran Gan",
+            "Kai Zhang",
+            "Shiwei Tong",
+            "Qi Liu",
+            "Zhaofeng Liu"
+          ],
+          "publication_date": "2024",
+          "citationKey": "yuEvaluationRetrievalAugmentedGeneration2024",
+          "abstract": "Retrieval-Augmented Generation (RAG) has recently gained traction in natural language processing. Numerous studies and real-world applications are leveraging its ability to enhance generative models through external information retrieval. Evaluating these RAG systems, however, poses unique challenges due to their hybrid structure and reliance on dynamic knowledge sources. To better understand these challenges, we conduct A Unified Evaluation Process of RAG (Auepora) and aim to provide a comprehensive overview of the evaluation and benchmarks of RAG systems. Specifically, we examine and compare several quantifiable metrics of the Retrieval and Generation components, such as relevance, accuracy, and faithfulness, within the current RAG benchmarks, encompassing the possible output and ground truth pairs. We then analyze the various datasets and metrics, discuss the limitations of current benchmarks, and suggest potential directions to advance the field of RAG benchmarks."
+        },
+        {
+          "title": "LLM RAG Evaluation with MLflow Example Notebook | MLflow",
+          "url": "https://mlflow.org/docs/3.0.1/llms/rag/notebooks/mlflow-e2e-evaluation",
+          "source_type": "tutorial",
+          "authors": [
+            "MLflow Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "mlflowdevelopersLLMRAGEvaluation2018"
+        },
+        {
+          "title": "LRAGE",
+          "url": "https://github.com/hoorangyee/LRAGE",
+          "source_type": "software_package",
+          "publication_date": "2024-10-27",
+          "citationKey": "hoorangyeeLRAGE2024",
+          "abstract": "A framework for evaluating RAG pipelines, specifically adapted for the legal domain."
+        },
+        {
+          "title": "Evaluating RAG Applications with RAGAs | Towards Data Science",
+          "url": "https://towardsdatascience.com/evaluating-rag-applications-with-ragas-81d67b0ee31a",
+          "source_type": "tutorial",
+          "authors": [
+            "Leonie Monigatti"
+          ],
+          "publication_date": "2023-12-13",
+          "citationKey": "monigattiEvaluatingRAGApplications2023"
+        },
+        {
+          "title": "Enhancing the Precision and Interpretability of Retrieval-Augmented Generation (RAG) in Legal Technology: A Survey",
+          "url": "https://www.semanticscholar.org/paper/f51e92ce3f63cf04c26374c0ca33a2a751931cf6",
+          "source_type": "technical_paper",
+          "authors": [
+            "Mahd Hindi",
+            "Linda Mohammed",
+            "Ommama Maaz",
+            "Abdulmalik Alwarafy"
+          ],
+          "publication_date": "2025",
+          "citationKey": "hindiEnhancingPrecisionInterpretability2025",
+          "abstract": "Retrieval-Augmented Generation (RAG) is a promising solution that can enhance the capabilities of large language model (LLM) applications in critical domains, including legal technology, by retrieving knowledge from external databases. Implementing RAG pipelines requires careful attention to the techniques and methods implemented in the different stages of the RAG process. However, robust RAG can enhance LLM generation with faithfulness and few hallucinations in responses. In this paper, we discuss the application of RAG in the legal domain. First, we present an overview of the main RAG methods, stages, techniques, and applications in the legal domain. We then briefly discuss the different information retrieval models, processes, and applied methods in current legal RAG solutions. Then, we explain the different quantitative and qualitative evaluation metrics. We also describe several emerging datasets and benchmarks. We then discuss and assess the ethical and privacy considerations for legal RAG and summarize various challenges, and propose a challenge scale based on RAG failure points and control over external knowledge. Finally, we provide insights into promising future research to leverage RAG efficiently and effectively in the legal field."
+        }
+      ],
+      "related_techniques": [
+        "epistemic-uncertainty-quantification",
+        "chain-of-thought-faithfulness-evaluation",
+        "out-of-domain-detection",
+        "prompt-robustness-testing"
+      ],
+      "sample_claims": [
+        {
+          "text": "The legal research system's generated case summaries are traceable to specific retrieved source documents with verifiable citations",
+          "domain": "public sector",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The clinical decision support system generates treatment recommendations that accurately reflect the retrieved evidence-based guidelines without extrapolating beyond available medical literature",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The customer support assistant explicitly indicates when retrieved knowledge base articles do not contain sufficient information to answer user queries",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The research literature assistant's generated summaries distinguish between findings directly supported by retrieved papers and those requiring synthesis across multiple sources",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The financial advisory chatbot's investment recommendations are attributable to specific sections of retrieved regulatory documents and market analyses",
+          "domain": "finance",
+          "assuranceGoal": "explainability"
+        }
+      ]
     }
   ],
-  "count": 23
+  "count": 24
 }

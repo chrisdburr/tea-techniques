@@ -22,13 +22,17 @@
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/explainability/property/consistency",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
         "explanatory-scope/global",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "technique-type/algorithmic",
         "applicable-models/architecture/model-agnostic",
@@ -122,7 +126,13 @@
         "local-interpretable-model-agnostic-explanations",
         "permutation-importance",
         "sobol-indices",
-        "partial-dependence-plots"
+        "partial-dependence-plots",
+        "mean-decrease-impurity",
+        "individual-conditional-expectation-plots",
+        "anchor",
+        "contrastive-explanation-method",
+        "permutation-tests",
+        "generalized-additive-models"
       ],
       "sample_claims": [
         {
@@ -308,13 +318,17 @@
         "assurance-goal-category/explainability/explains/causal-pathways",
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
         "explanatory-scope/global",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/deployment",
         "technique-type/algorithmic",
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box"
@@ -460,6 +474,7 @@
         "assurance-goal-category/explainability/explains/decision-boundaries",
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/qualitative-report",
@@ -467,6 +482,7 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic",
         "applicable-models/architecture/model-agnostic",
@@ -498,6 +514,9 @@
         },
         {
           "description": "Can be computationally expensive for explaining many instances due to repeated model queries."
+        },
+        {
+          "description": "Assumes features are independent when generating perturbations, producing unrealistic out-of-distribution samples for datasets with correlated features. This can generate misleading attribution scores when inputs share strong correlations (e.g., age and income in credit scoring, comorbidities in clinical data)."
         }
       ],
       "resources": [
@@ -568,7 +587,12 @@
         "shapley-additive-explanations",
         "anchor",
         "ridge-regression-surrogates",
-        "partial-dependence-plots"
+        "partial-dependence-plots",
+        "individual-conditional-expectation-plots",
+        "occlusion-sensitivity",
+        "contrastive-explanation-method",
+        "mean-decrease-impurity",
+        "sobol-indices"
       ],
       "sample_claims": [
         {
@@ -1176,6 +1200,7 @@
       "description": "Permutation tests assess the statistical significance of observed results (such as model accuracy, feature importance, or group differences) by comparing them to what would occur purely by chance. The technique randomly shuffles labels or data thousands of times, recalculating the metric of interest each time to build an empirical null distribution. If the actual observed result falls in the extreme tail of this distribution (typically beyond the 95th or 99th percentile), it provides strong evidence that the relationship is genuine rather than due to random chance, without requiring parametric assumptions about data distributions.",
       "assurance_goals": [
         "Explainability",
+        "Fairness",
         "Reliability"
       ],
       "tags": [
@@ -1186,13 +1211,17 @@
         "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/property/consistency",
         "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
       ],
@@ -1287,6 +1316,8 @@
       "related_techniques": [
         "permutation-importance",
         "bootstrapping",
+        "cross-validation",
+        "jackknife-resampling",
         "shapley-additive-explanations",
         "sobol-indices"
       ],

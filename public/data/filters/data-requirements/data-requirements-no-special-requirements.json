@@ -2,7 +2,7 @@
   "tag": {
     "name": "data-requirements/no-special-requirements",
     "slug": "data-requirements-no-special-requirements",
-    "count": 48,
+    "count": 49,
     "category": "data-requirements"
   },
   "techniques": [
@@ -22,13 +22,17 @@
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/explainability/property/consistency",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
         "explanatory-scope/global",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "technique-type/algorithmic",
         "applicable-models/architecture/model-agnostic",
@@ -122,7 +126,13 @@
         "local-interpretable-model-agnostic-explanations",
         "permutation-importance",
         "sobol-indices",
-        "partial-dependence-plots"
+        "partial-dependence-plots",
+        "mean-decrease-impurity",
+        "individual-conditional-expectation-plots",
+        "anchor",
+        "contrastive-explanation-method",
+        "permutation-tests",
+        "generalized-additive-models"
       ],
       "sample_claims": [
         {
@@ -454,12 +464,15 @@
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/explainability/property/efficiency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/tabular",
         "evidence-type/quantitative-metric",
         "expertise-needed/low",
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/metric",
         "applicable-models/architecture/linear-models",
         "applicable-models/paradigm/parametric",
@@ -532,7 +545,8 @@
         "permutation-importance",
         "mean-decrease-impurity",
         "shapley-additive-explanations",
-        "generalized-additive-models"
+        "generalized-additive-models",
+        "ridge-regression-surrogates"
       ],
       "sample_claims": [
         {
@@ -739,13 +753,17 @@
         "assurance-goal-category/explainability/explains/causal-pathways",
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
         "explanatory-scope/global",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/deployment",
         "technique-type/algorithmic",
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box"
@@ -891,6 +909,7 @@
         "assurance-goal-category/explainability/explains/decision-boundaries",
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/qualitative-report",
@@ -898,6 +917,7 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic",
         "applicable-models/architecture/model-agnostic",
@@ -929,6 +949,9 @@
         },
         {
           "description": "Can be computationally expensive for explaining many instances due to repeated model queries."
+        },
+        {
+          "description": "Assumes features are independent when generating perturbations, producing unrealistic out-of-distribution samples for datasets with correlated features. This can generate misleading attribution scores when inputs share strong correlations (e.g., age and income in credit scoring, comorbidities in clinical data)."
         }
       ],
       "resources": [
@@ -999,7 +1022,12 @@
         "shapley-additive-explanations",
         "anchor",
         "ridge-regression-surrogates",
-        "partial-dependence-plots"
+        "partial-dependence-plots",
+        "individual-conditional-expectation-plots",
+        "occlusion-sensitivity",
+        "contrastive-explanation-method",
+        "mean-decrease-impurity",
+        "sobol-indices"
       ],
       "sample_claims": [
         {
@@ -1045,12 +1073,15 @@
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/explainability/property/comprehensibility",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/structured-output",
         "expertise-needed/ml-engineering",
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic",
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box"
@@ -1132,6 +1163,7 @@
       "computational_cost_rating": 2,
       "related_techniques": [
         "local-interpretable-model-agnostic-explanations",
+        "model-distillation",
         "rulefit",
         "partial-dependence-plots",
         "coefficient-magnitudes-in-linear-models"
@@ -2112,12 +2144,15 @@
         "assurance-goal-category/explainability/property/comprehensibility",
         "assurance-goal-category/explainability/property/sparsity",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/structured-output",
         "expertise-needed/ml-engineering",
         "explanatory-scope/global",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -2195,7 +2230,10 @@
         "influence-functions",
         "t-sne",
         "umap",
-        "contrastive-explanation-method"
+        "contrastive-explanation-method",
+        "concept-activation-vectors",
+        "neuron-activation-analysis",
+        "factor-analysis"
       ],
       "sample_claims": [
         {
@@ -2383,12 +2421,16 @@
         "assurance-goal-category/explainability/property/sparsity",
         "assurance-goal-category/explainability/surrogate-models/rule-extraction",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -2462,7 +2504,8 @@
         "local-interpretable-model-agnostic-explanations",
         "shapley-additive-explanations",
         "rulefit",
-        "ridge-regression-surrogates"
+        "ridge-regression-surrogates",
+        "contrastive-explanation-method"
       ],
       "sample_claims": [
         {
@@ -2503,6 +2546,7 @@
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
         "applicable-models/requirements/training-data",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/explains/decision-boundaries",
@@ -2513,6 +2557,8 @@
         "assurance-goal-category/explainability/surrogate-models/global-surrogates",
         "assurance-goal-category/explainability/surrogate-models/rule-extraction",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -2608,7 +2654,8 @@
         "ridge-regression-surrogates",
         "anchor",
         "local-interpretable-model-agnostic-explanations",
-        "mean-decrease-impurity"
+        "mean-decrease-impurity",
+        "model-distillation"
       ],
       "sample_claims": [
         {
@@ -2937,6 +2984,7 @@
       "description": "Permutation tests assess the statistical significance of observed results (such as model accuracy, feature importance, or group differences) by comparing them to what would occur purely by chance. The technique randomly shuffles labels or data thousands of times, recalculating the metric of interest each time to build an empirical null distribution. If the actual observed result falls in the extreme tail of this distribution (typically beyond the 95th or 99th percentile), it provides strong evidence that the relationship is genuine rather than due to random chance, without requiring parametric assumptions about data distributions.",
       "assurance_goals": [
         "Explainability",
+        "Fairness",
         "Reliability"
       ],
       "tags": [
@@ -2947,13 +2995,17 @@
         "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/property/consistency",
         "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
       ],
@@ -3048,6 +3100,8 @@
       "related_techniques": [
         "permutation-importance",
         "bootstrapping",
+        "cross-validation",
+        "jackknife-resampling",
         "shapley-additive-explanations",
         "sobol-indices"
       ],
@@ -3071,6 +3125,154 @@
           "text": "The system's feature importance rankings reflect genuine signal rather than spurious patterns in the observed sample",
           "domain": "environmental",
           "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
+      "slug": "sensitivity-analysis-for-fairness",
+      "name": "Sensitivity Analysis for Fairness",
+      "description": "Sensitivity Analysis for Fairness systematically evaluates how model predictions change when sensitive attributes or their proxies are perturbed whilst holding other factors constant. The technique involves creating counterfactual instances by modifying potentially discriminatory features (race, gender, age) or their correlates (zip code, names, education institutions) and measuring the resulting prediction differences. This controlled perturbation approach quantifies the degree to which protected characteristics influence model decisions, helping detect both direct discrimination and indirect bias through proxy variables even when sensitive attributes are not explicitly used as model inputs.",
+      "assurance_goals": [
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "data-requirements/no-special-requirements",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/statistics",
+        "explanatory-scope/local",
+        "fairness-approach/group",
+        "lifecycle-stage/deployment",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing whether a lending model's decisions change significantly when only the applicant's zip code (which may correlate with race) is altered, while keeping all other factors constant.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Evaluating a recruitment algorithm by systematically changing candidate names from stereotypically male to female names (whilst keeping qualifications identical) to measure whether gender bias affects hiring recommendations, revealing discrimination through name-based proxies.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Assessing a healthcare resource allocation model by varying patient zip codes across different socioeconomic areas to determine whether geographic proxies for race and income inappropriately influence treatment recommendations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires domain expertise to identify relevant proxy variables for sensitive attributes, which may not be obvious or comprehensive."
+        },
+        {
+          "description": "Computationally intensive for complex models when testing many feature combinations or perturbation ranges."
+        },
+        {
+          "description": "Choice of perturbation ranges and comparison points involves subjective decisions that can significantly affect results and conclusions."
+        },
+        {
+          "description": "May miss subtle or interaction-based forms of discrimination that only manifest under specific combinations of features."
+        }
+      ],
+      "resources": [
+        {
+          "title": "The Fragility of Fairness: Causal Sensitivity Analysis for Fair Machine Learning",
+          "url": "http://arxiv.org/abs/2410.09600v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Jake Fawkes",
+            "Nic Fishman",
+            "Mel Andrews",
+            "Zachary C. Lipton"
+          ],
+          "publication_date": "2024-10-12",
+          "citationKey": "fawkesFragilityFairnessCausal2024",
+          "abstract": "Fairness metrics are a core tool in the fair machine learning literature (FairML), used to determine that ML models are, in some sense, \"fair\". Real-world data, however, are typically plagued by various measurement biases and other violated assumptions, which can render fairness assessments meaningless. We adapt tools from causal sensitivity analysis to the FairML context, providing a general framework which (1) accommodates effectively any combination of fairness metric and bias that can be posed in the \"oblivious setting\"; (2) allows researchers to investigate combinations of biases, resulting in non-linear sensitivity; and (3) enables flexible encoding of domain-specific constraints and assumptions. Employing this framework, we analyze the sensitivity of the most common parity metrics under 3 varieties of classifier across 14 canonical fairness datasets. Our analysis reveals the striking fragility of fairness assessments to even minor dataset biases. We show that causal sensitivity analysis provides a powerful and necessary toolkit for gauging the informativeness of parity metric evaluations. Our repository is available here: https://github.com/Jakefawkes/fragile_fair."
+        },
+        {
+          "title": "Fair SA: Sensitivity Analysis for Fairness in Face Recognition",
+          "url": "http://arxiv.org/abs/2202.03586v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Aparna R. Joshi",
+            "Xavier Suau",
+            "Nivedha Sivakumar",
+            "Luca Zappella",
+            "Nicholas Apostoloff"
+          ],
+          "publication_date": "2022-02-08",
+          "citationKey": "r.joshiFairSASensitivity2022",
+          "abstract": "As the use of deep learning in high impact domains becomes ubiquitous, it is increasingly important to assess the resilience of models. One such high impact domain is that of face recognition, with real world applications involving images affected by various degradations, such as motion blur or high exposure. Moreover, images captured across different attributes, such as gender and race, can also challenge the robustness of a face recognition algorithm. While traditional summary statistics suggest that the aggregate performance of face recognition models has continued to improve, these metrics do not directly measure the robustness or fairness of the models. Visual Psychophysics Sensitivity Analysis (VPSA) [1] provides a way to pinpoint the individual causes of failure by way of introducing incremental perturbations in the data. However, perturbations may affect subgroups differently. In this paper, we propose a new fairness evaluation based on robustness in the form of a generic framework that extends VPSA. With this framework, we can analyze the ability of a model to perform fairly for different subgroups of a population affected by perturbations, and pinpoint the exact failure modes for a subgroup by measuring targeted robustness. With the increasing focus on the fairness of models, we use face recognition as an example application of our framework and propose to compactly visualize the fairness analysis of a model via AUC matrices. We analyze the performance of common face recognition models and empirically show that certain subgroups are at a disadvantage when images are perturbed, thereby uncovering trends that were not visible using the model's performance on subgroups without perturbations."
+        },
+        {
+          "title": "fairlearn",
+          "url": "https://github.com/fairlearn/fairlearn",
+          "source_type": "software_package",
+          "publication_date": "2018-05-15",
+          "citationKey": "fairlearnFairlearn2018",
+          "abstract": "A Python package to assess and improve fairness of machine learning models."
+        },
+        {
+          "title": "aequitas",
+          "url": "https://github.com/dssg/aequitas",
+          "source_type": "software_package",
+          "publication_date": "2018-02-13",
+          "citationKey": "dssgAequitas2018",
+          "abstract": "Bias Auditing & Fair ML Toolkit"
+        },
+        {
+          "title": "User Guide - Fairlearn documentation",
+          "url": "https://fairlearn.org/v0.13/user_guide/index.html",
+          "source_type": "documentation",
+          "authors": [
+            "Fairlearn Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "fairlearndevelopersUserGuideFairlearn2018"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "path-specific-counterfactual-fairness-assessment",
+        "counterfactual-fairness-assessment",
+        "average-odds-difference",
+        "demographic-parity-assessment"
+      ],
+      "sample_claims": [
+        {
+          "text": "The hiring system's offer decisions remain stable when candidate demographic proxies such as postal code or university name are systematically varied",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The loan approval model's interest rate assignments do not shift meaningfully when applicant names associated with different ethnic backgrounds are substituted",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The clinical risk stratification tool's recommendations are insensitive to variations in patient geographic location that correlate with socioeconomic status",
+          "domain": "healthcare",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The vehicle insurance pricing algorithm produces consistent premium estimates when zip codes within similar risk profiles but different demographic compositions are interchanged",
+          "domain": "autonomous systems",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The model's predictions do not exhibit systematic dependence on proxy variables that indirectly encode protected characteristics",
+          "domain": "general",
+          "assuranceGoal": "fairness"
         }
       ]
     },
@@ -3240,10 +3442,13 @@
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/privacy",
         "assurance-goal-category/privacy/formal-guarantee/differential-privacy",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/privacy-guarantee",
@@ -3251,6 +3456,7 @@
         "expertise-needed/cryptography",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
+        "fairness-approach/group",
         "lifecycle-stage/data-handling",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
@@ -3328,8 +3534,9 @@
       "related_techniques": [
         "federated-learning",
         "homomorphic-encryption",
-        "synthetic-data-generation",
-        "membership-inference-attack-testing"
+        "machine-unlearning",
+        "membership-inference-attack-testing",
+        "synthetic-data-generation"
       ],
       "sample_claims": [
         {
@@ -3371,15 +3578,18 @@
       ],
       "tags": [
         "applicable-models/architecture/linear-models",
+        "applicable-models/architecture/model-agnostic",
         "applicable-models/architecture/neural-networks/feedforward",
+        "applicable-models/architecture/tree-based",
         "applicable-models/paradigm/discriminative",
         "applicable-models/paradigm/parametric",
-        "applicable-models/requirements/differentiable",
-        "applicable-models/requirements/white-box",
         "assurance-goal-category/privacy",
         "assurance-goal-category/privacy/formal-guarantee",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/security",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/privacy-guarantee",
@@ -3402,6 +3612,10 @@
         {
           "description": "Enabling transparent audit of algorithmic decision-making by allowing regulators to verify model computations on encrypted data, providing accountability whilst protecting the proprietary nature of both the algorithm and the underlying data.",
           "goal": "Transparency"
+        },
+        {
+          "description": "Protecting ML model intellectual property and confidential inference inputs during cloud deployment by running encrypted inference, ensuring that neither the client sensitive input data nor the server proprietary model weights and architecture are exposed to the cloud provider or the counterparty, enabling secure outsourced inference without requiring mutual trust assumptions.",
+          "goal": "Security"
         }
       ],
       "limitations": [
@@ -3481,7 +3695,8 @@
         "differential-privacy",
         "federated-learning",
         "synthetic-data-generation",
-        "model-extraction-defence-testing"
+        "model-extraction-defence-testing",
+        "membership-inference-attack-testing"
       ],
       "sample_claims": [
         {
@@ -3528,14 +3743,18 @@
         "applicable-models/paradigm/supervised",
         "applicable-models/requirements/white-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/prediction-interval",
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
@@ -3630,7 +3849,11 @@
       "related_techniques": [
         "conformal-prediction",
         "bootstrapping",
-        "jackknife-resampling"
+        "jackknife-resampling",
+        "monte-carlo-dropout",
+        "empirical-calibration",
+        "deep-ensembles",
+        "monotonicity-constraints"
       ],
       "sample_claims": [
         {
@@ -5274,13 +5497,18 @@
         "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/no-special-requirements",
         "data-type/text",
         "evidence-type/quantitative-metric",
         "evidence-type/visualisation",
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
+        "fairness-approach/group",
+        "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
         "lifecycle-stage/testing",
         "technique-type/algorithmic"
@@ -5367,7 +5595,8 @@
         "prompt-sensitivity-analysis",
         "causal-mediation-analysis-in-language-models",
         "attention-visualisation-in-transformers",
-        "contextual-decomposition"
+        "contextual-decomposition",
+        "shapley-additive-explanations"
       ],
       "sample_claims": [
         {
@@ -5850,6 +6079,7 @@
         "applicable-models/architecture/neural-networks/transformer/llm",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/harmful-behavior-detection",
         "assurance-goal-category/security",
         "assurance-goal-category/reliability",
         "data-type/text",
@@ -5969,7 +6199,12 @@
         "prompt-injection-testing",
         "agent-goal-misalignment-testing",
         "prompt-sensitivity-analysis",
-        "adversarial-training-evaluation"
+        "adversarial-training-evaluation",
+        "red-teaming",
+        "constitutional-ai-evaluation",
+        "multi-agent-system-testing",
+        "multimodal-alignment-evaluation",
+        "model-watermarking-and-theft-detection"
       ],
       "sample_claims": [
         {
@@ -6488,7 +6723,12 @@
         "lifecycle-stage/post-deployment",
         "lifecycle-stage/system-deployment/system-use-and-monitoring",
         "technique-type/testing",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/security/adversarial-robustness",
+        "assurance-goal-category/safety/harmful-behavior-detection",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/reliability/robustness"
       ],
       "example_use_cases": [
         {
@@ -6602,7 +6842,11 @@
         "agent-goal-misalignment-testing",
         "jailbreak-resistance-testing",
         "chain-of-thought-faithfulness-evaluation",
-        "toxicity-detection"
+        "toxicity-detection",
+        "red-teaming",
+        "prompt-robustness-testing",
+        "multi-agent-system-testing",
+        "api-usage-pattern-monitoring"
       ],
       "sample_claims": [
         {
@@ -6779,5 +7023,5 @@
       ]
     }
   ],
-  "count": 48
+  "count": 49
 }

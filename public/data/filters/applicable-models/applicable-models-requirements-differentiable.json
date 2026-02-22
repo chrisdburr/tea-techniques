@@ -2,7 +2,7 @@
   "tag": {
     "name": "applicable-models/requirements/differentiable",
     "slug": "applicable-models-requirements-differentiable",
-    "count": 9,
+    "count": 8,
     "category": "applicable-models"
   },
   "techniques": [
@@ -568,11 +568,13 @@
         "assurance-goal-category/explainability/property/efficiency",
         "assurance-goal-category/explainability/visualization-methods/activation-maps",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "data-requirements/access-to-model-internals",
         "data-type/image",
         "evidence-type/visualisation",
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "technique-type/algorithmic"
       ],
@@ -648,6 +650,8 @@
       "complexity_rating": 3,
       "computational_cost_rating": 2,
       "related_techniques": [
+        "concept-activation-vectors",
+        "deeplift",
         "gradient-weighted-class-activation-mapping",
         "integrated-gradients",
         "occlusion-sensitivity",
@@ -1100,6 +1104,7 @@
       "computational_cost_rating": 3,
       "related_techniques": [
         "fair-adversarial-networks",
+        "multi-accuracy-boosting",
         "reweighing",
         "equalised-odds-post-processing",
         "threshold-optimiser"
@@ -1131,159 +1136,7 @@
           "assuranceGoal": "fairness"
         }
       ]
-    },
-    {
-      "slug": "homomorphic-encryption",
-      "name": "Homomorphic Encryption",
-      "description": "Homomorphic encryption allows computation on encrypted data without decrypting it first, producing encrypted results that, when decrypted, match the results of performing the same operations on the plaintext. This enables secure outsourced computation where sensitive data remains encrypted throughout processing. By allowing ML operations on encrypted data, it provides strong privacy guarantees for applications involving highly sensitive information.",
-      "assurance_goals": [
-        "Privacy",
-        "Safety",
-        "Transparency",
-        "Security"
-      ],
-      "tags": [
-        "applicable-models/architecture/linear-models",
-        "applicable-models/architecture/neural-networks/feedforward",
-        "applicable-models/paradigm/discriminative",
-        "applicable-models/paradigm/parametric",
-        "applicable-models/requirements/differentiable",
-        "applicable-models/requirements/white-box",
-        "assurance-goal-category/privacy",
-        "assurance-goal-category/privacy/formal-guarantee",
-        "assurance-goal-category/safety",
-        "assurance-goal-category/transparency",
-        "data-requirements/no-special-requirements",
-        "data-type/any",
-        "evidence-type/privacy-guarantee",
-        "evidence-type/quantitative-metric",
-        "expertise-needed/cryptography",
-        "expertise-needed/ml-engineering",
-        "lifecycle-stage/model-development",
-        "lifecycle-stage/system-deployment-and-use",
-        "technique-type/algorithmic"
-      ],
-      "example_use_cases": [
-        {
-          "description": "Enabling a cloud-based medical diagnosis service to process encrypted patient data and return encrypted results without the cloud provider ever accessing actual medical information, ensuring complete patient privacy during outsourced computation.",
-          "goal": "Privacy"
-        },
-        {
-          "description": "Securing financial risk assessment computations by allowing banks to jointly analyse encrypted transaction patterns for fraud detection without exposing individual customer data, reducing systemic security risks.",
-          "goal": "Safety"
-        },
-        {
-          "description": "Enabling transparent audit of algorithmic decision-making by allowing regulators to verify model computations on encrypted data, providing accountability whilst protecting the proprietary nature of both the algorithm and the underlying data.",
-          "goal": "Transparency"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "Extremely computationally expensive, often 100-1000x slower than unencrypted computation, making it impractical for real-time applications or large-scale data processing."
-        },
-        {
-          "description": "Limited range of operations supported efficiently, with complex operations like divisions, comparisons, and non-polynomial functions being particularly challenging or impossible to implement."
-        },
-        {
-          "description": "Implementation requires deep cryptographic expertise to avoid security vulnerabilities, choose appropriate parameters, and optimise performance for specific use cases."
-        },
-        {
-          "description": "Memory and storage requirements are significantly higher than traditional computation, as encrypted data typically requires much more space than plaintext equivalents."
-        },
-        {
-          "description": "Current fully homomorphic encryption schemes have practical limitations on computation depth before noise accumulation requires expensive bootstrapping operations to refresh ciphertexts."
-        }
-      ],
-      "resources": [
-        {
-          "title": "concrete-ml",
-          "url": "https://github.com/zama-ai/concrete-ml",
-          "source_type": "software_package",
-          "publication_date": "2022-03-23",
-          "citationKey": "zama-aiConcreteml2022",
-          "abstract": "Concrete ML: Privacy Preserving ML framework using Fully Homomorphic Encryption (FHE), built on top of Concrete, with bindings to traditional ML frameworks."
-        },
-        {
-          "title": "Survey on Fully Homomorphic Encryption, Theory, and Applications",
-          "url": "https://core.ac.uk/download/579858842.pdf",
-          "source_type": "technical_paper",
-          "authors": [
-            "Chiara Marcolla",
-            "Frank H.P. Fitzek",
-            "Marc Manzano",
-            "Najwa Aaraj",
-            "Riccardo Bassoli",
-            "Victor Sucasas"
-          ],
-          "publication_date": "2022-10-06",
-          "citationKey": "marcollaSurveyFullyHomomorphic2022"
-        },
-        {
-          "title": "Welcome to OpenFHE's documentation! — OpenFHE documentation",
-          "url": "https://openfhe-development.readthedocs.io",
-          "source_type": "documentation",
-          "authors": [
-            "Openfhe-development Developers"
-          ],
-          "publication_date": "2023",
-          "citationKey": "openfhe-developmentdevelopersWelcomeOpenFHEsDocumentation2023"
-        },
-        {
-          "title": "Evaluation of Privacy-Preserving Support Vector Machine (SVM) Learning Using Homomorphic Encryption",
-          "url": "https://core.ac.uk/download/656115203.pdf",
-          "source_type": "technical_paper",
-          "authors": [
-            "Ali, Hisham",
-            "Buchanan, William J."
-          ],
-          "publication_date": "2025-01-01",
-          "citationKey": "hishamEvaluationPrivacyPreservingSupport2025"
-        },
-        {
-          "title": "SEAL",
-          "url": "https://github.com/microsoft/SEAL",
-          "source_type": "software_package",
-          "publication_date": "2018-11-09",
-          "citationKey": "microsoftSEAL2018",
-          "abstract": "Microsoft SEAL is an easy-to-use and powerful homomorphic encryption library."
-        }
-      ],
-      "complexity_rating": 5,
-      "computational_cost_rating": 5,
-      "related_techniques": [
-        "differential-privacy",
-        "federated-learning",
-        "synthetic-data-generation",
-        "model-extraction-defence-testing"
-      ],
-      "sample_claims": [
-        {
-          "text": "The cloud-based service processes patient data without the service provider ever accessing the underlying medical information",
-          "domain": "healthcare",
-          "assuranceGoal": "privacy"
-        },
-        {
-          "text": "The system's computational outputs are mathematically guaranteed to match results that would be obtained from unencrypted processing",
-          "domain": "general",
-          "assuranceGoal": "transparency"
-        },
-        {
-          "text": "The financial analysis platform maintains data confidentiality throughout all computational operations performed by third-party infrastructure",
-          "domain": "finance",
-          "assuranceGoal": "security"
-        },
-        {
-          "text": "The collaborative risk assessment system enables multi-party computation without exposing individual institutions' sensitive data to each other or to the computation coordinator",
-          "domain": "finance",
-          "assuranceGoal": "safety"
-        },
-        {
-          "text": "The public sector system allows regulatory oversight of algorithmic decisions whilst protecting both citizen data and proprietary model parameters from disclosure",
-          "domain": "public sector",
-          "assuranceGoal": "transparency"
-        }
-      ]
     }
   ],
-  "count": 9
+  "count": 8
 }

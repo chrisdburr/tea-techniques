@@ -493,15 +493,18 @@
       ],
       "tags": [
         "applicable-models/architecture/linear-models",
+        "applicable-models/architecture/model-agnostic",
         "applicable-models/architecture/neural-networks/feedforward",
+        "applicable-models/architecture/tree-based",
         "applicable-models/paradigm/discriminative",
         "applicable-models/paradigm/parametric",
-        "applicable-models/requirements/differentiable",
-        "applicable-models/requirements/white-box",
         "assurance-goal-category/privacy",
         "assurance-goal-category/privacy/formal-guarantee",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/security",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/privacy-guarantee",
@@ -524,6 +527,10 @@
         {
           "description": "Enabling transparent audit of algorithmic decision-making by allowing regulators to verify model computations on encrypted data, providing accountability whilst protecting the proprietary nature of both the algorithm and the underlying data.",
           "goal": "Transparency"
+        },
+        {
+          "description": "Protecting ML model intellectual property and confidential inference inputs during cloud deployment by running encrypted inference, ensuring that neither the client sensitive input data nor the server proprietary model weights and architecture are exposed to the cloud provider or the counterparty, enabling secure outsourced inference without requiring mutual trust assumptions.",
+          "goal": "Security"
         }
       ],
       "limitations": [
@@ -603,7 +610,8 @@
         "differential-privacy",
         "federated-learning",
         "synthetic-data-generation",
-        "model-extraction-defence-testing"
+        "model-extraction-defence-testing",
+        "membership-inference-attack-testing"
       ],
       "sample_claims": [
         {
@@ -910,7 +918,9 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/test-scenarios",
         "data-type/any",
         "evidence-type/boundary-analysis",
@@ -3106,13 +3116,18 @@
         "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/no-special-requirements",
         "data-type/text",
         "evidence-type/quantitative-metric",
         "evidence-type/visualisation",
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
+        "fairness-approach/group",
+        "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
         "lifecycle-stage/testing",
         "technique-type/algorithmic"
@@ -3199,7 +3214,8 @@
         "prompt-sensitivity-analysis",
         "causal-mediation-analysis-in-language-models",
         "attention-visualisation-in-transformers",
-        "contextual-decomposition"
+        "contextual-decomposition",
+        "shapley-additive-explanations"
       ],
       "sample_claims": [
         {
@@ -3683,11 +3699,18 @@
         "applicable-models/requirements/white-box",
         "applicable-models/paradigm/supervised",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/harmful-behavior-detection",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/safety/monitoring",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "data-type/text",
         "data-requirements/labelled-data",
         "data-requirements/access-to-training-data",
+        "lifecycle-stage/model-development",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
@@ -3788,7 +3811,9 @@
         "agent-goal-misalignment-testing",
         "chain-of-thought-faithfulness-evaluation",
         "jailbreak-resistance-testing",
-        "multimodal-alignment-evaluation"
+        "multimodal-alignment-evaluation",
+        "prompt-robustness-testing",
+        "reward-hacking-detection"
       ],
       "sample_claims": [
         {
@@ -4160,6 +4185,7 @@
         "applicable-models/architecture/neural-networks/transformer/llm",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/harmful-behavior-detection",
         "assurance-goal-category/security",
         "assurance-goal-category/reliability",
         "data-type/text",
@@ -4279,7 +4305,12 @@
         "prompt-injection-testing",
         "agent-goal-misalignment-testing",
         "prompt-sensitivity-analysis",
-        "adversarial-training-evaluation"
+        "adversarial-training-evaluation",
+        "red-teaming",
+        "constitutional-ai-evaluation",
+        "multi-agent-system-testing",
+        "multimodal-alignment-evaluation",
+        "model-watermarking-and-theft-detection"
       ],
       "sample_claims": [
         {
@@ -5002,7 +5033,12 @@
         "lifecycle-stage/post-deployment",
         "lifecycle-stage/system-deployment/system-use-and-monitoring",
         "technique-type/testing",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/security/adversarial-robustness",
+        "assurance-goal-category/safety/harmful-behavior-detection",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/reliability/robustness"
       ],
       "example_use_cases": [
         {
@@ -5116,7 +5152,11 @@
         "agent-goal-misalignment-testing",
         "jailbreak-resistance-testing",
         "chain-of-thought-faithfulness-evaluation",
-        "toxicity-detection"
+        "toxicity-detection",
+        "red-teaming",
+        "prompt-robustness-testing",
+        "multi-agent-system-testing",
+        "api-usage-pattern-monitoring"
       ],
       "sample_claims": [
         {
@@ -5317,7 +5357,12 @@
         "evidence-type/quantitative-metric",
         "evidence-type/qualitative-report",
         "expertise-needed/ml-engineering",
-        "expertise-needed/domain-expertise"
+        "expertise-needed/domain-expertise",
+        "assurance-goal-category/safety/harmful-behavior-detection",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/safety/risk-identification"
       ],
       "example_use_cases": [
         {
@@ -5409,7 +5454,9 @@
         "few-shot-fairness-evaluation",
         "embedding-bias-analysis",
         "prompt-injection-testing",
-        "runtime-monitoring-and-circuit-breakers"
+        "runtime-monitoring-and-circuit-breakers",
+        "jailbreak-resistance-testing",
+        "constitutional-ai-evaluation"
       ],
       "sample_claims": [
         {

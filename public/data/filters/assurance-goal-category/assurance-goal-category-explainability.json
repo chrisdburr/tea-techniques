@@ -22,13 +22,17 @@
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/explainability/property/consistency",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
         "explanatory-scope/global",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "technique-type/algorithmic",
         "applicable-models/architecture/model-agnostic",
@@ -122,7 +126,13 @@
         "local-interpretable-model-agnostic-explanations",
         "permutation-importance",
         "sobol-indices",
-        "partial-dependence-plots"
+        "partial-dependence-plots",
+        "mean-decrease-impurity",
+        "individual-conditional-expectation-plots",
+        "anchor",
+        "contrastive-explanation-method",
+        "permutation-tests",
+        "generalized-additive-models"
       ],
       "sample_claims": [
         {
@@ -454,12 +464,15 @@
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/explainability/property/efficiency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/tabular",
         "evidence-type/quantitative-metric",
         "expertise-needed/low",
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/metric",
         "applicable-models/architecture/linear-models",
         "applicable-models/paradigm/parametric",
@@ -532,7 +545,8 @@
         "permutation-importance",
         "mean-decrease-impurity",
         "shapley-additive-explanations",
-        "generalized-additive-models"
+        "generalized-additive-models",
+        "ridge-regression-surrogates"
       ],
       "sample_claims": [
         {
@@ -1282,13 +1296,17 @@
         "assurance-goal-category/explainability/explains/causal-pathways",
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
         "explanatory-scope/global",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/deployment",
         "technique-type/algorithmic",
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box"
@@ -1434,6 +1452,7 @@
         "assurance-goal-category/explainability/explains/decision-boundaries",
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/qualitative-report",
@@ -1441,6 +1460,7 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic",
         "applicable-models/architecture/model-agnostic",
@@ -1472,6 +1492,9 @@
         },
         {
           "description": "Can be computationally expensive for explaining many instances due to repeated model queries."
+        },
+        {
+          "description": "Assumes features are independent when generating perturbations, producing unrealistic out-of-distribution samples for datasets with correlated features. This can generate misleading attribution scores when inputs share strong correlations (e.g., age and income in credit scoring, comorbidities in clinical data)."
         }
       ],
       "resources": [
@@ -1542,7 +1565,12 @@
         "shapley-additive-explanations",
         "anchor",
         "ridge-regression-surrogates",
-        "partial-dependence-plots"
+        "partial-dependence-plots",
+        "individual-conditional-expectation-plots",
+        "occlusion-sensitivity",
+        "contrastive-explanation-method",
+        "mean-decrease-impurity",
+        "sobol-indices"
       ],
       "sample_claims": [
         {
@@ -1588,12 +1616,15 @@
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/explainability/property/comprehensibility",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/structured-output",
         "expertise-needed/ml-engineering",
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic",
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box"
@@ -1675,6 +1706,7 @@
       "computational_cost_rating": 2,
       "related_techniques": [
         "local-interpretable-model-agnostic-explanations",
+        "model-distillation",
         "rulefit",
         "partial-dependence-plots",
         "coefficient-magnitudes-in-linear-models"
@@ -2004,11 +2036,13 @@
         "assurance-goal-category/explainability/property/efficiency",
         "assurance-goal-category/explainability/visualization-methods/activation-maps",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "data-requirements/access-to-model-internals",
         "data-type/image",
         "evidence-type/visualisation",
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "technique-type/algorithmic"
       ],
@@ -2084,6 +2118,8 @@
       "complexity_rating": 3,
       "computational_cost_rating": 2,
       "related_techniques": [
+        "concept-activation-vectors",
+        "deeplift",
         "gradient-weighted-class-activation-mapping",
         "integrated-gradients",
         "occlusion-sensitivity",
@@ -2145,7 +2181,11 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/fairness/group",
+        "fairness-approach/group",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use/auditing"
       ],
       "example_use_cases": [
         {
@@ -2247,7 +2287,9 @@
         "integrated-gradients",
         "gradient-saliency",
         "occlusion-sensitivity",
-        "local-interpretable-model-agnostic-explanations"
+        "local-interpretable-model-agnostic-explanations",
+        "layer-wise-relevance-propagation",
+        "concept-activation-vectors"
       ],
       "sample_claims": [
         {
@@ -3089,12 +3131,15 @@
         "assurance-goal-category/explainability/property/comprehensibility",
         "assurance-goal-category/explainability/property/sparsity",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/structured-output",
         "expertise-needed/ml-engineering",
         "explanatory-scope/global",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -3172,7 +3217,10 @@
         "influence-functions",
         "t-sne",
         "umap",
-        "contrastive-explanation-method"
+        "contrastive-explanation-method",
+        "concept-activation-vectors",
+        "neuron-activation-analysis",
+        "factor-analysis"
       ],
       "sample_claims": [
         {
@@ -3533,12 +3581,16 @@
         "assurance-goal-category/explainability/property/sparsity",
         "assurance-goal-category/explainability/surrogate-models/rule-extraction",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -3612,7 +3664,8 @@
         "local-interpretable-model-agnostic-explanations",
         "shapley-additive-explanations",
         "rulefit",
-        "ridge-regression-surrogates"
+        "ridge-regression-surrogates",
+        "contrastive-explanation-method"
       ],
       "sample_claims": [
         {
@@ -3653,6 +3706,7 @@
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
         "applicable-models/requirements/training-data",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/explains/decision-boundaries",
@@ -3663,6 +3717,8 @@
         "assurance-goal-category/explainability/surrogate-models/global-surrogates",
         "assurance-goal-category/explainability/surrogate-models/rule-extraction",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -3758,7 +3814,8 @@
         "ridge-regression-surrogates",
         "anchor",
         "local-interpretable-model-agnostic-explanations",
-        "mean-decrease-impurity"
+        "mean-decrease-impurity",
+        "model-distillation"
       ],
       "sample_claims": [
         {
@@ -4087,6 +4144,7 @@
       "description": "Permutation tests assess the statistical significance of observed results (such as model accuracy, feature importance, or group differences) by comparing them to what would occur purely by chance. The technique randomly shuffles labels or data thousands of times, recalculating the metric of interest each time to build an empirical null distribution. If the actual observed result falls in the extreme tail of this distribution (typically beyond the 95th or 99th percentile), it provides strong evidence that the relationship is genuine rather than due to random chance, without requiring parametric assumptions about data distributions.",
       "assurance_goals": [
         "Explainability",
+        "Fairness",
         "Reliability"
       ],
       "tags": [
@@ -4097,13 +4155,17 @@
         "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/property/consistency",
         "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
       ],
@@ -4198,6 +4260,8 @@
       "related_techniques": [
         "permutation-importance",
         "bootstrapping",
+        "cross-validation",
+        "jackknife-resampling",
         "shapley-additive-explanations",
         "sobol-indices"
       ],
@@ -5845,7 +5909,9 @@
         "assurance-goal-category/explainability/surrogate-models/global-surrogates",
         "assurance-goal-category/explainability/visualization-methods/feature-relationships",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
         "data-type/tabular",
         "evidence-type/quantitative-metric",
@@ -6570,13 +6636,18 @@
         "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/no-special-requirements",
         "data-type/text",
         "evidence-type/quantitative-metric",
         "evidence-type/visualisation",
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
+        "fairness-approach/group",
+        "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
         "lifecycle-stage/testing",
         "technique-type/algorithmic"
@@ -6663,7 +6734,8 @@
         "prompt-sensitivity-analysis",
         "causal-mediation-analysis-in-language-models",
         "attention-visualisation-in-transformers",
-        "contextual-decomposition"
+        "contextual-decomposition",
+        "shapley-additive-explanations"
       ],
       "sample_claims": [
         {
@@ -6714,6 +6786,7 @@
         "assurance-goal-category/explainability/property/comprehensibility",
         "assurance-goal-category/explainability/representation-analysis/concept-identification",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/transparency",
         "data-requirements/access-to-model-internals",
         "data-type/any",
@@ -6723,8 +6796,11 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/global",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/system-deployment-and-use/auditing",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -6889,6 +6965,7 @@
         "assurance-goal-category/explainability/property/efficiency",
         "assurance-goal-category/explainability/visualization-methods/attention-patterns",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/transparency",
         "data-requirements/access-to-model-internals",
         "data-type/image",
@@ -6897,6 +6974,7 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/global",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "lifecycle-stage/testing",
         "technique-type/algorithmic"
@@ -7318,10 +7396,12 @@
         "applicable-models/architecture/neural-networks/convolutional",
         "applicable-models/requirements/model-internals",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/explains/internal-mechanisms",
         "assurance-goal-category/explainability/visualization-methods/activation-maps",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-type/text",
         "data-type/image",
         "data-requirements/access-to-training-data",
@@ -7335,7 +7415,8 @@
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
         "explanatory-scope/global",
-        "evidence-type/fairness-metric"
+        "evidence-type/fairness-metric",
+        "fairness-approach/group"
       ],
       "example_use_cases": [
         {
@@ -7444,7 +7525,8 @@
         "attention-visualisation-in-transformers",
         "concept-activation-vectors",
         "chain-of-thought-faithfulness-evaluation",
-        "few-shot-fairness-evaluation"
+        "few-shot-fairness-evaluation",
+        "toxicity-detection"
       ],
       "sample_claims": [
         {
@@ -7812,7 +7894,10 @@
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/transparency/process-transparency",
+        "explanatory-scope/local"
       ],
       "example_use_cases": [
         {

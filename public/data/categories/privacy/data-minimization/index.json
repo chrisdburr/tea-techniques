@@ -173,7 +173,156 @@
           "assuranceGoal": "privacy"
         }
       ]
+    },
+    {
+      "slug": "fairness-gan",
+      "name": "Fairness GAN",
+      "description": "A data generation technique that employs Generative Adversarial Networks (GANs) to create fair synthetic datasets by learning to generate data representations that preserve utility whilst obfuscating protected attributes. Unlike traditional GANs, Fairness GANs incorporate fairness constraints into the training objective, ensuring that the generated data maintains statistical parity across demographic groups. The technique can be used for data augmentation to balance underrepresented groups or to create privacy-preserving synthetic datasets that remove demographic bias from training data.",
+      "assurance_goals": [
+        "Fairness",
+        "Privacy",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/generative/gan",
+        "applicable-models/paradigm/generative",
+        "applicable-models/paradigm/unsupervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/data-minimization",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "evidence-type/synthetic-data",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-augmentation",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Generating balanced synthetic datasets for medical research by creating additional samples from underrepresented demographic groups, ensuring equal representation across ethnicity and gender whilst maintaining the statistical properties needed for robust model training.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Creating privacy-preserving synthetic datasets for financial services that remove demographic identifiers whilst preserving the underlying patterns needed for credit risk assessment, allowing secure data sharing between institutions without exposing sensitive customer information.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Augmenting recruitment datasets by generating synthetic candidate profiles that balance gender and ethnicity representation, ensuring reliable model performance across all demographic groups when real-world data exhibits significant imbalances.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "GAN training is notoriously difficult to stabilise, with potential for mode collapse or failure to converge, especially when additional fairness constraints are imposed."
+        },
+        {
+          "description": "Ensuring fairness in generated data may come at the cost of data utility, potentially reducing the quality or realism of synthetic samples."
+        },
+        {
+          "description": "Requires large datasets to train both generator and discriminator networks effectively, limiting applicability in data-scarce domains."
+        },
+        {
+          "description": "Evaluation complexity is high, as it requires assessing both the quality of generated data and the preservation of fairness properties across demographic groups."
+        },
+        {
+          "description": "May inadvertently introduce new biases if the fairness constraints are not properly specified or if the training data itself contains subtle biases."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Fairness GAN",
+          "url": "http://arxiv.org/abs/1805.09910v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Prasanna Sattigeri",
+            "Samuel C. Hoffman",
+            "Vijil Chenthamarakshan",
+            "Kush R. Varshney"
+          ],
+          "publication_date": "2018-05-24",
+          "citationKey": "sattigeriFairnessGAN2018",
+          "abstract": "In this paper, we introduce the Fairness GAN, an approach for generating a dataset that is plausibly similar to a given multimedia dataset, but is more fair with respect to protected attributes in allocative decision making. We propose a novel auxiliary classifier GAN that strives for demographic parity or equality of opportunity and show empirical results on several datasets, including the CelebFaces Attributes (CelebA) dataset, the Quick, Draw!\\ dataset, and a dataset of soccer player images and the offenses they were called for. The proposed formulation is well-suited to absorbing unlabeled data; we leverage this to augment the soccer dataset with the much larger CelebA dataset. The methodology tends to improve demographic parity and equality of opportunity while generating plausible images."
+        },
+        {
+          "title": "Fair GANs through model rebalancing for extremely imbalanced class distributions",
+          "url": "http://arxiv.org/abs/2308.08638v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Anubhav Jain",
+            "Nasir Memon",
+            "Julian Togelius"
+          ],
+          "publication_date": "2023-08-16",
+          "citationKey": "jainFairGANsModel2023",
+          "abstract": "Deep generative models require large amounts of training data. This often poses a problem as the collection of datasets can be expensive and difficult, in particular datasets that are representative of the appropriate underlying distribution (e.g. demographic). This introduces biases in datasets which are further propagated in the models. We present an approach to construct an unbiased generative adversarial network (GAN) from an existing biased GAN by rebalancing the model distribution. We do so by generating balanced data from an existing imbalanced deep generative model using an evolutionary algorithm and then using this data to train a balanced generative model. Additionally, we propose a bias mitigation loss function that minimizes the deviation of the learned class distribution from being equiprobable. We show results for the StyleGAN2 models while training on the Flickr Faces High Quality (FFHQ) dataset for racial fairness and see that the proposed approach improves on the fairness metric by almost 5 times, whilst maintaining image quality. We further validate our approach by applying it to an imbalanced CIFAR10 dataset where we show that we can obtain comparable fairness and image quality as when training on a balanced CIFAR10 dataset which is also twice as large. Lastly, we argue that the traditionally used image quality metrics such as Frechet inception distance (FID) are unsuitable for scenarios where the class distributions are imbalanced and a balanced reference set is not available."
+        },
+        {
+          "title": "Inclusive GAN: Improving Data and Minority Coverage in Generative Models",
+          "url": "http://arxiv.org/abs/2004.03355",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ning Yu",
+            "Ke Li",
+            "Peng Zhou",
+            "Jitendra Malik",
+            "Larry Davis",
+            "Mario Fritz"
+          ],
+          "publication_date": "2020-04-07",
+          "citationKey": "yuInclusiveGANImproving2020",
+          "abstract": "Generative Adversarial Networks (GANs) have brought about rapid progress towards generating photorealistic images. Yet the equitable allocation of their modeling capacity among subgroups has received less attention, which could lead to potential biases against underrepresented minorities if left uncontrolled. In this work, we first formalize the problem of minority inclusion as one of data coverage, and then propose to improve data coverage by harmonizing adversarial training with reconstructive generation. The experiments show that our method outperforms the existing state-of-the-art methods in terms of data coverage on both seen and unseen data. We develop an extension that allows explicit control over the minority subgroups that the model should ensure to include, and validate its effectiveness at little compromise from the overall performance on the entire dataset. Code, models, and supplemental videos are available at GitHub."
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "bayesian-fairness-regularization",
+        "sensitivity-analysis-for-fairness",
+        "attribute-removal-fairness-through-unawareness",
+        "fair-adversarial-networks",
+        "synthetic-data-generation"
+      ],
+      "sample_claims": [
+        {
+          "text": "The training dataset maintains balanced representation across demographic groups without compromising the statistical properties needed for model generalization",
+          "domain": "healthcare",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The synthetic data preserves clinical utility whilst obfuscating patient demographic identifiers",
+          "domain": "healthcare",
+          "assuranceGoal": "privacy"
+        },
+        {
+          "text": "The model achieves consistent performance across underrepresented demographic groups that were augmented in the training data",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The generated dataset exhibits statistical parity across protected attributes without relying on direct attribute removal",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The recommendation system's training data contains equitable representation of user demographics through controlled synthetic augmentation",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        }
+      ]
     }
   ],
-  "count": 1
+  "count": 2
 }

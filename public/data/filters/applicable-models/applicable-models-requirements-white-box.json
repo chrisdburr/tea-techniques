@@ -2,7 +2,7 @@
   "tag": {
     "name": "applicable-models/requirements/white-box",
     "slug": "applicable-models-requirements-white-box",
-    "count": 32,
+    "count": 31,
     "category": "applicable-models"
   },
   "techniques": [
@@ -168,12 +168,15 @@
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/explainability/property/efficiency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/tabular",
         "evidence-type/quantitative-metric",
         "expertise-needed/low",
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/metric",
         "applicable-models/architecture/linear-models",
         "applicable-models/paradigm/parametric",
@@ -246,7 +249,8 @@
         "permutation-importance",
         "mean-decrease-impurity",
         "shapley-additive-explanations",
-        "generalized-additive-models"
+        "generalized-additive-models",
+        "ridge-regression-surrogates"
       ],
       "sample_claims": [
         {
@@ -865,7 +869,11 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/fairness/group",
+        "fairness-approach/group",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use/auditing"
       ],
       "example_use_cases": [
         {
@@ -967,7 +975,9 @@
         "integrated-gradients",
         "gradient-saliency",
         "occlusion-sensitivity",
-        "local-interpretable-model-agnostic-explanations"
+        "local-interpretable-model-agnostic-explanations",
+        "layer-wise-relevance-propagation",
+        "concept-activation-vectors"
       ],
       "sample_claims": [
         {
@@ -1566,6 +1576,7 @@
       "computational_cost_rating": 3,
       "related_techniques": [
         "fair-adversarial-networks",
+        "multi-accuracy-boosting",
         "reweighing",
         "equalised-odds-post-processing",
         "threshold-optimiser"
@@ -1770,158 +1781,6 @@
       ]
     },
     {
-      "slug": "homomorphic-encryption",
-      "name": "Homomorphic Encryption",
-      "description": "Homomorphic encryption allows computation on encrypted data without decrypting it first, producing encrypted results that, when decrypted, match the results of performing the same operations on the plaintext. This enables secure outsourced computation where sensitive data remains encrypted throughout processing. By allowing ML operations on encrypted data, it provides strong privacy guarantees for applications involving highly sensitive information.",
-      "assurance_goals": [
-        "Privacy",
-        "Safety",
-        "Transparency",
-        "Security"
-      ],
-      "tags": [
-        "applicable-models/architecture/linear-models",
-        "applicable-models/architecture/neural-networks/feedforward",
-        "applicable-models/paradigm/discriminative",
-        "applicable-models/paradigm/parametric",
-        "applicable-models/requirements/differentiable",
-        "applicable-models/requirements/white-box",
-        "assurance-goal-category/privacy",
-        "assurance-goal-category/privacy/formal-guarantee",
-        "assurance-goal-category/safety",
-        "assurance-goal-category/transparency",
-        "data-requirements/no-special-requirements",
-        "data-type/any",
-        "evidence-type/privacy-guarantee",
-        "evidence-type/quantitative-metric",
-        "expertise-needed/cryptography",
-        "expertise-needed/ml-engineering",
-        "lifecycle-stage/model-development",
-        "lifecycle-stage/system-deployment-and-use",
-        "technique-type/algorithmic"
-      ],
-      "example_use_cases": [
-        {
-          "description": "Enabling a cloud-based medical diagnosis service to process encrypted patient data and return encrypted results without the cloud provider ever accessing actual medical information, ensuring complete patient privacy during outsourced computation.",
-          "goal": "Privacy"
-        },
-        {
-          "description": "Securing financial risk assessment computations by allowing banks to jointly analyse encrypted transaction patterns for fraud detection without exposing individual customer data, reducing systemic security risks.",
-          "goal": "Safety"
-        },
-        {
-          "description": "Enabling transparent audit of algorithmic decision-making by allowing regulators to verify model computations on encrypted data, providing accountability whilst protecting the proprietary nature of both the algorithm and the underlying data.",
-          "goal": "Transparency"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "Extremely computationally expensive, often 100-1000x slower than unencrypted computation, making it impractical for real-time applications or large-scale data processing."
-        },
-        {
-          "description": "Limited range of operations supported efficiently, with complex operations like divisions, comparisons, and non-polynomial functions being particularly challenging or impossible to implement."
-        },
-        {
-          "description": "Implementation requires deep cryptographic expertise to avoid security vulnerabilities, choose appropriate parameters, and optimise performance for specific use cases."
-        },
-        {
-          "description": "Memory and storage requirements are significantly higher than traditional computation, as encrypted data typically requires much more space than plaintext equivalents."
-        },
-        {
-          "description": "Current fully homomorphic encryption schemes have practical limitations on computation depth before noise accumulation requires expensive bootstrapping operations to refresh ciphertexts."
-        }
-      ],
-      "resources": [
-        {
-          "title": "concrete-ml",
-          "url": "https://github.com/zama-ai/concrete-ml",
-          "source_type": "software_package",
-          "publication_date": "2022-03-23",
-          "citationKey": "zama-aiConcreteml2022",
-          "abstract": "Concrete ML: Privacy Preserving ML framework using Fully Homomorphic Encryption (FHE), built on top of Concrete, with bindings to traditional ML frameworks."
-        },
-        {
-          "title": "Survey on Fully Homomorphic Encryption, Theory, and Applications",
-          "url": "https://core.ac.uk/download/579858842.pdf",
-          "source_type": "technical_paper",
-          "authors": [
-            "Chiara Marcolla",
-            "Frank H.P. Fitzek",
-            "Marc Manzano",
-            "Najwa Aaraj",
-            "Riccardo Bassoli",
-            "Victor Sucasas"
-          ],
-          "publication_date": "2022-10-06",
-          "citationKey": "marcollaSurveyFullyHomomorphic2022"
-        },
-        {
-          "title": "Welcome to OpenFHE's documentation! — OpenFHE documentation",
-          "url": "https://openfhe-development.readthedocs.io",
-          "source_type": "documentation",
-          "authors": [
-            "Openfhe-development Developers"
-          ],
-          "publication_date": "2023",
-          "citationKey": "openfhe-developmentdevelopersWelcomeOpenFHEsDocumentation2023"
-        },
-        {
-          "title": "Evaluation of Privacy-Preserving Support Vector Machine (SVM) Learning Using Homomorphic Encryption",
-          "url": "https://core.ac.uk/download/656115203.pdf",
-          "source_type": "technical_paper",
-          "authors": [
-            "Ali, Hisham",
-            "Buchanan, William J."
-          ],
-          "publication_date": "2025-01-01",
-          "citationKey": "hishamEvaluationPrivacyPreservingSupport2025"
-        },
-        {
-          "title": "SEAL",
-          "url": "https://github.com/microsoft/SEAL",
-          "source_type": "software_package",
-          "publication_date": "2018-11-09",
-          "citationKey": "microsoftSEAL2018",
-          "abstract": "Microsoft SEAL is an easy-to-use and powerful homomorphic encryption library."
-        }
-      ],
-      "complexity_rating": 5,
-      "computational_cost_rating": 5,
-      "related_techniques": [
-        "differential-privacy",
-        "federated-learning",
-        "synthetic-data-generation",
-        "model-extraction-defence-testing"
-      ],
-      "sample_claims": [
-        {
-          "text": "The cloud-based service processes patient data without the service provider ever accessing the underlying medical information",
-          "domain": "healthcare",
-          "assuranceGoal": "privacy"
-        },
-        {
-          "text": "The system's computational outputs are mathematically guaranteed to match results that would be obtained from unencrypted processing",
-          "domain": "general",
-          "assuranceGoal": "transparency"
-        },
-        {
-          "text": "The financial analysis platform maintains data confidentiality throughout all computational operations performed by third-party infrastructure",
-          "domain": "finance",
-          "assuranceGoal": "security"
-        },
-        {
-          "text": "The collaborative risk assessment system enables multi-party computation without exposing individual institutions' sensitive data to each other or to the computation coordinator",
-          "domain": "finance",
-          "assuranceGoal": "safety"
-        },
-        {
-          "text": "The public sector system allows regulatory oversight of algorithmic decisions whilst protecting both citizen data and proprietary model parameters from disclosure",
-          "domain": "public sector",
-          "assuranceGoal": "transparency"
-        }
-      ]
-    },
-    {
       "slug": "quantile-regression",
       "name": "Quantile Regression",
       "description": "Quantile regression estimates specific percentiles (quantiles) of the target variable rather than just predicting the average outcome. For example, instead of predicting 'average house price = £300,000', it can predict 'there's a 10% chance the price will be below £250,000, 50% chance below £300,000, and 90% chance below £380,000'. This technique reveals how input features affect different parts of the outcome distribution - perhaps property size strongly influences luxury homes (90th percentile) but barely affects budget properties (10th percentile). By capturing the full conditional distribution, quantile regression provides rich uncertainty information and enables robust prediction intervals.",
@@ -1938,14 +1797,18 @@
         "applicable-models/paradigm/supervised",
         "applicable-models/requirements/white-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/prediction-interval",
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
@@ -2040,7 +1903,11 @@
       "related_techniques": [
         "conformal-prediction",
         "bootstrapping",
-        "jackknife-resampling"
+        "jackknife-resampling",
+        "monte-carlo-dropout",
+        "empirical-calibration",
+        "deep-ensembles",
+        "monotonicity-constraints"
       ],
       "sample_claims": [
         {
@@ -2534,7 +2401,9 @@
         "assurance-goal-category/explainability/surrogate-models/global-surrogates",
         "assurance-goal-category/explainability/visualization-methods/feature-relationships",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
         "data-type/tabular",
         "evidence-type/quantitative-metric",
@@ -3128,13 +2997,18 @@
         "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/no-special-requirements",
         "data-type/text",
         "evidence-type/quantitative-metric",
         "evidence-type/visualisation",
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
+        "fairness-approach/group",
+        "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
         "lifecycle-stage/testing",
         "technique-type/algorithmic"
@@ -3221,7 +3095,8 @@
         "prompt-sensitivity-analysis",
         "causal-mediation-analysis-in-language-models",
         "attention-visualisation-in-transformers",
-        "contextual-decomposition"
+        "contextual-decomposition",
+        "shapley-additive-explanations"
       ],
       "sample_claims": [
         {
@@ -3272,6 +3147,7 @@
         "assurance-goal-category/explainability/property/comprehensibility",
         "assurance-goal-category/explainability/representation-analysis/concept-identification",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/transparency",
         "data-requirements/access-to-model-internals",
         "data-type/any",
@@ -3281,8 +3157,11 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/global",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/system-deployment-and-use/auditing",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -3444,7 +3323,9 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/data-minimization",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
         "data-type/any",
@@ -3541,7 +3422,8 @@
         "bayesian-fairness-regularization",
         "sensitivity-analysis-for-fairness",
         "attribute-removal-fairness-through-unawareness",
-        "fair-adversarial-networks"
+        "fair-adversarial-networks",
+        "synthetic-data-generation"
       ],
       "sample_claims": [
         {
@@ -3592,7 +3474,9 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
         "data-type/any",
@@ -3634,6 +3518,9 @@
         },
         {
           "description": "Computational overhead is significant due to training two networks simultaneously, increasing both training time and resource requirements."
+        },
+        {
+          "description": "The adversarial objective only removes dependence on explicitly labelled sensitive attributes; proxy variables that correlate with protected characteristics will remain encoded in learned representations. Extending to intersectional fairness across multiple protected attributes requires separate discriminator components or multi-task adversarial architectures, substantially increasing design complexity and training instability."
         }
       ],
       "resources": [
@@ -3692,7 +3579,9 @@
       "related_techniques": [
         "adaptive-sensitive-reweighting",
         "adversarial-debiasing",
+        "exponentiated-gradient-reduction",
         "fair-transfer-learning",
+        "fairness-gan",
         "meta-fair-classifier"
       ],
       "sample_claims": [
@@ -3743,7 +3632,9 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
         "data-type/tabular",
@@ -3825,7 +3716,8 @@
         "adaptive-sensitive-reweighting",
         "adversarial-debiasing",
         "fair-transfer-learning",
-        "meta-fair-classifier"
+        "meta-fair-classifier",
+        "reweighing"
       ],
       "sample_claims": [
         {
@@ -4020,7 +3912,11 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
         "data-type/any",
@@ -4108,7 +4004,8 @@
         "adaptive-sensitive-reweighting",
         "adversarial-debiasing",
         "fair-transfer-learning",
-        "meta-fair-classifier"
+        "meta-fair-classifier",
+        "reweighing"
       ],
       "sample_claims": [
         {
@@ -4302,11 +4199,18 @@
         "applicable-models/requirements/white-box",
         "applicable-models/paradigm/supervised",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/harmful-behavior-detection",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/safety/monitoring",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "data-type/text",
         "data-requirements/labelled-data",
         "data-requirements/access-to-training-data",
+        "lifecycle-stage/model-development",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
@@ -4407,7 +4311,9 @@
         "agent-goal-misalignment-testing",
         "chain-of-thought-faithfulness-evaluation",
         "jailbreak-resistance-testing",
-        "multimodal-alignment-evaluation"
+        "multimodal-alignment-evaluation",
+        "prompt-robustness-testing",
+        "reward-hacking-detection"
       ],
       "sample_claims": [
         {
@@ -4786,5 +4692,5 @@
       ]
     }
   ],
-  "count": 32
+  "count": 31
 }

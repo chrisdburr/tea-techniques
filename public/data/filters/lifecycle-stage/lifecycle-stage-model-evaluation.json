@@ -2,10 +2,1335 @@
   "tag": {
     "name": "lifecycle-stage/model-evaluation",
     "slug": "lifecycle-stage-model-evaluation",
-    "count": 27,
+    "count": 37,
     "category": "lifecycle-stage"
   },
   "techniques": [
+    {
+      "slug": "coefficient-magnitudes-in-linear-models",
+      "name": "Coefficient Magnitudes (in Linear Models)",
+      "description": "Coefficient Magnitudes assess feature influence in linear models by examining the absolute values of their coefficients. Features with larger absolute coefficients are considered to have a stronger impact on the prediction, while the sign of the coefficient indicates the direction of that influence (positive or negative). This technique provides a straightforward and transparent way to understand the direct linear relationship between each input feature and the model's output.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/model-specific",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/low",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/metric",
+        "applicable-models/architecture/linear-models",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/white-box"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Interpreting which features influence housing price predictions in linear regression, such as identifying that 'number of bedrooms' has a larger positive impact than 'distance to city centre' based on coefficient magnitudes.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Explaining the factors contributing to customer lifetime value (CLV) in a linear model, showing how 'average monthly spend' has a strong positive coefficient, making the model transparent for business stakeholders.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Only valid for linear relationships; it cannot capture complex non-linear patterns or interactions between features."
+        },
+        {
+          "description": "Highly sensitive to feature scaling; features with larger numerical ranges can appear more important even if their true impact is smaller."
+        },
+        {
+          "description": "Can be misleading in the presence of multicollinearity, where correlated features may split importance or have unstable coefficients."
+        },
+        {
+          "description": "Does not imply causation; a strong correlation (large coefficient) does not necessarily mean a causal relationship."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn Linear Models",
+          "url": "https://scikit-learn.org/stable/modules/linear_model.html",
+          "source_type": "documentation",
+          "authors": [
+            "Scikit-learn Developers"
+          ],
+          "publication_date": "2007",
+          "citationKey": "scikit-learndevelopersScikitlearnLinearModels2007"
+        },
+        {
+          "title": "Interpreting Linear Regression Coefficients",
+          "url": "https://statisticsbyjim.com/regression/interpret-coefficients-p-values-regression",
+          "source_type": "tutorial",
+          "authors": [
+            "Jim Frost"
+          ],
+          "publication_date": "2017-04-12",
+          "citationKey": "frostInterpretingLinearRegression2017"
+        },
+        {
+          "title": "statsmodels: Econometric and statistical modeling",
+          "url": "https://www.statsmodels.org/stable/index.html",
+          "source_type": "software_package",
+          "publication_date": "2009",
+          "citationKey": "StatsmodelsEconometricStatistical2009"
+        },
+        {
+          "title": "The Elements of Statistical Learning",
+          "url": "https://hastie.su.domains/ElemStatLearn",
+          "source_type": "technical_paper",
+          "publication_date": "2009",
+          "citationKey": "ElementsStatisticalLearning2009"
+        }
+      ],
+      "complexity_rating": 1,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "permutation-importance",
+        "mean-decrease-impurity",
+        "shapley-additive-explanations",
+        "generalized-additive-models",
+        "ridge-regression-surrogates"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's feature influences are quantifiable through direct examination of their linear coefficients",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The housing price estimator's reliance on specific property attributes is transparent to regulators through standardized coefficient magnitudes",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The clinical risk model's predictive contributions from patient characteristics are directly interpretable from the regression parameters",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The system's feature importance rankings remain consistent when input variables are appropriately scaled",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The crop yield prediction model's dependence on environmental factors is directly measurable through their coefficient values",
+          "domain": "environmental",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
+      "slug": "sobol-indices",
+      "name": "Sobol Indices",
+      "description": "Sobol Indices quantify how much each input feature contributes to the total variance in a model's predictions through global sensitivity analysis. The technique calculates first-order indices (individual feature contributions) and total-order indices (including all interaction effects involving that feature). By systematically sampling the input space and decomposing output variance, Sobol Indices reveal which features drive model uncertainty and which interactions between features are most important for predictions.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness"
+      ],
+      "tags": [
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/causal-analysis/interaction-effects",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/deployment",
+        "technique-type/algorithmic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing a climate prediction model to determine which atmospheric parameters (temperature, humidity, pressure) contribute most to rainfall forecast uncertainty, helping meteorologists understand which measurements need the highest precision.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Evaluating a financial risk model to identify which economic indicators (interest rates, inflation, GDP growth) drive the most variability in portfolio value predictions, enabling better risk management strategies.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Analysing a credit scoring model to quantify how much prediction variance stems from zip code (a potential proxy for race), helping identify features that may cause disparate impact across demographic groups.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive, requiring thousands of model evaluations to achieve stable variance estimates, making it impractical for very slow models."
+        },
+        {
+          "description": "Assumes input features are independently distributed, which can lead to misleading results when features are correlated in real data."
+        },
+        {
+          "description": "Curse of dimensionality makes the technique increasingly difficult and expensive to apply as the number of input features grows beyond 10-20."
+        },
+        {
+          "description": "Requires defining appropriate probability distributions for input features, which may not accurately reflect real-world feature distributions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Sobol Tensor Trains for Global Sensitivity Analysis",
+          "url": "http://arxiv.org/abs/1712.00233v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Rafael Ballester-Ripoll",
+            "Enrique G. Paredes",
+            "Renato Pajarola"
+          ],
+          "publication_date": "2017-12-01",
+          "citationKey": "ballester-ripollSobolTensorTrains2017",
+          "abstract": "Sobol indices are a widespread quantitative measure for variance-based global sensitivity analysis, but computing and utilizing them remains challenging for high-dimensional systems. We propose the tensor train decomposition (TT) as a unified framework for surrogate modeling and global sensitivity analysis via Sobol indices. We first overview several strategies to build a TT surrogate of the unknown true model using either an adaptive sampling strategy or a predefined set of samples. We then introduce and derive the Sobol tensor train, which compactly represents the Sobol indices for all possible joint variable interactions which are infeasible to compute and store explicitly. Our formulation allows efficient aggregation and subselection operations: we are able to obtain related indices (closed, total, and superset indices) at negligible cost. Furthermore, we exploit an existing global optimization procedure within the TT framework for variable selection and model analysis tasks. We demonstrate our algorithms with two analytical engineering models and a parallel computing simulation data set."
+        },
+        {
+          "title": "Sobol indices — UQpy v4.2.0 documentation",
+          "url": "https://uqpyproject.readthedocs.io/en/latest/sensitivity/sobol.html",
+          "source_type": "documentation",
+          "authors": [
+            "Uqpyproject Developers"
+          ],
+          "publication_date": "2017",
+          "citationKey": "uqpyprojectdevelopersSobolIndicesUQpy2017"
+        },
+        {
+          "title": "Sobol Indices to Measure Feature Importance | Towards Data Science",
+          "url": "https://towardsdatascience.com/sobol-indices-to-measure-feature-importance-54cedc3281bc",
+          "source_type": "tutorial",
+          "authors": [
+            "Valentin Catherine"
+          ],
+          "publication_date": "2022-06-20",
+          "citationKey": "catherineSobolIndicesMeasure2022"
+        },
+        {
+          "title": "Basics — SALib's documentation",
+          "url": "https://salib.readthedocs.io/en/latest/user_guide/basics.html",
+          "source_type": "documentation",
+          "authors": [
+            "Salib Developers"
+          ],
+          "publication_date": "2025",
+          "citationKey": "salibdevelopersBasicsSALibsDocumentation2025"
+        },
+        {
+          "title": "UQpy",
+          "url": "https://github.com/SURGroup/UQpy",
+          "source_type": "software_package",
+          "publication_date": "2017-12-01",
+          "citationKey": "surgroupUQpy2017",
+          "abstract": "UQpy (Uncertainty Quantification with python) is a general purpose Python toolbox for modeling uncertainty in physical and mathematical systems."
+        },
+        {
+          "title": "SALib",
+          "url": "https://github.com/SALib/SALib",
+          "source_type": "software_package",
+          "publication_date": "2013-05-30",
+          "citationKey": "salibSALib2013",
+          "abstract": "Sensitivity Analysis Library in Python. Contains Sobol, Morris, FAST, and other methods."
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "permutation-importance",
+        "shapley-additive-explanations",
+        "partial-dependence-plots",
+        "local-interpretable-model-agnostic-explanations"
+      ],
+      "sample_claims": [
+        {
+          "text": "The flood prediction model's output uncertainty is quantifiably attributable to specific atmospheric measurements rather than distributed uniformly across all input features",
+          "domain": "environmental",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The financial risk model's variance decomposition reveals which economic indicators contribute most to prediction uncertainty through both direct effects and interactions with other variables",
+          "domain": "finance",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The credit assessment system's sensitivity to zip code accounts for a quantifiable proportion of total prediction variance that can be compared against variance from financially relevant features",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The autonomous navigation system's steering decisions have identifiable sources of variability traceable to specific sensor inputs and their interactions",
+          "domain": "autonomous systems",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The clinical outcome predictor's total uncertainty can be decomposed into contributions from individual patient characteristics and their joint effects",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
+      "slug": "local-interpretable-model-agnostic-explanations",
+      "name": "Local Interpretable Model-Agnostic Explanations",
+      "description": "LIME (Local Interpretable Model-agnostic Explanations) explains individual predictions by approximating the complex model's behaviour in a small neighbourhood around a specific instance. It works by creating perturbed versions of the input (e.g., removing words from text, changing pixel values in images, or varying feature values), obtaining the model's predictions for these variations, and training a simple interpretable model (typically linear regression) weighted by proximity to the original instance. The coefficients of this local surrogate model reveal which features most influenced the specific prediction.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/surrogate-models/local-surrogates",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/qualitative-report",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Explaining why a specific patient received a high-risk diagnosis by showing which symptoms (fever, blood pressure, age) contributed most to the prediction, helping doctors validate the AI's reasoning.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging a text classifier's misclassification of a movie review by highlighting which words (e.g., sarcastic phrases) confused the model, enabling targeted model improvements.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations to customers about automated decisions in insurance claims, showing which claim features influenced approval or denial to meet regulatory requirements.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Explanations can be unstable due to random sampling, producing different results across multiple runs."
+        },
+        {
+          "description": "The linear surrogate may poorly approximate highly non-linear model behaviour in the local region."
+        },
+        {
+          "description": "Defining the neighbourhood size and perturbation strategy requires careful tuning for each data type."
+        },
+        {
+          "description": "Can be computationally expensive for explaining many instances due to repeated model queries."
+        },
+        {
+          "description": "Assumes features are independent when generating perturbations, producing unrealistic out-of-distribution samples for datasets with correlated features. This can generate misleading attribution scores when inputs share strong correlations (e.g., age and income in credit scoring, comorbidities in clinical data)."
+        }
+      ],
+      "resources": [
+        {
+          "title": "lime",
+          "url": "https://github.com/marcotcr/lime",
+          "source_type": "software_package",
+          "publication_date": "2016-03-15",
+          "citationKey": "marcotcrLime2016",
+          "abstract": "Lime: Explaining the predictions of any machine learning classifier"
+        },
+        {
+          "title": "lime",
+          "url": "https://github.com/thomasp85/lime",
+          "source_type": "software_package",
+          "publication_date": "2017-03-17",
+          "citationKey": "thomasp85Lime2017",
+          "abstract": "Local Interpretable Model-Agnostic Explanations (R port of original Python package)"
+        },
+        {
+          "title": "Local Interpretable Model-Agnostic Explanations (lime) — lime 0.1 ...",
+          "url": "https://lime-ml.readthedocs.io",
+          "source_type": "documentation",
+          "authors": [
+            "Lime-ml Developers"
+          ],
+          "publication_date": "2016",
+          "citationKey": "lime-mldevelopersLocalInterpretableModelAgnostic2016"
+        },
+        {
+          "title": "\"Why Should I Trust You?\": Explaining the Predictions of Any Classifier",
+          "url": "https://arxiv.org/abs/1602.04938",
+          "source_type": "technical_paper",
+          "authors": [
+            "Marco Tulio Ribeiro",
+            "Sameer Singh",
+            "Carlos Guestrin"
+          ],
+          "publication_date": "2016-02-16",
+          "citationKey": "tulioribeiroWhyShouldTrust2016",
+          "abstract": "Despite widespread adoption, machine learning models remain mostly black boxes. Understanding the reasons behind predictions is, however, quite important in assessing trust, which is fundamental if one plans to take action based on a prediction, or when choosing whether to deploy a new model. Such understanding also provides insights into the model, which can be used to transform an untrustworthy model or prediction into a trustworthy one. In this work, we propose LIME, a novel explanation technique that explains the predictions of any classifier in an interpretable and faithful manner, by learning an interpretable model locally around the prediction. We also propose a method to explain models by presenting representative individual predictions and their explanations in a non-redundant way, framing the task as a submodular optimization problem. We demonstrate the flexibility of these methods by explaining different models for text (e.g. random forests) and image classification (e.g. neural networks). We show the utility of explanations via novel experiments, both simulated and with human subjects, on various scenarios that require trust: deciding if one should trust a prediction, choosing between models, improving an untrustworthy classifier, and identifying why a classifier should not be trusted."
+        },
+        {
+          "title": "How to convince your boss to trust your ML/DL models - Towards Data Science",
+          "url": "https://towardsdatascience.com/how-to-convince-your-boss-to-trust-your-ml-dl-models-671f707246a8",
+          "source_type": "tutorial",
+          "authors": [
+            "Gurami Keretchashvili"
+          ],
+          "publication_date": "2022-09-15",
+          "citationKey": "keretchashviliHowConvinceYour2022"
+        },
+        {
+          "title": "Enhanced LIME — ADS 2.6.5 documentation",
+          "url": "https://accelerated-data-science.readthedocs.io/en/v2.6.5/user_guide/model_explainability/lime.html",
+          "source_type": "documentation",
+          "authors": [
+            "Accelerated-data-science Developers"
+          ],
+          "publication_date": "2021",
+          "citationKey": "accelerated-data-sciencedevelopersEnhancedLIMEADS2021"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 3,
+      "acronym": "LIME",
+      "related_techniques": [
+        "shapley-additive-explanations",
+        "anchor",
+        "ridge-regression-surrogates",
+        "partial-dependence-plots",
+        "individual-conditional-expectation-plots",
+        "occlusion-sensitivity",
+        "contrastive-explanation-method",
+        "mean-decrease-impurity",
+        "sobol-indices"
+      ],
+      "sample_claims": [
+        {
+          "text": "The fraud detection system's flagging of individual transactions is attributable to specific transaction features in the local decision context",
+          "domain": "finance",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The medical diagnosis model's predictions for individual patients are interpretable through locally approximated feature contributions",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The autonomous vehicle's object classification decisions are explainable to operators through feature-level analysis of specific detection instances",
+          "domain": "autonomous systems",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The content moderation system provides interpretable explanations for individual moderation decisions without requiring access to model internals",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The environmental monitoring system's anomaly alerts are accompanied by explanations showing which sensor readings contributed to each specific detection",
+          "domain": "environmental",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
+      "slug": "ridge-regression-surrogates",
+      "name": "Ridge Regression Surrogates",
+      "description": "This technique approximates a complex model by training a ridge regression (a linear model with L2 regularisation) on the original model's predictions. The ridge regression serves as a global surrogate that balances fidelity and interpretability, capturing the main linear relationships that the complex model learned whilst ignoring noise due to regularisation. This approach is particularly useful when stakeholders need to understand the overall behaviour of a complex model through transparent linear coefficients.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/structured-output",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Approximating a complex ensemble model used for credit scoring with a ridge regression surrogate to identify the most influential features (income, credit history, debt-to-income ratio) and their linear relationships for regulatory compliance reporting.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating a ridge regression surrogate of a neural network used for medical diagnosis to understand which patient symptoms and biomarkers have the strongest linear predictive relationships with disease outcomes.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating an interpretable approximation of a complex insurance pricing model for regulatory compliance, enabling stakeholders to understand and validate the decision-making process through transparent linear relationships.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Linear approximation may miss important non-linear relationships and interactions captured by the original complex model."
+        },
+        {
+          "description": "Requires a representative dataset to train the surrogate model, which may not be available or may be expensive to generate."
+        },
+        {
+          "description": "Ridge regularisation may oversimplify the model by shrinking coefficients, potentially hiding important but less dominant features."
+        },
+        {
+          "description": "Surrogate fidelity depends on how well linear relationships approximate the original model's behaviour across the entire input space."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn Ridge Regression Documentation",
+          "url": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html",
+          "source_type": "documentation",
+          "authors": [
+            "Scikit-learn Developers"
+          ],
+          "publication_date": "2007",
+          "citationKey": "scikit-learndevelopersScikitlearnRidgeRegression2007"
+        },
+        {
+          "title": "Interpretable Machine Learning: A Guide for Making Black Box Models Explainable",
+          "url": "https://christophm.github.io/interpretable-ml-book/global.html",
+          "source_type": "tutorial",
+          "publication_date": "2019",
+          "citationKey": "InterpretableMachineLearning2019"
+        },
+        {
+          "title": "Interpreting Blackbox Models via Model Extraction",
+          "url": "https://arxiv.org/abs/1705.08504",
+          "source_type": "technical_paper",
+          "authors": [
+            "Osbert Bastani",
+            "Carolyn Kim",
+            "Hamsa Bastani"
+          ],
+          "publication_date": "2017-05-23",
+          "citationKey": "bastaniInterpretingBlackboxModels2017",
+          "abstract": "Interpretability has become incredibly important as machine learning is increasingly used to inform consequential decisions. We propose to construct global explanations of complex, blackbox models in the form of a decision tree approximating the original model---as long as the decision tree is a good approximation, then it mirrors the computation performed by the blackbox model. We devise a novel algorithm for extracting decision tree explanations that actively samples new training points to avoid overfitting. We evaluate our algorithm on a random forest to predict diabetes risk and a learned controller for cart-pole. Compared to several baselines, our decision trees are both substantially more accurate and equally or more interpretable based on a user study. Finally, we describe several insights provided by our interpretations, including a causal issue validated by a physician."
+        },
+        {
+          "title": "Model extraction and defenses on generative adversarial networks",
+          "url": "https://ieeexplore.ieee.org/document/8424633",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yuheng Jia",
+            "Zhuofu Tian",
+            "Mulin Xiong",
+            "Jiaxin Ding"
+          ],
+          "publication_date": "2018-06-20",
+          "citationKey": "jiaModelExtractionDefenses2018"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "local-interpretable-model-agnostic-explanations",
+        "model-distillation",
+        "rulefit",
+        "partial-dependence-plots",
+        "coefficient-magnitudes-in-linear-models"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's global behavior is approximated by a simpler representation that captures dominant linear relationships across all predictions",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The credit scoring model's decision logic can be explained through consistent linear weights applied uniformly across all applicant evaluations",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The diagnostic system's predictions are attributable to weighted combinations of patient features that remain stable across the entire population",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The environmental forecasting model's feature influences are represented through simplified linear coefficients that prioritize robust patterns over noise",
+          "domain": "environmental",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The complex ensemble model's overall decision-making process is captured by an interpretable linear approximation that reveals primary feature contributions",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
+      "slug": "gradient-weighted-class-activation-mapping",
+      "name": "Gradient-weighted Class Activation Mapping",
+      "description": "Grad-CAM creates visual heatmaps showing which regions of an image a convolutional neural network focuses on when making a specific classification. Unlike pixel-level techniques, Grad-CAM produces coarser region-based explanations by using gradients from the predicted class to weight the CNN's final feature maps, then projecting these weighted activations back to create an overlay on the original image. This provides intuitive visual explanations of where the model is 'looking' for evidence of different classes.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/convolutional",
+        "applicable-models/requirements/architecture-specific",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/visualization-methods/activation-maps",
+        "assurance-goal-category/fairness",
+        "data-requirements/access-to-model-internals",
+        "data-type/image",
+        "evidence-type/visualisation",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic",
+        "assurance-goal-category/fairness/group",
+        "fairness-approach/group",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use/auditing"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Validating that a melanoma detection model focuses on the actual skin lesion rather than surrounding healthy skin, medical equipment, or artifacts when making cancer/benign classifications.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging an autonomous vehicle's traffic sign recognition system by visualising whether the model correctly focuses on the sign itself rather than background objects, shadows, or irrelevant visual elements.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Auditing a medical imaging system for racial bias by examining whether diagnostic predictions inappropriately focus on skin tone regions rather than actual pathological features, ensuring equitable healthcare AI deployment.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires access to the CNN's internal feature maps and gradients, limiting use to white-box scenarios."
+        },
+        {
+          "description": "Resolution is constrained by the final convolutional layer's feature map size, producing coarser localisation than pixel-level methods."
+        },
+        {
+          "description": "Only applicable to CNN architectures with clearly defined convolutional layers, not suitable for other neural network types."
+        },
+        {
+          "description": "May highlight regions that correlate with the class but aren't causally important for the model's decision-making process."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Grad-CAM: Visual Explanations from Deep Networks via Gradient-based Localization",
+          "url": "https://arxiv.org/abs/1610.02391",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ramprasaath R. Selvaraju",
+            "Michael Cogswell",
+            "Abhishek Das",
+            "Ramakrishna Vedantam",
+            "Devi Parikh",
+            "Dhruv Batra"
+          ],
+          "publication_date": "2016-10-07",
+          "citationKey": "r.selvarajuGradCAMVisualExplanations2016",
+          "abstract": "We propose a technique for producing \"visual explanations\" for decisions from a large class of CNN-based models, making them more transparent. Our approach - Gradient-weighted Class Activation Mapping (Grad-CAM), uses the gradients of any target concept, flowing into the final convolutional layer to produce a coarse localization map highlighting important regions in the image for predicting the concept. Grad-CAM is applicable to a wide variety of CNN model-families: (1) CNNs with fully-connected layers, (2) CNNs used for structured outputs, (3) CNNs used in tasks with multimodal inputs or reinforcement learning, without any architectural changes or re-training. We combine Grad-CAM with fine-grained visualizations to create a high-resolution class-discriminative visualization and apply it to off-the-shelf image classification, captioning, and visual question answering (VQA) models, including ResNet-based architectures. In the context of image classification models, our visualizations (a) lend insights into their failure modes, (b) are robust to adversarial images, (c) outperform previous methods on localization, (d) are more faithful to the underlying model and (e) help achieve generalization by identifying dataset bias. For captioning and VQA, we show that even non-attention based models can localize inputs. We devise a way to identify important neurons through Grad-CAM and combine it with neuron names to provide textual explanations for model decisions. Finally, we design and conduct human studies to measure if Grad-CAM helps users establish appropriate trust in predictions from models and show that Grad-CAM helps untrained users successfully discern a 'stronger' nodel from a 'weaker' one even when both make identical predictions. Our code is available at https://github.com/ramprs/grad-cam/, along with a demo at http://gradcam.cloudcv.org, and a video at youtu.be/COjUB9Izk6E."
+        },
+        {
+          "title": "pytorch-grad-cam",
+          "url": "https://github.com/jacobgil/pytorch-grad-cam",
+          "source_type": "software_package",
+          "publication_date": "2017-05-31",
+          "citationKey": "jacobgilPytorchgradcam2017",
+          "abstract": "Advanced AI Explainability for computer vision.  Support for CNNs, Vision Transformers, Classification, Object detection, Segmentation, Image similarity and more."
+        },
+        {
+          "title": "Grad-CAM: Visualize class activation maps with Keras, TensorFlow ...",
+          "url": "https://pyimagesearch.com/2020/03/09/grad-cam-visualize-class-activation-maps-with-keras-tensorflow-and-deep-learning",
+          "source_type": "tutorial",
+          "authors": [
+            "Adrian Rosebrock"
+          ],
+          "publication_date": "2020-03-09",
+          "citationKey": "rosebrockGradCAMVisualizeClass2020"
+        },
+        {
+          "title": "grad-cam-pytorch",
+          "url": "https://github.com/kazuto1011/grad-cam-pytorch",
+          "source_type": "software_package",
+          "publication_date": "2017-05-18",
+          "citationKey": "kazuto1011Gradcampytorch2017",
+          "abstract": "PyTorch re-implementation of Grad-CAM (+ vanilla/guided backpropagation, deconvnet, and occlusion sensitivity maps)"
+        },
+        {
+          "title": "A Tutorial on Explainable Image Classification for Dementia Stages Using Convolutional Neural Network and Gradient-weighted Class Activation Mapping",
+          "url": "https://www.semanticscholar.org/paper/8b1139cb06cfe5ba69e2fd05e1450b43df031a02",
+          "source_type": "technical_paper",
+          "authors": [
+            "Kevin Kam Fung Yuen"
+          ],
+          "publication_date": "2024",
+          "citationKey": "kamfungyuenTutorialExplainableImage2024",
+          "abstract": "This paper presents a tutorial of an explainable approach using Convolutional Neural Network (CNN) and Gradient-weighted Class Activation Mapping (Grad-CAM) to classify four progressive dementia stages based on open MRI brain images. The detailed implementation steps are demonstrated with an explanation. Whilst the proposed CNN architecture is demonstrated to achieve more than 99% accuracy for the test dataset, the computational procedure of CNN remains a black box. The visualisation based on Grad-CAM is attempted to explain such very high accuracy and may provide useful information for physicians. Future motivation based on this work is discussed."
+        },
+        {
+          "title": "A Guide to Grad-CAM in Deep Learning - Analytics Vidhya",
+          "url": "https://www.analyticsvidhya.com/blog/2023/12/grad-cam-in-deep-learning",
+          "source_type": "tutorial",
+          "authors": [
+            "Neha Vishwakarma"
+          ],
+          "publication_date": "2023-12-15",
+          "citationKey": "vishwakarmaGuideGradCAMDeep2023"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "acronym": "Grad-CAM",
+      "related_techniques": [
+        "integrated-gradients",
+        "gradient-saliency",
+        "occlusion-sensitivity",
+        "local-interpretable-model-agnostic-explanations",
+        "layer-wise-relevance-propagation",
+        "concept-activation-vectors"
+      ],
+      "sample_claims": [
+        {
+          "text": "The diagnostic model's predictions are grounded in visually identifiable image regions that align with clinical features",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The perception system's object classifications are traceable to specific spatial regions within the visual field",
+          "domain": "autonomous systems",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The medical imaging system's predictions do not disproportionately weight irrelevant visual characteristics across patient groups",
+          "domain": "healthcare",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The environmental monitoring system's land cover classifications are anchored to interpretable spatial patterns in satellite imagery",
+          "domain": "environmental",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The vision model's decision-making process reveals which image regions contribute most strongly to each class prediction",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
+      "slug": "prototype-and-criticism-models",
+      "name": "Prototype and Criticism Models",
+      "description": "Prototype and Criticism Models provide data understanding by identifying two complementary sets of examples: prototypes represent the most typical instances that best summarise common patterns in the data, whilst criticisms are outliers or edge cases that are poorly represented by the prototypes. For example, in a dataset of customer transactions, prototypes might be the most representative buying patterns (frequent small purchases, occasional large purchases), whilst criticisms could be unusual behaviours (bulk buyers, one-time high-value customers). This dual approach reveals both what is normal and what is exceptional, helping understand data coverage and model blind spots.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/paradigm/unsupervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/instance-based/prototypes",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/structured-output",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/global",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Analysing medical imaging datasets to identify prototype scans that represent typical healthy tissue patterns and criticism examples showing rare disease presentations, helping radiologists understand what the model considers 'normal' versus cases requiring special attention.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Evaluating credit scoring models by finding prototype borrowers who represent typical low-risk profiles and criticism cases showing unusual but legitimate financial patterns that the model might misclassify, ensuring fair treatment of edge cases.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Evaluating representation bias in hiring datasets by examining whether prototypes systematically exclude certain demographic groups and criticisms disproportionately represent minorities, revealing data collection inequities.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Selection of prototypes and criticisms is highly dependent on the choice of distance metric or similarity measure, which may not capture all meaningful relationships in the data."
+        },
+        {
+          "description": "Computational complexity can become prohibitive for very large datasets, as the method often requires pairwise comparisons or optimisation over the entire dataset."
+        },
+        {
+          "description": "The number of prototypes and criticisms to select is typically a hyperparameter that requires domain expertise to set appropriately."
+        },
+        {
+          "description": "Results may not generalise well if the training data distribution differs significantly from the deployment data distribution."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Examples are not Enough, Learn to Criticize! Criticism for Interpretability",
+          "url": "https://proceedings.neurips.cc/paper/2016/file/5680522b8e2bb01943234bce7bf84534-Paper.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Been Kim",
+            "Rajiv Khanna",
+            "Oluwasanmi O. Koyejo"
+          ],
+          "publication_date": "2016-12-05",
+          "citationKey": "kimExamplesAreNot2016"
+        },
+        {
+          "title": "alibi",
+          "url": "https://github.com/SeldonIO/alibi",
+          "source_type": "software_package",
+          "publication_date": "2019-02-26",
+          "citationKey": "seldonioAlibi2019",
+          "abstract": "Algorithms for explaining machine learning models"
+        },
+        {
+          "title": "Prototype selection for interpretable classification",
+          "url": "http://arxiv.org/abs/1202.5933v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Jacob Bien",
+            "Robert Tibshirani"
+          ],
+          "publication_date": "2012-02-27",
+          "citationKey": "bienPrototypeSelectionInterpretable2012",
+          "abstract": "Prototype methods seek a minimal subset of samples that can serve as a distillation or condensed view of a data set. As the size of modern data sets grows, being able to present a domain specialist with a short list of \"representative\" samples chosen from the data set is of increasing interpretative value. While much recent statistical research has been focused on producing sparse-in-the-variables methods, this paper aims at achieving sparsity in the samples. We discuss a method for selecting prototypes in the classification setting (in which the samples fall into known discrete categories). Our method of focus is derived from three basic properties that we believe a good prototype set should satisfy. This intuition is translated into a set cover optimization problem, which we solve approximately using standard approaches. While prototype selection is usually viewed as purely a means toward building an efficient classifier, in this paper we emphasize the inherent value of having a set of prototypical elements. That said, by using the nearest-neighbor rule on the set of prototypes, we can of course discuss our method as a classifier as well."
+        },
+        {
+          "title": "Alibi Explain Documentation",
+          "url": "https://docs.seldon.io/projects/alibi/en/stable",
+          "source_type": "documentation",
+          "publication_date": "2019",
+          "citationKey": "AlibiExplainDocumentation2019"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "influence-functions",
+        "t-sne",
+        "umap",
+        "contrastive-explanation-method",
+        "concept-activation-vectors",
+        "neuron-activation-analysis",
+        "factor-analysis"
+      ],
+      "sample_claims": [
+        {
+          "text": "The medical imaging dataset's coverage is characterised by both typical tissue patterns and rare pathological presentations requiring specialised attention",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The credit model's validation set includes both representative borrower profiles and exceptional cases that deviate from standard lending patterns",
+          "domain": "finance",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The environmental monitoring system's training data reflects both common measurement conditions and unusual scenarios that test operational boundaries",
+          "domain": "environmental",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The hiring dataset's representative candidates do not systematically exclude particular demographic groups whilst edge cases disproportionately represent minorities",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The system's performance on atypical cases is documented alongside its behaviour on prototypical examples",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        }
+      ]
+    },
+    {
+      "slug": "anchor",
+      "name": "ANCHOR",
+      "acronym": "ANCHOR",
+      "description": "ANCHOR generates high-precision if-then rules that explain individual predictions by identifying the minimal set of feature conditions that guarantee a specific prediction with high confidence. It searches for 'anchor' conditions (e.g., 'age > 30 AND income < £50k') that ensure the model gives the same prediction at least 95% of the time when those conditions are met. This creates human-readable rules that users can trust as sufficient conditions for understanding why a particular decision was made.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/surrogate-models/rule-extraction",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Explaining loan application decisions with rules like 'IF credit_score > 650 AND debt_ratio < 0.4 THEN approval = 95% likely', giving applicants clear, actionable conditions they can understand and potentially improve.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Generating diagnostic rules for medical predictions such as 'IF fever > 38.5°C AND white_blood_cells > 12,000 THEN infection = 92% likely', helping clinicians validate automated diagnoses with trusted clinical indicators.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating transparent hiring decisions with rules like 'IF experience >= 3_years AND degree = relevant THEN hire = 89% likely', providing clear justification for recruitment decisions that can be audited for fairness.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Limited to local explanations for individual instances, cannot provide global insights about overall model behaviour."
+        },
+        {
+          "description": "Requires discretisation of continuous features, which can lose important nuanced information and create arbitrary thresholds."
+        },
+        {
+          "description": "May fail to find suitable anchor rules if precision requirements are too strict or if the prediction space is highly complex."
+        },
+        {
+          "description": "Computationally expensive as it requires extensive sampling to validate rule precision, especially for high-dimensional data."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Anchors: High-Precision Model-Agnostic Explanations",
+          "url": "https://homes.cs.washington.edu/~marcotcr/aaai18.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Marco Tulio Ribeiro",
+            "Sameer Singh",
+            "Carlos Guestrin"
+          ],
+          "publication_date": "2018-01-01",
+          "citationKey": "ribeiroAnchorsHighPrecisionModelAgnostic2018"
+        },
+        {
+          "title": "anchor",
+          "url": "https://github.com/marcotcr/anchor",
+          "source_type": "software_package",
+          "publication_date": "2018-02-02",
+          "citationKey": "marcotcrAnchor2018",
+          "abstract": "Code for \"High-Precision Model-Agnostic Explanations\" paper"
+        },
+        {
+          "title": "alibi",
+          "url": "https://github.com/SeldonIO/alibi",
+          "source_type": "software_package",
+          "publication_date": "2019-02-26",
+          "citationKey": "seldonioAlibi2019",
+          "abstract": "Algorithms for explaining machine learning models"
+        },
+        {
+          "title": "Interpretable Machine Learning - Anchors",
+          "url": "https://christophm.github.io/interpretable-ml-book/anchors.html",
+          "source_type": "documentation",
+          "publication_date": "2019",
+          "citationKey": "InterpretableMachineLearning2019b"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "local-interpretable-model-agnostic-explanations",
+        "shapley-additive-explanations",
+        "rulefit",
+        "ridge-regression-surrogates",
+        "contrastive-explanation-method"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's individual predictions are supported by verifiable sufficient conditions with quantified confidence guarantees",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The lending system provides loan applicants with specific, actionable conditions that guarantee approval with stated probability",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The diagnostic system's recommendations are justified by minimal sets of clinical indicators that ensure the decision under specified conditions",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The hiring decision criteria are documented as precise if-then rules with empirically validated confidence bounds",
+          "domain": "public sector",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The fraud detection system identifies sufficient feature combinations that reliably predict flagged transactions with quantified precision",
+          "domain": "finance",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
+      "slug": "permutation-tests",
+      "name": "Permutation Tests",
+      "description": "Permutation tests assess the statistical significance of observed results (such as model accuracy, feature importance, or group differences) by comparing them to what would occur purely by chance. The technique randomly shuffles labels or data thousands of times, recalculating the metric of interest each time to build an empirical null distribution. If the actual observed result falls in the extreme tail of this distribution (typically beyond the 95th or 99th percentile), it provides strong evidence that the relationship is genuine rather than due to random chance, without requiring parametric assumptions about data distributions.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Validating feature importance in medical diagnosis models by permuting each feature 10,000 times to ensure that identified risk factors (e.g., blood pressure, cholesterol) have statistically significant predictive power beyond random chance.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Testing whether observed differences in loan approval rates between demographic groups are statistically significant by permuting group labels and calculating the approval rate difference distribution under the null hypothesis of no discrimination.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Verifying that a model's claimed 95% accuracy on test data is genuinely better than random guessing by permuting labels 5,000 times and confirming the actual accuracy falls beyond the 99th percentile of the null distribution.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive as it requires thousands of model evaluations or metric calculations, scaling poorly with dataset size and model complexity."
+        },
+        {
+          "description": "Requires many permutations (typically 5,000-10,000) to achieve reliable p-values for strict significance thresholds like p < 0.01."
+        },
+        {
+          "description": "Assumes exchangeability of observations under the null hypothesis, which may be violated in time series or hierarchical data structures."
+        },
+        {
+          "description": "Cannot be easily parallelised for some metrics that require global model retraining, limiting scalability for complex machine learning pipelines."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Permutation Tests for Classification",
+          "url": "https://core.ac.uk/download/4383831.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Golland, Polina",
+            "Mukherjee, Sayan",
+            "Panchenko, Dmitry"
+          ],
+          "publication_date": "2003-01-01",
+          "citationKey": "polinaPermutationTestsClassification2003"
+        },
+        {
+          "title": "How to use Permutation Tests | Towards Data Science",
+          "url": "https://towardsdatascience.com/how-to-use-permutation-tests-bacc79f45749",
+          "source_type": "tutorial",
+          "authors": [
+            "Michael Berk"
+          ],
+          "publication_date": "2021-09-21",
+          "citationKey": "berkHowUsePermutation2021"
+        },
+        {
+          "title": "Permutation test in R | Towards Data Science",
+          "url": "https://towardsdatascience.com/permutation-test-in-r-77d551a9f891",
+          "source_type": "tutorial",
+          "authors": [
+            "Serafim Petrov"
+          ],
+          "publication_date": "2021-03-15",
+          "citationKey": "petrovPermutationTestData2021"
+        },
+        {
+          "title": "The Exchangeability Assumption for Permutation Tests of Multiple Regression Models: Implications for Statistics and Data Science Educators",
+          "url": "http://arxiv.org/abs/2406.07756v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Johanna Hardin",
+            "Lauren Quesada",
+            "Julie Ye",
+            "Nicholas J. Horton"
+          ],
+          "publication_date": "2024-06-11",
+          "citationKey": "hardinExchangeabilityAssumptionPermutation2024",
+          "abstract": "Permutation tests are a powerful and flexible approach to inference via resampling. As computational methods become more ubiquitous in the statistics curriculum, use of permutation tests has become more tractable. At the heart of the permutation approach is the exchangeability assumption, which determines the appropriate null sampling distribution. We explore the exchangeability assumption in the context of permutation tests for multiple linear regression models, including settings where the assumption is not tenable. Various permutation schemes for the multiple linear regression setting have been proposed and assessed in the literature. As has been demonstrated previously, in most settings, the choice of how to permute a multiple linear regression model does not materially change inferential conclusions with respect to Type I errors. However, some violations (e.g., when clustering is not appropriately accounted for) lead to issues with Type I error rates. Regardless, we believe that understanding (1) exchangeability in the multiple linear regression setting and also (2) how it relates to the null hypothesis of interest is valuable. We close with pedagogical recommendations for instructors who want to bring multiple linear regression permutation inference into their classroom as a way to deepen student understanding of resampling-based inference."
+        },
+        {
+          "title": "scikit-learn permutation_importance",
+          "url": "https://scikit-learn.org/stable/modules/permutation_importance.html",
+          "source_type": "documentation",
+          "authors": [
+            "Scikit-learn Developers"
+          ],
+          "publication_date": "2007",
+          "citationKey": "scikit-learndevelopersScikitlearnPermutation_importance2007"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "permutation-importance",
+        "bootstrapping",
+        "cross-validation",
+        "jackknife-resampling",
+        "shapley-additive-explanations",
+        "sobol-indices"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's performance advantage over baseline methods is statistically robust to random data partitioning",
+          "domain": "general",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The observed differences in loan approval rates between demographic groups exceed what would occur by chance alone",
+          "domain": "finance",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The identified risk factors maintain their predictive strength independent of incidental correlations in the training data",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The system's feature importance rankings reflect genuine signal rather than spurious patterns in the observed sample",
+          "domain": "environmental",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
+      "slug": "sensitivity-analysis-for-fairness",
+      "name": "Sensitivity Analysis for Fairness",
+      "description": "Sensitivity Analysis for Fairness systematically evaluates how model predictions change when sensitive attributes or their proxies are perturbed whilst holding other factors constant. The technique involves creating counterfactual instances by modifying potentially discriminatory features (race, gender, age) or their correlates (zip code, names, education institutions) and measuring the resulting prediction differences. This controlled perturbation approach quantifies the degree to which protected characteristics influence model decisions, helping detect both direct discrimination and indirect bias through proxy variables even when sensitive attributes are not explicitly used as model inputs.",
+      "assurance_goals": [
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "data-requirements/no-special-requirements",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/statistics",
+        "explanatory-scope/local",
+        "fairness-approach/group",
+        "lifecycle-stage/deployment",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing whether a lending model's decisions change significantly when only the applicant's zip code (which may correlate with race) is altered, while keeping all other factors constant.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Evaluating a recruitment algorithm by systematically changing candidate names from stereotypically male to female names (whilst keeping qualifications identical) to measure whether gender bias affects hiring recommendations, revealing discrimination through name-based proxies.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Assessing a healthcare resource allocation model by varying patient zip codes across different socioeconomic areas to determine whether geographic proxies for race and income inappropriately influence treatment recommendations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires domain expertise to identify relevant proxy variables for sensitive attributes, which may not be obvious or comprehensive."
+        },
+        {
+          "description": "Computationally intensive for complex models when testing many feature combinations or perturbation ranges."
+        },
+        {
+          "description": "Choice of perturbation ranges and comparison points involves subjective decisions that can significantly affect results and conclusions."
+        },
+        {
+          "description": "May miss subtle or interaction-based forms of discrimination that only manifest under specific combinations of features."
+        }
+      ],
+      "resources": [
+        {
+          "title": "The Fragility of Fairness: Causal Sensitivity Analysis for Fair Machine Learning",
+          "url": "http://arxiv.org/abs/2410.09600v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Jake Fawkes",
+            "Nic Fishman",
+            "Mel Andrews",
+            "Zachary C. Lipton"
+          ],
+          "publication_date": "2024-10-12",
+          "citationKey": "fawkesFragilityFairnessCausal2024",
+          "abstract": "Fairness metrics are a core tool in the fair machine learning literature (FairML), used to determine that ML models are, in some sense, \"fair\". Real-world data, however, are typically plagued by various measurement biases and other violated assumptions, which can render fairness assessments meaningless. We adapt tools from causal sensitivity analysis to the FairML context, providing a general framework which (1) accommodates effectively any combination of fairness metric and bias that can be posed in the \"oblivious setting\"; (2) allows researchers to investigate combinations of biases, resulting in non-linear sensitivity; and (3) enables flexible encoding of domain-specific constraints and assumptions. Employing this framework, we analyze the sensitivity of the most common parity metrics under 3 varieties of classifier across 14 canonical fairness datasets. Our analysis reveals the striking fragility of fairness assessments to even minor dataset biases. We show that causal sensitivity analysis provides a powerful and necessary toolkit for gauging the informativeness of parity metric evaluations. Our repository is available here: https://github.com/Jakefawkes/fragile_fair."
+        },
+        {
+          "title": "Fair SA: Sensitivity Analysis for Fairness in Face Recognition",
+          "url": "http://arxiv.org/abs/2202.03586v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Aparna R. Joshi",
+            "Xavier Suau",
+            "Nivedha Sivakumar",
+            "Luca Zappella",
+            "Nicholas Apostoloff"
+          ],
+          "publication_date": "2022-02-08",
+          "citationKey": "r.joshiFairSASensitivity2022",
+          "abstract": "As the use of deep learning in high impact domains becomes ubiquitous, it is increasingly important to assess the resilience of models. One such high impact domain is that of face recognition, with real world applications involving images affected by various degradations, such as motion blur or high exposure. Moreover, images captured across different attributes, such as gender and race, can also challenge the robustness of a face recognition algorithm. While traditional summary statistics suggest that the aggregate performance of face recognition models has continued to improve, these metrics do not directly measure the robustness or fairness of the models. Visual Psychophysics Sensitivity Analysis (VPSA) [1] provides a way to pinpoint the individual causes of failure by way of introducing incremental perturbations in the data. However, perturbations may affect subgroups differently. In this paper, we propose a new fairness evaluation based on robustness in the form of a generic framework that extends VPSA. With this framework, we can analyze the ability of a model to perform fairly for different subgroups of a population affected by perturbations, and pinpoint the exact failure modes for a subgroup by measuring targeted robustness. With the increasing focus on the fairness of models, we use face recognition as an example application of our framework and propose to compactly visualize the fairness analysis of a model via AUC matrices. We analyze the performance of common face recognition models and empirically show that certain subgroups are at a disadvantage when images are perturbed, thereby uncovering trends that were not visible using the model's performance on subgroups without perturbations."
+        },
+        {
+          "title": "fairlearn",
+          "url": "https://github.com/fairlearn/fairlearn",
+          "source_type": "software_package",
+          "publication_date": "2018-05-15",
+          "citationKey": "fairlearnFairlearn2018",
+          "abstract": "A Python package to assess and improve fairness of machine learning models."
+        },
+        {
+          "title": "aequitas",
+          "url": "https://github.com/dssg/aequitas",
+          "source_type": "software_package",
+          "publication_date": "2018-02-13",
+          "citationKey": "dssgAequitas2018",
+          "abstract": "Bias Auditing & Fair ML Toolkit"
+        },
+        {
+          "title": "User Guide - Fairlearn documentation",
+          "url": "https://fairlearn.org/v0.13/user_guide/index.html",
+          "source_type": "documentation",
+          "authors": [
+            "Fairlearn Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "fairlearndevelopersUserGuideFairlearn2018"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "path-specific-counterfactual-fairness-assessment",
+        "counterfactual-fairness-assessment",
+        "average-odds-difference",
+        "demographic-parity-assessment"
+      ],
+      "sample_claims": [
+        {
+          "text": "The hiring system's offer decisions remain stable when candidate demographic proxies such as postal code or university name are systematically varied",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The loan approval model's interest rate assignments do not shift meaningfully when applicant names associated with different ethnic backgrounds are substituted",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The clinical risk stratification tool's recommendations are insensitive to variations in patient geographic location that correlate with socioeconomic status",
+          "domain": "healthcare",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The vehicle insurance pricing algorithm produces consistent premium estimates when zip codes within similar risk profiles but different demographic compositions are interchanged",
+          "domain": "autonomous systems",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The model's predictions do not exhibit systematic dependence on proxy variables that indirectly encode protected characteristics",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        }
+      ]
+    },
     {
       "slug": "bootstrapping",
       "name": "Bootstrapping",
@@ -706,6 +2031,184 @@
           "text": "The system's harmful output generation is attributable to specific intervening mechanisms that can be isolated and addressed",
           "domain": "general",
           "assuranceGoal": "safety"
+        }
+      ]
+    },
+    {
+      "slug": "concept-activation-vectors",
+      "name": "Concept Activation Vectors",
+      "description": "Concept Activation Vectors (CAVs), also known as Testing with Concept Activation Vectors (TCAV), identify mathematical directions in neural network representation space that correspond to human-understandable concepts such as 'stripes', 'young', or 'medical equipment'. The technique works by finding linear directions that separate activations of concept examples from non-concept examples, then measuring how much these concept directions influence the model's predictions. This provides quantitative answers to questions like 'How much does the concept of youth affect this model's hiring decisions?' enabling systematic bias detection and model understanding.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/causality",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/representation-analysis/concept-identification",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualisation",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/global",
+        "explanatory-scope/local",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use/auditing",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Auditing a medical imaging model to verify it focuses on diagnostic features (like 'tumour characteristics') rather than irrelevant concepts (like 'scanner type' or 'patient positioning') when classifying chest X-rays, ensuring clinical decisions rely on medically relevant information.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Testing whether a hiring algorithm's resume screening decisions are influenced by concepts related to protected characteristics such as 'gender-associated names', 'prestigious universities', or 'employment gaps', enabling systematic bias detection and compliance verification.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Providing regulatory-compliant explanations for financial lending decisions by quantifying how concepts like 'debt-to-income ratio', 'employment stability', and 'credit history length' influence loan approval models, with precise sensitivity scores for audit documentation.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires clearly defined concept examples and non-concept examples, which can be challenging to obtain for abstract or subjective concepts."
+        },
+        {
+          "description": "Assumes that meaningful concept directions exist as linear separable directions in the model's internal representation space, which may not hold for all concepts."
+        },
+        {
+          "description": "Results depend heavily on which network layer is examined, as different layers capture different levels of abstraction and concept representation."
+        },
+        {
+          "description": "Computational cost grows significantly with model size and number of concepts tested, though recent advances like FastCAV address this limitation."
+        },
+        {
+          "description": "Interpretation requires domain expertise to define meaningful concepts and understand the significance of sensitivity scores in practical contexts."
+        }
+      ],
+      "resources": [
+        {
+          "title": "FastCAV: Efficient Computation of Concept Activation Vectors for Explaining Deep Neural Networks",
+          "url": "http://arxiv.org/abs/2505.17883v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Laines Schmalwasser",
+            "Niklas Penzel",
+            "Joachim Denzler",
+            "Julia Niebling"
+          ],
+          "publication_date": "2025-05-23",
+          "citationKey": "schmalwasserFastCAVEfficientComputation2025",
+          "abstract": "Concepts such as objects, patterns, and shapes are how humans understand the world. Building on this intuition, concept-based explainability methods aim to study representations learned by deep neural networks in relation to human-understandable concepts. Here, Concept Activation Vectors (CAVs) are an important tool and can identify whether a model learned a concept or not. However, the computational cost and time requirements of existing CAV computation pose a significant challenge, particularly in large-scale, high-dimensional architectures. To address this limitation, we introduce FastCAV, a novel approach that accelerates the extraction of CAVs by up to 63.6x (on average 46.4x). We provide a theoretical foundation for our approach and give concrete assumptions under which it is equivalent to established SVM-based methods. Our empirical results demonstrate that CAVs calculated with FastCAV maintain similar performance while being more efficient and stable. In downstream applications, i.e., concept-based explanation methods, we show that FastCAV can act as a replacement leading to equivalent insights. Hence, our approach enables previously infeasible investigations of deep models, which we demonstrate by tracking the evolution of concepts during model training."
+        },
+        {
+          "title": "Concept Distillation: Leveraging Human-Centered Explanations for Model Improvement",
+          "url": "http://arxiv.org/abs/2311.15303v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Avani Gupta",
+            "Saurabh Saini",
+            "P J Narayanan"
+          ],
+          "publication_date": "2023-11-26",
+          "citationKey": "guptaConceptDistillationLeveraging2023",
+          "abstract": "Humans use abstract concepts for understanding instead of hard features. Recent interpretability research has focused on human-centered concept explanations of neural networks. Concept Activation Vectors (CAVs) estimate a model's sensitivity and possible biases to a given concept. In this paper, we extend CAVs from post-hoc analysis to ante-hoc training in order to reduce model bias through fine-tuning using an additional Concept Loss. Concepts were defined on the final layer of the network in the past. We generalize it to intermediate layers using class prototypes. This facilitates class learning in the last convolution layer, which is known to be most informative. We also introduce Concept Distillation to create richer concepts using a pre-trained knowledgeable model as the teacher. Our method can sensitize or desensitize a model towards concepts. We show applications of concept-sensitive training to debias several classification problems. We also use concepts to induce prior knowledge into IID, a reconstruction problem. Concept-sensitive training can improve model interpretability, reduce biases, and induce prior knowledge. Please visit https://avani17101.github.io/Concept-Distilllation/ for code and more details."
+        },
+        {
+          "title": "Post-Hoc Concept Disentanglement: From Correlated to Isolated Concept Representations",
+          "url": "http://arxiv.org/abs/2503.05522v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Eren Erogullari",
+            "Sebastian Lapuschkin",
+            "Wojciech Samek",
+            "Frederik Pahde"
+          ],
+          "publication_date": "2025-03-07",
+          "citationKey": "erogullariPostHocConceptDisentanglement2025",
+          "abstract": "Concept Activation Vectors (CAVs) are widely used to model human-understandable concepts as directions within the latent space of neural networks. They are trained by identifying directions from the activations of concept samples to those of non-concept samples. However, this method often produces similar, non-orthogonal directions for correlated concepts, such as \"beard\" and \"necktie\" within the CelebA dataset, which frequently co-occur in images of men. This entanglement complicates the interpretation of concepts in isolation and can lead to undesired effects in CAV applications, such as activation steering. To address this issue, we introduce a post-hoc concept disentanglement method that employs a non-orthogonality loss, facilitating the identification of orthogonal concept directions while preserving directional correctness. We evaluate our approach with real-world and controlled correlated concepts in CelebA and a synthetic FunnyBirds dataset with VGG16 and ResNet18 architectures. We further demonstrate the superiority of orthogonalized concept representations in activation steering tasks, allowing (1) the insertion of isolated concepts into input images through generative models and (2) the removal of concepts for effective shortcut suppression with reduced impact on correlated concepts in comparison to baseline CAVs."
+        },
+        {
+          "title": "Concept Gradient: Concept-based Interpretation Without Linear Assumption",
+          "url": "http://arxiv.org/abs/2208.14966v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andrew Bai",
+            "Chih-Kuan Yeh",
+            "Pradeep Ravikumar",
+            "Neil Y. C. Lin",
+            "Cho-Jui Hsieh"
+          ],
+          "publication_date": "2022-08-31",
+          "citationKey": "baiConceptGradientConceptbased2022",
+          "abstract": "Concept-based interpretations of black-box models are often more intuitive for humans to understand. The most widely adopted approach for concept-based interpretation is Concept Activation Vector (CAV). CAV relies on learning a linear relation between some latent representation of a given model and concepts. The linear separability is usually implicitly assumed but does not hold true in general. In this work, we started from the original intent of concept-based interpretation and proposed Concept Gradient (CG), extending concept-based interpretation beyond linear concept functions. We showed that for a general (potentially non-linear) concept, we can mathematically evaluate how a small change of concept affecting the model's prediction, which leads to an extension of gradient-based interpretation to the concept space. We demonstrated empirically that CG outperforms CAV in both toy examples and real world datasets."
+        },
+        {
+          "title": "SurroCBM: Concept Bottleneck Surrogate Models for Generative Post-hoc Explanation",
+          "url": "http://arxiv.org/abs/2310.07698v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Bo Pan",
+            "Zhenke Liu",
+            "Yifei Zhang",
+            "Liang Zhao"
+          ],
+          "publication_date": "2023-10-11",
+          "citationKey": "panSurroCBMConceptBottleneck2023",
+          "abstract": "Explainable AI seeks to bring light to the decision-making processes of black-box models. Traditional saliency-based methods, while highlighting influential data segments, often lack semantic understanding. Recent advancements, such as Concept Activation Vectors (CAVs) and Concept Bottleneck Models (CBMs), offer concept-based explanations but necessitate human-defined concepts. However, human-annotated concepts are expensive to attain. This paper introduces the Concept Bottleneck Surrogate Models (SurroCBM), a novel framework that aims to explain the black-box models with automatically discovered concepts. SurroCBM identifies shared and unique concepts across various black-box models and employs an explainable surrogate model for post-hoc explanations. An effective training strategy using self-generated data is proposed to enhance explanation quality continuously. Through extensive experiments, we demonstrate the efficacy of SurroCBM in concept discovery and explanation, underscoring its potential in advancing the field of explainable AI."
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "acronym": "CAVs",
+      "related_techniques": [
+        "neuron-activation-analysis",
+        "integrated-gradients",
+        "gradient-saliency",
+        "prototype-and-criticism-models"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's classification decisions are quantifiably linked to human-interpretable concepts rather than opaque internal representations",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The hiring system's candidate evaluations are demonstrably independent of concepts associated with protected characteristics",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The diagnostic model's sensitivity to clinically relevant concepts is documented with quantitative influence scores",
+          "domain": "healthcare",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The credit assessment model's reliance on demographic-related concepts is measurable and within acceptable bounds",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The vision system's object recognition depends on semantically meaningful visual concepts aligned with domain expertise",
+          "domain": "autonomous systems",
+          "assuranceGoal": "explainability"
         }
       ]
     },
@@ -1420,11 +2923,18 @@
         "applicable-models/requirements/white-box",
         "applicable-models/paradigm/supervised",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/harmful-behavior-detection",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/safety/monitoring",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "data-type/text",
         "data-requirements/labelled-data",
         "data-requirements/access-to-training-data",
+        "lifecycle-stage/model-development",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
@@ -1525,7 +3035,9 @@
         "agent-goal-misalignment-testing",
         "chain-of-thought-faithfulness-evaluation",
         "jailbreak-resistance-testing",
-        "multimodal-alignment-evaluation"
+        "multimodal-alignment-evaluation",
+        "prompt-robustness-testing",
+        "reward-hacking-detection"
       ],
       "sample_claims": [
         {
@@ -1900,10 +3412,12 @@
         "applicable-models/architecture/neural-networks/convolutional",
         "applicable-models/requirements/model-internals",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/explains/internal-mechanisms",
         "assurance-goal-category/explainability/visualization-methods/activation-maps",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-type/text",
         "data-type/image",
         "data-requirements/access-to-training-data",
@@ -1917,7 +3431,8 @@
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
         "explanatory-scope/global",
-        "evidence-type/fairness-metric"
+        "evidence-type/fairness-metric",
+        "fairness-approach/group"
       ],
       "example_use_cases": [
         {
@@ -2026,7 +3541,8 @@
         "attention-visualisation-in-transformers",
         "concept-activation-vectors",
         "chain-of-thought-faithfulness-evaluation",
-        "few-shot-fairness-evaluation"
+        "few-shot-fairness-evaluation",
+        "toxicity-detection"
       ],
       "sample_claims": [
         {
@@ -2210,6 +3726,7 @@
         "applicable-models/architecture/neural-networks/transformer/llm",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/harmful-behavior-detection",
         "assurance-goal-category/security",
         "assurance-goal-category/reliability",
         "data-type/text",
@@ -2329,7 +3846,12 @@
         "prompt-injection-testing",
         "agent-goal-misalignment-testing",
         "prompt-sensitivity-analysis",
-        "adversarial-training-evaluation"
+        "adversarial-training-evaluation",
+        "red-teaming",
+        "constitutional-ai-evaluation",
+        "multi-agent-system-testing",
+        "multimodal-alignment-evaluation",
+        "model-watermarking-and-theft-detection"
       ],
       "sample_claims": [
         {
@@ -3683,7 +5205,12 @@
         "lifecycle-stage/post-deployment",
         "lifecycle-stage/system-deployment/system-use-and-monitoring",
         "technique-type/testing",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/security/adversarial-robustness",
+        "assurance-goal-category/safety/harmful-behavior-detection",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/reliability/robustness"
       ],
       "example_use_cases": [
         {
@@ -3797,7 +5324,11 @@
         "agent-goal-misalignment-testing",
         "jailbreak-resistance-testing",
         "chain-of-thought-faithfulness-evaluation",
-        "toxicity-detection"
+        "toxicity-detection",
+        "red-teaming",
+        "prompt-robustness-testing",
+        "multi-agent-system-testing",
+        "api-usage-pattern-monitoring"
       ],
       "sample_claims": [
         {
@@ -3854,7 +5385,10 @@
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/transparency/process-transparency",
+        "explanatory-scope/local"
       ],
       "example_use_cases": [
         {
@@ -4163,7 +5697,12 @@
         "evidence-type/quantitative-metric",
         "evidence-type/qualitative-report",
         "expertise-needed/ml-engineering",
-        "expertise-needed/domain-expertise"
+        "expertise-needed/domain-expertise",
+        "assurance-goal-category/safety/harmful-behavior-detection",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/safety/risk-identification"
       ],
       "example_use_cases": [
         {
@@ -4255,7 +5794,9 @@
         "few-shot-fairness-evaluation",
         "embedding-bias-analysis",
         "prompt-injection-testing",
-        "runtime-monitoring-and-circuit-breakers"
+        "runtime-monitoring-and-circuit-breakers",
+        "jailbreak-resistance-testing",
+        "constitutional-ai-evaluation"
       ],
       "sample_claims": [
         {
@@ -4276,5 +5817,5 @@
       ]
     }
   ],
-  "count": 28
+  "count": 38
 }

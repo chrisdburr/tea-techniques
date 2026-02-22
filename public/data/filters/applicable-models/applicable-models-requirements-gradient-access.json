@@ -287,11 +287,13 @@
         "assurance-goal-category/explainability/property/efficiency",
         "assurance-goal-category/explainability/visualization-methods/activation-maps",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "data-requirements/access-to-model-internals",
         "data-type/image",
         "evidence-type/visualisation",
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "technique-type/algorithmic"
       ],
@@ -367,6 +369,8 @@
       "complexity_rating": 3,
       "computational_cost_rating": 2,
       "related_techniques": [
+        "concept-activation-vectors",
+        "deeplift",
         "gradient-weighted-class-activation-mapping",
         "integrated-gradients",
         "occlusion-sensitivity",
@@ -428,7 +432,11 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/fairness/group",
+        "fairness-approach/group",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use/auditing"
       ],
       "example_use_cases": [
         {
@@ -530,7 +538,9 @@
         "integrated-gradients",
         "gradient-saliency",
         "occlusion-sensitivity",
-        "local-interpretable-model-agnostic-explanations"
+        "local-interpretable-model-agnostic-explanations",
+        "layer-wise-relevance-propagation",
+        "concept-activation-vectors"
       ],
       "sample_claims": [
         {
@@ -979,6 +989,7 @@
       "computational_cost_rating": 3,
       "related_techniques": [
         "fair-adversarial-networks",
+        "multi-accuracy-boosting",
         "reweighing",
         "equalised-odds-post-processing",
         "threshold-optimiser"
@@ -1332,13 +1343,18 @@
         "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/no-special-requirements",
         "data-type/text",
         "evidence-type/quantitative-metric",
         "evidence-type/visualisation",
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
+        "fairness-approach/group",
+        "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
         "lifecycle-stage/testing",
         "technique-type/algorithmic"
@@ -1425,7 +1441,8 @@
         "prompt-sensitivity-analysis",
         "causal-mediation-analysis-in-language-models",
         "attention-visualisation-in-transformers",
-        "contextual-decomposition"
+        "contextual-decomposition",
+        "shapley-additive-explanations"
       ],
       "sample_claims": [
         {
@@ -1476,6 +1493,7 @@
         "assurance-goal-category/explainability/property/comprehensibility",
         "assurance-goal-category/explainability/representation-analysis/concept-identification",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/transparency",
         "data-requirements/access-to-model-internals",
         "data-type/any",
@@ -1485,8 +1503,11 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/global",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/system-deployment-and-use/auditing",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -1648,7 +1669,9 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/data-minimization",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
         "data-type/any",
@@ -1745,7 +1768,8 @@
         "bayesian-fairness-regularization",
         "sensitivity-analysis-for-fairness",
         "attribute-removal-fairness-through-unawareness",
-        "fair-adversarial-networks"
+        "fair-adversarial-networks",
+        "synthetic-data-generation"
       ],
       "sample_claims": [
         {
@@ -1796,7 +1820,9 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
         "data-type/any",
@@ -1838,6 +1864,9 @@
         },
         {
           "description": "Computational overhead is significant due to training two networks simultaneously, increasing both training time and resource requirements."
+        },
+        {
+          "description": "The adversarial objective only removes dependence on explicitly labelled sensitive attributes; proxy variables that correlate with protected characteristics will remain encoded in learned representations. Extending to intersectional fairness across multiple protected attributes requires separate discriminator components or multi-task adversarial architectures, substantially increasing design complexity and training instability."
         }
       ],
       "resources": [
@@ -1896,7 +1925,9 @@
       "related_techniques": [
         "adaptive-sensitive-reweighting",
         "adversarial-debiasing",
+        "exponentiated-gradient-reduction",
         "fair-transfer-learning",
+        "fairness-gan",
         "meta-fair-classifier"
       ],
       "sample_claims": [
@@ -2052,7 +2083,8 @@
         "adaptive-sensitive-reweighting",
         "adversarial-debiasing",
         "exponentiated-gradient-reduction",
-        "fair-adversarial-networks"
+        "fair-adversarial-networks",
+        "multi-accuracy-boosting"
       ],
       "sample_claims": [
         {
@@ -2248,12 +2280,15 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/pre-trained-model",
         "data-requirements/sensitive-attributes",
         "data-type/any",
         "evidence-type/fairness-metric",
         "evidence-type/quantitative-metric",
+        "expertise-needed/domain-expertise",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
         "fairness-approach/group",
@@ -2342,7 +2377,9 @@
         "adaptive-sensitive-reweighting",
         "adversarial-debiasing",
         "exponentiated-gradient-reduction",
-        "fair-adversarial-networks"
+        "fair-adversarial-networks",
+        "federated-learning",
+        "multi-accuracy-boosting"
       ],
       "sample_claims": [
         {

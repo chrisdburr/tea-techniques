@@ -516,10 +516,13 @@
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/privacy",
         "assurance-goal-category/privacy/formal-guarantee/differential-privacy",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/privacy-guarantee",
@@ -527,6 +530,7 @@
         "expertise-needed/cryptography",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
+        "fairness-approach/group",
         "lifecycle-stage/data-handling",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
@@ -604,8 +608,9 @@
       "related_techniques": [
         "federated-learning",
         "homomorphic-encryption",
-        "synthetic-data-generation",
-        "membership-inference-attack-testing"
+        "machine-unlearning",
+        "membership-inference-attack-testing",
+        "synthetic-data-generation"
       ],
       "sample_claims": [
         {
@@ -647,15 +652,18 @@
       ],
       "tags": [
         "applicable-models/architecture/linear-models",
+        "applicable-models/architecture/model-agnostic",
         "applicable-models/architecture/neural-networks/feedforward",
+        "applicable-models/architecture/tree-based",
         "applicable-models/paradigm/discriminative",
         "applicable-models/paradigm/parametric",
-        "applicable-models/requirements/differentiable",
-        "applicable-models/requirements/white-box",
         "assurance-goal-category/privacy",
         "assurance-goal-category/privacy/formal-guarantee",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/security",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/privacy-guarantee",
@@ -678,6 +686,10 @@
         {
           "description": "Enabling transparent audit of algorithmic decision-making by allowing regulators to verify model computations on encrypted data, providing accountability whilst protecting the proprietary nature of both the algorithm and the underlying data.",
           "goal": "Transparency"
+        },
+        {
+          "description": "Protecting ML model intellectual property and confidential inference inputs during cloud deployment by running encrypted inference, ensuring that neither the client sensitive input data nor the server proprietary model weights and architecture are exposed to the cloud provider or the counterparty, enabling secure outsourced inference without requiring mutual trust assumptions.",
+          "goal": "Security"
         }
       ],
       "limitations": [
@@ -757,7 +769,8 @@
         "differential-privacy",
         "federated-learning",
         "synthetic-data-generation",
-        "model-extraction-defence-testing"
+        "model-extraction-defence-testing",
+        "membership-inference-attack-testing"
       ],
       "sample_claims": [
         {
@@ -2264,7 +2277,9 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/data-minimization",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
         "data-type/any",
@@ -2361,7 +2376,8 @@
         "bayesian-fairness-regularization",
         "sensitivity-analysis-for-fairness",
         "attribute-removal-fairness-through-unawareness",
-        "fair-adversarial-networks"
+        "fair-adversarial-networks",
+        "synthetic-data-generation"
       ],
       "sample_claims": [
         {

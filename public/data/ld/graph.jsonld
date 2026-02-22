@@ -319,12 +319,15 @@
         "tea:tag/assurance-goal-category/explainability/property/fidelity",
         "tea:tag/assurance-goal-category/explainability/property/efficiency",
         "tea:tag/assurance-goal-category/transparency",
+        "tea:tag/assurance-goal-category/transparency/process-transparency",
         "tea:tag/data-requirements/no-special-requirements",
         "tea:tag/data-type/tabular",
         "tea:tag/evidence-type/quantitative-metric",
         "tea:tag/expertise-needed/low",
         "tea:tag/explanatory-scope/global",
         "tea:tag/lifecycle-stage/model-development",
+        "tea:tag/lifecycle-stage/model-evaluation",
+        "tea:tag/lifecycle-stage/system-deployment-and-use",
         "tea:tag/technique-type/metric",
         "tea:tag/applicable-models/architecture/linear-models",
         "tea:tag/applicable-models/paradigm/parametric",
@@ -337,7 +340,8 @@
         "tea:technique/permutation-importance",
         "tea:technique/mean-decrease-impurity",
         "tea:technique/shapley-additive-explanations",
-        "tea:technique/generalized-additive-models"
+        "tea:technique/generalized-additive-models",
+        "tea:technique/ridge-regression-surrogates"
       ],
       "citesResource": [
         "tea:resource/scikit-learndevelopersScikitlearnLinearModels2007",
@@ -910,13 +914,17 @@
         "tea:tag/assurance-goal-category/explainability/explains/causal-pathways",
         "tea:tag/assurance-goal-category/explainability/property/completeness",
         "tea:tag/assurance-goal-category/fairness",
+        "tea:tag/assurance-goal-category/fairness/group",
         "tea:tag/data-requirements/no-special-requirements",
         "tea:tag/data-type/any",
         "tea:tag/evidence-type/quantitative-metric",
         "tea:tag/expertise-needed/ml-engineering",
         "tea:tag/expertise-needed/statistics",
         "tea:tag/explanatory-scope/global",
+        "tea:tag/fairness-approach/group",
         "tea:tag/lifecycle-stage/model-development",
+        "tea:tag/lifecycle-stage/model-evaluation",
+        "tea:tag/lifecycle-stage/deployment",
         "tea:tag/technique-type/algorithmic",
         "tea:tag/applicable-models/architecture/model-agnostic",
         "tea:tag/applicable-models/requirements/black-box"
@@ -1011,6 +1019,7 @@
         "tea:tag/assurance-goal-category/explainability/explains/decision-boundaries",
         "tea:tag/assurance-goal-category/explainability/property/fidelity",
         "tea:tag/assurance-goal-category/transparency",
+        "tea:tag/assurance-goal-category/transparency/process-transparency",
         "tea:tag/data-requirements/no-special-requirements",
         "tea:tag/data-type/any",
         "tea:tag/evidence-type/qualitative-report",
@@ -1018,6 +1027,7 @@
         "tea:tag/expertise-needed/ml-engineering",
         "tea:tag/explanatory-scope/local",
         "tea:tag/lifecycle-stage/model-development",
+        "tea:tag/lifecycle-stage/model-evaluation",
         "tea:tag/lifecycle-stage/system-deployment-and-use",
         "tea:tag/technique-type/algorithmic",
         "tea:tag/applicable-models/architecture/model-agnostic",
@@ -1030,7 +1040,12 @@
         "tea:technique/shapley-additive-explanations",
         "tea:technique/anchor",
         "tea:technique/ridge-regression-surrogates",
-        "tea:technique/partial-dependence-plots"
+        "tea:technique/partial-dependence-plots",
+        "tea:technique/individual-conditional-expectation-plots",
+        "tea:technique/occlusion-sensitivity",
+        "tea:technique/contrastive-explanation-method",
+        "tea:technique/mean-decrease-impurity",
+        "tea:technique/sobol-indices"
       ],
       "citesResource": [
         "tea:resource/marcotcrLime2016",
@@ -1066,6 +1081,9 @@
         },
         {
           "description": "Can be computationally expensive for explaining many instances due to repeated model queries."
+        },
+        {
+          "description": "Assumes features are independent when generating perturbations, producing unrealistic out-of-distribution samples for datasets with correlated features. This can generate misleading attribution scores when inputs share strong correlations (e.g., age and income in credit scoring, comorbidities in clinical data)."
         }
       ],
       "sampleClaims": [
@@ -1114,12 +1132,15 @@
         "tea:tag/assurance-goal-category/explainability/property/fidelity",
         "tea:tag/assurance-goal-category/explainability/property/comprehensibility",
         "tea:tag/assurance-goal-category/transparency",
+        "tea:tag/assurance-goal-category/transparency/process-transparency",
         "tea:tag/data-requirements/no-special-requirements",
         "tea:tag/data-type/any",
         "tea:tag/evidence-type/structured-output",
         "tea:tag/expertise-needed/ml-engineering",
         "tea:tag/explanatory-scope/global",
         "tea:tag/lifecycle-stage/model-development",
+        "tea:tag/lifecycle-stage/model-evaluation",
+        "tea:tag/lifecycle-stage/system-deployment-and-use",
         "tea:tag/technique-type/algorithmic",
         "tea:tag/applicable-models/architecture/model-agnostic",
         "tea:tag/applicable-models/requirements/black-box"
@@ -1128,6 +1149,7 @@
       "computationalCostRating": 2,
       "relatedTo": [
         "tea:technique/local-interpretable-model-agnostic-explanations",
+        "tea:technique/model-distillation",
         "tea:technique/rulefit",
         "tea:technique/partial-dependence-plots",
         "tea:technique/coefficient-magnitudes-in-linear-models"
@@ -1402,17 +1424,21 @@
         "tea:tag/assurance-goal-category/explainability/property/efficiency",
         "tea:tag/assurance-goal-category/explainability/visualization-methods/activation-maps",
         "tea:tag/assurance-goal-category/fairness",
+        "tea:tag/assurance-goal-category/fairness/group",
         "tea:tag/data-requirements/access-to-model-internals",
         "tea:tag/data-type/image",
         "tea:tag/evidence-type/visualisation",
         "tea:tag/expertise-needed/ml-engineering",
         "tea:tag/explanatory-scope/local",
+        "tea:tag/fairness-approach/group",
         "tea:tag/lifecycle-stage/model-development",
         "tea:tag/technique-type/algorithmic"
       ],
       "complexityRating": 3,
       "computationalCostRating": 2,
       "relatedTo": [
+        "tea:technique/concept-activation-vectors",
+        "tea:technique/deeplift",
         "tea:technique/gradient-weighted-class-activation-mapping",
         "tea:technique/integrated-gradients",
         "tea:technique/occlusion-sensitivity",
@@ -1510,7 +1536,11 @@
         "tea:tag/expertise-needed/ml-engineering",
         "tea:tag/explanatory-scope/local",
         "tea:tag/lifecycle-stage/model-development",
-        "tea:tag/technique-type/algorithmic"
+        "tea:tag/technique-type/algorithmic",
+        "tea:tag/assurance-goal-category/fairness/group",
+        "tea:tag/fairness-approach/group",
+        "tea:tag/lifecycle-stage/model-evaluation",
+        "tea:tag/lifecycle-stage/system-deployment-and-use/auditing"
       ],
       "acronym": "Grad-CAM",
       "complexityRating": 3,
@@ -1519,7 +1549,9 @@
         "tea:technique/integrated-gradients",
         "tea:technique/gradient-saliency",
         "tea:technique/occlusion-sensitivity",
-        "tea:technique/local-interpretable-model-agnostic-explanations"
+        "tea:technique/local-interpretable-model-agnostic-explanations",
+        "tea:technique/layer-wise-relevance-propagation",
+        "tea:technique/concept-activation-vectors"
       ],
       "citesResource": [
         "tea:resource/r.selvarajuGradCAMVisualExplanations2016",
@@ -2157,12 +2189,15 @@
         "tea:tag/assurance-goal-category/explainability/property/comprehensibility",
         "tea:tag/assurance-goal-category/explainability/property/sparsity",
         "tea:tag/assurance-goal-category/fairness",
+        "tea:tag/assurance-goal-category/fairness/group",
         "tea:tag/data-requirements/no-special-requirements",
         "tea:tag/data-type/any",
         "tea:tag/evidence-type/structured-output",
         "tea:tag/expertise-needed/ml-engineering",
         "tea:tag/explanatory-scope/global",
+        "tea:tag/fairness-approach/group",
         "tea:tag/lifecycle-stage/model-development",
+        "tea:tag/lifecycle-stage/model-evaluation",
         "tea:tag/technique-type/algorithmic"
       ],
       "complexityRating": 4,
@@ -2171,7 +2206,10 @@
         "tea:technique/influence-functions",
         "tea:technique/t-sne",
         "tea:technique/umap",
-        "tea:technique/contrastive-explanation-method"
+        "tea:technique/contrastive-explanation-method",
+        "tea:technique/concept-activation-vectors",
+        "tea:technique/neuron-activation-analysis",
+        "tea:technique/factor-analysis"
       ],
       "citesResource": [
         "tea:resource/kimExamplesAreNot2016",
@@ -2472,12 +2510,16 @@
         "tea:tag/assurance-goal-category/explainability/property/sparsity",
         "tea:tag/assurance-goal-category/explainability/surrogate-models/rule-extraction",
         "tea:tag/assurance-goal-category/transparency",
+        "tea:tag/assurance-goal-category/transparency/audit-trail",
+        "tea:tag/assurance-goal-category/transparency/process-transparency",
         "tea:tag/data-requirements/no-special-requirements",
         "tea:tag/data-type/any",
         "tea:tag/evidence-type/quantitative-metric",
         "tea:tag/expertise-needed/statistics",
         "tea:tag/explanatory-scope/local",
         "tea:tag/lifecycle-stage/model-development",
+        "tea:tag/lifecycle-stage/model-evaluation",
+        "tea:tag/lifecycle-stage/system-deployment-and-use",
         "tea:tag/technique-type/algorithmic"
       ],
       "acronym": "ANCHOR",
@@ -2487,7 +2529,8 @@
         "tea:technique/local-interpretable-model-agnostic-explanations",
         "tea:technique/shapley-additive-explanations",
         "tea:technique/rulefit",
-        "tea:technique/ridge-regression-surrogates"
+        "tea:technique/ridge-regression-surrogates",
+        "tea:technique/contrastive-explanation-method"
       ],
       "citesResource": [
         "tea:resource/ribeiroAnchorsHighPrecisionModelAgnostic2018",
@@ -2564,6 +2607,7 @@
       "hasTag": [
         "tea:tag/applicable-models/architecture/model-agnostic",
         "tea:tag/applicable-models/paradigm/supervised",
+        "tea:tag/applicable-models/requirements/black-box",
         "tea:tag/applicable-models/requirements/training-data",
         "tea:tag/assurance-goal-category/explainability",
         "tea:tag/assurance-goal-category/explainability/explains/decision-boundaries",
@@ -2574,6 +2618,8 @@
         "tea:tag/assurance-goal-category/explainability/surrogate-models/global-surrogates",
         "tea:tag/assurance-goal-category/explainability/surrogate-models/rule-extraction",
         "tea:tag/assurance-goal-category/transparency",
+        "tea:tag/assurance-goal-category/transparency/audit-trail",
+        "tea:tag/assurance-goal-category/transparency/process-transparency",
         "tea:tag/data-requirements/no-special-requirements",
         "tea:tag/data-type/any",
         "tea:tag/evidence-type/quantitative-metric",
@@ -2588,7 +2634,8 @@
         "tea:technique/ridge-regression-surrogates",
         "tea:technique/anchor",
         "tea:technique/local-interpretable-model-agnostic-explanations",
-        "tea:technique/mean-decrease-impurity"
+        "tea:technique/mean-decrease-impurity",
+        "tea:technique/model-distillation"
       ],
       "citesResource": [
         "tea:resource/christophmRulefit2015",
@@ -2870,6 +2917,7 @@
       "description": "Permutation tests assess the statistical significance of observed results (such as model accuracy, feature importance, or group differences) by comparing them to what would occur purely by chance. The technique randomly shuffles labels or data thousands of times, recalculating the metric of interest each time to build an empirical null distribution. If the actual observed result falls in the extreme tail of this distribution (typically beyond the 95th or 99th percentile), it provides strong evidence that the relationship is genuine rather than due to random chance, without requiring parametric assumptions about data distributions.",
       "addressesGoal": [
         "tea:goal/explainability",
+        "tea:goal/fairness",
         "tea:goal/reliability"
       ],
       "hasTag": [
@@ -2880,13 +2928,17 @@
         "tea:tag/assurance-goal-category/explainability/explains/feature-importance",
         "tea:tag/assurance-goal-category/explainability/property/consistency",
         "tea:tag/assurance-goal-category/explainability/property/fidelity",
+        "tea:tag/assurance-goal-category/fairness",
+        "tea:tag/assurance-goal-category/fairness/group",
         "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/assurance-goal-category/reliability/model-behavior-understanding",
         "tea:tag/data-requirements/no-special-requirements",
         "tea:tag/data-type/any",
         "tea:tag/evidence-type/quantitative-metric",
         "tea:tag/expertise-needed/statistics",
         "tea:tag/explanatory-scope/global",
         "tea:tag/lifecycle-stage/model-development",
+        "tea:tag/lifecycle-stage/model-evaluation",
         "tea:tag/lifecycle-stage/system-deployment-and-use",
         "tea:tag/technique-type/algorithmic"
       ],
@@ -2895,6 +2947,8 @@
       "relatedTo": [
         "tea:technique/permutation-importance",
         "tea:technique/bootstrapping",
+        "tea:technique/cross-validation",
+        "tea:technique/jackknife-resampling",
         "tea:technique/shapley-additive-explanations",
         "tea:technique/sobol-indices"
       ],
@@ -3079,6 +3133,7 @@
       "computationalCostRating": 3,
       "relatedTo": [
         "tea:technique/fair-adversarial-networks",
+        "tea:technique/multi-accuracy-boosting",
         "tea:technique/reweighing",
         "tea:technique/equalised-odds-post-processing",
         "tea:technique/threshold-optimiser"
@@ -6674,6 +6729,7 @@
         "tea:tag/assurance-goal-category/explainability/property/comprehensibility",
         "tea:tag/assurance-goal-category/explainability/representation-analysis/concept-identification",
         "tea:tag/assurance-goal-category/fairness",
+        "tea:tag/assurance-goal-category/fairness/group",
         "tea:tag/assurance-goal-category/transparency",
         "tea:tag/data-requirements/access-to-model-internals",
         "tea:tag/data-type/any",
@@ -6683,8 +6739,11 @@
         "tea:tag/expertise-needed/ml-engineering",
         "tea:tag/explanatory-scope/global",
         "tea:tag/explanatory-scope/local",
+        "tea:tag/fairness-approach/group",
         "tea:tag/lifecycle-stage/model-development",
+        "tea:tag/lifecycle-stage/model-evaluation",
         "tea:tag/lifecycle-stage/system-deployment-and-use/auditing",
+        "tea:tag/lifecycle-stage/system-deployment-and-use/monitoring",
         "tea:tag/technique-type/algorithmic"
       ],
       "acronym": "CAVs",
@@ -7541,7 +7600,9 @@
         "tea:tag/assurance-goal-category/fairness",
         "tea:tag/assurance-goal-category/fairness/group",
         "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/assurance-goal-category/reliability/cross-group-consistency",
         "tea:tag/assurance-goal-category/transparency",
+        "tea:tag/assurance-goal-category/transparency/process-transparency",
         "tea:tag/data-requirements/labelled-data",
         "tea:tag/data-requirements/sensitive-attributes",
         "tea:tag/data-type/any",
@@ -7559,7 +7620,9 @@
       "relatedTo": [
         "tea:technique/adaptive-sensitive-reweighting",
         "tea:technique/adversarial-debiasing",
+        "tea:technique/exponentiated-gradient-reduction",
         "tea:technique/fair-transfer-learning",
+        "tea:technique/fairness-gan",
         "tea:technique/meta-fair-classifier"
       ],
       "citesResource": [
@@ -7597,6 +7660,9 @@
         },
         {
           "description": "Computational overhead is significant due to training two networks simultaneously, increasing both training time and resource requirements."
+        },
+        {
+          "description": "The adversarial objective only removes dependence on explicitly labelled sensitive attributes; proxy variables that correlate with protected characteristics will remain encoded in learned representations. Extending to intersectional fairness across multiple protected attributes requires separate discriminator components or multi-task adversarial architectures, substantially increasing design complexity and training instability."
         }
       ],
       "sampleClaims": [
@@ -7776,7 +7842,8 @@
         "tea:technique/adaptive-sensitive-reweighting",
         "tea:technique/adversarial-debiasing",
         "tea:technique/exponentiated-gradient-reduction",
-        "tea:technique/fair-adversarial-networks"
+        "tea:technique/fair-adversarial-networks",
+        "tea:technique/multi-accuracy-boosting"
       ],
       "citesResource": [
         "tea:resource/holisticaidevelopersRFairMethodHolisticai2024",
@@ -7973,12 +8040,15 @@
         "tea:tag/assurance-goal-category/fairness",
         "tea:tag/assurance-goal-category/fairness/group",
         "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/assurance-goal-category/reliability/cross-group-consistency",
         "tea:tag/assurance-goal-category/transparency",
+        "tea:tag/assurance-goal-category/transparency/process-transparency",
         "tea:tag/data-requirements/pre-trained-model",
         "tea:tag/data-requirements/sensitive-attributes",
         "tea:tag/data-type/any",
         "tea:tag/evidence-type/fairness-metric",
         "tea:tag/evidence-type/quantitative-metric",
+        "tea:tag/expertise-needed/domain-expertise",
         "tea:tag/expertise-needed/ml-engineering",
         "tea:tag/expertise-needed/statistics",
         "tea:tag/fairness-approach/group",
@@ -7993,7 +8063,9 @@
         "tea:technique/adaptive-sensitive-reweighting",
         "tea:technique/adversarial-debiasing",
         "tea:technique/exponentiated-gradient-reduction",
-        "tea:technique/fair-adversarial-networks"
+        "tea:technique/fair-adversarial-networks",
+        "tea:technique/federated-learning",
+        "tea:technique/multi-accuracy-boosting"
       ],
       "citesResource": [
         "tea:resource/zhangSegmentingPlacesNeed2022",
@@ -8092,7 +8164,8 @@
         "tea:technique/exponentiated-gradient-reduction",
         "tea:technique/fair-adversarial-networks",
         "tea:technique/fair-transfer-learning",
-        "tea:technique/meta-fair-classifier"
+        "tea:technique/meta-fair-classifier",
+        "tea:technique/multi-accuracy-boosting"
       ],
       "citesResource": [
         "tea:resource/krasanakisAdaptiveSensitiveReweighting2018",
@@ -8179,7 +8252,11 @@
         "tea:tag/assurance-goal-category/fairness",
         "tea:tag/assurance-goal-category/fairness/group",
         "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/assurance-goal-category/reliability/cross-group-consistency",
+        "tea:tag/assurance-goal-category/reliability/model-behavior-understanding",
         "tea:tag/assurance-goal-category/transparency",
+        "tea:tag/assurance-goal-category/transparency/audit-trail",
+        "tea:tag/assurance-goal-category/transparency/process-transparency",
         "tea:tag/data-requirements/labelled-data",
         "tea:tag/data-requirements/sensitive-attributes",
         "tea:tag/data-type/any",
@@ -8198,7 +8275,8 @@
         "tea:technique/adaptive-sensitive-reweighting",
         "tea:technique/adversarial-debiasing",
         "tea:technique/fair-transfer-learning",
-        "tea:technique/meta-fair-classifier"
+        "tea:technique/meta-fair-classifier",
+        "tea:technique/reweighing"
       ],
       "citesResource": [
         "tea:resource/bischlMcboostMultiCalibrationBoosting2021",
@@ -11996,7 +12074,7 @@
       "name": "Fairness",
       "slug": "fairness",
       "description": "Ensuring AI systems treat different groups and individuals equitably.",
-      "techniqueCount": 64,
+      "techniqueCount": 65,
       "hasTechnique": [
         "tea:technique/shapley-additive-explanations",
         "tea:technique/sobol-indices",
@@ -12004,6 +12082,7 @@
         "tea:technique/gradient-weighted-class-activation-mapping",
         "tea:technique/prototype-and-criticism-models",
         "tea:technique/influence-functions",
+        "tea:technique/permutation-tests",
         "tea:technique/demographic-parity-assessment",
         "tea:technique/adversarial-debiasing",
         "tea:technique/counterfactual-fairness-assessment",
@@ -12621,9 +12700,9 @@
       "category": "lifecycle-stage",
       "narrower": [
         "tea:tag/lifecycle-stage/model-development",
+        "tea:tag/lifecycle-stage/model-evaluation",
         "tea:tag/lifecycle-stage/system-deployment-and-use",
         "tea:tag/lifecycle-stage/deployment",
-        "tea:tag/lifecycle-stage/model-evaluation",
         "tea:tag/lifecycle-stage/data-collection",
         "tea:tag/lifecycle-stage/data-handling",
         "tea:tag/lifecycle-stage/all",
@@ -12836,12 +12915,40 @@
       ]
     },
     {
+      "@id": "tea:tag/assurance-goal-category/transparency/process-transparency",
+      "@type": "Tag",
+      "prefLabel": "process transparency",
+      "path": "assurance-goal-category/transparency/process-transparency",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/transparency"
+    },
+    {
       "@id": "tea:tag/expertise-needed/low",
       "@type": "Tag",
       "prefLabel": "low",
       "path": "expertise-needed/low",
       "category": "expertise-needed",
       "broader": "tea:tag/expertise-needed"
+    },
+    {
+      "@id": "tea:tag/lifecycle-stage/model-evaluation",
+      "@type": "Tag",
+      "prefLabel": "model evaluation",
+      "path": "lifecycle-stage/model-evaluation",
+      "category": "lifecycle-stage",
+      "broader": "tea:tag/lifecycle-stage"
+    },
+    {
+      "@id": "tea:tag/lifecycle-stage/system-deployment-and-use",
+      "@type": "Tag",
+      "prefLabel": "system deployment and use",
+      "path": "lifecycle-stage/system-deployment-and-use",
+      "category": "lifecycle-stage",
+      "broader": "tea:tag/lifecycle-stage",
+      "narrower": [
+        "tea:tag/lifecycle-stage/system-deployment-and-use/auditing",
+        "tea:tag/lifecycle-stage/system-deployment-and-use/monitoring"
+      ]
     },
     {
       "@id": "tea:tag/technique-type/metric",
@@ -12973,18 +13080,6 @@
       "broader": "tea:tag/data-requirements"
     },
     {
-      "@id": "tea:tag/lifecycle-stage/system-deployment-and-use",
-      "@type": "Tag",
-      "prefLabel": "system deployment and use",
-      "path": "lifecycle-stage/system-deployment-and-use",
-      "category": "lifecycle-stage",
-      "broader": "tea:tag/lifecycle-stage",
-      "narrower": [
-        "tea:tag/lifecycle-stage/system-deployment-and-use/monitoring",
-        "tea:tag/lifecycle-stage/system-deployment-and-use/auditing"
-      ]
-    },
-    {
       "@id": "tea:tag/assurance-goal-category/explainability/explains/internal-mechanisms",
       "@type": "Tag",
       "prefLabel": "internal mechanisms",
@@ -13043,6 +13138,14 @@
       "path": "assurance-goal-category/explainability/explains/causal-pathways",
       "category": "assurance-goal-category",
       "broader": "tea:tag/assurance-goal-category/explainability/explains"
+    },
+    {
+      "@id": "tea:tag/lifecycle-stage/deployment",
+      "@type": "Tag",
+      "prefLabel": "deployment",
+      "path": "lifecycle-stage/deployment",
+      "category": "lifecycle-stage",
+      "broader": "tea:tag/lifecycle-stage"
     },
     {
       "@id": "tea:tag/assurance-goal-category/explainability/surrogate-models",
@@ -13165,6 +13268,14 @@
       "path": "assurance-goal-category/explainability/property/sparsity",
       "category": "assurance-goal-category",
       "broader": "tea:tag/assurance-goal-category/explainability/property"
+    },
+    {
+      "@id": "tea:tag/lifecycle-stage/system-deployment-and-use/auditing",
+      "@type": "Tag",
+      "prefLabel": "auditing",
+      "path": "lifecycle-stage/system-deployment-and-use/auditing",
+      "category": "lifecycle-stage",
+      "broader": "tea:tag/lifecycle-stage/system-deployment-and-use"
     },
     {
       "@id": "tea:tag/applicable-models/requirements/model-internals",
@@ -13296,6 +13407,14 @@
       "broader": "tea:tag/assurance-goal-category/explainability/surrogate-models"
     },
     {
+      "@id": "tea:tag/assurance-goal-category/transparency/audit-trail",
+      "@type": "Tag",
+      "prefLabel": "audit trail",
+      "path": "assurance-goal-category/transparency/audit-trail",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/transparency"
+    },
+    {
       "@id": "tea:tag/applicable-models/paradigm/probabilistic",
       "@type": "Tag",
       "prefLabel": "probabilistic",
@@ -13391,22 +13510,6 @@
       "path": "expertise-needed/domain-expertise",
       "category": "expertise-needed",
       "broader": "tea:tag/expertise-needed"
-    },
-    {
-      "@id": "tea:tag/lifecycle-stage/deployment",
-      "@type": "Tag",
-      "prefLabel": "deployment",
-      "path": "lifecycle-stage/deployment",
-      "category": "lifecycle-stage",
-      "broader": "tea:tag/lifecycle-stage"
-    },
-    {
-      "@id": "tea:tag/lifecycle-stage/model-evaluation",
-      "@type": "Tag",
-      "prefLabel": "model evaluation",
-      "path": "lifecycle-stage/model-evaluation",
-      "category": "lifecycle-stage",
-      "broader": "tea:tag/lifecycle-stage"
     },
     {
       "@id": "tea:tag/applicable-models/architecture/neural-networks/generative",
@@ -13570,14 +13673,6 @@
       "path": "assurance-goal-category/privacy/formal-guarantee/differential-privacy",
       "category": "assurance-goal-category",
       "broader": "tea:tag/assurance-goal-category/privacy/formal-guarantee"
-    },
-    {
-      "@id": "tea:tag/assurance-goal-category/transparency/process-transparency",
-      "@type": "Tag",
-      "prefLabel": "process transparency",
-      "path": "assurance-goal-category/transparency/process-transparency",
-      "category": "assurance-goal-category",
-      "broader": "tea:tag/assurance-goal-category/transparency"
     },
     {
       "@id": "tea:tag/evidence-type/privacy-guarantee",
@@ -13982,14 +14077,6 @@
       "broader": "tea:tag/technique-type"
     },
     {
-      "@id": "tea:tag/lifecycle-stage/system-deployment-and-use/auditing",
-      "@type": "Tag",
-      "prefLabel": "auditing",
-      "path": "lifecycle-stage/system-deployment-and-use/auditing",
-      "category": "lifecycle-stage",
-      "broader": "tea:tag/lifecycle-stage/system-deployment-and-use"
-    },
-    {
       "@id": "tea:tag/assurance-goal-category/explainability/feature-analysis",
       "@type": "Tag",
       "prefLabel": "feature analysis",
@@ -14031,14 +14118,6 @@
       "path": "lifecycle-stage/data-handling/preprocessing",
       "category": "lifecycle-stage",
       "broader": "tea:tag/lifecycle-stage/data-handling"
-    },
-    {
-      "@id": "tea:tag/assurance-goal-category/transparency/audit-trail",
-      "@type": "Tag",
-      "prefLabel": "audit trail",
-      "path": "assurance-goal-category/transparency/audit-trail",
-      "category": "assurance-goal-category",
-      "broader": "tea:tag/assurance-goal-category/transparency"
     },
     {
       "@id": "tea:tag/lifecycle-stage/data-collection/data-preprocessing",

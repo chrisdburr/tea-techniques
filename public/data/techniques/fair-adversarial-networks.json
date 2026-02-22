@@ -19,7 +19,9 @@
     "assurance-goal-category/fairness",
     "assurance-goal-category/fairness/group",
     "assurance-goal-category/reliability",
+    "assurance-goal-category/reliability/cross-group-consistency",
     "assurance-goal-category/transparency",
+    "assurance-goal-category/transparency/process-transparency",
     "data-requirements/labelled-data",
     "data-requirements/sensitive-attributes",
     "data-type/any",
@@ -61,6 +63,9 @@
     },
     {
       "description": "Computational overhead is significant due to training two networks simultaneously, increasing both training time and resource requirements."
+    },
+    {
+      "description": "The adversarial objective only removes dependence on explicitly labelled sensitive attributes; proxy variables that correlate with protected characteristics will remain encoded in learned representations. Extending to intersectional fairness across multiple protected attributes requires separate discriminator components or multi-task adversarial architectures, substantially increasing design complexity and training instability."
     }
   ],
   "resources": [
@@ -119,7 +124,9 @@
   "related_techniques": [
     "adaptive-sensitive-reweighting",
     "adversarial-debiasing",
+    "exponentiated-gradient-reduction",
     "fair-transfer-learning",
+    "fairness-gan",
     "meta-fair-classifier"
   ],
   "sample_claims": [

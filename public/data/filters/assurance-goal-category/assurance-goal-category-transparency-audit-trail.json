@@ -2,10 +2,294 @@
   "tag": {
     "name": "assurance-goal-category/transparency/audit-trail",
     "slug": "assurance-goal-category-transparency-audit-trail",
-    "count": 3,
+    "count": 7,
     "category": "assurance-goal-category"
   },
   "techniques": [
+    {
+      "slug": "anchor",
+      "name": "ANCHOR",
+      "acronym": "ANCHOR",
+      "description": "ANCHOR generates high-precision if-then rules that explain individual predictions by identifying the minimal set of feature conditions that guarantee a specific prediction with high confidence. It searches for 'anchor' conditions (e.g., 'age > 30 AND income < £50k') that ensure the model gives the same prediction at least 95% of the time when those conditions are met. This creates human-readable rules that users can trust as sufficient conditions for understanding why a particular decision was made.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/surrogate-models/rule-extraction",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Explaining loan application decisions with rules like 'IF credit_score > 650 AND debt_ratio < 0.4 THEN approval = 95% likely', giving applicants clear, actionable conditions they can understand and potentially improve.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Generating diagnostic rules for medical predictions such as 'IF fever > 38.5°C AND white_blood_cells > 12,000 THEN infection = 92% likely', helping clinicians validate automated diagnoses with trusted clinical indicators.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating transparent hiring decisions with rules like 'IF experience >= 3_years AND degree = relevant THEN hire = 89% likely', providing clear justification for recruitment decisions that can be audited for fairness.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Limited to local explanations for individual instances, cannot provide global insights about overall model behaviour."
+        },
+        {
+          "description": "Requires discretisation of continuous features, which can lose important nuanced information and create arbitrary thresholds."
+        },
+        {
+          "description": "May fail to find suitable anchor rules if precision requirements are too strict or if the prediction space is highly complex."
+        },
+        {
+          "description": "Computationally expensive as it requires extensive sampling to validate rule precision, especially for high-dimensional data."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Anchors: High-Precision Model-Agnostic Explanations",
+          "url": "https://homes.cs.washington.edu/~marcotcr/aaai18.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Marco Tulio Ribeiro",
+            "Sameer Singh",
+            "Carlos Guestrin"
+          ],
+          "publication_date": "2018-01-01",
+          "citationKey": "ribeiroAnchorsHighPrecisionModelAgnostic2018"
+        },
+        {
+          "title": "anchor",
+          "url": "https://github.com/marcotcr/anchor",
+          "source_type": "software_package",
+          "publication_date": "2018-02-02",
+          "citationKey": "marcotcrAnchor2018",
+          "abstract": "Code for \"High-Precision Model-Agnostic Explanations\" paper"
+        },
+        {
+          "title": "alibi",
+          "url": "https://github.com/SeldonIO/alibi",
+          "source_type": "software_package",
+          "publication_date": "2019-02-26",
+          "citationKey": "seldonioAlibi2019",
+          "abstract": "Algorithms for explaining machine learning models"
+        },
+        {
+          "title": "Interpretable Machine Learning - Anchors",
+          "url": "https://christophm.github.io/interpretable-ml-book/anchors.html",
+          "source_type": "documentation",
+          "publication_date": "2019",
+          "citationKey": "InterpretableMachineLearning2019b"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "local-interpretable-model-agnostic-explanations",
+        "shapley-additive-explanations",
+        "rulefit",
+        "ridge-regression-surrogates",
+        "contrastive-explanation-method"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's individual predictions are supported by verifiable sufficient conditions with quantified confidence guarantees",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The lending system provides loan applicants with specific, actionable conditions that guarantee approval with stated probability",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The diagnostic system's recommendations are justified by minimal sets of clinical indicators that ensure the decision under specified conditions",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The hiring decision criteria are documented as precise if-then rules with empirically validated confidence bounds",
+          "domain": "public sector",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The fraud detection system identifies sufficient feature combinations that reliably predict flagged transactions with quantified precision",
+          "domain": "finance",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
+      "slug": "rulefit",
+      "name": "RuleFit",
+      "description": "RuleFit creates interpretable surrogate models that can explain complex black-box models or serve as interpretable alternatives. It works by learning a sparse linear model that combines automatically extracted decision rules with original features. The technique first builds tree ensembles to generate candidate rules, then uses LASSO regression to select the most important rules and features. The resulting model provides global explanations through human-readable rules (e.g., 'IF age > 50 AND income < 30k THEN ...') combined with linear feature weights, making complex model behaviour transparent and auditable.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+        "assurance-goal-category/explainability/surrogate-models/rule-extraction",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Building customer churn prediction models with rules like 'IF contract_length < 12_months AND support_calls > 5 THEN churn_risk = high', allowing marketing teams to understand and act on the key drivers of customer attrition.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating credit scoring models that combine traditional linear factors (income, age) with interpretable rules (IF recent_missed_payments = 0 AND account_age > 2_years THEN creditworthy), providing transparent lending decisions.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Developing regulatory-compliant medical diagnosis models where treatment recommendations combine clinical measurements with clear decision rules (IF blood_pressure > 140 AND diabetes = true THEN high_risk), enabling audit trails for healthcare decisions.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Can generate large numbers of rules even with regularisation, potentially overwhelming users and reducing practical interpretability."
+        },
+        {
+          "description": "Performance may be inferior to complex ensemble methods when rule complexity is constrained for interpretability."
+        },
+        {
+          "description": "Rule extraction quality depends heavily on the underlying tree ensemble, which may miss important feature interactions if not properly configured."
+        },
+        {
+          "description": "Requires careful hyperparameter tuning to balance between model complexity and interpretability, with no universal optimal setting."
+        }
+      ],
+      "resources": [
+        {
+          "title": "rulefit",
+          "url": "https://github.com/christophM/rulefit",
+          "source_type": "software_package",
+          "publication_date": "2015-10-16",
+          "citationKey": "christophmRulefit2015",
+          "abstract": "Python implementation of the rulefit algorithm"
+        },
+        {
+          "title": "Tree Ensembles with Rule Structured Horseshoe Regularization",
+          "url": "http://arxiv.org/abs/1702.05008v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Malte Nalenz",
+            "Mattias Villani"
+          ],
+          "publication_date": "2017-02-16",
+          "citationKey": "nalenzTreeEnsemblesRule2017",
+          "abstract": "We propose a new Bayesian model for flexible nonlinear regression and classification using tree ensembles. The model is based on the RuleFit approach in Friedman and Popescu (2008) where rules from decision trees and linear terms are used in a L1-regularized regression. We modify RuleFit by replacing the L1-regularization by a horseshoe prior, which is well known to give aggressive shrinkage of noise predictor while leaving the important signal essentially untouched. This is especially important when a large number of rules are used as predictors as many of them only contribute noise. Our horseshoe prior has an additional hierarchical layer that applies more shrinkage a priori to rules with a large number of splits, and to rules that are only satisfied by a few observations. The aggressive noise shrinkage of our prior also makes it possible to complement the rules from boosting in Friedman and Popescu (2008) with an additional set of trees from random forest, which brings a desirable diversity to the ensemble. We sample from the posterior distribution using a very efficient and easily implemented Gibbs sampler. The new model is shown to outperform state-of-the-art methods like RuleFit, BART and random forest on 16 datasets. The model and its interpretation is demonstrated on the well known Boston housing data, and on gene expression data for cancer classification. The posterior sampling, prediction and graphical tools for interpreting the model results are implemented in a publicly available R package."
+        },
+        {
+          "title": "Safe RuleFit: Learning Optimal Sparse Rule Model by Meta Safe Screening",
+          "url": "http://arxiv.org/abs/1810.01683v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hiroki Kato",
+            "Hiroyuki Hanada",
+            "Ichiro Takeuchi"
+          ],
+          "publication_date": "2018-10-03",
+          "citationKey": "katoSafeRuleFitLearning2018",
+          "abstract": "We consider the problem of learning a sparse rule model, a prediction model in the form of a sparse linear combination of rules, where a rule is an indicator function defined over a hyper-rectangle in the input space. Since the number of all possible such rules is extremely large, it has been computationally intractable to select the optimal set of active rules. In this paper, to solve this difficulty for learning the optimal sparse rule model, we propose Safe RuleFit (SRF). Our basic idea is to develop meta safe screening (mSS), which is a non-trivial extension of well-known safe screening (SS) techniques. While SS is used for screening out one feature, mSS can be used for screening out multiple features by exploiting the inclusion-relations of hyper-rectangles in the input space. SRF provides a general framework for fitting sparse rule models for regression and classification, and it can be extended to handle more general sparse regularizations such as group regularization. We demonstrate the advantages of SRF through intensive numerical experiments."
+        },
+        {
+          "title": "imodels",
+          "url": "https://github.com/csinva/imodels",
+          "source_type": "software_package",
+          "publication_date": "2019-07-04",
+          "citationKey": "csinvaImodels2019",
+          "abstract": "Interpretable ML package 🔍 for concise, transparent, and accurate predictive modeling (sklearn-compatible)."
+        },
+        {
+          "title": "Getting More From Regression Models with RuleFit | Towards Data ...",
+          "url": "https://towardsdatascience.com/getting-more-from-regression-models-with-rulefit-2e6be8d77432",
+          "source_type": "tutorial",
+          "authors": [
+            "Casey Whorton"
+          ],
+          "publication_date": "2020-11-28",
+          "citationKey": "whortonGettingMoreRegression2020"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "ridge-regression-surrogates",
+        "anchor",
+        "local-interpretable-model-agnostic-explanations",
+        "mean-decrease-impurity",
+        "model-distillation"
+      ],
+      "sample_claims": [
+        {
+          "text": "The credit risk model's decision logic is expressible as a sparse set of interpretable if-then rules combined with linear feature weights",
+          "domain": "finance",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The patient risk stratification system's predictions are traceable to explicit clinical decision rules that mirror diagnostic reasoning patterns",
+          "domain": "healthcare",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The fraud detection model identifies risk through comprehensible rules that stakeholders can validate against domain knowledge",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The customer churn prediction system's global behavior is approximated by a small number of actionable business rules rather than opaque feature interactions",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The regulatory compliance model combines human-readable decision boundaries with weighted factors in a single auditable representation",
+          "domain": "public sector",
+          "assuranceGoal": "transparency"
+        }
+      ]
+    },
     {
       "slug": "cross-validation",
       "name": "Cross-validation",
@@ -1465,6 +1749,287 @@
       ]
     },
     {
+      "slug": "relabelling",
+      "name": "Relabelling",
+      "description": "A preprocessing fairness technique that modifies class labels in training data to achieve equal positive outcome rates across protected groups. Also known as 'data massaging', this method identifies instances that contribute to discriminatory patterns and flips their labels (from positive to negative or vice versa) to balance the proportion of positive outcomes between demographic groups. The technique aims to remove historical bias from training data whilst preserving the overall class distribution, enabling standard classifiers to learn from discrimination-free datasets.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/access-to-training-data",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/dataset-analysis",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-preprocessing",
+        "lifecycle-stage/model-development",
+        "technique-type/procedural"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Preprocessing historical hiring datasets by relabelling borderline cases to ensure equal hiring rates across gender and ethnicity groups, correcting for past discriminatory practices whilst maintaining overall qualification standards for fair recruitment model training.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Creating transparent credit scoring datasets by documenting which loan applications had labels modified to address historical lending discrimination, providing clear audit trails showing how training data bias was systematically corrected before model development.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Improving reliability of medical diagnosis training data by relabelling cases where demographic bias may have influenced historical diagnoses, ensuring models learn from corrected labels that reflect true medical conditions rather than biased historical treatment patterns.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Altering training labels risks introducing new biases or artificial patterns that may not reflect genuine relationships in the data."
+        },
+        {
+          "description": "Deciding which instances to relabel requires careful selection criteria and domain expertise to avoid inappropriate label changes."
+        },
+        {
+          "description": "May reduce prediction accuracy if too many labels are changed, particularly when the modifications conflict with genuine patterns in the data."
+        },
+        {
+          "description": "Requires access to ground truth or expert knowledge to determine whether original labels reflect genuine outcomes or discriminatory bias."
+        },
+        {
+          "description": "Effectiveness depends on accurate identification of discriminatory instances, which can be challenging when bias patterns are subtle or complex."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Data preprocessing techniques for classification without discrimination",
+          "url": "https://link.springer.com/article/10.1007/s10115-011-0463-8",
+          "source_type": "technical_paper",
+          "authors": [
+            "Faisal Kamiran",
+            "Toon Calders"
+          ],
+          "publication_date": "2012-06-01",
+          "citationKey": "kamiranDataPreprocessingTechniques2012"
+        },
+        {
+          "title": "Classifying without discriminating",
+          "url": "https://www.researchgate.net/publication/224440330_Classifying_without_discriminating",
+          "source_type": "technical_paper",
+          "authors": [
+            "Toon Calders",
+            "Sicco Verwer"
+          ],
+          "publication_date": "2010-02-01",
+          "citationKey": "caldersClassifyingDiscriminating2010"
+        },
+        {
+          "title": "Data Pre-Processing for Discrimination Prevention",
+          "url": "https://krvarshney.github.io/pubs/CalmonWVRV_jstsp2018.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Flavio Calmon",
+            "Dennis Wei",
+            "Bhanukiran Vinzamuri",
+            "Karthikeyan Natesan Ramamurthy",
+            "Kush R. Varshney"
+          ],
+          "publication_date": "2018-01-01",
+          "citationKey": "calmonDataPreProcessingDiscrimination2018"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "reweighing",
+        "disparate-impact-remover",
+        "preferential-sampling",
+        "multi-accuracy-boosting"
+      ],
+      "sample_claims": [
+        {
+          "text": "The hiring system's training data has been corrected to achieve equal qualification acceptance rates across demographic groups through systematic label modification",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The training dataset documents which diagnostic labels were modified to correct for historical treatment bias in underrepresented patient populations",
+          "domain": "healthcare",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The credit model's predictions reflect genuine creditworthiness rather than historically biased lending decisions that were corrected through label flipping",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The model was trained on corrected labels that remove discriminatory patterns from historical outcomes without altering the underlying feature distributions",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The preprocessing pipeline identifies and flips classification labels for borderline cases to balance positive outcome rates across protected groups before model training",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        }
+      ]
+    },
+    {
+      "slug": "multi-accuracy-boosting",
+      "name": "Multi-Accuracy Boosting",
+      "description": "An in-processing fairness technique that employs boosting algorithms to improve accuracy uniformly across demographic groups by iteratively correcting errors where the model performs poorly for certain subgroups. The method uses a multi-calibration approach that trains weak learners to focus on prediction errors for underperforming groups, ensuring that no group experiences systematically worse accuracy. This iterative boosting process continues until accuracy parity is achieved across all groups whilst maintaining overall model performance.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/ensemble",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/labelled-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training a medical diagnosis model that achieves equal accuracy across age, gender, and ethnicity groups by using boosting to specifically target prediction errors for underrepresented patient demographics, ensuring equitable healthcare outcomes for all populations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Building a robust fraud detection system that maintains consistent accuracy across different customer segments by iteratively correcting errors where the model performs poorly for specific demographic or geographic groups, ensuring reliable fraud prevention across all user types.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Developing a transparent hiring algorithm that provides clear evidence of equal performance across candidate demographics by using multi-accuracy boosting to systematically address group-specific prediction errors, enabling auditable fair recruitment processes.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires identifying and defining relevant subgroups or error regions, which may be challenging when group boundaries are unclear or overlapping."
+        },
+        {
+          "description": "Could increase model complexity significantly as the boosting process adds multiple weak learners, potentially affecting interpretability and computational efficiency."
+        },
+        {
+          "description": "May overfit to training data if very granular corrections are made, particularly when subgroups are small or the boosting process continues for too many iterations."
+        },
+        {
+          "description": "Performance depends on the quality of subgroup identification, and may fail to achieve fairness if important demographic intersections are not properly captured."
+        },
+        {
+          "description": "Convergence to equal accuracy across groups is not guaranteed, especially when there are fundamental differences in data distributions between groups."
+        }
+      ],
+      "resources": [
+        {
+          "title": "mcboost: Multi-Calibration Boosting for R",
+          "url": "https://joss.theoj.org/papers/10.21105/joss.03453",
+          "source_type": "technical_paper",
+          "authors": [
+            "Bernd Bischl",
+            "Susanne Dandl",
+            "Christoph Kern",
+            "Michael P. Kim",
+            "Florian Pfisterer",
+            "Matthew Sun"
+          ],
+          "publication_date": "2021-08-24",
+          "citationKey": "bischlMcboostMultiCalibrationBoosting2021"
+        },
+        {
+          "title": "mcboost",
+          "url": "https://github.com/mlr-org/mcboost",
+          "source_type": "software_package",
+          "publication_date": "2020-12-28",
+          "citationKey": "mlr-orgMcboost2020",
+          "abstract": "Multi-Calibration & Multi-Accuracy Boosting for R"
+        },
+        {
+          "title": "Multigroup Robustness",
+          "url": "http://arxiv.org/abs/2405.00614",
+          "source_type": "technical_paper",
+          "authors": [
+            "Lunjia Hu",
+            "Charlotte Peale",
+            "Judy Hanwen Shen"
+          ],
+          "publication_date": "2024-05-01",
+          "citationKey": "huMultigroupRobustness2024",
+          "abstract": "To address the shortcomings of real-world datasets, robust learning algorithms have been designed to overcome arbitrary and indiscriminate data corruption. However, practical processes of gathering data may lead to patterns of data corruption that are localized to specific partitions of the training dataset. Motivated by critical applications where the learned model is deployed to make predictions about people from a rich collection of overlapping subpopulations, we initiate the study of multigroup robust algorithms whose robustness guarantees for each subpopulation only degrade with the amount of data corruption inside that subpopulation. When the data corruption is not distributed uniformly over subpopulations, our algorithms provide more meaningful robustness guarantees than standard guarantees that are oblivious to how the data corruption and the affected subpopulations are related. Our techniques establish a new connection between multigroup fairness and robustness."
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "adaptive-sensitive-reweighting",
+        "adversarial-debiasing",
+        "fair-transfer-learning",
+        "meta-fair-classifier",
+        "reweighing"
+      ],
+      "sample_claims": [
+        {
+          "text": "The medical diagnosis system maintains equivalent prediction accuracy across patient age, gender, and ethnicity groups",
+          "domain": "healthcare",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The fraud detection model achieves consistent error rates across customer demographics without systematic underperformance for any group",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The hiring algorithm demonstrates measurable accuracy parity across protected demographic categories with documented performance metrics for each group",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The environmental risk assessment model produces equally accurate predictions across geographic regions and socioeconomic communities",
+          "domain": "environmental",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The loan approval system maintains uniform prediction quality across applicant demographics without disproportionate errors for minority groups",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        }
+      ]
+    },
+    {
       "slug": "model-development-audit-trails",
       "name": "Model Development Audit Trails",
       "description": "Model development audit trails create comprehensive, immutable records of all decisions, experiments, and changes throughout the ML lifecycle. This technique captures dataset versions, training configurations, hyperparameter searches, model architecture changes, evaluation results, and deployment decisions in tamper-evident logs. Audit trails enable reproducibility, accountability, and regulatory compliance by documenting who made what changes when and why, supporting post-hoc investigation of model failures or unexpected behaviours.",
@@ -2063,5 +2628,5 @@
       ]
     }
   ],
-  "count": 15
+  "count": 19
 }

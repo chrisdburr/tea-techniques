@@ -2,7 +2,7 @@
   "tag": {
     "name": "lifecycle-stage/system-deployment-and-use/monitoring",
     "slug": "lifecycle-stage-system-deployment-and-use-monitoring",
-    "count": 3,
+    "count": 4,
     "category": "lifecycle-stage"
   },
   "techniques": [
@@ -244,6 +244,184 @@
       ]
     },
     {
+      "slug": "concept-activation-vectors",
+      "name": "Concept Activation Vectors",
+      "description": "Concept Activation Vectors (CAVs), also known as Testing with Concept Activation Vectors (TCAV), identify mathematical directions in neural network representation space that correspond to human-understandable concepts such as 'stripes', 'young', or 'medical equipment'. The technique works by finding linear directions that separate activations of concept examples from non-concept examples, then measuring how much these concept directions influence the model's predictions. This provides quantitative answers to questions like 'How much does the concept of youth affect this model's hiring decisions?' enabling systematic bias detection and model understanding.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/causality",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/representation-analysis/concept-identification",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/visualisation",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/global",
+        "explanatory-scope/local",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use/auditing",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Auditing a medical imaging model to verify it focuses on diagnostic features (like 'tumour characteristics') rather than irrelevant concepts (like 'scanner type' or 'patient positioning') when classifying chest X-rays, ensuring clinical decisions rely on medically relevant information.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Testing whether a hiring algorithm's resume screening decisions are influenced by concepts related to protected characteristics such as 'gender-associated names', 'prestigious universities', or 'employment gaps', enabling systematic bias detection and compliance verification.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Providing regulatory-compliant explanations for financial lending decisions by quantifying how concepts like 'debt-to-income ratio', 'employment stability', and 'credit history length' influence loan approval models, with precise sensitivity scores for audit documentation.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires clearly defined concept examples and non-concept examples, which can be challenging to obtain for abstract or subjective concepts."
+        },
+        {
+          "description": "Assumes that meaningful concept directions exist as linear separable directions in the model's internal representation space, which may not hold for all concepts."
+        },
+        {
+          "description": "Results depend heavily on which network layer is examined, as different layers capture different levels of abstraction and concept representation."
+        },
+        {
+          "description": "Computational cost grows significantly with model size and number of concepts tested, though recent advances like FastCAV address this limitation."
+        },
+        {
+          "description": "Interpretation requires domain expertise to define meaningful concepts and understand the significance of sensitivity scores in practical contexts."
+        }
+      ],
+      "resources": [
+        {
+          "title": "FastCAV: Efficient Computation of Concept Activation Vectors for Explaining Deep Neural Networks",
+          "url": "http://arxiv.org/abs/2505.17883v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Laines Schmalwasser",
+            "Niklas Penzel",
+            "Joachim Denzler",
+            "Julia Niebling"
+          ],
+          "publication_date": "2025-05-23",
+          "citationKey": "schmalwasserFastCAVEfficientComputation2025",
+          "abstract": "Concepts such as objects, patterns, and shapes are how humans understand the world. Building on this intuition, concept-based explainability methods aim to study representations learned by deep neural networks in relation to human-understandable concepts. Here, Concept Activation Vectors (CAVs) are an important tool and can identify whether a model learned a concept or not. However, the computational cost and time requirements of existing CAV computation pose a significant challenge, particularly in large-scale, high-dimensional architectures. To address this limitation, we introduce FastCAV, a novel approach that accelerates the extraction of CAVs by up to 63.6x (on average 46.4x). We provide a theoretical foundation for our approach and give concrete assumptions under which it is equivalent to established SVM-based methods. Our empirical results demonstrate that CAVs calculated with FastCAV maintain similar performance while being more efficient and stable. In downstream applications, i.e., concept-based explanation methods, we show that FastCAV can act as a replacement leading to equivalent insights. Hence, our approach enables previously infeasible investigations of deep models, which we demonstrate by tracking the evolution of concepts during model training."
+        },
+        {
+          "title": "Concept Distillation: Leveraging Human-Centered Explanations for Model Improvement",
+          "url": "http://arxiv.org/abs/2311.15303v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Avani Gupta",
+            "Saurabh Saini",
+            "P J Narayanan"
+          ],
+          "publication_date": "2023-11-26",
+          "citationKey": "guptaConceptDistillationLeveraging2023",
+          "abstract": "Humans use abstract concepts for understanding instead of hard features. Recent interpretability research has focused on human-centered concept explanations of neural networks. Concept Activation Vectors (CAVs) estimate a model's sensitivity and possible biases to a given concept. In this paper, we extend CAVs from post-hoc analysis to ante-hoc training in order to reduce model bias through fine-tuning using an additional Concept Loss. Concepts were defined on the final layer of the network in the past. We generalize it to intermediate layers using class prototypes. This facilitates class learning in the last convolution layer, which is known to be most informative. We also introduce Concept Distillation to create richer concepts using a pre-trained knowledgeable model as the teacher. Our method can sensitize or desensitize a model towards concepts. We show applications of concept-sensitive training to debias several classification problems. We also use concepts to induce prior knowledge into IID, a reconstruction problem. Concept-sensitive training can improve model interpretability, reduce biases, and induce prior knowledge. Please visit https://avani17101.github.io/Concept-Distilllation/ for code and more details."
+        },
+        {
+          "title": "Post-Hoc Concept Disentanglement: From Correlated to Isolated Concept Representations",
+          "url": "http://arxiv.org/abs/2503.05522v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Eren Erogullari",
+            "Sebastian Lapuschkin",
+            "Wojciech Samek",
+            "Frederik Pahde"
+          ],
+          "publication_date": "2025-03-07",
+          "citationKey": "erogullariPostHocConceptDisentanglement2025",
+          "abstract": "Concept Activation Vectors (CAVs) are widely used to model human-understandable concepts as directions within the latent space of neural networks. They are trained by identifying directions from the activations of concept samples to those of non-concept samples. However, this method often produces similar, non-orthogonal directions for correlated concepts, such as \"beard\" and \"necktie\" within the CelebA dataset, which frequently co-occur in images of men. This entanglement complicates the interpretation of concepts in isolation and can lead to undesired effects in CAV applications, such as activation steering. To address this issue, we introduce a post-hoc concept disentanglement method that employs a non-orthogonality loss, facilitating the identification of orthogonal concept directions while preserving directional correctness. We evaluate our approach with real-world and controlled correlated concepts in CelebA and a synthetic FunnyBirds dataset with VGG16 and ResNet18 architectures. We further demonstrate the superiority of orthogonalized concept representations in activation steering tasks, allowing (1) the insertion of isolated concepts into input images through generative models and (2) the removal of concepts for effective shortcut suppression with reduced impact on correlated concepts in comparison to baseline CAVs."
+        },
+        {
+          "title": "Concept Gradient: Concept-based Interpretation Without Linear Assumption",
+          "url": "http://arxiv.org/abs/2208.14966v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andrew Bai",
+            "Chih-Kuan Yeh",
+            "Pradeep Ravikumar",
+            "Neil Y. C. Lin",
+            "Cho-Jui Hsieh"
+          ],
+          "publication_date": "2022-08-31",
+          "citationKey": "baiConceptGradientConceptbased2022",
+          "abstract": "Concept-based interpretations of black-box models are often more intuitive for humans to understand. The most widely adopted approach for concept-based interpretation is Concept Activation Vector (CAV). CAV relies on learning a linear relation between some latent representation of a given model and concepts. The linear separability is usually implicitly assumed but does not hold true in general. In this work, we started from the original intent of concept-based interpretation and proposed Concept Gradient (CG), extending concept-based interpretation beyond linear concept functions. We showed that for a general (potentially non-linear) concept, we can mathematically evaluate how a small change of concept affecting the model's prediction, which leads to an extension of gradient-based interpretation to the concept space. We demonstrated empirically that CG outperforms CAV in both toy examples and real world datasets."
+        },
+        {
+          "title": "SurroCBM: Concept Bottleneck Surrogate Models for Generative Post-hoc Explanation",
+          "url": "http://arxiv.org/abs/2310.07698v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Bo Pan",
+            "Zhenke Liu",
+            "Yifei Zhang",
+            "Liang Zhao"
+          ],
+          "publication_date": "2023-10-11",
+          "citationKey": "panSurroCBMConceptBottleneck2023",
+          "abstract": "Explainable AI seeks to bring light to the decision-making processes of black-box models. Traditional saliency-based methods, while highlighting influential data segments, often lack semantic understanding. Recent advancements, such as Concept Activation Vectors (CAVs) and Concept Bottleneck Models (CBMs), offer concept-based explanations but necessitate human-defined concepts. However, human-annotated concepts are expensive to attain. This paper introduces the Concept Bottleneck Surrogate Models (SurroCBM), a novel framework that aims to explain the black-box models with automatically discovered concepts. SurroCBM identifies shared and unique concepts across various black-box models and employs an explainable surrogate model for post-hoc explanations. An effective training strategy using self-generated data is proposed to enhance explanation quality continuously. Through extensive experiments, we demonstrate the efficacy of SurroCBM in concept discovery and explanation, underscoring its potential in advancing the field of explainable AI."
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "acronym": "CAVs",
+      "related_techniques": [
+        "neuron-activation-analysis",
+        "integrated-gradients",
+        "gradient-saliency",
+        "prototype-and-criticism-models"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's classification decisions are quantifiably linked to human-interpretable concepts rather than opaque internal representations",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The hiring system's candidate evaluations are demonstrably independent of concepts associated with protected characteristics",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The diagnostic model's sensitivity to clinically relevant concepts is documented with quantitative influence scores",
+          "domain": "healthcare",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The credit assessment model's reliance on demographic-related concepts is measurable and within acceptable bounds",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The vision system's object recognition depends on semantically meaningful visual concepts aligned with domain expertise",
+          "domain": "autonomous systems",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
       "slug": "equalised-odds-post-processing",
       "name": "Equalised Odds Post-Processing",
       "description": "A post-processing fairness technique based on Hardt et al.'s seminal work that adjusts classification thresholds after model training to achieve equal true positive rates and false positive rates across demographic groups. The method uses group-specific decision thresholds, potentially with randomisation, to satisfy the equalised odds constraint whilst preserving model utility. This approach enables fairness mitigation without retraining, making it applicable to existing deployed models or when training data access is restricted.",
@@ -404,7 +582,9 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
         "data-type/any",
@@ -504,7 +684,9 @@
         "demographic-parity-assessment",
         "average-odds-difference",
         "attribute-removal-fairness-through-unawareness",
-        "calibration-with-equality-of-opportunity"
+        "calibration-with-equality-of-opportunity",
+        "area-under-precision-recall-curve",
+        "path-specific-counterfactual-fairness-assessment"
       ],
       "sample_claims": [
         {
@@ -535,5 +717,5 @@
       ]
     }
   ],
-  "count": 4
+  "count": 5
 }

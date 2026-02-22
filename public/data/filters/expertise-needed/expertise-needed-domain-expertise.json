@@ -2,10 +2,158 @@
   "tag": {
     "name": "expertise-needed/domain-expertise",
     "slug": "expertise-needed-domain-expertise",
-    "count": 28,
+    "count": 30,
     "category": "expertise-needed"
   },
   "techniques": [
+    {
+      "slug": "sensitivity-analysis-for-fairness",
+      "name": "Sensitivity Analysis for Fairness",
+      "description": "Sensitivity Analysis for Fairness systematically evaluates how model predictions change when sensitive attributes or their proxies are perturbed whilst holding other factors constant. The technique involves creating counterfactual instances by modifying potentially discriminatory features (race, gender, age) or their correlates (zip code, names, education institutions) and measuring the resulting prediction differences. This controlled perturbation approach quantifies the degree to which protected characteristics influence model decisions, helping detect both direct discrimination and indirect bias through proxy variables even when sensitive attributes are not explicitly used as model inputs.",
+      "assurance_goals": [
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "data-requirements/no-special-requirements",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/statistics",
+        "explanatory-scope/local",
+        "fairness-approach/group",
+        "lifecycle-stage/deployment",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing whether a lending model's decisions change significantly when only the applicant's zip code (which may correlate with race) is altered, while keeping all other factors constant.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Evaluating a recruitment algorithm by systematically changing candidate names from stereotypically male to female names (whilst keeping qualifications identical) to measure whether gender bias affects hiring recommendations, revealing discrimination through name-based proxies.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Assessing a healthcare resource allocation model by varying patient zip codes across different socioeconomic areas to determine whether geographic proxies for race and income inappropriately influence treatment recommendations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires domain expertise to identify relevant proxy variables for sensitive attributes, which may not be obvious or comprehensive."
+        },
+        {
+          "description": "Computationally intensive for complex models when testing many feature combinations or perturbation ranges."
+        },
+        {
+          "description": "Choice of perturbation ranges and comparison points involves subjective decisions that can significantly affect results and conclusions."
+        },
+        {
+          "description": "May miss subtle or interaction-based forms of discrimination that only manifest under specific combinations of features."
+        }
+      ],
+      "resources": [
+        {
+          "title": "The Fragility of Fairness: Causal Sensitivity Analysis for Fair Machine Learning",
+          "url": "http://arxiv.org/abs/2410.09600v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Jake Fawkes",
+            "Nic Fishman",
+            "Mel Andrews",
+            "Zachary C. Lipton"
+          ],
+          "publication_date": "2024-10-12",
+          "citationKey": "fawkesFragilityFairnessCausal2024",
+          "abstract": "Fairness metrics are a core tool in the fair machine learning literature (FairML), used to determine that ML models are, in some sense, \"fair\". Real-world data, however, are typically plagued by various measurement biases and other violated assumptions, which can render fairness assessments meaningless. We adapt tools from causal sensitivity analysis to the FairML context, providing a general framework which (1) accommodates effectively any combination of fairness metric and bias that can be posed in the \"oblivious setting\"; (2) allows researchers to investigate combinations of biases, resulting in non-linear sensitivity; and (3) enables flexible encoding of domain-specific constraints and assumptions. Employing this framework, we analyze the sensitivity of the most common parity metrics under 3 varieties of classifier across 14 canonical fairness datasets. Our analysis reveals the striking fragility of fairness assessments to even minor dataset biases. We show that causal sensitivity analysis provides a powerful and necessary toolkit for gauging the informativeness of parity metric evaluations. Our repository is available here: https://github.com/Jakefawkes/fragile_fair."
+        },
+        {
+          "title": "Fair SA: Sensitivity Analysis for Fairness in Face Recognition",
+          "url": "http://arxiv.org/abs/2202.03586v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Aparna R. Joshi",
+            "Xavier Suau",
+            "Nivedha Sivakumar",
+            "Luca Zappella",
+            "Nicholas Apostoloff"
+          ],
+          "publication_date": "2022-02-08",
+          "citationKey": "r.joshiFairSASensitivity2022",
+          "abstract": "As the use of deep learning in high impact domains becomes ubiquitous, it is increasingly important to assess the resilience of models. One such high impact domain is that of face recognition, with real world applications involving images affected by various degradations, such as motion blur or high exposure. Moreover, images captured across different attributes, such as gender and race, can also challenge the robustness of a face recognition algorithm. While traditional summary statistics suggest that the aggregate performance of face recognition models has continued to improve, these metrics do not directly measure the robustness or fairness of the models. Visual Psychophysics Sensitivity Analysis (VPSA) [1] provides a way to pinpoint the individual causes of failure by way of introducing incremental perturbations in the data. However, perturbations may affect subgroups differently. In this paper, we propose a new fairness evaluation based on robustness in the form of a generic framework that extends VPSA. With this framework, we can analyze the ability of a model to perform fairly for different subgroups of a population affected by perturbations, and pinpoint the exact failure modes for a subgroup by measuring targeted robustness. With the increasing focus on the fairness of models, we use face recognition as an example application of our framework and propose to compactly visualize the fairness analysis of a model via AUC matrices. We analyze the performance of common face recognition models and empirically show that certain subgroups are at a disadvantage when images are perturbed, thereby uncovering trends that were not visible using the model's performance on subgroups without perturbations."
+        },
+        {
+          "title": "fairlearn",
+          "url": "https://github.com/fairlearn/fairlearn",
+          "source_type": "software_package",
+          "publication_date": "2018-05-15",
+          "citationKey": "fairlearnFairlearn2018",
+          "abstract": "A Python package to assess and improve fairness of machine learning models."
+        },
+        {
+          "title": "aequitas",
+          "url": "https://github.com/dssg/aequitas",
+          "source_type": "software_package",
+          "publication_date": "2018-02-13",
+          "citationKey": "dssgAequitas2018",
+          "abstract": "Bias Auditing & Fair ML Toolkit"
+        },
+        {
+          "title": "User Guide - Fairlearn documentation",
+          "url": "https://fairlearn.org/v0.13/user_guide/index.html",
+          "source_type": "documentation",
+          "authors": [
+            "Fairlearn Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "fairlearndevelopersUserGuideFairlearn2018"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "path-specific-counterfactual-fairness-assessment",
+        "counterfactual-fairness-assessment",
+        "average-odds-difference",
+        "demographic-parity-assessment"
+      ],
+      "sample_claims": [
+        {
+          "text": "The hiring system's offer decisions remain stable when candidate demographic proxies such as postal code or university name are systematically varied",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The loan approval model's interest rate assignments do not shift meaningfully when applicant names associated with different ethnic backgrounds are substituted",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The clinical risk stratification tool's recommendations are insensitive to variations in patient geographic location that correlate with socioeconomic status",
+          "domain": "healthcare",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The vehicle insurance pricing algorithm produces consistent premium estimates when zip codes within similar risk profiles but different demographic compositions are interchanged",
+          "domain": "autonomous systems",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The model's predictions do not exhibit systematic dependence on proxy variables that indirectly encode protected characteristics",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        }
+      ]
+    },
     {
       "slug": "safety-envelope-testing",
       "name": "Safety Envelope Testing",
@@ -18,7 +166,9 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/test-scenarios",
         "data-type/any",
         "evidence-type/boundary-analysis",
@@ -738,6 +888,7 @@
         "assurance-goal-category/explainability/property/comprehensibility",
         "assurance-goal-category/explainability/representation-analysis/concept-identification",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/transparency",
         "data-requirements/access-to-model-internals",
         "data-type/any",
@@ -747,8 +898,11 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/global",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/system-deployment-and-use/auditing",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -1045,7 +1199,10 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/access-to-training-data",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
@@ -1162,6 +1319,154 @@
           "text": "The preprocessing pipeline identifies and flips classification labels for borderline cases to balance positive outcome rates across protected groups before model training",
           "domain": "general",
           "assuranceGoal": "transparency"
+        }
+      ]
+    },
+    {
+      "slug": "fair-transfer-learning",
+      "name": "Fair Transfer Learning",
+      "description": "An in-processing fairness technique that adapts pre-trained models from one domain to another whilst explicitly preserving fairness constraints across different contexts or populations. The method addresses the challenge that fairness properties may not transfer when adapting models to new domains with different demographic compositions or data distributions. Fair transfer learning typically involves constraint-aware fine-tuning, domain adaptation techniques, or adversarial training that maintains equitable performance across groups in the target domain, ensuring that bias mitigation efforts carry over from source to target domains.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/pre-trained-model",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/fine-tuning",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adapting a hiring algorithm trained on one country's recruitment data to another region whilst maintaining fairness across gender and ethnicity groups, ensuring equitable candidate evaluation despite different local demographic distributions and cultural contexts.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Transferring a medical diagnosis model from urban hospital data to rural clinics whilst providing transparent evidence that fairness constraints are preserved across age, gender, and socioeconomic groups despite different patient populations and healthcare infrastructure.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Adapting a fraud detection system from one financial market to another whilst ensuring reliable performance across customer demographics, maintaining consistent accuracy and fairness even when transaction patterns and customer characteristics differ between markets.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Fairness properties achieved in the source domain may not translate directly to the target domain if demographic distributions or data characteristics differ significantly."
+        },
+        {
+          "description": "Requires careful hyperparameter tuning and constraint specification to balance fairness preservation with model performance in the new domain."
+        },
+        {
+          "description": "Implementation complexity is high, requiring expertise in both transfer learning techniques and fairness constraint optimisation methods."
+        },
+        {
+          "description": "May suffer from negative transfer effects where fairness constraints that worked well in the source domain actually harm performance in the target domain."
+        },
+        {
+          "description": "Evaluation challenges arise from needing to validate fairness across multiple domains and demographic groups simultaneously."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Segmenting across places: The need for fair transfer learning with satellite imagery",
+          "url": "http://arxiv.org/abs/2204.04358v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Miao Zhang",
+            "Harvineet Singh",
+            "Lazarus Chok",
+            "Rumi Chunara"
+          ],
+          "publication_date": "2022-04-09",
+          "citationKey": "zhangSegmentingPlacesNeed2022",
+          "abstract": "The increasing availability of high-resolution satellite imagery has enabled the use of machine learning to support land-cover measurement and inform policy-making. However, labelling satellite images is expensive and is available for only some locations. This prompts the use of transfer learning to adapt models from data-rich locations to others. Given the potential for high-impact applications of satellite imagery across geographies, a systematic assessment of transfer learning implications is warranted. In this work, we consider the task of land-cover segmentation and study the fairness implications of transferring models across locations. We leverage a large satellite image segmentation benchmark with 5987 images from 18 districts (9 urban and 9 rural). Via fairness metrics we quantify disparities in model performance along two axes -- across urban-rural locations and across land-cover classes. Findings show that state-of-the-art models have better overall accuracy in rural areas compared to urban areas, through unsupervised domain adaptation methods transfer learning better to urban versus rural areas and enlarge fairness gaps. In analysis of reasons for these findings, we show that raw satellite images are overall more dissimilar between source and target districts for rural than for urban locations. This work highlights the need to conduct fairness analysis for satellite imagery segmentation models and motivates the development of methods for fair transfer learning in order not to introduce disparities between places, particularly urban and rural locations."
+        },
+        {
+          "title": "Trustworthy Transfer Learning: A Survey",
+          "url": "https://www.semanticscholar.org/paper/7ee5c5b58ed0b4e585e0c30790c206bea07faacf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Jun Wu",
+            "Jingrui He"
+          ],
+          "publication_date": "2024",
+          "citationKey": "wuTrustworthyTransferLearning2024",
+          "abstract": "Transfer learning aims to transfer knowledge or information from a source domain to a relevant target domain. In this paper, we understand transfer learning from the perspectives of knowledge transferability and trustworthiness. This involves two research questions: How is knowledge transferability quantitatively measured and enhanced across domains? Can we trust the transferred knowledge in the transfer learning process? To answer these questions, this paper provides a comprehensive review of trustworthy transfer learning from various aspects, including problem definitions, theoretical analysis, empirical algorithms, and real-world applications. Specifically, we summarize recent theories and algorithms for understanding knowledge transferability under (within-domain) IID and non-IID assumptions. In addition to knowledge transferability, we review the impact of trustworthiness on transfer learning, e.g., whether the transferred knowledge is adversarially robust or algorithmically fair, how to transfer the knowledge under privacy-preserving constraints, etc. Beyond discussing the current advancements, we highlight the open questions and future directions for understanding transfer learning in a reliable and trustworthy manner."
+        },
+        {
+          "title": "Cross-Institutional Transfer Learning for Educational Models: Implications for Model Performance, Fairness, and Equity",
+          "url": "https://arxiv.org/abs/2305.00927",
+          "source_type": "technical_paper",
+          "authors": [
+            "Josh Gardner",
+            "Renzhe Yu",
+            "Quan Nguyen",
+            "Christopher Brooks",
+            "Rene Kizilcec"
+          ],
+          "publication_date": "2023-05-01",
+          "citationKey": "gardnerCrossInstitutionalTransferLearning2023",
+          "abstract": "Modern machine learning increasingly supports paradigms that are multi-institutional (using data from multiple institutions during training) or cross-institutional (using models from multiple institutions for inference), but the empirical effects of these paradigms are not well understood. This study investigates cross-institutional learning via an empirical case study in higher education. We propose a framework and metrics for assessing the utility and fairness of student dropout prediction models that are transferred across institutions. We examine the feasibility of cross-institutional transfer under real-world data- and model-sharing constraints, quantifying model biases for intersectional student identities, characterizing potential disparate impact due to these biases, and investigating the impact of various cross-institutional ensembling approaches on fairness and overall model performance. We perform this analysis on data representing over 200,000 enrolled students annually from four universities without sharing training data between institutions.   We find that a simple zero-shot cross-institutional transfer procedure can achieve similar performance to locally-trained models for all institutions in our study, without sacrificing model fairness. We also find that stacked ensembling provides no additional benefits to overall performance or fairness compared to either a local model or the zero-shot transfer procedure we tested. We find no evidence of a fairness-accuracy tradeoff across dozens of models and transfer schemes evaluated. Our auditing procedure also highlights the importance of intersectional fairness analysis, revealing performance disparities at the intersection of sensitive identity groups that are concealed under one-dimensional analysis."
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "adaptive-sensitive-reweighting",
+        "adversarial-debiasing",
+        "exponentiated-gradient-reduction",
+        "fair-adversarial-networks",
+        "federated-learning",
+        "multi-accuracy-boosting"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model maintains equitable performance across demographic groups when deployed in contexts with different population characteristics than the training environment",
+          "domain": "healthcare",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The hiring system produces consistent outcomes across protected attributes when applied to regional markets with distinct demographic compositions",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The system's fairness properties are preserved when adapted from one operational context to another with different data distributions",
+          "domain": "autonomous systems",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The model's equitable treatment of demographic groups is documented across multiple deployment contexts",
+          "domain": "public sector",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The fraud detection system maintains reliable performance across customer demographics when transferred between markets with different transaction patterns",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
         }
       ]
     },
@@ -1769,11 +2074,18 @@
         "applicable-models/requirements/white-box",
         "applicable-models/paradigm/supervised",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/harmful-behavior-detection",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/safety/monitoring",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "data-type/text",
         "data-requirements/labelled-data",
         "data-requirements/access-to-training-data",
+        "lifecycle-stage/model-development",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
@@ -1874,7 +2186,9 @@
         "agent-goal-misalignment-testing",
         "chain-of-thought-faithfulness-evaluation",
         "jailbreak-resistance-testing",
-        "multimodal-alignment-evaluation"
+        "multimodal-alignment-evaluation",
+        "prompt-robustness-testing",
+        "reward-hacking-detection"
       ],
       "sample_claims": [
         {
@@ -2387,6 +2701,7 @@
         "applicable-models/architecture/neural-networks/transformer/llm",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/harmful-behavior-detection",
         "assurance-goal-category/security",
         "assurance-goal-category/reliability",
         "data-type/text",
@@ -2506,7 +2821,12 @@
         "prompt-injection-testing",
         "agent-goal-misalignment-testing",
         "prompt-sensitivity-analysis",
-        "adversarial-training-evaluation"
+        "adversarial-training-evaluation",
+        "red-teaming",
+        "constitutional-ai-evaluation",
+        "multi-agent-system-testing",
+        "multimodal-alignment-evaluation",
+        "model-watermarking-and-theft-detection"
       ],
       "sample_claims": [
         {
@@ -3688,7 +4008,12 @@
         "lifecycle-stage/post-deployment",
         "lifecycle-stage/system-deployment/system-use-and-monitoring",
         "technique-type/testing",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/security/adversarial-robustness",
+        "assurance-goal-category/safety/harmful-behavior-detection",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/reliability/robustness"
       ],
       "example_use_cases": [
         {
@@ -3802,7 +4127,11 @@
         "agent-goal-misalignment-testing",
         "jailbreak-resistance-testing",
         "chain-of-thought-faithfulness-evaluation",
-        "toxicity-detection"
+        "toxicity-detection",
+        "red-teaming",
+        "prompt-robustness-testing",
+        "multi-agent-system-testing",
+        "api-usage-pattern-monitoring"
       ],
       "sample_claims": [
         {
@@ -3859,7 +4188,10 @@
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/transparency/process-transparency",
+        "explanatory-scope/local"
       ],
       "example_use_cases": [
         {
@@ -4168,7 +4500,12 @@
         "evidence-type/quantitative-metric",
         "evidence-type/qualitative-report",
         "expertise-needed/ml-engineering",
-        "expertise-needed/domain-expertise"
+        "expertise-needed/domain-expertise",
+        "assurance-goal-category/safety/harmful-behavior-detection",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/safety/risk-identification"
       ],
       "example_use_cases": [
         {
@@ -4260,7 +4597,9 @@
         "few-shot-fairness-evaluation",
         "embedding-bias-analysis",
         "prompt-injection-testing",
-        "runtime-monitoring-and-circuit-breakers"
+        "runtime-monitoring-and-circuit-breakers",
+        "jailbreak-resistance-testing",
+        "constitutional-ai-evaluation"
       ],
       "sample_claims": [
         {
@@ -4281,5 +4620,5 @@
       ]
     }
   ],
-  "count": 28
+  "count": 30
 }

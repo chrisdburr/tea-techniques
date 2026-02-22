@@ -2,7 +2,7 @@
   "goal": {
     "name": "Fairness",
     "slug": "fairness",
-    "count": 64,
+    "count": 65,
     "description": "Ensuring AI systems treat different groups and individuals equitably."
   },
   "techniques": [
@@ -22,13 +22,17 @@
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/explainability/property/consistency",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
         "explanatory-scope/global",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "technique-type/algorithmic",
         "applicable-models/architecture/model-agnostic",
@@ -122,7 +126,13 @@
         "local-interpretable-model-agnostic-explanations",
         "permutation-importance",
         "sobol-indices",
-        "partial-dependence-plots"
+        "partial-dependence-plots",
+        "mean-decrease-impurity",
+        "individual-conditional-expectation-plots",
+        "anchor",
+        "contrastive-explanation-method",
+        "permutation-tests",
+        "generalized-additive-models"
       ],
       "sample_claims": [
         {
@@ -168,13 +178,17 @@
         "assurance-goal-category/explainability/explains/causal-pathways",
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
         "explanatory-scope/global",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/deployment",
         "technique-type/algorithmic",
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box"
@@ -323,11 +337,13 @@
         "assurance-goal-category/explainability/property/efficiency",
         "assurance-goal-category/explainability/visualization-methods/activation-maps",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "data-requirements/access-to-model-internals",
         "data-type/image",
         "evidence-type/visualisation",
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "technique-type/algorithmic"
       ],
@@ -403,6 +419,8 @@
       "complexity_rating": 3,
       "computational_cost_rating": 2,
       "related_techniques": [
+        "concept-activation-vectors",
+        "deeplift",
         "gradient-weighted-class-activation-mapping",
         "integrated-gradients",
         "occlusion-sensitivity",
@@ -464,7 +482,11 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "assurance-goal-category/fairness/group",
+        "fairness-approach/group",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use/auditing"
       ],
       "example_use_cases": [
         {
@@ -566,7 +588,9 @@
         "integrated-gradients",
         "gradient-saliency",
         "occlusion-sensitivity",
-        "local-interpretable-model-agnostic-explanations"
+        "local-interpretable-model-agnostic-explanations",
+        "layer-wise-relevance-propagation",
+        "concept-activation-vectors"
       ],
       "sample_claims": [
         {
@@ -617,12 +641,15 @@
         "assurance-goal-category/explainability/property/comprehensibility",
         "assurance-goal-category/explainability/property/sparsity",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/structured-output",
         "expertise-needed/ml-engineering",
         "explanatory-scope/global",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -700,7 +727,10 @@
         "influence-functions",
         "t-sne",
         "umap",
-        "contrastive-explanation-method"
+        "contrastive-explanation-method",
+        "concept-activation-vectors",
+        "neuron-activation-analysis",
+        "factor-analysis"
       ],
       "sample_claims": [
         {
@@ -899,6 +929,156 @@
         {
           "text": "The perception system's object classification decisions are traceable to specific labeled examples from the training corpus",
           "domain": "autonomous systems",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
+      "slug": "permutation-tests",
+      "name": "Permutation Tests",
+      "description": "Permutation tests assess the statistical significance of observed results (such as model accuracy, feature importance, or group differences) by comparing them to what would occur purely by chance. The technique randomly shuffles labels or data thousands of times, recalculating the metric of interest each time to build an empirical null distribution. If the actual observed result falls in the extreme tail of this distribution (typically beyond the 95th or 99th percentile), it provides strong evidence that the relationship is genuine rather than due to random chance, without requiring parametric assumptions about data distributions.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Validating feature importance in medical diagnosis models by permuting each feature 10,000 times to ensure that identified risk factors (e.g., blood pressure, cholesterol) have statistically significant predictive power beyond random chance.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Testing whether observed differences in loan approval rates between demographic groups are statistically significant by permuting group labels and calculating the approval rate difference distribution under the null hypothesis of no discrimination.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Verifying that a model's claimed 95% accuracy on test data is genuinely better than random guessing by permuting labels 5,000 times and confirming the actual accuracy falls beyond the 99th percentile of the null distribution.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally expensive as it requires thousands of model evaluations or metric calculations, scaling poorly with dataset size and model complexity."
+        },
+        {
+          "description": "Requires many permutations (typically 5,000-10,000) to achieve reliable p-values for strict significance thresholds like p < 0.01."
+        },
+        {
+          "description": "Assumes exchangeability of observations under the null hypothesis, which may be violated in time series or hierarchical data structures."
+        },
+        {
+          "description": "Cannot be easily parallelised for some metrics that require global model retraining, limiting scalability for complex machine learning pipelines."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Permutation Tests for Classification",
+          "url": "https://core.ac.uk/download/4383831.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Golland, Polina",
+            "Mukherjee, Sayan",
+            "Panchenko, Dmitry"
+          ],
+          "publication_date": "2003-01-01",
+          "citationKey": "polinaPermutationTestsClassification2003"
+        },
+        {
+          "title": "How to use Permutation Tests | Towards Data Science",
+          "url": "https://towardsdatascience.com/how-to-use-permutation-tests-bacc79f45749",
+          "source_type": "tutorial",
+          "authors": [
+            "Michael Berk"
+          ],
+          "publication_date": "2021-09-21",
+          "citationKey": "berkHowUsePermutation2021"
+        },
+        {
+          "title": "Permutation test in R | Towards Data Science",
+          "url": "https://towardsdatascience.com/permutation-test-in-r-77d551a9f891",
+          "source_type": "tutorial",
+          "authors": [
+            "Serafim Petrov"
+          ],
+          "publication_date": "2021-03-15",
+          "citationKey": "petrovPermutationTestData2021"
+        },
+        {
+          "title": "The Exchangeability Assumption for Permutation Tests of Multiple Regression Models: Implications for Statistics and Data Science Educators",
+          "url": "http://arxiv.org/abs/2406.07756v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Johanna Hardin",
+            "Lauren Quesada",
+            "Julie Ye",
+            "Nicholas J. Horton"
+          ],
+          "publication_date": "2024-06-11",
+          "citationKey": "hardinExchangeabilityAssumptionPermutation2024",
+          "abstract": "Permutation tests are a powerful and flexible approach to inference via resampling. As computational methods become more ubiquitous in the statistics curriculum, use of permutation tests has become more tractable. At the heart of the permutation approach is the exchangeability assumption, which determines the appropriate null sampling distribution. We explore the exchangeability assumption in the context of permutation tests for multiple linear regression models, including settings where the assumption is not tenable. Various permutation schemes for the multiple linear regression setting have been proposed and assessed in the literature. As has been demonstrated previously, in most settings, the choice of how to permute a multiple linear regression model does not materially change inferential conclusions with respect to Type I errors. However, some violations (e.g., when clustering is not appropriately accounted for) lead to issues with Type I error rates. Regardless, we believe that understanding (1) exchangeability in the multiple linear regression setting and also (2) how it relates to the null hypothesis of interest is valuable. We close with pedagogical recommendations for instructors who want to bring multiple linear regression permutation inference into their classroom as a way to deepen student understanding of resampling-based inference."
+        },
+        {
+          "title": "scikit-learn permutation_importance",
+          "url": "https://scikit-learn.org/stable/modules/permutation_importance.html",
+          "source_type": "documentation",
+          "authors": [
+            "Scikit-learn Developers"
+          ],
+          "publication_date": "2007",
+          "citationKey": "scikit-learndevelopersScikitlearnPermutation_importance2007"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "permutation-importance",
+        "bootstrapping",
+        "cross-validation",
+        "jackknife-resampling",
+        "shapley-additive-explanations",
+        "sobol-indices"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's performance advantage over baseline methods is statistically robust to random data partitioning",
+          "domain": "general",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The observed differences in loan approval rates between demographic groups exceed what would occur by chance alone",
+          "domain": "finance",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The identified risk factors maintain their predictive strength independent of incidental correlations in the training data",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The system's feature importance rankings reflect genuine signal rather than spurious patterns in the observed sample",
+          "domain": "environmental",
           "assuranceGoal": "explainability"
         }
       ]
@@ -1154,6 +1334,7 @@
       "computational_cost_rating": 3,
       "related_techniques": [
         "fair-adversarial-networks",
+        "multi-accuracy-boosting",
         "reweighing",
         "equalised-odds-post-processing",
         "threshold-optimiser"
@@ -1320,13 +1501,18 @@
         "applicable-models/requirements/black-box",
         "applicable-models/requirements/training-data",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "data-requirements/no-special-requirements",
         "data-requirements/sensitive-attributes",
         "data-type/any",
         "evidence-type/quantitative-metric",
+        "expertise-needed/domain-expertise",
         "expertise-needed/statistics",
         "explanatory-scope/local",
         "fairness-approach/group",
+        "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -1787,10 +1973,13 @@
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/privacy",
         "assurance-goal-category/privacy/formal-guarantee/differential-privacy",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/privacy-guarantee",
@@ -1798,6 +1987,7 @@
         "expertise-needed/cryptography",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
+        "fairness-approach/group",
         "lifecycle-stage/data-handling",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
@@ -1875,8 +2065,9 @@
       "related_techniques": [
         "federated-learning",
         "homomorphic-encryption",
-        "synthetic-data-generation",
-        "membership-inference-attack-testing"
+        "machine-unlearning",
+        "membership-inference-attack-testing",
+        "synthetic-data-generation"
       ],
       "sample_claims": [
         {
@@ -1923,14 +2114,18 @@
         "applicable-models/paradigm/supervised",
         "applicable-models/requirements/white-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/prediction-interval",
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
@@ -2025,7 +2220,11 @@
       "related_techniques": [
         "conformal-prediction",
         "bootstrapping",
-        "jackknife-resampling"
+        "jackknife-resampling",
+        "monte-carlo-dropout",
+        "empirical-calibration",
+        "deep-ensembles",
+        "monotonicity-constraints"
       ],
       "sample_claims": [
         {
@@ -4533,13 +4732,18 @@
         "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/no-special-requirements",
         "data-type/text",
         "evidence-type/quantitative-metric",
         "evidence-type/visualisation",
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
+        "fairness-approach/group",
+        "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
         "lifecycle-stage/testing",
         "technique-type/algorithmic"
@@ -4626,7 +4830,8 @@
         "prompt-sensitivity-analysis",
         "causal-mediation-analysis-in-language-models",
         "attention-visualisation-in-transformers",
-        "contextual-decomposition"
+        "contextual-decomposition",
+        "shapley-additive-explanations"
       ],
       "sample_claims": [
         {
@@ -4677,6 +4882,7 @@
         "assurance-goal-category/explainability/property/comprehensibility",
         "assurance-goal-category/explainability/representation-analysis/concept-identification",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/transparency",
         "data-requirements/access-to-model-internals",
         "data-type/any",
@@ -4686,8 +4892,11 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/global",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/system-deployment-and-use/auditing",
+        "lifecycle-stage/system-deployment-and-use/monitoring",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -4852,6 +5061,7 @@
         "assurance-goal-category/explainability/property/efficiency",
         "assurance-goal-category/explainability/visualization-methods/attention-patterns",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/transparency",
         "data-requirements/access-to-model-internals",
         "data-type/image",
@@ -4860,6 +5070,7 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/global",
         "explanatory-scope/local",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "lifecycle-stage/testing",
         "technique-type/algorithmic"
@@ -5018,11 +5229,15 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group/statistical-parity",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/access-to-training-data",
         "data-requirements/sensitive-attributes",
         "data-type/any",
+        "evidence-type/dataset-analysis",
         "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
         "expertise-needed/low",
         "fairness-approach/group",
         "lifecycle-stage/data-handling/preprocessing",
@@ -5115,7 +5330,8 @@
         "disparate-impact-remover",
         "relabelling",
         "preferential-sampling",
-        "adaptive-sensitive-reweighting"
+        "adaptive-sensitive-reweighting",
+        "adversarial-debiasing"
       ],
       "sample_claims": [
         {
@@ -5301,7 +5517,9 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/data-minimization",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
         "data-type/any",
@@ -5398,7 +5616,8 @@
         "bayesian-fairness-regularization",
         "sensitivity-analysis-for-fairness",
         "attribute-removal-fairness-through-unawareness",
-        "fair-adversarial-networks"
+        "fair-adversarial-networks",
+        "synthetic-data-generation"
       ],
       "sample_claims": [
         {
@@ -5445,7 +5664,10 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/access-to-training-data",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
@@ -5582,6 +5804,7 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/transparency",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
@@ -5671,7 +5894,8 @@
         "disparate-impact-remover",
         "reweighing",
         "relabelling",
-        "out-of-domain-detection"
+        "out-of-domain-detection",
+        "adaptive-sensitive-reweighting"
       ],
       "sample_claims": [
         {
@@ -5866,7 +6090,9 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
         "data-type/any",
@@ -5908,6 +6134,9 @@
         },
         {
           "description": "Computational overhead is significant due to training two networks simultaneously, increasing both training time and resource requirements."
+        },
+        {
+          "description": "The adversarial objective only removes dependence on explicitly labelled sensitive attributes; proxy variables that correlate with protected characteristics will remain encoded in learned representations. Extending to intersectional fairness across multiple protected attributes requires separate discriminator components or multi-task adversarial architectures, substantially increasing design complexity and training instability."
         }
       ],
       "resources": [
@@ -5966,7 +6195,9 @@
       "related_techniques": [
         "adaptive-sensitive-reweighting",
         "adversarial-debiasing",
+        "exponentiated-gradient-reduction",
         "fair-transfer-learning",
+        "fairness-gan",
         "meta-fair-classifier"
       ],
       "sample_claims": [
@@ -6017,7 +6248,9 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
         "data-type/tabular",
@@ -6099,7 +6332,8 @@
         "adaptive-sensitive-reweighting",
         "adversarial-debiasing",
         "fair-transfer-learning",
-        "meta-fair-classifier"
+        "meta-fair-classifier",
+        "reweighing"
       ],
       "sample_claims": [
         {
@@ -6254,7 +6488,8 @@
         "adaptive-sensitive-reweighting",
         "adversarial-debiasing",
         "exponentiated-gradient-reduction",
-        "fair-adversarial-networks"
+        "fair-adversarial-networks",
+        "multi-accuracy-boosting"
       ],
       "sample_claims": [
         {
@@ -6450,12 +6685,15 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/pre-trained-model",
         "data-requirements/sensitive-attributes",
         "data-type/any",
         "evidence-type/fairness-metric",
         "evidence-type/quantitative-metric",
+        "expertise-needed/domain-expertise",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
         "fairness-approach/group",
@@ -6544,7 +6782,9 @@
         "adaptive-sensitive-reweighting",
         "adversarial-debiasing",
         "exponentiated-gradient-reduction",
-        "fair-adversarial-networks"
+        "fair-adversarial-networks",
+        "federated-learning",
+        "multi-accuracy-boosting"
       ],
       "sample_claims": [
         {
@@ -6681,7 +6921,8 @@
         "exponentiated-gradient-reduction",
         "fair-adversarial-networks",
         "fair-transfer-learning",
-        "meta-fair-classifier"
+        "meta-fair-classifier",
+        "multi-accuracy-boosting"
       ],
       "sample_claims": [
         {
@@ -6729,7 +6970,11 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
         "data-type/any",
@@ -6817,7 +7062,8 @@
         "adaptive-sensitive-reweighting",
         "adversarial-debiasing",
         "fair-transfer-learning",
-        "meta-fair-classifier"
+        "meta-fair-classifier",
+        "reweighing"
       ],
       "sample_claims": [
         {
@@ -7006,9 +7252,14 @@
         "applicable-models/requirements/black-box",
         "applicable-models/requirements/probabilistic-output",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "data-requirements/labelled-data",
+        "data-requirements/prediction-probabilities",
         "data-requirements/sensitive-attributes",
         "data-type/any",
+        "evidence-type/fairness-metric",
         "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
         "fairness-approach/group",
         "lifecycle-stage/post-processing",
@@ -7102,6 +7353,7 @@
       "complexity_rating": 2,
       "computational_cost_rating": 1,
       "related_techniques": [
+        "adversarial-debiasing",
         "calibration-with-equality-of-opportunity",
         "equalised-odds-post-processing",
         "reject-option-classification",
@@ -7152,7 +7404,9 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
         "data-requirements/prediction-probabilities",
         "data-requirements/sensitive-attributes",
@@ -7246,8 +7500,7 @@
       "related_techniques": [
         "calibration-with-equality-of-opportunity",
         "equalised-odds-post-processing",
-        "threshold-optimiser",
-        "out-of-domain-detection"
+        "threshold-optimiser"
       ],
       "sample_claims": [
         {
@@ -7439,7 +7692,9 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
         "data-type/any",
@@ -7539,7 +7794,9 @@
         "demographic-parity-assessment",
         "average-odds-difference",
         "attribute-removal-fairness-through-unawareness",
-        "calibration-with-equality-of-opportunity"
+        "calibration-with-equality-of-opportunity",
+        "area-under-precision-recall-curve",
+        "path-specific-counterfactual-fairness-assessment"
       ],
       "sample_claims": [
         {
@@ -8436,10 +8693,12 @@
         "applicable-models/architecture/neural-networks/convolutional",
         "applicable-models/requirements/model-internals",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/explainability",
         "assurance-goal-category/explainability/explains/internal-mechanisms",
         "assurance-goal-category/explainability/visualization-methods/activation-maps",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-type/text",
         "data-type/image",
         "data-requirements/access-to-training-data",
@@ -8453,7 +8712,8 @@
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
         "explanatory-scope/global",
-        "evidence-type/fairness-metric"
+        "evidence-type/fairness-metric",
+        "fairness-approach/group"
       ],
       "example_use_cases": [
         {
@@ -8562,7 +8822,8 @@
         "attention-visualisation-in-transformers",
         "concept-activation-vectors",
         "chain-of-thought-faithfulness-evaluation",
-        "few-shot-fairness-evaluation"
+        "few-shot-fairness-evaluation",
+        "toxicity-detection"
       ],
       "sample_claims": [
         {
@@ -9203,5 +9464,5 @@
       ]
     }
   ],
-  "count": 64
+  "count": 65
 }

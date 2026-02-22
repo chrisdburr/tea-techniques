@@ -2,10 +2,138 @@
   "tag": {
     "name": "lifecycle-stage/system-deployment-and-use",
     "slug": "lifecycle-stage-system-deployment-and-use",
-    "count": 26,
+    "count": 29,
     "category": "lifecycle-stage"
   },
   "techniques": [
+    {
+      "slug": "coefficient-magnitudes-in-linear-models",
+      "name": "Coefficient Magnitudes (in Linear Models)",
+      "description": "Coefficient Magnitudes assess feature influence in linear models by examining the absolute values of their coefficients. Features with larger absolute coefficients are considered to have a stronger impact on the prediction, while the sign of the coefficient indicates the direction of that influence (positive or negative). This technique provides a straightforward and transparent way to understand the direct linear relationship between each input feature and the model's output.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/model-specific",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/efficiency",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/tabular",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/low",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/metric",
+        "applicable-models/architecture/linear-models",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/white-box"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Interpreting which features influence housing price predictions in linear regression, such as identifying that 'number of bedrooms' has a larger positive impact than 'distance to city centre' based on coefficient magnitudes.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Explaining the factors contributing to customer lifetime value (CLV) in a linear model, showing how 'average monthly spend' has a strong positive coefficient, making the model transparent for business stakeholders.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Only valid for linear relationships; it cannot capture complex non-linear patterns or interactions between features."
+        },
+        {
+          "description": "Highly sensitive to feature scaling; features with larger numerical ranges can appear more important even if their true impact is smaller."
+        },
+        {
+          "description": "Can be misleading in the presence of multicollinearity, where correlated features may split importance or have unstable coefficients."
+        },
+        {
+          "description": "Does not imply causation; a strong correlation (large coefficient) does not necessarily mean a causal relationship."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn Linear Models",
+          "url": "https://scikit-learn.org/stable/modules/linear_model.html",
+          "source_type": "documentation",
+          "authors": [
+            "Scikit-learn Developers"
+          ],
+          "publication_date": "2007",
+          "citationKey": "scikit-learndevelopersScikitlearnLinearModels2007"
+        },
+        {
+          "title": "Interpreting Linear Regression Coefficients",
+          "url": "https://statisticsbyjim.com/regression/interpret-coefficients-p-values-regression",
+          "source_type": "tutorial",
+          "authors": [
+            "Jim Frost"
+          ],
+          "publication_date": "2017-04-12",
+          "citationKey": "frostInterpretingLinearRegression2017"
+        },
+        {
+          "title": "statsmodels: Econometric and statistical modeling",
+          "url": "https://www.statsmodels.org/stable/index.html",
+          "source_type": "software_package",
+          "publication_date": "2009",
+          "citationKey": "StatsmodelsEconometricStatistical2009"
+        },
+        {
+          "title": "The Elements of Statistical Learning",
+          "url": "https://hastie.su.domains/ElemStatLearn",
+          "source_type": "technical_paper",
+          "publication_date": "2009",
+          "citationKey": "ElementsStatisticalLearning2009"
+        }
+      ],
+      "complexity_rating": 1,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "permutation-importance",
+        "mean-decrease-impurity",
+        "shapley-additive-explanations",
+        "generalized-additive-models",
+        "ridge-regression-surrogates"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's feature influences are quantifiable through direct examination of their linear coefficients",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The housing price estimator's reliance on specific property attributes is transparent to regulators through standardized coefficient magnitudes",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The clinical risk model's predictive contributions from patient characteristics are directly interpretable from the regression parameters",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The system's feature importance rankings remain consistent when input variables are appropriately scaled",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The crop yield prediction model's dependence on environmental factors is directly measurable through their coefficient values",
+          "domain": "environmental",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
     {
       "slug": "deeplift",
       "name": "DeepLIFT",
@@ -464,6 +592,7 @@
         "assurance-goal-category/explainability/explains/decision-boundaries",
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/qualitative-report",
@@ -471,6 +600,7 @@
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic",
         "applicable-models/architecture/model-agnostic",
@@ -502,6 +632,9 @@
         },
         {
           "description": "Can be computationally expensive for explaining many instances due to repeated model queries."
+        },
+        {
+          "description": "Assumes features are independent when generating perturbations, producing unrealistic out-of-distribution samples for datasets with correlated features. This can generate misleading attribution scores when inputs share strong correlations (e.g., age and income in credit scoring, comorbidities in clinical data)."
         }
       ],
       "resources": [
@@ -572,7 +705,12 @@
         "shapley-additive-explanations",
         "anchor",
         "ridge-regression-surrogates",
-        "partial-dependence-plots"
+        "partial-dependence-plots",
+        "individual-conditional-expectation-plots",
+        "occlusion-sensitivity",
+        "contrastive-explanation-method",
+        "mean-decrease-impurity",
+        "sobol-indices"
       ],
       "sample_claims": [
         {
@@ -598,6 +736,279 @@
         {
           "text": "The environmental monitoring system's anomaly alerts are accompanied by explanations showing which sensor readings contributed to each specific detection",
           "domain": "environmental",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
+      "slug": "ridge-regression-surrogates",
+      "name": "Ridge Regression Surrogates",
+      "description": "This technique approximates a complex model by training a ridge regression (a linear model with L2 regularisation) on the original model's predictions. The ridge regression serves as a global surrogate that balances fidelity and interpretability, capturing the main linear relationships that the complex model learned whilst ignoring noise due to regularisation. This approach is particularly useful when stakeholders need to understand the overall behaviour of a complex model through transparent linear coefficients.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/structured-output",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic",
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Approximating a complex ensemble model used for credit scoring with a ridge regression surrogate to identify the most influential features (income, credit history, debt-to-income ratio) and their linear relationships for regulatory compliance reporting.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating a ridge regression surrogate of a neural network used for medical diagnosis to understand which patient symptoms and biomarkers have the strongest linear predictive relationships with disease outcomes.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating an interpretable approximation of a complex insurance pricing model for regulatory compliance, enabling stakeholders to understand and validate the decision-making process through transparent linear relationships.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Linear approximation may miss important non-linear relationships and interactions captured by the original complex model."
+        },
+        {
+          "description": "Requires a representative dataset to train the surrogate model, which may not be available or may be expensive to generate."
+        },
+        {
+          "description": "Ridge regularisation may oversimplify the model by shrinking coefficients, potentially hiding important but less dominant features."
+        },
+        {
+          "description": "Surrogate fidelity depends on how well linear relationships approximate the original model's behaviour across the entire input space."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn Ridge Regression Documentation",
+          "url": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html",
+          "source_type": "documentation",
+          "authors": [
+            "Scikit-learn Developers"
+          ],
+          "publication_date": "2007",
+          "citationKey": "scikit-learndevelopersScikitlearnRidgeRegression2007"
+        },
+        {
+          "title": "Interpretable Machine Learning: A Guide for Making Black Box Models Explainable",
+          "url": "https://christophm.github.io/interpretable-ml-book/global.html",
+          "source_type": "tutorial",
+          "publication_date": "2019",
+          "citationKey": "InterpretableMachineLearning2019"
+        },
+        {
+          "title": "Interpreting Blackbox Models via Model Extraction",
+          "url": "https://arxiv.org/abs/1705.08504",
+          "source_type": "technical_paper",
+          "authors": [
+            "Osbert Bastani",
+            "Carolyn Kim",
+            "Hamsa Bastani"
+          ],
+          "publication_date": "2017-05-23",
+          "citationKey": "bastaniInterpretingBlackboxModels2017",
+          "abstract": "Interpretability has become incredibly important as machine learning is increasingly used to inform consequential decisions. We propose to construct global explanations of complex, blackbox models in the form of a decision tree approximating the original model---as long as the decision tree is a good approximation, then it mirrors the computation performed by the blackbox model. We devise a novel algorithm for extracting decision tree explanations that actively samples new training points to avoid overfitting. We evaluate our algorithm on a random forest to predict diabetes risk and a learned controller for cart-pole. Compared to several baselines, our decision trees are both substantially more accurate and equally or more interpretable based on a user study. Finally, we describe several insights provided by our interpretations, including a causal issue validated by a physician."
+        },
+        {
+          "title": "Model extraction and defenses on generative adversarial networks",
+          "url": "https://ieeexplore.ieee.org/document/8424633",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yuheng Jia",
+            "Zhuofu Tian",
+            "Mulin Xiong",
+            "Jiaxin Ding"
+          ],
+          "publication_date": "2018-06-20",
+          "citationKey": "jiaModelExtractionDefenses2018"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "local-interpretable-model-agnostic-explanations",
+        "model-distillation",
+        "rulefit",
+        "partial-dependence-plots",
+        "coefficient-magnitudes-in-linear-models"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's global behavior is approximated by a simpler representation that captures dominant linear relationships across all predictions",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The credit scoring model's decision logic can be explained through consistent linear weights applied uniformly across all applicant evaluations",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The diagnostic system's predictions are attributable to weighted combinations of patient features that remain stable across the entire population",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The environmental forecasting model's feature influences are represented through simplified linear coefficients that prioritize robust patterns over noise",
+          "domain": "environmental",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The complex ensemble model's overall decision-making process is captured by an interpretable linear approximation that reveals primary feature contributions",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
+      "slug": "anchor",
+      "name": "ANCHOR",
+      "acronym": "ANCHOR",
+      "description": "ANCHOR generates high-precision if-then rules that explain individual predictions by identifying the minimal set of feature conditions that guarantee a specific prediction with high confidence. It searches for 'anchor' conditions (e.g., 'age > 30 AND income < £50k') that ensure the model gives the same prediction at least 95% of the time when those conditions are met. This creates human-readable rules that users can trust as sufficient conditions for understanding why a particular decision was made.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/explainability/surrogate-models/rule-extraction",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Explaining loan application decisions with rules like 'IF credit_score > 650 AND debt_ratio < 0.4 THEN approval = 95% likely', giving applicants clear, actionable conditions they can understand and potentially improve.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Generating diagnostic rules for medical predictions such as 'IF fever > 38.5°C AND white_blood_cells > 12,000 THEN infection = 92% likely', helping clinicians validate automated diagnoses with trusted clinical indicators.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating transparent hiring decisions with rules like 'IF experience >= 3_years AND degree = relevant THEN hire = 89% likely', providing clear justification for recruitment decisions that can be audited for fairness.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Limited to local explanations for individual instances, cannot provide global insights about overall model behaviour."
+        },
+        {
+          "description": "Requires discretisation of continuous features, which can lose important nuanced information and create arbitrary thresholds."
+        },
+        {
+          "description": "May fail to find suitable anchor rules if precision requirements are too strict or if the prediction space is highly complex."
+        },
+        {
+          "description": "Computationally expensive as it requires extensive sampling to validate rule precision, especially for high-dimensional data."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Anchors: High-Precision Model-Agnostic Explanations",
+          "url": "https://homes.cs.washington.edu/~marcotcr/aaai18.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Marco Tulio Ribeiro",
+            "Sameer Singh",
+            "Carlos Guestrin"
+          ],
+          "publication_date": "2018-01-01",
+          "citationKey": "ribeiroAnchorsHighPrecisionModelAgnostic2018"
+        },
+        {
+          "title": "anchor",
+          "url": "https://github.com/marcotcr/anchor",
+          "source_type": "software_package",
+          "publication_date": "2018-02-02",
+          "citationKey": "marcotcrAnchor2018",
+          "abstract": "Code for \"High-Precision Model-Agnostic Explanations\" paper"
+        },
+        {
+          "title": "alibi",
+          "url": "https://github.com/SeldonIO/alibi",
+          "source_type": "software_package",
+          "publication_date": "2019-02-26",
+          "citationKey": "seldonioAlibi2019",
+          "abstract": "Algorithms for explaining machine learning models"
+        },
+        {
+          "title": "Interpretable Machine Learning - Anchors",
+          "url": "https://christophm.github.io/interpretable-ml-book/anchors.html",
+          "source_type": "documentation",
+          "publication_date": "2019",
+          "citationKey": "InterpretableMachineLearning2019b"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "local-interpretable-model-agnostic-explanations",
+        "shapley-additive-explanations",
+        "rulefit",
+        "ridge-regression-surrogates",
+        "contrastive-explanation-method"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's individual predictions are supported by verifiable sufficient conditions with quantified confidence guarantees",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The lending system provides loan applicants with specific, actionable conditions that guarantee approval with stated probability",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The diagnostic system's recommendations are justified by minimal sets of clinical indicators that ensure the decision under specified conditions",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The hiring decision criteria are documented as precise if-then rules with empirically validated confidence bounds",
+          "domain": "public sector",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The fraud detection system identifies sufficient feature combinations that reliably predict flagged transactions with quantified precision",
+          "domain": "finance",
           "assuranceGoal": "explainability"
         }
       ]
@@ -751,6 +1162,7 @@
       "description": "Permutation tests assess the statistical significance of observed results (such as model accuracy, feature importance, or group differences) by comparing them to what would occur purely by chance. The technique randomly shuffles labels or data thousands of times, recalculating the metric of interest each time to build an empirical null distribution. If the actual observed result falls in the extreme tail of this distribution (typically beyond the 95th or 99th percentile), it provides strong evidence that the relationship is genuine rather than due to random chance, without requiring parametric assumptions about data distributions.",
       "assurance_goals": [
         "Explainability",
+        "Fairness",
         "Reliability"
       ],
       "tags": [
@@ -761,13 +1173,17 @@
         "assurance-goal-category/explainability/explains/feature-importance",
         "assurance-goal-category/explainability/property/consistency",
         "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
       ],
@@ -862,6 +1278,8 @@
       "related_techniques": [
         "permutation-importance",
         "bootstrapping",
+        "cross-validation",
+        "jackknife-resampling",
         "shapley-additive-explanations",
         "sobol-indices"
       ],
@@ -1214,10 +1632,13 @@
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/privacy",
         "assurance-goal-category/privacy/formal-guarantee/differential-privacy",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/privacy-guarantee",
@@ -1225,6 +1646,7 @@
         "expertise-needed/cryptography",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
+        "fairness-approach/group",
         "lifecycle-stage/data-handling",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
@@ -1302,8 +1724,9 @@
       "related_techniques": [
         "federated-learning",
         "homomorphic-encryption",
-        "synthetic-data-generation",
-        "membership-inference-attack-testing"
+        "machine-unlearning",
+        "membership-inference-attack-testing",
+        "synthetic-data-generation"
       ],
       "sample_claims": [
         {
@@ -1345,15 +1768,18 @@
       ],
       "tags": [
         "applicable-models/architecture/linear-models",
+        "applicable-models/architecture/model-agnostic",
         "applicable-models/architecture/neural-networks/feedforward",
+        "applicable-models/architecture/tree-based",
         "applicable-models/paradigm/discriminative",
         "applicable-models/paradigm/parametric",
-        "applicable-models/requirements/differentiable",
-        "applicable-models/requirements/white-box",
         "assurance-goal-category/privacy",
         "assurance-goal-category/privacy/formal-guarantee",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/security",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/privacy-guarantee",
@@ -1376,6 +1802,10 @@
         {
           "description": "Enabling transparent audit of algorithmic decision-making by allowing regulators to verify model computations on encrypted data, providing accountability whilst protecting the proprietary nature of both the algorithm and the underlying data.",
           "goal": "Transparency"
+        },
+        {
+          "description": "Protecting ML model intellectual property and confidential inference inputs during cloud deployment by running encrypted inference, ensuring that neither the client sensitive input data nor the server proprietary model weights and architecture are exposed to the cloud provider or the counterparty, enabling secure outsourced inference without requiring mutual trust assumptions.",
+          "goal": "Security"
         }
       ],
       "limitations": [
@@ -1455,7 +1885,8 @@
         "differential-privacy",
         "federated-learning",
         "synthetic-data-generation",
-        "model-extraction-defence-testing"
+        "model-extraction-defence-testing",
+        "membership-inference-attack-testing"
       ],
       "sample_claims": [
         {
@@ -1502,14 +1933,18 @@
         "applicable-models/paradigm/supervised",
         "applicable-models/requirements/white-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/prediction-interval",
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
@@ -1604,7 +2039,11 @@
       "related_techniques": [
         "conformal-prediction",
         "bootstrapping",
-        "jackknife-resampling"
+        "jackknife-resampling",
+        "monte-carlo-dropout",
+        "empirical-calibration",
+        "deep-ensembles",
+        "monotonicity-constraints"
       ],
       "sample_claims": [
         {
@@ -2590,7 +3029,9 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/test-scenarios",
         "data-type/any",
         "evidence-type/boundary-analysis",
@@ -3761,5 +4202,5 @@
       ]
     }
   ],
-  "count": 27
+  "count": 30
 }

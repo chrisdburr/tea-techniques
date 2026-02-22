@@ -309,12 +309,15 @@
       "assurance-goal-category/explainability/property/fidelity",
       "assurance-goal-category/explainability/property/efficiency",
       "assurance-goal-category/transparency",
+      "assurance-goal-category/transparency/process-transparency",
       "data-requirements/no-special-requirements",
       "data-type/tabular",
       "evidence-type/quantitative-metric",
       "expertise-needed/low",
       "explanatory-scope/global",
       "lifecycle-stage/model-development",
+      "lifecycle-stage/model-evaluation",
+      "lifecycle-stage/system-deployment-and-use",
       "technique-type/metric",
       "applicable-models/architecture/linear-models",
       "applicable-models/paradigm/parametric",
@@ -357,7 +360,8 @@
       "permutation-importance",
       "mean-decrease-impurity",
       "shapley-additive-explanations",
-      "generalized-additive-models"
+      "generalized-additive-models",
+      "ridge-regression-surrogates"
     ],
     "sample_claims": [
       {
@@ -635,7 +639,7 @@
         "description": "Can produce negative relevance scores which may be difficult to interpret intuitively."
       },
       {
-        "description": "Rule selection (LRP-\u03b5, LRP-\u03b3, etc.) significantly affects results and requires domain expertise."
+        "description": "Rule selection (LRP-ε, LRP-γ, etc.) significantly affects results and requires domain expertise."
       },
       {
         "description": "Limited to feedforward networks and may not work well with modern architectures like transformers without substantial modifications."
@@ -888,13 +892,17 @@
       "assurance-goal-category/explainability/explains/causal-pathways",
       "assurance-goal-category/explainability/property/completeness",
       "assurance-goal-category/fairness",
+      "assurance-goal-category/fairness/group",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/quantitative-metric",
       "expertise-needed/ml-engineering",
       "expertise-needed/statistics",
       "explanatory-scope/global",
+      "fairness-approach/group",
       "lifecycle-stage/model-development",
+      "lifecycle-stage/model-evaluation",
+      "lifecycle-stage/deployment",
       "technique-type/algorithmic",
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box"
@@ -987,6 +995,7 @@
       "assurance-goal-category/explainability/explains/decision-boundaries",
       "assurance-goal-category/explainability/property/fidelity",
       "assurance-goal-category/transparency",
+      "assurance-goal-category/transparency/process-transparency",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/qualitative-report",
@@ -994,6 +1003,7 @@
       "expertise-needed/ml-engineering",
       "explanatory-scope/local",
       "lifecycle-stage/model-development",
+      "lifecycle-stage/model-evaluation",
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic",
       "applicable-models/architecture/model-agnostic",
@@ -1025,6 +1035,9 @@
       },
       {
         "description": "Can be computationally expensive for explaining many instances due to repeated model queries."
+      },
+      {
+        "description": "Assumes features are independent when generating perturbations, producing unrealistic out-of-distribution samples for datasets with correlated features. This can generate misleading attribution scores when inputs share strong correlations (e.g., age and income in credit scoring, comorbidities in clinical data)."
       }
     ],
     "resources": [
@@ -1042,7 +1055,12 @@
       "shapley-additive-explanations",
       "anchor",
       "ridge-regression-surrogates",
-      "partial-dependence-plots"
+      "partial-dependence-plots",
+      "individual-conditional-expectation-plots",
+      "occlusion-sensitivity",
+      "contrastive-explanation-method",
+      "mean-decrease-impurity",
+      "sobol-indices"
     ],
     "sample_claims": [
       {
@@ -1088,12 +1106,15 @@
       "assurance-goal-category/explainability/property/fidelity",
       "assurance-goal-category/explainability/property/comprehensibility",
       "assurance-goal-category/transparency",
+      "assurance-goal-category/transparency/process-transparency",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/structured-output",
       "expertise-needed/ml-engineering",
       "explanatory-scope/global",
       "lifecycle-stage/model-development",
+      "lifecycle-stage/model-evaluation",
+      "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic",
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box"
@@ -1136,6 +1157,7 @@
     "computational_cost_rating": 2,
     "related_techniques": [
       "local-interpretable-model-agnostic-explanations",
+      "model-distillation",
       "rulefit",
       "partial-dependence-plots",
       "coefficient-magnitudes-in-linear-models"
@@ -1370,11 +1392,13 @@
       "assurance-goal-category/explainability/property/efficiency",
       "assurance-goal-category/explainability/visualization-methods/activation-maps",
       "assurance-goal-category/fairness",
+      "assurance-goal-category/fairness/group",
       "data-requirements/access-to-model-internals",
       "data-type/image",
       "evidence-type/visualisation",
       "expertise-needed/ml-engineering",
       "explanatory-scope/local",
+      "fairness-approach/group",
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
@@ -1415,6 +1439,8 @@
     "complexity_rating": 3,
     "computational_cost_rating": 2,
     "related_techniques": [
+      "concept-activation-vectors",
+      "deeplift",
       "gradient-weighted-class-activation-mapping",
       "integrated-gradients",
       "occlusion-sensitivity",
@@ -1476,7 +1502,11 @@
       "expertise-needed/ml-engineering",
       "explanatory-scope/local",
       "lifecycle-stage/model-development",
-      "technique-type/algorithmic"
+      "technique-type/algorithmic",
+      "assurance-goal-category/fairness/group",
+      "fairness-approach/group",
+      "lifecycle-stage/model-evaluation",
+      "lifecycle-stage/system-deployment-and-use/auditing"
     ],
     "example_use_cases": [
       {
@@ -1521,7 +1551,9 @@
       "integrated-gradients",
       "gradient-saliency",
       "occlusion-sensitivity",
-      "local-interpretable-model-agnostic-explanations"
+      "local-interpretable-model-agnostic-explanations",
+      "layer-wise-relevance-propagation",
+      "concept-activation-vectors"
     ],
     "sample_claims": [
       {
@@ -1957,7 +1989,7 @@
         "description": "Prioritizes preserving local neighborhood structure at the expense of global relationships, potentially creating misleading impressions about overall data topology."
       },
       {
-        "description": "Computationally expensive with O(n\u00b2) complexity, making it impractical for datasets with more than ~10,000 points without approximation methods."
+        "description": "Computationally expensive with O(n²) complexity, making it impractical for datasets with more than ~10,000 points without approximation methods."
       },
       {
         "description": "Sensitive to hyperparameter choices (perplexity, learning rate, iterations) that can dramatically affect clustering patterns and require domain expertise to tune appropriately."
@@ -2109,12 +2141,15 @@
       "assurance-goal-category/explainability/property/comprehensibility",
       "assurance-goal-category/explainability/property/sparsity",
       "assurance-goal-category/fairness",
+      "assurance-goal-category/fairness/group",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/structured-output",
       "expertise-needed/ml-engineering",
       "explanatory-scope/global",
+      "fairness-approach/group",
       "lifecycle-stage/model-development",
+      "lifecycle-stage/model-evaluation",
       "technique-type/algorithmic"
     ],
     "example_use_cases": [
@@ -2157,7 +2192,10 @@
       "influence-functions",
       "t-sne",
       "umap",
-      "contrastive-explanation-method"
+      "contrastive-explanation-method",
+      "concept-activation-vectors",
+      "neuron-activation-analysis",
+      "factor-analysis"
     ],
     "sample_claims": [
       {
@@ -2331,7 +2369,7 @@
     ],
     "example_use_cases": [
       {
-        "description": "Explaining loan application rejections by showing that removing recent late payments (pertinent negative) or adding \u00a35,000 more annual income (pertinent positive) would change the decision to approval, giving applicants clear actionable guidance.",
+        "description": "Explaining loan application rejections by showing that removing recent late payments (pertinent negative) or adding £5,000 more annual income (pertinent positive) would change the decision to approval, giving applicants clear actionable guidance.",
         "goal": "Explainability"
       },
       {
@@ -2403,7 +2441,7 @@
     "slug": "anchor",
     "name": "ANCHOR",
     "acronym": "ANCHOR",
-    "description": "ANCHOR generates high-precision if-then rules that explain individual predictions by identifying the minimal set of feature conditions that guarantee a specific prediction with high confidence. It searches for 'anchor' conditions (e.g., 'age > 30 AND income < \u00a350k') that ensure the model gives the same prediction at least 95% of the time when those conditions are met. This creates human-readable rules that users can trust as sufficient conditions for understanding why a particular decision was made.",
+    "description": "ANCHOR generates high-precision if-then rules that explain individual predictions by identifying the minimal set of feature conditions that guarantee a specific prediction with high confidence. It searches for 'anchor' conditions (e.g., 'age > 30 AND income < £50k') that ensure the model gives the same prediction at least 95% of the time when those conditions are met. This creates human-readable rules that users can trust as sufficient conditions for understanding why a particular decision was made.",
     "assurance_goals": [
       "Explainability",
       "Transparency"
@@ -2419,12 +2457,16 @@
       "assurance-goal-category/explainability/property/sparsity",
       "assurance-goal-category/explainability/surrogate-models/rule-extraction",
       "assurance-goal-category/transparency",
+      "assurance-goal-category/transparency/audit-trail",
+      "assurance-goal-category/transparency/process-transparency",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/quantitative-metric",
       "expertise-needed/statistics",
       "explanatory-scope/local",
       "lifecycle-stage/model-development",
+      "lifecycle-stage/model-evaluation",
+      "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
     "example_use_cases": [
@@ -2433,7 +2475,7 @@
         "goal": "Explainability"
       },
       {
-        "description": "Generating diagnostic rules for medical predictions such as 'IF fever > 38.5\u00b0C AND white_blood_cells > 12,000 THEN infection = 92% likely', helping clinicians validate automated diagnoses with trusted clinical indicators.",
+        "description": "Generating diagnostic rules for medical predictions such as 'IF fever > 38.5°C AND white_blood_cells > 12,000 THEN infection = 92% likely', helping clinicians validate automated diagnoses with trusted clinical indicators.",
         "goal": "Explainability"
       },
       {
@@ -2467,7 +2509,8 @@
       "local-interpretable-model-agnostic-explanations",
       "shapley-additive-explanations",
       "rulefit",
-      "ridge-regression-surrogates"
+      "ridge-regression-surrogates",
+      "contrastive-explanation-method"
     ],
     "sample_claims": [
       {
@@ -2508,6 +2551,7 @@
     "tags": [
       "applicable-models/architecture/model-agnostic",
       "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/black-box",
       "applicable-models/requirements/training-data",
       "assurance-goal-category/explainability",
       "assurance-goal-category/explainability/explains/decision-boundaries",
@@ -2518,6 +2562,8 @@
       "assurance-goal-category/explainability/surrogate-models/global-surrogates",
       "assurance-goal-category/explainability/surrogate-models/rule-extraction",
       "assurance-goal-category/transparency",
+      "assurance-goal-category/transparency/audit-trail",
+      "assurance-goal-category/transparency/process-transparency",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/quantitative-metric",
@@ -2567,7 +2613,8 @@
       "ridge-regression-surrogates",
       "anchor",
       "local-interpretable-model-agnostic-explanations",
-      "mean-decrease-impurity"
+      "mean-decrease-impurity",
+      "model-distillation"
     ],
     "sample_claims": [
       {
@@ -2808,6 +2855,7 @@
     "description": "Permutation tests assess the statistical significance of observed results (such as model accuracy, feature importance, or group differences) by comparing them to what would occur purely by chance. The technique randomly shuffles labels or data thousands of times, recalculating the metric of interest each time to build an empirical null distribution. If the actual observed result falls in the extreme tail of this distribution (typically beyond the 95th or 99th percentile), it provides strong evidence that the relationship is genuine rather than due to random chance, without requiring parametric assumptions about data distributions.",
     "assurance_goals": [
       "Explainability",
+      "Fairness",
       "Reliability"
     ],
     "tags": [
@@ -2818,13 +2866,17 @@
       "assurance-goal-category/explainability/explains/feature-importance",
       "assurance-goal-category/explainability/property/consistency",
       "assurance-goal-category/explainability/property/fidelity",
+      "assurance-goal-category/fairness",
+      "assurance-goal-category/fairness/group",
       "assurance-goal-category/reliability",
+      "assurance-goal-category/reliability/model-behavior-understanding",
       "data-requirements/no-special-requirements",
       "data-type/any",
       "evidence-type/quantitative-metric",
       "expertise-needed/statistics",
       "explanatory-scope/global",
       "lifecycle-stage/model-development",
+      "lifecycle-stage/model-evaluation",
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
@@ -2868,6 +2920,8 @@
     "related_techniques": [
       "permutation-importance",
       "bootstrapping",
+      "cross-validation",
+      "jackknife-resampling",
       "shapley-additive-explanations",
       "sobol-indices"
     ],
@@ -3050,6 +3104,7 @@
     "computational_cost_rating": 3,
     "related_techniques": [
       "fair-adversarial-networks",
+      "multi-accuracy-boosting",
       "reweighing",
       "equalised-odds-post-processing",
       "threshold-optimiser"
@@ -3718,7 +3773,7 @@
   {
     "slug": "quantile-regression",
     "name": "Quantile Regression",
-    "description": "Quantile regression estimates specific percentiles (quantiles) of the target variable rather than just predicting the average outcome. For example, instead of predicting 'average house price = \u00a3300,000', it can predict 'there's a 10% chance the price will be below \u00a3250,000, 50% chance below \u00a3300,000, and 90% chance below \u00a3380,000'. This technique reveals how input features affect different parts of the outcome distribution - perhaps property size strongly influences luxury homes (90th percentile) but barely affects budget properties (10th percentile). By capturing the full conditional distribution, quantile regression provides rich uncertainty information and enables robust prediction intervals.",
+    "description": "Quantile regression estimates specific percentiles (quantiles) of the target variable rather than just predicting the average outcome. For example, instead of predicting 'average house price = £300,000', it can predict 'there's a 10% chance the price will be below £250,000, 50% chance below £300,000, and 90% chance below £380,000'. This technique reveals how input features affect different parts of the outcome distribution - perhaps property size strongly influences luxury homes (90th percentile) but barely affects budget properties (10th percentile). By capturing the full conditional distribution, quantile regression provides rich uncertainty information and enables robust prediction intervals.",
     "assurance_goals": [
       "Reliability",
       "Transparency",
@@ -4818,7 +4873,7 @@
   {
     "slug": "red-teaming",
     "name": "Red Teaming",
-    "description": "Red teaming is a structured adversarial evaluation process in which a dedicated team systematically probes an AI/ML system to discover vulnerabilities and failure modes. Unlike individual testing techniques (such as prompt injection testing, jailbreak resistance testing, or safety envelope testing), red teaming defines the organisational methodology: team composition, campaign planning, attack taxonomy, and reporting structure. The red team coordinates diverse attack vectors \u2014 including prompt manipulation, adversarial examples, edge case exploitation, and social engineering scenarios \u2014 into a coherent assessment programme. Results feed into risk registers and remediation plans rather than pass/fail metrics.",
+    "description": "Red teaming is a structured adversarial evaluation process in which a dedicated team systematically probes an AI/ML system to discover vulnerabilities and failure modes. Unlike individual testing techniques (such as prompt injection testing, jailbreak resistance testing, or safety envelope testing), red teaming defines the organisational methodology: team composition, campaign planning, attack taxonomy, and reporting structure. The red team coordinates diverse attack vectors — including prompt manipulation, adversarial examples, edge case exploitation, and social engineering scenarios — into a coherent assessment programme. Results feed into risk registers and remediation plans rather than pass/fail metrics.",
     "assurance_goals": [
       "General"
     ],
@@ -6295,7 +6350,7 @@
   {
     "slug": "causal-mediation-analysis-in-language-models",
     "name": "Causal Mediation Analysis in Language Models",
-    "description": "Causal mediation analysis in language models is a mechanistic interpretability technique that systematically investigates how specific internal components (neurons, attention heads, or layers) causally contribute to model outputs. By performing controlled interventions\u2014such as activating, deactivating, or modifying specific components\u2014researchers can trace the causal pathways through which information flows and transforms within the model. This approach goes beyond correlation to establish causal relationships, enabling researchers to understand not just what features influence outputs, but how and why they do so through specific computational pathways.",
+    "description": "Causal mediation analysis in language models is a mechanistic interpretability technique that systematically investigates how specific internal components (neurons, attention heads, or layers) causally contribute to model outputs. By performing controlled interventions—such as activating, deactivating, or modifying specific components—researchers can trace the causal pathways through which information flows and transforms within the model. This approach goes beyond correlation to establish causal relationships, enabling researchers to understand not just what features influence outputs, but how and why they do so through specific computational pathways.",
     "assurance_goals": [
       "Explainability",
       "Reliability",
@@ -6539,6 +6594,7 @@
       "assurance-goal-category/explainability/property/comprehensibility",
       "assurance-goal-category/explainability/representation-analysis/concept-identification",
       "assurance-goal-category/fairness",
+      "assurance-goal-category/fairness/group",
       "assurance-goal-category/transparency",
       "data-requirements/access-to-model-internals",
       "data-type/any",
@@ -6548,8 +6604,11 @@
       "expertise-needed/ml-engineering",
       "explanatory-scope/global",
       "explanatory-scope/local",
+      "fairness-approach/group",
       "lifecycle-stage/model-development",
+      "lifecycle-stage/model-evaluation",
       "lifecycle-stage/system-deployment-and-use/auditing",
+      "lifecycle-stage/system-deployment-and-use/monitoring",
       "technique-type/algorithmic"
     ],
     "example_use_cases": [
@@ -7390,7 +7449,9 @@
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/group",
       "assurance-goal-category/reliability",
+      "assurance-goal-category/reliability/cross-group-consistency",
       "assurance-goal-category/transparency",
+      "assurance-goal-category/transparency/process-transparency",
       "data-requirements/labelled-data",
       "data-requirements/sensitive-attributes",
       "data-type/any",
@@ -7432,6 +7493,9 @@
       },
       {
         "description": "Computational overhead is significant due to training two networks simultaneously, increasing both training time and resource requirements."
+      },
+      {
+        "description": "The adversarial objective only removes dependence on explicitly labelled sensitive attributes; proxy variables that correlate with protected characteristics will remain encoded in learned representations. Extending to intersectional fairness across multiple protected attributes requires separate discriminator components or multi-task adversarial architectures, substantially increasing design complexity and training instability."
       }
     ],
     "resources": [
@@ -7445,7 +7509,9 @@
     "related_techniques": [
       "adaptive-sensitive-reweighting",
       "adversarial-debiasing",
+      "exponentiated-gradient-reduction",
       "fair-transfer-learning",
+      "fairness-gan",
       "meta-fair-classifier"
     ],
     "sample_claims": [
@@ -7659,7 +7725,8 @@
       "adaptive-sensitive-reweighting",
       "adversarial-debiasing",
       "exponentiated-gradient-reduction",
-      "fair-adversarial-networks"
+      "fair-adversarial-networks",
+      "multi-accuracy-boosting"
     ],
     "sample_claims": [
       {
@@ -7814,12 +7881,15 @@
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/group",
       "assurance-goal-category/reliability",
+      "assurance-goal-category/reliability/cross-group-consistency",
       "assurance-goal-category/transparency",
+      "assurance-goal-category/transparency/process-transparency",
       "data-requirements/pre-trained-model",
       "data-requirements/sensitive-attributes",
       "data-type/any",
       "evidence-type/fairness-metric",
       "evidence-type/quantitative-metric",
+      "expertise-needed/domain-expertise",
       "expertise-needed/ml-engineering",
       "expertise-needed/statistics",
       "fairness-approach/group",
@@ -7870,7 +7940,9 @@
       "adaptive-sensitive-reweighting",
       "adversarial-debiasing",
       "exponentiated-gradient-reduction",
-      "fair-adversarial-networks"
+      "fair-adversarial-networks",
+      "federated-learning",
+      "multi-accuracy-boosting"
     ],
     "sample_claims": [
       {
@@ -7968,7 +8040,8 @@
       "exponentiated-gradient-reduction",
       "fair-adversarial-networks",
       "fair-transfer-learning",
-      "meta-fair-classifier"
+      "meta-fair-classifier",
+      "multi-accuracy-boosting"
     ],
     "sample_claims": [
       {
@@ -8016,7 +8089,11 @@
       "assurance-goal-category/fairness",
       "assurance-goal-category/fairness/group",
       "assurance-goal-category/reliability",
+      "assurance-goal-category/reliability/cross-group-consistency",
+      "assurance-goal-category/reliability/model-behavior-understanding",
       "assurance-goal-category/transparency",
+      "assurance-goal-category/transparency/audit-trail",
+      "assurance-goal-category/transparency/process-transparency",
       "data-requirements/labelled-data",
       "data-requirements/sensitive-attributes",
       "data-type/any",
@@ -8071,7 +8148,8 @@
       "adaptive-sensitive-reweighting",
       "adversarial-debiasing",
       "fair-transfer-learning",
-      "meta-fair-classifier"
+      "meta-fair-classifier",
+      "reweighing"
     ],
     "sample_claims": [
       {
@@ -8768,7 +8846,7 @@
     ],
     "limitations": [
       {
-        "description": "Requires identifying which causal pathways are 'allowable' and which are not\u2014a subjective decision; analyzing specific paths adds complexity to the causal model and the fairness criterion."
+        "description": "Requires identifying which causal pathways are 'allowable' and which are not—a subjective decision; analyzing specific paths adds complexity to the causal model and the fairness criterion."
       }
     ],
     "resources": [
@@ -11214,7 +11292,7 @@
         "description": "Testing reveals brittleness but doesn't necessarily provide clear paths to mitigation beyond avoiding problematic variations."
       },
       {
-        "description": "Robustness patterns may not transfer across domains\u2014a model robust to medical terminology variations might still be brittle to legal phrasings, requiring separate testing for each application domain."
+        "description": "Robustness patterns may not transfer across domains—a model robust to medical terminology variations might still be brittle to legal phrasings, requiring separate testing for each application domain."
       }
     ],
     "resources": [
@@ -11447,7 +11525,7 @@
         "description": "Metrics may not capture subtle quality issues like incomplete answers, misleading emphasis, or failure to synthesize information from multiple retrieved sources."
       },
       {
-        "description": "Evaluating multi-hop reasoning\u2014where answers require synthesising information across multiple retrieved documents\u2014is particularly challenging, as standard metrics may not capture whether the system correctly chains information or makes unsupported logical leaps."
+        "description": "Evaluating multi-hop reasoning—where answers require synthesising information across multiple retrieved documents—is particularly challenging, as standard metrics may not capture whether the system correctly chains information or makes unsupported logical leaps."
       },
       {
         "description": "Difficult to isolate whether poor performance stems from retrieval failures (finding wrong documents), generation failures (misusing correct documents), or interaction effects, complicating diagnosis and improvement efforts."

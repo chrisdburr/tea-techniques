@@ -12,6 +12,8 @@ set -euo pipefail
 #   ./scripts/enhance-batch.sh --range -20        # First 20
 #   ./scripts/enhance-batch.sh --dry-run           # Show work queue only
 #   ./scripts/enhance-batch.sh --dry-run --range 0-4
+#   ./scripts/enhance-batch.sh --focus related_techniques --dry-run --range 0-4
+#   ./scripts/enhance-batch.sh --focus tags --range 0-9
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
@@ -20,6 +22,8 @@ ENHANCEMENT_LOG="$PROJECT_ROOT/.enhancement-log.json"
 
 RANGE=""
 DRY_RUN=false
+FOCUS=""
+VALID_FOCUS_AREAS="related_techniques tags resources descriptions"
 
 # ---------- Argument parsing ----------
 
@@ -36,6 +40,10 @@ Options:
                       Examples: 0-9   (indices 0 through 9)
                                80-   (index 80 to end)
                                -20   (indices 0 through 19)
+  --focus AREA        Focus on a single enhancement area per pass. Techniques
+                      are re-ordered by area-specific priority and skip logic
+                      uses per-focus timestamps instead of last_reviewed.
+                      Valid areas: related_techniques, tags, resources, descriptions
   --dry-run           Show work queue without launching sessions
   --help              Show this help message
 
@@ -43,6 +51,8 @@ Examples:
   ./scripts/enhance-batch.sh --dry-run --range 0-4   # Preview 5 worst techniques
   ./scripts/enhance-batch.sh --range 0-0              # Process single worst technique
   ./scripts/enhance-batch.sh                          # Process all pending techniques
+  ./scripts/enhance-batch.sh --focus related_techniques --dry-run --range 0-4
+  ./scripts/enhance-batch.sh --focus tags --range 0-9
 EOF
   exit 0
 }
@@ -51,6 +61,10 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --range)
       RANGE="$2"
+      shift 2
+      ;;
+    --focus)
+      FOCUS="$2"
       shift 2
       ;;
     --dry-run)
@@ -86,6 +100,22 @@ if ! command -v claude &>/dev/null; then
   exit 1
 fi
 
+# Validate --focus value
+if [[ -n "$FOCUS" ]]; then
+  valid=false
+  for area in $VALID_FOCUS_AREAS; do
+    if [[ "$FOCUS" == "$area" ]]; then
+      valid=true
+      break
+    fi
+  done
+  if [[ "$valid" != true ]]; then
+    echo "Error: Invalid focus area '$FOCUS'."
+    echo "Valid areas: $VALID_FOCUS_AREAS"
+    exit 1
+  fi
+fi
+
 # ---------- Staleness warning ----------
 
 if [[ -f "$ENHANCEMENT_LOG" ]]; then
@@ -109,14 +139,63 @@ fi
 
 # ---------- Build work queue ----------
 
-# Extract all slugs + scores from quality report, sorted ascending (worst first)
-ALL_QUEUE=$(jq -r '.completeness_scores[] | "\(.slug)\t\(.score)"' "$QUALITY_REPORT")
+if [[ -n "$FOCUS" ]]; then
+  # Focus-specific queue ordering by area
+  TECHNIQUES_FILE="$PROJECT_ROOT/public/data/techniques.json"
+
+  case "$FOCUS" in
+    related_techniques)
+      # Sort by delta from target of 3 (|count - 3|, descending — most bloated/sparse first)
+      # Requires cross-referencing techniques.json for raw counts
+      ALL_QUEUE=$(jq -r --slurpfile tech "$TECHNIQUES_FILE" '
+        ($tech[0] | map({(.slug): (.related_techniques // [] | length)}) | add) as $counts
+        | [.completeness_scores[] | {
+            slug: .slug,
+            score: .score,
+            delta: (($counts[.slug] // 0) - 3 | if . < 0 then -. else . end)
+          }]
+        | sort_by(-.delta)
+        | .[]
+        | "\(.slug)\t\(.score)"
+      ' "$QUALITY_REPORT")
+      ;;
+    tags)
+      # Sort by tag_coverage breakdown score ascending (worst tag coverage first)
+      ALL_QUEUE=$(jq -r '
+        [.completeness_scores[]] | sort_by(.breakdown.tag_coverage) | .[] | "\(.slug)\t\(.score)"
+      ' "$QUALITY_REPORT")
+      ;;
+    resources)
+      # Sort by resources breakdown score ascending (worst resource coverage first)
+      ALL_QUEUE=$(jq -r '
+        [.completeness_scores[]] | sort_by(.breakdown.resources) | .[] | "\(.slug)\t\(.score)"
+      ' "$QUALITY_REPORT")
+      ;;
+    descriptions)
+      # Sort by description_quality breakdown score ascending (worst descriptions first)
+      ALL_QUEUE=$(jq -r '
+        [.completeness_scores[]] | sort_by(.breakdown.description_quality) | .[] | "\(.slug)\t\(.score)"
+      ' "$QUALITY_REPORT")
+      ;;
+  esac
+else
+  # Default: sorted ascending by overall completeness score (worst first)
+  ALL_QUEUE=$(jq -r '.completeness_scores[] | "\(.slug)\t\(.score)"' "$QUALITY_REPORT")
+fi
+
 TOTAL_TECHNIQUES=$(echo "$ALL_QUEUE" | wc -l | tr -d ' ')
 
 # Build set of already-reviewed slugs from enhancement log
 REVIEWED_SLUGS=""
 if [[ -f "$ENHANCEMENT_LOG" ]]; then
-  REVIEWED_SLUGS=$(jq -r '.technique_timestamps | keys[]' "$ENHANCEMENT_LOG" 2>/dev/null || true)
+  if [[ -n "$FOCUS" ]]; then
+    # Focus mode: check per-focus timestamps instead of last_reviewed
+    REVIEWED_SLUGS=$(jq -r --arg focus "$FOCUS" \
+      '.technique_timestamps | to_entries[] | select(.value.focus_reviews[$focus] != null) | .key' \
+      "$ENHANCEMENT_LOG" 2>/dev/null || true)
+  else
+    REVIEWED_SLUGS=$(jq -r '.technique_timestamps | keys[]' "$ENHANCEMENT_LOG" 2>/dev/null || true)
+  fi
 fi
 
 # Filter out reviewed techniques
@@ -197,6 +276,9 @@ echo "========================================="
 echo "Enhancement Batch Runner"
 echo "========================================="
 echo ""
+if [[ -n "$FOCUS" ]]; then
+  echo "Focus area:         $FOCUS"
+fi
 echo "Total techniques:   $TOTAL_TECHNIQUES"
 echo "Already reviewed:   $SKIPPED_COUNT"
 echo "Pending:            $PENDING_COUNT"
@@ -234,17 +316,25 @@ for i in "${!WORK_SLUGS[@]}"; do
   echo "========================================="
   echo ""
 
-  # Launch interactive Claude session with enhance-dataset agent
-  # No -p flag: session must be interactive for AskUserQuestion (human approval)
+  # Launch non-interactive Claude session with enhance-dataset agent
+  # -p (print mode): process prompt and exit, enabling batch loop to advance
+  # --output-format stream-json: stream progress instead of buffering until exit
+  # Auto-approve mode: skip AskUserQuestion (incompatible with -p), auto-apply
+  # consensus proposals (2/3+), auto-reject non-consensus (1/3)
   # unset CLAUDECODE: required for nested CLI invocation
+  SCOPE_STR="--technique $slug"
+  if [[ -n "$FOCUS" ]]; then
+    SCOPE_STR="--technique $slug --focus $FOCUS"
+  fi
+
   set +e
   (
     unset CLAUDECODE
     cd "$PROJECT_ROOT"
     claude --agent enhance-dataset \
       --model sonnet \
-      --append-system-prompt "Scope: --technique $slug. Begin the enhancement workflow for this single technique." \
-      --allowedTools "Read,Write,Edit,Grep,Glob,Bash,Task,Skill,AskUserQuestion"
+      -p "Scope: $SCOPE_STR. Begin the enhancement workflow for this single technique. IMPORTANT: This is an automated batch run. Do NOT use AskUserQuestion. Instead, auto-approve all proposals with 2/3+ consensus and auto-reject proposals with only 1/3 consensus. Apply approved changes, update the enhancement log, and run validation. Report results in your final output." \
+      --allowedTools "Read,Write,Edit,Grep,Glob,Bash,Task,Skill"
   )
   exit_code=$?
   set -e

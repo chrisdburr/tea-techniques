@@ -2310,12 +2310,14 @@
         "tea:tag/assurance-goal-category/explainability/property/causality",
         "tea:tag/assurance-goal-category/explainability/property/fidelity",
         "tea:tag/assurance-goal-category/fairness",
+        "tea:tag/assurance-goal-category/fairness/group",
         "tea:tag/assurance-goal-category/privacy",
         "tea:tag/data-requirements/access-to-training-data",
         "tea:tag/data-type/any",
         "tea:tag/evidence-type/quantitative-metric",
         "tea:tag/expertise-needed/ml-engineering",
         "tea:tag/explanatory-scope/local",
+        "tea:tag/fairness-approach/group",
         "tea:tag/lifecycle-stage/model-development",
         "tea:tag/technique-type/algorithmic"
       ],
@@ -2325,7 +2327,9 @@
         "tea:technique/jackknife-resampling",
         "tea:technique/integrated-gradients",
         "tea:technique/machine-unlearning",
-        "tea:technique/data-poisoning-detection"
+        "tea:technique/data-poisoning-detection",
+        "tea:technique/prototype-and-criticism-models",
+        "tea:technique/membership-inference-attack-testing"
       ],
       "citesResource": [
         "tea:resource/weikohUnderstandingBlackboxPredictions2017",
@@ -2841,14 +2845,19 @@
         "tea:tag/assurance-goal-category/explainability/property/fidelity",
         "tea:tag/assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
         "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/assurance-goal-category/reliability/uncertainty-quantification",
         "tea:tag/assurance-goal-category/safety",
+        "tea:tag/assurance-goal-category/safety/monitoring",
+        "tea:tag/assurance-goal-category/safety/risk-identification",
         "tea:tag/data-requirements/no-special-requirements",
         "tea:tag/data-type/any",
         "tea:tag/evidence-type/quantitative-metric",
         "tea:tag/expertise-needed/ml-engineering",
         "tea:tag/expertise-needed/statistics",
-        "tea:tag/explanatory-scope/global",
+        "tea:tag/explanatory-scope/local",
         "tea:tag/lifecycle-stage/model-development",
+        "tea:tag/lifecycle-stage/model-evaluation",
+        "tea:tag/lifecycle-stage/system-deployment-and-use",
         "tea:tag/technique-type/algorithmic"
       ],
       "acronym": "ODIN",
@@ -2858,7 +2867,11 @@
         "tea:technique/out-of-domain-detection",
         "tea:technique/epistemic-uncertainty-quantification",
         "tea:technique/data-poisoning-detection",
-        "tea:technique/deep-ensembles"
+        "tea:technique/deep-ensembles",
+        "tea:technique/monte-carlo-dropout",
+        "tea:technique/safety-envelope-testing",
+        "tea:technique/human-in-the-loop-safeguards",
+        "tea:technique/runtime-monitoring-and-circuit-breakers"
       ],
       "citesResource": [
         "tea:resource/liangEnhancingReliabilityOutofdistribution2017",
@@ -3995,15 +4008,18 @@
         "tea:tag/applicable-models/architecture/model-agnostic",
         "tea:tag/applicable-models/requirements/black-box",
         "tea:tag/assurance-goal-category/fairness",
+        "tea:tag/assurance-goal-category/fairness/group",
         "tea:tag/assurance-goal-category/reliability",
         "tea:tag/assurance-goal-category/reliability/uncertainty-quantification",
         "tea:tag/assurance-goal-category/transparency",
+        "tea:tag/assurance-goal-category/transparency/process-transparency",
         "tea:tag/data-requirements/calibration-set",
         "tea:tag/data-type/any",
         "tea:tag/evidence-type/prediction-interval",
         "tea:tag/evidence-type/quantitative-metric",
         "tea:tag/expertise-needed/ml-engineering",
         "tea:tag/expertise-needed/statistics",
+        "tea:tag/fairness-approach/group",
         "tea:tag/lifecycle-stage/model-development",
         "tea:tag/lifecycle-stage/system-deployment-and-use",
         "tea:tag/technique-type/algorithmic"
@@ -4014,7 +4030,11 @@
         "tea:technique/bootstrapping",
         "tea:technique/quantile-regression",
         "tea:technique/deep-ensembles",
-        "tea:technique/empirical-calibration"
+        "tea:technique/empirical-calibration",
+        "tea:technique/epistemic-uncertainty-quantification",
+        "tea:technique/temperature-scaling",
+        "tea:technique/monte-carlo-dropout",
+        "tea:technique/jackknife-resampling"
       ],
       "citesResource": [
         "tea:resource/shaferTutorialConformalPrediction2007",
@@ -4310,7 +4330,10 @@
         "tea:tag/assurance-goal-category/reliability",
         "tea:tag/assurance-goal-category/reliability/uncertainty-quantification",
         "tea:tag/assurance-goal-category/safety",
+        "tea:tag/assurance-goal-category/safety/monitoring",
+        "tea:tag/assurance-goal-category/safety/risk-identification",
         "tea:tag/assurance-goal-category/transparency",
+        "tea:tag/assurance-goal-category/transparency/process-transparency",
         "tea:tag/data-requirements/no-special-requirements",
         "tea:tag/data-type/any",
         "tea:tag/evidence-type/prediction-interval",
@@ -4327,7 +4350,11 @@
         "tea:technique/monte-carlo-dropout",
         "tea:technique/conformal-prediction",
         "tea:technique/out-of-distribution-detector-for-neural-networks",
-        "tea:technique/quantile-regression"
+        "tea:technique/quantile-regression",
+        "tea:technique/temperature-scaling",
+        "tea:technique/bootstrapping",
+        "tea:technique/out-of-domain-detection",
+        "tea:technique/epistemic-uncertainty-quantification"
       ],
       "citesResource": [
         "tea:resource/lakshminarayananSimpleScalablePredictive2016",
@@ -6248,11 +6275,15 @@
         "tea:tag/assurance-goal-category/explainability/property/comprehensibility",
         "tea:tag/assurance-goal-category/explainability/property/sparsity",
         "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/assurance-goal-category/reliability/model-behavior-understanding",
+        "tea:tag/assurance-goal-category/reliability/robustness",
         "tea:tag/assurance-goal-category/safety",
+        "tea:tag/assurance-goal-category/safety/risk-identification",
         "tea:tag/data-requirements/access-to-model-internals",
         "tea:tag/data-type/any",
         "tea:tag/evidence-type/quantitative-metric",
         "tea:tag/expertise-needed/ml-engineering",
+        "tea:tag/explanatory-scope/global",
         "tea:tag/lifecycle-stage/model-development",
         "tea:tag/lifecycle-stage/model-optimization",
         "tea:tag/technique-type/algorithmic"
@@ -8011,7 +8042,9 @@
         "tea:tag/assurance-goal-category/fairness",
         "tea:tag/assurance-goal-category/fairness/group",
         "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/assurance-goal-category/reliability/cross-group-consistency",
         "tea:tag/assurance-goal-category/transparency",
+        "tea:tag/assurance-goal-category/transparency/process-transparency",
         "tea:tag/data-requirements/labelled-data",
         "tea:tag/data-requirements/sensitive-attributes",
         "tea:tag/data-type/any",
@@ -8029,6 +8062,7 @@
       "relatedTo": [
         "tea:technique/adaptive-sensitive-reweighting",
         "tea:technique/adversarial-debiasing",
+        "tea:technique/fair-adversarial-networks",
         "tea:technique/fair-transfer-learning",
         "tea:technique/meta-fair-classifier"
       ],
@@ -8447,8 +8481,11 @@
         "tea:tag/assurance-goal-category/fairness",
         "tea:tag/assurance-goal-category/fairness/group",
         "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/assurance-goal-category/reliability/cross-group-consistency",
         "tea:tag/assurance-goal-category/transparency",
+        "tea:tag/assurance-goal-category/transparency/process-transparency",
         "tea:tag/data-requirements/labelled-data",
+        "tea:tag/data-requirements/prediction-probabilities",
         "tea:tag/data-requirements/sensitive-attributes",
         "tea:tag/data-type/any",
         "tea:tag/evidence-type/fairness-metric",
@@ -8458,6 +8495,7 @@
         "tea:tag/fairness-approach/group",
         "tea:tag/lifecycle-stage/model-development",
         "tea:tag/lifecycle-stage/model-development/testing",
+        "tea:tag/lifecycle-stage/post-processing",
         "tea:tag/lifecycle-stage/system-deployment-and-use/monitoring",
         "tea:tag/technique-type/algorithmic"
       ],
@@ -8466,6 +8504,7 @@
       "relatedTo": [
         "tea:technique/calibration-with-equality-of-opportunity",
         "tea:technique/reject-option-classification",
+        "tea:technique/reweighing",
         "tea:technique/threshold-optimiser",
         "tea:technique/out-of-domain-detection"
       ],
@@ -8762,7 +8801,10 @@
         "tea:tag/assurance-goal-category/fairness",
         "tea:tag/assurance-goal-category/fairness/group",
         "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/assurance-goal-category/reliability/cross-group-consistency",
+        "tea:tag/assurance-goal-category/reliability/uncertainty-quantification",
         "tea:tag/assurance-goal-category/transparency",
+        "tea:tag/assurance-goal-category/transparency/process-transparency",
         "tea:tag/data-requirements/calibration-set",
         "tea:tag/data-requirements/labelled-data",
         "tea:tag/data-requirements/sensitive-attributes",
@@ -8782,7 +8824,9 @@
         "tea:technique/equalised-odds-post-processing",
         "tea:technique/reject-option-classification",
         "tea:technique/threshold-optimiser",
-        "tea:technique/out-of-domain-detection"
+        "tea:technique/equal-opportunity-difference",
+        "tea:technique/average-odds-difference",
+        "tea:technique/empirical-calibration"
       ],
       "citesResource": [
         "tea:resource/pleissFairnessCalibration2017",
@@ -9754,25 +9798,29 @@
         "tea:tag/assurance-goal-category/explainability/explains/internal-mechanisms",
         "tea:tag/assurance-goal-category/explainability/property/fidelity",
         "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/assurance-goal-category/reliability/model-behavior-understanding",
+        "tea:tag/assurance-goal-category/reliability/robustness",
         "tea:tag/assurance-goal-category/transparency",
-        "tea:tag/data-type/text",
+        "tea:tag/assurance-goal-category/transparency/process-transparency",
         "tea:tag/data-requirements/labelled-data",
+        "tea:tag/data-type/text",
         "tea:tag/evidence-type/qualitative-report",
         "tea:tag/evidence-type/quantitative-metric",
-        "tea:tag/expertise-needed/ml-engineering",
         "tea:tag/expertise-needed/domain-expertise",
+        "tea:tag/expertise-needed/ml-engineering",
         "tea:tag/expertise-needed/statistics",
         "tea:tag/explanatory-scope/local",
         "tea:tag/lifecycle-stage/model-evaluation",
         "tea:tag/lifecycle-stage/post-deployment",
-        "tea:tag/technique-type/testing",
-        "tea:tag/technique-type/algorithmic"
+        "tea:tag/technique-type/algorithmic",
+        "tea:tag/technique-type/testing"
       ],
       "relatedTo": [
         "tea:technique/few-shot-fairness-evaluation",
         "tea:technique/retrieval-augmented-generation-evaluation",
         "tea:technique/epistemic-uncertainty-quantification",
-        "tea:technique/constitutional-ai-evaluation"
+        "tea:technique/constitutional-ai-evaluation",
+        "tea:technique/causal-mediation-analysis-in-language-models"
       ],
       "citesResource": [
         "tea:resource/senChainVerificationPrompt2024",
@@ -11136,12 +11184,17 @@
         "tea:tag/applicable-models/architecture/neural-networks/transformer",
         "tea:tag/applicable-models/requirements/black-box",
         "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/assurance-goal-category/reliability/model-behavior-understanding",
+        "tea:tag/assurance-goal-category/reliability/robustness",
         "tea:tag/assurance-goal-category/explainability",
         "tea:tag/assurance-goal-category/explainability/explains/internal-mechanisms",
         "tea:tag/assurance-goal-category/safety",
+        "tea:tag/assurance-goal-category/safety/risk-identification",
+        "tea:tag/assurance-goal-category/safety/monitoring",
         "tea:tag/data-type/image",
         "tea:tag/data-type/text",
         "tea:tag/data-requirements/labelled-data",
+        "tea:tag/explanatory-scope/local",
         "tea:tag/lifecycle-stage/model-evaluation",
         "tea:tag/lifecycle-stage/post-deployment",
         "tea:tag/technique-type/testing",
@@ -11585,7 +11638,11 @@
         "tea:tag/applicable-models/architecture/neural-networks/transformer/llm",
         "tea:tag/applicable-models/requirements/black-box",
         "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/assurance-goal-category/reliability/robustness",
+        "tea:tag/assurance-goal-category/reliability/model-behavior-understanding",
+        "tea:tag/assurance-goal-category/reliability/cross-group-consistency",
         "tea:tag/assurance-goal-category/fairness",
+        "tea:tag/assurance-goal-category/fairness/group",
         "tea:tag/assurance-goal-category/explainability",
         "tea:tag/assurance-goal-category/explainability/explains/decision-boundaries",
         "tea:tag/data-type/text",
@@ -11596,7 +11653,8 @@
         "tea:tag/evidence-type/quantitative-metric",
         "tea:tag/expertise-needed/ml-engineering",
         "tea:tag/expertise-needed/domain-expertise",
-        "tea:tag/explanatory-scope/global"
+        "tea:tag/explanatory-scope/global",
+        "tea:tag/fairness-approach/group"
       ],
       "relatedTo": [
         "tea:technique/prompt-sensitivity-analysis",
@@ -13624,10 +13682,26 @@
       "category": "assurance-goal-category",
       "broader": "tea:tag/assurance-goal-category",
       "narrower": [
-        "tea:tag/assurance-goal-category/safety/risk-identification",
         "tea:tag/assurance-goal-category/safety/monitoring",
+        "tea:tag/assurance-goal-category/safety/risk-identification",
         "tea:tag/assurance-goal-category/safety/harmful-behavior-detection"
       ]
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/safety/monitoring",
+      "@type": "Tag",
+      "prefLabel": "monitoring",
+      "path": "assurance-goal-category/safety/monitoring",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/safety"
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/safety/risk-identification",
+      "@type": "Tag",
+      "prefLabel": "risk identification",
+      "path": "assurance-goal-category/safety/risk-identification",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/safety"
     },
     {
       "@id": "tea:tag/assurance-goal-category/fairness/group/statistical-parity",
@@ -13760,14 +13834,6 @@
       ]
     },
     {
-      "@id": "tea:tag/assurance-goal-category/safety/risk-identification",
-      "@type": "Tag",
-      "prefLabel": "risk identification",
-      "path": "assurance-goal-category/safety/risk-identification",
-      "category": "assurance-goal-category",
-      "broader": "tea:tag/assurance-goal-category/safety"
-    },
-    {
       "@id": "tea:tag/evidence-type/synthetic-data",
       "@type": "Tag",
       "prefLabel": "synthetic data",
@@ -13823,14 +13889,6 @@
       "path": "assurance-goal-category/privacy/data-minimization",
       "category": "assurance-goal-category",
       "broader": "tea:tag/assurance-goal-category/privacy"
-    },
-    {
-      "@id": "tea:tag/assurance-goal-category/safety/monitoring",
-      "@type": "Tag",
-      "prefLabel": "monitoring",
-      "path": "assurance-goal-category/safety/monitoring",
-      "category": "assurance-goal-category",
-      "broader": "tea:tag/assurance-goal-category/safety"
     },
     {
       "@id": "tea:tag/expertise-needed/software-engineering",
@@ -14342,20 +14400,20 @@
       "broader": "tea:tag/applicable-models/architecture"
     },
     {
-      "@id": "tea:tag/lifecycle-stage/model-development/testing",
-      "@type": "Tag",
-      "prefLabel": "testing",
-      "path": "lifecycle-stage/model-development/testing",
-      "category": "lifecycle-stage",
-      "broader": "tea:tag/lifecycle-stage/model-development"
-    },
-    {
       "@id": "tea:tag/data-requirements/prediction-probabilities",
       "@type": "Tag",
       "prefLabel": "prediction probabilities",
       "path": "data-requirements/prediction-probabilities",
       "category": "data-requirements",
       "broader": "tea:tag/data-requirements"
+    },
+    {
+      "@id": "tea:tag/lifecycle-stage/model-development/testing",
+      "@type": "Tag",
+      "prefLabel": "testing",
+      "path": "lifecycle-stage/model-development/testing",
+      "category": "lifecycle-stage",
+      "broader": "tea:tag/lifecycle-stage/model-development"
     },
     {
       "@id": "tea:tag/lifecycle-stage/post-processing",

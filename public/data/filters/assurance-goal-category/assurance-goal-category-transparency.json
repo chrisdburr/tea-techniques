@@ -1901,15 +1901,18 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
         "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/calibration-set",
         "data-type/any",
         "evidence-type/prediction-interval",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
@@ -2004,7 +2007,11 @@
         "bootstrapping",
         "quantile-regression",
         "deep-ensembles",
-        "empirical-calibration"
+        "empirical-calibration",
+        "epistemic-uncertainty-quantification",
+        "temperature-scaling",
+        "monte-carlo-dropout",
+        "jackknife-resampling"
       ],
       "sample_claims": [
         {
@@ -2341,7 +2348,10 @@
         "assurance-goal-category/reliability",
         "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/prediction-interval",
@@ -2425,7 +2435,11 @@
         "monte-carlo-dropout",
         "conformal-prediction",
         "out-of-distribution-detector-for-neural-networks",
-        "quantile-regression"
+        "quantile-regression",
+        "temperature-scaling",
+        "bootstrapping",
+        "out-of-domain-detection",
+        "epistemic-uncertainty-quantification"
       ],
       "sample_claims": [
         {
@@ -6177,7 +6191,9 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
         "data-type/any",
@@ -6273,6 +6289,7 @@
       "related_techniques": [
         "adaptive-sensitive-reweighting",
         "adversarial-debiasing",
+        "fair-adversarial-networks",
         "fair-transfer-learning",
         "meta-fair-classifier"
       ],
@@ -6611,8 +6628,11 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
+        "data-requirements/prediction-probabilities",
         "data-requirements/sensitive-attributes",
         "data-type/any",
         "evidence-type/fairness-metric",
@@ -6622,6 +6642,7 @@
         "fairness-approach/group",
         "lifecycle-stage/model-development",
         "lifecycle-stage/model-development/testing",
+        "lifecycle-stage/post-processing",
         "lifecycle-stage/system-deployment-and-use/monitoring",
         "technique-type/algorithmic"
       ],
@@ -6707,6 +6728,7 @@
       "related_techniques": [
         "calibration-with-equality-of-opportunity",
         "reject-option-classification",
+        "reweighing",
         "threshold-optimiser",
         "out-of-domain-detection"
       ],
@@ -6898,7 +6920,10 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/calibration-set",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
@@ -6997,7 +7022,9 @@
         "equalised-odds-post-processing",
         "reject-option-classification",
         "threshold-optimiser",
-        "out-of-domain-detection"
+        "equal-opportunity-difference",
+        "average-odds-difference",
+        "empirical-calibration"
       ],
       "sample_claims": [
         {
@@ -7747,19 +7774,22 @@
         "assurance-goal-category/explainability/explains/internal-mechanisms",
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/robustness",
         "assurance-goal-category/transparency",
-        "data-type/text",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
+        "data-type/text",
         "evidence-type/qualitative-report",
         "evidence-type/quantitative-metric",
-        "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
+        "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
         "explanatory-scope/local",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
-        "technique-type/testing",
-        "technique-type/algorithmic"
+        "technique-type/algorithmic",
+        "technique-type/testing"
       ],
       "example_use_cases": [
         {
@@ -7822,7 +7852,8 @@
         "few-shot-fairness-evaluation",
         "retrieval-augmented-generation-evaluation",
         "epistemic-uncertainty-quantification",
-        "constitutional-ai-evaluation"
+        "constitutional-ai-evaluation",
+        "causal-mediation-analysis-in-language-models"
       ],
       "sample_claims": [
         {

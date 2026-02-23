@@ -760,6 +760,183 @@
       ]
     },
     {
+      "slug": "influence-functions",
+      "name": "Influence Functions",
+      "description": "Influence functions quantify how much each training example influenced a model's predictions by computing the change in prediction that would occur if that training example were removed and the model retrained. Using calculus and the implicit function theorem, they approximate this 'leave-one-out' effect without actually retraining the model by computing gradients and Hessian information. This mathematical approach reveals which specific training examples were most responsible for pushing the model toward or away from particular predictions, enabling practitioners to trace problematic outputs back to their root causes in the training data.",
+      "assurance_goals": [
+        "Explainability",
+        "Fairness",
+        "Privacy"
+      ],
+      "tags": [
+        "applicable-models/architecture/linear-models",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/differentiable",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/explains/causal-pathways",
+        "assurance-goal-category/explainability/explains/data-patterns",
+        "assurance-goal-category/explainability/instance-based/influence-analysis",
+        "assurance-goal-category/explainability/property/causality",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/privacy",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Investigating why a medical diagnosis model misclassified a patient by identifying which specific training cases most influenced the incorrect prediction, revealing potential mislabelled examples or problematic patterns in the training data.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Analysing a spam detection system that falsely flagged legitimate emails by tracing the prediction back to influential training examples, discovering that certain training emails contained misleading patterns that caused the model to overfit.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Auditing a loan approval model for discriminatory patterns by identifying which training examples most influenced rejections of minority applicants, revealing whether biased historical decisions are driving current unfair outcomes.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Assessing membership inference risks in a medical model by identifying whether certain patient records have disproportionate influence on predictions, indicating potential data leakage vulnerabilities.",
+          "goal": "Privacy"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Computationally intensive, requiring Hessian matrix computations that become intractable for very large models with millions of parameters."
+        },
+        {
+          "description": "Requires access to the complete training dataset and training process, making it impossible to apply to pre-trained models without access to original training data."
+        },
+        {
+          "description": "Accuracy degrades for highly non-convex models where the linear approximation underlying influence functions breaks down."
+        },
+        {
+          "description": "Results can be sensitive to hyperparameter choices and may not generalise well across different model architectures or training procedures."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Understanding Black-box Predictions via Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/08ad8fad21f6ec4cda4d56be1ca5e146b7c913a1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Pang Wei Koh",
+            "Percy Liang"
+          ],
+          "publication_date": "2017",
+          "citationKey": "weikohUnderstandingBlackboxPredictions2017",
+          "abstract": "How can we explain the predictions of a black-box model? In this paper, we use influence functions — a classic technique from robust statistics — to trace a model's prediction through the learning algorithm and back to its training data, thereby identifying training points most responsible for a given prediction. To scale up influence functions to modern machine learning settings, we develop a simple, efficient implementation that requires only oracle access to gradients and Hessian-vector products. We show that even on non-convex and non-differentiable models where the theory breaks down, approximations to influence functions can still provide valuable information. On linear models and convolutional neural networks, we demonstrate that influence functions are useful for multiple purposes: understanding model behavior, debugging models, detecting dataset errors, and even creating visually-indistinguishable training-set attacks."
+        },
+        {
+          "title": "pytorch_influence_functions",
+          "url": "https://github.com/nimarb/pytorch_influence_functions",
+          "source_type": "software_package",
+          "publication_date": "2019-11-30",
+          "citationKey": "nimarbPytorch_influence_functions2019",
+          "abstract": "This is a PyTorch reimplementation of Influence Functions from the ICML2017 best paper: Understanding Black-box Predictions via Influence Functions by Pang Wei Koh and Percy Liang."
+        },
+        {
+          "title": "What is Your Data Worth to GPT? LLM-Scale Data Valuation with Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/f33f3dece9f34c1ec5417dccf9e0acf592d8e8cb",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sang Keun Choe",
+            "Hwijeen Ahn",
+            "Juhan Bae",
+            "Kewen Zhao",
+            "Minsoo Kang",
+            "Youngseog Chung",
+            "Adithya Pratapa",
+            "Willie Neiswanger",
+            "Emma Strubell",
+            "Teruko Mitamura",
+            "Jeff G. Schneider",
+            "Eduard H. Hovy",
+            "Roger B. Grosse",
+            "Eric P. Xing"
+          ],
+          "publication_date": "2024",
+          "citationKey": "keunchoeWhatYourData2024",
+          "abstract": "Large language models (LLMs) are trained on a vast amount of human-written data, but data providers often remain uncredited. In response to this issue, data valuation (or data attribution), which quantifies the contribution or value of each data to the model output, has been discussed as a potential solution. Nevertheless, applying existing data valuation methods to recent LLMs and their vast training datasets has been largely limited by prohibitive compute and memory costs. In this work, we focus on influence functions, a popular gradient-based data valuation method, and significantly improve its scalability with an efficient gradient projection strategy called LoGra that leverages the gradient structure in backpropagation. We then provide a theoretical motivation of gradient projection approaches to influence functions to promote trust in the data valuation process. Lastly, we lower the barrier to implementing data valuation systems by introducing LogIX, a software package that can transform existing training code into data valuation code with minimal effort. In our data valuation experiments, LoGra achieves competitive accuracy against more expensive baselines while showing up to 6,500x improvement in throughput and 5x reduction in GPU memory usage when applied to Llama3-8B-Instruct and the 1B-token dataset."
+        },
+        {
+          "title": "Scaling Up Influence Functions",
+          "url": "https://www.semanticscholar.org/paper/ef2a773c3c7848a6cc16b18164be5f8876a310af",
+          "source_type": "technical_paper",
+          "authors": [
+            "Andrea Schioppa",
+            "Polina Zablotskaia",
+            "David Vilar",
+            "Artem Sokolov"
+          ],
+          "publication_date": "2021",
+          "citationKey": "schioppaScalingInfluenceFunctions2021",
+          "abstract": "We address efficient calculation of influence functions for tracking predictions back to the training data. We propose and analyze a new approach to speeding up the inverse Hessian calculation based on Arnoldi iteration. With this improvement, we achieve, to the best of our knowledge, the first successful implementation of influence functions that scales to full-size (language and vision) Transformer models with several hundreds of millions of parameters. We evaluate our approach in image classification and sequence-to-sequence tasks with tens to a hundred of millions of training examples. Our code is available at https://github.com/google-research/jax-influence."
+        },
+        {
+          "title": "Welcome to torch-influence's API Reference! — torch-influence 0.1.0 ...",
+          "url": "https://torch-influence.readthedocs.io",
+          "source_type": "documentation",
+          "authors": [
+            "Torch-influence Developers"
+          ],
+          "publication_date": "2023",
+          "citationKey": "torch-influencedevelopersWelcomeTorchinfluencesAPI2023"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "jackknife-resampling",
+        "integrated-gradients",
+        "machine-unlearning",
+        "data-poisoning-detection",
+        "prototype-and-criticism-models",
+        "membership-inference-attack-testing"
+      ],
+      "sample_claims": [
+        {
+          "text": "The diagnostic model's predictions are traceable to specific patient cases in the training data",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The credit model's decisions on individual applications are attributable to identifiable historical loan records",
+          "domain": "finance",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The welfare eligibility system's rejections can be traced to specific training cases to identify discriminatory patterns",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The medical model's predictions reveal which patient records from the training set had disproportionate influence on diagnostic outputs",
+          "domain": "healthcare",
+          "assuranceGoal": "privacy"
+        },
+        {
+          "text": "The perception system's object classification decisions are traceable to specific labeled examples from the training corpus",
+          "domain": "autonomous systems",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
       "slug": "permutation-tests",
       "name": "Permutation Tests",
       "description": "Permutation tests assess the statistical significance of observed results (such as model accuracy, feature importance, or group differences) by comparing them to what would occur purely by chance. The technique randomly shuffles labels or data thousands of times, recalculating the metric of interest each time to build an empirical null distribution. If the actual observed result falls in the extreme tail of this distribution (typically beyond the 95th or 99th percentile), it provides strong evidence that the relationship is genuine rather than due to random chance, without requiring parametric assumptions about data distributions.",
@@ -1959,6 +2136,159 @@
           "text": "The system communicates how treatment effectiveness varies across the full spectrum of patient outcomes rather than only average effects",
           "domain": "healthcare",
           "assuranceGoal": "transparency"
+        }
+      ]
+    },
+    {
+      "slug": "conformal-prediction",
+      "name": "Conformal Prediction",
+      "description": "Conformal prediction provides mathematically guaranteed uncertainty quantification by creating prediction sets that contain the true outcome with a specified probability (e.g., exactly 95% coverage). The technique works by measuring how 'strange' or 'nonconforming' new predictions are compared to calibration data - if a prediction seems unusual, it gets wider intervals. For example, in medical diagnosis, instead of saying 'likely cancer', it might say 'possible diagnoses: {cancer, benign tumour} with 95% confidence'. This distribution-free method works with any underlying model (neural networks, random forests, etc.) and requires no assumptions about data distribution, making it a robust framework for reliable uncertainty estimates in high-stakes applications.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/calibration-set",
+        "data-type/any",
+        "evidence-type/prediction-interval",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Creating prediction sets for drug discovery that guarantee 95% coverage, such as 'this compound will likely have activity against {target A, target B, target C}', ensuring reliable decision-making in costly experimental validation.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing transparent multi-class predictions in judicial risk assessment by showing all plausible risk categories with guaranteed coverage, enabling judges to see the full range of possibilities rather than just a single point estimate.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring fair uncertainty quantification across demographic groups in college admissions by verifying that prediction set sizes (number of possible outcomes) are consistent across protected groups, preventing discriminatory overconfidence for certain populations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Prediction sets can be unnecessarily wide when nonconformity scores vary greatly across the feature space, leading to conservative intervals that reduce practical utility."
+        },
+        {
+          "description": "Requires a held-out calibration set separate from training data, reducing the amount of data available for model training, which can impact performance on small datasets."
+        },
+        {
+          "description": "Guarantees only hold under the exchangeability assumption - if test data distribution differs significantly from calibration data, coverage guarantees may be violated."
+        },
+        {
+          "description": "For multi-class problems, prediction sets may include many classes when the model is uncertain, making decisions difficult when sets contain opposing outcomes."
+        },
+        {
+          "description": "Computational cost increases with the number of calibration samples, and efficient implementation requires careful design for large-scale or real-time applications."
+        }
+      ],
+      "resources": [
+        {
+          "title": "A tutorial on conformal prediction",
+          "url": "http://arxiv.org/abs/0706.3188v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Glenn Shafer",
+            "Vladimir Vovk"
+          ],
+          "publication_date": "2007-06-21",
+          "citationKey": "shaferTutorialConformalPrediction2007",
+          "abstract": "Conformal prediction uses past experience to determine precise levels of confidence in new predictions. Given an error probability $ε$, together with a method that makes a prediction $\\hat{y}$ of a label $y$, it produces a set of labels, typically containing $\\hat{y}$, that also contains $y$ with probability $1-ε$. Conformal prediction can be applied to any method for producing $\\hat{y}$: a nearest-neighbor method, a support-vector machine, ridge regression, etc.   Conformal prediction is designed for an on-line setting in which labels are predicted successively, each one being revealed before the next is predicted. The most novel and valuable feature of conformal prediction is that if the successive examples are sampled independently from the same distribution, then the successive predictions will be right $1-ε$ of the time, even though they are based on an accumulating dataset rather than on independent datasets.   In addition to the model under which successive examples are sampled independently, other on-line compression models can also use conformal prediction. The widely used Gaussian linear model is one of these.   This tutorial presents a self-contained account of the theory of conformal prediction and works through several numerical examples. A more comprehensive treatment of the topic is provided in \"Algorithmic Learning in a Random World\", by Vladimir Vovk, Alex Gammerman, and Glenn Shafer (Springer, 2005)."
+        },
+        {
+          "title": "awesome-conformal-prediction",
+          "url": "https://github.com/valeman/awesome-conformal-prediction",
+          "source_type": "software_package",
+          "publication_date": "2021-12-10",
+          "citationKey": "valemanAwesomeconformalprediction2021",
+          "abstract": "A professionally curated list of awesome Conformal Prediction videos, tutorials, books, papers, PhD and MSc theses, articles and open-source libraries."
+        },
+        {
+          "title": "MAPIE",
+          "url": "https://github.com/scikit-learn-contrib/MAPIE",
+          "source_type": "software_package",
+          "publication_date": "2021-03-30",
+          "citationKey": "scikit-learn-contribMAPIE2021",
+          "abstract": "A scikit-learn-compatible library for estimating prediction intervals and controlling risks, based on conformal predictions."
+        },
+        {
+          "title": "Tutorial for classification — MAPIE 0.8.6 documentation",
+          "url": "https://mapie.readthedocs.io/en/v0.8.6/examples_classification/4-tutorials/plot_main-tutorial-classification.html",
+          "source_type": "documentation",
+          "authors": [
+            "Mapie Developers"
+          ],
+          "publication_date": "2021",
+          "citationKey": "mapiedevelopersTutorialClassificationMAPIE2021"
+        },
+        {
+          "title": "Conformal Prediction: a Unified Review of Theory and New Challenges",
+          "url": "http://arxiv.org/abs/2005.07972v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Matteo Fontana",
+            "Gianluca Zeni",
+            "Simone Vantini"
+          ],
+          "publication_date": "2020-05-16",
+          "citationKey": "fontanaConformalPredictionUnified2020",
+          "abstract": "In this work we provide a review of basic ideas and novel developments about Conformal Prediction -- an innovative distribution-free, non-parametric forecasting method, based on minimal assumptions -- that is able to yield in a very straightforward way predictions sets that are valid in a statistical sense also in in the finite sample case. The in-depth discussion provided in the paper covers the theoretical underpinnings of Conformal Prediction, and then proceeds to list the more advanced developments and adaptations of the original idea."
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "bootstrapping",
+        "quantile-regression",
+        "deep-ensembles",
+        "empirical-calibration",
+        "epistemic-uncertainty-quantification",
+        "temperature-scaling",
+        "monte-carlo-dropout",
+        "jackknife-resampling"
+      ],
+      "sample_claims": [
+        {
+          "text": "The diagnostic system's prediction sets contain the correct outcome with a guaranteed minimum coverage rate across all patient presentations",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The system's uncertainty estimates maintain their specified validity guarantees regardless of the underlying data distribution",
+          "domain": "general",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The model communicates uncertainty by providing a set of plausible outcomes rather than a single point prediction",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The prediction sets achieve equivalent coverage rates across demographic groups without requiring distributional assumptions",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The autonomous system's safety-critical predictions are accompanied by statistically guaranteed confidence bounds",
+          "domain": "autonomous systems",
+          "assuranceGoal": "reliability"
         }
       ]
     },
@@ -4337,7 +4667,9 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
         "data-type/any",
@@ -4433,6 +4765,7 @@
       "related_techniques": [
         "adaptive-sensitive-reweighting",
         "adversarial-debiasing",
+        "fair-adversarial-networks",
         "fair-transfer-learning",
         "meta-fair-classifier"
       ],
@@ -4916,8 +5249,11 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
+        "data-requirements/prediction-probabilities",
         "data-requirements/sensitive-attributes",
         "data-type/any",
         "evidence-type/fairness-metric",
@@ -4927,6 +5263,7 @@
         "fairness-approach/group",
         "lifecycle-stage/model-development",
         "lifecycle-stage/model-development/testing",
+        "lifecycle-stage/post-processing",
         "lifecycle-stage/system-deployment-and-use/monitoring",
         "technique-type/algorithmic"
       ],
@@ -5012,6 +5349,7 @@
       "related_techniques": [
         "calibration-with-equality-of-opportunity",
         "reject-option-classification",
+        "reweighing",
         "threshold-optimiser",
         "out-of-domain-detection"
       ],
@@ -5352,7 +5690,10 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/calibration-set",
         "data-requirements/labelled-data",
         "data-requirements/sensitive-attributes",
@@ -5451,7 +5792,9 @@
         "equalised-odds-post-processing",
         "reject-option-classification",
         "threshold-optimiser",
-        "out-of-domain-detection"
+        "equal-opportunity-difference",
+        "average-odds-difference",
+        "empirical-calibration"
       ],
       "sample_claims": [
         {
@@ -6428,6 +6771,157 @@
       ]
     },
     {
+      "slug": "prompt-robustness-testing",
+      "name": "Prompt Robustness Testing",
+      "description": "Prompt robustness testing evaluates how consistently models perform when prompts undergo minor variations in wording, formatting, or structure. This technique systematically paraphrases prompts, reorders elements, changes formatting (capitalisation, punctuation), and tests semantically equivalent variations to measure output consistency. Testing assesses robustness by identifying when superficial prompt changes cause dramatic performance swings, helping developers create robust prompt templates and understand model reliability boundaries.",
+      "assurance_goals": [
+        "Reliability",
+        "Fairness",
+        "Explainability"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "data-type/text",
+        "data-requirements/no-special-requirements",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "technique-type/testing",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-expertise",
+        "explanatory-scope/global",
+        "fairness-approach/group"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing whether a medical triage chatbot gives consistent urgency assessments when patients describe symptoms using different phrasings, ensuring reliable advice regardless of communication style.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Verifying that a climate modeling AI produces consistent environmental risk assessments regardless of minor variations in how scenarios are described, maintaining fair analysis across different reporting styles.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Testing a customer service routing AI to identify which keywords and phrases are critical for correctly categorising support requests versus which formatting variations inappropriately change routing decisions, enabling clearer user guidance.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Testing an automated essay grading system to ensure it provides consistent scores and feedback when students express equivalent ideas using different vocabulary, sentence structures, or writing styles, ensuring fair assessment across diverse student populations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Validating that a fraud detection AI maintains consistent risk assessments when financial transactions are described using varied terminology, abbreviations, or formats, ensuring reliable protection regardless of how suspicious activities are reported.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Vast space of possible prompt variations makes exhaustive testing infeasible, requiring sampling strategies that may miss important edge cases."
+        },
+        {
+          "description": "Defining 'semantically equivalent' prompts can be subjective, especially for complex or nuanced instructions."
+        },
+        {
+          "description": "Some brittleness may be unavoidable due to fundamental model limitations rather than fixable through prompt engineering."
+        },
+        {
+          "description": "Testing reveals brittleness but doesn't necessarily provide clear paths to mitigation beyond avoiding problematic variations."
+        },
+        {
+          "description": "Robustness patterns may not transfer across domains—a model robust to medical terminology variations might still be brittle to legal phrasings, requiring separate testing for each application domain."
+        }
+      ],
+      "resources": [
+        {
+          "title": "promptbench Introduction — promptbench 0.0.1 documentation",
+          "url": "https://promptbench.readthedocs.io/en/latest/start/intro.html",
+          "source_type": "documentation",
+          "authors": [
+            "Promptbench Developers"
+          ],
+          "publication_date": "2023",
+          "citationKey": "promptbenchdevelopersPromptbenchIntroductionPromptbench2023"
+        },
+        {
+          "title": "acceptance-bench",
+          "url": "https://github.com/ellydee/acceptance-bench",
+          "source_type": "software_package",
+          "publication_date": "2025-10-16",
+          "citationKey": "ellydeeAcceptancebench2025",
+          "abstract": "A robust LLM evaluation framework measuring acceptance vs refusal across difficulty levels. Features multi-prompt variation testing, temperature sweeping, and LLM-as-judge evaluation. Current focus: creative writing benchmarks including erotica generation tasks."
+        },
+        {
+          "title": "A Guide on Effective LLM Assessment with DeepEval",
+          "url": "https://www.analyticsvidhya.com/blog/2025/01/llm-assessment-with-deepeval",
+          "source_type": "tutorial",
+          "authors": [
+            "Nibedita Dutta"
+          ],
+          "publication_date": "2025-01-24",
+          "citationKey": "duttaGuideEffectiveLLM2025"
+        },
+        {
+          "title": "Prompt engineering",
+          "url": "https://huggingface.co/docs/transformers/en/tasks/prompting",
+          "source_type": "documentation",
+          "publication_date": "2019",
+          "citationKey": "PromptEngineering2019"
+        },
+        {
+          "title": "Prompt Engineering UI (Experimental) | MLflow",
+          "url": "https://mlflow.org/docs/latest/genai/prompt-registry/prompt-engineering",
+          "source_type": "documentation",
+          "authors": [
+            "MLflow Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "mlflowdevelopersPromptEngineeringUI2018"
+        }
+      ],
+      "related_techniques": [
+        "prompt-sensitivity-analysis",
+        "prompt-injection-testing",
+        "chain-of-thought-faithfulness-evaluation",
+        "constitutional-ai-evaluation"
+      ],
+      "sample_claims": [
+        {
+          "text": "The medical triage system provides consistent urgency assessments regardless of how patients phrase their symptom descriptions",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The automated assessment tool evaluates student work equitably across different writing styles and vocabularies when expressing equivalent ideas",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The customer routing system's categorisation decisions remain stable when support requests are reformatted or reworded whilst maintaining semantic meaning",
+          "domain": "general",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The decision boundaries governing query classification are identifiable through systematic analysis of which input variations trigger different categorisation outcomes",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The environmental monitoring system produces equivalent risk assessments when scenario descriptions vary in formatting, capitalisation, or structural presentation",
+          "domain": "environmental",
+          "assuranceGoal": "fairness"
+        }
+      ]
+    },
+    {
       "slug": "reweighing",
       "name": "Reweighing",
       "description": "Reweighing is a pre-processing technique that mitigates bias by assigning different weights to training examples based on their group membership and class label. The weights are calculated to ensure that privileged and unprivileged groups have equal influence on the model's training process, effectively balancing the dataset without altering the feature values themselves. This helps to train fairer models by correcting for historical imbalances in how different groups are represented in the data.",
@@ -6577,5 +7071,5 @@
       ]
     }
   ],
-  "count": 44
+  "count": 47
 }

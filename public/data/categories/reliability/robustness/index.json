@@ -729,6 +729,139 @@
       ]
     },
     {
+      "slug": "model-pruning",
+      "name": "Model Pruning",
+      "description": "Model pruning systematically removes less important weights, neurons, or entire layers from neural networks to create smaller, more efficient models whilst maintaining performance. This process involves iterative removal based on importance criteria (weight magnitudes, gradient information, activation patterns) followed by fine-tuning. Pruning can be structured (removing entire neurons/channels) or unstructured (removing individual weights), with structured pruning providing greater computational benefits and interpretability through simplified architectures.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/model-internals",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/model-simplification/pruning",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/sparsity",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
+        "data-requirements/access-to-model-internals",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/global",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-optimization",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Compressing a medical imaging model from 100MB to 15MB for deployment on edge devices in remote clinics, enabling healthcare professionals to audit the remaining critical feature detectors and understand which anatomical patterns drive diagnoses whilst maintaining diagnostic accuracy.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Pruning a financial fraud detection model by 70% to eliminate redundant pathways that amplify noise, creating a more robust system that maintains consistent predictions across different transaction types and reduces false positives during market volatility.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Reducing an autonomous vehicle perception model to ensure predictable inference times under 50ms for safety-critical decisions, removing non-essential neurons to guarantee consistent computational behaviour whilst maintaining object detection accuracy for pedestrian safety.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Determining optimal pruning ratios requires extensive experimentation as over-pruning can cause dramatic accuracy degradation, whilst under-pruning provides minimal benefits, making the process time-consuming and resource-intensive."
+        },
+        {
+          "description": "Structured pruning often requires specific hardware or software framework support to realise computational benefits, limiting deployment flexibility and potentially necessitating model architecture changes."
+        },
+        {
+          "description": "Pruned models may exhibit reduced robustness to out-of-distribution inputs or adversarial attacks, as removing neurons can eliminate defensive redundancy that helped handle edge cases."
+        },
+        {
+          "description": "The iterative pruning and fine-tuning process can be computationally expensive, sometimes requiring more resources than training the original model, particularly for large-scale networks."
+        },
+        {
+          "description": "Pruning criteria based on weight magnitudes or gradients may not align with interpretability goals, potentially removing neurons that contribute to model transparency whilst retaining complex, opaque pathways."
+        }
+      ],
+      "resources": [
+        {
+          "title": "LLM-Pruner",
+          "url": "https://github.com/horseee/LLM-Pruner",
+          "source_type": "software_package",
+          "publication_date": "2023-05-17",
+          "citationKey": "horseeeLLMPruner2023",
+          "abstract": "[NeurIPS 2023] LLM-Pruner: On the Structural Pruning of Large Language Models. Support Llama-3/3.1, Llama-2, LLaMA,  BLOOM, Vicuna, Baichuan, TinyLlama, etc."
+        },
+        {
+          "title": "Pruning Quickstart — Neural Network Intelligence",
+          "url": "https://nni.readthedocs.io/en/stable/tutorials/pruning_quick_start.html",
+          "source_type": "documentation",
+          "authors": [
+            "Nni Developers"
+          ],
+          "publication_date": "2021",
+          "citationKey": "nnidevelopersPruningQuickstartNeural2021"
+        },
+        {
+          "title": "Overview of NNI Model Pruning — Neural Network Intelligence",
+          "url": "https://nni.readthedocs.io/en/stable/compression/pruning.html",
+          "source_type": "documentation",
+          "authors": [
+            "Nni Developers"
+          ],
+          "publication_date": "2021",
+          "citationKey": "nnidevelopersOverviewNNIModel2021"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "model-distillation",
+        "neuron-activation-analysis",
+        "integrated-gradients",
+        "layer-wise-relevance-propagation"
+      ],
+      "sample_claims": [
+        {
+          "text": "The medical imaging model's inference time is bounded by a simplified architecture that guarantees processing within device constraints",
+          "domain": "healthcare",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The autonomous vehicle perception system maintains consistent detection accuracy with reduced computational pathways that eliminate non-essential processing",
+          "domain": "autonomous systems",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The diagnostic system's decision-making relies on a sparse set of identifiable feature detectors that clinical experts can inspect",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The fraud detection model's predictions remain stable across transaction types despite systematic removal of redundant computational elements",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The edge-deployed model executes within deterministic memory and processing budgets required for real-time safety-critical operation",
+          "domain": "general",
+          "assuranceGoal": "safety"
+        }
+      ]
+    },
+    {
       "slug": "prompt-sensitivity-analysis",
       "name": "Prompt Sensitivity Analysis",
       "description": "Prompt Sensitivity Analysis systematically evaluates how variations in input prompts affect large language model outputs, providing insights into model robustness, consistency, and interpretability. This technique involves creating controlled perturbations of prompts whilst maintaining semantic meaning, then measuring how these changes influence model responses. It encompasses various types of prompt modifications including lexical substitutions, syntactic restructuring, formatting changes, and contextual variations. The analysis typically quantifies sensitivity through metrics such as output consistency, semantic similarity, and statistical measures of variance across prompt variations.",
@@ -862,6 +995,132 @@
           "text": "The public service chatbot delivers equivalent information to citizens regardless of whether queries are posed formally or conversationally",
           "domain": "public sector",
           "assuranceGoal": "reliability"
+        }
+      ]
+    },
+    {
+      "slug": "chain-of-thought-faithfulness-evaluation",
+      "name": "Chain-of-Thought Faithfulness Evaluation",
+      "description": "Chain-of-thought faithfulness evaluation assesses the quality and faithfulness of step-by-step reasoning produced by language models. This technique evaluates whether intermediate reasoning steps are logically valid, factually accurate, and actually responsible for final answers (rather than post-hoc rationalisations). Evaluation methods include consistency checking (whether altered reasoning changes answers), counterfactual testing (injecting errors in reasoning chains), and comparison between reasoning paths for equivalent problems to ensure systematic rather than spurious reasoning.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/paradigm/generative",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/labelled-data",
+        "data-type/text",
+        "evidence-type/qualitative-report",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "technique-type/algorithmic",
+        "technique-type/testing"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating a chemistry tutoring AI that guides students through chemical reaction balancing, ensuring each reasoning step correctly applies conservation of mass and charge rather than producing superficially plausible but scientifically incorrect pathways.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Ensuring a legal reasoning assistant produces reliable analysis by verifying that its chain-of-thought explanations correctly apply relevant statutes and precedents without logical gaps.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Testing science education AI that explains complex concepts step-by-step, verifying reasoning chains reflect sound pedagogical logic that helps students build understanding rather than just memorize facts.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Assessing an automated financial advisory system's investment recommendations to verify that its chain-of-thought explanations correctly apply financial principles, accurately calculate risk metrics, and logically justify portfolio allocations to clients.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Models may generate reasoning that appears valid but is actually post-hoc rationalization rather than the actual computational process leading to answers."
+        },
+        {
+          "description": "Difficult to establish ground truth for complex reasoning tasks where multiple valid reasoning paths may exist."
+        },
+        {
+          "description": "Verification requires domain expertise to judge whether reasoning steps are genuinely valid or merely superficially plausible."
+        },
+        {
+          "description": "Computationally expensive to generate and verify multiple reasoning paths for comprehensive consistency checking."
+        },
+        {
+          "description": "Scaling to production environments with high-volume requests is challenging, as thorough faithfulness evaluation may require generating multiple alternative reasoning paths for comparison, significantly increasing latency and cost."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Chain of Verification: Prompt Engineering for Unparalleled Accuracy",
+          "url": "https://www.analyticsvidhya.com/blog/2024/07/chain-of-verification",
+          "source_type": "tutorial",
+          "authors": [
+            "Shikha Sen"
+          ],
+          "publication_date": "2024-07-18",
+          "citationKey": "senChainVerificationPrompt2024"
+        },
+        {
+          "title": "Chain of Verification Using LangChain Expression Language & LLM",
+          "url": "https://www.analyticsvidhya.com/blog/2023/12/chain-of-verification-implementation-using-langchain-expression-language-and-llm",
+          "source_type": "tutorial",
+          "authors": [
+            "Ritika"
+          ],
+          "publication_date": "2023-12-14",
+          "citationKey": "ritikaChainVerificationUsing2023"
+        }
+      ],
+      "related_techniques": [
+        "few-shot-fairness-evaluation",
+        "retrieval-augmented-generation-evaluation",
+        "epistemic-uncertainty-quantification",
+        "constitutional-ai-evaluation",
+        "causal-mediation-analysis-in-language-models"
+      ],
+      "sample_claims": [
+        {
+          "text": "The system's intermediate reasoning steps are logically valid and directly contribute to final conclusions",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The medical triage assistant's step-by-step symptom analysis reflects genuine clinical reasoning rather than post-hoc justification",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The legal research tool's case analysis demonstrates consistent application of precedent across equivalent legal questions",
+          "domain": "public sector",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The tutoring system's problem-solving explanations maintain factual accuracy at each step without logical gaps",
+          "domain": "general",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The financial advisory model's investment recommendations are grounded in verifiable reasoning that users can trace and validate",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
         }
       ]
     },
@@ -1502,6 +1761,327 @@
       ]
     },
     {
+      "slug": "multimodal-alignment-evaluation",
+      "name": "Multimodal Alignment Evaluation",
+      "description": "Multimodal alignment evaluation assesses whether different modalities (vision, language, audio) are synchronised and consistent in multimodal AI systems. This technique tests whether descriptions match content, sounds associate with correct sources, and cross-modal reasoning maintains accuracy. It produces alignment scores, grounding quality metrics, and reports on modality-specific failure patterns.",
+      "assurance_goals": [
+        "Reliability",
+        "Explainability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/architecture/neural-networks/transformer",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/safety/monitoring",
+        "data-type/image",
+        "data-type/text",
+        "data-requirements/labelled-data",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "technique-type/testing",
+        "technique-type/algorithmic",
+        "evidence-type/quantitative-metric",
+        "evidence-type/qualitative-report",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-expertise"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Verifying that a vision-language model for medical imaging correctly associates diagnostic findings in radiology reports with corresponding visual features in scans, preventing misdiagnosis from misaligned interpretations.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Testing accessibility tools that generate image descriptions for visually impaired users, ensuring descriptions accurately reflect actual visual content and don't misrepresent important details or context.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Evaluating whether visual grounding mechanisms correctly highlight image regions corresponding to generated text descriptions, enabling users to verify and understand model reasoning.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Evaluating alignment in autonomous vehicle systems where camera, lidar, and radar data must be synchronised with language-based reasoning about driving scenarios, ensuring object detection, tracking, and decision explanations remain consistent across modalities.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Testing e-commerce product recommendation systems to verify that visual product features align with textual descriptions and user queries, preventing mismatched recommendations that frustrate customers or misrepresent products.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Validating educational content generation tools that create visual learning materials with text explanations, ensuring diagrams, images, and written content present consistent information without contradictions that could confuse learners.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Defining ground truth for proper alignment can be subjective, especially for abstract concepts or implicit relationships between modalities."
+        },
+        {
+          "description": "Models may appear aligned on simple cases but fail on complex scenarios requiring deep understanding of both modalities."
+        },
+        {
+          "description": "Evaluation requires multimodal datasets with high-quality annotations linking different modalities, which are expensive to create."
+        },
+        {
+          "description": "Adversarial testing may not cover all possible misalignment scenarios, particularly rare or subtle cases of modal inconsistency."
+        },
+        {
+          "description": "Multimodal alignment evaluation requires processing multiple data types simultaneously, increasing computational costs by 2-5x compared to single-modality evaluation, particularly for video or high-resolution image analysis."
+        },
+        {
+          "description": "Creating benchmarks requires expertise across multiple domains (computer vision, NLP, audio processing) and application-specific knowledge, making it difficult to assemble qualified evaluation teams."
+        },
+        {
+          "description": "Annotating multimodal datasets with alignment ground truth is labor-intensive and expensive, typically costing 3-10x more per sample than single-modality annotation due to increased complexity."
+        }
+      ],
+      "resources": [
+        {
+          "title": "CLIP",
+          "url": "https://huggingface.co/docs/transformers/en/model_doc/clip",
+          "source_type": "documentation",
+          "publication_date": "2021",
+          "citationKey": "CLIP2021"
+        },
+        {
+          "title": "Welcome to verl's documentation! — verl documentation",
+          "url": "https://verl.readthedocs.io",
+          "source_type": "documentation",
+          "authors": [
+            "Verl Developers"
+          ],
+          "publication_date": "2021",
+          "citationKey": "verldevelopersWelcomeVerlsDocumentation2021"
+        },
+        {
+          "title": "TRL - Transformer Reinforcement Learning",
+          "url": "https://huggingface.co/docs/trl/en/index",
+          "source_type": "documentation",
+          "publication_date": "2020",
+          "citationKey": "TRLTransformerReinforcement2020"
+        },
+        {
+          "title": "An Efficient Approach for Calibration of Automotive Radar–Camera With Real-Time Projection of Multimodal Data",
+          "url": "https://www.semanticscholar.org/paper/07c4dd6b40c1e284e565463586bbeb66f61c0cb7",
+          "source_type": "technical_paper",
+          "authors": [
+            "Nitish Kumar",
+            "Ayush Dasgupta",
+            "Venkata Satyanand Mutnuri",
+            "Rajalakshmi Pachamuthu"
+          ],
+          "publication_date": "2024",
+          "citationKey": "kumarEfficientApproachCalibration2024",
+          "abstract": "This article presents a comprehensive method for radar-camera calibration with a primary focus on real-time projection, addressing the critical need for precise spatial and temporal alignment between radar and camera sensor modalities. The research introduces a novel methodology for calibration utilizing geometrical transformation, incorporating radar corner reflectors to establish correspondences. This methodology applies to post-automotive manufacturing for integration into radar-camera applications such as advanced driver-assistance systems (ADASs), adaptive cruise control (ACC), collision warning, and mitigation systems. It also serves post-production for sensor installation and algorithm development. The proposed approach employs an advanced algorithm to optimize spatial and temporal synchronization and radar and camera data alignment, ensuring accuracy in multimodal sensor fusion. Rigorous validation through extensive testing demonstrates the efficiency and reliability of the proposed system. The results show that the calibration method is highly accurate compared to the existing state-of-the-art methods, with minimal errors, an average Euclidean distance (AED) of 1.447, and a root-mean-square reprojection error (RMSRE) of (0.1720, 0.5965), indicating a highly efficient spatial synchronization method. During real-time projection, the proposed algorithm for temporal synchronization achieves an average latency of 35 ms between frames."
+        },
+        {
+          "title": "Integration of Large Language Models and Computer Vision Algorithms in LMS: A Methodology for Automated Verification of Software Tasks and Multimodal Analysis of Educational Data",
+          "url": "https://www.semanticscholar.org/paper/0991fef3f336b1ec981d83d7a7c6b8ea2e27598f",
+          "source_type": "technical_paper",
+          "authors": [
+            "E. I. Markin",
+            "V. V. Zuparova",
+            "A. I. Martyshkin"
+          ],
+          "publication_date": "2025",
+          "citationKey": "i.markinIntegrationLargeLanguage2025",
+          "abstract": "This paper presents a study on the design and development of a learning management system (LMS) integrated with large language models (LLMs) and image recognition/generation algorithms to automate software task validation and multimodal educational data analysis. The purpose of the development is to improve the quality of feedback for learners, deepen the understanding of errors made and expand the capabilities of the system by synthesizing formal LLM models and visual processing algorithms. The system is based on the use of domestic LLMs such as GigaChat and YandexGPT, Retrieval-Augmented Generation (RAG) technology, and modern computer vision algorithms. The system architecture is described, including GitVerse for code storage, GitVerse Actions for automated testing of solutions in Docker containers, and image processing modules for analyzing and generating visual data in the educational process. The conducted experiment demonstrates the effectiveness of the integrative approach, which allows to improve the quality of feedback and increase the performance of students. Prospects for further research include optimization of computational resources and development of techniques for integrated analysis of multimodal educational data."
+        }
+      ],
+      "related_techniques": [
+        "adversarial-training-evaluation",
+        "constitutional-ai-evaluation",
+        "chain-of-thought-faithfulness-evaluation",
+        "jailbreak-resistance-testing"
+      ],
+      "sample_claims": [
+        {
+          "text": "The diagnostic imaging system's textual findings correspond to the same anatomical regions and pathological features identified in the visual scans",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The autonomous vehicle's sensor fusion maintains consistent object identification and spatial reasoning across camera, lidar, and linguistic representations",
+          "domain": "autonomous systems",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The model's visual attention mechanisms highlight image regions that semantically align with the concepts referenced in generated text explanations",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The product recommendation system's visual feature analysis and textual query interpretation converge on semantically consistent item attributes",
+          "domain": "general",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The clinical decision support system's risk assessments reflect consistent evidence across radiology images, laboratory results, and clinical note interpretations",
+          "domain": "healthcare",
+          "assuranceGoal": "safety"
+        }
+      ]
+    },
+    {
+      "slug": "prompt-robustness-testing",
+      "name": "Prompt Robustness Testing",
+      "description": "Prompt robustness testing evaluates how consistently models perform when prompts undergo minor variations in wording, formatting, or structure. This technique systematically paraphrases prompts, reorders elements, changes formatting (capitalisation, punctuation), and tests semantically equivalent variations to measure output consistency. Testing assesses robustness by identifying when superficial prompt changes cause dramatic performance swings, helping developers create robust prompt templates and understand model reliability boundaries.",
+      "assurance_goals": [
+        "Reliability",
+        "Fairness",
+        "Explainability"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "data-type/text",
+        "data-requirements/no-special-requirements",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "technique-type/testing",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-expertise",
+        "explanatory-scope/global",
+        "fairness-approach/group"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing whether a medical triage chatbot gives consistent urgency assessments when patients describe symptoms using different phrasings, ensuring reliable advice regardless of communication style.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Verifying that a climate modeling AI produces consistent environmental risk assessments regardless of minor variations in how scenarios are described, maintaining fair analysis across different reporting styles.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Testing a customer service routing AI to identify which keywords and phrases are critical for correctly categorising support requests versus which formatting variations inappropriately change routing decisions, enabling clearer user guidance.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Testing an automated essay grading system to ensure it provides consistent scores and feedback when students express equivalent ideas using different vocabulary, sentence structures, or writing styles, ensuring fair assessment across diverse student populations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Validating that a fraud detection AI maintains consistent risk assessments when financial transactions are described using varied terminology, abbreviations, or formats, ensuring reliable protection regardless of how suspicious activities are reported.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Vast space of possible prompt variations makes exhaustive testing infeasible, requiring sampling strategies that may miss important edge cases."
+        },
+        {
+          "description": "Defining 'semantically equivalent' prompts can be subjective, especially for complex or nuanced instructions."
+        },
+        {
+          "description": "Some brittleness may be unavoidable due to fundamental model limitations rather than fixable through prompt engineering."
+        },
+        {
+          "description": "Testing reveals brittleness but doesn't necessarily provide clear paths to mitigation beyond avoiding problematic variations."
+        },
+        {
+          "description": "Robustness patterns may not transfer across domains—a model robust to medical terminology variations might still be brittle to legal phrasings, requiring separate testing for each application domain."
+        }
+      ],
+      "resources": [
+        {
+          "title": "promptbench Introduction — promptbench 0.0.1 documentation",
+          "url": "https://promptbench.readthedocs.io/en/latest/start/intro.html",
+          "source_type": "documentation",
+          "authors": [
+            "Promptbench Developers"
+          ],
+          "publication_date": "2023",
+          "citationKey": "promptbenchdevelopersPromptbenchIntroductionPromptbench2023"
+        },
+        {
+          "title": "acceptance-bench",
+          "url": "https://github.com/ellydee/acceptance-bench",
+          "source_type": "software_package",
+          "publication_date": "2025-10-16",
+          "citationKey": "ellydeeAcceptancebench2025",
+          "abstract": "A robust LLM evaluation framework measuring acceptance vs refusal across difficulty levels. Features multi-prompt variation testing, temperature sweeping, and LLM-as-judge evaluation. Current focus: creative writing benchmarks including erotica generation tasks."
+        },
+        {
+          "title": "A Guide on Effective LLM Assessment with DeepEval",
+          "url": "https://www.analyticsvidhya.com/blog/2025/01/llm-assessment-with-deepeval",
+          "source_type": "tutorial",
+          "authors": [
+            "Nibedita Dutta"
+          ],
+          "publication_date": "2025-01-24",
+          "citationKey": "duttaGuideEffectiveLLM2025"
+        },
+        {
+          "title": "Prompt engineering",
+          "url": "https://huggingface.co/docs/transformers/en/tasks/prompting",
+          "source_type": "documentation",
+          "publication_date": "2019",
+          "citationKey": "PromptEngineering2019"
+        },
+        {
+          "title": "Prompt Engineering UI (Experimental) | MLflow",
+          "url": "https://mlflow.org/docs/latest/genai/prompt-registry/prompt-engineering",
+          "source_type": "documentation",
+          "authors": [
+            "MLflow Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "mlflowdevelopersPromptEngineeringUI2018"
+        }
+      ],
+      "related_techniques": [
+        "prompt-sensitivity-analysis",
+        "prompt-injection-testing",
+        "chain-of-thought-faithfulness-evaluation",
+        "constitutional-ai-evaluation"
+      ],
+      "sample_claims": [
+        {
+          "text": "The medical triage system provides consistent urgency assessments regardless of how patients phrase their symptom descriptions",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The automated assessment tool evaluates student work equitably across different writing styles and vocabularies when expressing equivalent ideas",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The customer routing system's categorisation decisions remain stable when support requests are reformatted or reworded whilst maintaining semantic meaning",
+          "domain": "general",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The decision boundaries governing query classification are identifiable through systematic analysis of which input variations trigger different categorisation outcomes",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The environmental monitoring system produces equivalent risk assessments when scenario descriptions vary in formatting, capitalisation, or structural presentation",
+          "domain": "environmental",
+          "assuranceGoal": "fairness"
+        }
+      ]
+    },
+    {
       "slug": "prompt-injection-testing",
       "name": "Prompt Injection Testing",
       "description": "Prompt injection testing systematically evaluates LLMs and generative AI systems for vulnerabilities where malicious users can override system instructions through carefully crafted inputs. This technique encompasses both offensive security testing (proactively attempting injection attacks to identify vulnerabilities) and defensive detection mechanisms (monitoring for suspicious patterns in prompts and context). Testing involves evaluating various injection patterns including direct instruction manipulation, context confusion, role-playing exploits, delimiter attacks, and context window poisoning. Detection methods analyse context provenance, validate formatting consistency, and identify semantic anomalies that indicate manipulation attempts rather than legitimate user interaction.",
@@ -1984,5 +2564,5 @@
       ]
     }
   ],
-  "count": 13
+  "count": 17
 }

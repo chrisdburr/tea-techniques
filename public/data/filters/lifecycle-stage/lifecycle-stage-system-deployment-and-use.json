@@ -2,7 +2,7 @@
   "tag": {
     "name": "lifecycle-stage/system-deployment-and-use",
     "slug": "lifecycle-stage-system-deployment-and-use",
-    "count": 32,
+    "count": 33,
     "category": "lifecycle-stage"
   },
   "techniques": [
@@ -1163,6 +1163,165 @@
       ]
     },
     {
+      "slug": "out-of-distribution-detector-for-neural-networks",
+      "name": "Out-of-Distribution Detector for Neural Networks",
+      "description": "ODIN (Out-of-Distribution Detector for Neural Networks) identifies when a neural network encounters inputs significantly different from its training distribution. It enhances detection by applying temperature scaling to soften the model's output distribution and adding small, carefully calibrated perturbations to the input that push in-distribution samples towards higher confidence predictions. By measuring the maximum softmax probability after these adjustments, ODIN can effectively distinguish between in-distribution and out-of-distribution inputs, flagging potentially unreliable predictions before they cause downstream errors.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/probabilistic-output",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/prediction-confidence",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Detecting anomalous medical images in diagnostic systems, where ODIN flags X-rays or scans containing rare pathologies or imaging artefacts not present in training data, preventing misdiagnosis and prompting specialist review.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Protecting autonomous vehicle perception systems by identifying novel road scenarios (e.g., unusual weather conditions, rare obstacle types) that fall outside the training distribution, triggering fallback safety mechanisms.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Monitoring production ML systems for data drift by detecting when incoming customer behaviour patterns deviate significantly from training data, helping explain why model performance may degrade over time.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires careful tuning of temperature scaling and perturbation magnitude parameters, which may need adjustment for different types of out-of-distribution data."
+        },
+        {
+          "description": "Performance degrades when out-of-distribution samples are very similar to training data, making near-distribution detection challenging."
+        },
+        {
+          "description": "Vulnerable to adversarial examples specifically crafted to evade detection by mimicking in-distribution characteristics."
+        },
+        {
+          "description": "Computational overhead from input preprocessing and perturbation generation can impact real-time inference applications."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Enhancing The Reliability of Out-of-distribution Image Detection in Neural Networks",
+          "url": "http://arxiv.org/abs/1706.02690v5",
+          "source_type": "technical_paper",
+          "authors": [
+            "Shiyu Liang",
+            "Yixuan Li",
+            "R. Srikant"
+          ],
+          "publication_date": "2017-06-08",
+          "citationKey": "liangEnhancingReliabilityOutofdistribution2017",
+          "abstract": "We consider the problem of detecting out-of-distribution images in neural networks. We propose ODIN, a simple and effective method that does not require any change to a pre-trained neural network. Our method is based on the observation that using temperature scaling and adding small perturbations to the input can separate the softmax score distributions between in- and out-of-distribution images, allowing for more effective detection. We show in a series of experiments that ODIN is compatible with diverse network architectures and datasets. It consistently outperforms the baseline approach by a large margin, establishing a new state-of-the-art performance on this task. For example, ODIN reduces the false positive rate from the baseline 34.7% to 4.3% on the DenseNet (applied to CIFAR-10) when the true positive rate is 95%."
+        },
+        {
+          "title": "odin",
+          "url": "https://github.com/facebookresearch/odin",
+          "source_type": "software_package",
+          "publication_date": "2018-02-10",
+          "citationKey": "Odin2018",
+          "abstract": "A simple and effective method for detecting out-of-distribution images in neural networks."
+        },
+        {
+          "title": "Generalized ODIN: Detecting Out-of-distribution Image without Learning from Out-of-distribution Data",
+          "url": "http://arxiv.org/abs/2002.11297v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yen-Chang Hsu",
+            "Yilin Shen",
+            "Hongxia Jin",
+            "Zsolt Kira"
+          ],
+          "publication_date": "2020-02-26",
+          "citationKey": "hsuGeneralizedODINDetecting2020",
+          "abstract": "Deep neural networks have attained remarkable performance when applied to data that comes from the same distribution as that of the training set, but can significantly degrade otherwise. Therefore, detecting whether an example is out-of-distribution (OoD) is crucial to enable a system that can reject such samples or alert users. Recent works have made significant progress on OoD benchmarks consisting of small image datasets. However, many recent methods based on neural networks rely on training or tuning with both in-distribution and out-of-distribution data. The latter is generally hard to define a-priori, and its selection can easily bias the learning. We base our work on a popular method ODIN, proposing two strategies for freeing it from the needs of tuning with OoD data, while improving its OoD detection performance. We specifically propose to decompose confidence scoring as well as a modified input pre-processing method. We show that both of these significantly help in detection performance. Our further analysis on a larger scale image dataset shows that the two types of distribution shifts, specifically semantic shift and non-semantic shift, present a significant difference in the difficulty of the problem, providing an analysis of when ODIN-like strategies do or do not work."
+        },
+        {
+          "title": "Detection of out-of-distribution samples using binary neuron activation patterns",
+          "url": "http://arxiv.org/abs/2212.14268",
+          "source_type": "technical_paper",
+          "authors": [
+            "Bartlomiej Olber",
+            "Krystian Radlak",
+            "Adam Popowicz",
+            "Michal Szczepankiewicz",
+            "Krystian Chachuła"
+          ],
+          "publication_date": "2022-12-29",
+          "citationKey": "olberDetectionOutofdistributionSamples2022",
+          "abstract": "Deep neural networks (DNN) have outstanding performance in various applications. Despite numerous efforts of the research community, out-of-distribution (OOD) samples remain a significant limitation of DNN classifiers. The ability to identify previously unseen inputs as novel is crucial in safety-critical applications such as self-driving cars, unmanned aerial vehicles, and robots. Existing approaches to detect OOD samples treat a DNN as a black box and evaluate the confidence score of the output predictions. Unfortunately, this method frequently fails, because DNNs are not trained to reduce their confidence for OOD inputs. In this work, we introduce a novel method for OOD detection. Our method is motivated by theoretical analysis of neuron activation patterns (NAP) in ReLU-based architectures. The proposed method does not introduce a high computational overhead due to the binary representation of the activation patterns extracted from convolutional layers. The extensive empirical evaluation proves its high performance on various DNN architectures and seven image datasets."
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "acronym": "ODIN",
+      "related_techniques": [
+        "out-of-domain-detection",
+        "epistemic-uncertainty-quantification",
+        "data-poisoning-detection",
+        "deep-ensembles",
+        "monte-carlo-dropout",
+        "safety-envelope-testing",
+        "human-in-the-loop-safeguards",
+        "runtime-monitoring-and-circuit-breakers"
+      ],
+      "sample_claims": [
+        {
+          "text": "The perception system detects when operating conditions fall outside its validated envelope",
+          "domain": "autonomous systems",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The diagnostic model identifies medical images containing pathologies or imaging artifacts not represented in the training dataset",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The classification system's confidence estimates distinguish between familiar and novel input patterns without requiring retraining",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The fraud detection system flags transactions exhibiting characteristics absent from historical attack patterns",
+          "domain": "finance",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The environmental monitoring model maintains prediction reliability across sensor configurations and atmospheric conditions encountered during deployment",
+          "domain": "environmental",
+          "assuranceGoal": "reliability"
+        }
+      ]
+    },
+    {
       "slug": "permutation-tests",
       "name": "Permutation Tests",
       "description": "Permutation tests assess the statistical significance of observed results (such as model accuracy, feature importance, or group differences) by comparing them to what would occur purely by chance. The technique randomly shuffles labels or data thousands of times, recalculating the metric of interest each time to build an empirical null distribution. If the actual observed result falls in the extreme tail of this distribution (typically beyond the 95th or 99th percentile), it provides strong evidence that the relationship is genuine rather than due to random chance, without requiring parametric assumptions about data distributions.",
@@ -2095,15 +2254,18 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
         "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/calibration-set",
         "data-type/any",
         "evidence-type/prediction-interval",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
@@ -2198,7 +2360,11 @@
         "bootstrapping",
         "quantile-regression",
         "deep-ensembles",
-        "empirical-calibration"
+        "empirical-calibration",
+        "epistemic-uncertainty-quantification",
+        "temperature-scaling",
+        "monte-carlo-dropout",
+        "jackknife-resampling"
       ],
       "sample_claims": [
         {
@@ -2535,7 +2701,10 @@
         "assurance-goal-category/reliability",
         "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/prediction-interval",
@@ -2619,7 +2788,11 @@
         "monte-carlo-dropout",
         "conformal-prediction",
         "out-of-distribution-detector-for-neural-networks",
-        "quantile-regression"
+        "quantile-regression",
+        "temperature-scaling",
+        "bootstrapping",
+        "out-of-domain-detection",
+        "epistemic-uncertainty-quantification"
       ],
       "sample_claims": [
         {
@@ -4630,5 +4803,5 @@
       ]
     }
   ],
-  "count": 33
+  "count": 34
 }

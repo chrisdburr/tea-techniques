@@ -586,6 +586,7 @@
         "lifecycle-stage/data-handling/collection",
         "lifecycle-stage/data-handling/preparation",
         "technique-type/documentation",
+        "technique-type/process",
         "assurance-goal-category/general"
       ],
       "example_use_cases": [
@@ -600,6 +601,14 @@
         {
           "description": "Establishing transparent documentation for financial transaction datasets that clearly describes data collection methodology, preprocessing steps, and intended use cases, enabling researchers to make informed decisions about dataset appropriateness for their specific applications.",
           "goal": "Transparency"
+        },
+        {
+          "description": "Documenting a safety-critical autonomous vehicle perception dataset with records of sensor calibration procedures, environmental conditions during collection, edge-case scenario coverage, and known distributional gaps, enabling safety engineers to assess whether training data adequately represents the operating conditions required for safe deployment and to support regulatory type-approval submissions.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Documenting the statistical distributions, temporal coverage, and known quality characteristics of training datasets to support model monitoring pipelines, enabling operations teams to detect data drift and assess whether production data remains within the documented training distribution for informed decisions about model retraining or recalibration.",
+          "goal": "Reliability"
         }
       ],
       "limitations": [
@@ -690,7 +699,8 @@
         "model-cards",
         "data-version-control",
         "automated-documentation-generation",
-        "synthetic-data-evaluation"
+        "synthetic-data-evaluation",
+        "internal-review-boards"
       ],
       "sample_claims": [
         {
@@ -2232,13 +2242,17 @@
         "applicable-models/architecture/neural-networks",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
         "assurance-goal-category/fairness",
         "data-requirements/access-to-training-data",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
+        "fairness-approach/group",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "lifecycle-stage/system-deployment/system-use-and-monitoring",
@@ -2561,9 +2575,12 @@
         "applicable-models/paradigm/generative",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "evidence-type/fairness-metric",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
         "data-type/text",
         "evidence-type/quantitative-metric",
@@ -2571,6 +2588,7 @@
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
         "expertise-needed/domain-expertise",
+        "fairness-approach/group",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
@@ -3379,15 +3397,14 @@
       "description": "Model watermarking and theft detection techniques protect AI systems from unauthorised replication by embedding detectable signatures in model outputs and identifying suspiciously similar prediction patterns. This includes watermarking schemes that survive knowledge distillation, fingerprinting methods that create unique statistical signatures, and detection methods that identify when a model has been stolen or replicated through model extraction, distillation, or imitation. These techniques enable model owners to prove intellectual property theft and protect proprietary AI systems.",
       "assurance_goals": [
         "Security",
-        "Transparency",
-        "Fairness"
+        "Transparency"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/security",
+        "assurance-goal-category/security/adversarial-robustness",
         "assurance-goal-category/transparency",
-        "assurance-goal-category/fairness",
         "data-type/any",
         "data-requirements/no-special-requirements",
         "lifecycle-stage/model-development",
@@ -3409,10 +3426,6 @@
         {
           "description": "Providing forensic evidence in intellectual property litigation by demonstrating through watermark extraction and statistical fingerprinting that a competitor's fraud detection system was derived from a bank's proprietary model.",
           "goal": "Transparency"
-        },
-        {
-          "description": "Protecting an autonomous vehicle perception model from unauthorised replication, ensuring that safety-critical models undergo proper validation rather than being deployed through model theft, maintaining fair safety standards across the industry.",
-          "goal": "Fairness"
         }
       ],
       "limitations": [
@@ -3491,7 +3504,9 @@
         "jailbreak-resistance-testing",
         "adversarial-training-evaluation",
         "data-poisoning-detection",
-        "model-extraction-defence-testing"
+        "model-extraction-defence-testing",
+        "membership-inference-attack-testing",
+        "differential-privacy"
       ],
       "sample_claims": [
         {
@@ -4354,7 +4369,14 @@
         "evidence-type/qualitative-report",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
-        "expertise-needed/domain-expertise"
+        "expertise-needed/domain-expertise",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring"
       ],
       "example_use_cases": [
         {
@@ -4372,6 +4394,10 @@
         {
           "description": "Verifying that an educational content recommendation system optimizes for genuine learning outcomes rather than gaming engagement metrics through strategies like repeatedly presenting easier content that inflates measured progress.",
           "goal": "Reliability"
+        },
+        {
+          "description": "Producing a documented audit trail for a high-risk AI deployment by running reward hacking detection tests and recording which specification loopholes were identified and remediated, enabling auditors and regulators to verify that the system achieves its stated objectives through legitimate means rather than gaming its evaluation criteria.",
+          "goal": "Transparency"
         }
       ],
       "limitations": [
@@ -4445,7 +4471,8 @@
         "chain-of-thought-faithfulness-evaluation",
         "adversarial-training-evaluation",
         "constitutional-ai-evaluation",
-        "epistemic-uncertainty-quantification"
+        "epistemic-uncertainty-quantification",
+        "red-teaming"
       ],
       "sample_claims": [
         {

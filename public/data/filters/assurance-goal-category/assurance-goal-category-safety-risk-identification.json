@@ -2,7 +2,7 @@
   "tag": {
     "name": "assurance-goal-category/safety/risk-identification",
     "slug": "assurance-goal-category-safety-risk-identification",
-    "count": 12,
+    "count": 14,
     "category": "assurance-goal-category"
   },
   "techniques": [
@@ -1459,7 +1459,12 @@
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/documentation",
-        "assurance-goal-category/general"
+        "assurance-goal-category/general",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/safety"
       ],
       "example_use_cases": [
         {
@@ -1536,7 +1541,9 @@
         "datasheets-for-datasets",
         "model-development-audit-trails",
         "automated-documentation-generation",
-        "internal-review-boards"
+        "internal-review-boards",
+        "mlflow-experiment-tracking",
+        "data-version-control"
       ],
       "sample_claims": [
         {
@@ -1585,6 +1592,7 @@
         "lifecycle-stage/data-handling/collection",
         "lifecycle-stage/data-handling/preparation",
         "technique-type/documentation",
+        "technique-type/process",
         "assurance-goal-category/general"
       ],
       "example_use_cases": [
@@ -1599,6 +1607,14 @@
         {
           "description": "Establishing transparent documentation for financial transaction datasets that clearly describes data collection methodology, preprocessing steps, and intended use cases, enabling researchers to make informed decisions about dataset appropriateness for their specific applications.",
           "goal": "Transparency"
+        },
+        {
+          "description": "Documenting a safety-critical autonomous vehicle perception dataset with records of sensor calibration procedures, environmental conditions during collection, edge-case scenario coverage, and known distributional gaps, enabling safety engineers to assess whether training data adequately represents the operating conditions required for safe deployment and to support regulatory type-approval submissions.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Documenting the statistical distributions, temporal coverage, and known quality characteristics of training datasets to support model monitoring pipelines, enabling operations teams to detect data drift and assess whether production data remains within the documented training distribution for informed decisions about model retraining or recalibration.",
+          "goal": "Reliability"
         }
       ],
       "limitations": [
@@ -1689,7 +1705,8 @@
         "model-cards",
         "data-version-control",
         "automated-documentation-generation",
-        "synthetic-data-evaluation"
+        "synthetic-data-evaluation",
+        "internal-review-boards"
       ],
       "sample_claims": [
         {
@@ -1978,9 +1995,14 @@
         "expertise-needed/software-engineering",
         "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/project-design",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic",
-        "assurance-goal-category/general"
+        "technique-type/documentation",
+        "assurance-goal-category/general",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency"
       ],
       "example_use_cases": [
         {
@@ -2057,7 +2079,9 @@
         "model-cards",
         "datasheets-for-datasets",
         "mlflow-experiment-tracking",
-        "model-development-audit-trails"
+        "model-development-audit-trails",
+        "internal-review-boards",
+        "data-version-control"
       ],
       "sample_claims": [
         {
@@ -2695,6 +2719,166 @@
           "text": "The educational assistant upholds its pedagogical values without reverting to direct answer provision when users express frustration or urgency",
           "domain": "general",
           "assuranceGoal": "reliability"
+        }
+      ]
+    },
+    {
+      "slug": "continual-learning-stability-testing",
+      "name": "Continual Learning Stability Testing",
+      "description": "Continual learning stability testing evaluates whether models that learn from streaming data maintain performance on previously learned tasks while acquiring new capabilities. This technique measures catastrophic forgetting (performance degradation on old tasks), forward transfer (whether old knowledge helps new learning), and backward transfer (whether new learning damages old performance). Testing includes challenging scenarios where data distributions shift significantly and evaluates whether stability techniques like experience replay or regularisation effectively preserve knowledge.",
+      "assurance_goals": [
+        "Reliability",
+        "Safety",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/fairness",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-expertise",
+        "fairness-approach/group",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring",
+        "technique-type/testing"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing whether a content moderation model updated with new harmful content patterns maintains reliable detection of previously learned violation types without catastrophic forgetting.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Ensuring a medical diagnosis AI that continuously learns from new clinical cases doesn't forget how to recognize previously mastered conditions, preventing safety regressions.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Verifying that fairness improvements from continual learning don't introduce new biases or degrade performance for previously well-served demographic groups.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Testing whether a fraud detection system that continuously learns from new fraud patterns maintains its ability to detect previously identified fraud types, preventing financial losses from regression to older attack vectors.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Verifying that a customer service chatbot updated with new product knowledge doesn't degrade in handling established customer issues, maintaining consistent service quality across evolving capabilities.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Comprehensive testing requires maintaining evaluation datasets for all previously learned tasks, which becomes burdensome as systems learn continuously."
+        },
+        {
+          "description": "Trade-offs between plasticity (learning new tasks well) and stability (retaining old knowledge) are fundamental and difficult to optimize simultaneously."
+        },
+        {
+          "description": "Techniques that prevent catastrophic forgetting often require storing samples of old data, raising privacy and storage concerns."
+        },
+        {
+          "description": "Defining acceptable forgetting levels is application-dependent and may conflict with the need to adapt to changing environments."
+        },
+        {
+          "description": "Comprehensive stability testing requires re-running full evaluation suites after each update, creating computational costs that scale linearly with model lifespan and update frequency."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Metrics — Continuum 0.1.0 documentation",
+          "url": "https://continuum.readthedocs.io/en/stable/_tutorials/metrics/metrics.html",
+          "source_type": "documentation",
+          "authors": [
+            "Continuum Developers"
+          ],
+          "publication_date": "2023",
+          "citationKey": "continuumdevelopersMetricsContinuum0102023"
+        },
+        {
+          "title": "hypercl",
+          "url": "https://github.com/chrhenning/hypercl",
+          "source_type": "software_package",
+          "publication_date": "2019-06-02",
+          "citationKey": "chrhenningHypercl2019",
+          "abstract": "Continual Learning with Hypernetworks. A continual learning approach that has the flexibility to learn a dedicated set of parameters, fine-tuned for every task, that doesn't require an increase in the number of trainable weights and is robust against catastrophic forgetting."
+        },
+        {
+          "title": "awesome-continual-learning",
+          "url": "https://github.com/kjaved0/awesome-continual-learning",
+          "source_type": "software_package",
+          "publication_date": "2019-02-26",
+          "citationKey": "kjaved0Awesomecontinuallearning2019",
+          "abstract": "A repository to keep track of literature on catastrophic forgetting"
+        },
+        {
+          "title": "Continual evaluation for lifelong learning: Identifying the stability gap",
+          "url": "https://arxiv.org/abs/2205.13452",
+          "source_type": "technical_paper",
+          "authors": [
+            "Matthias De Lange",
+            "Gido van de Ven",
+            "Tinne Tuytelaars"
+          ],
+          "publication_date": "2022-05-26",
+          "citationKey": "delangeContinualEvaluationLifelong2022",
+          "abstract": "Time-dependent data-generating distributions have proven to be difficult for gradient-based training of neural networks, as the greedy updates result in catastrophic forgetting of previously learned knowledge. Despite the progress in the field of continual learning to overcome this forgetting, we show that a set of common state-of-the-art methods still suffers from substantial forgetting upon starting to learn new tasks, except that this forgetting is temporary and followed by a phase of performance recovery. We refer to this intriguing but potentially problematic phenomenon as the stability gap. The stability gap had likely remained under the radar due to standard practice in the field of evaluating continual learning models only after each task. Instead, we establish a framework for continual evaluation that uses per-iteration evaluation and we define a new set of metrics to quantify worst-case performance. Empirically we show that experience replay, constraint-based replay, knowledge-distillation, and parameter regularization methods are all prone to the stability gap; and that the stability gap can be observed in class-, task-, and domain-incremental learning benchmarks. Additionally, a controlled experiment shows that the stability gap increases when tasks are more dissimilar. Finally, by disentangling gradients into plasticity and stability components, we propose a conceptual explanation for the stability gap."
+        },
+        {
+          "title": "Toward Understanding Catastrophic Forgetting in Continual Learning",
+          "url": "https://arxiv.org/abs/1908.01091",
+          "source_type": "technical_paper",
+          "authors": [
+            "Cuong V. Nguyen",
+            "Alessandro Achille",
+            "Michael Lam",
+            "Tal Hassner",
+            "Vijay Mahadevan",
+            "Stefano Soatto"
+          ],
+          "publication_date": "2019-08-02",
+          "citationKey": "v.nguyenUnderstandingCatastrophicForgetting2019",
+          "abstract": "We study the relationship between catastrophic forgetting and properties of task sequences. In particular, given a sequence of tasks, we would like to understand which properties of this sequence influence the error rates of continual learning algorithms trained on the sequence. To this end, we propose a new procedure that makes use of recent developments in task space modeling as well as correlation analysis to specify and analyze the properties we are interested in. As an application, we apply our procedure to study two properties of a task sequence: (1) total complexity and (2) sequential heterogeneity. We show that error rates are strongly and positively correlated to a task sequence's total complexity for some state-of-the-art algorithms. We also show that, surprisingly, the error rates have no or even negative correlations in some cases to sequential heterogeneity. Our findings suggest directions for improving continual learning benchmarks and methods."
+        }
+      ],
+      "related_techniques": [
+        "adversarial-training-evaluation",
+        "safety-envelope-testing",
+        "agent-goal-misalignment-testing",
+        "cross-validation"
+      ],
+      "sample_claims": [
+        {
+          "text": "The diagnostic system maintains accurate detection of previously learned conditions when updated with new disease patterns",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The content moderation model retains effective identification of earlier violation types after learning to detect new forms of harmful content",
+          "domain": "general",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The fraud detection system's performance on established fraud patterns does not degrade when trained on emerging attack vectors",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The recommendation system's fairness properties for existing user demographics remain stable when the model adapts to new user populations",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The industrial safety monitoring system preserves reliable detection of known hazard conditions whilst incorporating recognition of newly identified risk factors",
+          "domain": "manufacturing",
+          "assuranceGoal": "safety"
         }
       ]
     },
@@ -3369,6 +3553,164 @@
       ]
     },
     {
+      "slug": "reward-hacking-detection",
+      "name": "Reward Hacking Detection",
+      "description": "Reward hacking detection identifies when AI systems achieve stated objectives through unintended shortcuts or loopholes rather than genuine task mastery. This technique analyses whether systems exploit reward specification ambiguities, reward function bugs, or simulator artifacts to maximise rewards without actually solving the intended problem. Detection involves adversarial specification testing, human evaluation of solution quality, transfer testing to slightly modified tasks, and analysis of unexpected strategy patterns that suggest reward hacking rather than genuine learning.",
+      "assurance_goals": [
+        "Reliability",
+        "Safety",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/reinforcement",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/transparency",
+        "data-type/any",
+        "data-requirements/no-special-requirements",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "technique-type/testing",
+        "technique-type/algorithmic",
+        "evidence-type/qualitative-report",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-expertise",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Detecting when a reinforcement learning agent for robot manipulation learns to exploit physics simulator quirks rather than developing real-world-transferable manipulation skills, preventing failures in physical deployment.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Identifying when an AI-based healthcare scheduling system appears to optimize patient wait times by gaming appointment classifications or encouraging cancellations rather than genuinely improving clinic efficiency, preventing patient care degradation.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Detecting when a loan approval system achieves target approval rates by exploiting specification loopholes in creditworthiness definitions rather than accurately assessing borrower risk, ensuring reliable lending decisions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Verifying that an educational content recommendation system optimizes for genuine learning outcomes rather than gaming engagement metrics through strategies like repeatedly presenting easier content that inflates measured progress.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Producing a documented audit trail for a high-risk AI deployment by running reward hacking detection tests and recording which specification loopholes were identified and remediated, enabling auditors and regulators to verify that the system achieves its stated objectives through legitimate means rather than gaming its evaluation criteria.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Difficult to distinguish between clever problem-solving and specification gaming without deep understanding of task intent."
+        },
+        {
+          "description": "Novel gaming strategies may not be detected until systems are deployed in real environments where gaming becomes apparent."
+        },
+        {
+          "description": "Closing detected loopholes may simply push systems to discover new gaming strategies rather than solving the fundamental specification challenge."
+        },
+        {
+          "description": "Perfect specifications that eliminate all gaming opportunities may be impossible for complex, open-ended tasks."
+        },
+        {
+          "description": "Requires domain expertise and clear articulation of task intent to distinguish between legitimate optimization strategies and gaming behaviors, which can be subjective in complex domains."
+        },
+        {
+          "description": "Detection often requires access to detailed behavioral logs and environment state information that may not be available in black-box deployment scenarios."
+        },
+        {
+          "description": "Establishing ground truth for 'correct' task completion without gaming requires independent verification methods that may be as resource-intensive as the original task."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Detecting and Mitigating Reward Hacking in Reinforcement Learning Systems: A Comprehensive Empirical Study",
+          "url": "https://www.semanticscholar.org/paper/f71379b765f01c333ebaab5736dbf7f1005b19c9",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ibne Farabi Shihab",
+            "Sanjeda Akter",
+            "Anuj Sharma"
+          ],
+          "publication_date": "2025",
+          "citationKey": "farabishihabDetectingMitigatingReward2025",
+          "abstract": "Reward hacking in Reinforcement Learning (RL) systems poses a critical threat to the deployment of autonomous agents, where agents exploit flaws in reward functions to achieve high scores without fulfilling intended objectives. Despite growing awareness of this problem, systematic detection and mitigation approaches remain limited. This paper presents a large-scale empirical study of reward hacking across diverse RL environments and algorithms. We analyze 15,247 training episodes across 15 RL environments (Atari, MuJoCo, custom domains) and 5 algorithms (PPO, SAC, DQN, A3C, Rainbow), implementing automated detection algorithms for six categories of reward hacking: specification gaming, reward tampering, proxy optimization, objective misalignment, exploitation patterns, and wireheading. Our detection framework achieves 78.4% precision and 81.7% recall across environments, with computational overhead under 5%. Through controlled experiments varying reward function properties, we demonstrate that reward density and alignment with true objectives significantly impact hacking frequency ($p<0.001$, Cohen's $d = 1.24$). We validate our approach through three simulated application studies representing recommendation systems, competitive gaming, and robotic control scenarios. Our mitigation techniques reduce hacking frequency by up to 54.6% in controlled scenarios, though we find these trade-offs are more challenging in practice due to concept drift, false positive costs, and adversarial adaptation. All detection algorithms, datasets, and experimental protocols are publicly available to support reproducible research in RL safety."
+        },
+        {
+          "title": "Preventing Reward Hacking with Occupancy Measure Regularization",
+          "url": "https://www.semanticscholar.org/paper/878e2c80a9247b6106b479bf8d74c02427947176",
+          "source_type": "technical_paper",
+          "authors": [
+            "Cassidy Laidlaw",
+            "Shivam Singhal",
+            "A. Dragan"
+          ],
+          "publication_date": "2024",
+          "citationKey": "laidlawPreventingRewardHacking2024"
+        },
+        {
+          "title": "Fine-tuning & RL for LLMs: Intro to Post-training - DeepLearning.AI",
+          "url": "https://learn.deeplearning.ai/courses/fine-tuning-and-reinforcement-learning-for-llms-intro-to-post-training/lesson/wr7ye4/evals-for-post-training:-test-sets-and-metrics",
+          "source_type": "tutorial",
+          "authors": [
+            "Sharon Zhou"
+          ],
+          "publication_date": "2025",
+          "citationKey": "zhouFinetuningRLLLMs2025"
+        },
+        {
+          "title": "How to Make a Reward Function in Reinforcement Learning ...",
+          "url": "https://www.geeksforgeeks.org/machine-learning/how-to-make-a-reward-function-in-reinforcement-learning",
+          "source_type": "tutorial",
+          "publication_date": "2024-10-01",
+          "citationKey": "HowMakeReward2024"
+        }
+      ],
+      "related_techniques": [
+        "chain-of-thought-faithfulness-evaluation",
+        "adversarial-training-evaluation",
+        "constitutional-ai-evaluation",
+        "epistemic-uncertainty-quantification",
+        "red-teaming"
+      ],
+      "sample_claims": [
+        {
+          "text": "The autonomous vehicle's lane-keeping performance transfers reliably to real-world conditions rather than exploiting simulator artifacts",
+          "domain": "autonomous systems",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The healthcare scheduling system improves patient outcomes through genuine efficiency gains rather than manipulating appointment metrics",
+          "domain": "healthcare",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The system's strategy for achieving stated objectives is interpretable and consistent with task intent rather than relying on unintended shortcuts",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The loan processing system maintains creditworthiness assessment accuracy when evaluated on modified criteria that close potential loopholes",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The educational recommendation system's learning outcome improvements reflect genuine student progress rather than optimisation of engagement proxies",
+          "domain": "public sector",
+          "assuranceGoal": "safety"
+        }
+      ]
+    },
+    {
       "slug": "toxicity-detection",
       "name": "Toxicity Detection",
       "description": "Toxicity detection uses automated classifiers and human review to identify harmful, offensive, or dangerous content in model outputs. This technique employs tools trained to detect toxic language, hate speech, threats, and other harmful content through targeted testing with adversarial prompts. Detection covers explicit toxicity (slurs, threats, graphic content) and implicit harm (manipulative advice, dangerous instructions). For bias and fairness evaluation of model outputs, see related techniques such as few-shot fairness evaluation and demographic parity assessment.",
@@ -3513,5 +3855,5 @@
       ]
     }
   ],
-  "count": 24
+  "count": 26
 }

@@ -2,7 +2,7 @@
   "tag": {
     "name": "lifecycle-stage/system-deployment-and-use",
     "slug": "lifecycle-stage-system-deployment-and-use",
-    "count": 29,
+    "count": 32,
     "category": "lifecycle-stage"
   },
   "techniques": [
@@ -150,6 +150,7 @@
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/explainability/property/consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/access-to-model-internals",
         "data-requirements/reference-dataset",
         "data-type/any",
@@ -237,7 +238,8 @@
         "layer-wise-relevance-propagation",
         "integrated-gradients",
         "taylor-decomposition",
-        "gradient-saliency"
+        "gradient-saliency",
+        "gradient-weighted-class-activation-mapping"
       ],
       "sample_claims": [
         {
@@ -1034,6 +1036,8 @@
         "assurance-goal-category/explainability/property/efficiency",
         "assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/reliability/uncertainty-quantification",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -1042,6 +1046,7 @@
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
+        "lifecycle-stage/testing",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -1126,7 +1131,8 @@
         "deep-ensembles",
         "conformal-prediction",
         "out-of-distribution-detector-for-neural-networks",
-        "quantile-regression"
+        "quantile-regression",
+        "temperature-scaling"
       ],
       "sample_claims": [
         {
@@ -2234,13 +2240,17 @@
         "applicable-models/requirements/black-box",
         "applicable-models/requirements/probabilistic-output",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/transparency",
         "data-requirements/calibration-set",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
         "explanatory-scope/global",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
       ],
@@ -2313,7 +2323,9 @@
         "temperature-scaling",
         "conformal-prediction",
         "confidence-thresholding",
-        "quantile-regression"
+        "quantile-regression",
+        "bootstrapping",
+        "area-under-precision-recall-curve"
       ],
       "sample_claims": [
         {
@@ -2340,6 +2352,166 @@
           "text": "The forecasting model's stated confidence intervals reflect empirically measured prediction accuracy",
           "domain": "environmental",
           "assuranceGoal": "transparency"
+        }
+      ]
+    },
+    {
+      "slug": "temperature-scaling",
+      "name": "Temperature Scaling",
+      "description": "Temperature scaling adjusts a model's confidence by applying a single parameter (temperature) to its predictions. When a model is too confident in its wrong answers, temperature scaling can fix this by making the predictions more realistic. It works by dividing the model's outputs by the temperature value before converting them to probabilities. Higher temperatures make the model less confident, whilst lower temperatures increase confidence. The technique maintains the model's accuracy whilst ensuring that when it says it's 90% confident, it's actually right about 90% of the time.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/probabilistic-output",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-requirements/calibration-set",
+        "data-requirements/validation-set",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting a deep learning image classifier's confidence scores to be realistic, ensuring that when it's 90% confident, it's right 90% of the time.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Making medical diagnosis model predictions more trustworthy by providing realistic confidence scores that doctors can interpret and use to make informed decisions about patient care.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring fair treatment across patient demographics by calibrating confidence scores equally across different groups, preventing systematic over-confidence in predictions for certain populations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Only addresses calibration at the overall dataset level, not subgroup-specific miscalibration issues."
+        },
+        {
+          "description": "Does not improve the rank ordering or accuracy of predictions, only adjusts confidence levels."
+        },
+        {
+          "description": "Assumes that calibration errors are consistent across different types of inputs and feature values."
+        },
+        {
+          "description": "Requires a separate validation set for temperature parameter optimisation, which may not be available in small datasets."
+        }
+      ],
+      "resources": [
+        {
+          "title": "temperature_scaling",
+          "url": "https://github.com/gpleiss/temperature_scaling",
+          "source_type": "software_package",
+          "publication_date": "2017-08-03",
+          "citationKey": "gpleissTemperature_scaling2017",
+          "abstract": "A simple way to calibrate your neural network."
+        },
+        {
+          "title": "Exploring the Impact of Temperature Scaling in Softmax for Classification and Adversarial Robustness",
+          "url": "http://arxiv.org/abs/2502.20604v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hao Xuan",
+            "Bokai Yang",
+            "Xingyu Li"
+          ],
+          "publication_date": "2025-02-28",
+          "citationKey": "xuanExploringImpactTemperature2025",
+          "abstract": "The softmax function is a fundamental component in deep learning. This study delves into the often-overlooked parameter within the softmax function, known as \"temperature,\" providing novel insights into the practical and theoretical aspects of temperature scaling for image classification. Our empirical studies, adopting convolutional neural networks and transformers on multiple benchmark datasets, reveal that moderate temperatures generally introduce better overall performance. Through extensive experiments and rigorous theoretical analysis, we explore the role of temperature scaling in model training and unveil that temperature not only influences learning step size but also shapes the model's optimization direction. Moreover, for the first time, we discover a surprising benefit of elevated temperatures: enhanced model robustness against common corruption, natural perturbation, and non-targeted adversarial attacks like Projected Gradient Descent. We extend our discoveries to adversarial training, demonstrating that, compared to the standard softmax function with the default temperature value, higher temperatures have the potential to enhance adversarial training. The insights of this work open new avenues for improving model performance and security in deep learning applications."
+        },
+        {
+          "title": "Neural Clamping: Joint Input Perturbation and Temperature Scaling for Neural Network Calibration",
+          "url": "http://arxiv.org/abs/2209.11604v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yung-Chen Tang",
+            "Pin-Yu Chen",
+            "Tsung-Yi Ho"
+          ],
+          "publication_date": "2022-09-23",
+          "citationKey": "tangNeuralClampingJoint2022",
+          "abstract": "Neural network calibration is an essential task in deep learning to ensure consistency between the confidence of model prediction and the true correctness likelihood. In this paper, we propose a new post-processing calibration method called Neural Clamping, which employs a simple joint input-output transformation on a pre-trained classifier via a learnable universal input perturbation and an output temperature scaling parameter. Moreover, we provide theoretical explanations on why Neural Clamping is provably better than temperature scaling. Evaluated on BloodMNIST, CIFAR-100, and ImageNet image recognition datasets and a variety of deep neural network models, our empirical results show that Neural Clamping significantly outperforms state-of-the-art post-processing calibration methods. The code is available at github.com/yungchentang/NCToolkit, and the demo is available at huggingface.co/spaces/TrustSafeAI/NCTV."
+        },
+        {
+          "title": "On Calibration of Modern Neural Networks",
+          "url": "https://arxiv.org/abs/1706.04599",
+          "source_type": "technical_paper",
+          "authors": [
+            "Chuan Guo",
+            "Geoff Pleiss",
+            "Yu Sun",
+            "Kilian Q. Weinberger"
+          ],
+          "publication_date": "2017-06-14",
+          "citationKey": "guoCalibrationModernNeural2017",
+          "abstract": "Confidence calibration -- the problem of predicting probability estimates representative of the true correctness likelihood -- is important for classification models in many applications. We discover that modern neural networks, unlike those from a decade ago, are poorly calibrated. Through extensive experiments, we observe that depth, width, weight decay, and Batch Normalization are important factors influencing calibration. We evaluate the performance of various post-processing calibration methods on state-of-the-art architectures with image and document classification datasets. Our analysis and experiments not only offer insights into neural network learning, but also provide a simple and straightforward recipe for practical settings: on most datasets, temperature scaling -- a single-parameter variant of Platt Scaling -- is surprisingly effective at calibrating predictions."
+        },
+        {
+          "title": "On the Limitations of Temperature Scaling for Distributions with Overlaps",
+          "url": "http://arxiv.org/abs/2306.00740v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Muthu Chidambaram",
+            "Rong Ge"
+          ],
+          "publication_date": "2023-06-01",
+          "citationKey": "chidambaramLimitationsTemperatureScaling2023",
+          "abstract": "Despite the impressive generalization capabilities of deep neural networks, they have been repeatedly shown to be overconfident when they are wrong. Fixing this issue is known as model calibration, and has consequently received much attention in the form of modified training schemes and post-training calibration procedures such as temperature scaling. While temperature scaling is frequently used because of its simplicity, it is often outperformed by modified training schemes. In this work, we identify a specific bottleneck for the performance of temperature scaling. We show that for empirical risk minimizers for a general set of distributions in which the supports of classes have overlaps, the performance of temperature scaling degrades with the amount of overlap between classes, and asymptotically becomes no better than random when there are a large number of classes. On the other hand, we prove that optimizing a modified form of the empirical risk induced by the Mixup data augmentation technique can in fact lead to reasonably good calibration performance, showing that training-time calibration may be necessary in some situations. We also verify that our theoretical results reflect practice by showing that Mixup significantly outperforms empirical risk minimization (with respect to multiple calibration metrics) on image classification benchmarks with class overlaps introduced in the form of label noise."
+        }
+      ],
+      "complexity_rating": 1,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "empirical-calibration",
+        "deep-ensembles",
+        "monte-carlo-dropout",
+        "conformal-prediction",
+        "calibration-with-equality-of-opportunity"
+      ],
+      "sample_claims": [
+        {
+          "text": "The medical diagnosis system's confidence scores align with observed clinical outcome frequencies across all prediction confidence levels",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The credit risk model's probability estimates reflect true default rates without sacrificing discriminative accuracy",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The image classifier communicates prediction confidence through calibrated probabilities that match empirical correctness rates",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The fraud detection system's confidence estimates are equally well-calibrated across customer demographic groups",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The environmental forecasting model's stated uncertainty levels correspond to actual prediction accuracy across diverse weather conditions",
+          "domain": "environmental",
+          "assuranceGoal": "reliability"
         }
       ]
     },
@@ -3851,7 +4023,12 @@
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/documentation",
-        "assurance-goal-category/general"
+        "assurance-goal-category/general",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/safety"
       ],
       "example_use_cases": [
         {
@@ -3928,7 +4105,9 @@
         "datasheets-for-datasets",
         "model-development-audit-trails",
         "automated-documentation-generation",
-        "internal-review-boards"
+        "internal-review-boards",
+        "mlflow-experiment-tracking",
+        "data-version-control"
       ],
       "sample_claims": [
         {
@@ -4200,7 +4379,243 @@
           "assuranceGoal": "transparency"
         }
       ]
+    },
+    {
+      "slug": "automated-documentation-generation",
+      "name": "Automated Documentation Generation",
+      "description": "Automated documentation generation creates and maintains up-to-date documentation using various methods including programmatic scripts, large language models (LLMs), and extraction tools. These approaches can capture model architectures, data schemas, feature importance, performance metrics, API specifications, and lineage information without manual writing. Methods range from traditional code parsing and template-based generation to modern AI-assisted documentation that can understand context and generate human-readable explanations.",
+      "assurance_goals": [
+        "General"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "data-requirements/no-special-requirements",
+        "data-type/any",
+        "evidence-type/documentation",
+        "expertise-needed/software-engineering",
+        "lifecycle-stage/deployment",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/project-design",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic",
+        "technique-type/documentation",
+        "assurance-goal-category/general",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Automatically generating comprehensive model cards for a healthcare AI system each time a new version is deployed, including updated performance metrics across demographic groups, data lineage information, and bias evaluation results for regulatory compliance documentation.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Using LLM-powered tools to automatically document complex financial risk models by analysing code, extracting business logic, and generating human-readable explanations of model behaviour for audit trails and stakeholder communication.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Implementing automated API documentation generation for a machine learning platform that extracts endpoint specifications, parameter definitions, and usage examples, ensuring documentation stays synchronised with code changes and reducing deployment errors from outdated documentation.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "AI-generated documentation may miss critical domain context and business logic that human experts would include, potentially leading to incomplete or misleading explanations of model behaviour."
+        },
+        {
+          "description": "Template-based approaches often struggle with unstructured information and complex relationships between code components, limiting their ability to capture nuanced system interactions."
+        },
+        {
+          "description": "Quality heavily depends on code quality and instrumentation comprehensiveness; poorly commented or documented source code will result in inadequate generated documentation."
+        },
+        {
+          "description": "Maintenance overhead can be significant as automated systems require configuration updates when code structures change, and generated content may need human review for accuracy and completeness."
+        },
+        {
+          "description": "LLM-based approaches may introduce hallucinations or inaccuracies, particularly when documenting complex technical details or domain-specific terminology without proper validation mechanisms."
+        }
+      ],
+      "resources": [
+        {
+          "title": "fundoc",
+          "url": "https://github.com/daynin/fundoc",
+          "source_type": "software_package",
+          "publication_date": "2020-04-10",
+          "citationKey": "dayninFundoc2020",
+          "abstract": "Fundoc - the right way to generate documentation"
+        },
+        {
+          "title": "Generative AI for Software Development - DeepLearning.AI",
+          "url": "https://www.deeplearning.ai/courses/generative-ai-for-software-development",
+          "source_type": "tutorial",
+          "authors": [
+            "Laurence Moroney"
+          ],
+          "publication_date": "2025",
+          "citationKey": "moroneyGenerativeAISoftware2025"
+        },
+        {
+          "title": "Documentation Generator Analysis — Wiser Documentation",
+          "url": "https://chiplicity.readthedocs.io/en/latest/On_Software/DocumentationGenerator.html",
+          "source_type": "documentation",
+          "authors": [
+            "Chiplicity Developers"
+          ],
+          "publication_date": "2022",
+          "citationKey": "chiplicitydevelopersDocumentationGeneratorAnalysis2022"
+        },
+        {
+          "title": "sphinx-reports",
+          "url": "https://github.com/pyTooling/sphinx-reports",
+          "source_type": "software_package",
+          "publication_date": "2024-01-07",
+          "citationKey": "pytoolingSphinxreports2024",
+          "abstract": "Integrate reports (code coverage, doc. coverage, pytest, mypy, ...) into Sphinx documentation as appendix pages."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "model-cards",
+        "datasheets-for-datasets",
+        "mlflow-experiment-tracking",
+        "model-development-audit-trails",
+        "internal-review-boards",
+        "data-version-control"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's technical specifications remain synchronized with the deployed version throughout the production lifecycle",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The diagnostic system's documentation accurately reflects current performance characteristics across patient demographics",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The API endpoints and model interfaces are documented with up-to-date parameter definitions and usage examples",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The credit assessment model's architecture, feature definitions, and decision boundaries are documented without manual maintenance overhead",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The system's performance metrics and operational characteristics are continuously extracted and reported as code evolves",
+          "domain": "autonomous systems",
+          "assuranceGoal": "reliability"
+        }
+      ]
+    },
+    {
+      "slug": "path-specific-counterfactual-fairness-assessment",
+      "name": "Path-Specific Counterfactual Fairness Assessment",
+      "description": "A causal fairness evaluation technique that assesses algorithmic discrimination by examining specific causal pathways in a model's decision-making process. Unlike general counterfactual fairness, this approach enables practitioners to identify and intervene on particular causal paths that may introduce bias whilst preserving other legitimate pathways. The method uses causal graphs to distinguish between direct discrimination (through protected attributes) and indirect discrimination (through seemingly neutral factors that correlate with protected attributes), allowing for more nuanced fairness assessments in complex causal settings.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/causal",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/causal-graph",
+        "data-requirements/sensitive-attributes",
+        "data-type/tabular",
+        "evidence-type/causal-analysis",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/causal-inference",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/causal",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/metric"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating hiring algorithms by identifying which causal pathways from education and experience legitimately affect job performance versus those that introduce gender or racial bias, enabling targeted interventions that preserve merit-based selection whilst eliminating discriminatory pathways.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Analysing loan approval models to provide transparent evidence of which factors legitimately influence creditworthiness versus those that create indirect discrimination, enabling clear explanations to regulators about causal mechanisms underlying fair lending decisions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Assessing medical diagnosis systems to ensure reliable performance by distinguishing between clinically relevant causal pathways (symptoms to diagnosis) and potentially biased pathways (demographics to diagnosis), maintaining diagnostic accuracy whilst preventing healthcare disparities.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires identifying which causal pathways are 'allowable' and which are not—a subjective decision; analyzing specific paths adds complexity to the causal model and the fairness criterion."
+        },
+        {
+          "description": "Causal graph construction relies on domain expertise and cannot be validated from observational data alone; if the graph incorrectly encodes causal structure or omits relevant edges, the path-specific assessment may certify an unfair model as compliant with no internal mechanism to detect the error, and this uncertainty is rarely surfaced in compliance documentation."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Path-Specific Counterfactual Fairness via Dividend Correction",
+          "url": "https://www.semanticscholar.org/paper/197367ee337e8838fd2ef1a887101ddc84eb0612",
+          "source_type": "technical_paper",
+          "authors": [
+            "Daisuke Hatano",
+            "Satoshi Hara",
+            "Hiromi Arai"
+          ],
+          "publication_date": "2025",
+          "citationKey": "hatanoPathSpecificCounterfactualFairness2025"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "counterfactual-fairness-assessment",
+        "average-odds-difference",
+        "equal-opportunity-difference",
+        "area-under-precision-recall-curve"
+      ],
+      "sample_claims": [
+        {
+          "text": "The hiring system's decisions are not influenced by gender through educational pathways whilst preserving the legitimate influence of qualifications on employment outcomes",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The loan approval model's risk assessment isolates the direct influence of creditworthiness from indirect effects of demographic characteristics propagating through correlated factors",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The diagnostic system's predictions are attributable to specific clinical pathways independent of demographic factors that influence healthcare access",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The decision process documents which factors legitimately affect outcomes versus those that create indirect discrimination through upstream correlations",
+          "domain": "public sector",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The model's treatment recommendations remain consistent across patient demographics when controlling for symptom severity and medical history whilst allowing clinically relevant differences to influence care decisions",
+          "domain": "healthcare",
+          "assuranceGoal": "fairness"
+        }
+      ]
     }
   ],
-  "count": 30
+  "count": 33
 }

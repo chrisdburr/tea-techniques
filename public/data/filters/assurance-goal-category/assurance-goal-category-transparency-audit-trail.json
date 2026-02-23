@@ -2,7 +2,7 @@
   "tag": {
     "name": "assurance-goal-category/transparency/audit-trail",
     "slug": "assurance-goal-category-transparency-audit-trail",
-    "count": 7,
+    "count": 8,
     "category": "assurance-goal-category"
   },
   "techniques": [
@@ -1120,7 +1120,12 @@
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/documentation",
-        "assurance-goal-category/general"
+        "assurance-goal-category/general",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/safety"
       ],
       "example_use_cases": [
         {
@@ -1197,7 +1202,9 @@
         "datasheets-for-datasets",
         "model-development-audit-trails",
         "automated-documentation-generation",
-        "internal-review-boards"
+        "internal-review-boards",
+        "mlflow-experiment-tracking",
+        "data-version-control"
       ],
       "sample_claims": [
         {
@@ -1246,6 +1253,7 @@
         "lifecycle-stage/data-handling/collection",
         "lifecycle-stage/data-handling/preparation",
         "technique-type/documentation",
+        "technique-type/process",
         "assurance-goal-category/general"
       ],
       "example_use_cases": [
@@ -1260,6 +1268,14 @@
         {
           "description": "Establishing transparent documentation for financial transaction datasets that clearly describes data collection methodology, preprocessing steps, and intended use cases, enabling researchers to make informed decisions about dataset appropriateness for their specific applications.",
           "goal": "Transparency"
+        },
+        {
+          "description": "Documenting a safety-critical autonomous vehicle perception dataset with records of sensor calibration procedures, environmental conditions during collection, edge-case scenario coverage, and known distributional gaps, enabling safety engineers to assess whether training data adequately represents the operating conditions required for safe deployment and to support regulatory type-approval submissions.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Documenting the statistical distributions, temporal coverage, and known quality characteristics of training datasets to support model monitoring pipelines, enabling operations teams to detect data drift and assess whether production data remains within the documented training distribution for informed decisions about model retraining or recalibration.",
+          "goal": "Reliability"
         }
       ],
       "limitations": [
@@ -1350,7 +1366,8 @@
         "model-cards",
         "data-version-control",
         "automated-documentation-generation",
-        "synthetic-data-evaluation"
+        "synthetic-data-evaluation",
+        "internal-review-boards"
       ],
       "sample_claims": [
         {
@@ -1639,9 +1656,14 @@
         "expertise-needed/software-engineering",
         "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/project-design",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic",
-        "assurance-goal-category/general"
+        "technique-type/documentation",
+        "assurance-goal-category/general",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency"
       ],
       "example_use_cases": [
         {
@@ -1718,7 +1740,9 @@
         "model-cards",
         "datasheets-for-datasets",
         "mlflow-experiment-tracking",
-        "model-development-audit-trails"
+        "model-development-audit-trails",
+        "internal-review-boards",
+        "data-version-control"
       ],
       "sample_claims": [
         {
@@ -2626,7 +2650,165 @@
           "assuranceGoal": "privacy"
         }
       ]
+    },
+    {
+      "slug": "reward-hacking-detection",
+      "name": "Reward Hacking Detection",
+      "description": "Reward hacking detection identifies when AI systems achieve stated objectives through unintended shortcuts or loopholes rather than genuine task mastery. This technique analyses whether systems exploit reward specification ambiguities, reward function bugs, or simulator artifacts to maximise rewards without actually solving the intended problem. Detection involves adversarial specification testing, human evaluation of solution quality, transfer testing to slightly modified tasks, and analysis of unexpected strategy patterns that suggest reward hacking rather than genuine learning.",
+      "assurance_goals": [
+        "Reliability",
+        "Safety",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/reinforcement",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/transparency",
+        "data-type/any",
+        "data-requirements/no-special-requirements",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "technique-type/testing",
+        "technique-type/algorithmic",
+        "evidence-type/qualitative-report",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-expertise",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Detecting when a reinforcement learning agent for robot manipulation learns to exploit physics simulator quirks rather than developing real-world-transferable manipulation skills, preventing failures in physical deployment.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Identifying when an AI-based healthcare scheduling system appears to optimize patient wait times by gaming appointment classifications or encouraging cancellations rather than genuinely improving clinic efficiency, preventing patient care degradation.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Detecting when a loan approval system achieves target approval rates by exploiting specification loopholes in creditworthiness definitions rather than accurately assessing borrower risk, ensuring reliable lending decisions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Verifying that an educational content recommendation system optimizes for genuine learning outcomes rather than gaming engagement metrics through strategies like repeatedly presenting easier content that inflates measured progress.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Producing a documented audit trail for a high-risk AI deployment by running reward hacking detection tests and recording which specification loopholes were identified and remediated, enabling auditors and regulators to verify that the system achieves its stated objectives through legitimate means rather than gaming its evaluation criteria.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Difficult to distinguish between clever problem-solving and specification gaming without deep understanding of task intent."
+        },
+        {
+          "description": "Novel gaming strategies may not be detected until systems are deployed in real environments where gaming becomes apparent."
+        },
+        {
+          "description": "Closing detected loopholes may simply push systems to discover new gaming strategies rather than solving the fundamental specification challenge."
+        },
+        {
+          "description": "Perfect specifications that eliminate all gaming opportunities may be impossible for complex, open-ended tasks."
+        },
+        {
+          "description": "Requires domain expertise and clear articulation of task intent to distinguish between legitimate optimization strategies and gaming behaviors, which can be subjective in complex domains."
+        },
+        {
+          "description": "Detection often requires access to detailed behavioral logs and environment state information that may not be available in black-box deployment scenarios."
+        },
+        {
+          "description": "Establishing ground truth for 'correct' task completion without gaming requires independent verification methods that may be as resource-intensive as the original task."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Detecting and Mitigating Reward Hacking in Reinforcement Learning Systems: A Comprehensive Empirical Study",
+          "url": "https://www.semanticscholar.org/paper/f71379b765f01c333ebaab5736dbf7f1005b19c9",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ibne Farabi Shihab",
+            "Sanjeda Akter",
+            "Anuj Sharma"
+          ],
+          "publication_date": "2025",
+          "citationKey": "farabishihabDetectingMitigatingReward2025",
+          "abstract": "Reward hacking in Reinforcement Learning (RL) systems poses a critical threat to the deployment of autonomous agents, where agents exploit flaws in reward functions to achieve high scores without fulfilling intended objectives. Despite growing awareness of this problem, systematic detection and mitigation approaches remain limited. This paper presents a large-scale empirical study of reward hacking across diverse RL environments and algorithms. We analyze 15,247 training episodes across 15 RL environments (Atari, MuJoCo, custom domains) and 5 algorithms (PPO, SAC, DQN, A3C, Rainbow), implementing automated detection algorithms for six categories of reward hacking: specification gaming, reward tampering, proxy optimization, objective misalignment, exploitation patterns, and wireheading. Our detection framework achieves 78.4% precision and 81.7% recall across environments, with computational overhead under 5%. Through controlled experiments varying reward function properties, we demonstrate that reward density and alignment with true objectives significantly impact hacking frequency ($p<0.001$, Cohen's $d = 1.24$). We validate our approach through three simulated application studies representing recommendation systems, competitive gaming, and robotic control scenarios. Our mitigation techniques reduce hacking frequency by up to 54.6% in controlled scenarios, though we find these trade-offs are more challenging in practice due to concept drift, false positive costs, and adversarial adaptation. All detection algorithms, datasets, and experimental protocols are publicly available to support reproducible research in RL safety."
+        },
+        {
+          "title": "Preventing Reward Hacking with Occupancy Measure Regularization",
+          "url": "https://www.semanticscholar.org/paper/878e2c80a9247b6106b479bf8d74c02427947176",
+          "source_type": "technical_paper",
+          "authors": [
+            "Cassidy Laidlaw",
+            "Shivam Singhal",
+            "A. Dragan"
+          ],
+          "publication_date": "2024",
+          "citationKey": "laidlawPreventingRewardHacking2024"
+        },
+        {
+          "title": "Fine-tuning & RL for LLMs: Intro to Post-training - DeepLearning.AI",
+          "url": "https://learn.deeplearning.ai/courses/fine-tuning-and-reinforcement-learning-for-llms-intro-to-post-training/lesson/wr7ye4/evals-for-post-training:-test-sets-and-metrics",
+          "source_type": "tutorial",
+          "authors": [
+            "Sharon Zhou"
+          ],
+          "publication_date": "2025",
+          "citationKey": "zhouFinetuningRLLLMs2025"
+        },
+        {
+          "title": "How to Make a Reward Function in Reinforcement Learning ...",
+          "url": "https://www.geeksforgeeks.org/machine-learning/how-to-make-a-reward-function-in-reinforcement-learning",
+          "source_type": "tutorial",
+          "publication_date": "2024-10-01",
+          "citationKey": "HowMakeReward2024"
+        }
+      ],
+      "related_techniques": [
+        "chain-of-thought-faithfulness-evaluation",
+        "adversarial-training-evaluation",
+        "constitutional-ai-evaluation",
+        "epistemic-uncertainty-quantification",
+        "red-teaming"
+      ],
+      "sample_claims": [
+        {
+          "text": "The autonomous vehicle's lane-keeping performance transfers reliably to real-world conditions rather than exploiting simulator artifacts",
+          "domain": "autonomous systems",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The healthcare scheduling system improves patient outcomes through genuine efficiency gains rather than manipulating appointment metrics",
+          "domain": "healthcare",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The system's strategy for achieving stated objectives is interpretable and consistent with task intent rather than relying on unintended shortcuts",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The loan processing system maintains creditworthiness assessment accuracy when evaluated on modified criteria that close potential loopholes",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The educational recommendation system's learning outcome improvements reflect genuine student progress rather than optimisation of engagement proxies",
+          "domain": "public sector",
+          "assuranceGoal": "safety"
+        }
+      ]
     }
   ],
-  "count": 19
+  "count": 20
 }

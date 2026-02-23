@@ -2,7 +2,7 @@
   "tag": {
     "name": "fairness-approach/group",
     "slug": "fairness-approach-group",
-    "count": 38,
+    "count": 42,
     "category": "fairness-approach"
   },
   "techniques": [
@@ -1807,6 +1807,296 @@
           "text": "The system communicates how treatment effectiveness varies across the full spectrum of patient outcomes rather than only average effects",
           "domain": "healthcare",
           "assuranceGoal": "transparency"
+        }
+      ]
+    },
+    {
+      "slug": "empirical-calibration",
+      "name": "Empirical Calibration",
+      "description": "Empirical calibration adjusts a model's predicted probabilities to match observed frequencies. For example, if events predicted with 80% confidence only occur 60% of the time, calibration would correct this overconfidence. Common techniques include Platt scaling and isotonic regression, which learn transformations that map the model's raw scores to well-calibrated probabilities, improving the reliability of confidence measures for downstream decisions.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/probabilistic-output",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "data-requirements/calibration-set",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting a credit default prediction model's probabilities to ensure that loan applicants with a predicted 30% default risk actually default 30% of the time, improving decision-making.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Calibrating a medical diagnosis model's confidence scores so that stakeholders can meaningfully interpret probability outputs, enabling doctors to make informed decisions about treatment urgency based on reliable confidence estimates.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring that a hiring algorithm's confidence scores are equally well-calibrated across different demographic groups, preventing systematically overconfident predictions for certain populations that could lead to biased decision-making.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires a separate held-out calibration dataset, which reduces the amount of data available for model training."
+        },
+        {
+          "description": "Calibration performance can degrade over time if the underlying data distribution shifts, requiring periodic recalibration."
+        },
+        {
+          "description": "May sacrifice some discriminative power in favour of calibration, potentially reducing the model's ability to distinguish between classes."
+        },
+        {
+          "description": "Calibration methods assume that the calibration set is representative of future data, which may not hold in dynamic environments."
+        }
+      ],
+      "resources": [
+        {
+          "title": "empirical_calibration",
+          "url": "https://github.com/google/empirical_calibration",
+          "source_type": "software_package",
+          "publication_date": "2019-02-01",
+          "citationKey": "googleEmpirical_calibration2019"
+        },
+        {
+          "title": "A Python Library For Empirical Calibration",
+          "url": "http://arxiv.org/abs/1906.11920v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xiaojing Wang",
+            "Jingang Miao",
+            "Yunting Sun"
+          ],
+          "publication_date": "2019-06-27",
+          "citationKey": "wangPythonLibraryEmpirical2019",
+          "abstract": "Dealing with biased data samples is a common task across many statistical fields. In survey sampling, bias often occurs due to unrepresentative samples. In causal studies with observational data, the treated versus untreated group assignment is often correlated with covariates, i.e., not random. Empirical calibration is a generic weighting method that presents a unified view on correcting or reducing the data biases for the tasks mentioned above. We provide a Python library EC to compute the empirical calibration weights. The problem is formulated as convex optimization and solved efficiently in the dual form. Compared to existing software, EC is both more efficient and robust. EC also accommodates different optimization objectives, supports weight clipping, and allows inexact calibration, which improves usability. We demonstrate its usage across various experiments with both simulated and real-world data."
+        },
+        {
+          "title": "Assessing the effectiveness of empirical calibration under different bias scenarios",
+          "url": "http://arxiv.org/abs/2111.04233v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hon Hwang",
+            "Juan C Quiroz",
+            "Blanca Gallego"
+          ],
+          "publication_date": "2021-11-08",
+          "citationKey": "hwangAssessingEffectivenessEmpirical2021",
+          "abstract": "Background: Estimations of causal effects from observational data are subject to various sources of bias. One method of adjusting for the residual biases in the estimation of a treatment effect is through negative control outcomes, where the treatment does not affect the outcome. The empirical calibration procedure is a technique that uses negative controls to calibrate p-values. An extension of empirical calibration calibrates the coverage of the 95% confidence interval of a treatment effect estimate by using negative control outcomes as well as positive control outcomes (where treatment affects the outcome).   Methods: The effect of empirical calibration of confidence intervals was analyzed using simulated datasets with known treatment effects. The simulations consisted of binary treatment and binary outcome, with biases resulting from unmeasured confounder, model misspecification, measurement error, and lack of positivity. The performance of the empirical calibration was evaluated by determining the change in the coverage of the confidence interval and the bias in the treatment effect estimate.   Results: Empirical calibration increased coverage of the 95% confidence interval of the treatment effect estimate under most bias scenarios but was inconsistent in adjusting the bias in the treatment effect estimate. Empirical calibration of confidence intervals was most effective when adjusting for the unmeasured confounding bias. Suitable negative controls had a large impact on the adjustment made by empirical calibration, but small improvements in the coverage of the outcome of interest were also observable when using unsuitable negative controls."
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "temperature-scaling",
+        "conformal-prediction",
+        "confidence-thresholding",
+        "quantile-regression",
+        "bootstrapping",
+        "area-under-precision-recall-curve"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's predicted probabilities align with observed outcome frequencies across the decision space",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The system's confidence scores are interpretable as genuine probability estimates for critical decisions",
+          "domain": "healthcare",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The model's probability estimates maintain consistent calibration quality across protected demographic groups",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The autonomous system's predicted risk levels correspond to actual failure rates in operational conditions",
+          "domain": "autonomous systems",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The forecasting model's stated confidence intervals reflect empirically measured prediction accuracy",
+          "domain": "environmental",
+          "assuranceGoal": "transparency"
+        }
+      ]
+    },
+    {
+      "slug": "temperature-scaling",
+      "name": "Temperature Scaling",
+      "description": "Temperature scaling adjusts a model's confidence by applying a single parameter (temperature) to its predictions. When a model is too confident in its wrong answers, temperature scaling can fix this by making the predictions more realistic. It works by dividing the model's outputs by the temperature value before converting them to probabilities. Higher temperatures make the model less confident, whilst lower temperatures increase confidence. The technique maintains the model's accuracy whilst ensuring that when it says it's 90% confident, it's actually right about 90% of the time.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/probabilistic-output",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-requirements/calibration-set",
+        "data-requirements/validation-set",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting a deep learning image classifier's confidence scores to be realistic, ensuring that when it's 90% confident, it's right 90% of the time.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Making medical diagnosis model predictions more trustworthy by providing realistic confidence scores that doctors can interpret and use to make informed decisions about patient care.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring fair treatment across patient demographics by calibrating confidence scores equally across different groups, preventing systematic over-confidence in predictions for certain populations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Only addresses calibration at the overall dataset level, not subgroup-specific miscalibration issues."
+        },
+        {
+          "description": "Does not improve the rank ordering or accuracy of predictions, only adjusts confidence levels."
+        },
+        {
+          "description": "Assumes that calibration errors are consistent across different types of inputs and feature values."
+        },
+        {
+          "description": "Requires a separate validation set for temperature parameter optimisation, which may not be available in small datasets."
+        }
+      ],
+      "resources": [
+        {
+          "title": "temperature_scaling",
+          "url": "https://github.com/gpleiss/temperature_scaling",
+          "source_type": "software_package",
+          "publication_date": "2017-08-03",
+          "citationKey": "gpleissTemperature_scaling2017",
+          "abstract": "A simple way to calibrate your neural network."
+        },
+        {
+          "title": "Exploring the Impact of Temperature Scaling in Softmax for Classification and Adversarial Robustness",
+          "url": "http://arxiv.org/abs/2502.20604v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hao Xuan",
+            "Bokai Yang",
+            "Xingyu Li"
+          ],
+          "publication_date": "2025-02-28",
+          "citationKey": "xuanExploringImpactTemperature2025",
+          "abstract": "The softmax function is a fundamental component in deep learning. This study delves into the often-overlooked parameter within the softmax function, known as \"temperature,\" providing novel insights into the practical and theoretical aspects of temperature scaling for image classification. Our empirical studies, adopting convolutional neural networks and transformers on multiple benchmark datasets, reveal that moderate temperatures generally introduce better overall performance. Through extensive experiments and rigorous theoretical analysis, we explore the role of temperature scaling in model training and unveil that temperature not only influences learning step size but also shapes the model's optimization direction. Moreover, for the first time, we discover a surprising benefit of elevated temperatures: enhanced model robustness against common corruption, natural perturbation, and non-targeted adversarial attacks like Projected Gradient Descent. We extend our discoveries to adversarial training, demonstrating that, compared to the standard softmax function with the default temperature value, higher temperatures have the potential to enhance adversarial training. The insights of this work open new avenues for improving model performance and security in deep learning applications."
+        },
+        {
+          "title": "Neural Clamping: Joint Input Perturbation and Temperature Scaling for Neural Network Calibration",
+          "url": "http://arxiv.org/abs/2209.11604v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yung-Chen Tang",
+            "Pin-Yu Chen",
+            "Tsung-Yi Ho"
+          ],
+          "publication_date": "2022-09-23",
+          "citationKey": "tangNeuralClampingJoint2022",
+          "abstract": "Neural network calibration is an essential task in deep learning to ensure consistency between the confidence of model prediction and the true correctness likelihood. In this paper, we propose a new post-processing calibration method called Neural Clamping, which employs a simple joint input-output transformation on a pre-trained classifier via a learnable universal input perturbation and an output temperature scaling parameter. Moreover, we provide theoretical explanations on why Neural Clamping is provably better than temperature scaling. Evaluated on BloodMNIST, CIFAR-100, and ImageNet image recognition datasets and a variety of deep neural network models, our empirical results show that Neural Clamping significantly outperforms state-of-the-art post-processing calibration methods. The code is available at github.com/yungchentang/NCToolkit, and the demo is available at huggingface.co/spaces/TrustSafeAI/NCTV."
+        },
+        {
+          "title": "On Calibration of Modern Neural Networks",
+          "url": "https://arxiv.org/abs/1706.04599",
+          "source_type": "technical_paper",
+          "authors": [
+            "Chuan Guo",
+            "Geoff Pleiss",
+            "Yu Sun",
+            "Kilian Q. Weinberger"
+          ],
+          "publication_date": "2017-06-14",
+          "citationKey": "guoCalibrationModernNeural2017",
+          "abstract": "Confidence calibration -- the problem of predicting probability estimates representative of the true correctness likelihood -- is important for classification models in many applications. We discover that modern neural networks, unlike those from a decade ago, are poorly calibrated. Through extensive experiments, we observe that depth, width, weight decay, and Batch Normalization are important factors influencing calibration. We evaluate the performance of various post-processing calibration methods on state-of-the-art architectures with image and document classification datasets. Our analysis and experiments not only offer insights into neural network learning, but also provide a simple and straightforward recipe for practical settings: on most datasets, temperature scaling -- a single-parameter variant of Platt Scaling -- is surprisingly effective at calibrating predictions."
+        },
+        {
+          "title": "On the Limitations of Temperature Scaling for Distributions with Overlaps",
+          "url": "http://arxiv.org/abs/2306.00740v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Muthu Chidambaram",
+            "Rong Ge"
+          ],
+          "publication_date": "2023-06-01",
+          "citationKey": "chidambaramLimitationsTemperatureScaling2023",
+          "abstract": "Despite the impressive generalization capabilities of deep neural networks, they have been repeatedly shown to be overconfident when they are wrong. Fixing this issue is known as model calibration, and has consequently received much attention in the form of modified training schemes and post-training calibration procedures such as temperature scaling. While temperature scaling is frequently used because of its simplicity, it is often outperformed by modified training schemes. In this work, we identify a specific bottleneck for the performance of temperature scaling. We show that for empirical risk minimizers for a general set of distributions in which the supports of classes have overlaps, the performance of temperature scaling degrades with the amount of overlap between classes, and asymptotically becomes no better than random when there are a large number of classes. On the other hand, we prove that optimizing a modified form of the empirical risk induced by the Mixup data augmentation technique can in fact lead to reasonably good calibration performance, showing that training-time calibration may be necessary in some situations. We also verify that our theoretical results reflect practice by showing that Mixup significantly outperforms empirical risk minimization (with respect to multiple calibration metrics) on image classification benchmarks with class overlaps introduced in the form of label noise."
+        }
+      ],
+      "complexity_rating": 1,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "empirical-calibration",
+        "deep-ensembles",
+        "monte-carlo-dropout",
+        "conformal-prediction",
+        "calibration-with-equality-of-opportunity"
+      ],
+      "sample_claims": [
+        {
+          "text": "The medical diagnosis system's confidence scores align with observed clinical outcome frequencies across all prediction confidence levels",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The credit risk model's probability estimates reflect true default rates without sacrificing discriminative accuracy",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The image classifier communicates prediction confidence through calibrated probabilities that match empirical correctness rates",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The fraud detection system's confidence estimates are equally well-calibrated across customer demographic groups",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The environmental forecasting model's stated uncertainty levels correspond to actual prediction accuracy across diverse weather conditions",
+          "domain": "environmental",
+          "assuranceGoal": "reliability"
         }
       ]
     },
@@ -5508,6 +5798,166 @@
       ]
     },
     {
+      "slug": "continual-learning-stability-testing",
+      "name": "Continual Learning Stability Testing",
+      "description": "Continual learning stability testing evaluates whether models that learn from streaming data maintain performance on previously learned tasks while acquiring new capabilities. This technique measures catastrophic forgetting (performance degradation on old tasks), forward transfer (whether old knowledge helps new learning), and backward transfer (whether new learning damages old performance). Testing includes challenging scenarios where data distributions shift significantly and evaluates whether stability techniques like experience replay or regularisation effectively preserve knowledge.",
+      "assurance_goals": [
+        "Reliability",
+        "Safety",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/fairness",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-expertise",
+        "fairness-approach/group",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring",
+        "technique-type/testing"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing whether a content moderation model updated with new harmful content patterns maintains reliable detection of previously learned violation types without catastrophic forgetting.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Ensuring a medical diagnosis AI that continuously learns from new clinical cases doesn't forget how to recognize previously mastered conditions, preventing safety regressions.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Verifying that fairness improvements from continual learning don't introduce new biases or degrade performance for previously well-served demographic groups.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Testing whether a fraud detection system that continuously learns from new fraud patterns maintains its ability to detect previously identified fraud types, preventing financial losses from regression to older attack vectors.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Verifying that a customer service chatbot updated with new product knowledge doesn't degrade in handling established customer issues, maintaining consistent service quality across evolving capabilities.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Comprehensive testing requires maintaining evaluation datasets for all previously learned tasks, which becomes burdensome as systems learn continuously."
+        },
+        {
+          "description": "Trade-offs between plasticity (learning new tasks well) and stability (retaining old knowledge) are fundamental and difficult to optimize simultaneously."
+        },
+        {
+          "description": "Techniques that prevent catastrophic forgetting often require storing samples of old data, raising privacy and storage concerns."
+        },
+        {
+          "description": "Defining acceptable forgetting levels is application-dependent and may conflict with the need to adapt to changing environments."
+        },
+        {
+          "description": "Comprehensive stability testing requires re-running full evaluation suites after each update, creating computational costs that scale linearly with model lifespan and update frequency."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Metrics — Continuum 0.1.0 documentation",
+          "url": "https://continuum.readthedocs.io/en/stable/_tutorials/metrics/metrics.html",
+          "source_type": "documentation",
+          "authors": [
+            "Continuum Developers"
+          ],
+          "publication_date": "2023",
+          "citationKey": "continuumdevelopersMetricsContinuum0102023"
+        },
+        {
+          "title": "hypercl",
+          "url": "https://github.com/chrhenning/hypercl",
+          "source_type": "software_package",
+          "publication_date": "2019-06-02",
+          "citationKey": "chrhenningHypercl2019",
+          "abstract": "Continual Learning with Hypernetworks. A continual learning approach that has the flexibility to learn a dedicated set of parameters, fine-tuned for every task, that doesn't require an increase in the number of trainable weights and is robust against catastrophic forgetting."
+        },
+        {
+          "title": "awesome-continual-learning",
+          "url": "https://github.com/kjaved0/awesome-continual-learning",
+          "source_type": "software_package",
+          "publication_date": "2019-02-26",
+          "citationKey": "kjaved0Awesomecontinuallearning2019",
+          "abstract": "A repository to keep track of literature on catastrophic forgetting"
+        },
+        {
+          "title": "Continual evaluation for lifelong learning: Identifying the stability gap",
+          "url": "https://arxiv.org/abs/2205.13452",
+          "source_type": "technical_paper",
+          "authors": [
+            "Matthias De Lange",
+            "Gido van de Ven",
+            "Tinne Tuytelaars"
+          ],
+          "publication_date": "2022-05-26",
+          "citationKey": "delangeContinualEvaluationLifelong2022",
+          "abstract": "Time-dependent data-generating distributions have proven to be difficult for gradient-based training of neural networks, as the greedy updates result in catastrophic forgetting of previously learned knowledge. Despite the progress in the field of continual learning to overcome this forgetting, we show that a set of common state-of-the-art methods still suffers from substantial forgetting upon starting to learn new tasks, except that this forgetting is temporary and followed by a phase of performance recovery. We refer to this intriguing but potentially problematic phenomenon as the stability gap. The stability gap had likely remained under the radar due to standard practice in the field of evaluating continual learning models only after each task. Instead, we establish a framework for continual evaluation that uses per-iteration evaluation and we define a new set of metrics to quantify worst-case performance. Empirically we show that experience replay, constraint-based replay, knowledge-distillation, and parameter regularization methods are all prone to the stability gap; and that the stability gap can be observed in class-, task-, and domain-incremental learning benchmarks. Additionally, a controlled experiment shows that the stability gap increases when tasks are more dissimilar. Finally, by disentangling gradients into plasticity and stability components, we propose a conceptual explanation for the stability gap."
+        },
+        {
+          "title": "Toward Understanding Catastrophic Forgetting in Continual Learning",
+          "url": "https://arxiv.org/abs/1908.01091",
+          "source_type": "technical_paper",
+          "authors": [
+            "Cuong V. Nguyen",
+            "Alessandro Achille",
+            "Michael Lam",
+            "Tal Hassner",
+            "Vijay Mahadevan",
+            "Stefano Soatto"
+          ],
+          "publication_date": "2019-08-02",
+          "citationKey": "v.nguyenUnderstandingCatastrophicForgetting2019",
+          "abstract": "We study the relationship between catastrophic forgetting and properties of task sequences. In particular, given a sequence of tasks, we would like to understand which properties of this sequence influence the error rates of continual learning algorithms trained on the sequence. To this end, we propose a new procedure that makes use of recent developments in task space modeling as well as correlation analysis to specify and analyze the properties we are interested in. As an application, we apply our procedure to study two properties of a task sequence: (1) total complexity and (2) sequential heterogeneity. We show that error rates are strongly and positively correlated to a task sequence's total complexity for some state-of-the-art algorithms. We also show that, surprisingly, the error rates have no or even negative correlations in some cases to sequential heterogeneity. Our findings suggest directions for improving continual learning benchmarks and methods."
+        }
+      ],
+      "related_techniques": [
+        "adversarial-training-evaluation",
+        "safety-envelope-testing",
+        "agent-goal-misalignment-testing",
+        "cross-validation"
+      ],
+      "sample_claims": [
+        {
+          "text": "The diagnostic system maintains accurate detection of previously learned conditions when updated with new disease patterns",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The content moderation model retains effective identification of earlier violation types after learning to detect new forms of harmful content",
+          "domain": "general",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The fraud detection system's performance on established fraud patterns does not degrade when trained on emerging attack vectors",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The recommendation system's fairness properties for existing user demographics remain stable when the model adapts to new user populations",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The industrial safety monitoring system preserves reliable detection of known hazard conditions whilst incorporating recognition of newly identified risk factors",
+          "domain": "manufacturing",
+          "assuranceGoal": "safety"
+        }
+      ]
+    },
+    {
       "slug": "embedding-bias-analysis",
       "name": "Embedding Bias Analysis",
       "description": "Embedding bias analysis examines learned representations to identify biases, spurious correlations, and problematic clustering patterns in vector embeddings. This technique uses dimensionality reduction, clustering analysis, and geometric fairness metrics to examine whether embeddings encode sensitive attributes, place certain groups in disadvantaged regions of representation space, or learn stereotypical associations. Analysis reveals whether embeddings used for retrieval, recommendation, or downstream tasks contain fairness issues that will propagate to applications.",
@@ -5682,7 +6132,152 @@
           "assuranceGoal": "transparency"
         }
       ]
+    },
+    {
+      "slug": "few-shot-fairness-evaluation",
+      "name": "Few-Shot Fairness Evaluation",
+      "description": "Few-shot fairness evaluation assesses whether in-context learning with few-shot examples introduces or amplifies biases in model predictions. This technique systematically varies demographic characteristics in few-shot examples and measures how these variations affect model outputs for different groups. Evaluation includes testing prompt sensitivity (how example selection impacts fairness), stereotype amplification (whether biased examples disproportionately affect outputs), and consistency (whether similar inputs receive equitable treatment regardless of example composition).",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/paradigm/generative",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "evidence-type/fairness-metric",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/labelled-data",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "evidence-type/documentation",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "expertise-needed/domain-expertise",
+        "fairness-approach/group",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "technique-type/testing",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing whether a resume screening LLM's few-shot examples inadvertently introduce gender bias by showing more male examples for technical positions, affecting how it evaluates subsequent applicants.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Ensuring a customer service classifier maintains reliable performance across demographic groups regardless of which few-shot examples users or developers choose to include in prompts.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Documenting how few-shot example selection affects fairness metrics, transparently reporting sensitivity to example composition in deployment guidelines.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Evaluating whether a medical triage LLM's few-shot examples for symptom assessment inadvertently encode demographic biases (e.g., more examples of cardiac symptoms in male patients), leading to differential urgency assessments across patient populations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Testing whether few-shot examples used in a legal case summarization system introduce racial or socioeconomic bias in how defendant backgrounds or case circumstances are characterized, affecting case outcome predictions.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Assessing whether few-shot examples in a loan application review assistant systematically present more favourable examples for certain demographic profiles, biasing the model's assessment of creditworthiness for subsequent applications.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Verifying that an automated essay grading system maintains consistent standards across student demographics when few-shot examples inadvertently represent particular writing styles, dialects, or cultural references more prominently.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Vast number of possible few-shot example combinations makes exhaustive testing infeasible, requiring sampling strategies that may miss important configurations."
+        },
+        {
+          "description": "Fairness may be highly sensitive to subtle differences in example wording or formatting, making it difficult to provide robust guarantees."
+        },
+        {
+          "description": "Trade-offs between example diversity and task performance may force choices between fairness and accuracy."
+        },
+        {
+          "description": "Results may not generalise across different prompt templates or instruction formats, requiring separate evaluation for each prompting strategy."
+        },
+        {
+          "description": "Requires carefully labeled datasets with demographic annotations to measure fairness across groups, which may be unavailable, expensive to create, or raise privacy concerns in sensitive domains."
+        },
+        {
+          "description": "Designing representative test sets that capture realistic few-shot example distributions requires deep domain expertise and understanding of how the system will be used in practice."
+        },
+        {
+          "description": "Evaluating fairness across multiple demographic groups with various few-shot configurations can be computationally expensive, particularly for large language models with high inference costs."
+        }
+      ],
+      "resources": [
+        {
+          "title": "fairness-indicators",
+          "url": "https://github.com/tensorflow/fairness-indicators",
+          "source_type": "software_package",
+          "publication_date": "2019-09-30",
+          "citationKey": "tensorflowFairnessindicators2019",
+          "abstract": "Tensorflow's Fairness Evaluation and Visualization Toolkit"
+        },
+        {
+          "title": "indic-bias",
+          "url": "https://github.com/AI4Bharat/indic-bias",
+          "source_type": "software_package",
+          "publication_date": "2024-12-20",
+          "citationKey": "ai4bharatIndicbias2024",
+          "abstract": "Indic-Bias is a comprehensive benchmark to evaluate the fairness of LLMs in Indian Contexts."
+        },
+        {
+          "title": "Fairness-guided few-shot prompting for large language models",
+          "url": "https://arxiv.org/abs/2303.13217",
+          "source_type": "technical_paper",
+          "publication_date": "2023",
+          "citationKey": "FairnessguidedFewshotPrompting2023"
+        }
+      ],
+      "related_techniques": [
+        "prompt-robustness-testing",
+        "toxicity-detection",
+        "sensitivity-analysis-for-fairness",
+        "path-specific-counterfactual-fairness-assessment"
+      ],
+      "sample_claims": [
+        {
+          "text": "The language model produces equitable outcomes across demographic groups regardless of which few-shot examples are provided in the prompt",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The recruitment system's candidate assessments remain unbiased when the composition of demonstration examples varies in demographic representation",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The model maintains consistent performance across protected groups under diverse configurations of in-context learning examples",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The system's fairness characteristics across different prompt example compositions are quantified and documented",
+          "domain": "public sector",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The content generation model's outputs exhibit equitable treatment of demographic groups when few-shot examples contain varying levels of representation",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        }
+      ]
     }
   ],
-  "count": 38
+  "count": 42
 }

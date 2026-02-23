@@ -1045,6 +1045,8 @@
         "assurance-goal-category/explainability/property/efficiency",
         "assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/reliability/uncertainty-quantification",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -1053,6 +1055,7 @@
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
+        "lifecycle-stage/testing",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -1137,7 +1140,8 @@
         "deep-ensembles",
         "conformal-prediction",
         "out-of-distribution-detector-for-neural-networks",
-        "quantile-regression"
+        "quantile-regression",
+        "temperature-scaling"
       ],
       "sample_claims": [
         {
@@ -2213,13 +2217,17 @@
         "applicable-models/requirements/black-box",
         "applicable-models/requirements/probabilistic-output",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/transparency",
         "data-requirements/calibration-set",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
         "explanatory-scope/global",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
       ],
@@ -2292,7 +2300,9 @@
         "temperature-scaling",
         "conformal-prediction",
         "confidence-thresholding",
-        "quantile-regression"
+        "quantile-regression",
+        "bootstrapping",
+        "area-under-precision-recall-curve"
       ],
       "sample_claims": [
         {
@@ -2338,7 +2348,9 @@
         "applicable-models/requirements/probabilistic-output",
         "applicable-models/requirements/white-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/transparency",
         "data-requirements/access-to-model-internals",
         "data-requirements/calibration-set",
@@ -2347,7 +2359,10 @@
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
         "explanatory-scope/global",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -2446,7 +2461,8 @@
         "empirical-calibration",
         "deep-ensembles",
         "monte-carlo-dropout",
-        "conformal-prediction"
+        "conformal-prediction",
+        "calibration-with-equality-of-opportunity"
       ],
       "sample_claims": [
         {
@@ -6333,6 +6349,7 @@
         "assurance-goal-category/fairness/causal",
         "assurance-goal-category/reliability",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/causal-graph",
         "data-requirements/sensitive-attributes",
         "data-type/tabular",
@@ -6344,6 +6361,7 @@
         "fairness-approach/causal",
         "lifecycle-stage/model-development",
         "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/metric"
       ],
       "example_use_cases": [
@@ -6363,6 +6381,9 @@
       "limitations": [
         {
           "description": "Requires identifying which causal pathways are 'allowable' and which are not—a subjective decision; analyzing specific paths adds complexity to the causal model and the fairness criterion."
+        },
+        {
+          "description": "Causal graph construction relies on domain expertise and cannot be validated from observational data alone; if the graph incorrectly encodes causal structure or omits relevant edges, the path-specific assessment may certify an unfair model as compliant with no internal mechanism to detect the error, and this uncertainty is rarely surfaced in compliance documentation."
         }
       ],
       "resources": [

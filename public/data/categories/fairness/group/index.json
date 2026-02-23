@@ -1817,6 +1817,296 @@
       ]
     },
     {
+      "slug": "empirical-calibration",
+      "name": "Empirical Calibration",
+      "description": "Empirical calibration adjusts a model's predicted probabilities to match observed frequencies. For example, if events predicted with 80% confidence only occur 60% of the time, calibration would correct this overconfidence. Common techniques include Platt scaling and isotonic regression, which learn transformations that map the model's raw scores to well-calibrated probabilities, improving the reliability of confidence measures for downstream decisions.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/probabilistic-output",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "data-requirements/calibration-set",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting a credit default prediction model's probabilities to ensure that loan applicants with a predicted 30% default risk actually default 30% of the time, improving decision-making.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Calibrating a medical diagnosis model's confidence scores so that stakeholders can meaningfully interpret probability outputs, enabling doctors to make informed decisions about treatment urgency based on reliable confidence estimates.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring that a hiring algorithm's confidence scores are equally well-calibrated across different demographic groups, preventing systematically overconfident predictions for certain populations that could lead to biased decision-making.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires a separate held-out calibration dataset, which reduces the amount of data available for model training."
+        },
+        {
+          "description": "Calibration performance can degrade over time if the underlying data distribution shifts, requiring periodic recalibration."
+        },
+        {
+          "description": "May sacrifice some discriminative power in favour of calibration, potentially reducing the model's ability to distinguish between classes."
+        },
+        {
+          "description": "Calibration methods assume that the calibration set is representative of future data, which may not hold in dynamic environments."
+        }
+      ],
+      "resources": [
+        {
+          "title": "empirical_calibration",
+          "url": "https://github.com/google/empirical_calibration",
+          "source_type": "software_package",
+          "publication_date": "2019-02-01",
+          "citationKey": "googleEmpirical_calibration2019"
+        },
+        {
+          "title": "A Python Library For Empirical Calibration",
+          "url": "http://arxiv.org/abs/1906.11920v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xiaojing Wang",
+            "Jingang Miao",
+            "Yunting Sun"
+          ],
+          "publication_date": "2019-06-27",
+          "citationKey": "wangPythonLibraryEmpirical2019",
+          "abstract": "Dealing with biased data samples is a common task across many statistical fields. In survey sampling, bias often occurs due to unrepresentative samples. In causal studies with observational data, the treated versus untreated group assignment is often correlated with covariates, i.e., not random. Empirical calibration is a generic weighting method that presents a unified view on correcting or reducing the data biases for the tasks mentioned above. We provide a Python library EC to compute the empirical calibration weights. The problem is formulated as convex optimization and solved efficiently in the dual form. Compared to existing software, EC is both more efficient and robust. EC also accommodates different optimization objectives, supports weight clipping, and allows inexact calibration, which improves usability. We demonstrate its usage across various experiments with both simulated and real-world data."
+        },
+        {
+          "title": "Assessing the effectiveness of empirical calibration under different bias scenarios",
+          "url": "http://arxiv.org/abs/2111.04233v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hon Hwang",
+            "Juan C Quiroz",
+            "Blanca Gallego"
+          ],
+          "publication_date": "2021-11-08",
+          "citationKey": "hwangAssessingEffectivenessEmpirical2021",
+          "abstract": "Background: Estimations of causal effects from observational data are subject to various sources of bias. One method of adjusting for the residual biases in the estimation of a treatment effect is through negative control outcomes, where the treatment does not affect the outcome. The empirical calibration procedure is a technique that uses negative controls to calibrate p-values. An extension of empirical calibration calibrates the coverage of the 95% confidence interval of a treatment effect estimate by using negative control outcomes as well as positive control outcomes (where treatment affects the outcome).   Methods: The effect of empirical calibration of confidence intervals was analyzed using simulated datasets with known treatment effects. The simulations consisted of binary treatment and binary outcome, with biases resulting from unmeasured confounder, model misspecification, measurement error, and lack of positivity. The performance of the empirical calibration was evaluated by determining the change in the coverage of the confidence interval and the bias in the treatment effect estimate.   Results: Empirical calibration increased coverage of the 95% confidence interval of the treatment effect estimate under most bias scenarios but was inconsistent in adjusting the bias in the treatment effect estimate. Empirical calibration of confidence intervals was most effective when adjusting for the unmeasured confounding bias. Suitable negative controls had a large impact on the adjustment made by empirical calibration, but small improvements in the coverage of the outcome of interest were also observable when using unsuitable negative controls."
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "temperature-scaling",
+        "conformal-prediction",
+        "confidence-thresholding",
+        "quantile-regression",
+        "bootstrapping",
+        "area-under-precision-recall-curve"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's predicted probabilities align with observed outcome frequencies across the decision space",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The system's confidence scores are interpretable as genuine probability estimates for critical decisions",
+          "domain": "healthcare",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The model's probability estimates maintain consistent calibration quality across protected demographic groups",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The autonomous system's predicted risk levels correspond to actual failure rates in operational conditions",
+          "domain": "autonomous systems",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The forecasting model's stated confidence intervals reflect empirically measured prediction accuracy",
+          "domain": "environmental",
+          "assuranceGoal": "transparency"
+        }
+      ]
+    },
+    {
+      "slug": "temperature-scaling",
+      "name": "Temperature Scaling",
+      "description": "Temperature scaling adjusts a model's confidence by applying a single parameter (temperature) to its predictions. When a model is too confident in its wrong answers, temperature scaling can fix this by making the predictions more realistic. It works by dividing the model's outputs by the temperature value before converting them to probabilities. Higher temperatures make the model less confident, whilst lower temperatures increase confidence. The technique maintains the model's accuracy whilst ensuring that when it says it's 90% confident, it's actually right about 90% of the time.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/discriminative",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/probabilistic-output",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "data-requirements/access-to-model-internals",
+        "data-requirements/calibration-set",
+        "data-requirements/validation-set",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting a deep learning image classifier's confidence scores to be realistic, ensuring that when it's 90% confident, it's right 90% of the time.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Making medical diagnosis model predictions more trustworthy by providing realistic confidence scores that doctors can interpret and use to make informed decisions about patient care.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring fair treatment across patient demographics by calibrating confidence scores equally across different groups, preventing systematic over-confidence in predictions for certain populations.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Only addresses calibration at the overall dataset level, not subgroup-specific miscalibration issues."
+        },
+        {
+          "description": "Does not improve the rank ordering or accuracy of predictions, only adjusts confidence levels."
+        },
+        {
+          "description": "Assumes that calibration errors are consistent across different types of inputs and feature values."
+        },
+        {
+          "description": "Requires a separate validation set for temperature parameter optimisation, which may not be available in small datasets."
+        }
+      ],
+      "resources": [
+        {
+          "title": "temperature_scaling",
+          "url": "https://github.com/gpleiss/temperature_scaling",
+          "source_type": "software_package",
+          "publication_date": "2017-08-03",
+          "citationKey": "gpleissTemperature_scaling2017",
+          "abstract": "A simple way to calibrate your neural network."
+        },
+        {
+          "title": "Exploring the Impact of Temperature Scaling in Softmax for Classification and Adversarial Robustness",
+          "url": "http://arxiv.org/abs/2502.20604v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hao Xuan",
+            "Bokai Yang",
+            "Xingyu Li"
+          ],
+          "publication_date": "2025-02-28",
+          "citationKey": "xuanExploringImpactTemperature2025",
+          "abstract": "The softmax function is a fundamental component in deep learning. This study delves into the often-overlooked parameter within the softmax function, known as \"temperature,\" providing novel insights into the practical and theoretical aspects of temperature scaling for image classification. Our empirical studies, adopting convolutional neural networks and transformers on multiple benchmark datasets, reveal that moderate temperatures generally introduce better overall performance. Through extensive experiments and rigorous theoretical analysis, we explore the role of temperature scaling in model training and unveil that temperature not only influences learning step size but also shapes the model's optimization direction. Moreover, for the first time, we discover a surprising benefit of elevated temperatures: enhanced model robustness against common corruption, natural perturbation, and non-targeted adversarial attacks like Projected Gradient Descent. We extend our discoveries to adversarial training, demonstrating that, compared to the standard softmax function with the default temperature value, higher temperatures have the potential to enhance adversarial training. The insights of this work open new avenues for improving model performance and security in deep learning applications."
+        },
+        {
+          "title": "Neural Clamping: Joint Input Perturbation and Temperature Scaling for Neural Network Calibration",
+          "url": "http://arxiv.org/abs/2209.11604v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yung-Chen Tang",
+            "Pin-Yu Chen",
+            "Tsung-Yi Ho"
+          ],
+          "publication_date": "2022-09-23",
+          "citationKey": "tangNeuralClampingJoint2022",
+          "abstract": "Neural network calibration is an essential task in deep learning to ensure consistency between the confidence of model prediction and the true correctness likelihood. In this paper, we propose a new post-processing calibration method called Neural Clamping, which employs a simple joint input-output transformation on a pre-trained classifier via a learnable universal input perturbation and an output temperature scaling parameter. Moreover, we provide theoretical explanations on why Neural Clamping is provably better than temperature scaling. Evaluated on BloodMNIST, CIFAR-100, and ImageNet image recognition datasets and a variety of deep neural network models, our empirical results show that Neural Clamping significantly outperforms state-of-the-art post-processing calibration methods. The code is available at github.com/yungchentang/NCToolkit, and the demo is available at huggingface.co/spaces/TrustSafeAI/NCTV."
+        },
+        {
+          "title": "On Calibration of Modern Neural Networks",
+          "url": "https://arxiv.org/abs/1706.04599",
+          "source_type": "technical_paper",
+          "authors": [
+            "Chuan Guo",
+            "Geoff Pleiss",
+            "Yu Sun",
+            "Kilian Q. Weinberger"
+          ],
+          "publication_date": "2017-06-14",
+          "citationKey": "guoCalibrationModernNeural2017",
+          "abstract": "Confidence calibration -- the problem of predicting probability estimates representative of the true correctness likelihood -- is important for classification models in many applications. We discover that modern neural networks, unlike those from a decade ago, are poorly calibrated. Through extensive experiments, we observe that depth, width, weight decay, and Batch Normalization are important factors influencing calibration. We evaluate the performance of various post-processing calibration methods on state-of-the-art architectures with image and document classification datasets. Our analysis and experiments not only offer insights into neural network learning, but also provide a simple and straightforward recipe for practical settings: on most datasets, temperature scaling -- a single-parameter variant of Platt Scaling -- is surprisingly effective at calibrating predictions."
+        },
+        {
+          "title": "On the Limitations of Temperature Scaling for Distributions with Overlaps",
+          "url": "http://arxiv.org/abs/2306.00740v3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Muthu Chidambaram",
+            "Rong Ge"
+          ],
+          "publication_date": "2023-06-01",
+          "citationKey": "chidambaramLimitationsTemperatureScaling2023",
+          "abstract": "Despite the impressive generalization capabilities of deep neural networks, they have been repeatedly shown to be overconfident when they are wrong. Fixing this issue is known as model calibration, and has consequently received much attention in the form of modified training schemes and post-training calibration procedures such as temperature scaling. While temperature scaling is frequently used because of its simplicity, it is often outperformed by modified training schemes. In this work, we identify a specific bottleneck for the performance of temperature scaling. We show that for empirical risk minimizers for a general set of distributions in which the supports of classes have overlaps, the performance of temperature scaling degrades with the amount of overlap between classes, and asymptotically becomes no better than random when there are a large number of classes. On the other hand, we prove that optimizing a modified form of the empirical risk induced by the Mixup data augmentation technique can in fact lead to reasonably good calibration performance, showing that training-time calibration may be necessary in some situations. We also verify that our theoretical results reflect practice by showing that Mixup significantly outperforms empirical risk minimization (with respect to multiple calibration metrics) on image classification benchmarks with class overlaps introduced in the form of label noise."
+        }
+      ],
+      "complexity_rating": 1,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "empirical-calibration",
+        "deep-ensembles",
+        "monte-carlo-dropout",
+        "conformal-prediction",
+        "calibration-with-equality-of-opportunity"
+      ],
+      "sample_claims": [
+        {
+          "text": "The medical diagnosis system's confidence scores align with observed clinical outcome frequencies across all prediction confidence levels",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The credit risk model's probability estimates reflect true default rates without sacrificing discriminative accuracy",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The image classifier communicates prediction confidence through calibrated probabilities that match empirical correctness rates",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The fraud detection system's confidence estimates are equally well-calibrated across customer demographic groups",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The environmental forecasting model's stated uncertainty levels correspond to actual prediction accuracy across diverse weather conditions",
+          "domain": "environmental",
+          "assuranceGoal": "reliability"
+        }
+      ]
+    },
+    {
       "slug": "bootstrapping",
       "name": "Bootstrapping",
       "description": "Bootstrapping estimates uncertainty by repeatedly resampling the original dataset with replacement to create many new training sets, training a model on each sample, and analysing the variation in predictions. This approach provides confidence intervals and stability measures without making strong statistical assumptions. By showing how predictions change with different random samples of the data, it reveals how sensitive the model is to the specific training examples and provides robust uncertainty estimates.",
@@ -2104,6 +2394,140 @@
         {
           "text": "The credit risk model's performance metrics account for the imbalance between default and non-default cases in the portfolio",
           "domain": "finance",
+          "assuranceGoal": "transparency"
+        }
+      ]
+    },
+    {
+      "slug": "model-cards",
+      "name": "Model Cards",
+      "description": "Model cards are standardised documentation frameworks that systematically document machine learning models through structured templates. The templates cover intended use cases, performance metrics across different demographic groups and operating conditions, training data characteristics, evaluation procedures, limitations, and ethical considerations. They serve as comprehensive technical specifications that enable informed model selection, prevent inappropriate deployment, support regulatory compliance, and facilitate fair assessment by providing transparent reporting of model capabilities and constraints across diverse populations and scenarios.",
+      "assurance_goals": [
+        "General"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "data-requirements/access-to-training-data",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/documentation",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/regulatory-compliance",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/documentation",
+        "assurance-goal-category/general",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/safety"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Documenting a medical diagnosis AI with detailed performance metrics across different patient demographics, age groups, and clinical conditions, enabling healthcare providers to understand when the model should be trusted and when additional expert consultation is needed for patient safety.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Creating comprehensive model cards for hiring algorithms that transparently report performance differences across demographic groups, helping HR departments identify potential bias issues and ensure equitable candidate evaluation processes.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Publishing detailed model documentation for a credit scoring API that clearly describes training data sources, evaluation methodologies, and performance limitations, enabling financial institutions to make informed decisions about model deployment and regulatory compliance.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Creating comprehensive model cards requires substantial time, expertise, and resources to gather performance data across diverse conditions and demographic groups, potentially delaying model deployment timelines."
+        },
+        {
+          "description": "Information can become outdated quickly as models are retrained, updated, or deployed in new contexts, requiring ongoing maintenance and version control to remain accurate and useful."
+        },
+        {
+          "description": "Organisations may provide incomplete or superficial documentation to avoid revealing competitive advantages or potential liabilities, undermining the transparency goals of model cards."
+        },
+        {
+          "description": "Lack of standardised formats and enforcement mechanisms means model card quality and completeness vary significantly across different organisations and use cases."
+        },
+        {
+          "description": "Technical complexity of documenting model behaviour across all relevant dimensions may exceed the expertise of some development teams, leading to gaps in critical information."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Model Cards for Model Reporting",
+          "url": "http://arxiv.org/abs/1810.03993v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Margaret Mitchell",
+            "Simone Wu",
+            "Andrew Zaldivar",
+            "Parker Barnes",
+            "Lucy Vasserman",
+            "Ben Hutchinson",
+            "Elena Spitzer",
+            "Inioluwa Deborah Raji",
+            "Timnit Gebru"
+          ],
+          "publication_date": "2018-10-05",
+          "citationKey": "mitchellModelCardsModel2018",
+          "abstract": "Trained machine learning models are increasingly used to perform high-impact tasks in areas such as law enforcement, medicine, education, and employment. In order to clarify the intended use cases of machine learning models and minimize their usage in contexts for which they are not well suited, we recommend that released models be accompanied by documentation detailing their performance characteristics. In this paper, we propose a framework that we call model cards, to encourage such transparent model reporting. Model cards are short documents accompanying trained machine learning models that provide benchmarked evaluation in a variety of conditions, such as across different cultural, demographic, or phenotypic groups (e.g., race, geographic location, sex, Fitzpatrick skin type) and intersectional groups (e.g., age and race, or sex and Fitzpatrick skin type) that are relevant to the intended application domains. Model cards also disclose the context in which models are intended to be used, details of the performance evaluation procedures, and other relevant information. While we focus primarily on human-centered machine learning models in the application fields of computer vision and natural language processing, this framework can be used to document any trained machine learning model. To solidify the concept, we provide cards for two supervised models: One trained to detect smiling faces in images, and one trained to detect toxic comments in text. We propose model cards as a step towards the responsible democratization of machine learning and related AI technology, increasing transparency into how well AI technology works. We hope this work encourages those releasing trained machine learning models to accompany model releases with similar detailed evaluation numbers and other relevant documentation."
+        },
+        {
+          "title": "Model Card Guidebook",
+          "url": "https://huggingface.co/docs/hub/en/model-card-guidebook",
+          "source_type": "tutorial",
+          "publication_date": "2022",
+          "citationKey": "ModelCardGuidebook2022"
+        },
+        {
+          "title": "scikit-learn model cards documentation",
+          "url": "https://skops.readthedocs.io/en/stable/model_card.html",
+          "source_type": "documentation",
+          "authors": [
+            "Skops Developers"
+          ],
+          "publication_date": "2023",
+          "citationKey": "skopsdevelopersScikitlearnModelCards2023"
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "datasheets-for-datasets",
+        "model-development-audit-trails",
+        "automated-documentation-generation",
+        "internal-review-boards",
+        "mlflow-experiment-tracking",
+        "data-version-control"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's performance characteristics are documented across all relevant demographic groups and operating conditions",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The diagnostic system's accuracy and error rates are reported separately for each patient subpopulation",
+          "domain": "healthcare",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The model's intended use cases and known limitations are clearly communicated to decision-makers",
+          "domain": "general",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The lending model's approval rates and error distributions are transparently reported for all applicant demographics",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The system's training data characteristics, evaluation procedures, and ethical considerations are comprehensively documented",
+          "domain": "public sector",
           "assuranceGoal": "transparency"
         }
       ]
@@ -4969,6 +5393,151 @@
       ]
     },
     {
+      "slug": "few-shot-fairness-evaluation",
+      "name": "Few-Shot Fairness Evaluation",
+      "description": "Few-shot fairness evaluation assesses whether in-context learning with few-shot examples introduces or amplifies biases in model predictions. This technique systematically varies demographic characteristics in few-shot examples and measures how these variations affect model outputs for different groups. Evaluation includes testing prompt sensitivity (how example selection impacts fairness), stereotype amplification (whether biased examples disproportionately affect outputs), and consistency (whether similar inputs receive equitable treatment regardless of example composition).",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/paradigm/generative",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "evidence-type/fairness-metric",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/labelled-data",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "evidence-type/documentation",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "expertise-needed/domain-expertise",
+        "fairness-approach/group",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "technique-type/testing",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing whether a resume screening LLM's few-shot examples inadvertently introduce gender bias by showing more male examples for technical positions, affecting how it evaluates subsequent applicants.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Ensuring a customer service classifier maintains reliable performance across demographic groups regardless of which few-shot examples users or developers choose to include in prompts.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Documenting how few-shot example selection affects fairness metrics, transparently reporting sensitivity to example composition in deployment guidelines.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Evaluating whether a medical triage LLM's few-shot examples for symptom assessment inadvertently encode demographic biases (e.g., more examples of cardiac symptoms in male patients), leading to differential urgency assessments across patient populations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Testing whether few-shot examples used in a legal case summarization system introduce racial or socioeconomic bias in how defendant backgrounds or case circumstances are characterized, affecting case outcome predictions.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Assessing whether few-shot examples in a loan application review assistant systematically present more favourable examples for certain demographic profiles, biasing the model's assessment of creditworthiness for subsequent applications.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Verifying that an automated essay grading system maintains consistent standards across student demographics when few-shot examples inadvertently represent particular writing styles, dialects, or cultural references more prominently.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Vast number of possible few-shot example combinations makes exhaustive testing infeasible, requiring sampling strategies that may miss important configurations."
+        },
+        {
+          "description": "Fairness may be highly sensitive to subtle differences in example wording or formatting, making it difficult to provide robust guarantees."
+        },
+        {
+          "description": "Trade-offs between example diversity and task performance may force choices between fairness and accuracy."
+        },
+        {
+          "description": "Results may not generalise across different prompt templates or instruction formats, requiring separate evaluation for each prompting strategy."
+        },
+        {
+          "description": "Requires carefully labeled datasets with demographic annotations to measure fairness across groups, which may be unavailable, expensive to create, or raise privacy concerns in sensitive domains."
+        },
+        {
+          "description": "Designing representative test sets that capture realistic few-shot example distributions requires deep domain expertise and understanding of how the system will be used in practice."
+        },
+        {
+          "description": "Evaluating fairness across multiple demographic groups with various few-shot configurations can be computationally expensive, particularly for large language models with high inference costs."
+        }
+      ],
+      "resources": [
+        {
+          "title": "fairness-indicators",
+          "url": "https://github.com/tensorflow/fairness-indicators",
+          "source_type": "software_package",
+          "publication_date": "2019-09-30",
+          "citationKey": "tensorflowFairnessindicators2019",
+          "abstract": "Tensorflow's Fairness Evaluation and Visualization Toolkit"
+        },
+        {
+          "title": "indic-bias",
+          "url": "https://github.com/AI4Bharat/indic-bias",
+          "source_type": "software_package",
+          "publication_date": "2024-12-20",
+          "citationKey": "ai4bharatIndicbias2024",
+          "abstract": "Indic-Bias is a comprehensive benchmark to evaluate the fairness of LLMs in Indian Contexts."
+        },
+        {
+          "title": "Fairness-guided few-shot prompting for large language models",
+          "url": "https://arxiv.org/abs/2303.13217",
+          "source_type": "technical_paper",
+          "publication_date": "2023",
+          "citationKey": "FairnessguidedFewshotPrompting2023"
+        }
+      ],
+      "related_techniques": [
+        "prompt-robustness-testing",
+        "toxicity-detection",
+        "sensitivity-analysis-for-fairness",
+        "path-specific-counterfactual-fairness-assessment"
+      ],
+      "sample_claims": [
+        {
+          "text": "The language model produces equitable outcomes across demographic groups regardless of which few-shot examples are provided in the prompt",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The recruitment system's candidate assessments remain unbiased when the composition of demonstration examples varies in demographic representation",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The model maintains consistent performance across protected groups under diverse configurations of in-context learning examples",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The system's fairness characteristics across different prompt example compositions are quantified and documented",
+          "domain": "public sector",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The content generation model's outputs exhibit equitable treatment of demographic groups when few-shot examples contain varying levels of representation",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        }
+      ]
+    },
+    {
       "slug": "machine-unlearning",
       "name": "Machine Unlearning",
       "description": "Machine unlearning enables removal of specific training data's influence from trained models without complete retraining. This technique addresses privacy rights like GDPR's right to be forgotten by selectively erasing learned patterns associated with particular data points, individuals, or sensitive attributes. Methods include exact unlearning (provably equivalent to retraining without the data), approximate unlearning (efficient algorithms that closely approximate retraining), and certified unlearning (providing formal guarantees about information removal).",
@@ -5293,5 +5862,5 @@
       ]
     }
   ],
-  "count": 35
+  "count": 39
 }

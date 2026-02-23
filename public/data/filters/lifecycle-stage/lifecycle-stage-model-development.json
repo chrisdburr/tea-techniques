@@ -2,7 +2,7 @@
   "tag": {
     "name": "lifecycle-stage/model-development",
     "slug": "lifecycle-stage-model-development",
-    "count": 87,
+    "count": 88,
     "category": "lifecycle-stage"
   },
   "techniques": [
@@ -177,6 +177,8 @@
         "assurance-goal-category/explainability/property/consistency",
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/robustness",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -272,7 +274,10 @@
         "shapley-additive-explanations",
         "permutation-tests",
         "mean-decrease-impurity",
-        "sobol-indices"
+        "sobol-indices",
+        "partial-dependence-plots",
+        "individual-conditional-expectation-plots",
+        "coefficient-magnitudes-in-linear-models"
       ],
       "sample_claims": [
         {
@@ -735,6 +740,7 @@
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/explainability/property/consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/access-to-model-internals",
         "data-requirements/reference-dataset",
         "data-type/any",
@@ -822,7 +828,8 @@
         "layer-wise-relevance-propagation",
         "integrated-gradients",
         "taylor-decomposition",
-        "gradient-saliency"
+        "gradient-saliency",
+        "gradient-weighted-class-activation-mapping"
       ],
       "sample_claims": [
         {
@@ -2885,6 +2892,8 @@
         "expertise-needed/statistics",
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/testing",
         "technique-type/visualization"
       ],
       "example_use_cases": [
@@ -2955,8 +2964,8 @@
       "related_techniques": [
         "umap",
         "principal-component-analysis",
-        "prototype-and-criticism-models",
-        "factor-analysis"
+        "factor-analysis",
+        "neuron-activation-analysis"
       ],
       "sample_claims": [
         {
@@ -3866,6 +3875,8 @@
         "assurance-goal-category/explainability/property/efficiency",
         "assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/reliability/uncertainty-quantification",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -3874,6 +3885,7 @@
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
+        "lifecycle-stage/testing",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -3958,7 +3970,8 @@
         "deep-ensembles",
         "conformal-prediction",
         "out-of-distribution-detector-for-neural-networks",
-        "quantile-regression"
+        "quantile-regression",
+        "temperature-scaling"
       ],
       "sample_claims": [
         {
@@ -5766,6 +5779,136 @@
       ]
     },
     {
+      "slug": "empirical-calibration",
+      "name": "Empirical Calibration",
+      "description": "Empirical calibration adjusts a model's predicted probabilities to match observed frequencies. For example, if events predicted with 80% confidence only occur 60% of the time, calibration would correct this overconfidence. Common techniques include Platt scaling and isotonic regression, which learn transformations that map the model's raw scores to well-calibrated probabilities, improving the reliability of confidence measures for downstream decisions.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/probabilistic-output",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "data-requirements/calibration-set",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Adjusting a credit default prediction model's probabilities to ensure that loan applicants with a predicted 30% default risk actually default 30% of the time, improving decision-making.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Calibrating a medical diagnosis model's confidence scores so that stakeholders can meaningfully interpret probability outputs, enabling doctors to make informed decisions about treatment urgency based on reliable confidence estimates.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring that a hiring algorithm's confidence scores are equally well-calibrated across different demographic groups, preventing systematically overconfident predictions for certain populations that could lead to biased decision-making.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires a separate held-out calibration dataset, which reduces the amount of data available for model training."
+        },
+        {
+          "description": "Calibration performance can degrade over time if the underlying data distribution shifts, requiring periodic recalibration."
+        },
+        {
+          "description": "May sacrifice some discriminative power in favour of calibration, potentially reducing the model's ability to distinguish between classes."
+        },
+        {
+          "description": "Calibration methods assume that the calibration set is representative of future data, which may not hold in dynamic environments."
+        }
+      ],
+      "resources": [
+        {
+          "title": "empirical_calibration",
+          "url": "https://github.com/google/empirical_calibration",
+          "source_type": "software_package",
+          "publication_date": "2019-02-01",
+          "citationKey": "googleEmpirical_calibration2019"
+        },
+        {
+          "title": "A Python Library For Empirical Calibration",
+          "url": "http://arxiv.org/abs/1906.11920v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xiaojing Wang",
+            "Jingang Miao",
+            "Yunting Sun"
+          ],
+          "publication_date": "2019-06-27",
+          "citationKey": "wangPythonLibraryEmpirical2019",
+          "abstract": "Dealing with biased data samples is a common task across many statistical fields. In survey sampling, bias often occurs due to unrepresentative samples. In causal studies with observational data, the treated versus untreated group assignment is often correlated with covariates, i.e., not random. Empirical calibration is a generic weighting method that presents a unified view on correcting or reducing the data biases for the tasks mentioned above. We provide a Python library EC to compute the empirical calibration weights. The problem is formulated as convex optimization and solved efficiently in the dual form. Compared to existing software, EC is both more efficient and robust. EC also accommodates different optimization objectives, supports weight clipping, and allows inexact calibration, which improves usability. We demonstrate its usage across various experiments with both simulated and real-world data."
+        },
+        {
+          "title": "Assessing the effectiveness of empirical calibration under different bias scenarios",
+          "url": "http://arxiv.org/abs/2111.04233v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Hon Hwang",
+            "Juan C Quiroz",
+            "Blanca Gallego"
+          ],
+          "publication_date": "2021-11-08",
+          "citationKey": "hwangAssessingEffectivenessEmpirical2021",
+          "abstract": "Background: Estimations of causal effects from observational data are subject to various sources of bias. One method of adjusting for the residual biases in the estimation of a treatment effect is through negative control outcomes, where the treatment does not affect the outcome. The empirical calibration procedure is a technique that uses negative controls to calibrate p-values. An extension of empirical calibration calibrates the coverage of the 95% confidence interval of a treatment effect estimate by using negative control outcomes as well as positive control outcomes (where treatment affects the outcome).   Methods: The effect of empirical calibration of confidence intervals was analyzed using simulated datasets with known treatment effects. The simulations consisted of binary treatment and binary outcome, with biases resulting from unmeasured confounder, model misspecification, measurement error, and lack of positivity. The performance of the empirical calibration was evaluated by determining the change in the coverage of the confidence interval and the bias in the treatment effect estimate.   Results: Empirical calibration increased coverage of the 95% confidence interval of the treatment effect estimate under most bias scenarios but was inconsistent in adjusting the bias in the treatment effect estimate. Empirical calibration of confidence intervals was most effective when adjusting for the unmeasured confounding bias. Suitable negative controls had a large impact on the adjustment made by empirical calibration, but small improvements in the coverage of the outcome of interest were also observable when using unsuitable negative controls."
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 2,
+      "related_techniques": [
+        "temperature-scaling",
+        "conformal-prediction",
+        "confidence-thresholding",
+        "quantile-regression",
+        "bootstrapping",
+        "area-under-precision-recall-curve"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model's predicted probabilities align with observed outcome frequencies across the decision space",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The system's confidence scores are interpretable as genuine probability estimates for critical decisions",
+          "domain": "healthcare",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The model's probability estimates maintain consistent calibration quality across protected demographic groups",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The autonomous system's predicted risk levels correspond to actual failure rates in operational conditions",
+          "domain": "autonomous systems",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The forecasting model's stated confidence intervals reflect empirically measured prediction accuracy",
+          "domain": "environmental",
+          "assuranceGoal": "transparency"
+        }
+      ]
+    },
+    {
       "slug": "temperature-scaling",
       "name": "Temperature Scaling",
       "description": "Temperature scaling adjusts a model's confidence by applying a single parameter (temperature) to its predictions. When a model is too confident in its wrong answers, temperature scaling can fix this by making the predictions more realistic. It works by dividing the model's outputs by the temperature value before converting them to probabilities. Higher temperatures make the model less confident, whilst lower temperatures increase confidence. The technique maintains the model's accuracy whilst ensuring that when it says it's 90% confident, it's actually right about 90% of the time.",
@@ -5781,7 +5924,9 @@
         "applicable-models/requirements/probabilistic-output",
         "applicable-models/requirements/white-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/transparency",
         "data-requirements/access-to-model-internals",
         "data-requirements/calibration-set",
@@ -5790,7 +5935,10 @@
         "evidence-type/quantitative-metric",
         "expertise-needed/statistics",
         "explanatory-scope/global",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -5889,7 +6037,8 @@
         "empirical-calibration",
         "deep-ensembles",
         "monte-carlo-dropout",
-        "conformal-prediction"
+        "conformal-prediction",
+        "calibration-with-equality-of-opportunity"
       ],
       "sample_claims": [
         {
@@ -7028,7 +7177,12 @@
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/documentation",
-        "assurance-goal-category/general"
+        "assurance-goal-category/general",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/safety"
       ],
       "example_use_cases": [
         {
@@ -7105,7 +7259,9 @@
         "datasheets-for-datasets",
         "model-development-audit-trails",
         "automated-documentation-generation",
-        "internal-review-boards"
+        "internal-review-boards",
+        "mlflow-experiment-tracking",
+        "data-version-control"
       ],
       "sample_claims": [
         {
@@ -7394,9 +7550,14 @@
         "expertise-needed/software-engineering",
         "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/project-design",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic",
-        "assurance-goal-category/general"
+        "technique-type/documentation",
+        "assurance-goal-category/general",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency"
       ],
       "example_use_cases": [
         {
@@ -7473,7 +7634,9 @@
         "model-cards",
         "datasheets-for-datasets",
         "mlflow-experiment-tracking",
-        "model-development-audit-trails"
+        "model-development-audit-trails",
+        "internal-review-boards",
+        "data-version-control"
       ],
       "sample_claims": [
         {
@@ -11499,6 +11662,7 @@
         "assurance-goal-category/fairness/causal",
         "assurance-goal-category/reliability",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/causal-graph",
         "data-requirements/sensitive-attributes",
         "data-type/tabular",
@@ -11510,6 +11674,7 @@
         "fairness-approach/causal",
         "lifecycle-stage/model-development",
         "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/metric"
       ],
       "example_use_cases": [
@@ -11529,6 +11694,9 @@
       "limitations": [
         {
           "description": "Requires identifying which causal pathways are 'allowable' and which are not—a subjective decision; analyzing specific paths adds complexity to the causal model and the fairness criterion."
+        },
+        {
+          "description": "Causal graph construction relies on domain expertise and cannot be validated from observational data alone; if the graph incorrectly encodes causal structure or omits relevant edges, the path-specific assessment may certify an unfair model as compliant with no internal mechanism to detect the error, and this uncertainty is rarely surfaced in compliance documentation."
         }
       ],
       "resources": [
@@ -12385,15 +12553,14 @@
       "description": "Model watermarking and theft detection techniques protect AI systems from unauthorised replication by embedding detectable signatures in model outputs and identifying suspiciously similar prediction patterns. This includes watermarking schemes that survive knowledge distillation, fingerprinting methods that create unique statistical signatures, and detection methods that identify when a model has been stolen or replicated through model extraction, distillation, or imitation. These techniques enable model owners to prove intellectual property theft and protect proprietary AI systems.",
       "assurance_goals": [
         "Security",
-        "Transparency",
-        "Fairness"
+        "Transparency"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/security",
+        "assurance-goal-category/security/adversarial-robustness",
         "assurance-goal-category/transparency",
-        "assurance-goal-category/fairness",
         "data-type/any",
         "data-requirements/no-special-requirements",
         "lifecycle-stage/model-development",
@@ -12415,10 +12582,6 @@
         {
           "description": "Providing forensic evidence in intellectual property litigation by demonstrating through watermark extraction and statistical fingerprinting that a competitor's fraud detection system was derived from a bank's proprietary model.",
           "goal": "Transparency"
-        },
-        {
-          "description": "Protecting an autonomous vehicle perception model from unauthorised replication, ensuring that safety-critical models undergo proper validation rather than being deployed through model theft, maintaining fair safety standards across the industry.",
-          "goal": "Fairness"
         }
       ],
       "limitations": [
@@ -12497,7 +12660,9 @@
         "jailbreak-resistance-testing",
         "adversarial-training-evaluation",
         "data-poisoning-detection",
-        "model-extraction-defence-testing"
+        "model-extraction-defence-testing",
+        "membership-inference-attack-testing",
+        "differential-privacy"
       ],
       "sample_claims": [
         {
@@ -12677,5 +12842,5 @@
       ]
     }
   ],
-  "count": 88
+  "count": 89
 }

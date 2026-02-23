@@ -177,6 +177,8 @@
         "assurance-goal-category/explainability/property/consistency",
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/robustness",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -272,7 +274,10 @@
         "shapley-additive-explanations",
         "permutation-tests",
         "mean-decrease-impurity",
-        "sobol-indices"
+        "sobol-indices",
+        "partial-dependence-plots",
+        "individual-conditional-expectation-plots",
+        "coefficient-magnitudes-in-linear-models"
       ],
       "sample_claims": [
         {
@@ -2174,7 +2179,12 @@
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/documentation",
-        "assurance-goal-category/general"
+        "assurance-goal-category/general",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/safety"
       ],
       "example_use_cases": [
         {
@@ -2251,7 +2261,9 @@
         "datasheets-for-datasets",
         "model-development-audit-trails",
         "automated-documentation-generation",
-        "internal-review-boards"
+        "internal-review-boards",
+        "mlflow-experiment-tracking",
+        "data-version-control"
       ],
       "sample_claims": [
         {
@@ -2300,6 +2312,7 @@
         "lifecycle-stage/data-handling/collection",
         "lifecycle-stage/data-handling/preparation",
         "technique-type/documentation",
+        "technique-type/process",
         "assurance-goal-category/general"
       ],
       "example_use_cases": [
@@ -2314,6 +2327,14 @@
         {
           "description": "Establishing transparent documentation for financial transaction datasets that clearly describes data collection methodology, preprocessing steps, and intended use cases, enabling researchers to make informed decisions about dataset appropriateness for their specific applications.",
           "goal": "Transparency"
+        },
+        {
+          "description": "Documenting a safety-critical autonomous vehicle perception dataset with records of sensor calibration procedures, environmental conditions during collection, edge-case scenario coverage, and known distributional gaps, enabling safety engineers to assess whether training data adequately represents the operating conditions required for safe deployment and to support regulatory type-approval submissions.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Documenting the statistical distributions, temporal coverage, and known quality characteristics of training datasets to support model monitoring pipelines, enabling operations teams to detect data drift and assess whether production data remains within the documented training distribution for informed decisions about model retraining or recalibration.",
+          "goal": "Reliability"
         }
       ],
       "limitations": [
@@ -2404,7 +2425,8 @@
         "model-cards",
         "data-version-control",
         "automated-documentation-generation",
-        "synthetic-data-evaluation"
+        "synthetic-data-evaluation",
+        "internal-review-boards"
       ],
       "sample_claims": [
         {
@@ -2693,9 +2715,14 @@
         "expertise-needed/software-engineering",
         "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/project-design",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic",
-        "assurance-goal-category/general"
+        "technique-type/documentation",
+        "assurance-goal-category/general",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency"
       ],
       "example_use_cases": [
         {
@@ -2772,7 +2799,9 @@
         "model-cards",
         "datasheets-for-datasets",
         "mlflow-experiment-tracking",
-        "model-development-audit-trails"
+        "model-development-audit-trails",
+        "internal-review-boards",
+        "data-version-control"
       ],
       "sample_claims": [
         {

@@ -2,7 +2,7 @@
   "tag": {
     "name": "assurance-goal-category/transparency/process-transparency",
     "slug": "assurance-goal-category-transparency-process-transparency",
-    "count": 21,
+    "count": 27,
     "category": "assurance-goal-category"
   },
   "techniques": [
@@ -130,6 +130,141 @@
         {
           "text": "The crop yield prediction model's dependence on environmental factors is directly measurable through their coefficient values",
           "domain": "environmental",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
+      "slug": "deeplift",
+      "name": "DeepLIFT",
+      "description": "DeepLIFT (Deep Learning Important FeaTures) explains neural network predictions by decomposing the difference between the actual output and a reference output back to individual input features. It compares each neuron's activation to a reference activation (typically from a baseline input like all zeros or the dataset mean) and propagates these differences backwards through the network using chain rule modifications. Unlike gradient-based methods, DeepLIFT satisfies the sensitivity property (zero input gets zero attribution) and provides more stable attributions by using discrete differences rather than gradients.",
+      "assurance_goals": [
+        "Explainability",
+        "Transparency"
+      ],
+      "tags": [
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/gradient-based",
+        "assurance-goal-category/explainability/representation-analysis/decomposition",
+        "assurance-goal-category/explainability/explains/feature-importance",
+        "assurance-goal-category/explainability/property/completeness",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/access-to-model-internals",
+        "data-requirements/reference-dataset",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic",
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/requirements/white-box",
+        "applicable-models/requirements/differentiable"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Identifying which genomic sequences contribute to a neural network's prediction of protein binding sites, helping biologists understand regulatory mechanisms by comparing to neutral DNA baselines.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Debugging a deep learning image classifier that misclassifies medical scans by attributing the decision to specific image regions, revealing if the model focuses on irrelevant artifacts rather than pathological features.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Providing transparent explanations for automated loan approval decisions by showing which financial features (relative to typical applicant profiles) most influenced the neural network's recommendation.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires careful selection of reference baseline, as different choices can lead to substantially different attribution scores."
+        },
+        {
+          "description": "Implementation complexity varies significantly across different neural network architectures and layer types."
+        },
+        {
+          "description": "May produce unintuitive results when the chosen reference is not representative of the decision boundary."
+        },
+        {
+          "description": "Limited to feedforward networks and specific layer types, not suitable for all modern architectures like transformers."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Learning Important Features Through Propagating Activation Differences",
+          "url": "http://arxiv.org/abs/1704.02685v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Avanti Shrikumar",
+            "Peyton Greenside",
+            "Anshul Kundaje"
+          ],
+          "publication_date": "2017-04-10",
+          "citationKey": "shrikumarLearningImportantFeatures2017",
+          "abstract": "The purported \"black box\" nature of neural networks is a barrier to adoption in applications where interpretability is essential. Here we present DeepLIFT (Deep Learning Important FeaTures), a method for decomposing the output prediction of a neural network on a specific input by backpropagating the contributions of all neurons in the network to every feature of the input. DeepLIFT compares the activation of each neuron to its 'reference activation' and assigns contribution scores according to the difference. By optionally giving separate consideration to positive and negative contributions, DeepLIFT can also reveal dependencies which are missed by other approaches. Scores can be computed efficiently in a single backward pass. We apply DeepLIFT to models trained on MNIST and simulated genomic data, and show significant advantages over gradient-based methods. Video tutorial: http://goo.gl/qKb7pL, ICML slides: bit.ly/deeplifticmlslides, ICML talk: https://vimeo.com/238275076, code: http://goo.gl/RM8jvH."
+        },
+        {
+          "title": "captum",
+          "url": "https://github.com/pytorch/captum",
+          "source_type": "software_package",
+          "publication_date": "2019-08-27",
+          "citationKey": "meta-pytorchCaptum2019",
+          "abstract": "Model interpretability and understanding for PyTorch"
+        },
+        {
+          "title": "Tutorial A3: DeepLIFT/SHAP — tangermeme v0.1.0 documentation",
+          "url": "https://tangermeme.readthedocs.io/en/latest/tutorials/Tutorial_A3_Deep_LIFT_SHAP.html",
+          "source_type": "documentation",
+          "authors": [
+            "Tangermeme Developers"
+          ],
+          "publication_date": "2023",
+          "citationKey": "tangermemedevelopersTutorialA3DeepLIFT2023"
+        },
+        {
+          "title": "DeepLIFT Documentation - Captum",
+          "url": "https://captum.ai/api/deep_lift.html",
+          "source_type": "documentation",
+          "publication_date": "2019",
+          "citationKey": "DeepLIFTDocumentationCaptum2019"
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "layer-wise-relevance-propagation",
+        "integrated-gradients",
+        "taylor-decomposition",
+        "gradient-saliency",
+        "gradient-weighted-class-activation-mapping"
+      ],
+      "sample_claims": [
+        {
+          "text": "The medical imaging model's diagnostic predictions are attributable to specific anatomical features relative to typical baseline scans",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The lending system's decision factors are traceable to deviations from representative applicant profiles",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The perception system's object classifications are explained by feature differences from neutral reference inputs",
+          "domain": "autonomous systems",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The model's individual predictions are accompanied by feature-level attributions measured against defined baseline conditions",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The recommendation system's outputs are interpretable through comparison with typical user interaction patterns",
+          "domain": "general",
           "assuranceGoal": "explainability"
         }
       ]
@@ -2004,7 +2139,12 @@
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/documentation",
-        "assurance-goal-category/general"
+        "assurance-goal-category/general",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/safety"
       ],
       "example_use_cases": [
         {
@@ -2081,7 +2221,9 @@
         "datasheets-for-datasets",
         "model-development-audit-trails",
         "automated-documentation-generation",
-        "internal-review-boards"
+        "internal-review-boards",
+        "mlflow-experiment-tracking",
+        "data-version-control"
       ],
       "sample_claims": [
         {
@@ -2130,6 +2272,7 @@
         "lifecycle-stage/data-handling/collection",
         "lifecycle-stage/data-handling/preparation",
         "technique-type/documentation",
+        "technique-type/process",
         "assurance-goal-category/general"
       ],
       "example_use_cases": [
@@ -2144,6 +2287,14 @@
         {
           "description": "Establishing transparent documentation for financial transaction datasets that clearly describes data collection methodology, preprocessing steps, and intended use cases, enabling researchers to make informed decisions about dataset appropriateness for their specific applications.",
           "goal": "Transparency"
+        },
+        {
+          "description": "Documenting a safety-critical autonomous vehicle perception dataset with records of sensor calibration procedures, environmental conditions during collection, edge-case scenario coverage, and known distributional gaps, enabling safety engineers to assess whether training data adequately represents the operating conditions required for safe deployment and to support regulatory type-approval submissions.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Documenting the statistical distributions, temporal coverage, and known quality characteristics of training datasets to support model monitoring pipelines, enabling operations teams to detect data drift and assess whether production data remains within the documented training distribution for informed decisions about model retraining or recalibration.",
+          "goal": "Reliability"
         }
       ],
       "limitations": [
@@ -2234,7 +2385,8 @@
         "model-cards",
         "data-version-control",
         "automated-documentation-generation",
-        "synthetic-data-evaluation"
+        "synthetic-data-evaluation",
+        "internal-review-boards"
       ],
       "sample_claims": [
         {
@@ -2523,9 +2675,14 @@
         "expertise-needed/software-engineering",
         "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/project-design",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic",
-        "assurance-goal-category/general"
+        "technique-type/documentation",
+        "assurance-goal-category/general",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency"
       ],
       "example_use_cases": [
         {
@@ -2602,7 +2759,9 @@
         "model-cards",
         "datasheets-for-datasets",
         "mlflow-experiment-tracking",
-        "model-development-audit-trails"
+        "model-development-audit-trails",
+        "internal-review-boards",
+        "data-version-control"
       ],
       "sample_claims": [
         {
@@ -4077,6 +4236,110 @@
       ]
     },
     {
+      "slug": "path-specific-counterfactual-fairness-assessment",
+      "name": "Path-Specific Counterfactual Fairness Assessment",
+      "description": "A causal fairness evaluation technique that assesses algorithmic discrimination by examining specific causal pathways in a model's decision-making process. Unlike general counterfactual fairness, this approach enables practitioners to identify and intervene on particular causal paths that may introduce bias whilst preserving other legitimate pathways. The method uses causal graphs to distinguish between direct discrimination (through protected attributes) and indirect discrimination (through seemingly neutral factors that correlate with protected attributes), allowing for more nuanced fairness assessments in complex causal settings.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/causal",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/causal-graph",
+        "data-requirements/sensitive-attributes",
+        "data-type/tabular",
+        "evidence-type/causal-analysis",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/causal-inference",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/causal",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/metric"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating hiring algorithms by identifying which causal pathways from education and experience legitimately affect job performance versus those that introduce gender or racial bias, enabling targeted interventions that preserve merit-based selection whilst eliminating discriminatory pathways.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Analysing loan approval models to provide transparent evidence of which factors legitimately influence creditworthiness versus those that create indirect discrimination, enabling clear explanations to regulators about causal mechanisms underlying fair lending decisions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Assessing medical diagnosis systems to ensure reliable performance by distinguishing between clinically relevant causal pathways (symptoms to diagnosis) and potentially biased pathways (demographics to diagnosis), maintaining diagnostic accuracy whilst preventing healthcare disparities.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires identifying which causal pathways are 'allowable' and which are not—a subjective decision; analyzing specific paths adds complexity to the causal model and the fairness criterion."
+        },
+        {
+          "description": "Causal graph construction relies on domain expertise and cannot be validated from observational data alone; if the graph incorrectly encodes causal structure or omits relevant edges, the path-specific assessment may certify an unfair model as compliant with no internal mechanism to detect the error, and this uncertainty is rarely surfaced in compliance documentation."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Path-Specific Counterfactual Fairness via Dividend Correction",
+          "url": "https://www.semanticscholar.org/paper/197367ee337e8838fd2ef1a887101ddc84eb0612",
+          "source_type": "technical_paper",
+          "authors": [
+            "Daisuke Hatano",
+            "Satoshi Hara",
+            "Hiromi Arai"
+          ],
+          "publication_date": "2025",
+          "citationKey": "hatanoPathSpecificCounterfactualFairness2025"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "counterfactual-fairness-assessment",
+        "average-odds-difference",
+        "equal-opportunity-difference",
+        "area-under-precision-recall-curve"
+      ],
+      "sample_claims": [
+        {
+          "text": "The hiring system's decisions are not influenced by gender through educational pathways whilst preserving the legitimate influence of qualifications on employment outcomes",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The loan approval model's risk assessment isolates the direct influence of creditworthiness from indirect effects of demographic characteristics propagating through correlated factors",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The diagnostic system's predictions are attributable to specific clinical pathways independent of demographic factors that influence healthcare access",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The decision process documents which factors legitimately affect outcomes versus those that create indirect discrimination through upstream correlations",
+          "domain": "public sector",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The model's treatment recommendations remain consistent across patient demographics when controlling for symptom severity and medical history whilst allowing clinically relevant differences to influence care decisions",
+          "domain": "healthcare",
+          "assuranceGoal": "fairness"
+        }
+      ]
+    },
+    {
       "slug": "model-development-audit-trails",
       "name": "Model Development Audit Trails",
       "description": "Model development audit trails create comprehensive, immutable records of all decisions, experiments, and changes throughout the ML lifecycle. This technique captures dataset versions, training configurations, hyperparameter searches, model architecture changes, evaluation results, and deployment decisions in tamper-evident logs. Audit trails enable reproducibility, accountability, and regulatory compliance by documenting who made what changes when and why, supporting post-hoc investigation of model failures or unexpected behaviours.",
@@ -4553,6 +4816,151 @@
       ]
     },
     {
+      "slug": "few-shot-fairness-evaluation",
+      "name": "Few-Shot Fairness Evaluation",
+      "description": "Few-shot fairness evaluation assesses whether in-context learning with few-shot examples introduces or amplifies biases in model predictions. This technique systematically varies demographic characteristics in few-shot examples and measures how these variations affect model outputs for different groups. Evaluation includes testing prompt sensitivity (how example selection impacts fairness), stereotype amplification (whether biased examples disproportionately affect outputs), and consistency (whether similar inputs receive equitable treatment regardless of example composition).",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/paradigm/generative",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "evidence-type/fairness-metric",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/labelled-data",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "evidence-type/documentation",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "expertise-needed/domain-expertise",
+        "fairness-approach/group",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "technique-type/testing",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing whether a resume screening LLM's few-shot examples inadvertently introduce gender bias by showing more male examples for technical positions, affecting how it evaluates subsequent applicants.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Ensuring a customer service classifier maintains reliable performance across demographic groups regardless of which few-shot examples users or developers choose to include in prompts.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Documenting how few-shot example selection affects fairness metrics, transparently reporting sensitivity to example composition in deployment guidelines.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Evaluating whether a medical triage LLM's few-shot examples for symptom assessment inadvertently encode demographic biases (e.g., more examples of cardiac symptoms in male patients), leading to differential urgency assessments across patient populations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Testing whether few-shot examples used in a legal case summarization system introduce racial or socioeconomic bias in how defendant backgrounds or case circumstances are characterized, affecting case outcome predictions.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Assessing whether few-shot examples in a loan application review assistant systematically present more favourable examples for certain demographic profiles, biasing the model's assessment of creditworthiness for subsequent applications.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Verifying that an automated essay grading system maintains consistent standards across student demographics when few-shot examples inadvertently represent particular writing styles, dialects, or cultural references more prominently.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Vast number of possible few-shot example combinations makes exhaustive testing infeasible, requiring sampling strategies that may miss important configurations."
+        },
+        {
+          "description": "Fairness may be highly sensitive to subtle differences in example wording or formatting, making it difficult to provide robust guarantees."
+        },
+        {
+          "description": "Trade-offs between example diversity and task performance may force choices between fairness and accuracy."
+        },
+        {
+          "description": "Results may not generalise across different prompt templates or instruction formats, requiring separate evaluation for each prompting strategy."
+        },
+        {
+          "description": "Requires carefully labeled datasets with demographic annotations to measure fairness across groups, which may be unavailable, expensive to create, or raise privacy concerns in sensitive domains."
+        },
+        {
+          "description": "Designing representative test sets that capture realistic few-shot example distributions requires deep domain expertise and understanding of how the system will be used in practice."
+        },
+        {
+          "description": "Evaluating fairness across multiple demographic groups with various few-shot configurations can be computationally expensive, particularly for large language models with high inference costs."
+        }
+      ],
+      "resources": [
+        {
+          "title": "fairness-indicators",
+          "url": "https://github.com/tensorflow/fairness-indicators",
+          "source_type": "software_package",
+          "publication_date": "2019-09-30",
+          "citationKey": "tensorflowFairnessindicators2019",
+          "abstract": "Tensorflow's Fairness Evaluation and Visualization Toolkit"
+        },
+        {
+          "title": "indic-bias",
+          "url": "https://github.com/AI4Bharat/indic-bias",
+          "source_type": "software_package",
+          "publication_date": "2024-12-20",
+          "citationKey": "ai4bharatIndicbias2024",
+          "abstract": "Indic-Bias is a comprehensive benchmark to evaluate the fairness of LLMs in Indian Contexts."
+        },
+        {
+          "title": "Fairness-guided few-shot prompting for large language models",
+          "url": "https://arxiv.org/abs/2303.13217",
+          "source_type": "technical_paper",
+          "publication_date": "2023",
+          "citationKey": "FairnessguidedFewshotPrompting2023"
+        }
+      ],
+      "related_techniques": [
+        "prompt-robustness-testing",
+        "toxicity-detection",
+        "sensitivity-analysis-for-fairness",
+        "path-specific-counterfactual-fairness-assessment"
+      ],
+      "sample_claims": [
+        {
+          "text": "The language model produces equitable outcomes across demographic groups regardless of which few-shot examples are provided in the prompt",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The recruitment system's candidate assessments remain unbiased when the composition of demonstration examples varies in demographic representation",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The model maintains consistent performance across protected groups under diverse configurations of in-context learning examples",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The system's fairness characteristics across different prompt example compositions are quantified and documented",
+          "domain": "public sector",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The content generation model's outputs exhibit equitable treatment of demographic groups when few-shot examples contain varying levels of representation",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        }
+      ]
+    },
+    {
       "slug": "retrieval-augmented-generation-evaluation",
       "name": "Retrieval-Augmented Generation Evaluation",
       "description": "RAG evaluation assesses systems combining retrieval and generation by measuring retrieval quality, generation faithfulness, and overall performance. This technique evaluates whether retrieved context is relevant, whether responses faithfully represent information without hallucination, and how systems handle insufficient context. Key metrics include retrieval precision/recall, answer relevance, faithfulness scores, and citation accuracy.",
@@ -4719,7 +5127,165 @@
           "assuranceGoal": "explainability"
         }
       ]
+    },
+    {
+      "slug": "reward-hacking-detection",
+      "name": "Reward Hacking Detection",
+      "description": "Reward hacking detection identifies when AI systems achieve stated objectives through unintended shortcuts or loopholes rather than genuine task mastery. This technique analyses whether systems exploit reward specification ambiguities, reward function bugs, or simulator artifacts to maximise rewards without actually solving the intended problem. Detection involves adversarial specification testing, human evaluation of solution quality, transfer testing to slightly modified tasks, and analysis of unexpected strategy patterns that suggest reward hacking rather than genuine learning.",
+      "assurance_goals": [
+        "Reliability",
+        "Safety",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/reinforcement",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/transparency",
+        "data-type/any",
+        "data-requirements/no-special-requirements",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "technique-type/testing",
+        "technique-type/algorithmic",
+        "evidence-type/qualitative-report",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-expertise",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Detecting when a reinforcement learning agent for robot manipulation learns to exploit physics simulator quirks rather than developing real-world-transferable manipulation skills, preventing failures in physical deployment.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Identifying when an AI-based healthcare scheduling system appears to optimize patient wait times by gaming appointment classifications or encouraging cancellations rather than genuinely improving clinic efficiency, preventing patient care degradation.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Detecting when a loan approval system achieves target approval rates by exploiting specification loopholes in creditworthiness definitions rather than accurately assessing borrower risk, ensuring reliable lending decisions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Verifying that an educational content recommendation system optimizes for genuine learning outcomes rather than gaming engagement metrics through strategies like repeatedly presenting easier content that inflates measured progress.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Producing a documented audit trail for a high-risk AI deployment by running reward hacking detection tests and recording which specification loopholes were identified and remediated, enabling auditors and regulators to verify that the system achieves its stated objectives through legitimate means rather than gaming its evaluation criteria.",
+          "goal": "Transparency"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Difficult to distinguish between clever problem-solving and specification gaming without deep understanding of task intent."
+        },
+        {
+          "description": "Novel gaming strategies may not be detected until systems are deployed in real environments where gaming becomes apparent."
+        },
+        {
+          "description": "Closing detected loopholes may simply push systems to discover new gaming strategies rather than solving the fundamental specification challenge."
+        },
+        {
+          "description": "Perfect specifications that eliminate all gaming opportunities may be impossible for complex, open-ended tasks."
+        },
+        {
+          "description": "Requires domain expertise and clear articulation of task intent to distinguish between legitimate optimization strategies and gaming behaviors, which can be subjective in complex domains."
+        },
+        {
+          "description": "Detection often requires access to detailed behavioral logs and environment state information that may not be available in black-box deployment scenarios."
+        },
+        {
+          "description": "Establishing ground truth for 'correct' task completion without gaming requires independent verification methods that may be as resource-intensive as the original task."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Detecting and Mitigating Reward Hacking in Reinforcement Learning Systems: A Comprehensive Empirical Study",
+          "url": "https://www.semanticscholar.org/paper/f71379b765f01c333ebaab5736dbf7f1005b19c9",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ibne Farabi Shihab",
+            "Sanjeda Akter",
+            "Anuj Sharma"
+          ],
+          "publication_date": "2025",
+          "citationKey": "farabishihabDetectingMitigatingReward2025",
+          "abstract": "Reward hacking in Reinforcement Learning (RL) systems poses a critical threat to the deployment of autonomous agents, where agents exploit flaws in reward functions to achieve high scores without fulfilling intended objectives. Despite growing awareness of this problem, systematic detection and mitigation approaches remain limited. This paper presents a large-scale empirical study of reward hacking across diverse RL environments and algorithms. We analyze 15,247 training episodes across 15 RL environments (Atari, MuJoCo, custom domains) and 5 algorithms (PPO, SAC, DQN, A3C, Rainbow), implementing automated detection algorithms for six categories of reward hacking: specification gaming, reward tampering, proxy optimization, objective misalignment, exploitation patterns, and wireheading. Our detection framework achieves 78.4% precision and 81.7% recall across environments, with computational overhead under 5%. Through controlled experiments varying reward function properties, we demonstrate that reward density and alignment with true objectives significantly impact hacking frequency ($p<0.001$, Cohen's $d = 1.24$). We validate our approach through three simulated application studies representing recommendation systems, competitive gaming, and robotic control scenarios. Our mitigation techniques reduce hacking frequency by up to 54.6% in controlled scenarios, though we find these trade-offs are more challenging in practice due to concept drift, false positive costs, and adversarial adaptation. All detection algorithms, datasets, and experimental protocols are publicly available to support reproducible research in RL safety."
+        },
+        {
+          "title": "Preventing Reward Hacking with Occupancy Measure Regularization",
+          "url": "https://www.semanticscholar.org/paper/878e2c80a9247b6106b479bf8d74c02427947176",
+          "source_type": "technical_paper",
+          "authors": [
+            "Cassidy Laidlaw",
+            "Shivam Singhal",
+            "A. Dragan"
+          ],
+          "publication_date": "2024",
+          "citationKey": "laidlawPreventingRewardHacking2024"
+        },
+        {
+          "title": "Fine-tuning & RL for LLMs: Intro to Post-training - DeepLearning.AI",
+          "url": "https://learn.deeplearning.ai/courses/fine-tuning-and-reinforcement-learning-for-llms-intro-to-post-training/lesson/wr7ye4/evals-for-post-training:-test-sets-and-metrics",
+          "source_type": "tutorial",
+          "authors": [
+            "Sharon Zhou"
+          ],
+          "publication_date": "2025",
+          "citationKey": "zhouFinetuningRLLLMs2025"
+        },
+        {
+          "title": "How to Make a Reward Function in Reinforcement Learning ...",
+          "url": "https://www.geeksforgeeks.org/machine-learning/how-to-make-a-reward-function-in-reinforcement-learning",
+          "source_type": "tutorial",
+          "publication_date": "2024-10-01",
+          "citationKey": "HowMakeReward2024"
+        }
+      ],
+      "related_techniques": [
+        "chain-of-thought-faithfulness-evaluation",
+        "adversarial-training-evaluation",
+        "constitutional-ai-evaluation",
+        "epistemic-uncertainty-quantification",
+        "red-teaming"
+      ],
+      "sample_claims": [
+        {
+          "text": "The autonomous vehicle's lane-keeping performance transfers reliably to real-world conditions rather than exploiting simulator artifacts",
+          "domain": "autonomous systems",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The healthcare scheduling system improves patient outcomes through genuine efficiency gains rather than manipulating appointment metrics",
+          "domain": "healthcare",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The system's strategy for achieving stated objectives is interpretable and consistent with task intent rather than relying on unintended shortcuts",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The loan processing system maintains creditworthiness assessment accuracy when evaluated on modified criteria that close potential loopholes",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The educational recommendation system's learning outcome improvements reflect genuine student progress rather than optimisation of engagement proxies",
+          "domain": "public sector",
+          "assuranceGoal": "safety"
+        }
+      ]
     }
   ],
-  "count": 33
+  "count": 37
 }

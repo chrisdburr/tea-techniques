@@ -305,6 +305,7 @@
         "assurance-goal-category/fairness/causal",
         "assurance-goal-category/reliability",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/causal-graph",
         "data-requirements/sensitive-attributes",
         "data-type/tabular",
@@ -316,6 +317,7 @@
         "fairness-approach/causal",
         "lifecycle-stage/model-development",
         "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/metric"
       ],
       "example_use_cases": [
@@ -335,6 +337,9 @@
       "limitations": [
         {
           "description": "Requires identifying which causal pathways are 'allowable' and which are not—a subjective decision; analyzing specific paths adds complexity to the causal model and the fairness criterion."
+        },
+        {
+          "description": "Causal graph construction relies on domain expertise and cannot be validated from observational data alone; if the graph incorrectly encodes causal structure or omits relevant edges, the path-specific assessment may certify an unfair model as compliant with no internal mechanism to detect the error, and this uncertainty is rarely surfaced in compliance documentation."
         }
       ],
       "resources": [

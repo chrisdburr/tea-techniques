@@ -165,6 +165,7 @@
         "assurance-goal-category/explainability/property/completeness",
         "assurance-goal-category/explainability/property/consistency",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/access-to-model-internals",
         "data-requirements/reference-dataset",
         "data-type/any",
@@ -252,7 +253,8 @@
         "layer-wise-relevance-propagation",
         "integrated-gradients",
         "taylor-decomposition",
-        "gradient-saliency"
+        "gradient-saliency",
+        "gradient-weighted-class-activation-mapping"
       ],
       "sample_claims": [
         {
@@ -2369,6 +2371,8 @@
         "assurance-goal-category/explainability/property/efficiency",
         "assurance-goal-category/explainability/uncertainty-analysis/prediction-uncertainty",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/reliability/uncertainty-quantification",
         "data-requirements/no-special-requirements",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -2377,6 +2381,7 @@
         "explanatory-scope/global",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
+        "lifecycle-stage/testing",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -2461,7 +2466,8 @@
         "deep-ensembles",
         "conformal-prediction",
         "out-of-distribution-detector-for-neural-networks",
-        "quantile-regression"
+        "quantile-regression",
+        "temperature-scaling"
       ],
       "sample_claims": [
         {
@@ -4765,7 +4771,12 @@
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/documentation",
-        "assurance-goal-category/general"
+        "assurance-goal-category/general",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/safety"
       ],
       "example_use_cases": [
         {
@@ -4842,7 +4853,9 @@
         "datasheets-for-datasets",
         "model-development-audit-trails",
         "automated-documentation-generation",
-        "internal-review-boards"
+        "internal-review-boards",
+        "mlflow-experiment-tracking",
+        "data-version-control"
       ],
       "sample_claims": [
         {
@@ -7985,6 +7998,7 @@
         "assurance-goal-category/fairness/causal",
         "assurance-goal-category/reliability",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/causal-graph",
         "data-requirements/sensitive-attributes",
         "data-type/tabular",
@@ -7996,6 +8010,7 @@
         "fairness-approach/causal",
         "lifecycle-stage/model-development",
         "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
         "technique-type/metric"
       ],
       "example_use_cases": [
@@ -8015,6 +8030,9 @@
       "limitations": [
         {
           "description": "Requires identifying which causal pathways are 'allowable' and which are not—a subjective decision; analyzing specific paths adds complexity to the causal model and the fairness criterion."
+        },
+        {
+          "description": "Causal graph construction relies on domain expertise and cannot be validated from observational data alone; if the graph incorrectly encodes causal structure or omits relevant edges, the path-specific assessment may certify an unfair model as compliant with no internal mechanism to detect the error, and this uncertainty is rarely surfaced in compliance documentation."
         }
       ],
       "resources": [
@@ -9121,13 +9139,17 @@
         "applicable-models/architecture/neural-networks",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/safety/risk-identification",
         "assurance-goal-category/fairness",
         "data-requirements/access-to-training-data",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "expertise-needed/domain-expertise",
+        "fairness-approach/group",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "lifecycle-stage/system-deployment/system-use-and-monitoring",
@@ -9626,9 +9648,12 @@
         "applicable-models/paradigm/generative",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "evidence-type/fairness-metric",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/labelled-data",
         "data-type/text",
         "evidence-type/quantitative-metric",
@@ -9636,6 +9661,7 @@
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
         "expertise-needed/domain-expertise",
+        "fairness-approach/group",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
         "technique-type/testing",
@@ -10913,15 +10939,14 @@
       "description": "Model watermarking and theft detection techniques protect AI systems from unauthorised replication by embedding detectable signatures in model outputs and identifying suspiciously similar prediction patterns. This includes watermarking schemes that survive knowledge distillation, fingerprinting methods that create unique statistical signatures, and detection methods that identify when a model has been stolen or replicated through model extraction, distillation, or imitation. These techniques enable model owners to prove intellectual property theft and protect proprietary AI systems.",
       "assurance_goals": [
         "Security",
-        "Transparency",
-        "Fairness"
+        "Transparency"
       ],
       "tags": [
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/security",
+        "assurance-goal-category/security/adversarial-robustness",
         "assurance-goal-category/transparency",
-        "assurance-goal-category/fairness",
         "data-type/any",
         "data-requirements/no-special-requirements",
         "lifecycle-stage/model-development",
@@ -10943,10 +10968,6 @@
         {
           "description": "Providing forensic evidence in intellectual property litigation by demonstrating through watermark extraction and statistical fingerprinting that a competitor's fraud detection system was derived from a bank's proprietary model.",
           "goal": "Transparency"
-        },
-        {
-          "description": "Protecting an autonomous vehicle perception model from unauthorised replication, ensuring that safety-critical models undergo proper validation rather than being deployed through model theft, maintaining fair safety standards across the industry.",
-          "goal": "Fairness"
         }
       ],
       "limitations": [
@@ -11025,7 +11046,9 @@
         "jailbreak-resistance-testing",
         "adversarial-training-evaluation",
         "data-poisoning-detection",
-        "model-extraction-defence-testing"
+        "model-extraction-defence-testing",
+        "membership-inference-attack-testing",
+        "differential-privacy"
       ],
       "sample_claims": [
         {
@@ -11888,7 +11911,14 @@
         "evidence-type/qualitative-report",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
-        "expertise-needed/domain-expertise"
+        "expertise-needed/domain-expertise",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/safety/monitoring",
+        "assurance-goal-category/transparency/audit-trail",
+        "assurance-goal-category/transparency/process-transparency",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring"
       ],
       "example_use_cases": [
         {
@@ -11906,6 +11936,10 @@
         {
           "description": "Verifying that an educational content recommendation system optimizes for genuine learning outcomes rather than gaming engagement metrics through strategies like repeatedly presenting easier content that inflates measured progress.",
           "goal": "Reliability"
+        },
+        {
+          "description": "Producing a documented audit trail for a high-risk AI deployment by running reward hacking detection tests and recording which specification loopholes were identified and remediated, enabling auditors and regulators to verify that the system achieves its stated objectives through legitimate means rather than gaming its evaluation criteria.",
+          "goal": "Transparency"
         }
       ],
       "limitations": [
@@ -11979,7 +12013,8 @@
         "chain-of-thought-faithfulness-evaluation",
         "adversarial-training-evaluation",
         "constitutional-ai-evaluation",
-        "epistemic-uncertainty-quantification"
+        "epistemic-uncertainty-quantification",
+        "red-teaming"
       ],
       "sample_claims": [
         {

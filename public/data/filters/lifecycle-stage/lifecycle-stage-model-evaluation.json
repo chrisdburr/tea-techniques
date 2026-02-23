@@ -2,7 +2,7 @@
   "tag": {
     "name": "lifecycle-stage/model-evaluation",
     "slug": "lifecycle-stage-model-evaluation",
-    "count": 40,
+    "count": 42,
     "category": "lifecycle-stage"
   },
   "techniques": [
@@ -1309,6 +1309,131 @@
       ]
     },
     {
+      "slug": "counterfactual-fairness-assessment",
+      "name": "Counterfactual Fairness Assessment",
+      "description": "Counterfactual Fairness Assessment evaluates whether a model's predictions would remain unchanged if an individual's protected attributes (race, gender, age) were different, whilst keeping all other causally legitimate factors constant. The technique requires constructing a causal graph that maps relationships between variables, then using do-calculus or structural causal models to simulate counterfactual scenarios. For example, it asks: 'Would this loan application still be approved if the applicant were a different race, holding constant their actual qualifications and economic circumstances?' This individual-level fairness criterion helps identify when decisions depend improperly on protected characteristics.",
+      "assurance_goals": [
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/causal",
+        "data-requirements/causal-graph",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/causal-analysis",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/causal-inference",
+        "expertise-needed/ml-engineering",
+        "explanatory-scope/local",
+        "fairness-approach/causal",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating a hiring algorithm by testing whether qualified candidates would receive the same evaluation scores if their gender were different, whilst controlling for actual skills, experience, and education, revealing whether gender bias affects recruitment decisions.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Assessing a criminal sentencing model by examining whether defendants with identical criminal histories and case circumstances would receive the same sentence recommendations regardless of their race, identifying potential discriminatory patterns in judicial AI systems.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires explicit specification of causal relationships between variables, which involves subjective assumptions about what constitutes legitimate versus illegitimate causal pathways."
+        },
+        {
+          "description": "May be mathematically impossible to satisfy simultaneously with other fairness criteria (like statistical parity), forcing practitioners to choose between competing fairness definitions."
+        },
+        {
+          "description": "Implementation complexity is high, requiring sophisticated causal inference techniques and structural causal models that are difficult to construct and validate."
+        },
+        {
+          "description": "Depends heavily on the quality and completeness of the causal graph, which may be incorrect or missing important confounding variables."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Counterfactual Fairness",
+          "url": "https://proceedings.neurips.cc/paper/2017/file/a486cd07e4ac3d270571622f4f316ec5-Paper.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Matt J. Kusner",
+            "Joshua Loftus",
+            "Chris Russell",
+            "Ricardo Silva"
+          ],
+          "publication_date": "2017-12-04",
+          "citationKey": "kusnerCounterfactualFairness2017"
+        },
+        {
+          "title": "fairlearn",
+          "url": "https://github.com/fairlearn/fairlearn",
+          "source_type": "software_package",
+          "publication_date": "2018-05-15",
+          "citationKey": "fairlearnFairlearn2018",
+          "abstract": "A Python package to assess and improve fairness of machine learning models."
+        },
+        {
+          "title": "Counterfactual Fairness in Text Classification through Robustness",
+          "url": "http://arxiv.org/abs/1809.10610v2",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sahaj Garg",
+            "Vincent Perot",
+            "Nicole Limtiaco",
+            "Ankur Taly",
+            "Ed H. Chi",
+            "Alex Beutel"
+          ],
+          "publication_date": "2018-09-27",
+          "citationKey": "gargCounterfactualFairnessText2018",
+          "abstract": "In this paper, we study counterfactual fairness in text classification, which asks the question: How would the prediction change if the sensitive attribute referenced in the example were different? Toxicity classifiers demonstrate a counterfactual fairness issue by predicting that \"Some people are gay\" is toxic while \"Some people are straight\" is nontoxic. We offer a metric, counterfactual token fairness (CTF), for measuring this particular form of fairness in text classifiers, and describe its relationship with group fairness. Further, we offer three approaches, blindness, counterfactual augmentation, and counterfactual logit pairing (CLP), for optimizing counterfactual token fairness during training, bridging the robustness and fairness literature. Empirically, we find that blindness and CLP address counterfactual token fairness. The methods do not harm classifier performance, and have varying tradeoffs with group fairness. These approaches, both for measurement and optimization, provide a new path forward for addressing fairness concerns in text classification."
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "sensitivity-analysis-for-fairness",
+        "path-specific-counterfactual-fairness-assessment",
+        "demographic-parity-assessment",
+        "average-odds-difference"
+      ],
+      "sample_claims": [
+        {
+          "text": "The hiring system's candidate evaluations remain consistent under hypothetical changes to applicant demographics when qualifications and experience are held constant",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The loan approval model's creditworthiness assessments are invariant to the applicant's race when economic circumstances and financial history remain unchanged",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The treatment recommendation system produces identical clinical decisions regardless of patient gender when medical history and symptoms are causally equivalent",
+          "domain": "healthcare",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The benefit allocation system's eligibility determinations are unaffected by hypothetical changes to an individual's protected characteristics when their genuine need and circumstances are held constant",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The autonomous system's risk assessments yield the same safety decisions for individuals with different demographic attributes but identical situational factors",
+          "domain": "autonomous systems",
+          "assuranceGoal": "fairness"
+        }
+      ]
+    },
+    {
       "slug": "sensitivity-analysis-for-fairness",
       "name": "Sensitivity Analysis for Fairness",
       "description": "Sensitivity Analysis for Fairness systematically evaluates how model predictions change when sensitive attributes or their proxies are perturbed whilst holding other factors constant. The technique involves creating counterfactual instances by modifying potentially discriminatory features (race, gender, age) or their correlates (zip code, names, education institutions) and measuring the resulting prediction differences. This controlled perturbation approach quantifies the degree to which protected characteristics influence model decisions, helping detect both direct discrimination and indirect bias through proxy variables even when sensitive attributes are not explicitly used as model inputs.",
@@ -2180,16 +2305,23 @@
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/explainability/uncertainty-analysis/sensitivity-testing",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/robustness",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/no-special-requirements",
         "data-type/text",
         "evidence-type/quantitative-metric",
         "expertise-needed/experimental-design",
         "expertise-needed/linguistics",
         "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "explanatory-scope/local",
         "lifecycle-stage/model-development",
         "lifecycle-stage/model-evaluation",
-        "technique-type/experimental"
+        "lifecycle-stage/post-deployment",
+        "technique-type/experimental",
+        "technique-type/testing"
       ],
       "example_use_cases": [
         {
@@ -2259,8 +2391,7 @@
       "related_techniques": [
         "prompt-robustness-testing",
         "red-teaming",
-        "jailbreak-resistance-testing",
-        "occlusion-sensitivity"
+        "jailbreak-resistance-testing"
       ],
       "sample_claims": [
         {
@@ -2626,6 +2757,151 @@
           "text": "The vision system's object recognition depends on semantically meaningful visual concepts aligned with domain expertise",
           "domain": "autonomous systems",
           "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
+      "slug": "average-odds-difference",
+      "name": "Average Odds Difference",
+      "description": "Average Odds Difference measures fairness by calculating the average difference in both false positive rates and true positive rates between different demographic groups. This metric captures how consistently a model performs across groups for both positive and negative predictions. A value of 0 indicates perfect fairness under the equalized odds criterion, while larger absolute values indicate greater disparities in model performance between groups.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/fairness/group/statistical-parity",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/low",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/testing",
+        "technique-type/metric"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating criminal risk assessment tools to ensure equal false positive rates (wrongly flagging low-risk individuals as high-risk) and true positive rates (correctly identifying high-risk individuals) across racial and ethnic groups.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Auditing hiring algorithms to verify that both the rate of correctly identifying qualified candidates and the rate of incorrectly rejecting qualified candidates remain consistent across gender and demographic groups.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Monitoring loan approval systems to ensure reliable performance by checking that both approval rates for creditworthy applicants and rejection rates for non-creditworthy applicants are consistent across protected demographic categories.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Testing medical diagnostic models to validate that diagnostic accuracy (both correctly identifying disease and correctly ruling out disease) remains consistent across patient demographics, ensuring reliable healthcare delivery.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Averaging effect can mask important disparities when false positive and true positive rate differences compensate for each other, potentially hiding significant bias in one direction."
+        },
+        {
+          "description": "Requires access to ground truth labels and sensitive attribute information, which may not be available in all deployment scenarios or may be subject to privacy constraints."
+        },
+        {
+          "description": "Does not account for base rate differences between groups, meaning equal error rates may not translate to equal treatment when group prevalences differ significantly."
+        },
+        {
+          "description": "Focuses solely on prediction accuracy disparities without considering whether the underlying decision-making process or feature selection introduces systematic bias against certain groups."
+        },
+        {
+          "description": "May encourage optimization for fairness metrics at the expense of overall model performance, potentially reducing utility for the primary prediction task."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Equality of Opportunity in Supervised Learning",
+          "url": "https://arxiv.org/abs/1610.02413",
+          "source_type": "technical_paper",
+          "authors": [
+            "Moritz Hardt",
+            "Eric Price",
+            "Nathan Srebro"
+          ],
+          "publication_date": "2016-10-07",
+          "citationKey": "hardtEqualityOpportunitySupervised2016",
+          "abstract": "We propose a criterion for discrimination against a specified sensitive attribute in supervised learning, where the goal is to predict some target based on available features. Assuming data about the predictor, target, and membership in the protected group are available, we show how to optimally adjust any learned predictor so as to remove discrimination according to our definition. Our framework also improves incentives by shifting the cost of poor classification from disadvantaged groups to the decision maker, who can respond by improving the classification accuracy.   In line with other studies, our notion is oblivious: it depends only on the joint statistics of the predictor, the target and the protected attribute, but not on interpretation of individualfeatures. We study the inherent limits of defining and identifying biases based on such oblivious measures, outlining what can and cannot be inferred from different oblivious tests.   We illustrate our notion using a case study of FICO credit scores."
+        },
+        {
+          "title": "FairBalance: How to Achieve Equalized Odds With Data Pre-processing",
+          "url": "https://arxiv.org/abs/2107.08310",
+          "source_type": "technical_paper",
+          "authors": [
+            "Zhe Yu",
+            "Joymallya Chakraborty",
+            "Tim Menzies"
+          ],
+          "publication_date": "2021-07-17",
+          "citationKey": "yuFairBalanceHowAchieve2021",
+          "abstract": "This research seeks to benefit the software engineering society by providing a simple yet effective pre-processing approach to achieve equalized odds fairness in machine learning software. Fairness issues have attracted increasing attention since machine learning software is increasingly used for high-stakes and high-risk decisions. Amongst all the existing fairness notions, this work specifically targets \"equalized odds\" given its advantage in always allowing perfect classifiers. Equalized odds requires that members of every demographic group do not receive disparate mistreatment. Prior works either optimize for an equalized odds related metric during the learning process like a black-box, or manipulate the training data following some intuition. This work studies the root cause of the violation of equalized odds and how to tackle it. We found that equalizing the class distribution in each demographic group with sample weights is a necessary condition for achieving equalized odds without modifying the normal training process. In addition, an important partial condition for equalized odds (zero average odds difference) can be guaranteed when the class distributions are weighted to be not only equal but also balanced (1:1). Based on these analyses, we proposed FairBalance, a pre-processing algorithm which balances the class distribution in each demographic group by assigning calculated weights to the training data. On eight real-world datasets, our empirical results show that, at low computational overhead, the proposed pre-processing algorithm FairBalance can significantly improve equalized odds without much, if any damage to the utility. FairBalance also outperforms existing state-of-the-art approaches in terms of equalized odds. To facilitate reuse, reproduction, and validation, we made our scripts available at https://github.com/hil-se/FairBalance."
+        },
+        {
+          "title": "AIF360: Average Odds Difference Documentation",
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.metrics.average_odds_difference.html",
+          "source_type": "documentation",
+          "authors": [
+            "Aif360 Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "aif360developersAIF360AverageOdds2018"
+        },
+        {
+          "title": "fairlearn",
+          "url": "https://github.com/fairlearn/fairlearn",
+          "source_type": "software_package",
+          "publication_date": "2018-05-15",
+          "citationKey": "fairlearnFairlearn2018",
+          "abstract": "A Python package to assess and improve fairness of machine learning models."
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "demographic-parity-assessment",
+        "equal-opportunity-difference",
+        "attribute-removal-fairness-through-unawareness",
+        "calibration-with-equality-of-opportunity"
+      ],
+      "sample_claims": [
+        {
+          "text": "The criminal risk assessment system maintains equivalent error rates for both false alarms and correct identifications across racial and ethnic groups",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The hiring model's accuracy in both accepting qualified candidates and rejecting unqualified candidates is consistent across all protected demographic categories",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The medical diagnostic system demonstrates balanced performance across patient demographics for both correctly identifying disease presence and correctly ruling out disease absence",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The credit scoring model's true approval rate for creditworthy applicants and false approval rate for non-creditworthy applicants remain equitable across protected groups",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The fraud detection system maintains consistent detection accuracy and false alarm rates across customer segments regardless of demographic characteristics",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
         }
       ]
     },
@@ -4327,8 +4603,12 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/labelled-data",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -4468,7 +4748,10 @@
         "conformal-prediction",
         "jackknife-resampling",
         "chain-of-thought-faithfulness-evaluation",
-        "bootstrapping"
+        "bootstrapping",
+        "monte-carlo-dropout",
+        "deep-ensembles",
+        "empirical-calibration"
       ],
       "sample_claims": [
         {
@@ -4686,16 +4969,21 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/security",
+        "assurance-goal-category/security/adversarial-robustness",
         "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
         "data-type/any",
-        "data-requirements/access-to-training-data",
+        "data-requirements/no-special-requirements",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring",
         "technique-type/testing",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
-        "expertise-needed/software-engineering"
+        "expertise-needed/software-engineering",
+        "expertise-needed/security"
       ],
       "example_use_cases": [
         {
@@ -4780,7 +5068,8 @@
         "data-poisoning-detection",
         "membership-inference-attack-testing",
         "model-watermarking-and-theft-detection",
-        "adversarial-training-evaluation"
+        "adversarial-training-evaluation",
+        "api-usage-pattern-monitoring"
       ],
       "sample_claims": [
         {
@@ -6262,5 +6551,5 @@
       ]
     }
   ],
-  "count": 41
+  "count": 43
 }

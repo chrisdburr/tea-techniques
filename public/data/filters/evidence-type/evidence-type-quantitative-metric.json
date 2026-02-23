@@ -3204,14 +3204,18 @@
         "applicable-models/paradigm/supervised",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/causal",
+        "data-requirements/causal-graph",
         "data-requirements/sensitive-attributes",
         "data-type/any",
+        "evidence-type/causal-analysis",
         "evidence-type/quantitative-metric",
         "expertise-needed/causal-inference",
         "expertise-needed/ml-engineering",
         "explanatory-scope/local",
         "fairness-approach/causal",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -4811,15 +4815,19 @@
         "applicable-models/requirements/black-box",
         "applicable-models/requirements/training-data",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
         "assurance-goal-category/reliability/uncertainty-quantification",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/access-to-training-data",
         "data-type/any",
         "evidence-type/prediction-interval",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
+        "fairness-approach/group",
         "lifecycle-stage/model-development",
         "lifecycle-stage/system-deployment-and-use",
         "technique-type/algorithmic"
@@ -4881,9 +4889,12 @@
       "computational_cost_rating": 5,
       "related_techniques": [
         "bootstrapping",
-        "influence-functions",
+        "conformal-prediction",
         "cross-validation",
-        "conformal-prediction"
+        "epistemic-uncertainty-quantification",
+        "influence-functions",
+        "permutation-tests",
+        "quantile-regression"
       ],
       "sample_claims": [
         {
@@ -5600,10 +5611,13 @@
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/explainability/surrogate-models/global-surrogates",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/access-to-training-data",
         "data-type/any",
         "evidence-type/quantitative-metric",
+        "explanatory-scope/global",
         "expertise-needed/ml-engineering",
         "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
@@ -6322,16 +6336,23 @@
         "assurance-goal-category/explainability/property/fidelity",
         "assurance-goal-category/explainability/uncertainty-analysis/sensitivity-testing",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/robustness",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/no-special-requirements",
         "data-type/text",
         "evidence-type/quantitative-metric",
         "expertise-needed/experimental-design",
         "expertise-needed/linguistics",
         "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "explanatory-scope/local",
         "lifecycle-stage/model-development",
         "lifecycle-stage/model-evaluation",
-        "technique-type/experimental"
+        "lifecycle-stage/post-deployment",
+        "technique-type/experimental",
+        "technique-type/testing"
       ],
       "example_use_cases": [
         {
@@ -6401,8 +6422,7 @@
       "related_techniques": [
         "prompt-robustness-testing",
         "red-teaming",
-        "jailbreak-resistance-testing",
-        "occlusion-sensitivity"
+        "jailbreak-resistance-testing"
       ],
       "sample_claims": [
         {
@@ -7487,12 +7507,17 @@
         "applicable-models/requirements/black-box",
         "applicable-models/requirements/training-data",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group-fairness",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/algorithmic-transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/sensitive-attributes",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/low",
         "fairness-approach/group",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
         "technique-type/algorithmic"
       ],
@@ -7587,7 +7612,8 @@
         "fairness-gan",
         "bayesian-fairness-regularization",
         "sensitivity-analysis-for-fairness",
-        "out-of-domain-detection"
+        "out-of-domain-detection",
+        "reweighing"
       ],
       "sample_claims": [
         {
@@ -8377,14 +8403,18 @@
         "applicable-models/requirements/gray-box",
         "applicable-models/requirements/training-data",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "data-requirements/access-to-model-internals",
         "data-requirements/sensitive-attributes",
         "data-type/any",
+        "evidence-type/fairness-metric",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -8470,7 +8500,10 @@
         "fair-adversarial-networks",
         "fair-transfer-learning",
         "meta-fair-classifier",
-        "multi-accuracy-boosting"
+        "multi-accuracy-boosting",
+        "prejudice-remover-regulariser",
+        "preferential-sampling",
+        "reweighing"
       ],
       "sample_claims": [
         {
@@ -9387,13 +9420,18 @@
         "applicable-models/paradigm/supervised",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/fairness/group/statistical-parity",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "data-requirements/sensitive-attributes",
         "data-type/any",
+        "evidence-type/fairness-metric",
         "evidence-type/quantitative-metric",
         "expertise-needed/low",
         "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/testing",
         "technique-type/metric"
       ],
@@ -9637,9 +9675,13 @@
         "applicable-models/requirements/training-data",
         "applicable-models/requirements/white-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/fairness/group/statistical-parity",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
         "data-requirements/sensitive-attributes",
         "data-type/any",
+        "evidence-type/fairness-metric",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
@@ -9741,7 +9783,8 @@
         "fairness-gan",
         "attribute-removal-fairness-through-unawareness",
         "sensitivity-analysis-for-fairness",
-        "out-of-domain-detection"
+        "prejudice-remover-regulariser",
+        "exponentiated-gradient-reduction"
       ],
       "sample_claims": [
         {
@@ -11354,8 +11397,12 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/labelled-data",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -11495,7 +11542,10 @@
         "conformal-prediction",
         "jackknife-resampling",
         "chain-of-thought-faithfulness-evaluation",
-        "bootstrapping"
+        "bootstrapping",
+        "monte-carlo-dropout",
+        "deep-ensembles",
+        "empirical-calibration"
       ],
       "sample_claims": [
         {
@@ -11713,16 +11763,21 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/security",
+        "assurance-goal-category/security/adversarial-robustness",
         "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
         "data-type/any",
-        "data-requirements/access-to-training-data",
+        "data-requirements/no-special-requirements",
         "lifecycle-stage/model-evaluation",
         "lifecycle-stage/post-deployment",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring",
         "technique-type/testing",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
-        "expertise-needed/software-engineering"
+        "expertise-needed/software-engineering",
+        "expertise-needed/security"
       ],
       "example_use_cases": [
         {
@@ -11807,7 +11862,8 @@
         "data-poisoning-detection",
         "membership-inference-attack-testing",
         "model-watermarking-and-theft-detection",
-        "adversarial-training-evaluation"
+        "adversarial-training-evaluation",
+        "api-usage-pattern-monitoring"
       ],
       "sample_claims": [
         {

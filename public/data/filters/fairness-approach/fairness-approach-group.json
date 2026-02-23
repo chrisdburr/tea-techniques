@@ -2,7 +2,7 @@
   "tag": {
     "name": "fairness-approach/group",
     "slug": "fairness-approach-group",
-    "count": 42,
+    "count": 43,
     "category": "fairness-approach"
   },
   "techniques": [
@@ -772,9 +772,12 @@
         "applicable-models/paradigm/supervised",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/fairness/group/statistical-parity",
         "data-requirements/sensitive-attributes",
         "data-type/any",
         "evidence-type/fairness-metric",
+        "expertise-needed/domain-expertise",
         "expertise-needed/statistics",
         "fairness-approach/group",
         "lifecycle-stage/model-development",
@@ -2245,6 +2248,130 @@
       ]
     },
     {
+      "slug": "jackknife-resampling",
+      "name": "Jackknife Resampling",
+      "description": "Jackknife resampling (also called leave-one-out resampling) assesses model stability and uncertainty by systematically removing one data point at a time and retraining the model on the remaining data. Unlike bootstrapping which samples with replacement, jackknife creates n different models by excluding each of the n data points once. This systematic approach reveals how individual points influence results, provides robust estimates of prediction variance, and identifies unusually influential observations that may be outliers or leverage points affecting model reliability.",
+      "assurance_goals": [
+        "Reliability",
+        "Transparency",
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/prediction-interval",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating how removing individual countries from a global climate model affects predictions, identifying which regions have outsized influence and providing robust uncertainty estimates for climate projections used in policy decisions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Providing transparent uncertainty estimates in medical risk prediction by showing how individual patient records influence model predictions, enabling clinicians to understand prediction stability and confidence intervals for treatment decisions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Ensuring fair model evaluation in hiring algorithms by systematically testing how removing candidates from different demographic groups affects model performance, revealing whether certain populations disproportionately influence the model's behaviour.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Extremely computationally intensive for large datasets, requiring training of n separate models for n data points, making it impractical for datasets with thousands or millions of observations."
+        },
+        {
+          "description": "May underestimate uncertainty compared to bootstrapping or other resampling methods, as it provides only n different samples rather than a broader exploration of the data distribution."
+        },
+        {
+          "description": "Assumes that removing single data points provides meaningful insights into model stability, which may not hold when multiple correlated observations drive model behaviour."
+        },
+        {
+          "description": "Can be sensitive to the choice of performance metric used for evaluation, as different metrics may show different patterns of sensitivity to individual data points."
+        },
+        {
+          "description": "Provides limited insight into model behaviour on truly novel data, as each jackknife sample is only minimally different from the full training set."
+        }
+      ],
+      "resources": [
+        {
+          "title": "scikit-learn model_selection.LeaveOneOut",
+          "url": "https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.LeaveOneOut.html",
+          "source_type": "documentation",
+          "authors": [
+            "Scikit-learn Developers"
+          ],
+          "publication_date": "2007",
+          "citationKey": "scikit-learndevelopersScikitlearnModel_selectionLeaveOneOut2007"
+        },
+        {
+          "title": "Cross-validation: evaluating estimator performance",
+          "url": "https://scikit-learn.org/stable/modules/cross_validation.html",
+          "source_type": "documentation",
+          "authors": [
+            "Scikit-learn Developers"
+          ],
+          "publication_date": "2007",
+          "citationKey": "scikit-learndevelopersCrossvalidationEvaluatingEstimator2007"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 5,
+      "related_techniques": [
+        "bootstrapping",
+        "conformal-prediction",
+        "cross-validation",
+        "epistemic-uncertainty-quantification",
+        "influence-functions",
+        "permutation-tests",
+        "quantile-regression"
+      ],
+      "sample_claims": [
+        {
+          "text": "The environmental model's uncertainty estimates do not depend on assumptions about sampling distribution or resampling variability",
+          "domain": "environmental",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The clinical prediction model's performance stability is quantified by systematically examining the influence of each individual patient record",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The credit risk model's predictions are traceable to specific historical loan records that most strongly influence assessment outcomes",
+          "domain": "finance",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The hiring model's performance is not disproportionately dependent on individual candidates from particular demographic groups",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The public benefit allocation system identifies individual case records that exert unusual influence on eligibility determinations",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        }
+      ]
+    },
+    {
       "slug": "area-under-precision-recall-curve",
       "name": "Area Under Precision-Recall Curve",
       "description": "Area Under Precision-Recall Curve (AUPRC) measures model performance by plotting precision (the proportion of positive predictions that are correct) against recall (the proportion of actual positives that are correctly identified) at various classification thresholds, then calculating the area under the resulting curve. Unlike accuracy or AUC-ROC, AUPRC is particularly valuable for imbalanced datasets where the minority class is of primary interest---a perfect score is 1.0, whilst random performance equals the positive class proportion. By focusing on the precision-recall trade-off, it provides a more informative assessment than overall accuracy for scenarios where false positives and false negatives have different costs, especially when positive examples are rare.",
@@ -3620,12 +3747,17 @@
         "applicable-models/requirements/black-box",
         "applicable-models/requirements/training-data",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group-fairness",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/algorithmic-transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "data-requirements/sensitive-attributes",
         "data-type/any",
         "evidence-type/quantitative-metric",
         "expertise-needed/low",
         "fairness-approach/group",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/deployment",
         "lifecycle-stage/model-development",
         "technique-type/algorithmic"
       ],
@@ -3720,7 +3852,8 @@
         "fairness-gan",
         "bayesian-fairness-regularization",
         "sensitivity-analysis-for-fairness",
-        "out-of-domain-detection"
+        "out-of-domain-detection",
+        "reweighing"
       ],
       "sample_claims": [
         {
@@ -4510,14 +4643,18 @@
         "applicable-models/requirements/gray-box",
         "applicable-models/requirements/training-data",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "data-requirements/access-to-model-internals",
         "data-requirements/sensitive-attributes",
         "data-type/any",
+        "evidence-type/fairness-metric",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
         "technique-type/algorithmic"
       ],
       "example_use_cases": [
@@ -4603,7 +4740,10 @@
         "fair-adversarial-networks",
         "fair-transfer-learning",
         "meta-fair-classifier",
-        "multi-accuracy-boosting"
+        "multi-accuracy-boosting",
+        "prejudice-remover-regulariser",
+        "preferential-sampling",
+        "reweighing"
       ],
       "sample_claims": [
         {
@@ -5520,13 +5660,18 @@
         "applicable-models/paradigm/supervised",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/fairness/group/statistical-parity",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "data-requirements/sensitive-attributes",
         "data-type/any",
+        "evidence-type/fairness-metric",
         "evidence-type/quantitative-metric",
         "expertise-needed/low",
         "fairness-approach/group",
         "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
         "lifecycle-stage/testing",
         "technique-type/metric"
       ],
@@ -5663,9 +5808,13 @@
         "applicable-models/requirements/training-data",
         "applicable-models/requirements/white-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/fairness/group/statistical-parity",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
         "data-requirements/sensitive-attributes",
         "data-type/any",
+        "evidence-type/fairness-metric",
         "evidence-type/quantitative-metric",
         "expertise-needed/ml-engineering",
         "expertise-needed/statistics",
@@ -5767,7 +5916,8 @@
         "fairness-gan",
         "attribute-removal-fairness-through-unawareness",
         "sensitivity-analysis-for-fairness",
-        "out-of-domain-detection"
+        "prejudice-remover-regulariser",
+        "exponentiated-gradient-reduction"
       ],
       "sample_claims": [
         {
@@ -6279,5 +6429,5 @@
       ]
     }
   ],
-  "count": 42
+  "count": 43
 }

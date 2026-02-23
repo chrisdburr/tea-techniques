@@ -598,20 +598,24 @@
       "applicable-models/requirements/black-box",
       "applicable-models/requirements/training-data",
       "assurance-goal-category/fairness",
+      "assurance-goal-category/fairness/group",
       "assurance-goal-category/reliability",
+      "assurance-goal-category/reliability/robustness",
       "assurance-goal-category/reliability/uncertainty-quantification",
       "assurance-goal-category/transparency",
+      "assurance-goal-category/transparency/process-transparency",
       "data-requirements/access-to-training-data",
       "data-type/any",
       "evidence-type/prediction-interval",
       "evidence-type/quantitative-metric",
       "expertise-needed/ml-engineering",
       "expertise-needed/statistics",
+      "fairness-approach/group",
       "lifecycle-stage/model-development",
       "lifecycle-stage/system-deployment-and-use",
       "technique-type/algorithmic"
     ],
-    "searchText": "jackknife resampling jackknife resampling (also called leave-one-out resampling) assesses model stability and uncertainty by systematically removing one data point at a time and retraining the model on the remaining data. unlike bootstrapping which samples with replacement, jackknife creates n different models by excluding each of the n data points once. this systematic approach reveals how individual points influence results, provides robust estimates of prediction variance, and identifies unusually influential observations that may be outliers or leverage points affecting model reliability. reliability transparency fairness applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/training-data assurance-goal-category/fairness assurance-goal-category/reliability assurance-goal-category/reliability/uncertainty-quantification assurance-goal-category/transparency data-requirements/access-to-training-data data-type/any evidence-type/prediction-interval evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic the environmental model's uncertainty estimates do not depend on assumptions about sampling distribution or resampling variability the clinical prediction model's performance stability is quantified by systematically examining the influence of each individual patient record the credit risk model's predictions are traceable to specific historical loan records that most strongly influence assessment outcomes the hiring model's performance is not disproportionately dependent on individual candidates from particular demographic groups the public benefit allocation system identifies individual case records that exert unusual influence on eligibility determinations"
+    "searchText": "jackknife resampling jackknife resampling (also called leave-one-out resampling) assesses model stability and uncertainty by systematically removing one data point at a time and retraining the model on the remaining data. unlike bootstrapping which samples with replacement, jackknife creates n different models by excluding each of the n data points once. this systematic approach reveals how individual points influence results, provides robust estimates of prediction variance, and identifies unusually influential observations that may be outliers or leverage points affecting model reliability. reliability transparency fairness applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/training-data assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/reliability assurance-goal-category/reliability/robustness assurance-goal-category/reliability/uncertainty-quantification assurance-goal-category/transparency assurance-goal-category/transparency/process-transparency data-requirements/access-to-training-data data-type/any evidence-type/prediction-interval evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/model-development lifecycle-stage/system-deployment-and-use technique-type/algorithmic the environmental model's uncertainty estimates do not depend on assumptions about sampling distribution or resampling variability the clinical prediction model's performance stability is quantified by systematically examining the influence of each individual patient record the credit risk model's predictions are traceable to specific historical loan records that most strongly influence assessment outcomes the hiring model's performance is not disproportionately dependent on individual candidates from particular demographic groups the public benefit allocation system identifies individual case records that exert unusual influence on eligibility determinations"
   },
   {
     "slug": "cross-validation",
@@ -1203,16 +1207,21 @@
       "applicable-models/requirements/black-box",
       "applicable-models/requirements/training-data",
       "assurance-goal-category/fairness",
+      "assurance-goal-category/fairness/group-fairness",
       "assurance-goal-category/transparency",
+      "assurance-goal-category/transparency/algorithmic-transparency",
+      "assurance-goal-category/transparency/process-transparency",
       "data-requirements/sensitive-attributes",
       "data-type/any",
       "evidence-type/quantitative-metric",
       "expertise-needed/low",
       "fairness-approach/group",
+      "lifecycle-stage/data-collection",
+      "lifecycle-stage/deployment",
       "lifecycle-stage/model-development",
       "technique-type/algorithmic"
     ],
-    "searchText": "attribute removal (fairness through unawareness) attribute removal (fairness through unawareness) ensures fairness by completely excluding protected attributes such as race, gender, or age from the model's input features. while this approach prevents direct discrimination, it may not eliminate bias if other features are correlated with protected attributes (proxy discrimination). this technique represents the most basic fairness intervention but often needs to be combined with other approaches to address indirect bias through seemingly neutral features. fairness transparency applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/training-data assurance-goal-category/fairness assurance-goal-category/transparency data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric expertise-needed/low fairness-approach/group lifecycle-stage/model-development technique-type/algorithmic the model makes decisions without direct access to protected demographic attributes such as race, gender, or age the lending system excludes ethnicity and gender information from all decision-making processes to prevent explicit discrimination in credit approvals the recruitment algorithm documents which protected attributes have been excluded from candidate evaluation to ensure regulatory compliance the diagnostic system bases treatment recommendations solely on clinical indicators without incorporating patient race or ethnicity all decision-making processes are auditable to verify that legally protected characteristics are not used as input features"
+    "searchText": "attribute removal (fairness through unawareness) attribute removal (fairness through unawareness) ensures fairness by completely excluding protected attributes such as race, gender, or age from the model's input features. while this approach prevents direct discrimination, it may not eliminate bias if other features are correlated with protected attributes (proxy discrimination). this technique represents the most basic fairness intervention but often needs to be combined with other approaches to address indirect bias through seemingly neutral features. fairness transparency applicable-models/architecture/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/black-box applicable-models/requirements/training-data assurance-goal-category/fairness assurance-goal-category/fairness/group-fairness assurance-goal-category/transparency assurance-goal-category/transparency/algorithmic-transparency assurance-goal-category/transparency/process-transparency data-requirements/sensitive-attributes data-type/any evidence-type/quantitative-metric expertise-needed/low fairness-approach/group lifecycle-stage/data-collection lifecycle-stage/deployment lifecycle-stage/model-development technique-type/algorithmic the model makes decisions without direct access to protected demographic attributes such as race, gender, or age the lending system excludes ethnicity and gender information from all decision-making processes to prevent explicit discrimination in credit approvals the recruitment algorithm documents which protected attributes have been excluded from candidate evaluation to ensure regulatory compliance the diagnostic system bases treatment recommendations solely on clinical indicators without incorporating patient race or ethnicity all decision-making processes are auditable to verify that legally protected characteristics are not used as input features"
   },
   {
     "slug": "fair-adversarial-networks",
@@ -1847,8 +1856,12 @@
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box",
       "assurance-goal-category/transparency",
+      "assurance-goal-category/transparency/process-transparency",
       "assurance-goal-category/reliability",
+      "assurance-goal-category/reliability/uncertainty-quantification",
+      "assurance-goal-category/reliability/model-behavior-understanding",
       "assurance-goal-category/safety",
+      "assurance-goal-category/safety/risk-identification",
       "data-requirements/labelled-data",
       "data-type/any",
       "evidence-type/quantitative-metric",
@@ -1862,7 +1875,7 @@
       "technique-type/algorithmic",
       "technique-type/testing"
     ],
-    "searchText": "epistemic uncertainty quantification epistemic uncertainty quantification systematically measures model uncertainty about what it knows, partially knows, and doesn't know across different domains and topics. this technique uses probing datasets, confidence calibration analysis, and consistency testing to quantify epistemic uncertainty (uncertainty due to lack of knowledge) as distinct from aleatoric uncertainty (inherent data uncertainty). uncertainty quantification enables appropriate deployment scoping, communicating model limitations, and identifying knowledge gaps requiring additional training or human oversight. transparency reliability safety applicable-models/architecture/model-agnostic applicable-models/requirements/black-box assurance-goal-category/transparency assurance-goal-category/reliability assurance-goal-category/safety data-requirements/labelled-data data-type/any evidence-type/quantitative-metric evidence-type/documentation evidence-type/visualisation expertise-needed/ml-engineering expertise-needed/domain-expertise expertise-needed/statistics lifecycle-stage/model-evaluation lifecycle-stage/post-deployment technique-type/algorithmic technique-type/testing the diagnostic system's uncertainty estimates distinguish between lack of training data and inherent clinical variability the credit assessment model identifies when applicant profiles fall outside its established knowledge boundaries the autonomous vehicle's perception system detects when environmental conditions exceed its validated knowledge envelope the policy analysis tool communicates gaps in its domain knowledge separately from prediction variance the flood forecasting model's uncertainty estimates reflect genuine epistemic gaps"
+    "searchText": "epistemic uncertainty quantification epistemic uncertainty quantification systematically measures model uncertainty about what it knows, partially knows, and doesn't know across different domains and topics. this technique uses probing datasets, confidence calibration analysis, and consistency testing to quantify epistemic uncertainty (uncertainty due to lack of knowledge) as distinct from aleatoric uncertainty (inherent data uncertainty). uncertainty quantification enables appropriate deployment scoping, communicating model limitations, and identifying knowledge gaps requiring additional training or human oversight. transparency reliability safety applicable-models/architecture/model-agnostic applicable-models/requirements/black-box assurance-goal-category/transparency assurance-goal-category/transparency/process-transparency assurance-goal-category/reliability assurance-goal-category/reliability/uncertainty-quantification assurance-goal-category/reliability/model-behavior-understanding assurance-goal-category/safety assurance-goal-category/safety/risk-identification data-requirements/labelled-data data-type/any evidence-type/quantitative-metric evidence-type/documentation evidence-type/visualisation expertise-needed/ml-engineering expertise-needed/domain-expertise expertise-needed/statistics lifecycle-stage/model-evaluation lifecycle-stage/post-deployment technique-type/algorithmic technique-type/testing the diagnostic system's uncertainty estimates distinguish between lack of training data and inherent clinical variability the credit assessment model identifies when applicant profiles fall outside its established knowledge boundaries the autonomous vehicle's perception system detects when environmental conditions exceed its validated knowledge envelope the policy analysis tool communicates gaps in its domain knowledge separately from prediction variance the flood forecasting model's uncertainty estimates reflect genuine epistemic gaps"
   },
   {
     "slug": "machine-unlearning",
@@ -1910,18 +1923,23 @@
       "applicable-models/architecture/model-agnostic",
       "applicable-models/requirements/black-box",
       "assurance-goal-category/security",
+      "assurance-goal-category/security/adversarial-robustness",
       "assurance-goal-category/privacy",
+      "assurance-goal-category/privacy/formal-guarantee",
       "assurance-goal-category/transparency",
+      "assurance-goal-category/transparency/audit-trail",
       "data-type/any",
-      "data-requirements/access-to-training-data",
+      "data-requirements/no-special-requirements",
       "lifecycle-stage/model-evaluation",
       "lifecycle-stage/post-deployment",
+      "lifecycle-stage/system-deployment/system-use-and-monitoring",
       "technique-type/testing",
       "evidence-type/quantitative-metric",
       "expertise-needed/ml-engineering",
-      "expertise-needed/software-engineering"
+      "expertise-needed/software-engineering",
+      "expertise-needed/security"
     ],
-    "searchText": "model extraction defence testing model extraction defence testing evaluates protections against attackers who attempt to steal model functionality by querying it and training surrogate models. this technique assesses defences like query limiting, output perturbation, watermarking, and fingerprinting by simulating extraction attacks and measuring how much model functionality can be replicated. testing evaluates both the effectiveness of defences in preventing extraction and their impact on legitimate use cases, ensuring security measures don't excessively degrade user experience. security privacy transparency applicable-models/architecture/model-agnostic applicable-models/requirements/black-box assurance-goal-category/security assurance-goal-category/privacy assurance-goal-category/transparency data-type/any data-requirements/access-to-training-data lifecycle-stage/model-evaluation lifecycle-stage/post-deployment technique-type/testing evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/software-engineering the proprietary fraud detection api withstands systematic querying attempts designed to replicate its decision boundaries without degrading service for legitimate users the medical diagnosis system's output perturbations prevent extraction of patient privacy patterns embedded in the model whilst maintaining clinical utility the model service distinguishes between legitimate high-volume use and malicious extraction attempts through behavioral analysis the deployed model provides forensic evidence when unauthorized replication attempts are detected through fingerprinting and watermarking mechanisms the autonomous vehicle perception api maintains protection against competitors extracting routing optimization logic through probe queries across varied traffic scenarios"
+    "searchText": "model extraction defence testing model extraction defence testing evaluates protections against attackers who attempt to steal model functionality by querying it and training surrogate models. this technique assesses defences like query limiting, output perturbation, watermarking, and fingerprinting by simulating extraction attacks and measuring how much model functionality can be replicated. testing evaluates both the effectiveness of defences in preventing extraction and their impact on legitimate use cases, ensuring security measures don't excessively degrade user experience. security privacy transparency applicable-models/architecture/model-agnostic applicable-models/requirements/black-box assurance-goal-category/security assurance-goal-category/security/adversarial-robustness assurance-goal-category/privacy assurance-goal-category/privacy/formal-guarantee assurance-goal-category/transparency assurance-goal-category/transparency/audit-trail data-type/any data-requirements/no-special-requirements lifecycle-stage/model-evaluation lifecycle-stage/post-deployment lifecycle-stage/system-deployment/system-use-and-monitoring technique-type/testing evidence-type/quantitative-metric expertise-needed/ml-engineering expertise-needed/software-engineering expertise-needed/security the proprietary fraud detection api withstands systematic querying attempts designed to replicate its decision boundaries without degrading service for legitimate users the medical diagnosis system's output perturbations prevent extraction of patient privacy patterns embedded in the model whilst maintaining clinical utility the model service distinguishes between legitimate high-volume use and malicious extraction attempts through behavioral analysis the deployed model provides forensic evidence when unauthorized replication attempts are detected through fingerprinting and watermarking mechanisms the autonomous vehicle perception api maintains protection against competitors extracting routing optimization logic through probe queries across varied traffic scenarios"
   },
   {
     "slug": "membership-inference-attack-testing",

@@ -2,10 +2,156 @@
   "tag": {
     "name": "expertise-needed/domain-expertise",
     "slug": "expertise-needed-domain-expertise",
-    "count": 30,
+    "count": 31,
     "category": "expertise-needed"
   },
   "techniques": [
+    {
+      "slug": "demographic-parity-assessment",
+      "name": "Demographic Parity Assessment",
+      "description": "Demographic Parity Assessment evaluates whether a model produces equal positive prediction rates across different demographic groups, regardless of underlying differences in qualifications or base rates. It quantifies fairness using metrics like Statistical Parity Difference (the absolute difference in positive outcome rates between groups) or Disparate Impact ratio (the ratio of positive rates). Unlike techniques that modify data or models, this is purely a measurement approach that highlights when protected groups receive favourable outcomes at different rates, helping organisations identify and document potential discrimination.",
+      "assurance_goals": [
+        "Fairness"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/fairness/group/statistical-parity",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating credit approval algorithms by calculating that loan approval rates for different racial groups must be within 20% of each other (0.8 disparate impact ratio), ensuring compliance with anti-discrimination regulations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Monitoring hiring platforms by measuring that job recommendation rates for male vs female candidates remain statistically equivalent (Statistical Parity Difference < 0.05), preventing systemic gender bias in career opportunities.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Auditing healthcare triage systems to verify that urgent care assignment rates are equal across ethnic groups, ensuring that automated medical prioritisation doesn't disadvantage minority patients.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Purely observational - identifies discrimination but doesn't provide solutions for remediation or bias mitigation."
+        },
+        {
+          "description": "May penalise models for legitimate differences in base rates between groups, potentially forcing artificial equality where none should exist."
+        },
+        {
+          "description": "Can conflict with individual fairness principles, where similarly qualified individuals might receive different treatment to achieve group parity."
+        },
+        {
+          "description": "Doesn't account for quality of outcomes or consider whether equal rates are actually desirable given different group needs or preferences."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Fairness Through Awareness",
+          "url": "https://arxiv.org/abs/1104.3913",
+          "source_type": "technical_paper",
+          "authors": [
+            "Cynthia Dwork",
+            "Moritz Hardt",
+            "Toniann Pitassi",
+            "Omer Reingold",
+            "Rich Zemel"
+          ],
+          "publication_date": "2011-04-20",
+          "citationKey": "dworkFairnessAwareness2011",
+          "abstract": "We study fairness in classification, where individuals are classified, e.g., admitted to a university, and the goal is to prevent discrimination against individuals based on their membership in some group, while maintaining utility for the classifier (the university). The main conceptual contribution of this paper is a framework for fair classification comprising (1) a (hypothetical) task-specific metric for determining the degree to which individuals are similar with respect to the classification task at hand; (2) an algorithm for maximizing utility subject to the fairness constraint, that similar individuals are treated similarly. We also present an adaptation of our approach to achieve the complementary goal of \"fair affirmative action,\" which guarantees statistical parity (i.e., the demographics of the set of individuals receiving any classification are the same as the demographics of the underlying population), while treating similar individuals as similarly as possible. Finally, we discuss the relationship of fairness to privacy: when fairness implies privacy, and how tools developed in the context of differential privacy may be applied to fairness."
+        },
+        {
+          "title": "AIF360",
+          "url": "https://github.com/Trusted-AI/AIF360",
+          "source_type": "software_package",
+          "publication_date": "2018-08-22",
+          "citationKey": "trusted-aiAIF3602018",
+          "abstract": "A comprehensive set of fairness metrics for datasets and machine learning models, explanations for these metrics, and algorithms to mitigate bias in datasets and models."
+        },
+        {
+          "title": "Fairlearn - Demographic Parity",
+          "url": "https://fairlearn.org/main/user_guide/fairness_in_machine_learning.html",
+          "source_type": "documentation",
+          "authors": [
+            "Fairlearn Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "fairlearndevelopersFairlearnDemographicParity2018"
+        },
+        {
+          "title": "A Data-Centric Approach to Detecting and Mitigating Demographic Bias in Pediatric Mental Health Text: A Case Study in Anxiety Detection",
+          "url": "https://www.semanticscholar.org/paper/ce96e451a2685485c05f06fb0d991e29a9c43dae",
+          "source_type": "technical_paper",
+          "authors": [
+            "Julia Ive",
+            "Paulina Bondaronek",
+            "Vishal Yadav",
+            "D. Santel",
+            "Tracy Glauser",
+            "Tina Cheng",
+            "Jeffrey R. Strawn",
+            "G. Agasthya",
+            "Jordan Tschida",
+            "Sanghyun Choo",
+            "Mayanka Chandrashekar",
+            "Anuj J. Kapadia",
+            "J. Pestian"
+          ],
+          "publication_date": "2024",
+          "citationKey": "iveDataCentricApproachDetecting2024",
+          "abstract": "Introduction: Healthcare AI models often inherit biases from their training data. While efforts have primarily targeted bias in structured data, mental health heavily depends on unstructured data. This study aims to detect and mitigate linguistic differences related to non-biological differences in the training data of AI models designed to assist in pediatric mental health screening. Our objectives are: (1) to assess the presence of bias by evaluating outcome parity across sex subgroups, (2) to identify bias sources through textual distribution analysis, and (3) to develop a de-biasing method for mental health text data. Methods: We examined classification parity across demographic groups and assessed how gendered language influences model predictions. A data-centric de-biasing method was applied, focusing on neutralizing biased terms while retaining salient clinical information. This methodology was tested on a model for automatic anxiety detection in pediatric patients. Results: Our findings revealed a systematic under-diagnosis of female adolescent patients, with a 4% lower accuracy and a 9% higher False Negative Rate (FNR) compared to male patients, likely due to disparities in information density and linguistic differences in patient notes. Notes for male patients were on average 500 words longer, and linguistic similarity metrics indicated distinct word distributions between genders. Implementing our de-biasing approach reduced diagnostic bias by up to 27%, demonstrating its effectiveness in enhancing equity across demographic groups. Discussion: We developed a data-centric de-biasing framework to address gender-based content disparities within clinical text. By neutralizing biased language and enhancing focus on clinically essential information, our approach demonstrates an effective strategy for mitigating bias in AI healthcare models trained on text."
+        }
+      ],
+      "complexity_rating": 1,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "equal-opportunity-difference",
+        "average-odds-difference",
+        "sensitivity-analysis-for-fairness",
+        "counterfactual-fairness-assessment"
+      ],
+      "sample_claims": [
+        {
+          "text": "The recruitment system's job offer rates are statistically equivalent across gender groups",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The automated lending platform produces approval decisions at equal rates for all ethnic demographics",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The medical referral system assigns specialist appointments at consistent rates across patient age groups",
+          "domain": "healthcare",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The benefits allocation system provides positive outcomes at equal rates across protected demographic categories",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The admissions algorithm produces acceptance decisions at statistically indistinguishable rates for applicants from different socioeconomic backgrounds",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        }
+      ]
+    },
     {
       "slug": "sensitivity-analysis-for-fairness",
       "name": "Sensitivity Analysis for Fairness",
@@ -2887,8 +3033,12 @@
         "applicable-models/architecture/model-agnostic",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/reliability/model-behavior-understanding",
         "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
         "data-requirements/labelled-data",
         "data-type/any",
         "evidence-type/quantitative-metric",
@@ -3028,7 +3178,10 @@
         "conformal-prediction",
         "jackknife-resampling",
         "chain-of-thought-faithfulness-evaluation",
-        "bootstrapping"
+        "bootstrapping",
+        "monte-carlo-dropout",
+        "deep-ensembles",
+        "empirical-calibration"
       ],
       "sample_claims": [
         {
@@ -4647,5 +4800,5 @@
       ]
     }
   ],
-  "count": 30
+  "count": 31
 }

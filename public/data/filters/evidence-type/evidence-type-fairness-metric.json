@@ -2,7 +2,7 @@
   "tag": {
     "name": "evidence-type/fairness-metric",
     "slug": "evidence-type-fairness-metric",
-    "count": 16,
+    "count": 19,
     "category": "evidence-type"
   },
   "techniques": [
@@ -18,9 +18,12 @@
         "applicable-models/paradigm/supervised",
         "applicable-models/requirements/black-box",
         "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/fairness/group/statistical-parity",
         "data-requirements/sensitive-attributes",
         "data-type/any",
         "evidence-type/fairness-metric",
+        "expertise-needed/domain-expertise",
         "expertise-needed/statistics",
         "fairness-approach/group",
         "lifecycle-stage/model-development",
@@ -1193,6 +1196,151 @@
       ]
     },
     {
+      "slug": "adaptive-sensitive-reweighting",
+      "name": "Adaptive Sensitive Reweighting",
+      "description": "Adaptive Sensitive Reweighting dynamically adjusts the importance of training examples during model training based on real-time performance across different demographic groups. Unlike traditional static reweighting that fixes weights at the start, this technique continuously monitors fairness metrics and automatically increases the weight of examples from underperforming groups whilst decreasing weights for overrepresented groups. The adaptive mechanism prevents models from perpetuating historical biases by ensuring balanced learning across all demographics throughout the training process.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gray-box",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "data-requirements/access-to-model-internals",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/training",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Training speech recognition systems that adapt weights during training to ensure consistent accuracy across different accents, dialects, and linguistic backgrounds, preventing models from favouring dominant accent groups in the training data.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Developing hiring algorithms that dynamically adjust training example weights to maintain consistent evaluation performance across demographic groups, ensuring the model doesn't learn to favour candidates from overrepresented backgrounds.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Building medical diagnostic models that adaptively reweight patient examples during training to ensure reliable performance across different age groups, ethnicities, and socioeconomic backgrounds, preventing healthcare disparities.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Training instability can occur when adaptive weight adjustments cause oscillations between demographic groups, potentially preventing convergence if reweighting parameters are not carefully tuned."
+        },
+        {
+          "description": "Computational overhead increases significantly due to continuous monitoring of fairness metrics across groups during training, requiring additional memory and processing time."
+        },
+        {
+          "description": "Risk of overfitting to specific demographic subgroups if the adaptation mechanism becomes too aggressive in correcting for observed performance disparities during training."
+        },
+        {
+          "description": "Requires careful hyperparameter tuning for adaptation rates and fairness thresholds, making the technique sensitive to configuration choices that may not generalise across different datasets."
+        },
+        {
+          "description": "May inadvertently harm overall model performance if the reweighting process prioritises fairness at the expense of learning important patterns that benefit all groups."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Adaptive Sensitive Reweighting to Mitigate Bias in Fairness-aware Classification",
+          "url": "https://dl.acm.org/doi/10.1145/3178876.3186133",
+          "source_type": "technical_paper",
+          "authors": [
+            "Emmanouil Krasanakis",
+            "Eleftherios Spyromitros Xioufis",
+            "S. Papadopoulos",
+            "Y. Kompatsiaris"
+          ],
+          "publication_date": "2018",
+          "citationKey": "krasanakisAdaptiveSensitiveReweighting2018"
+        },
+        {
+          "title": "AIF360",
+          "url": "https://github.com/Trusted-AI/AIF360",
+          "source_type": "software_package",
+          "publication_date": "2018-08-22",
+          "citationKey": "trusted-aiAIF3602018",
+          "abstract": "A comprehensive set of fairness metrics for datasets and machine learning models, explanations for these metrics, and algorithms to mitigate bias in datasets and models."
+        },
+        {
+          "title": "fairlearn",
+          "url": "https://github.com/fairlearn/fairlearn",
+          "source_type": "software_package",
+          "publication_date": "2018-05-15",
+          "citationKey": "fairlearnFairlearn2018",
+          "abstract": "A Python package to assess and improve fairness of machine learning models."
+        },
+        {
+          "title": "Causal Fairness-Guided Dataset Reweighting using Neural Networks",
+          "url": "https://arxiv.org/abs/2311.10512",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xuan Zhao",
+            "Klaus Broelemann",
+            "Salvatore Ruggieri",
+            "Gjergji Kasneci"
+          ],
+          "publication_date": "2023-11-17",
+          "citationKey": "zhaoCausalFairnessGuidedDataset2023",
+          "abstract": "The importance of achieving fairness in machine learning models cannot be overstated. Recent research has pointed out that fairness should be examined from a causal perspective, and several fairness notions based on the on Pearl's causal framework have been proposed. In this paper, we construct a reweighting scheme of datasets to address causal fairness. Our approach aims at mitigating bias by considering the causal relationships among variables and incorporating them into the reweighting process. The proposed method adopts two neural networks, whose structures are intentionally used to reflect the structures of a causal graph and of an interventional graph. The two neural networks can approximate the causal model of the data, and the causal model of interventions. Furthermore, reweighting guided by a discriminator is applied to achieve various fairness notions. Experiments on real-world datasets show that our method can achieve causal fairness on the data while remaining close to the original data for downstream tasks."
+        }
+      ],
+      "complexity_rating": 4,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "exponentiated-gradient-reduction",
+        "fair-adversarial-networks",
+        "fair-transfer-learning",
+        "meta-fair-classifier",
+        "multi-accuracy-boosting",
+        "prejudice-remover-regulariser",
+        "preferential-sampling",
+        "reweighing"
+      ],
+      "sample_claims": [
+        {
+          "text": "The model maintains equitable performance across demographic groups throughout the entire training process",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The hiring system's candidate evaluation accuracy is balanced across gender and ethnicity groups despite historical imbalances in recruitment data",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The speech recognition system achieves consistent accuracy across speakers with different accents and linguistic backgrounds",
+          "domain": "autonomous systems",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The diagnostic model's performance remains stable across patient demographics as learning progresses",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The credit scoring system prevents perpetuation of historical lending biases by ensuring balanced learning across applicant groups",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        }
+      ]
+    },
+    {
       "slug": "multi-accuracy-boosting",
       "name": "Multi-Accuracy Boosting",
       "description": "An in-processing fairness technique that employs boosting algorithms to improve accuracy uniformly across demographic groups by iteratively correcting errors where the model performs poorly for certain subgroups. The method uses a multi-calibration approach that trains weak learners to focus on prediction errors for underperforming groups, ensuring that no group experiences systematically worse accuracy. This iterative boosting process continues until accuracy parity is achieved across all groups whilst maintaining overall model performance.",
@@ -2067,6 +2215,306 @@
       ]
     },
     {
+      "slug": "average-odds-difference",
+      "name": "Average Odds Difference",
+      "description": "Average Odds Difference measures fairness by calculating the average difference in both false positive rates and true positive rates between different demographic groups. This metric captures how consistently a model performs across groups for both positive and negative predictions. A value of 0 indicates perfect fairness under the equalized odds criterion, while larger absolute values indicate greater disparities in model performance between groups.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/fairness/group/statistical-parity",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/low",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/testing",
+        "technique-type/metric"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating criminal risk assessment tools to ensure equal false positive rates (wrongly flagging low-risk individuals as high-risk) and true positive rates (correctly identifying high-risk individuals) across racial and ethnic groups.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Auditing hiring algorithms to verify that both the rate of correctly identifying qualified candidates and the rate of incorrectly rejecting qualified candidates remain consistent across gender and demographic groups.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Monitoring loan approval systems to ensure reliable performance by checking that both approval rates for creditworthy applicants and rejection rates for non-creditworthy applicants are consistent across protected demographic categories.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Testing medical diagnostic models to validate that diagnostic accuracy (both correctly identifying disease and correctly ruling out disease) remains consistent across patient demographics, ensuring reliable healthcare delivery.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Averaging effect can mask important disparities when false positive and true positive rate differences compensate for each other, potentially hiding significant bias in one direction."
+        },
+        {
+          "description": "Requires access to ground truth labels and sensitive attribute information, which may not be available in all deployment scenarios or may be subject to privacy constraints."
+        },
+        {
+          "description": "Does not account for base rate differences between groups, meaning equal error rates may not translate to equal treatment when group prevalences differ significantly."
+        },
+        {
+          "description": "Focuses solely on prediction accuracy disparities without considering whether the underlying decision-making process or feature selection introduces systematic bias against certain groups."
+        },
+        {
+          "description": "May encourage optimization for fairness metrics at the expense of overall model performance, potentially reducing utility for the primary prediction task."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Equality of Opportunity in Supervised Learning",
+          "url": "https://arxiv.org/abs/1610.02413",
+          "source_type": "technical_paper",
+          "authors": [
+            "Moritz Hardt",
+            "Eric Price",
+            "Nathan Srebro"
+          ],
+          "publication_date": "2016-10-07",
+          "citationKey": "hardtEqualityOpportunitySupervised2016",
+          "abstract": "We propose a criterion for discrimination against a specified sensitive attribute in supervised learning, where the goal is to predict some target based on available features. Assuming data about the predictor, target, and membership in the protected group are available, we show how to optimally adjust any learned predictor so as to remove discrimination according to our definition. Our framework also improves incentives by shifting the cost of poor classification from disadvantaged groups to the decision maker, who can respond by improving the classification accuracy.   In line with other studies, our notion is oblivious: it depends only on the joint statistics of the predictor, the target and the protected attribute, but not on interpretation of individualfeatures. We study the inherent limits of defining and identifying biases based on such oblivious measures, outlining what can and cannot be inferred from different oblivious tests.   We illustrate our notion using a case study of FICO credit scores."
+        },
+        {
+          "title": "FairBalance: How to Achieve Equalized Odds With Data Pre-processing",
+          "url": "https://arxiv.org/abs/2107.08310",
+          "source_type": "technical_paper",
+          "authors": [
+            "Zhe Yu",
+            "Joymallya Chakraborty",
+            "Tim Menzies"
+          ],
+          "publication_date": "2021-07-17",
+          "citationKey": "yuFairBalanceHowAchieve2021",
+          "abstract": "This research seeks to benefit the software engineering society by providing a simple yet effective pre-processing approach to achieve equalized odds fairness in machine learning software. Fairness issues have attracted increasing attention since machine learning software is increasingly used for high-stakes and high-risk decisions. Amongst all the existing fairness notions, this work specifically targets \"equalized odds\" given its advantage in always allowing perfect classifiers. Equalized odds requires that members of every demographic group do not receive disparate mistreatment. Prior works either optimize for an equalized odds related metric during the learning process like a black-box, or manipulate the training data following some intuition. This work studies the root cause of the violation of equalized odds and how to tackle it. We found that equalizing the class distribution in each demographic group with sample weights is a necessary condition for achieving equalized odds without modifying the normal training process. In addition, an important partial condition for equalized odds (zero average odds difference) can be guaranteed when the class distributions are weighted to be not only equal but also balanced (1:1). Based on these analyses, we proposed FairBalance, a pre-processing algorithm which balances the class distribution in each demographic group by assigning calculated weights to the training data. On eight real-world datasets, our empirical results show that, at low computational overhead, the proposed pre-processing algorithm FairBalance can significantly improve equalized odds without much, if any damage to the utility. FairBalance also outperforms existing state-of-the-art approaches in terms of equalized odds. To facilitate reuse, reproduction, and validation, we made our scripts available at https://github.com/hil-se/FairBalance."
+        },
+        {
+          "title": "AIF360: Average Odds Difference Documentation",
+          "url": "https://aif360.readthedocs.io/en/stable/modules/generated/aif360.sklearn.metrics.average_odds_difference.html",
+          "source_type": "documentation",
+          "authors": [
+            "Aif360 Developers"
+          ],
+          "publication_date": "2018",
+          "citationKey": "aif360developersAIF360AverageOdds2018"
+        },
+        {
+          "title": "fairlearn",
+          "url": "https://github.com/fairlearn/fairlearn",
+          "source_type": "software_package",
+          "publication_date": "2018-05-15",
+          "citationKey": "fairlearnFairlearn2018",
+          "abstract": "A Python package to assess and improve fairness of machine learning models."
+        }
+      ],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "demographic-parity-assessment",
+        "equal-opportunity-difference",
+        "attribute-removal-fairness-through-unawareness",
+        "calibration-with-equality-of-opportunity"
+      ],
+      "sample_claims": [
+        {
+          "text": "The criminal risk assessment system maintains equivalent error rates for both false alarms and correct identifications across racial and ethnic groups",
+          "domain": "public sector",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The hiring model's accuracy in both accepting qualified candidates and rejecting unqualified candidates is consistent across all protected demographic categories",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The medical diagnostic system demonstrates balanced performance across patient demographics for both correctly identifying disease presence and correctly ruling out disease absence",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The credit scoring model's true approval rate for creditworthy applicants and false approval rate for non-creditworthy applicants remain equitable across protected groups",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The fraud detection system maintains consistent detection accuracy and false alarm rates across customer segments regardless of demographic characteristics",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        }
+      ]
+    },
+    {
+      "slug": "bayesian-fairness-regularization",
+      "name": "Bayesian Fairness Regularization",
+      "description": "Bayesian Fairness Regularization incorporates fairness constraints into machine learning models through Bayesian methods, treating fairness as a prior distribution or regularization term. This approach includes techniques like Fair Bayesian Optimization that use constrained optimization to tune model hyperparameters whilst enforcing fairness constraints, and methods that add regularization terms to objective functions to penalize discriminatory predictions. The technique allows for probabilistic interpretation of fairness constraints and can account for uncertainty in both model parameters and fairness requirements.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/gradient-access",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/fairness/group/statistical-parity",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "data-requirements/sensitive-attributes",
+        "data-type/any",
+        "evidence-type/fairness-metric",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/group",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Using Fair Bayesian Optimization to tune hyperparameters of credit risk models, automatically balancing predictive accuracy with fairness constraints across different demographic groups whilst accounting for uncertainty in both model performance and fairness requirements.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Implementing Bayesian neural networks with fairness-aware priors for hiring recommendation systems, where uncertainty in fairness constraints is modeled probabilistically to ensure robust fair decision-making across different candidate populations.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Applying Bayesian regularization techniques to medical diagnosis models to ensure reliable performance across patient demographics, using probabilistic constraints to maintain consistent diagnostic accuracy whilst preventing algorithmic bias in healthcare delivery.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Developing insurance premium calculation models using Bayesian fairness regularization to ensure actuarially sound pricing that meets regulatory fairness requirements, with probabilistic modeling of both risk assessment accuracy and demographic equity.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Prior selection challenges make it difficult to specify appropriate prior distributions for fairness constraints, requiring domain expertise and potentially leading to suboptimal or biased outcomes if priors are poorly chosen."
+        },
+        {
+          "description": "Computational complexity increases significantly due to Bayesian inference requirements, including sampling methods, variational inference, or optimization over probability distributions, making the approach less scalable for large datasets."
+        },
+        {
+          "description": "Sensitivity to hyperparameters affects both the Bayesian inference process and fairness regularization terms, requiring careful tuning of multiple parameters that control the trade-off between accuracy, fairness, and computational efficiency."
+        },
+        {
+          "description": "Convergence and stability issues may arise in Bayesian optimization with fairness constraints, particularly when fairness objectives conflict with performance objectives or when the constraint space becomes highly complex."
+        },
+        {
+          "description": "Limited theoretical understanding exists for the interaction between Bayesian uncertainty quantification and fairness constraints, making it challenging to provide guarantees about both predictive performance and fairness under uncertainty."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Bayesian fairness",
+          "url": "https://arxiv.org/abs/1706.00119",
+          "source_type": "technical_paper",
+          "authors": [
+            "Christos Dimitrakakis",
+            "Yang Liu",
+            "David Parkes",
+            "Goran Radanovic"
+          ],
+          "publication_date": "2017-05-31",
+          "citationKey": "dimitrakakisBayesianFairness2017",
+          "abstract": "We consider the problem of how decision making can be fair when the underlying probabilistic model of the world is not known with certainty. We argue that recent notions of fairness in machine learning need to explicitly incorporate parameter uncertainty, hence we introduce the notion of {\\em Bayesian fairness} as a suitable candidate for fair decision rules. Using balance, a definition of fairness introduced by Kleinberg et al (2016), we show how a Bayesian perspective can lead to well-performing, fair decision rules even under high uncertainty."
+        },
+        {
+          "title": "Fair Bayesian Optimization",
+          "url": "https://arxiv.org/abs/2006.05109",
+          "source_type": "technical_paper",
+          "authors": [
+            "Valerio Perrone",
+            "Michele Donini",
+            "Muhammad Bilal Zafar",
+            "Robin Schmucker",
+            "Krishnaram Kenthapadi",
+            "Cédric Archambeau"
+          ],
+          "publication_date": "2020-06-09",
+          "citationKey": "perroneFairBayesianOptimization2020",
+          "abstract": "Given the increasing importance of machine learning (ML) in our lives, several algorithmic fairness techniques have been proposed to mitigate biases in the outcomes of the ML models. However, most of these techniques are specialized to cater to a single family of ML models and a specific definition of fairness, limiting their adaptibility in practice. We introduce a general constrained Bayesian optimization (BO) framework to optimize the performance of any ML model while enforcing one or multiple fairness constraints. BO is a model-agnostic optimization method that has been successfully applied to automatically tune the hyperparameters of ML models. We apply BO with fairness constraints to a range of popular models, including random forests, gradient boosting, and neural networks, showing that we can obtain accurate and fair solutions by acting solely on the hyperparameters. We also show empirically that our approach is competitive with specialized techniques that enforce model-specific fairness constraints, and outperforms preprocessing methods that learn fair representations of the input data. Moreover, our method can be used in synergy with such specialized fairness techniques to tune their hyperparameters. Finally, we study the relationship between fairness and the hyperparameters selected by BO. We observe a correlation between regularization and unbiased models, explaining why acting on the hyperparameters leads to ML models that generalize well and are fair."
+        },
+        {
+          "title": "fgp",
+          "url": "https://github.com/ztanml/fgp",
+          "source_type": "software_package",
+          "publication_date": "2019-06-21",
+          "citationKey": "ztanmlFgp2019",
+          "abstract": "Fair Gaussian Processes"
+        },
+        {
+          "title": "Fairness-Aware Classifier with Prejudice Remover Regularizer",
+          "url": "https://link.springer.com/chapter/10.1007/978-3-642-33486-3_3",
+          "source_type": "technical_paper",
+          "authors": [
+            "Toshihiro Kamishima",
+            "Shotaro Akaho",
+            "Hideki Asoh",
+            "Jun Sakuma"
+          ],
+          "publication_date": "2012-09-24",
+          "citationKey": "kamishimaFairnessAwareClassifierPrejudice2012"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "fairness-gan",
+        "attribute-removal-fairness-through-unawareness",
+        "sensitivity-analysis-for-fairness",
+        "prejudice-remover-regulariser",
+        "exponentiated-gradient-reduction"
+      ],
+      "sample_claims": [
+        {
+          "text": "The lending model's fairness guarantees account for uncertainty in both demographic data quality and group membership boundaries",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The hiring system's decisions balance predictive accuracy with equity constraints through probabilistically-weighted regularization",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The diagnostic model maintains reliable performance across patient subgroups whilst incorporating uncertainty about demographic fairness requirements",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The risk assessment model quantifies confidence in its fairness properties alongside prediction uncertainty",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The system's hyperparameters are optimized to meet fairness constraints whilst accounting for variability in model performance",
+          "domain": "public sector",
+          "assuranceGoal": "reliability"
+        }
+      ]
+    },
+    {
       "slug": "embedding-bias-analysis",
       "name": "Embedding Bias Analysis",
       "description": "Embedding bias analysis examines learned representations to identify biases, spurious correlations, and problematic clustering patterns in vector embeddings. This technique uses dimensionality reduction, clustering analysis, and geometric fairness metrics to examine whether embeddings encode sensitive attributes, place certain groups in disadvantaged regions of representation space, or learn stereotypical associations. Analysis reveals whether embeddings used for retrieval, recommendation, or downstream tasks contain fairness issues that will propagate to applications.",
@@ -2388,5 +2836,5 @@
       ]
     }
   ],
-  "count": 16
+  "count": 19
 }

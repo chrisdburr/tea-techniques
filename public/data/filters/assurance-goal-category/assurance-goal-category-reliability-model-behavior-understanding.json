@@ -2,7 +2,7 @@
   "tag": {
     "name": "assurance-goal-category/reliability/model-behavior-understanding",
     "slug": "assurance-goal-category-reliability-model-behavior-understanding",
-    "count": 16,
+    "count": 19,
     "category": "assurance-goal-category"
   },
   "techniques": [
@@ -2088,6 +2088,149 @@
       ]
     },
     {
+      "slug": "model-distillation",
+      "name": "Model Distillation",
+      "description": "Model distillation transfers knowledge from a large, complex model (teacher) to a smaller, more efficient model (student) by training the student to mimic the teacher's behaviour. The student learns from the teacher's soft predictions and intermediate representations rather than just hard labels, capturing nuanced decision boundaries and uncertainty. This produces models that are faster, require less memory, and are often more interpretable whilst maintaining much of the original performance. Beyond compression, distillation can improve model reliability by regularising training and enable deployment in resource-constrained environments.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks",
+        "applicable-models/paradigm/parametric",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/training-data",
+        "applicable-models/requirements/white-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/explains/decision-boundaries",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/model-simplification/knowledge-transfer",
+        "assurance-goal-category/explainability/property/comprehensibility",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/surrogate-models/global-surrogates",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
+        "data-requirements/access-to-training-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "explanatory-scope/global",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/deployment",
+        "lifecycle-stage/model-development",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Compressing a large medical diagnosis model into a smaller student model that can run on edge devices in resource-limited clinics, making the decision process more transparent for healthcare professionals whilst maintaining diagnostic accuracy for critical patient care.",
+          "goal": "Explainability"
+        },
+        {
+          "description": "Creating a compressed fraud detection model from a complex ensemble teacher that maintains detection performance whilst being more robust to adversarial attacks and data drift, ensuring consistent protection of financial transactions across varying conditions.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Distilling a large autonomous vehicle perception model into a smaller student model that can run with guaranteed inference times and lower computational requirements, ensuring predictable safety-critical decision-making under real-time constraints.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Student models typically achieve 90-95% of teacher performance, creating a trade-off between model efficiency and predictive accuracy that may be unacceptable for high-stakes applications requiring maximum precision."
+        },
+        {
+          "description": "Distillation process can be computationally expensive, requiring extensive teacher model inference during training and careful hyperparameter tuning to balance knowledge transfer with student model capacity."
+        },
+        {
+          "description": "Knowledge transfer quality depends heavily on teacher-student architecture compatibility and the chosen distillation objectives, with mismatched designs potentially leading to ineffective learning or mode collapse."
+        },
+        {
+          "description": "Student models may inherit teacher model biases and vulnerabilities whilst potentially introducing new failure modes, requiring separate validation for fairness, robustness, and safety properties."
+        },
+        {
+          "description": "Compressed models may lack the teacher's capability to handle edge cases or out-of-distribution inputs, potentially creating safety risks when deployed in environments different from the training distribution."
+        }
+      ],
+      "resources": [
+        {
+          "title": "TextBrewer",
+          "url": "https://github.com/airaria/TextBrewer",
+          "source_type": "software_package",
+          "publication_date": "2020-02-25",
+          "citationKey": "airariaTextBrewer2020",
+          "abstract": "A PyTorch-based knowledge distillation toolkit for natural language processing"
+        },
+        {
+          "title": "Main features — TextBrewer 0.2.1.post1 documentation",
+          "url": "https://textbrewer.readthedocs.io",
+          "source_type": "documentation",
+          "authors": [
+            "Textbrewer Developers"
+          ],
+          "publication_date": "2020",
+          "citationKey": "textbrewerdevelopersMainFeaturesTextBrewer2020"
+        },
+        {
+          "title": "A Generic Approach for Reproducible Model Distillation",
+          "url": "http://arxiv.org/abs/2211.12631",
+          "source_type": "technical_paper",
+          "authors": [
+            "Yunzhe Zhou",
+            "Peiru Xu",
+            "Giles Hooker"
+          ],
+          "publication_date": "2022-11-22",
+          "citationKey": "zhouGenericApproachReproducible2022",
+          "abstract": "Model distillation has been a popular method for producing interpretable machine learning. It uses an interpretable \"student\" model to mimic the predictions made by the black box \"teacher\" model. However, when the student model is sensitive to the variability of the data sets used for training even when keeping the teacher fixed, the corresponded interpretation is not reliable. Existing strategies stabilize model distillation by checking whether a large enough corpus of pseudo-data is generated to reliably reproduce student models, but methods to do so have so far been developed for a specific student model. In this paper, we develop a generic approach for stable model distillation based on central limit theorem for the average loss. We start with a collection of candidate student models and search for candidates that reasonably agree with the teacher. Then we construct a multiple testing framework to select a corpus size such that the consistent student model would be selected under different pseudo samples. We demonstrate the application of our proposed approach on three commonly used intelligible models: decision trees, falling rule lists and symbolic regression. Finally, we conduct simulation experiments on Mammographic Mass and Breast Cancer datasets and illustrate the testing procedure throughout a theoretical analysis with Markov process. The code is publicly available at https://github.com/yunzhe-zhou/GenericDistillation."
+        },
+        {
+          "title": "awesome-knowledge-distillation",
+          "url": "https://github.com/dkozlov/awesome-knowledge-distillation",
+          "source_type": "software_package",
+          "publication_date": "2017-02-28",
+          "citationKey": "dkozlovAwesomeknowledgedistillation2017",
+          "abstract": "Awesome Knowledge Distillation"
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "model-pruning",
+        "ridge-regression-surrogates",
+        "rulefit",
+        "generalized-additive-models"
+      ],
+      "sample_claims": [
+        {
+          "text": "The compressed diagnostic model preserves the teacher network's decision-making patterns in a form that clinical staff can inspect and validate",
+          "domain": "healthcare",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The fraud detection system maintains consistent risk scoring accuracy after compression to meet deployment memory constraints",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The perception model executes within guaranteed latency bounds whilst retaining safety-critical object detection capabilities",
+          "domain": "autonomous systems",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The environmental forecasting model's uncertainty estimates remain calibrated after knowledge transfer from the ensemble teacher",
+          "domain": "environmental",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The quality inspection model's decision boundaries are interpretable to operators whilst maintaining the teacher's defect detection performance",
+          "domain": "manufacturing",
+          "assuranceGoal": "explainability"
+        }
+      ]
+    },
+    {
       "slug": "monotonicity-constraints",
       "name": "Monotonicity Constraints",
       "description": "Monotonicity constraints enforce consistent directional relationships between input features and model predictions, ensuring that increasing a feature value either always increases, always decreases, or has no effect on the output. These constraints integrate domain knowledge into model training, preventing counterintuitive relationships that may arise from spurious correlations in data. By maintaining logical feature relationships (e.g., experience always positively influences salary), monotonicity constraints enhance model trustworthiness, interpretability, and alignment with business logic whilst often improving generalisation to new data.",
@@ -2373,6 +2516,143 @@
           "text": "The resource allocation model documents how each policy-relevant factor shapes outcomes through interpretable functional relationships",
           "domain": "public sector",
           "assuranceGoal": "transparency"
+        }
+      ]
+    },
+    {
+      "slug": "prompt-sensitivity-analysis",
+      "name": "Prompt Sensitivity Analysis",
+      "description": "Prompt Sensitivity Analysis systematically evaluates how variations in input prompts affect large language model outputs, providing insights into model robustness, consistency, and interpretability. This technique involves creating controlled perturbations of prompts whilst maintaining semantic meaning, then measuring how these changes influence model responses. It encompasses various types of prompt modifications including lexical substitutions, syntactic restructuring, formatting changes, and contextual variations. The analysis typically quantifies sensitivity through metrics such as output consistency, semantic similarity, and statistical measures of variance across prompt variations.",
+      "assurance_goals": [
+        "Explainability",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/neural-networks/transformer/llm",
+        "applicable-models/paradigm/generative",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/explainability",
+        "assurance-goal-category/explainability/attribution-methods/perturbation-based",
+        "assurance-goal-category/explainability/explains/internal-mechanisms",
+        "assurance-goal-category/explainability/explains/prediction-confidence",
+        "assurance-goal-category/explainability/property/consistency",
+        "assurance-goal-category/explainability/property/fidelity",
+        "assurance-goal-category/explainability/uncertainty-analysis/sensitivity-testing",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/reliability/robustness",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
+        "data-requirements/no-special-requirements",
+        "data-type/text",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/experimental-design",
+        "expertise-needed/linguistics",
+        "expertise-needed/statistics",
+        "explanatory-scope/global",
+        "explanatory-scope/local",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "technique-type/experimental",
+        "technique-type/testing"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing medical diagnosis LLMs with semantically equivalent but syntactically different symptom descriptions to ensure consistent diagnostic recommendations across different patient communication styles, identifying potential failure modes where slight phrasing changes could lead to dangerous misdiagnoses.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Analysing how variations in candidate descriptions (gendered language, cultural references, educational institution prestige indicators) affect LLM-based CV screening recommendations to identify potential discriminatory patterns and ensure equitable treatment across diverse applicant backgrounds.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Examining how different ways of framing financial questions (formal vs informal language, technical vs layperson terminology) affect investment advice generated by LLMs to improve user understanding and model transparency whilst ensuring consistent advisory quality.",
+          "goal": "Explainability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Analysis is inherently limited to the specific prompt variations tested, potentially missing important sensitivity patterns that weren't anticipated during study design, making comprehensive coverage challenging."
+        },
+        {
+          "description": "Systematic exploration of prompt variations can be computationally expensive, particularly for large-scale sensitivity analysis across multiple dimensions of variation, requiring significant resources for thorough evaluation."
+        },
+        {
+          "description": "Ensuring that prompt variations maintain semantic equivalence whilst introducing meaningful perturbations requires careful linguistic expertise and validation, which can be subjective and domain-dependent."
+        },
+        {
+          "description": "Results may reveal sensitivity patterns that are difficult to interpret or act upon, particularly when multiple types of variations interact in complex ways, limiting practical applicability of findings."
+        },
+        {
+          "description": "The meaningfulness of sensitivity measurements depends heavily on the choice of baseline prompts and variation strategies, which can introduce methodological biases and affect the generalisability of conclusions."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Quantifying Language Models' Sensitivity to Spurious Features in Prompt Design or: How I learned to start worrying about prompt formatting",
+          "url": "https://www.semanticscholar.org/paper/17a6116e5bbd8b87082cbb2e795885567300c483",
+          "source_type": "technical_paper",
+          "authors": [
+            "Melanie Sclar",
+            "Yejin Choi",
+            "Yulia Tsvetkov",
+            "Alane Suhr"
+          ],
+          "publication_date": "2023",
+          "citationKey": "sclarQuantifyingLanguageModels2023",
+          "abstract": "As large language models (LLMs) are adopted as a fundamental component of language technologies, it is crucial to accurately characterize their performance. Because choices in prompt design can strongly influence model behavior, this design process is critical in effectively using any modern pre-trained generative language model. In this work, we focus on LLM sensitivity to a quintessential class of meaning-preserving design choices: prompt formatting. We find that several widely used open-source LLMs are extremely sensitive to subtle changes in prompt formatting in few-shot settings, with performance differences of up to 76 accuracy points when evaluated using LLaMA-2-13B. Sensitivity remains even when increasing model size, the number of few-shot examples, or performing instruction tuning. Our analysis suggests that work evaluating LLMs with prompting-based methods would benefit from reporting a range of performance across plausible prompt formats, instead of the currently-standard practice of reporting performance on a single format. We also show that format performance only weakly correlates between models, which puts into question the methodological validity of comparing models with an arbitrarily chosen, fixed prompt format. To facilitate systematic analysis we propose FormatSpread, an algorithm that rapidly evaluates a sampled set of plausible prompt formats for a given task, and reports the interval of expected performance without accessing model weights. Furthermore, we present a suite of analyses that characterize the nature of this sensitivity, including exploring the influence of particular atomic perturbations and the internal representation of particular formats."
+        },
+        {
+          "title": "PromptPrism: A Linguistically-Inspired Taxonomy for Prompts",
+          "url": "http://arxiv.org/abs/2505.12592v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Sullam Jeoung",
+            "Yueyan Chen",
+            "Yi Zhang",
+            "Shuai Wang",
+            "Haibo Ding",
+            "Lin Lee Cheong"
+          ],
+          "publication_date": "2025-05-19",
+          "citationKey": "jeoungPromptPrismLinguisticallyInspiredTaxonomy2025",
+          "abstract": "Prompts are the interface for eliciting the capabilities of large language models (LLMs). Understanding their structure and components is critical for analyzing LLM behavior and optimizing performance. However, the field lacks a comprehensive framework for systematic prompt analysis and understanding. We introduce PromptPrism, a linguistically-inspired taxonomy that enables prompt analysis across three hierarchical levels: functional structure, semantic component, and syntactic pattern. We show the practical utility of PromptPrism by applying it to three applications: (1) a taxonomy-guided prompt refinement approach that automatically improves prompt quality and enhances model performance across a range of tasks; (2) a multi-dimensional dataset profiling method that extracts and aggregates structural, semantic, and syntactic characteristics from prompt datasets, enabling comprehensive analysis of prompt distributions and patterns; (3) a controlled experimental framework for prompt sensitivity analysis by quantifying the impact of semantic reordering and delimiter modifications on LLM performance. Our experimental results validate the effectiveness of our taxonomy across these applications, demonstrating that PromptPrism provides a foundation for refining, profiling, and analyzing prompts."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "prompt-robustness-testing",
+        "red-teaming",
+        "jailbreak-resistance-testing"
+      ],
+      "sample_claims": [
+        {
+          "text": "The diagnostic support system produces consistent clinical recommendations when patients describe symptoms using different vocabulary or phrasing styles",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The model's interpretation of financial queries remains stable across minor variations in question formatting or terminology",
+          "domain": "finance",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The system's decision-making process reveals which aspects of user requests drive output changes versus which are superficial formatting differences",
+          "domain": "general",
+          "assuranceGoal": "explainability"
+        },
+        {
+          "text": "The autonomous system maintains safe operational decisions despite natural variation in how operators phrase commands or queries",
+          "domain": "autonomous systems",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The public service chatbot delivers equivalent information to citizens regardless of whether queries are posed formally or conversationally",
+          "domain": "public sector",
+          "assuranceGoal": "reliability"
         }
       ]
     },
@@ -3460,6 +3740,197 @@
       ]
     },
     {
+      "slug": "epistemic-uncertainty-quantification",
+      "name": "Epistemic Uncertainty Quantification",
+      "description": "Epistemic uncertainty quantification systematically measures model uncertainty about what it knows, partially knows, and doesn't know across different domains and topics. This technique uses probing datasets, confidence calibration analysis, and consistency testing to quantify epistemic uncertainty (uncertainty due to lack of knowledge) as distinct from aleatoric uncertainty (inherent data uncertainty). Uncertainty quantification enables appropriate deployment scoping, communicating model limitations, and identifying knowledge gaps requiring additional training or human oversight.",
+      "assurance_goals": [
+        "Transparency",
+        "Reliability",
+        "Safety"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/reliability/model-behavior-understanding",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
+        "data-requirements/labelled-data",
+        "data-type/any",
+        "evidence-type/quantitative-metric",
+        "evidence-type/documentation",
+        "evidence-type/visualisation",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/statistics",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "technique-type/algorithmic",
+        "technique-type/testing"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Mapping a medical AI's knowledge boundaries to identify conditions it diagnoses reliably versus conditions requiring specialist referral, enabling safe deployment with appropriate scope limitations.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Identifying knowledge gaps in a public policy analysis AI to ensure it provides reliable information about well-researched policy areas while disclaiming uncertainty about emerging policy domains or local contexts.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Transparently documenting model knowledge boundaries in user-facing applications, helping users understand when to trust AI outputs versus seek additional verification.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Quantifying uncertainty in an automated loan approval system to identify applications where the model's knowledge boundaries are exceeded (e.g., novel business types or unusual financial situations), triggering human expert review rather than automated rejection or approval.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Mapping knowledge boundaries in an educational AI tutor to distinguish between well-covered curriculum topics and emerging areas where the model lacks sufficient training data, ensuring students receive reliable guidance and appropriate referrals to human instructors.",
+          "goal": "Safety"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Comprehensive knowledge mapping across all possible domains and topics is infeasible, requiring prioritization of important knowledge areas."
+        },
+        {
+          "description": "Knowledge boundaries may be fuzzy rather than discrete, making it difficult to establish clear cutoffs between known and unknown."
+        },
+        {
+          "description": "Models may be confidently wrong in some areas, making calibration and confidence signals unreliable indicators of actual knowledge."
+        },
+        {
+          "description": "Knowledge boundaries shift as models are updated or fine-tuned, requiring continuous remapping to maintain accuracy."
+        },
+        {
+          "description": "Uncertainty quantification methods can add significant computational overhead (10-100x inference time for ensemble-based approaches), making real-time deployment challenging for latency-sensitive applications."
+        },
+        {
+          "description": "Interpreting uncertainty estimates requires statistical expertise and domain knowledge to set appropriate thresholds for triggering human review or system warnings."
+        }
+      ],
+      "resources": [
+        {
+          "title": "CoT-UQ",
+          "url": "https://github.com/ZBox1005/CoT-UQ",
+          "source_type": "software_package",
+          "publication_date": "2025-02-21",
+          "citationKey": "zbox1005CoTUQ2025",
+          "abstract": "[arXiv 2025] \"CoT-UQ: Improving Response-wise Uncertainty Quantification in LLMs with Chain-of-Thought\""
+        },
+        {
+          "title": "Knowledge Boundary of Large Language Models: A Survey",
+          "url": "https://aclanthology.org/2025.acl-long.256/",
+          "source_type": "technical_paper",
+          "authors": [
+            "Moxin Li",
+            "Yong Zhao",
+            "Wenxuan Zhang",
+            "Shuaiyi Li",
+            "Wenya Xie",
+            "See-Kiong Ng",
+            "Tat-Seng Chua",
+            "Yang Deng"
+          ],
+          "publication_date": "2025-07",
+          "citationKey": "liKnowledgeBoundaryLarge2025",
+          "abstract": "Although large language models (LLMs) store vast amount of knowledge in their parameters, they still have limitations in the memorization and utilization of certain knowledge, leading to undesired behaviors such as generating untruthful and inaccurate responses. This highlights the critical need to understand the knowledge boundary of LLMs, a concept that remains inadequately defined in existing research. In this survey, we propose a comprehensive definition of the LLM knowledge boundary and introduce a formalized taxonomy categorizing knowledge into four distinct types. Using this foundation, we systematically review the field through three key lenses: the motivation for studying LLM knowledge boundaries, methods for identifying these boundaries, and strategies for mitigating the challenges they present. Finally, we discuss open challenges and potential research directions in this area. We aim for this survey to offer the community a comprehensive overview, facilitate access to key issues, and inspire further advancements in LLM knowledge research."
+        },
+        {
+          "title": "Teaching Large Language Models to Express Knowledge Boundary from Their Own Signals",
+          "url": "https://aclanthology.org/2025.knowllm-1.3/",
+          "source_type": "technical_paper",
+          "authors": [
+            "Lida Chen",
+            "Zujie Liang",
+            "Xintao Wang",
+            "Jiaqing Liang",
+            "Yanghua Xiao",
+            "Feng Wei",
+            "Jinglei Chen",
+            "Zhenghong Hao",
+            "Bing Han",
+            "Wei Wang"
+          ],
+          "publication_date": "2025-08",
+          "citationKey": "chenTeachingLargeLanguage2025",
+          "abstract": "Large language models (LLMs) have achieved great success, but their occasional content fabrication, or hallucination, limits their practical application. Hallucination arises because LLMs struggle to admit ignorance due to inadequate training on knowledge boundaries. We call it a limitation of LLMs that they can not accurately express their knowledge boundary, answering questions they know while admitting ignorance to questions they do not know. In this paper, we aim to teach LLMs to recognize and express their knowledge boundary, so they can reduce hallucinations caused by fabricating when they do not know. We propose CoKE, which first probes LLMs' knowledge boundary via internal confidence given a set of questions, and then leverages the probing results to elicit the expression of the knowledge boundary. Extensive experiments show CoKE helps LLMs express knowledge boundaries, answering known questions while declining unknown ones, significantly improving in-domain and out-of-domain performance."
+        },
+        {
+          "title": "Benchmarking Knowledge Boundary for Large Language Models: A Different Perspective on Model Evaluation",
+          "url": "https://arxiv.org/abs/2402.11493",
+          "source_type": "technical_paper",
+          "authors": [
+            "Xunjian Yin",
+            "Xu Zhang",
+            "Jie Ruan",
+            "Xiaojun Wan"
+          ],
+          "publication_date": "2024-02-18",
+          "citationKey": "yinBenchmarkingKnowledgeBoundary2024",
+          "abstract": "In recent years, substantial advancements have been made in the development of large language models, achieving remarkable performance across diverse tasks. To evaluate the knowledge ability of language models, previous studies have proposed lots of benchmarks based on question-answering pairs. We argue that it is not reliable and comprehensive to evaluate language models with a fixed question or limited paraphrases as the query, since language models are sensitive to prompt. Therefore, we introduce a novel concept named knowledge boundary to encompass both prompt-agnostic and prompt-sensitive knowledge within language models. Knowledge boundary avoids prompt sensitivity in language model evaluations, rendering them more dependable and robust. To explore the knowledge boundary for a given model, we propose projected gradient descent method with semantic constraints, a new algorithm designed to identify the optimal prompt for each piece of knowledge. Experiments demonstrate a superior performance of our algorithm in computing the knowledge boundary compared to existing methods. Furthermore, we evaluate the ability of multiple language models in several domains with knowledge boundary."
+        },
+        {
+          "title": "Investigating the Factual Knowledge Boundary of Large Language Models with Retrieval Augmentation",
+          "url": "https://aclanthology.org/2025.coling-main.250/",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ruiyang Ren",
+            "Yuhao Wang",
+            "Yingqi Qu",
+            "Wayne Xin Zhao",
+            "Jing Liu",
+            "Hua Wu",
+            "Ji-Rong Wen",
+            "Haifeng Wang"
+          ],
+          "publication_date": "2025-01",
+          "citationKey": "renInvestigatingFactualKnowledge2025",
+          "abstract": "Large language models (LLMs) have shown impressive prowess in solving a wide range of tasks with world knowledge. However, it remains unclear how well LLMs are able to perceive their factual knowledge boundaries, particularly under retrieval augmentation settings. In this study, we present the first analysis on the factual knowledge boundaries of LLMs and how retrieval augmentation affects LLMs on open-domain question answering (QA), with a bunch of important findings. Specifically, we focus on three research questions and analyze them by examining QA, priori judgement and posteriori judgement capabilities of LLMs. We show evidence that LLMs possess unwavering confidence in their knowledge and cannot handle the conflict between internal and external knowledge well. Furthermore, retrieval augmentation proves to be an effective approach in enhancing LLMs' awareness of knowledge boundaries. We further conduct thorough experiments to examine how different factors affect LLMs and propose a simple method to dynamically utilize supporting documents with our judgement strategy. Additionally, we find that the relevance between the supporting documents and the questions significantly impacts LLMs' QA and judgemental capabilities."
+        }
+      ],
+      "related_techniques": [
+        "conformal-prediction",
+        "jackknife-resampling",
+        "chain-of-thought-faithfulness-evaluation",
+        "bootstrapping",
+        "monte-carlo-dropout",
+        "deep-ensembles",
+        "empirical-calibration"
+      ],
+      "sample_claims": [
+        {
+          "text": "The diagnostic system's uncertainty estimates distinguish between lack of training data and inherent clinical variability",
+          "domain": "healthcare",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The credit assessment model identifies when applicant profiles fall outside its established knowledge boundaries",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The autonomous vehicle's perception system detects when environmental conditions exceed its validated knowledge envelope",
+          "domain": "autonomous systems",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The policy analysis tool communicates gaps in its domain knowledge separately from prediction variance",
+          "domain": "public sector",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The flood forecasting model's uncertainty estimates reflect genuine epistemic gaps",
+          "domain": "environmental",
+          "assuranceGoal": "safety"
+        }
+      ]
+    },
+    {
       "slug": "multi-agent-system-testing",
       "name": "Multi-Agent System Testing",
       "description": "Multi-agent system testing evaluates safety and reliability of systems where multiple AI agents interact, coordinate, or compete. This technique assesses emergent behaviours, communication protocols, conflict resolution, and whether agents maintain objectives appropriately. Testing produces reports on agent interaction patterns, coalition formation, failure cascade analysis, and safety property violations in multi-agent scenarios.",
@@ -4098,5 +4569,5 @@
       ]
     }
   ],
-  "count": 28
+  "count": 31
 }

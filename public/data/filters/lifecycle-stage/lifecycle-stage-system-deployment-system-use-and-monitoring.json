@@ -2,7 +2,7 @@
   "tag": {
     "name": "lifecycle-stage/system-deployment/system-use-and-monitoring",
     "slug": "lifecycle-stage-system-deployment-system-use-and-monitoring",
-    "count": 8,
+    "count": 9,
     "category": "lifecycle-stage"
   },
   "techniques": [
@@ -581,6 +581,149 @@
           "text": "The industrial safety monitoring system preserves reliable detection of known hazard conditions whilst incorporating recognition of newly identified risk factors",
           "domain": "manufacturing",
           "assuranceGoal": "safety"
+        }
+      ]
+    },
+    {
+      "slug": "model-extraction-defence-testing",
+      "name": "Model Extraction Defence Testing",
+      "description": "Model extraction defence testing evaluates protections against attackers who attempt to steal model functionality by querying it and training surrogate models. This technique assesses defences like query limiting, output perturbation, watermarking, and fingerprinting by simulating extraction attacks and measuring how much model functionality can be replicated. Testing evaluates both the effectiveness of defences in preventing extraction and their impact on legitimate use cases, ensuring security measures don't excessively degrade user experience.",
+      "assurance_goals": [
+        "Security",
+        "Privacy",
+        "Transparency"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/security",
+        "assurance-goal-category/security/adversarial-robustness",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/audit-trail",
+        "data-type/any",
+        "data-requirements/no-special-requirements",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/post-deployment",
+        "lifecycle-stage/system-deployment/system-use-and-monitoring",
+        "technique-type/testing",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/software-engineering",
+        "expertise-needed/security"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Testing protections for a proprietary fraud detection API to ensure competitors cannot recreate the model's decision boundaries through systematic querying, by simulating extraction attacks using query budgets, active learning strategies, and substitute model training.",
+          "goal": "Security"
+        },
+        {
+          "description": "Evaluating whether a medical diagnosis model's query limits and output perturbations prevent extraction while protecting patient privacy embedded in the model's learned patterns.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Assessing watermarking techniques that enable model owners to prove when competitors have extracted their model, providing transparent evidence for intellectual property claims.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Evaluating whether rate limiting and output obfuscation for an automated essay grading API prevent competitors from extracting the scoring model through systematic submission of probe essays designed to reverse-engineer grading criteria.",
+          "goal": "Security"
+        },
+        {
+          "description": "Testing whether a traffic prediction API's defensive perturbations prevent extraction of the underlying routing optimization model whilst maintaining sufficient accuracy for legitimate urban planning applications.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Sophisticated attackers may use transfer learning, active learning, or knowledge distillation to extract models with 10-50x fewer queries than static defences anticipate, and can adapt their strategies as they probe defences, requiring dynamic rather than static protection mechanisms."
+        },
+        {
+          "description": "Defensive measures like output perturbation can degrade model utility for legitimate users, creating tension between security and usability."
+        },
+        {
+          "description": "Difficult to distinguish between legitimate high-volume use and malicious extraction attempts, potentially blocking valid users."
+        },
+        {
+          "description": "Watermarking and fingerprinting techniques may be removed or obscured by attackers who post-process extracted models."
+        },
+        {
+          "description": "Difficult to validate defence effectiveness without exposing the model to actual extraction attempts, and limited public benchmarks make it challenging to compare defence strategies objectively across different model types and threat scenarios."
+        },
+        {
+          "description": "Requires specialised expertise in adversarial machine learning and attack simulation to design realistic extraction scenarios, making it challenging for organisations without dedicated security teams to implement comprehensive testing."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Welcome to the Adversarial Robustness Toolbox — Adversarial ...",
+          "url": "https://adversarial-robustness-toolbox.readthedocs.io",
+          "source_type": "documentation",
+          "authors": [
+            "Adversarial-robustness-toolbox Developers"
+          ],
+          "citationKey": "adversarial-robustness-toolboxdevelopersWelcomeAdversarialRobustness"
+        },
+        {
+          "title": "Adversarial Machine Learning: Defense Strategies",
+          "url": "https://neptune.ai/blog/adversarial-machine-learning-defense-strategies",
+          "source_type": "tutorial",
+          "authors": [
+            "Michał Oleszak"
+          ],
+          "publication_date": "2024-07-11",
+          "citationKey": "oleszakAdversarialMachineLearning2024"
+        },
+        {
+          "title": "Hypothesis Testing and Beyond: a Mini Survey on Membership Inference Attacks",
+          "url": "https://www.semanticscholar.org/paper/ac4dcda6b7490d525c24d27100b7f9428ee01265",
+          "source_type": "technical_paper",
+          "authors": [
+            "Jiajie Liu",
+            "Zixuan Zhang",
+            "Haonan Li",
+            "Weijian Song",
+            "Yiyang Lin",
+            "Jinxin Zuo"
+          ],
+          "publication_date": "2025",
+          "citationKey": "liuHypothesisTestingMini2025",
+          "abstract": "Membership Inference Attacks (MIA) have received significant attention from academia as a crucial means of evaluating privacy risks in machine learning models. With the introduction of formal modeling based on hypothesis testing, MIA research has entered a new phase of development. However, there is currently a lack of systematic review of recent technical innovations and evaluation frameworks in MIA. This paper focuses on the latest developments in MIA research since 2022. Building upon the classification framework proposed by Hu et al., we systematically examine the development trajectory of two main attack approaches: metric-based attacks and neural networkbased attacks. For metric-based attacks, starting with LiRA, we provide a detailed analysis of likelihood ratio-based attack methods (such as Enhanced MIA and RMIA) and their technical innovations under the hypothesis testing framework. For neural network-based attacks, we concentrate on breakthroughs in feature extraction and temporal modeling achieved by novel attack strategies (such as QMIA and SeqMIA). Furthermore, this paper thoroughly examines the applicability of evaluation metrics and analyzes the challenges of MIA in emerging scenarios such as time-series data and large language models. Through this systematic review, we aim to provide theoretical guidance for improving MIA techniques and promote their standardized application in model privacy auditing."
+        }
+      ],
+      "related_techniques": [
+        "data-poisoning-detection",
+        "membership-inference-attack-testing",
+        "model-watermarking-and-theft-detection",
+        "adversarial-training-evaluation",
+        "api-usage-pattern-monitoring"
+      ],
+      "sample_claims": [
+        {
+          "text": "The proprietary fraud detection API withstands systematic querying attempts designed to replicate its decision boundaries without degrading service for legitimate users",
+          "domain": "finance",
+          "assuranceGoal": "security"
+        },
+        {
+          "text": "The medical diagnosis system's output perturbations prevent extraction of patient privacy patterns embedded in the model whilst maintaining clinical utility",
+          "domain": "healthcare",
+          "assuranceGoal": "privacy"
+        },
+        {
+          "text": "The model service distinguishes between legitimate high-volume use and malicious extraction attempts through behavioral analysis",
+          "domain": "general",
+          "assuranceGoal": "security"
+        },
+        {
+          "text": "The deployed model provides forensic evidence when unauthorized replication attempts are detected through fingerprinting and watermarking mechanisms",
+          "domain": "general",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The autonomous vehicle perception API maintains protection against competitors extracting routing optimization logic through probe queries across varied traffic scenarios",
+          "domain": "autonomous systems",
+          "assuranceGoal": "security"
         }
       ]
     },
@@ -1380,5 +1523,5 @@
       ]
     }
   ],
-  "count": 9
+  "count": 10
 }

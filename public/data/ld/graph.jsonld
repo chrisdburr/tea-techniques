@@ -9042,6 +9042,7 @@
         "tea:tag/assurance-goal-category/fairness",
         "tea:tag/assurance-goal-category/fairness/causal",
         "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/assurance-goal-category/reliability/cross-group-consistency",
         "tea:tag/assurance-goal-category/transparency",
         "tea:tag/assurance-goal-category/transparency/process-transparency",
         "tea:tag/data-requirements/causal-graph",
@@ -9063,8 +9064,7 @@
       "relatedTo": [
         "tea:technique/counterfactual-fairness-assessment",
         "tea:technique/average-odds-difference",
-        "tea:technique/equal-opportunity-difference",
-        "tea:technique/area-under-precision-recall-curve"
+        "tea:technique/equal-opportunity-difference"
       ],
       "citesResource": [
         "tea:resource/hatanoPathSpecificCounterfactualFairness2025"
@@ -9089,6 +9089,9 @@
         },
         {
           "description": "Causal graph construction relies on domain expertise and cannot be validated from observational data alone; if the graph incorrectly encodes causal structure or omits relevant edges, the path-specific assessment may certify an unfair model as compliant with no internal mechanism to detect the error, and this uncertainty is rarely surfaced in compliance documentation."
+        },
+        {
+          "description": "Path-specific causal effects are frequently non-identifiable from observational data alone; when unobserved confounders exist between a sensitive attribute and mediating variables or outcomes, the effect along a specific pathway cannot be uniquely recovered without additional parametric assumptions, reducing the technique to bounding rather than point-estimation of discrimination."
         }
       ],
       "sampleClaims": [

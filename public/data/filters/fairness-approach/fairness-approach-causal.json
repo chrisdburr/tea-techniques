@@ -143,6 +143,7 @@
         "assurance-goal-category/fairness",
         "assurance-goal-category/fairness/causal",
         "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
         "assurance-goal-category/transparency",
         "assurance-goal-category/transparency/process-transparency",
         "data-requirements/causal-graph",
@@ -179,6 +180,9 @@
         },
         {
           "description": "Causal graph construction relies on domain expertise and cannot be validated from observational data alone; if the graph incorrectly encodes causal structure or omits relevant edges, the path-specific assessment may certify an unfair model as compliant with no internal mechanism to detect the error, and this uncertainty is rarely surfaced in compliance documentation."
+        },
+        {
+          "description": "Path-specific causal effects are frequently non-identifiable from observational data alone; when unobserved confounders exist between a sensitive attribute and mediating variables or outcomes, the effect along a specific pathway cannot be uniquely recovered without additional parametric assumptions, reducing the technique to bounding rather than point-estimation of discrimination."
         }
       ],
       "resources": [
@@ -200,8 +204,7 @@
       "related_techniques": [
         "counterfactual-fairness-assessment",
         "average-odds-difference",
-        "equal-opportunity-difference",
-        "area-under-precision-recall-curve"
+        "equal-opportunity-difference"
       ],
       "sample_claims": [
         {

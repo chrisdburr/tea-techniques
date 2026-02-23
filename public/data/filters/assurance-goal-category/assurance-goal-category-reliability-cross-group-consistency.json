@@ -2,7 +2,7 @@
   "tag": {
     "name": "assurance-goal-category/reliability/cross-group-consistency",
     "slug": "assurance-goal-category-reliability-cross-group-consistency",
-    "count": 11,
+    "count": 12,
     "category": "assurance-goal-category"
   },
   "techniques": [
@@ -3110,6 +3110,113 @@
       ]
     },
     {
+      "slug": "path-specific-counterfactual-fairness-assessment",
+      "name": "Path-Specific Counterfactual Fairness Assessment",
+      "description": "A causal fairness evaluation technique that assesses algorithmic discrimination by examining specific causal pathways in a model's decision-making process. Unlike general counterfactual fairness, this approach enables practitioners to identify and intervene on particular causal paths that may introduce bias whilst preserving other legitimate pathways. The method uses causal graphs to distinguish between direct discrimination (through protected attributes) and indirect discrimination (through seemingly neutral factors that correlate with protected attributes), allowing for more nuanced fairness assessments in complex causal settings.",
+      "assurance_goals": [
+        "Fairness",
+        "Transparency",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/architecture/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/black-box",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/causal",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/cross-group-consistency",
+        "assurance-goal-category/transparency",
+        "assurance-goal-category/transparency/process-transparency",
+        "data-requirements/causal-graph",
+        "data-requirements/sensitive-attributes",
+        "data-type/tabular",
+        "evidence-type/causal-analysis",
+        "evidence-type/quantitative-metric",
+        "expertise-needed/causal-inference",
+        "expertise-needed/ml-engineering",
+        "expertise-needed/statistics",
+        "fairness-approach/causal",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-evaluation",
+        "lifecycle-stage/system-deployment-and-use",
+        "technique-type/metric"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Evaluating hiring algorithms by identifying which causal pathways from education and experience legitimately affect job performance versus those that introduce gender or racial bias, enabling targeted interventions that preserve merit-based selection whilst eliminating discriminatory pathways.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Analysing loan approval models to provide transparent evidence of which factors legitimately influence creditworthiness versus those that create indirect discrimination, enabling clear explanations to regulators about causal mechanisms underlying fair lending decisions.",
+          "goal": "Transparency"
+        },
+        {
+          "description": "Assessing medical diagnosis systems to ensure reliable performance by distinguishing between clinically relevant causal pathways (symptoms to diagnosis) and potentially biased pathways (demographics to diagnosis), maintaining diagnostic accuracy whilst preventing healthcare disparities.",
+          "goal": "Reliability"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires identifying which causal pathways are 'allowable' and which are not—a subjective decision; analyzing specific paths adds complexity to the causal model and the fairness criterion."
+        },
+        {
+          "description": "Causal graph construction relies on domain expertise and cannot be validated from observational data alone; if the graph incorrectly encodes causal structure or omits relevant edges, the path-specific assessment may certify an unfair model as compliant with no internal mechanism to detect the error, and this uncertainty is rarely surfaced in compliance documentation."
+        },
+        {
+          "description": "Path-specific causal effects are frequently non-identifiable from observational data alone; when unobserved confounders exist between a sensitive attribute and mediating variables or outcomes, the effect along a specific pathway cannot be uniquely recovered without additional parametric assumptions, reducing the technique to bounding rather than point-estimation of discrimination."
+        }
+      ],
+      "resources": [
+        {
+          "title": "Path-Specific Counterfactual Fairness via Dividend Correction",
+          "url": "https://www.semanticscholar.org/paper/197367ee337e8838fd2ef1a887101ddc84eb0612",
+          "source_type": "technical_paper",
+          "authors": [
+            "Daisuke Hatano",
+            "Satoshi Hara",
+            "Hiromi Arai"
+          ],
+          "publication_date": "2025",
+          "citationKey": "hatanoPathSpecificCounterfactualFairness2025"
+        }
+      ],
+      "complexity_rating": 5,
+      "computational_cost_rating": 4,
+      "related_techniques": [
+        "counterfactual-fairness-assessment",
+        "average-odds-difference",
+        "equal-opportunity-difference"
+      ],
+      "sample_claims": [
+        {
+          "text": "The hiring system's decisions are not influenced by gender through educational pathways whilst preserving the legitimate influence of qualifications on employment outcomes",
+          "domain": "general",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The loan approval model's risk assessment isolates the direct influence of creditworthiness from indirect effects of demographic characteristics propagating through correlated factors",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The diagnostic system's predictions are attributable to specific clinical pathways independent of demographic factors that influence healthcare access",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The decision process documents which factors legitimately affect outcomes versus those that create indirect discrimination through upstream correlations",
+          "domain": "public sector",
+          "assuranceGoal": "transparency"
+        },
+        {
+          "text": "The model's treatment recommendations remain consistent across patient demographics when controlling for symptom severity and medical history whilst allowing clinically relevant differences to influence care decisions",
+          "domain": "healthcare",
+          "assuranceGoal": "fairness"
+        }
+      ]
+    },
+    {
       "slug": "model-development-audit-trails",
       "name": "Model Development Audit Trails",
       "description": "Model development audit trails create comprehensive, immutable records of all decisions, experiments, and changes throughout the ML lifecycle. This technique captures dataset versions, training configurations, hyperparameter searches, model architecture changes, evaluation results, and deployment decisions in tamper-evident logs. Audit trails enable reproducibility, accountability, and regulatory compliance by documenting who made what changes when and why, supporting post-hoc investigation of model failures or unexpected behaviours.",
@@ -3252,5 +3359,5 @@
       ]
     }
   ],
-  "count": 23
+  "count": 24
 }

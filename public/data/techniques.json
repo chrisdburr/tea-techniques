@@ -351,11 +351,8 @@
     "complexity_rating": 1,
     "computational_cost_rating": 1,
     "related_techniques": [
-      "permutation-importance",
-      "mean-decrease-impurity",
       "shapley-additive-explanations",
-      "generalized-additive-models",
-      "ridge-regression-surrogates"
+      "generalized-additive-models"
     ],
     "sample_claims": [
       {
@@ -634,7 +631,7 @@
         "description": "Can produce negative relevance scores which may be difficult to interpret intuitively."
       },
       {
-        "description": "Rule selection (LRP-\u03b5, LRP-\u03b3, etc.) significantly affects results and requires domain expertise."
+        "description": "Rule selection (LRP-ε, LRP-γ, etc.) significantly affects results and requires domain expertise."
       },
       {
         "description": "Limited to feedforward networks and may not work well with modern architectures like transformers without substantial modifications."
@@ -653,8 +650,8 @@
     "related_techniques": [
       "deeplift",
       "taylor-decomposition",
-      "gradient-weighted-class-activation-mapping",
-      "integrated-gradients"
+      "integrated-gradients",
+      "gradient-saliency"
     ],
     "sample_claims": [
       {
@@ -753,7 +750,7 @@
     "related_techniques": [
       "layer-wise-relevance-propagation",
       "deeplift",
-      "taylor-decomposition",
+      "feature-attribution-with-integrated-gradients-in-nlp",
       "classical-attention-analysis-in-neural-networks"
     ],
     "sample_claims": [
@@ -1146,9 +1143,7 @@
     "computational_cost_rating": 2,
     "related_techniques": [
       "local-interpretable-model-agnostic-explanations",
-      "model-distillation",
       "rulefit",
-      "partial-dependence-plots",
       "coefficient-magnitudes-in-linear-models"
     ],
     "sample_claims": [
@@ -1976,7 +1971,7 @@
         "description": "Prioritizes preserving local neighborhood structure at the expense of global relationships, potentially creating misleading impressions about overall data topology."
       },
       {
-        "description": "Computationally expensive with O(n\u00b2) complexity, making it impractical for datasets with more than ~10,000 points without approximation methods."
+        "description": "Computationally expensive with O(n²) complexity, making it impractical for datasets with more than ~10,000 points without approximation methods."
       },
       {
         "description": "Sensitive to hyperparameter choices (perplexity, learning rate, iterations) that can dramatically affect clustering patterns and require domain expertise to tune appropriately."
@@ -2354,7 +2349,7 @@
     ],
     "example_use_cases": [
       {
-        "description": "Explaining loan application rejections by showing that removing recent late payments (pertinent negative) or adding \u00a35,000 more annual income (pertinent positive) would change the decision to approval, giving applicants clear actionable guidance.",
+        "description": "Explaining loan application rejections by showing that removing recent late payments (pertinent negative) or adding £5,000 more annual income (pertinent positive) would change the decision to approval, giving applicants clear actionable guidance.",
         "goal": "Explainability"
       },
       {
@@ -2391,8 +2386,7 @@
     "related_techniques": [
       "local-interpretable-model-agnostic-explanations",
       "anchor",
-      "integrated-gradients",
-      "shapley-additive-explanations"
+      "integrated-gradients"
     ],
     "sample_claims": [
       {
@@ -2426,7 +2420,7 @@
     "slug": "anchor",
     "name": "ANCHOR",
     "acronym": "ANCHOR",
-    "description": "ANCHOR generates high-precision if-then rules that explain individual predictions by identifying the minimal set of feature conditions that guarantee a specific prediction with high confidence. It searches for 'anchor' conditions (e.g., 'age > 30 AND income < \u00a350k') that ensure the model gives the same prediction at least 95% of the time when those conditions are met. This creates human-readable rules that users can trust as sufficient conditions for understanding why a particular decision was made.",
+    "description": "ANCHOR generates high-precision if-then rules that explain individual predictions by identifying the minimal set of feature conditions that guarantee a specific prediction with high confidence. It searches for 'anchor' conditions (e.g., 'age > 30 AND income < £50k') that ensure the model gives the same prediction at least 95% of the time when those conditions are met. This creates human-readable rules that users can trust as sufficient conditions for understanding why a particular decision was made.",
     "assurance_goals": [
       "Explainability",
       "Transparency"
@@ -2460,7 +2454,7 @@
         "goal": "Explainability"
       },
       {
-        "description": "Generating diagnostic rules for medical predictions such as 'IF fever > 38.5\u00b0C AND white_blood_cells > 12,000 THEN infection = 92% likely', helping clinicians validate automated diagnoses with trusted clinical indicators.",
+        "description": "Generating diagnostic rules for medical predictions such as 'IF fever > 38.5°C AND white_blood_cells > 12,000 THEN infection = 92% likely', helping clinicians validate automated diagnoses with trusted clinical indicators.",
         "goal": "Explainability"
       },
       {
@@ -2996,8 +2990,8 @@
     "related_techniques": [
       "equal-opportunity-difference",
       "average-odds-difference",
-      "sensitivity-analysis-for-fairness",
-      "counterfactual-fairness-assessment"
+      "counterfactual-fairness-assessment",
+      "reweighing"
     ],
     "sample_claims": [
       {
@@ -3092,10 +3086,7 @@
     "computational_cost_rating": 3,
     "related_techniques": [
       "fair-adversarial-networks",
-      "multi-accuracy-boosting",
-      "reweighing",
-      "equalised-odds-post-processing",
-      "threshold-optimiser"
+      "reweighing"
     ],
     "sample_claims": [
       {
@@ -3185,8 +3176,7 @@
     "related_techniques": [
       "sensitivity-analysis-for-fairness",
       "path-specific-counterfactual-fairness-assessment",
-      "demographic-parity-assessment",
-      "average-odds-difference"
+      "demographic-parity-assessment"
     ],
     "sample_claims": [
       {
@@ -3763,7 +3753,7 @@
   {
     "slug": "quantile-regression",
     "name": "Quantile Regression",
-    "description": "Quantile regression estimates specific percentiles (quantiles) of the target variable rather than just predicting the average outcome. For example, instead of predicting 'average house price = \u00a3300,000', it can predict 'there's a 10% chance the price will be below \u00a3250,000, 50% chance below \u00a3300,000, and 90% chance below \u00a3380,000'. This technique reveals how input features affect different parts of the outcome distribution - perhaps property size strongly influences luxury homes (90th percentile) but barely affects budget properties (10th percentile). By capturing the full conditional distribution, quantile regression provides rich uncertainty information and enables robust prediction intervals.",
+    "description": "Quantile regression estimates specific percentiles (quantiles) of the target variable rather than just predicting the average outcome. For example, instead of predicting 'average house price = £300,000', it can predict 'there's a 10% chance the price will be below £250,000, 50% chance below £300,000, and 90% chance below £380,000'. This technique reveals how input features affect different parts of the outcome distribution - perhaps property size strongly influences luxury homes (90th percentile) but barely affects budget properties (10th percentile). By capturing the full conditional distribution, quantile regression provides rich uncertainty information and enables robust prediction intervals.",
     "assurance_goals": [
       "Reliability",
       "Transparency",
@@ -4640,9 +4630,7 @@
     "computational_cost_rating": 2,
     "acronym": "AUPRC",
     "related_techniques": [
-      "empirical-calibration",
       "bootstrapping",
-      "temperature-scaling",
       "equal-opportunity-difference",
       "cross-validation"
     ],
@@ -4869,7 +4857,7 @@
   {
     "slug": "red-teaming",
     "name": "Red Teaming",
-    "description": "Red teaming is a structured adversarial evaluation process in which a dedicated team systematically probes an AI/ML system to discover vulnerabilities and failure modes. Unlike individual testing techniques (such as prompt injection testing, jailbreak resistance testing, or safety envelope testing), red teaming defines the organisational methodology: team composition, campaign planning, attack taxonomy, and reporting structure. The red team coordinates diverse attack vectors \u2014 including prompt manipulation, adversarial examples, edge case exploitation, and social engineering scenarios \u2014 into a coherent assessment programme. Results feed into risk registers and remediation plans rather than pass/fail metrics.",
+    "description": "Red teaming is a structured adversarial evaluation process in which a dedicated team systematically probes an AI/ML system to discover vulnerabilities and failure modes. Unlike individual testing techniques (such as prompt injection testing, jailbreak resistance testing, or safety envelope testing), red teaming defines the organisational methodology: team composition, campaign planning, attack taxonomy, and reporting structure. The red team coordinates diverse attack vectors — including prompt manipulation, adversarial examples, edge case exploitation, and social engineering scenarios — into a coherent assessment programme. Results feed into risk registers and remediation plans rather than pass/fail metrics.",
     "assurance_goals": [
       "General"
     ],
@@ -5028,10 +5016,8 @@
     "complexity_rating": 2,
     "computational_cost_rating": 2,
     "related_techniques": [
-      "out-of-distribution-detector-for-neural-networks",
       "confidence-thresholding",
       "internal-review-boards",
-      "out-of-domain-detection",
       "runtime-monitoring-and-circuit-breakers"
     ],
     "sample_claims": [
@@ -5415,9 +5401,7 @@
     "related_techniques": [
       "model-cards",
       "data-version-control",
-      "automated-documentation-generation",
-      "synthetic-data-evaluation",
-      "internal-review-boards"
+      "automated-documentation-generation"
     ],
     "sample_claims": [
       {
@@ -5807,9 +5791,7 @@
     "computational_cost_rating": 4,
     "related_techniques": [
       "model-pruning",
-      "ridge-regression-surrogates",
-      "rulefit",
-      "generalized-additive-models"
+      "ridge-regression-surrogates"
     ],
     "sample_claims": [
       {
@@ -5908,9 +5890,8 @@
     "computational_cost_rating": 2,
     "related_techniques": [
       "generalized-additive-models",
-      "coefficient-magnitudes-in-linear-models",
-      "quantile-regression",
-      "partial-dependence-plots"
+      "partial-dependence-plots",
+      "individual-conditional-expectation-plots"
     ],
     "sample_claims": [
       {
@@ -6128,8 +6109,7 @@
     "related_techniques": [
       "model-distillation",
       "neuron-activation-analysis",
-      "integrated-gradients",
-      "layer-wise-relevance-propagation"
+      "integrated-gradients"
     ],
     "sample_claims": [
       {
@@ -6380,7 +6360,7 @@
   {
     "slug": "causal-mediation-analysis-in-language-models",
     "name": "Causal Mediation Analysis in Language Models",
-    "description": "Causal mediation analysis in language models is a mechanistic interpretability technique that systematically investigates how specific internal components (neurons, attention heads, or layers) causally contribute to model outputs. By performing controlled interventions\u2014such as activating, deactivating, or modifying specific components\u2014researchers can trace the causal pathways through which information flows and transforms within the model. This approach goes beyond correlation to establish causal relationships, enabling researchers to understand not just what features influence outputs, but how and why they do so through specific computational pathways.",
+    "description": "Causal mediation analysis in language models is a mechanistic interpretability technique that systematically investigates how specific internal components (neurons, attention heads, or layers) causally contribute to model outputs. By performing controlled interventions—such as activating, deactivating, or modifying specific components—researchers can trace the causal pathways through which information flows and transforms within the model. This approach goes beyond correlation to establish causal relationships, enabling researchers to understand not just what features influence outputs, but how and why they do so through specific computational pathways.",
     "assurance_goals": [
       "Explainability",
       "Reliability",
@@ -6565,10 +6545,8 @@
     "complexity_rating": 4,
     "computational_cost_rating": 3,
     "related_techniques": [
-      "prompt-sensitivity-analysis",
       "causal-mediation-analysis-in-language-models",
       "attention-visualisation-in-transformers",
-      "contextual-decomposition",
       "shapley-additive-explanations"
     ],
     "sample_claims": [
@@ -6897,9 +6875,7 @@
     "related_techniques": [
       "disparate-impact-remover",
       "relabelling",
-      "preferential-sampling",
-      "adaptive-sensitive-reweighting",
-      "adversarial-debiasing"
+      "preferential-sampling"
     ],
     "sample_claims": [
       {
@@ -7003,8 +6979,7 @@
       "reweighing",
       "relabelling",
       "preferential-sampling",
-      "attribute-removal-fairness-through-unawareness",
-      "adversarial-debiasing"
+      "attribute-removal-fairness-through-unawareness"
     ],
     "sample_claims": [
       {
@@ -7110,8 +7085,6 @@
     "computational_cost_rating": 5,
     "related_techniques": [
       "bayesian-fairness-regularization",
-      "sensitivity-analysis-for-fairness",
-      "attribute-removal-fairness-through-unawareness",
       "fair-adversarial-networks",
       "synthetic-data-generation"
     ],
@@ -7645,9 +7618,7 @@
     "related_techniques": [
       "adaptive-sensitive-reweighting",
       "adversarial-debiasing",
-      "fair-transfer-learning",
-      "meta-fair-classifier",
-      "reweighing"
+      "meta-fair-classifier"
     ],
     "sample_claims": [
       {
@@ -8172,8 +8143,6 @@
     "related_techniques": [
       "adaptive-sensitive-reweighting",
       "adversarial-debiasing",
-      "fair-transfer-learning",
-      "meta-fair-classifier",
       "reweighing"
     ],
     "sample_claims": [
@@ -8381,11 +8350,9 @@
     "complexity_rating": 2,
     "computational_cost_rating": 1,
     "related_techniques": [
-      "adversarial-debiasing",
       "calibration-with-equality-of-opportunity",
       "equalised-odds-post-processing",
-      "reject-option-classification",
-      "average-odds-difference"
+      "reject-option-classification"
     ],
     "sample_claims": [
       {
@@ -8802,8 +8769,8 @@
     "related_techniques": [
       "demographic-parity-assessment",
       "equal-opportunity-difference",
-      "attribute-removal-fairness-through-unawareness",
-      "calibration-with-equality-of-opportunity"
+      "calibration-with-equality-of-opportunity",
+      "equalised-odds-post-processing"
     ],
     "sample_claims": [
       {
@@ -8882,7 +8849,7 @@
     ],
     "limitations": [
       {
-        "description": "Requires identifying which causal pathways are 'allowable' and which are not\u2014a subjective decision; analyzing specific paths adds complexity to the causal model and the fairness criterion."
+        "description": "Requires identifying which causal pathways are 'allowable' and which are not—a subjective decision; analyzing specific paths adds complexity to the causal model and the fairness criterion."
       },
       {
         "description": "Causal graph construction relies on domain expertise and cannot be validated from observational data alone; if the graph incorrectly encodes causal structure or omits relevant edges, the path-specific assessment may certify an unfair model as compliant with no internal mechanism to detect the error, and this uncertainty is rarely surfaced in compliance documentation."
@@ -9447,9 +9414,7 @@
       "pasunooriCollaborativeIntelligenceAPI2024"
     ],
     "related_techniques": [
-      "adversarial-training-evaluation",
       "runtime-monitoring-and-circuit-breakers",
-      "membership-inference-attack-testing",
       "prompt-injection-testing",
       "model-development-audit-trails"
     ],
@@ -9783,7 +9748,7 @@
       "adversarial-training-evaluation",
       "safety-envelope-testing",
       "agent-goal-misalignment-testing",
-      "cross-validation"
+      "machine-unlearning"
     ],
     "sample_claims": [
       {
@@ -10022,7 +9987,6 @@
     "related_techniques": [
       "attention-visualisation-in-transformers",
       "concept-activation-vectors",
-      "chain-of-thought-faithfulness-evaluation",
       "few-shot-fairness-evaluation",
       "toxicity-detection"
     ],
@@ -10149,7 +10113,7 @@
       "prompt-robustness-testing",
       "toxicity-detection",
       "sensitivity-analysis-for-fairness",
-      "path-specific-counterfactual-fairness-assessment"
+      "embedding-bias-analysis"
     ],
     "sample_claims": [
       {
@@ -10470,8 +10434,6 @@
       "xuMachineUnlearningTraditional2024"
     ],
     "related_techniques": [
-      "federated-learning",
-      "homomorphic-encryption",
       "membership-inference-attack-testing",
       "influence-functions",
       "differential-privacy"
@@ -10692,9 +10654,7 @@
       "ou-yangApplyingProcessMining2010"
     ],
     "related_techniques": [
-      "jailbreak-resistance-testing",
       "agent-goal-misalignment-testing",
-      "prompt-injection-testing",
       "runtime-monitoring-and-circuit-breakers",
       "safety-envelope-testing"
     ],
@@ -10911,7 +10871,6 @@
       "i.markinIntegrationLargeLanguage2025"
     ],
     "related_techniques": [
-      "adversarial-training-evaluation",
       "constitutional-ai-evaluation",
       "chain-of-thought-faithfulness-evaluation",
       "jailbreak-resistance-testing"
@@ -11122,9 +11081,7 @@
     ],
     "related_techniques": [
       "deep-ensembles",
-      "chain-of-thought-faithfulness-evaluation",
       "out-of-distribution-detector-for-neural-networks",
-      "conformal-prediction",
       "runtime-monitoring-and-circuit-breakers"
     ],
     "sample_claims": [
@@ -11331,7 +11288,7 @@
         "description": "Testing reveals brittleness but doesn't necessarily provide clear paths to mitigation beyond avoiding problematic variations."
       },
       {
-        "description": "Robustness patterns may not transfer across domains\u2014a model robust to medical terminology variations might still be brittle to legal phrasings, requiring separate testing for each application domain."
+        "description": "Robustness patterns may not transfer across domains—a model robust to medical terminology variations might still be brittle to legal phrasings, requiring separate testing for each application domain."
       }
     ],
     "resources": [
@@ -11344,8 +11301,8 @@
     "related_techniques": [
       "prompt-sensitivity-analysis",
       "prompt-injection-testing",
-      "chain-of-thought-faithfulness-evaluation",
-      "constitutional-ai-evaluation"
+      "red-teaming",
+      "adversarial-training-evaluation"
     ],
     "sample_claims": [
       {
@@ -11560,7 +11517,7 @@
         "description": "Metrics may not capture subtle quality issues like incomplete answers, misleading emphasis, or failure to synthesize information from multiple retrieved sources."
       },
       {
-        "description": "Evaluating multi-hop reasoning\u2014where answers require synthesising information across multiple retrieved documents\u2014is particularly challenging, as standard metrics may not capture whether the system correctly chains information or makes unsupported logical leaps."
+        "description": "Evaluating multi-hop reasoning—where answers require synthesising information across multiple retrieved documents—is particularly challenging, as standard metrics may not capture whether the system correctly chains information or makes unsupported logical leaps."
       },
       {
         "description": "Difficult to isolate whether poor performance stems from retrieval failures (finding wrong documents), generation failures (misusing correct documents), or interaction effects, complicating diagnosis and improvement efforts."

@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { columns } from '@/components/techniques-columns';
 import { TechniquesDataTable } from '@/components/techniques-data-table';
 import { Badge } from '@/components/ui/badge';
-import { getTags, getTechniquesByTag } from '@/lib/data';
+import { getTags, getTechniquesByExactTag } from '@/lib/data';
 import { tagDefinitions } from '@/lib/data/tag-definitions';
 
 // Force static rendering for static export
@@ -82,7 +82,7 @@ export default async function CategorySubcategoryPage({
     notFound();
   }
 
-  const techniques = await getTechniquesByTag(tag.name);
+  const techniques = await getTechniquesByExactTag(tag.name);
   const goalName =
     resolvedParams.goal.charAt(0).toUpperCase() + resolvedParams.goal.slice(1);
   const subcategoryName =

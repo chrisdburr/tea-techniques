@@ -125,7 +125,7 @@ export async function getTechniquesByGoal(
   );
 }
 
-// Get techniques by tag
+// Get techniques by tag (includes catch-all matches for filtering)
 export async function getTechniquesByTag(
   tagName: string
 ): Promise<Technique[]> {
@@ -139,6 +139,14 @@ export async function getTechniquesByTag(
         catchAllTag !== tagName &&
         technique.tags?.includes(catchAllTag))
   );
+}
+
+// Get techniques by exact tag match (no catch-all expansion)
+export async function getTechniquesByExactTag(
+  tagName: string
+): Promise<Technique[]> {
+  const techniques = await getAllTechniques();
+  return techniques.filter((technique) => technique.tags?.includes(tagName));
 }
 
 // Get related techniques by curated slug list

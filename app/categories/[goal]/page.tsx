@@ -1,10 +1,9 @@
-import { ChevronRight } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { columns } from '@/components/techniques-columns';
 import { TechniquesDataTable } from '@/components/techniques-data-table';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { GoalIcon } from '@/components/ui/goal-icon';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -109,33 +108,21 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <h2 className="mb-4 font-semibold text-foreground text-xl">
               Browse by subcategory
             </h2>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="flex flex-wrap gap-2">
               {dimensions.map((dim) => (
                 <Link
                   href={`/categories/${goal.slug}/${dim.slug}`}
                   key={dim.slug}
                 >
-                  <Card className="h-full transition-colors hover:bg-accent">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="flex items-center justify-between text-lg">
-                        <span>{dim.name}</span>
-                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      {dim.description && (
-                        <p className="mb-2 text-muted-foreground text-sm">
-                          {dim.description}
-                        </p>
-                      )}
-                      <p className="text-muted-foreground text-xs">
-                        {dim.techniqueCount} technique
-                        {dim.techniqueCount !== 1 ? 's' : ''}
-                        {dim.subcategoryCount > 0 &&
-                          ` · ${dim.subcategoryCount} subcategor${dim.subcategoryCount !== 1 ? 'ies' : 'y'}`}
-                      </p>
-                    </CardContent>
-                  </Card>
+                  <Badge
+                    className="cursor-pointer px-3 py-1.5 text-sm transition-colors hover:bg-secondary/80"
+                    variant="secondary"
+                  >
+                    {dim.name}
+                    <span className="ml-1.5 text-muted-foreground">
+                      {dim.techniqueCount}
+                    </span>
+                  </Badge>
                 </Link>
               ))}
             </div>

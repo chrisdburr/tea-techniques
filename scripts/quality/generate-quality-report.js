@@ -1302,7 +1302,7 @@ async function main() {
   logger.info(`  Statistical outliers: ${statisticalOutliers.length}`);
   logger.info(`  Invalid cross-refs: ${crossReferences.invalid_slugs.length}`);
   logger.info(
-    `  Asymmetric relationships: ${crossReferences.asymmetric_relationships.length}`
+    `  Asymmetric relationships: ${crossReferences.asymmetric_relationships.length} (informational — asymmetry is expected)`
   );
   logger.info(
     `  Orphan techniques: ${crossReferences.orphan_techniques.length}`

@@ -1,0 +1,218 @@
+{
+  "tag": {
+    "name": "applicable-models/requirements/model-agnostic",
+    "slug": "applicable-models-requirements-model-agnostic",
+    "count": 2,
+    "category": "applicable-models"
+  },
+  "techniques": [
+    {
+      "slug": "statistical-oversampling-methods",
+      "name": "Statistical Oversampling Methods",
+      "description": "A family of data augmentation techniques that generate synthetic minority-class examples through geometric interpolation in feature space, addressing class imbalance problems that degrade classifier performance on underrepresented groups. The foundational method, SMOTE (Synthetic Minority Over-sampling Technique), creates new instances by interpolating between existing minority samples and their k-nearest neighbours. Extensions include Borderline-SMOTE (focusing generation near decision boundaries), ADASYN (adaptively weighting harder-to-learn instances), and SVMSMOTE (using support vectors to guide generation). These methods operate directly on feature vectors without requiring neural network training, making them computationally lightweight and applicable to any tabular classification task.",
+      "assurance_goals": [
+        "Fairness",
+        "Reliability"
+      ],
+      "tags": [
+        "applicable-models/requirements/model-agnostic",
+        "applicable-models/paradigm/supervised",
+        "applicable-models/requirements/training-data",
+        "assurance-goal-category/fairness",
+        "assurance-goal-category/fairness/group",
+        "assurance-goal-category/fairness/process",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/performance-assessment",
+        "data-requirements/labelled-data",
+        "data-type/tabular",
+        "evidence-type/structured-output",
+        "evidence-type/synthetic-data",
+        "expertise-needed/statistics",
+        "expertise-needed/ml-engineering",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-augmentation",
+        "lifecycle-stage/data-handling",
+        "technique-type/algorithmic"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Applying SMOTE to oversample underrepresented ethnic groups in a loan approval training dataset, ensuring the classifier has sufficient examples from each demographic group to learn fair decision boundaries.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Using ADASYN to generate synthetic examples of rare manufacturing defect types, improving the reliability of quality control classifiers on edge cases that occur in fewer than 1% of production runs.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Applying Borderline-SMOTE to augment minority-class examples near the decision boundary in a medical diagnosis task, reducing false-negative rates for rare conditions without collecting additional patient data.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Oversampling underrepresented protected groups in a hiring dataset to enable equitable evaluation of candidates across gender and ethnicity, ensuring the model does not simply learn to predict the majority class.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Interpolation in feature space can generate synthetic instances that fall in regions of the feature space not occupied by the true data distribution, introducing noise or unrealistic combinations — particularly problematic for high-dimensional data."
+        },
+        {
+          "description": "Does not address the root cause of class imbalance (e.g. data collection bias, structural underrepresentation) and may mask rather than resolve underlying fairness issues in the data pipeline."
+        },
+        {
+          "description": "Performance degrades on high-dimensional datasets where the nearest-neighbour assumption breaks down, and oversampling in such spaces can amplify noise dimensions without improving classification."
+        },
+        {
+          "description": "Assumes the minority class forms coherent clusters in feature space; when minority examples are scattered or overlap heavily with majority-class regions, interpolation produces ambiguous or mislabelled synthetic samples."
+        }
+      ],
+      "resources": [],
+      "complexity_rating": 2,
+      "computational_cost_rating": 1,
+      "related_techniques": [
+        "synthetic-data-generation",
+        "synthetic-data-evaluation",
+        "gan-based-tabular-synthetic-data"
+      ],
+      "sample_claims": [
+        {
+          "text": "The training dataset has been balanced using SMOTE oversampling to ensure the classifier has sufficient representation of all demographic groups for equitable decision-making",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The rare defect classifier has been trained on an ADASYN-augmented dataset that maintains the original feature distributions whilst ensuring adequate representation of all defect categories",
+          "domain": "manufacturing",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The diagnostic model performance on rare conditions has been improved through Borderline-SMOTE augmentation targeting samples near the decision boundary, without introducing fabricated clinical relationships",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        }
+      ]
+    },
+    {
+      "slug": "simulation-based-synthetic-data",
+      "name": "Simulation-Based Synthetic Data Generation",
+      "description": "Generates synthetic datasets through computational simulation of underlying data-generating processes, encompassing statistical methods (copula models, parametric distribution fitting), agent-based models, physics-informed simulators, and Monte Carlo sampling. Unlike neural-network-based approaches, these methods encode explicit domain knowledge or statistical structure into the generation process — copulas model multivariate dependencies through known distributional families, agent-based simulations construct data from interacting rule-driven entities, and physics-informed generators embed differential equation constraints. This makes the synthetic data more interpretable and auditable, with known theoretical properties, at the cost of reduced flexibility for capturing complex nonlinear patterns that lack a known generative model.",
+      "assurance_goals": [
+        "Safety",
+        "Reliability",
+        "Privacy"
+      ],
+      "tags": [
+        "applicable-models/requirements/model-agnostic",
+        "applicable-models/paradigm/generative",
+        "applicable-models/architecture/probabilistic",
+        "assurance-goal-category/safety",
+        "assurance-goal-category/safety/risk-identification",
+        "assurance-goal-category/safety/hazard-analysis",
+        "assurance-goal-category/reliability",
+        "assurance-goal-category/reliability/uncertainty-quantification",
+        "assurance-goal-category/privacy",
+        "assurance-goal-category/privacy/formal-guarantee",
+        "data-requirements/no-special-requirements",
+        "data-type/tabular",
+        "data-type/time-series",
+        "evidence-type/structured-output",
+        "evidence-type/synthetic-data",
+        "evidence-type/statistical-test",
+        "expertise-needed/domain-expertise",
+        "expertise-needed/statistics",
+        "lifecycle-stage/data-collection",
+        "lifecycle-stage/data-collection/data-augmentation",
+        "lifecycle-stage/model-development",
+        "lifecycle-stage/model-development/testing",
+        "technique-type/algorithmic",
+        "technique-type/process-based"
+      ],
+      "example_use_cases": [
+        {
+          "description": "Using copula-based simulation to generate synthetic financial portfolio data preserving tail dependencies and correlation structures, enabling stress testing of risk models under extreme market conditions without relying solely on limited historical crash data.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Running agent-based traffic simulations to generate synthetic autonomous vehicle sensor data covering rare and dangerous driving scenarios (pedestrian occlusion, multi-vehicle pile-ups) that are impractical or unethical to collect in real-world testing.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Employing Monte Carlo simulation to generate synthetic clinical trial outcome data for sensitivity analysis of treatment-effect estimators, quantifying how model predictions change across plausible data-generating processes.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Fitting Gaussian copula models to census microdata to generate synthetic population datasets that preserve multivariate demographic relationships whilst providing formal disclosure limitation through the generation process.",
+          "goal": "Privacy"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires explicit specification of the data-generating process, meaning that important but unknown relationships or latent factors not captured in the simulation model will be absent from the synthetic data."
+        },
+        {
+          "description": "Copula models assume that dependencies can be separated from marginal distributions, which may not hold for complex real-world datasets where the dependency structure itself varies across the marginal distribution."
+        },
+        {
+          "description": "Agent-based and physics-informed simulators require significant domain expertise to design, calibrate, and validate, making them resource-intensive compared to data-driven approaches."
+        },
+        {
+          "description": "Scalability is limited for high-dimensional problems — parametric models face the curse of dimensionality in specifying joint distributions, and agent-based simulations become computationally expensive as the number of interacting entities grows."
+        }
+      ],
+      "resources": [
+        {
+          "title": "SDV",
+          "url": "https://github.com/sdv-dev/SDV",
+          "source_type": "software_package",
+          "publication_date": "2018-05-11",
+          "citationKey": "sdv-devSDV2018",
+          "abstract": "Synthetic data generation for tabular data"
+        },
+        {
+          "title": "An evaluation framework for synthetic data generation models",
+          "url": "http://arxiv.org/abs/2404.08866v1",
+          "source_type": "technical_paper",
+          "authors": [
+            "Ioannis E. Livieris",
+            "Nikos Alimpertis",
+            "George Domalis",
+            "Dimitris Tsakalidis"
+          ],
+          "publication_date": "2024-04-13",
+          "citationKey": "e.livierisEvaluationFrameworkSynthetic2024",
+          "abstract": "Nowadays, the use of synthetic data has gained popularity as a cost-efficient strategy for enhancing data augmentation for improving machine learning models performance as well as addressing concerns related to sensitive data privacy. Therefore, the necessity of ensuring quality of generated synthetic data, in terms of accurate representation of real data, consists of primary importance. In this work, we present a new framework for evaluating synthetic data generation models' ability for developing high-quality synthetic data. The proposed approach is able to provide strong statistical and theoretical information about the evaluation framework and the compared models' ranking. Two use case scenarios demonstrate the applicability of the proposed framework for evaluating the ability of synthetic data generation models to generated high quality data. The implementation code can be found in https://github.com/novelcore/synthetic_data_evaluation_framework."
+        }
+      ],
+      "complexity_rating": 3,
+      "computational_cost_rating": 3,
+      "related_techniques": [
+        "synthetic-data-generation",
+        "synthetic-data-evaluation",
+        "sensitivity-analysis-for-fairness"
+      ],
+      "sample_claims": [
+        {
+          "text": "The risk model has been stress-tested using copula-simulated scenarios that preserve the tail dependence structure of historical market crashes whilst exploring conditions beyond observed extremes",
+          "domain": "finance",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The autonomous vehicle perception system has been validated against agent-based simulation data covering rare hazardous scenarios that cannot be safely or frequently observed in real-world testing",
+          "domain": "autonomous systems",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The treatment-effect estimator has been subjected to Monte Carlo sensitivity analysis demonstrating robustness of conclusions across 10,000 plausible data-generating processes",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The released population dataset was generated through copula-based simulation that preserves demographic correlations whilst providing formal disclosure limitation guarantees",
+          "domain": "government",
+          "assuranceGoal": "privacy"
+        }
+      ]
+    }
+  ],
+  "count": 2
+}

@@ -390,6 +390,71 @@
     "searchText": "synthetic data generation synthetic data generation creates artificial datasets that aim to preserve the statistical properties, distributions, and relationships of real data whilst containing no actual records from real individuals. the technique encompasses various approaches including generative adversarial networks (gans), variational autoencoders (vaes), statistical sampling methods, and privacy-preserving techniques like differential privacy. beyond privacy protection, synthetic data serves multiple purposes: augmenting limited datasets, balancing class distributions, testing model robustness, enabling data sharing across organisations, and supporting fairness assessments by generating representative samples for underrepresented groups. privacy fairness reliability safety applicable-models/architecture/neural-networks/generative/gan applicable-models/architecture/neural-networks/generative/vae applicable-models/architecture/probabilistic applicable-models/paradigm/generative applicable-models/paradigm/unsupervised applicable-models/requirements/training-data assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/privacy assurance-goal-category/privacy/formal-guarantee assurance-goal-category/reliability assurance-goal-category/reliability/uncertainty-quantification assurance-goal-category/safety assurance-goal-category/safety/risk-identification data-requirements/no-special-requirements data-type/any evidence-type/structured-output evidence-type/synthetic-data expertise-needed/cryptography expertise-needed/ml-engineering expertise-needed/statistics fairness-approach/group lifecycle-stage/data-collection lifecycle-stage/data-collection/data-augmentation lifecycle-stage/data-handling lifecycle-stage/model-development technique-type/algorithmic the training dataset contains no records traceable to actual individuals from the original data source the model evaluation dataset includes representative samples from demographic groups underrepresented in production data the perception system's performance on edge-case scenarios has been validated using generated test data covering conditions rarely observed in real operation the development environment uses generated transaction data that preserves realistic fraud patterns without exposing customer financial information the quality control model has been tested on generated defect patterns that maintain statistical relationships with manufacturing parameters without revealing proprietary production data"
   },
   {
+    "slug": "gan-based-tabular-synthetic-data",
+    "name": "GAN-Based Tabular Synthetic Data",
+    "description": "Generates synthetic tabular datasets using Generative Adversarial Networks, most commonly through architectures such as CTGAN (Conditional Tabular GAN) and TVAE (Triplet-based Variational Autoencoder). These models learn the joint distribution of mixed-type columns — continuous, discrete, and categorical — by training a generator and discriminator in an adversarial framework, with mode-specific normalisation to handle multimodal continuous distributions and training-by-sampling to address class imbalance. The resulting synthetic tables aim to preserve statistical relationships, correlations, and marginal distributions of the original data whilst containing no real records, supporting privacy-preserving data sharing, model development on sensitive datasets, and augmentation of limited training data.",
+    "assurance_goals": [
+      "Privacy",
+      "Reliability",
+      "Fairness"
+    ],
+    "tags": [
+      "applicable-models/architecture/neural-networks/generative/gan",
+      "applicable-models/architecture/neural-networks/generative/vae",
+      "applicable-models/paradigm/generative",
+      "applicable-models/paradigm/unsupervised",
+      "applicable-models/requirements/training-data",
+      "applicable-models/requirements/gradient-access",
+      "assurance-goal-category/privacy",
+      "assurance-goal-category/privacy/formal-guarantee",
+      "assurance-goal-category/reliability",
+      "assurance-goal-category/reliability/uncertainty-quantification",
+      "assurance-goal-category/fairness",
+      "assurance-goal-category/fairness/group",
+      "data-requirements/no-special-requirements",
+      "data-type/tabular",
+      "evidence-type/structured-output",
+      "evidence-type/synthetic-data",
+      "expertise-needed/ml-engineering",
+      "expertise-needed/statistics",
+      "lifecycle-stage/data-collection",
+      "lifecycle-stage/data-collection/data-augmentation",
+      "lifecycle-stage/data-handling",
+      "technique-type/algorithmic"
+    ],
+    "searchText": "gan-based tabular synthetic data generates synthetic tabular datasets using generative adversarial networks, most commonly through architectures such as ctgan (conditional tabular gan) and tvae (triplet-based variational autoencoder). these models learn the joint distribution of mixed-type columns — continuous, discrete, and categorical — by training a generator and discriminator in an adversarial framework, with mode-specific normalisation to handle multimodal continuous distributions and training-by-sampling to address class imbalance. the resulting synthetic tables aim to preserve statistical relationships, correlations, and marginal distributions of the original data whilst containing no real records, supporting privacy-preserving data sharing, model development on sensitive datasets, and augmentation of limited training data. privacy reliability fairness applicable-models/architecture/neural-networks/generative/gan applicable-models/architecture/neural-networks/generative/vae applicable-models/paradigm/generative applicable-models/paradigm/unsupervised applicable-models/requirements/training-data applicable-models/requirements/gradient-access assurance-goal-category/privacy assurance-goal-category/privacy/formal-guarantee assurance-goal-category/reliability assurance-goal-category/reliability/uncertainty-quantification assurance-goal-category/fairness assurance-goal-category/fairness/group data-requirements/no-special-requirements data-type/tabular evidence-type/structured-output evidence-type/synthetic-data expertise-needed/ml-engineering expertise-needed/statistics lifecycle-stage/data-collection lifecycle-stage/data-collection/data-augmentation lifecycle-stage/data-handling technique-type/algorithmic the synthetic patient dataset generated by ctgan preserves statistical correlations between clinical variables whilst containing no records traceable to real patients the augmented training dataset includes gan-generated records for underrepresented demographic groups, achieving balanced representation across all protected characteristics the fraud detection model has been validated on gan-generated synthetic transaction data that preserves the statistical distribution of rare fraud patterns from the original dataset"
+  },
+  {
+    "slug": "statistical-oversampling-methods",
+    "name": "Statistical Oversampling Methods",
+    "description": "A family of data augmentation techniques that generate synthetic minority-class examples through geometric interpolation in feature space, addressing class imbalance problems that degrade classifier performance on underrepresented groups. The foundational method, SMOTE (Synthetic Minority Over-sampling Technique), creates new instances by interpolating between existing minority samples and their k-nearest neighbours. Extensions include Borderline-SMOTE (focusing generation near decision boundaries), ADASYN (adaptively weighting harder-to-learn instances), and SVMSMOTE (using support vectors to guide generation). These methods operate directly on feature vectors without requiring neural network training, making them computationally lightweight and applicable to any tabular classification task.",
+    "assurance_goals": [
+      "Fairness",
+      "Reliability"
+    ],
+    "tags": [
+      "applicable-models/requirements/model-agnostic",
+      "applicable-models/paradigm/supervised",
+      "applicable-models/requirements/training-data",
+      "assurance-goal-category/fairness",
+      "assurance-goal-category/fairness/group",
+      "assurance-goal-category/fairness/process",
+      "assurance-goal-category/reliability",
+      "assurance-goal-category/reliability/performance-assessment",
+      "data-requirements/labelled-data",
+      "data-type/tabular",
+      "evidence-type/structured-output",
+      "evidence-type/synthetic-data",
+      "expertise-needed/statistics",
+      "expertise-needed/ml-engineering",
+      "lifecycle-stage/data-collection",
+      "lifecycle-stage/data-collection/data-augmentation",
+      "lifecycle-stage/data-handling",
+      "technique-type/algorithmic"
+    ],
+    "searchText": "statistical oversampling methods a family of data augmentation techniques that generate synthetic minority-class examples through geometric interpolation in feature space, addressing class imbalance problems that degrade classifier performance on underrepresented groups. the foundational method, smote (synthetic minority over-sampling technique), creates new instances by interpolating between existing minority samples and their k-nearest neighbours. extensions include borderline-smote (focusing generation near decision boundaries), adasyn (adaptively weighting harder-to-learn instances), and svmsmote (using support vectors to guide generation). these methods operate directly on feature vectors without requiring neural network training, making them computationally lightweight and applicable to any tabular classification task. fairness reliability applicable-models/requirements/model-agnostic applicable-models/paradigm/supervised applicable-models/requirements/training-data assurance-goal-category/fairness assurance-goal-category/fairness/group assurance-goal-category/fairness/process assurance-goal-category/reliability assurance-goal-category/reliability/performance-assessment data-requirements/labelled-data data-type/tabular evidence-type/structured-output evidence-type/synthetic-data expertise-needed/statistics expertise-needed/ml-engineering lifecycle-stage/data-collection lifecycle-stage/data-collection/data-augmentation lifecycle-stage/data-handling technique-type/algorithmic the training dataset has been balanced using smote oversampling to ensure the classifier has sufficient representation of all demographic groups for equitable decision-making the rare defect classifier has been trained on an adasyn-augmented dataset that maintains the original feature distributions whilst ensuring adequate representation of all defect categories the diagnostic model performance on rare conditions has been improved through borderline-smote augmentation targeting samples near the decision boundary, without introducing fabricated clinical relationships"
+  },
+  {
     "slug": "federated-learning",
     "name": "Federated Learning",
     "description": "Federated learning enables collaborative model training across multiple distributed parties (devices, organisations, or data centres) without requiring centralised data sharing. Participants train models locally on their private datasets and only share model updates (gradients, weights, or aggregated statistics) with a central coordinator. This distributed approach serves multiple purposes: preserving data privacy and sovereignty, reducing communication costs, enabling learning from diverse data sources, improving model robustness through heterogeneous training, and facilitating compliance with data protection regulations whilst maintaining model performance comparable to centralised training.",

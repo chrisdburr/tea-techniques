@@ -3416,7 +3416,10 @@
       "relatedTo": [
         "tea:technique/differential-privacy",
         "tea:technique/synthetic-data-evaluation",
-        "tea:technique/membership-inference-attack-testing"
+        "tea:technique/membership-inference-attack-testing",
+        "tea:technique/gan-based-tabular-synthetic-data",
+        "tea:technique/statistical-oversampling-methods",
+        "tea:technique/simulation-based-synthetic-data"
       ],
       "citesResource": [
         "tea:resource/sdv-devSDV2018",
@@ -3483,6 +3486,291 @@
         {
           "text": "The quality control model has been tested on generated defect patterns that maintain statistical relationships with manufacturing parameters without revealing proprietary production data",
           "domain": "manufacturing",
+          "assuranceGoal": "privacy"
+        }
+      ]
+    },
+    {
+      "@id": "tea:technique/gan-based-tabular-synthetic-data",
+      "@type": "Technique",
+      "name": "GAN-Based Tabular Synthetic Data",
+      "slug": "gan-based-tabular-synthetic-data",
+      "description": "Generates synthetic tabular datasets using Generative Adversarial Networks, most commonly through architectures such as CTGAN (Conditional Tabular GAN) and TVAE (Triplet-based Variational Autoencoder). These models learn the joint distribution of mixed-type columns — continuous, discrete, and categorical — by training a generator and discriminator in an adversarial framework, with mode-specific normalisation to handle multimodal continuous distributions and training-by-sampling to address class imbalance. The resulting synthetic tables aim to preserve statistical relationships, correlations, and marginal distributions of the original data whilst containing no real records, supporting privacy-preserving data sharing, model development on sensitive datasets, and augmentation of limited training data.",
+      "addressesGoal": [
+        "tea:goal/privacy",
+        "tea:goal/reliability",
+        "tea:goal/fairness"
+      ],
+      "hasTag": [
+        "tea:tag/applicable-models/architecture/neural-networks/generative/gan",
+        "tea:tag/applicable-models/architecture/neural-networks/generative/vae",
+        "tea:tag/applicable-models/paradigm/generative",
+        "tea:tag/applicable-models/paradigm/unsupervised",
+        "tea:tag/applicable-models/requirements/training-data",
+        "tea:tag/applicable-models/requirements/gradient-access",
+        "tea:tag/assurance-goal-category/privacy",
+        "tea:tag/assurance-goal-category/privacy/formal-guarantee",
+        "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/assurance-goal-category/reliability/uncertainty-quantification",
+        "tea:tag/assurance-goal-category/fairness",
+        "tea:tag/assurance-goal-category/fairness/group",
+        "tea:tag/data-requirements/no-special-requirements",
+        "tea:tag/data-type/tabular",
+        "tea:tag/evidence-type/structured-output",
+        "tea:tag/evidence-type/synthetic-data",
+        "tea:tag/expertise-needed/ml-engineering",
+        "tea:tag/expertise-needed/statistics",
+        "tea:tag/lifecycle-stage/data-collection",
+        "tea:tag/lifecycle-stage/data-collection/data-augmentation",
+        "tea:tag/lifecycle-stage/data-handling",
+        "tea:tag/technique-type/algorithmic"
+      ],
+      "complexityRating": 4,
+      "computationalCostRating": 4,
+      "relatedTo": [
+        "tea:technique/synthetic-data-generation",
+        "tea:technique/synthetic-data-evaluation",
+        "tea:technique/differential-privacy",
+        "tea:technique/fairness-gan"
+      ],
+      "citesResource": [
+        "tea:resource/sdv-devSDV2018",
+        "tea:resource/santosHowGenerateRealWorld2023",
+        "tea:resource/e.livierisEvaluationFrameworkSynthetic2024",
+        "tea:resource/ramachandranpillaiBtGANGeneratingFair2024"
+      ],
+      "exampleUseCases": [
+        {
+          "description": "Generating synthetic patient records from hospital databases using CTGAN to enable multi-institution collaborative research on treatment outcomes without sharing identifiable health data across organisational boundaries.",
+          "goal": "Privacy"
+        },
+        {
+          "description": "Augmenting a limited fraud detection training set by generating synthetic fraudulent transaction records that preserve the statistical characteristics of rare fraud patterns, improving model recall on underrepresented fraud types.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Creating balanced synthetic datasets for credit scoring by generating additional records for underrepresented demographic groups, enabling fairness testing across protected characteristics without collecting new sensitive data.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Training instability inherent to GAN architectures (mode collapse, vanishing gradients) can result in synthetic data that fails to capture the full diversity of the original distribution, particularly for rare categories or tail distributions."
+        },
+        {
+          "description": "Requires substantial computational resources and hyperparameter tuning, with training times scaling poorly for datasets with many columns or complex inter-column dependencies."
+        },
+        {
+          "description": "Privacy guarantees are not inherent — without additional mechanisms like differential privacy, GAN-generated data may leak information about training records through memorisation or membership inference attacks."
+        },
+        {
+          "description": "Performance degrades significantly on datasets with high cardinality categorical columns, complex temporal dependencies, or relational structures across multiple tables."
+        }
+      ],
+      "sampleClaims": [
+        {
+          "text": "The synthetic patient dataset generated by CTGAN preserves statistical correlations between clinical variables whilst containing no records traceable to real patients",
+          "domain": "healthcare",
+          "assuranceGoal": "privacy"
+        },
+        {
+          "text": "The augmented training dataset includes GAN-generated records for underrepresented demographic groups, achieving balanced representation across all protected characteristics",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The fraud detection model has been validated on GAN-generated synthetic transaction data that preserves the statistical distribution of rare fraud patterns from the original dataset",
+          "domain": "finance",
+          "assuranceGoal": "reliability"
+        }
+      ]
+    },
+    {
+      "@id": "tea:technique/statistical-oversampling-methods",
+      "@type": "Technique",
+      "name": "Statistical Oversampling Methods",
+      "slug": "statistical-oversampling-methods",
+      "description": "A family of data augmentation techniques that generate synthetic minority-class examples through geometric interpolation in feature space, addressing class imbalance problems that degrade classifier performance on underrepresented groups. The foundational method, SMOTE (Synthetic Minority Over-sampling Technique), creates new instances by interpolating between existing minority samples and their k-nearest neighbours. Extensions include Borderline-SMOTE (focusing generation near decision boundaries), ADASYN (adaptively weighting harder-to-learn instances), and SVMSMOTE (using support vectors to guide generation). These methods operate directly on feature vectors without requiring neural network training, making them computationally lightweight and applicable to any tabular classification task.",
+      "addressesGoal": [
+        "tea:goal/fairness",
+        "tea:goal/reliability"
+      ],
+      "hasTag": [
+        "tea:tag/applicable-models/requirements/model-agnostic",
+        "tea:tag/applicable-models/paradigm/supervised",
+        "tea:tag/applicable-models/requirements/training-data",
+        "tea:tag/assurance-goal-category/fairness",
+        "tea:tag/assurance-goal-category/fairness/group",
+        "tea:tag/assurance-goal-category/fairness/process",
+        "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/assurance-goal-category/reliability/performance-assessment",
+        "tea:tag/data-requirements/labelled-data",
+        "tea:tag/data-type/tabular",
+        "tea:tag/evidence-type/structured-output",
+        "tea:tag/evidence-type/synthetic-data",
+        "tea:tag/expertise-needed/statistics",
+        "tea:tag/expertise-needed/ml-engineering",
+        "tea:tag/lifecycle-stage/data-collection",
+        "tea:tag/lifecycle-stage/data-collection/data-augmentation",
+        "tea:tag/lifecycle-stage/data-handling",
+        "tea:tag/technique-type/algorithmic"
+      ],
+      "complexityRating": 2,
+      "computationalCostRating": 1,
+      "relatedTo": [
+        "tea:technique/synthetic-data-generation",
+        "tea:technique/synthetic-data-evaluation",
+        "tea:technique/gan-based-tabular-synthetic-data"
+      ],
+      "exampleUseCases": [
+        {
+          "description": "Applying SMOTE to oversample underrepresented ethnic groups in a loan approval training dataset, ensuring the classifier has sufficient examples from each demographic group to learn fair decision boundaries.",
+          "goal": "Fairness"
+        },
+        {
+          "description": "Using ADASYN to generate synthetic examples of rare manufacturing defect types, improving the reliability of quality control classifiers on edge cases that occur in fewer than 1% of production runs.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Applying Borderline-SMOTE to augment minority-class examples near the decision boundary in a medical diagnosis task, reducing false-negative rates for rare conditions without collecting additional patient data.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Oversampling underrepresented protected groups in a hiring dataset to enable equitable evaluation of candidates across gender and ethnicity, ensuring the model does not simply learn to predict the majority class.",
+          "goal": "Fairness"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Interpolation in feature space can generate synthetic instances that fall in regions of the feature space not occupied by the true data distribution, introducing noise or unrealistic combinations — particularly problematic for high-dimensional data."
+        },
+        {
+          "description": "Does not address the root cause of class imbalance (e.g. data collection bias, structural underrepresentation) and may mask rather than resolve underlying fairness issues in the data pipeline."
+        },
+        {
+          "description": "Performance degrades on high-dimensional datasets where the nearest-neighbour assumption breaks down, and oversampling in such spaces can amplify noise dimensions without improving classification."
+        },
+        {
+          "description": "Assumes the minority class forms coherent clusters in feature space; when minority examples are scattered or overlap heavily with majority-class regions, interpolation produces ambiguous or mislabelled synthetic samples."
+        }
+      ],
+      "sampleClaims": [
+        {
+          "text": "The training dataset has been balanced using SMOTE oversampling to ensure the classifier has sufficient representation of all demographic groups for equitable decision-making",
+          "domain": "finance",
+          "assuranceGoal": "fairness"
+        },
+        {
+          "text": "The rare defect classifier has been trained on an ADASYN-augmented dataset that maintains the original feature distributions whilst ensuring adequate representation of all defect categories",
+          "domain": "manufacturing",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The diagnostic model performance on rare conditions has been improved through Borderline-SMOTE augmentation targeting samples near the decision boundary, without introducing fabricated clinical relationships",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        }
+      ]
+    },
+    {
+      "@id": "tea:technique/simulation-based-synthetic-data",
+      "@type": "Technique",
+      "name": "Simulation-Based Synthetic Data Generation",
+      "slug": "simulation-based-synthetic-data",
+      "description": "Generates synthetic datasets through computational simulation of underlying data-generating processes, encompassing statistical methods (copula models, parametric distribution fitting), agent-based models, physics-informed simulators, and Monte Carlo sampling. Unlike neural-network-based approaches, these methods encode explicit domain knowledge or statistical structure into the generation process — copulas model multivariate dependencies through known distributional families, agent-based simulations construct data from interacting rule-driven entities, and physics-informed generators embed differential equation constraints. This makes the synthetic data more interpretable and auditable, with known theoretical properties, at the cost of reduced flexibility for capturing complex nonlinear patterns that lack a known generative model.",
+      "addressesGoal": [
+        "tea:goal/safety",
+        "tea:goal/reliability",
+        "tea:goal/privacy"
+      ],
+      "hasTag": [
+        "tea:tag/applicable-models/requirements/model-agnostic",
+        "tea:tag/applicable-models/paradigm/generative",
+        "tea:tag/applicable-models/architecture/probabilistic",
+        "tea:tag/assurance-goal-category/safety",
+        "tea:tag/assurance-goal-category/safety/risk-identification",
+        "tea:tag/assurance-goal-category/safety/hazard-analysis",
+        "tea:tag/assurance-goal-category/reliability",
+        "tea:tag/assurance-goal-category/reliability/uncertainty-quantification",
+        "tea:tag/assurance-goal-category/privacy",
+        "tea:tag/assurance-goal-category/privacy/formal-guarantee",
+        "tea:tag/data-requirements/no-special-requirements",
+        "tea:tag/data-type/tabular",
+        "tea:tag/data-type/time-series",
+        "tea:tag/evidence-type/structured-output",
+        "tea:tag/evidence-type/synthetic-data",
+        "tea:tag/evidence-type/statistical-test",
+        "tea:tag/expertise-needed/domain-expertise",
+        "tea:tag/expertise-needed/statistics",
+        "tea:tag/lifecycle-stage/data-collection",
+        "tea:tag/lifecycle-stage/data-collection/data-augmentation",
+        "tea:tag/lifecycle-stage/model-development",
+        "tea:tag/lifecycle-stage/model-development/testing",
+        "tea:tag/technique-type/algorithmic",
+        "tea:tag/technique-type/process-based"
+      ],
+      "complexityRating": 3,
+      "computationalCostRating": 3,
+      "relatedTo": [
+        "tea:technique/synthetic-data-generation",
+        "tea:technique/synthetic-data-evaluation",
+        "tea:technique/sensitivity-analysis-for-fairness"
+      ],
+      "citesResource": [
+        "tea:resource/sdv-devSDV2018",
+        "tea:resource/e.livierisEvaluationFrameworkSynthetic2024"
+      ],
+      "exampleUseCases": [
+        {
+          "description": "Using copula-based simulation to generate synthetic financial portfolio data preserving tail dependencies and correlation structures, enabling stress testing of risk models under extreme market conditions without relying solely on limited historical crash data.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Running agent-based traffic simulations to generate synthetic autonomous vehicle sensor data covering rare and dangerous driving scenarios (pedestrian occlusion, multi-vehicle pile-ups) that are impractical or unethical to collect in real-world testing.",
+          "goal": "Safety"
+        },
+        {
+          "description": "Employing Monte Carlo simulation to generate synthetic clinical trial outcome data for sensitivity analysis of treatment-effect estimators, quantifying how model predictions change across plausible data-generating processes.",
+          "goal": "Reliability"
+        },
+        {
+          "description": "Fitting Gaussian copula models to census microdata to generate synthetic population datasets that preserve multivariate demographic relationships whilst providing formal disclosure limitation through the generation process.",
+          "goal": "Privacy"
+        }
+      ],
+      "limitations": [
+        {
+          "description": "Requires explicit specification of the data-generating process, meaning that important but unknown relationships or latent factors not captured in the simulation model will be absent from the synthetic data."
+        },
+        {
+          "description": "Copula models assume that dependencies can be separated from marginal distributions, which may not hold for complex real-world datasets where the dependency structure itself varies across the marginal distribution."
+        },
+        {
+          "description": "Agent-based and physics-informed simulators require significant domain expertise to design, calibrate, and validate, making them resource-intensive compared to data-driven approaches."
+        },
+        {
+          "description": "Scalability is limited for high-dimensional problems — parametric models face the curse of dimensionality in specifying joint distributions, and agent-based simulations become computationally expensive as the number of interacting entities grows."
+        }
+      ],
+      "sampleClaims": [
+        {
+          "text": "The risk model has been stress-tested using copula-simulated scenarios that preserve the tail dependence structure of historical market crashes whilst exploring conditions beyond observed extremes",
+          "domain": "finance",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The autonomous vehicle perception system has been validated against agent-based simulation data covering rare hazardous scenarios that cannot be safely or frequently observed in real-world testing",
+          "domain": "autonomous systems",
+          "assuranceGoal": "safety"
+        },
+        {
+          "text": "The treatment-effect estimator has been subjected to Monte Carlo sensitivity analysis demonstrating robustness of conclusions across 10,000 plausible data-generating processes",
+          "domain": "healthcare",
+          "assuranceGoal": "reliability"
+        },
+        {
+          "text": "The released population dataset was generated through copula-based simulation that preserves demographic correlations whilst providing formal disclosure limitation guarantees",
+          "domain": "government",
           "assuranceGoal": "privacy"
         }
       ]
@@ -11256,7 +11544,10 @@
         "tea:technique/membership-inference-attack-testing",
         "tea:technique/synthetic-data-generation",
         "tea:technique/differential-privacy",
-        "tea:technique/data-poisoning-detection"
+        "tea:technique/data-poisoning-detection",
+        "tea:technique/gan-based-tabular-synthetic-data",
+        "tea:technique/statistical-oversampling-methods",
+        "tea:technique/simulation-based-synthetic-data"
       ],
       "citesResource": [
         "tea:resource/scu-trustworthyaiSynEval2024",
@@ -11966,7 +12257,7 @@
       "name": "Fairness",
       "slug": "fairness",
       "description": "Ensuring AI systems treat different groups and individuals equitably.",
-      "techniqueCount": 63,
+      "techniqueCount": 65,
       "hasTechnique": [
         "tea:technique/shapley-additive-explanations",
         "tea:technique/sobol-indices",
@@ -11980,6 +12271,8 @@
         "tea:technique/counterfactual-fairness-assessment",
         "tea:technique/sensitivity-analysis-for-fairness",
         "tea:technique/synthetic-data-generation",
+        "tea:technique/gan-based-tabular-synthetic-data",
+        "tea:technique/statistical-oversampling-methods",
         "tea:technique/federated-learning",
         "tea:technique/differential-privacy",
         "tea:technique/quantile-regression",
@@ -12049,10 +12342,12 @@
       "name": "Privacy",
       "slug": "privacy",
       "description": "Protecting personal data and maintaining confidentiality in AI systems.",
-      "techniqueCount": 21,
+      "techniqueCount": 23,
       "hasTechnique": [
         "tea:technique/influence-functions",
         "tea:technique/synthetic-data-generation",
+        "tea:technique/gan-based-tabular-synthetic-data",
+        "tea:technique/simulation-based-synthetic-data",
         "tea:technique/federated-learning",
         "tea:technique/differential-privacy",
         "tea:technique/homomorphic-encryption",
@@ -12069,7 +12364,7 @@
       "name": "Reliability",
       "slug": "reliability",
       "description": "Building AI systems that perform consistently and predictably.",
-      "techniqueCount": 71,
+      "techniqueCount": 74,
       "hasTechnique": [
         "tea:technique/shapley-additive-explanations",
         "tea:technique/permutation-importance",
@@ -12078,6 +12373,9 @@
         "tea:technique/out-of-distribution-detector-for-neural-networks",
         "tea:technique/permutation-tests",
         "tea:technique/synthetic-data-generation",
+        "tea:technique/gan-based-tabular-synthetic-data",
+        "tea:technique/statistical-oversampling-methods",
+        "tea:technique/simulation-based-synthetic-data",
         "tea:technique/federated-learning",
         "tea:technique/quantile-regression",
         "tea:technique/conformal-prediction",
@@ -12139,10 +12437,11 @@
       "name": "Safety",
       "slug": "safety",
       "description": "Ensuring AI systems operate safely and do not cause harm.",
-      "techniqueCount": 36,
+      "techniqueCount": 37,
       "hasTechnique": [
         "tea:technique/out-of-distribution-detector-for-neural-networks",
         "tea:technique/synthetic-data-generation",
+        "tea:technique/simulation-based-synthetic-data",
         "tea:technique/federated-learning",
         "tea:technique/homomorphic-encryption",
         "tea:technique/deep-ensembles",
@@ -12380,6 +12679,7 @@
       "narrower": [
         "tea:tag/assurance-goal-category/fairness/group",
         "tea:tag/assurance-goal-category/fairness/causal",
+        "tea:tag/assurance-goal-category/fairness/process",
         "tea:tag/assurance-goal-category/fairness/group-fairness"
       ]
     },
@@ -12405,7 +12705,8 @@
         "tea:tag/assurance-goal-category/reliability/cross-group-consistency",
         "tea:tag/assurance-goal-category/reliability/model-behavior-understanding",
         "tea:tag/assurance-goal-category/reliability/robustness",
-        "tea:tag/assurance-goal-category/reliability/uncertainty-quantification"
+        "tea:tag/assurance-goal-category/reliability/uncertainty-quantification",
+        "tea:tag/assurance-goal-category/reliability/performance-assessment"
       ]
     },
     {
@@ -12463,7 +12764,8 @@
         "tea:tag/data-type/any",
         "tea:tag/data-type/tabular",
         "tea:tag/data-type/text",
-        "tea:tag/data-type/image"
+        "tea:tag/data-type/image",
+        "tea:tag/data-type/time-series"
       ]
     },
     {
@@ -12488,6 +12790,7 @@
         "tea:tag/evidence-type/fairness-metric",
         "tea:tag/evidence-type/causal-analysis",
         "tea:tag/evidence-type/synthetic-data",
+        "tea:tag/evidence-type/statistical-test",
         "tea:tag/evidence-type/privacy-guarantee",
         "tea:tag/evidence-type/prediction-interval",
         "tea:tag/evidence-type/boundary-analysis",
@@ -12615,9 +12918,9 @@
       "category": "lifecycle-stage",
       "broader": "tea:tag/lifecycle-stage",
       "narrower": [
+        "tea:tag/lifecycle-stage/model-development/testing",
         "tea:tag/lifecycle-stage/model-development/training",
-        "tea:tag/lifecycle-stage/model-development/fine-tuning",
-        "tea:tag/lifecycle-stage/model-development/testing"
+        "tea:tag/lifecycle-stage/model-development/fine-tuning"
       ]
     },
     {
@@ -12630,6 +12933,7 @@
         "tea:tag/technique-type/algorithmic",
         "tea:tag/technique-type/metric",
         "tea:tag/technique-type/visualization",
+        "tea:tag/technique-type/process-based",
         "tea:tag/technique-type/testing",
         "tea:tag/technique-type/process",
         "tea:tag/technique-type/procedural",
@@ -12698,6 +13002,7 @@
         "tea:tag/applicable-models/requirements/model-internals",
         "tea:tag/applicable-models/requirements/training-data",
         "tea:tag/applicable-models/requirements/probabilistic-output",
+        "tea:tag/applicable-models/requirements/model-agnostic",
         "tea:tag/applicable-models/requirements/gray-box"
       ]
     },
@@ -13384,6 +13689,7 @@
       "narrower": [
         "tea:tag/assurance-goal-category/safety/monitoring",
         "tea:tag/assurance-goal-category/safety/risk-identification",
+        "tea:tag/assurance-goal-category/safety/hazard-analysis",
         "tea:tag/assurance-goal-category/safety/harmful-behavior-detection"
       ]
     },
@@ -13581,6 +13887,70 @@
         "tea:tag/lifecycle-stage/data-handling/preparation",
         "tea:tag/lifecycle-stage/data-handling/preprocessing"
       ]
+    },
+    {
+      "@id": "tea:tag/applicable-models/requirements/model-agnostic",
+      "@type": "Tag",
+      "prefLabel": "model agnostic",
+      "path": "applicable-models/requirements/model-agnostic",
+      "category": "applicable-models",
+      "broader": "tea:tag/applicable-models/requirements"
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/fairness/process",
+      "@type": "Tag",
+      "prefLabel": "process",
+      "path": "assurance-goal-category/fairness/process",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/fairness"
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/reliability/performance-assessment",
+      "@type": "Tag",
+      "prefLabel": "performance assessment",
+      "path": "assurance-goal-category/reliability/performance-assessment",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/reliability"
+    },
+    {
+      "@id": "tea:tag/assurance-goal-category/safety/hazard-analysis",
+      "@type": "Tag",
+      "prefLabel": "hazard analysis",
+      "path": "assurance-goal-category/safety/hazard-analysis",
+      "category": "assurance-goal-category",
+      "broader": "tea:tag/assurance-goal-category/safety"
+    },
+    {
+      "@id": "tea:tag/data-type/time-series",
+      "@type": "Tag",
+      "prefLabel": "time series",
+      "path": "data-type/time-series",
+      "category": "data-type",
+      "broader": "tea:tag/data-type"
+    },
+    {
+      "@id": "tea:tag/evidence-type/statistical-test",
+      "@type": "Tag",
+      "prefLabel": "statistical test",
+      "path": "evidence-type/statistical-test",
+      "category": "evidence-type",
+      "broader": "tea:tag/evidence-type"
+    },
+    {
+      "@id": "tea:tag/lifecycle-stage/model-development/testing",
+      "@type": "Tag",
+      "prefLabel": "testing",
+      "path": "lifecycle-stage/model-development/testing",
+      "category": "lifecycle-stage",
+      "broader": "tea:tag/lifecycle-stage/model-development"
+    },
+    {
+      "@id": "tea:tag/technique-type/process-based",
+      "@type": "Tag",
+      "prefLabel": "process based",
+      "path": "technique-type/process-based",
+      "category": "technique-type",
+      "broader": "tea:tag/technique-type"
     },
     {
       "@id": "tea:tag/assurance-goal-category/privacy/data-minimization",
@@ -14106,14 +14476,6 @@
       "path": "data-requirements/prediction-probabilities",
       "category": "data-requirements",
       "broader": "tea:tag/data-requirements"
-    },
-    {
-      "@id": "tea:tag/lifecycle-stage/model-development/testing",
-      "@type": "Tag",
-      "prefLabel": "testing",
-      "path": "lifecycle-stage/model-development/testing",
-      "category": "lifecycle-stage",
-      "broader": "tea:tag/lifecycle-stage/model-development"
     },
     {
       "@id": "tea:tag/lifecycle-stage/post-processing",
@@ -16112,6 +16474,22 @@
       "publicationDate": "2023-04-13"
     },
     {
+      "@id": "tea:resource/ramachandranpillaiBtGANGeneratingFair2024",
+      "@type": "Resource",
+      "name": "Bt-GAN: Generating Fair Synthetic Healthdata via Bias-transforming Generative Adversarial Networks",
+      "citationKey": "ramachandranpillaiBtGANGeneratingFair2024",
+      "url": "https://www.semanticscholar.org/paper/6995779ac582c5f2436cfb82a3c8cf5ca72bae2f",
+      "sourceType": "technical_paper",
+      "authors": [
+        "R. Ramachandranpillai",
+        "Md Fahim Sikder",
+        "David Bergstrom",
+        "Fredrik Heintz"
+      ],
+      "publicationDate": "2024",
+      "abstract": "Synthetic data generation offers a promising solution to enhance the usefulness of Electronic Healthcare Records (EHR) by generating realistic de-identified data. However, the existing literature primarily focuses on the quality of synthetic health data, neglecting the crucial aspect of fairness in downstream predictions. Consequently, models trained on synthetic EHR have faced criticism for producing biased outcomes in target tasks. These biases can arise from either spurious correlations between features or the failure of models to accurately represent sub-groups. To address these concerns, we present Bias-transforming Generative Adversarial Networks (Bt-GAN), a GAN-based synthetic data generator specifically designed for the healthcare domain. In order to tackle spurious correlations (i), we propose an information-constrained Data Generation Process (DGP) that enables the generator to learn a fair deterministic transformation based on a well-defined notion of algorithmic fairness. To overcome the challenge of capturing exact sub-group representations (ii), we incentivize the generator to preserve sub-group densities through score-based weighted sampling. This approach compels the generator to learn from underrepresented regions of the data manifold. To evaluate the effectiveness of our proposed method, we conduct extensive experiments using the Medical Information Mart for Intensive Care (MIMIC-III) database. Our results demonstrate that Bt-GAN achieves state-of-the-art accuracy while significantly improving fairness and minimizing bias amplification. Furthermore, we perform an in-depth explainability analysis to provide additional evidence supporting the validity of our study. In conclusion, our research introduces a novel and professional approach to addressing the limitations of synthetic data generation in the healthcare domain. By incorporating fairness considerations and leveraging advanced techniques such as GANs, we pave the way for more reliable and unbiased predictions in healthcare applications."
+    },
+    {
       "@id": "tea:resource/openfldevelopersOpenFederatedLearning2020",
       "@type": "Resource",
       "name": "Open Federated Learning (OpenFL) Documentation",
@@ -18002,22 +18380,6 @@
       ],
       "publicationDate": "2024",
       "abstract": "With the rapid development of deep learning, AI systems are being used more in complex and important domains and necessitates the simultaneous fulfillment of multiple constraints: accurate, robust, and fair. Accuracy measures how well a DNN can generalize to new data. Robustness demonstrates how well the network can withstand minor perturbations without changing the results. Fairness focuses on treating different groups equally. This survey provides an overview of the triangular trade-off among robustness, accuracy, and fairness in neural networks. This trade-off makes it difficult for AI systems to achieve true intelligence and is connected to generalization, robustness, and fairness in deep learning. The survey explores these trade-offs and their relationships to adversarial examples, adversarial training, and fair machine learning. The trade-offs between accuracy and robustness, accuracy and fairness, and robustness and fairness have been studied to different extents. However, there is a lack of taxonomy and analysis of these trade-offs. The accuracy-robustness trade-off is inherent in Gaussian models, but it varies when classes are not closely distributed. The accuracy-fairness and robustness-fairness trade-offs have been assessed empirically, but their theoretical nature needs more investigation. This survey aims to explore the origins, evolution, influencing factors, and future research directions of these trade-offs."
-    },
-    {
-      "@id": "tea:resource/ramachandranpillaiBtGANGeneratingFair2024",
-      "@type": "Resource",
-      "name": "Bt-GAN: Generating Fair Synthetic Healthdata via Bias-transforming Generative Adversarial Networks",
-      "citationKey": "ramachandranpillaiBtGANGeneratingFair2024",
-      "url": "https://www.semanticscholar.org/paper/6995779ac582c5f2436cfb82a3c8cf5ca72bae2f",
-      "sourceType": "technical_paper",
-      "authors": [
-        "R. Ramachandranpillai",
-        "Md Fahim Sikder",
-        "David Bergstrom",
-        "Fredrik Heintz"
-      ],
-      "publicationDate": "2024",
-      "abstract": "Synthetic data generation offers a promising solution to enhance the usefulness of Electronic Healthcare Records (EHR) by generating realistic de-identified data. However, the existing literature primarily focuses on the quality of synthetic health data, neglecting the crucial aspect of fairness in downstream predictions. Consequently, models trained on synthetic EHR have faced criticism for producing biased outcomes in target tasks. These biases can arise from either spurious correlations between features or the failure of models to accurately represent sub-groups. To address these concerns, we present Bias-transforming Generative Adversarial Networks (Bt-GAN), a GAN-based synthetic data generator specifically designed for the healthcare domain. In order to tackle spurious correlations (i), we propose an information-constrained Data Generation Process (DGP) that enables the generator to learn a fair deterministic transformation based on a well-defined notion of algorithmic fairness. To overcome the challenge of capturing exact sub-group representations (ii), we incentivize the generator to preserve sub-group densities through score-based weighted sampling. This approach compels the generator to learn from underrepresented regions of the data manifold. To evaluate the effectiveness of our proposed method, we conduct extensive experiments using the Medical Information Mart for Intensive Care (MIMIC-III) database. Our results demonstrate that Bt-GAN achieves state-of-the-art accuracy while significantly improving fairness and minimizing bias amplification. Furthermore, we perform an in-depth explainability analysis to provide additional evidence supporting the validity of our study. In conclusion, our research introduces a novel and professional approach to addressing the limitations of synthetic data generation in the healthcare domain. By incorporating fairness considerations and leveraging advanced techniques such as GANs, we pave the way for more reliable and unbiased predictions in healthcare applications."
     },
     {
       "@id": "tea:resource/kamishimaFairnessAwareClassifierPrejudice2012",

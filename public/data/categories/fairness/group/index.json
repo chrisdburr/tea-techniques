@@ -1561,12 +1561,47 @@
       ],
       "resources": [
         {
+          "title": "Modeling Tabular data using Conditional GAN",
+          "url": "http://arxiv.org/abs/1907.00503",
+          "source_type": "technical_paper",
+          "authors": [
+            "Lei Xu",
+            "Maria Skoularidou",
+            "Alfredo Cuesta-Infante",
+            "Kalyan Veeramachaneni"
+          ],
+          "publication_date": "2019-10-28",
+          "citationKey": "xuModelingTabularData2019",
+          "abstract": "Modeling the probability distribution of rows in tabular data and generating realistic synthetic data is a non-trivial task. Tabular data usually contains a mix of discrete and continuous columns. Continuous columns may have multiple modes whereas discrete columns are sometimes imbalanced making the modeling difficult. Existing statistical and deep neural network models fail to properly model this type of data. We design TGAN, which uses a conditional generative adversarial network to address these challenges. To aid in a fair and thorough comparison, we design a benchmark with 7 simulated and 8 real datasets and several Bayesian network baselines. TGAN outperforms Bayesian methods on most of the real datasets whereas other deep learning methods could not."
+        },
+        {
+          "title": "The Synthetic Data Vault",
+          "url": "https://ieeexplore.ieee.org/document/7796926",
+          "source_type": "technical_paper",
+          "authors": [
+            "Neha Patki",
+            "Roy Wedge",
+            "Kalyan Veeramachaneni"
+          ],
+          "publication_date": "2016-10",
+          "citationKey": "patkiSyntheticDataVault2016",
+          "abstract": "The goal of this paper is to build a system that automatically creates synthetic data to enable data science endeavors. To achieve this, we present the Synthetic Data Vault (SDV), a system that builds generative models of relational databases. We are able to sample from the model and create synthetic data, hence the name SDV. When implementing the SDV, we also developed an algorithm that computes statistics at the intersection of related database tables. We then used a state-of-the-art multivariate modeling approach to model this data. The SDV iterates through all possible relations, ultimately creating a model for the entire database. Once this model is computed, the same relational information allows the SDV to synthesize data by sampling from any part of the database. After building the SDV, we used it to generate synthetic data for five different publicly available datasets. We then published these datasets, and asked data scientists to develop predictive models for them as part of a crowdsourced experiment. By analyzing the outcomes, we show that synthetic data can successfully replace original data for data science. Our analysis indicates that there is no significant difference in the work produced by data scientists who used synthetic data as opposed to real data. We conclude that the SDV is a viable solution for synthetic data generation."
+        },
+        {
           "title": "SDV",
           "url": "https://github.com/sdv-dev/SDV",
           "source_type": "software_package",
           "publication_date": "2018-05-11",
           "citationKey": "sdv-devSDV2018",
           "abstract": "Synthetic data generation for tabular data"
+        },
+        {
+          "title": "sdv-dev/CTGAN",
+          "url": "https://github.com/sdv-dev/CTGAN",
+          "source_type": "software_package",
+          "publication_date": "2026-02-25T08:42:10Z",
+          "citationKey": "SdvdevCTGAN2026",
+          "abstract": "Conditional GAN for generating synthetic tabular data."
         },
         {
           "title": "How to Generate Real-World Synthetic Data with CTGAN | Towards ...",
@@ -1693,7 +1728,66 @@
           "description": "Assumes the minority class forms coherent clusters in feature space; when minority examples are scattered or overlap heavily with majority-class regions, interpolation produces ambiguous or mislabelled synthetic samples."
         }
       ],
-      "resources": [],
+      "resources": [
+        {
+          "title": "SMOTE: Synthetic Minority Over-sampling Technique",
+          "url": "https://www.jair.org/index.php/jair/article/view/10302",
+          "source_type": "technical_paper",
+          "authors": [
+            "N. V. Chawla",
+            "K. W. Bowyer",
+            "L. O. Hall",
+            "W. P. Kegelmeyer"
+          ],
+          "publication_date": "2002-06-01",
+          "citationKey": "chawlaSMOTESyntheticMinority2002",
+          "abstract": "An approach to the construction of classifiers from    imbalanced datasets is described. A dataset is imbalanced if the    classification categories are not approximately equally    represented. Often real-world data sets are predominately composed of    ``normal'' examples with only a small percentage of ``abnormal'' or    ``interesting'' examples. It is also the case that the cost of    misclassifying an abnormal (interesting) example as a normal example    is often much higher than the cost of the reverse    error. Under-sampling of the majority (normal) class has been proposed    as a good means of increasing the sensitivity of a classifier to the    minority class. This paper shows that a combination of our method of    over-sampling the minority (abnormal) class and under-sampling the    majority (normal) class can achieve better classifier performance (in    ROC space) than only under-sampling the majority class.  This paper    also shows that a combination of our method of over-sampling the    minority class and under-sampling the majority class can achieve    better classifier performance (in ROC space) than varying the loss    ratios in Ripper or class priors in Naive Bayes. Our method of    over-sampling the minority class involves creating synthetic minority    class examples.  Experiments are performed using C4.5, Ripper and a    Naive Bayes classifier. The method is evaluated using the area under    the Receiver Operating Characteristic curve (AUC) and the ROC convex    hull strategy."
+        },
+        {
+          "title": "ADASYN: Adaptive synthetic sampling approach for imbalanced learning",
+          "url": "https://ieeexplore.ieee.org/document/4633969/",
+          "source_type": "technical_paper",
+          "authors": [
+            "Haibo He",
+            "Yang Bai",
+            "Edwardo A. Garcia",
+            "Shutao Li"
+          ],
+          "publication_date": "2008-06",
+          "citationKey": "heADASYNAdaptiveSynthetic2008",
+          "abstract": "This paper presents a novel adaptive synthetic (ADASYN) sampling approach for learning from imbalanced data sets. The essential idea of ADASYN is to use a weighted distribution for different minority class examples according to their level of difficulty in learning, where more synthetic data is generated for minority class examples that are harder to learn compared to those minority examples that are easier to learn. As a result, the ADASYN approach improves learning with respect to the data distributions in two ways: (1) reducing the bias introduced by the class imbalance, and (2) adaptively shifting the classification decision boundary toward the difficult examples. Simulation analyses on several machine learning data sets show the effectiveness of this method across five evaluation metrics."
+        },
+        {
+          "title": "Imbalanced-learn: A Python Toolbox to Tackle the Curse of Imbalanced Datasets in Machine Learning",
+          "url": "https://jmlr.org/papers/volume18/16-365/16-365.pdf",
+          "source_type": "technical_paper",
+          "authors": [
+            "Guillaume Lemaıtre",
+            "Fernando Nogueira"
+          ],
+          "publication_date": "2017",
+          "citationKey": "lemaitreImbalancedlearnPythonToolbox"
+        },
+        {
+          "title": "scikit-learn-contrib/imbalanced-learn",
+          "url": "https://github.com/scikit-learn-contrib/imbalanced-learn",
+          "source_type": "software_package",
+          "publication_date": "2026-02-16T09:47:16Z",
+          "citationKey": "ScikitlearncontribImbalancedlearn2026",
+          "abstract": "A Python Package to Tackle the Curse of Imbalanced Datasets in Machine Learning"
+        },
+        {
+          "title": "SMOTE for Imbalanced Classification with Python",
+          "url": "https://www.machinelearningmastery.com/smote-oversampling-for-imbalanced-classification/",
+          "source_type": "tutorial",
+          "authors": [
+            "Jason Brownlee"
+          ],
+          "publication_date": "2020-01-16T18:00:07+00:00",
+          "citationKey": "brownleeSMOTEImbalancedClassification2020",
+          "abstract": "Imbalanced classification involves developing predictive models on classification datasets that have a severe class imbalance. The challenge of working with imbalanced datasets is that most machine learning techniques will ignore, and in turn have poor performance on, the minority class, although typically it is performance on the minority class that is most important. One approach […]"
+        }
+      ],
       "complexity_rating": 2,
       "computational_cost_rating": 1,
       "related_techniques": [

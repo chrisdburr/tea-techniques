@@ -3414,7 +3414,10 @@
         "tea:technique/fairness-gan"
       ],
       "citesResource": [
+        "tea:resource/xuModelingTabularData2019",
+        "tea:resource/patkiSyntheticDataVault2016",
         "tea:resource/sdv-devSDV2018",
+        "tea:resource/SdvdevCTGAN2026",
         "tea:resource/santosHowGenerateRealWorld2023",
         "tea:resource/e.livierisEvaluationFrameworkSynthetic2024",
         "tea:resource/ramachandranpillaiBtGANGeneratingFair2024"
@@ -3501,6 +3504,13 @@
         "tea:technique/simulation-based-synthetic-data",
         "tea:technique/synthetic-data-evaluation",
         "tea:technique/gan-based-tabular-synthetic-data"
+      ],
+      "citesResource": [
+        "tea:resource/chawlaSMOTESyntheticMinority2002",
+        "tea:resource/heADASYNAdaptiveSynthetic2008",
+        "tea:resource/lemaitreImbalancedlearnPythonToolbox",
+        "tea:resource/ScikitlearncontribImbalancedlearn2026",
+        "tea:resource/brownleeSMOTEImbalancedClassification2020"
       ],
       "exampleUseCases": [
         {
@@ -3597,7 +3607,13 @@
         "tea:technique/sensitivity-analysis-for-fairness"
       ],
       "citesResource": [
+        "tea:resource/kamtheCopulaFlowsSynthetic2021",
+        "tea:resource/nowokSynthpopBespokeCreation2016",
+        "tea:resource/nowokSynthpopGeneratingSynthetic2025",
+        "tea:resource/patkiSyntheticDataVault2016",
         "tea:resource/sdv-devSDV2018",
+        "tea:resource/SdvdevCopulas2026",
+        "tea:resource/warnesGeneratingSyntheticMultivariate2021",
         "tea:resource/e.livierisEvaluationFrameworkSynthetic2024"
       ],
       "exampleUseCases": [
@@ -16299,6 +16315,37 @@
       "publicationDate": "2018"
     },
     {
+      "@id": "tea:resource/xuModelingTabularData2019",
+      "@type": "Resource",
+      "name": "Modeling Tabular data using Conditional GAN",
+      "citationKey": "xuModelingTabularData2019",
+      "url": "http://arxiv.org/abs/1907.00503",
+      "sourceType": "technical_paper",
+      "authors": [
+        "Lei Xu",
+        "Maria Skoularidou",
+        "Alfredo Cuesta-Infante",
+        "Kalyan Veeramachaneni"
+      ],
+      "publicationDate": "2019-10-28",
+      "abstract": "Modeling the probability distribution of rows in tabular data and generating realistic synthetic data is a non-trivial task. Tabular data usually contains a mix of discrete and continuous columns. Continuous columns may have multiple modes whereas discrete columns are sometimes imbalanced making the modeling difficult. Existing statistical and deep neural network models fail to properly model this type of data. We design TGAN, which uses a conditional generative adversarial network to address these challenges. To aid in a fair and thorough comparison, we design a benchmark with 7 simulated and 8 real datasets and several Bayesian network baselines. TGAN outperforms Bayesian methods on most of the real datasets whereas other deep learning methods could not."
+    },
+    {
+      "@id": "tea:resource/patkiSyntheticDataVault2016",
+      "@type": "Resource",
+      "name": "The Synthetic Data Vault",
+      "citationKey": "patkiSyntheticDataVault2016",
+      "url": "https://ieeexplore.ieee.org/document/7796926",
+      "sourceType": "technical_paper",
+      "authors": [
+        "Neha Patki",
+        "Roy Wedge",
+        "Kalyan Veeramachaneni"
+      ],
+      "publicationDate": "2016-10",
+      "abstract": "The goal of this paper is to build a system that automatically creates synthetic data to enable data science endeavors. To achieve this, we present the Synthetic Data Vault (SDV), a system that builds generative models of relational databases. We are able to sample from the model and create synthetic data, hence the name SDV. When implementing the SDV, we also developed an algorithm that computes statistics at the intersection of related database tables. We then used a state-of-the-art multivariate modeling approach to model this data. The SDV iterates through all possible relations, ultimately creating a model for the entire database. Once this model is computed, the same relational information allows the SDV to synthesize data by sampling from any part of the database. After building the SDV, we used it to generate synthetic data for five different publicly available datasets. We then published these datasets, and asked data scientists to develop predictive models for them as part of a crowdsourced experiment. By analyzing the outcomes, we show that synthetic data can successfully replace original data for data science. Our analysis indicates that there is no significant difference in the work produced by data scientists who used synthetic data as opposed to real data. We conclude that the SDV is a viable solution for synthetic data generation."
+    },
+    {
       "@id": "tea:resource/sdv-devSDV2018",
       "@type": "Resource",
       "name": "SDV",
@@ -16307,6 +16354,16 @@
       "sourceType": "software_package",
       "publicationDate": "2018-05-11",
       "abstract": "Synthetic data generation for tabular data"
+    },
+    {
+      "@id": "tea:resource/SdvdevCTGAN2026",
+      "@type": "Resource",
+      "name": "sdv-dev/CTGAN",
+      "citationKey": "SdvdevCTGAN2026",
+      "url": "https://github.com/sdv-dev/CTGAN",
+      "sourceType": "software_package",
+      "publicationDate": "2026-02-25T08:42:10Z",
+      "abstract": "Conditional GAN for generating synthetic tabular data."
     },
     {
       "@id": "tea:resource/santosHowGenerateRealWorld2023",
@@ -16351,6 +16408,137 @@
       ],
       "publicationDate": "2024",
       "abstract": "Synthetic data generation offers a promising solution to enhance the usefulness of Electronic Healthcare Records (EHR) by generating realistic de-identified data. However, the existing literature primarily focuses on the quality of synthetic health data, neglecting the crucial aspect of fairness in downstream predictions. Consequently, models trained on synthetic EHR have faced criticism for producing biased outcomes in target tasks. These biases can arise from either spurious correlations between features or the failure of models to accurately represent sub-groups. To address these concerns, we present Bias-transforming Generative Adversarial Networks (Bt-GAN), a GAN-based synthetic data generator specifically designed for the healthcare domain. In order to tackle spurious correlations (i), we propose an information-constrained Data Generation Process (DGP) that enables the generator to learn a fair deterministic transformation based on a well-defined notion of algorithmic fairness. To overcome the challenge of capturing exact sub-group representations (ii), we incentivize the generator to preserve sub-group densities through score-based weighted sampling. This approach compels the generator to learn from underrepresented regions of the data manifold. To evaluate the effectiveness of our proposed method, we conduct extensive experiments using the Medical Information Mart for Intensive Care (MIMIC-III) database. Our results demonstrate that Bt-GAN achieves state-of-the-art accuracy while significantly improving fairness and minimizing bias amplification. Furthermore, we perform an in-depth explainability analysis to provide additional evidence supporting the validity of our study. In conclusion, our research introduces a novel and professional approach to addressing the limitations of synthetic data generation in the healthcare domain. By incorporating fairness considerations and leveraging advanced techniques such as GANs, we pave the way for more reliable and unbiased predictions in healthcare applications."
+    },
+    {
+      "@id": "tea:resource/chawlaSMOTESyntheticMinority2002",
+      "@type": "Resource",
+      "name": "SMOTE: Synthetic Minority Over-sampling Technique",
+      "citationKey": "chawlaSMOTESyntheticMinority2002",
+      "url": "https://www.jair.org/index.php/jair/article/view/10302",
+      "sourceType": "technical_paper",
+      "authors": [
+        "N. V. Chawla",
+        "K. W. Bowyer",
+        "L. O. Hall",
+        "W. P. Kegelmeyer"
+      ],
+      "publicationDate": "2002-06-01",
+      "abstract": "An approach to the construction of classifiers from    imbalanced datasets is described. A dataset is imbalanced if the    classification categories are not approximately equally    represented. Often real-world data sets are predominately composed of    ``normal'' examples with only a small percentage of ``abnormal'' or    ``interesting'' examples. It is also the case that the cost of    misclassifying an abnormal (interesting) example as a normal example    is often much higher than the cost of the reverse    error. Under-sampling of the majority (normal) class has been proposed    as a good means of increasing the sensitivity of a classifier to the    minority class. This paper shows that a combination of our method of    over-sampling the minority (abnormal) class and under-sampling the    majority (normal) class can achieve better classifier performance (in    ROC space) than only under-sampling the majority class.  This paper    also shows that a combination of our method of over-sampling the    minority class and under-sampling the majority class can achieve    better classifier performance (in ROC space) than varying the loss    ratios in Ripper or class priors in Naive Bayes. Our method of    over-sampling the minority class involves creating synthetic minority    class examples.  Experiments are performed using C4.5, Ripper and a    Naive Bayes classifier. The method is evaluated using the area under    the Receiver Operating Characteristic curve (AUC) and the ROC convex    hull strategy."
+    },
+    {
+      "@id": "tea:resource/heADASYNAdaptiveSynthetic2008",
+      "@type": "Resource",
+      "name": "ADASYN: Adaptive synthetic sampling approach for imbalanced learning",
+      "citationKey": "heADASYNAdaptiveSynthetic2008",
+      "url": "https://ieeexplore.ieee.org/document/4633969/",
+      "sourceType": "technical_paper",
+      "authors": [
+        "Haibo He",
+        "Yang Bai",
+        "Edwardo A. Garcia",
+        "Shutao Li"
+      ],
+      "publicationDate": "2008-06",
+      "abstract": "This paper presents a novel adaptive synthetic (ADASYN) sampling approach for learning from imbalanced data sets. The essential idea of ADASYN is to use a weighted distribution for different minority class examples according to their level of difficulty in learning, where more synthetic data is generated for minority class examples that are harder to learn compared to those minority examples that are easier to learn. As a result, the ADASYN approach improves learning with respect to the data distributions in two ways: (1) reducing the bias introduced by the class imbalance, and (2) adaptively shifting the classification decision boundary toward the difficult examples. Simulation analyses on several machine learning data sets show the effectiveness of this method across five evaluation metrics."
+    },
+    {
+      "@id": "tea:resource/lemaitreImbalancedlearnPythonToolbox",
+      "@type": "Resource",
+      "name": "Imbalanced-learn: A Python Toolbox to Tackle the Curse of Imbalanced Datasets in Machine Learning",
+      "citationKey": "lemaitreImbalancedlearnPythonToolbox",
+      "url": "https://jmlr.org/papers/volume18/16-365/16-365.pdf",
+      "sourceType": "technical_paper",
+      "authors": [
+        "Guillaume Lemaıtre",
+        "Fernando Nogueira"
+      ],
+      "publicationDate": "2017"
+    },
+    {
+      "@id": "tea:resource/ScikitlearncontribImbalancedlearn2026",
+      "@type": "Resource",
+      "name": "scikit-learn-contrib/imbalanced-learn",
+      "citationKey": "ScikitlearncontribImbalancedlearn2026",
+      "url": "https://github.com/scikit-learn-contrib/imbalanced-learn",
+      "sourceType": "software_package",
+      "publicationDate": "2026-02-16T09:47:16Z",
+      "abstract": "A Python Package to Tackle the Curse of Imbalanced Datasets in Machine Learning"
+    },
+    {
+      "@id": "tea:resource/brownleeSMOTEImbalancedClassification2020",
+      "@type": "Resource",
+      "name": "SMOTE for Imbalanced Classification with Python",
+      "citationKey": "brownleeSMOTEImbalancedClassification2020",
+      "url": "https://www.machinelearningmastery.com/smote-oversampling-for-imbalanced-classification/",
+      "sourceType": "tutorial",
+      "authors": [
+        "Jason Brownlee"
+      ],
+      "publicationDate": "2020-01-16T18:00:07+00:00",
+      "abstract": "Imbalanced classification involves developing predictive models on classification datasets that have a severe class imbalance. The challenge of working with imbalanced datasets is that most machine learning techniques will ignore, and in turn have poor performance on, the minority class, although typically it is performance on the minority class that is most important. One approach […]"
+    },
+    {
+      "@id": "tea:resource/kamtheCopulaFlowsSynthetic2021",
+      "@type": "Resource",
+      "name": "Copula Flows for Synthetic Data Generation",
+      "citationKey": "kamtheCopulaFlowsSynthetic2021",
+      "url": "http://arxiv.org/abs/2101.00598",
+      "sourceType": "technical_paper",
+      "authors": [
+        "Sanket Kamthe",
+        "Samuel Assefa",
+        "Marc Deisenroth"
+      ],
+      "publicationDate": "2021-01-03",
+      "abstract": "The ability to generate high-fidelity synthetic data is crucial when available (real) data is limited or where privacy and data protection standards allow only for limited use of the given data, e.g., in medical and financial data-sets. Current state-of-the-art methods for synthetic data generation are based on generative models, such as Generative Adversarial Networks (GANs). Even though GANs have achieved remarkable results in synthetic data generation, they are often challenging to interpret.Furthermore, GAN-based methods can suffer when used with mixed real and categorical variables.Moreover, loss function (discriminator loss) design itself is problem specific, i.e., the generative model may not be useful for tasks it was not explicitly trained for. In this paper, we propose to use a probabilistic model as a synthetic data generator. Learning the probabilistic model for the data is equivalent to estimating the density of the data. Based on the copula theory, we divide the density estimation task into two parts, i.e., estimating univariate marginals and estimating the multivariate copula density over the univariate marginals. We use normalising flows to learn both the copula density and univariate marginals. We benchmark our method on both simulated and real data-sets in terms of density estimation as well as the ability to generate high-fidelity synthetic data"
+    },
+    {
+      "@id": "tea:resource/nowokSynthpopBespokeCreation2016",
+      "@type": "Resource",
+      "name": "synthpop: Bespoke Creation of Synthetic Data in R",
+      "citationKey": "nowokSynthpopBespokeCreation2016",
+      "url": "https://doi.org/10.18637/jss.v074.i11",
+      "sourceType": "technical_paper",
+      "authors": [
+        "Beata Nowok",
+        "Gillian M. Raab",
+        "Chris Dibben"
+      ],
+      "publicationDate": "2016-10-28",
+      "abstract": "In many contexts, confidentiality constraints severely restrict access to unique and valuable microdata. Synthetic data which mimic the original observed data and preserve the relationships between variables but do not contain any disclosive records are one possible solution to this problem. The synthpop package for R, introduced in this paper, provides routines to generate synthetic versions of original data sets. We describe the methodology and its consequences for the data characteristics. We illustrate the package features using a survey data example."
+    },
+    {
+      "@id": "tea:resource/nowokSynthpopGeneratingSynthetic2025",
+      "@type": "Resource",
+      "name": "synthpop: Generating Synthetic Versions of Sensitive Microdata for Statistical Disclosure Control",
+      "citationKey": "nowokSynthpopGeneratingSynthetic2025",
+      "url": "https://cran.r-project.org/web/packages/synthpop/index.html",
+      "sourceType": "software_package",
+      "publicationDate": "2025-07-12",
+      "abstract": "A tool for producing synthetic versions of microdata containing confidential information so that they are safe to be released to users for exploratory analysis. The key objective of generating synthetic data is to replace sensitive original values with synthetic ones causing minimal distortion of the statistical information contained in the data set. Variables, which can be categorical or continuous, are synthesised one-by-one using sequential modelling. Replacements are generated by drawing from conditional distributions fitted to the original data using parametric or classification and regression trees models. Data are synthesised via the function syn() which can be largely automated, if default settings are used, or with methods defined by the user. Optional parameters can be used to influence the disclosure risk and the analytical quality of the synthesised data. For a description of the implemented method see Nowok, Raab and Dibben (2016) <doi:10.18637/jss.v074.i11>. Functions to assess identity and attribute disclosure for the original and for the synthetic data are included in the package, and their use is illustrated in a vignette on disclosure (Practical Privacy Metrics for Synthetic Data)."
+    },
+    {
+      "@id": "tea:resource/SdvdevCopulas2026",
+      "@type": "Resource",
+      "name": "sdv-dev/Copulas",
+      "citationKey": "SdvdevCopulas2026",
+      "url": "https://github.com/sdv-dev/Copulas",
+      "sourceType": "software_package",
+      "publicationDate": "2026-02-23T14:29:41Z",
+      "abstract": "A library to model multivariate data using copulas."
+    },
+    {
+      "@id": "tea:resource/warnesGeneratingSyntheticMultivariate2021",
+      "@type": "Resource",
+      "name": "Generating Synthetic Multivariate Data with Copulas",
+      "citationKey": "warnesGeneratingSyntheticMultivariate2021",
+      "url": "https://towardsdatascience.com/generating-synthetic-multivariate-data-with-copulas-edd1c4afa1bb/",
+      "sourceType": "tutorial",
+      "authors": [
+        "Zachary Warnes"
+      ],
+      "publicationDate": "2021-09-03T15:32:37+00:00",
+      "abstract": "Create more data with the same feature dependencies as your data"
     },
     {
       "@id": "tea:resource/openfldevelopersOpenFederatedLearning2020",

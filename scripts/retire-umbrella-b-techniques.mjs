@@ -26,6 +26,11 @@ const RETIREMENTS = {
     'datasheets-for-datasets',
     'model-development-audit-trails',
   ],
+  'synthetic-data-generation': [
+    'gan-based-tabular-synthetic-data',
+    'statistical-oversampling-methods',
+    'simulation-based-synthetic-data',
+  ],
 };
 
 const retiredSlugs = new Set(Object.keys(RETIREMENTS));

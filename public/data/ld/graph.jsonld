@@ -3371,126 +3371,6 @@
       ]
     },
     {
-      "@id": "tea:technique/synthetic-data-generation",
-      "@type": "Technique",
-      "name": "Synthetic Data Generation",
-      "slug": "synthetic-data-generation",
-      "description": "Synthetic data generation creates artificial datasets that aim to preserve the statistical properties, distributions, and relationships of real data whilst containing no actual records from real individuals. The technique encompasses various approaches including generative adversarial networks (GANs), variational autoencoders (VAEs), statistical sampling methods, and privacy-preserving techniques like differential privacy. Beyond privacy protection, synthetic data serves multiple purposes: augmenting limited datasets, balancing class distributions, testing model robustness, enabling data sharing across organisations, and supporting fairness assessments by generating representative samples for underrepresented groups.",
-      "addressesGoal": [
-        "tea:goal/privacy",
-        "tea:goal/fairness",
-        "tea:goal/reliability",
-        "tea:goal/safety"
-      ],
-      "hasTag": [
-        "tea:tag/applicable-models/architecture/neural-networks/generative/gan",
-        "tea:tag/applicable-models/architecture/neural-networks/generative/vae",
-        "tea:tag/applicable-models/architecture/probabilistic",
-        "tea:tag/applicable-models/paradigm/generative",
-        "tea:tag/applicable-models/paradigm/unsupervised",
-        "tea:tag/applicable-models/requirements/training-data",
-        "tea:tag/assurance-goal-category/fairness",
-        "tea:tag/assurance-goal-category/fairness/group",
-        "tea:tag/assurance-goal-category/privacy",
-        "tea:tag/assurance-goal-category/privacy/formal-guarantee",
-        "tea:tag/assurance-goal-category/reliability",
-        "tea:tag/assurance-goal-category/reliability/uncertainty-quantification",
-        "tea:tag/assurance-goal-category/safety",
-        "tea:tag/assurance-goal-category/safety/risk-identification",
-        "tea:tag/data-requirements/no-special-requirements",
-        "tea:tag/data-type/any",
-        "tea:tag/evidence-type/structured-output",
-        "tea:tag/evidence-type/synthetic-data",
-        "tea:tag/expertise-needed/cryptography",
-        "tea:tag/expertise-needed/ml-engineering",
-        "tea:tag/expertise-needed/statistics",
-        "tea:tag/fairness-approach/group",
-        "tea:tag/lifecycle-stage/data-collection",
-        "tea:tag/lifecycle-stage/data-collection/data-augmentation",
-        "tea:tag/lifecycle-stage/data-handling",
-        "tea:tag/lifecycle-stage/model-development",
-        "tea:tag/technique-type/algorithmic"
-      ],
-      "complexityRating": 4,
-      "computationalCostRating": 4,
-      "relatedTo": [
-        "tea:technique/differential-privacy",
-        "tea:technique/synthetic-data-evaluation",
-        "tea:technique/membership-inference-attack-testing",
-        "tea:technique/gan-based-tabular-synthetic-data",
-        "tea:technique/statistical-oversampling-methods",
-        "tea:technique/simulation-based-synthetic-data"
-      ],
-      "citesResource": [
-        "tea:resource/sdv-devSDV2018",
-        "tea:resource/e.livierisEvaluationFrameworkSynthetic2024",
-        "tea:resource/securemldevelopersSyntheticDataSecureML2023",
-        "tea:resource/santosHowGenerateRealWorld2023"
-      ],
-      "exampleUseCases": [
-        {
-          "description": "Creating realistic but synthetic electronic health records for developing and testing medical diagnosis algorithms without exposing real patient data, enabling secure collaboration between healthcare institutions.",
-          "goal": "Privacy"
-        },
-        {
-          "description": "Generating synthetic samples for underrepresented demographic groups in a hiring dataset to train fair recruitment models, ensuring all groups have sufficient representation for bias testing and mitigation.",
-          "goal": "Fairness"
-        },
-        {
-          "description": "Augmenting limited training data for rare medical conditions by generating synthetic patient records, improving model reliability and performance on edge cases where real data is insufficient.",
-          "goal": "Reliability"
-        },
-        {
-          "description": "Creating synthetic financial transaction data for testing fraud detection systems in development environments, avoiding exposure of real customer financial information whilst maintaining realistic attack patterns.",
-          "goal": "Safety"
-        }
-      ],
-      "limitations": [
-        {
-          "description": "May not capture all subtle patterns, correlations, and edge cases present in real data, potentially leading to reduced model performance when deployed on actual data with different characteristics."
-        },
-        {
-          "description": "Generating high-quality synthetic data that maintains both statistical fidelity and utility requires sophisticated techniques and substantial computational resources, especially for complex, high-dimensional datasets."
-        },
-        {
-          "description": "Privacy-preserving approaches may still risk information leakage through statistical inference attacks, membership inference, or model inversion, requiring careful privacy budget management and validation."
-        },
-        {
-          "description": "Synthetic data may inadvertently amplify existing biases in the original data or introduce new biases through the generation process, particularly in generative models trained on biased datasets."
-        },
-        {
-          "description": "Validation and quality assessment of synthetic data is challenging, as traditional metrics may not adequately capture whether the synthetic data preserves the relationships and patterns needed for specific downstream tasks."
-        }
-      ],
-      "sampleClaims": [
-        {
-          "text": "The training dataset contains no records traceable to actual individuals from the original data source",
-          "domain": "healthcare",
-          "assuranceGoal": "privacy"
-        },
-        {
-          "text": "The model evaluation dataset includes representative samples from demographic groups underrepresented in production data",
-          "domain": "finance",
-          "assuranceGoal": "fairness"
-        },
-        {
-          "text": "The perception system's performance on edge-case scenarios has been validated using generated test data covering conditions rarely observed in real operation",
-          "domain": "autonomous systems",
-          "assuranceGoal": "reliability"
-        },
-        {
-          "text": "The development environment uses generated transaction data that preserves realistic fraud patterns without exposing customer financial information",
-          "domain": "finance",
-          "assuranceGoal": "safety"
-        },
-        {
-          "text": "The quality control model has been tested on generated defect patterns that maintain statistical relationships with manufacturing parameters without revealing proprietary production data",
-          "domain": "manufacturing",
-          "assuranceGoal": "privacy"
-        }
-      ]
-    },
-    {
       "@id": "tea:technique/gan-based-tabular-synthetic-data",
       "@type": "Technique",
       "name": "GAN-Based Tabular Synthetic Data",
@@ -3528,7 +3408,7 @@
       "complexityRating": 4,
       "computationalCostRating": 4,
       "relatedTo": [
-        "tea:technique/synthetic-data-generation",
+        "tea:technique/statistical-oversampling-methods",
         "tea:technique/synthetic-data-evaluation",
         "tea:technique/differential-privacy",
         "tea:technique/fairness-gan"
@@ -3618,7 +3498,7 @@
       "complexityRating": 2,
       "computationalCostRating": 1,
       "relatedTo": [
-        "tea:technique/synthetic-data-generation",
+        "tea:technique/simulation-based-synthetic-data",
         "tea:technique/synthetic-data-evaluation",
         "tea:technique/gan-based-tabular-synthetic-data"
       ],
@@ -3712,7 +3592,7 @@
       "complexityRating": 3,
       "computationalCostRating": 3,
       "relatedTo": [
-        "tea:technique/synthetic-data-generation",
+        "tea:technique/gan-based-tabular-synthetic-data",
         "tea:technique/synthetic-data-evaluation",
         "tea:technique/sensitivity-analysis-for-fairness"
       ],
@@ -3931,7 +3811,7 @@
         "tea:technique/homomorphic-encryption",
         "tea:technique/machine-unlearning",
         "tea:technique/membership-inference-attack-testing",
-        "tea:technique/synthetic-data-generation"
+        "tea:technique/gan-based-tabular-synthetic-data"
       ],
       "citesResource": [
         "tea:resource/googleDifferentialprivacy2019",
@@ -7375,7 +7255,7 @@
       "relatedTo": [
         "tea:technique/bayesian-fairness-regularization",
         "tea:technique/fair-adversarial-networks",
-        "tea:technique/synthetic-data-generation"
+        "tea:technique/gan-based-tabular-synthetic-data"
       ],
       "citesResource": [
         "tea:resource/sattigeriFairnessGAN2018",
@@ -11542,7 +11422,6 @@
       ],
       "relatedTo": [
         "tea:technique/membership-inference-attack-testing",
-        "tea:technique/synthetic-data-generation",
         "tea:technique/differential-privacy",
         "tea:technique/data-poisoning-detection",
         "tea:technique/gan-based-tabular-synthetic-data",
@@ -12257,7 +12136,7 @@
       "name": "Fairness",
       "slug": "fairness",
       "description": "Ensuring AI systems treat different groups and individuals equitably.",
-      "techniqueCount": 65,
+      "techniqueCount": 64,
       "hasTechnique": [
         "tea:technique/shapley-additive-explanations",
         "tea:technique/sobol-indices",
@@ -12270,7 +12149,6 @@
         "tea:technique/adversarial-debiasing",
         "tea:technique/counterfactual-fairness-assessment",
         "tea:technique/sensitivity-analysis-for-fairness",
-        "tea:technique/synthetic-data-generation",
         "tea:technique/gan-based-tabular-synthetic-data",
         "tea:technique/statistical-oversampling-methods",
         "tea:technique/federated-learning",
@@ -12342,10 +12220,9 @@
       "name": "Privacy",
       "slug": "privacy",
       "description": "Protecting personal data and maintaining confidentiality in AI systems.",
-      "techniqueCount": 23,
+      "techniqueCount": 22,
       "hasTechnique": [
         "tea:technique/influence-functions",
-        "tea:technique/synthetic-data-generation",
         "tea:technique/gan-based-tabular-synthetic-data",
         "tea:technique/simulation-based-synthetic-data",
         "tea:technique/federated-learning",
@@ -12364,7 +12241,7 @@
       "name": "Reliability",
       "slug": "reliability",
       "description": "Building AI systems that perform consistently and predictably.",
-      "techniqueCount": 74,
+      "techniqueCount": 73,
       "hasTechnique": [
         "tea:technique/shapley-additive-explanations",
         "tea:technique/permutation-importance",
@@ -12372,7 +12249,6 @@
         "tea:technique/monte-carlo-dropout",
         "tea:technique/out-of-distribution-detector-for-neural-networks",
         "tea:technique/permutation-tests",
-        "tea:technique/synthetic-data-generation",
         "tea:technique/gan-based-tabular-synthetic-data",
         "tea:technique/statistical-oversampling-methods",
         "tea:technique/simulation-based-synthetic-data",
@@ -12437,10 +12313,9 @@
       "name": "Safety",
       "slug": "safety",
       "description": "Ensuring AI systems operate safely and do not cause harm.",
-      "techniqueCount": 37,
+      "techniqueCount": 36,
       "hasTechnique": [
         "tea:technique/out-of-distribution-detector-for-neural-networks",
-        "tea:technique/synthetic-data-generation",
         "tea:technique/simulation-based-synthetic-data",
         "tea:technique/federated-learning",
         "tea:technique/homomorphic-encryption",
@@ -12820,8 +12695,8 @@
         "tea:tag/expertise-needed/ml-engineering",
         "tea:tag/expertise-needed/domain-expertise",
         "tea:tag/expertise-needed/causal-inference",
-        "tea:tag/expertise-needed/cryptography",
         "tea:tag/expertise-needed/software-engineering",
+        "tea:tag/expertise-needed/cryptography",
         "tea:tag/expertise-needed/safety-engineering",
         "tea:tag/expertise-needed/ethics",
         "tea:tag/expertise-needed/legal",
@@ -13810,17 +13685,6 @@
       "broader": "tea:tag/applicable-models/architecture/neural-networks/generative"
     },
     {
-      "@id": "tea:tag/applicable-models/architecture/probabilistic",
-      "@type": "Tag",
-      "prefLabel": "probabilistic",
-      "path": "applicable-models/architecture/probabilistic",
-      "category": "applicable-models",
-      "broader": "tea:tag/applicable-models/architecture",
-      "narrower": [
-        "tea:tag/applicable-models/architecture/probabilistic/gaussian-processes"
-      ]
-    },
-    {
       "@id": "tea:tag/applicable-models/paradigm/generative",
       "@type": "Tag",
       "prefLabel": "generative",
@@ -13846,14 +13710,6 @@
       "path": "evidence-type/synthetic-data",
       "category": "evidence-type",
       "broader": "tea:tag/evidence-type"
-    },
-    {
-      "@id": "tea:tag/expertise-needed/cryptography",
-      "@type": "Tag",
-      "prefLabel": "cryptography",
-      "path": "expertise-needed/cryptography",
-      "category": "expertise-needed",
-      "broader": "tea:tag/expertise-needed"
     },
     {
       "@id": "tea:tag/lifecycle-stage/data-collection",
@@ -13911,6 +13767,17 @@
       "path": "assurance-goal-category/reliability/performance-assessment",
       "category": "assurance-goal-category",
       "broader": "tea:tag/assurance-goal-category/reliability"
+    },
+    {
+      "@id": "tea:tag/applicable-models/architecture/probabilistic",
+      "@type": "Tag",
+      "prefLabel": "probabilistic",
+      "path": "applicable-models/architecture/probabilistic",
+      "category": "applicable-models",
+      "broader": "tea:tag/applicable-models/architecture",
+      "narrower": [
+        "tea:tag/applicable-models/architecture/probabilistic/gaussian-processes"
+      ]
     },
     {
       "@id": "tea:tag/assurance-goal-category/safety/hazard-analysis",
@@ -13983,6 +13850,14 @@
       "path": "evidence-type/privacy-guarantee",
       "category": "evidence-type",
       "broader": "tea:tag/evidence-type"
+    },
+    {
+      "@id": "tea:tag/expertise-needed/cryptography",
+      "@type": "Tag",
+      "prefLabel": "cryptography",
+      "path": "expertise-needed/cryptography",
+      "category": "expertise-needed",
+      "broader": "tea:tag/expertise-needed"
     },
     {
       "@id": "tea:tag/applicable-models/architecture/neural-networks/feedforward",
@@ -16434,6 +16309,18 @@
       "abstract": "Synthetic data generation for tabular data"
     },
     {
+      "@id": "tea:resource/santosHowGenerateRealWorld2023",
+      "@type": "Resource",
+      "name": "How to Generate Real-World Synthetic Data with CTGAN | Towards ...",
+      "citationKey": "santosHowGenerateRealWorld2023",
+      "url": "https://towardsdatascience.com/how-to-generate-real-world-synthetic-data-with-ctgan-af41b4d60fde",
+      "sourceType": "tutorial",
+      "authors": [
+        "Miriam Santos"
+      ],
+      "publicationDate": "2023-04-13"
+    },
+    {
       "@id": "tea:resource/e.livierisEvaluationFrameworkSynthetic2024",
       "@type": "Resource",
       "name": "An evaluation framework for synthetic data generation models",
@@ -16448,30 +16335,6 @@
       ],
       "publicationDate": "2024-04-13",
       "abstract": "Nowadays, the use of synthetic data has gained popularity as a cost-efficient strategy for enhancing data augmentation for improving machine learning models performance as well as addressing concerns related to sensitive data privacy. Therefore, the necessity of ensuring quality of generated synthetic data, in terms of accurate representation of real data, consists of primary importance. In this work, we present a new framework for evaluating synthetic data generation models' ability for developing high-quality synthetic data. The proposed approach is able to provide strong statistical and theoretical information about the evaluation framework and the compared models' ranking. Two use case scenarios demonstrate the applicability of the proposed framework for evaluating the ability of synthetic data generation models to generated high quality data. The implementation code can be found in https://github.com/novelcore/synthetic_data_evaluation_framework."
-    },
-    {
-      "@id": "tea:resource/securemldevelopersSyntheticDataSecureML2023",
-      "@type": "Resource",
-      "name": "Synthetic Data — SecureML 0.2.2 documentation",
-      "citationKey": "securemldevelopersSyntheticDataSecureML2023",
-      "url": "https://secureml.readthedocs.io/en/latest/user_guide/synthetic_data.html",
-      "sourceType": "documentation",
-      "authors": [
-        "Secureml Developers"
-      ],
-      "publicationDate": "2023"
-    },
-    {
-      "@id": "tea:resource/santosHowGenerateRealWorld2023",
-      "@type": "Resource",
-      "name": "How to Generate Real-World Synthetic Data with CTGAN | Towards ...",
-      "citationKey": "santosHowGenerateRealWorld2023",
-      "url": "https://towardsdatascience.com/how-to-generate-real-world-synthetic-data-with-ctgan-af41b4d60fde",
-      "sourceType": "tutorial",
-      "authors": [
-        "Miriam Santos"
-      ],
-      "publicationDate": "2023-04-13"
     },
     {
       "@id": "tea:resource/ramachandranpillaiBtGANGeneratingFair2024",

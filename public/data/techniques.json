@@ -631,7 +631,7 @@
         "description": "Can produce negative relevance scores which may be difficult to interpret intuitively."
       },
       {
-        "description": "Rule selection (LRP-ε, LRP-γ, etc.) significantly affects results and requires domain expertise."
+        "description": "Rule selection (LRP-\u03b5, LRP-\u03b3, etc.) significantly affects results and requires domain expertise."
       },
       {
         "description": "Limited to feedforward networks and may not work well with modern architectures like transformers without substantial modifications."
@@ -843,7 +843,7 @@
       "layer-wise-relevance-propagation",
       "deeplift",
       "integrated-gradients",
-      "contextual-decomposition"
+      "gradient-saliency"
     ],
     "sample_claims": [
       {
@@ -941,7 +941,7 @@
       "permutation-importance",
       "shapley-additive-explanations",
       "partial-dependence-plots",
-      "local-interpretable-model-agnostic-explanations"
+      "sensitivity-analysis-for-fairness"
     ],
     "sample_claims": [
       {
@@ -1241,7 +1241,7 @@
       "individual-conditional-expectation-plots",
       "shapley-additive-explanations",
       "permutation-importance",
-      "local-interpretable-model-agnostic-explanations"
+      "generalized-additive-models"
     ],
     "sample_claims": [
       {
@@ -1330,9 +1330,9 @@
     "acronym": "ICE",
     "related_techniques": [
       "partial-dependence-plots",
-      "shapley-additive-explanations",
       "permutation-importance",
-      "local-interpretable-model-agnostic-explanations"
+      "local-interpretable-model-agnostic-explanations",
+      "generalized-additive-models"
     ],
     "sample_claims": [
       {
@@ -1623,10 +1623,9 @@
     "complexity_rating": 2,
     "computational_cost_rating": 4,
     "related_techniques": [
-      "gradient-saliency",
       "gradient-weighted-class-activation-mapping",
-      "integrated-gradients",
-      "local-interpretable-model-agnostic-explanations"
+      "local-interpretable-model-agnostic-explanations",
+      "permutation-importance"
     ],
     "sample_claims": [
       {
@@ -1713,7 +1712,7 @@
       "contextual-decomposition",
       "attention-visualisation-in-transformers",
       "layer-wise-relevance-propagation",
-      "gradient-weighted-class-activation-mapping"
+      "deeplift"
     ],
     "sample_claims": [
       {
@@ -1803,9 +1802,8 @@
     "computational_cost_rating": 3,
     "related_techniques": [
       "principal-component-analysis",
-      "t-sne",
-      "umap",
-      "prototype-and-criticism-models"
+      "prototype-and-criticism-models",
+      "sobol-indices"
     ],
     "sample_claims": [
       {
@@ -1896,8 +1894,7 @@
     "related_techniques": [
       "factor-analysis",
       "t-sne",
-      "umap",
-      "sobol-indices"
+      "umap"
     ],
     "sample_claims": [
       {
@@ -1971,7 +1968,7 @@
         "description": "Prioritizes preserving local neighborhood structure at the expense of global relationships, potentially creating misleading impressions about overall data topology."
       },
       {
-        "description": "Computationally expensive with O(n²) complexity, making it impractical for datasets with more than ~10,000 points without approximation methods."
+        "description": "Computationally expensive with O(n\u00b2) complexity, making it impractical for datasets with more than ~10,000 points without approximation methods."
       },
       {
         "description": "Sensitive to hyperparameter choices (perplexity, learning rate, iterations) that can dramatically affect clustering patterns and require domain expertise to tune appropriately."
@@ -2076,7 +2073,6 @@
     "related_techniques": [
       "t-sne",
       "principal-component-analysis",
-      "factor-analysis",
       "prototype-and-criticism-models"
     ],
     "sample_claims": [
@@ -2349,7 +2345,7 @@
     ],
     "example_use_cases": [
       {
-        "description": "Explaining loan application rejections by showing that removing recent late payments (pertinent negative) or adding £5,000 more annual income (pertinent positive) would change the decision to approval, giving applicants clear actionable guidance.",
+        "description": "Explaining loan application rejections by showing that removing recent late payments (pertinent negative) or adding \u00a35,000 more annual income (pertinent positive) would change the decision to approval, giving applicants clear actionable guidance.",
         "goal": "Explainability"
       },
       {
@@ -2420,7 +2416,7 @@
     "slug": "anchor",
     "name": "ANCHOR",
     "acronym": "ANCHOR",
-    "description": "ANCHOR generates high-precision if-then rules that explain individual predictions by identifying the minimal set of feature conditions that guarantee a specific prediction with high confidence. It searches for 'anchor' conditions (e.g., 'age > 30 AND income < £50k') that ensure the model gives the same prediction at least 95% of the time when those conditions are met. This creates human-readable rules that users can trust as sufficient conditions for understanding why a particular decision was made.",
+    "description": "ANCHOR generates high-precision if-then rules that explain individual predictions by identifying the minimal set of feature conditions that guarantee a specific prediction with high confidence. It searches for 'anchor' conditions (e.g., 'age > 30 AND income < \u00a350k') that ensure the model gives the same prediction at least 95% of the time when those conditions are met. This creates human-readable rules that users can trust as sufficient conditions for understanding why a particular decision was made.",
     "assurance_goals": [
       "Explainability",
       "Transparency"
@@ -2454,7 +2450,7 @@
         "goal": "Explainability"
       },
       {
-        "description": "Generating diagnostic rules for medical predictions such as 'IF fever > 38.5°C AND white_blood_cells > 12,000 THEN infection = 92% likely', helping clinicians validate automated diagnoses with trusted clinical indicators.",
+        "description": "Generating diagnostic rules for medical predictions such as 'IF fever > 38.5\u00b0C AND white_blood_cells > 12,000 THEN infection = 92% likely', helping clinicians validate automated diagnoses with trusted clinical indicators.",
         "goal": "Explainability"
       },
       {
@@ -3273,8 +3269,8 @@
     "related_techniques": [
       "path-specific-counterfactual-fairness-assessment",
       "counterfactual-fairness-assessment",
-      "average-odds-difference",
-      "demographic-parity-assessment"
+      "demographic-parity-assessment",
+      "attribute-removal-fairness-through-unawareness"
     ],
     "sample_claims": [
       {
@@ -3388,9 +3384,8 @@
     "computational_cost_rating": 4,
     "related_techniques": [
       "differential-privacy",
-      "federated-learning",
       "synthetic-data-evaluation",
-      "fairness-gan"
+      "membership-inference-attack-testing"
     ],
     "sample_claims": [
       {
@@ -3502,7 +3497,7 @@
     "related_techniques": [
       "differential-privacy",
       "homomorphic-encryption",
-      "synthetic-data-generation",
+      "machine-unlearning",
       "data-poisoning-detection"
     ],
     "sample_claims": [
@@ -3753,7 +3748,7 @@
   {
     "slug": "quantile-regression",
     "name": "Quantile Regression",
-    "description": "Quantile regression estimates specific percentiles (quantiles) of the target variable rather than just predicting the average outcome. For example, instead of predicting 'average house price = £300,000', it can predict 'there's a 10% chance the price will be below £250,000, 50% chance below £300,000, and 90% chance below £380,000'. This technique reveals how input features affect different parts of the outcome distribution - perhaps property size strongly influences luxury homes (90th percentile) but barely affects budget properties (10th percentile). By capturing the full conditional distribution, quantile regression provides rich uncertainty information and enables robust prediction intervals.",
+    "description": "Quantile regression estimates specific percentiles (quantiles) of the target variable rather than just predicting the average outcome. For example, instead of predicting 'average house price = \u00a3300,000', it can predict 'there's a 10% chance the price will be below \u00a3250,000, 50% chance below \u00a3300,000, and 90% chance below \u00a3380,000'. This technique reveals how input features affect different parts of the outcome distribution - perhaps property size strongly influences luxury homes (90th percentile) but barely affects budget properties (10th percentile). By capturing the full conditional distribution, quantile regression provides rich uncertainty information and enables robust prediction intervals.",
     "assurance_goals": [
       "Reliability",
       "Transparency",
@@ -4530,7 +4525,7 @@
       "bootstrapping",
       "jackknife-resampling",
       "permutation-tests",
-      "area-under-precision-recall-curve"
+      "conformal-prediction"
     ],
     "sample_claims": [
       {
@@ -4727,10 +4722,9 @@
     "complexity_rating": 4,
     "computational_cost_rating": 4,
     "related_techniques": [
-      "adversarial-training-evaluation",
       "red-teaming",
       "out-of-domain-detection",
-      "out-of-distribution-detector-for-neural-networks"
+      "runtime-monitoring-and-circuit-breakers"
     ],
     "sample_claims": [
       {
@@ -4857,7 +4851,7 @@
   {
     "slug": "red-teaming",
     "name": "Red Teaming",
-    "description": "Red teaming is a structured adversarial evaluation process in which a dedicated team systematically probes an AI/ML system to discover vulnerabilities and failure modes. Unlike individual testing techniques (such as prompt injection testing, jailbreak resistance testing, or safety envelope testing), red teaming defines the organisational methodology: team composition, campaign planning, attack taxonomy, and reporting structure. The red team coordinates diverse attack vectors — including prompt manipulation, adversarial examples, edge case exploitation, and social engineering scenarios — into a coherent assessment programme. Results feed into risk registers and remediation plans rather than pass/fail metrics.",
+    "description": "Red teaming is a structured adversarial evaluation process in which a dedicated team systematically probes an AI/ML system to discover vulnerabilities and failure modes. Unlike individual testing techniques (such as prompt injection testing, jailbreak resistance testing, or safety envelope testing), red teaming defines the organisational methodology: team composition, campaign planning, attack taxonomy, and reporting structure. The red team coordinates diverse attack vectors \u2014 including prompt manipulation, adversarial examples, edge case exploitation, and social engineering scenarios \u2014 into a coherent assessment programme. Results feed into risk registers and remediation plans rather than pass/fail metrics.",
     "assurance_goals": [
       "General"
     ],
@@ -4923,7 +4917,8 @@
       "adversarial-training-evaluation",
       "jailbreak-resistance-testing",
       "prompt-injection-testing",
-      "safety-envelope-testing"
+      "safety-envelope-testing",
+      "internal-review-boards"
     ],
     "sample_claims": [
       {
@@ -5107,10 +5102,10 @@
     "complexity_rating": 2,
     "computational_cost_rating": 1,
     "related_techniques": [
-      "epistemic-uncertainty-quantification",
       "human-in-the-loop-safeguards",
       "empirical-calibration",
-      "out-of-domain-detection"
+      "out-of-domain-detection",
+      "runtime-monitoring-and-circuit-breakers"
     ],
     "sample_claims": [
       {
@@ -5201,7 +5196,7 @@
       "out-of-distribution-detector-for-neural-networks",
       "confidence-thresholding",
       "human-in-the-loop-safeguards",
-      "toxicity-detection"
+      "api-usage-pattern-monitoring"
     ],
     "sample_claims": [
       {
@@ -5587,8 +5582,7 @@
     "related_techniques": [
       "mlflow-experiment-tracking",
       "model-development-audit-trails",
-      "automated-documentation-generation",
-      "model-cards"
+      "datasheets-for-datasets"
     ],
     "sample_claims": [
       {
@@ -6326,7 +6320,7 @@
     "computational_cost_rating": 3,
     "related_techniques": [
       "prompt-robustness-testing",
-      "red-teaming",
+      "prompt-injection-testing",
       "jailbreak-resistance-testing"
     ],
     "sample_claims": [
@@ -6360,7 +6354,7 @@
   {
     "slug": "causal-mediation-analysis-in-language-models",
     "name": "Causal Mediation Analysis in Language Models",
-    "description": "Causal mediation analysis in language models is a mechanistic interpretability technique that systematically investigates how specific internal components (neurons, attention heads, or layers) causally contribute to model outputs. By performing controlled interventions—such as activating, deactivating, or modifying specific components—researchers can trace the causal pathways through which information flows and transforms within the model. This approach goes beyond correlation to establish causal relationships, enabling researchers to understand not just what features influence outputs, but how and why they do so through specific computational pathways.",
+    "description": "Causal mediation analysis in language models is a mechanistic interpretability technique that systematically investigates how specific internal components (neurons, attention heads, or layers) causally contribute to model outputs. By performing controlled interventions\u2014such as activating, deactivating, or modifying specific components\u2014researchers can trace the causal pathways through which information flows and transforms within the model. This approach goes beyond correlation to establish causal relationships, enabling researchers to understand not just what features influence outputs, but how and why they do so through specific computational pathways.",
     "assurance_goals": [
       "Explainability",
       "Reliability",
@@ -6658,9 +6652,9 @@
     "acronym": "CAVs",
     "related_techniques": [
       "neuron-activation-analysis",
-      "integrated-gradients",
-      "gradient-saliency",
-      "prototype-and-criticism-models"
+      "prototype-and-criticism-models",
+      "gradient-weighted-class-activation-mapping",
+      "embedding-bias-analysis"
     ],
     "sample_claims": [
       {
@@ -6769,7 +6763,6 @@
     "related_techniques": [
       "feature-attribution-with-integrated-gradients-in-nlp",
       "causal-mediation-analysis-in-language-models",
-      "integrated-gradients",
       "classical-attention-analysis-in-neural-networks"
     ],
     "sample_claims": [
@@ -7192,8 +7185,7 @@
     "related_techniques": [
       "reweighing",
       "disparate-impact-remover",
-      "preferential-sampling",
-      "multi-accuracy-boosting"
+      "preferential-sampling"
     ],
     "sample_claims": [
       {
@@ -8453,9 +8445,10 @@
     "complexity_rating": 3,
     "computational_cost_rating": 2,
     "related_techniques": [
-      "calibration-with-equality-of-opportunity",
       "equalised-odds-post-processing",
-      "threshold-optimiser"
+      "threshold-optimiser",
+      "conformal-prediction",
+      "confidence-thresholding"
     ],
     "sample_claims": [
       {
@@ -8849,7 +8842,7 @@
     ],
     "limitations": [
       {
-        "description": "Requires identifying which causal pathways are 'allowable' and which are not—a subjective decision; analyzing specific paths adds complexity to the causal model and the fairness criterion."
+        "description": "Requires identifying which causal pathways are 'allowable' and which are not\u2014a subjective decision; analyzing specific paths adds complexity to the causal model and the fairness criterion."
       },
       {
         "description": "Causal graph construction relies on domain expertise and cannot be validated from observational data alone; if the graph incorrectly encodes causal structure or omits relevant edges, the path-specific assessment may certify an unfair model as compliant with no internal mechanism to detect the error, and this uncertainty is rarely surfaced in compliance documentation."
@@ -8865,8 +8858,7 @@
     "computational_cost_rating": 4,
     "related_techniques": [
       "counterfactual-fairness-assessment",
-      "average-odds-difference",
-      "equal-opportunity-difference"
+      "sensitivity-analysis-for-fairness"
     ],
     "sample_claims": [
       {
@@ -9078,10 +9070,9 @@
       "foalemLoggingRequirementContinuous2025"
     ],
     "related_techniques": [
-      "api-usage-pattern-monitoring",
-      "out-of-domain-detection",
-      "preferential-sampling",
-      "relabelling"
+      "mlflow-experiment-tracking",
+      "data-version-control",
+      "model-cards"
     ],
     "sample_claims": [
       {
@@ -10217,7 +10208,8 @@
     "related_techniques": [
       "prompt-injection-testing",
       "adversarial-training-evaluation",
-      "red-teaming"
+      "red-teaming",
+      "prompt-sensitivity-analysis"
     ],
     "sample_claims": [
       {
@@ -11191,7 +11183,7 @@
       "membership-inference-attack-testing",
       "synthetic-data-generation",
       "differential-privacy",
-      "machine-unlearning"
+      "data-poisoning-detection"
     ],
     "sample_claims": [
       {
@@ -11288,7 +11280,7 @@
         "description": "Testing reveals brittleness but doesn't necessarily provide clear paths to mitigation beyond avoiding problematic variations."
       },
       {
-        "description": "Robustness patterns may not transfer across domains—a model robust to medical terminology variations might still be brittle to legal phrasings, requiring separate testing for each application domain."
+        "description": "Robustness patterns may not transfer across domains\u2014a model robust to medical terminology variations might still be brittle to legal phrasings, requiring separate testing for each application domain."
       }
     ],
     "resources": [
@@ -11419,7 +11411,8 @@
       "jailbreak-resistance-testing",
       "red-teaming",
       "multi-agent-system-testing",
-      "api-usage-pattern-monitoring"
+      "api-usage-pattern-monitoring",
+      "prompt-sensitivity-analysis"
     ],
     "sample_claims": [
       {
@@ -11517,7 +11510,7 @@
         "description": "Metrics may not capture subtle quality issues like incomplete answers, misleading emphasis, or failure to synthesize information from multiple retrieved sources."
       },
       {
-        "description": "Evaluating multi-hop reasoning—where answers require synthesising information across multiple retrieved documents—is particularly challenging, as standard metrics may not capture whether the system correctly chains information or makes unsupported logical leaps."
+        "description": "Evaluating multi-hop reasoning\u2014where answers require synthesising information across multiple retrieved documents\u2014is particularly challenging, as standard metrics may not capture whether the system correctly chains information or makes unsupported logical leaps."
       },
       {
         "description": "Difficult to isolate whether poor performance stems from retrieval failures (finding wrong documents), generation failures (misusing correct documents), or interaction effects, complicating diagnosis and improvement efforts."
@@ -11533,8 +11526,7 @@
     "related_techniques": [
       "epistemic-uncertainty-quantification",
       "chain-of-thought-faithfulness-evaluation",
-      "out-of-domain-detection",
-      "prompt-robustness-testing"
+      "out-of-domain-detection"
     ],
     "sample_claims": [
       {
